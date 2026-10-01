@@ -8,6 +8,7 @@ import {
 } from './i18n/LocalizedLink';
 import LanguageSwitcher from './i18n/LanguageSwitcher';
 import Arrow from './i18n/Arrow';
+import BrandLogo from './BrandLogo';
 
 const navItems = [
   { key: 'company', path: '/company' },
@@ -70,8 +71,7 @@ export default function Header() {
             onClick={closeMenu}
             aria-label={t('nav.homeLink')}
           >
-            <span className="brandMain">RMA</span>
-            <span className="brandSub">PLASTIK</span>
+            <BrandLogo alt="" />
           </LocalizedLink>
 
           <nav className="desktopNav" aria-label={t('nav.main')}>

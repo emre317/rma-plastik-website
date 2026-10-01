@@ -1162,29 +1162,10 @@ h2 {
 .brand {
   display: flex;
 
-  align-items: baseline;
-
-  gap: 7px;
+  align-items: center;
 
   min-width: 170px;
 }
-
-.brandMain {
-  font-size: 23px;
-
-  font-weight: 700;
-
-  letter-spacing: -0.05em;
-}
-
-.brandSub {
-  font-size: 9px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.18em;
-}
-
 
 /* DESKTOP NAV */
 
@@ -5415,27 +5396,7 @@ h2 {
 .footerLogo {
   display: inline-flex;
 
-  align-items: baseline;
-
-  gap: 8px;
-
   margin-bottom: 28px;
-}
-
-.footerLogo span {
-  font-size: 30px;
-
-  font-weight: 700;
-
-  letter-spacing: -.06em;
-}
-
-.footerLogo small {
-  font-size: 9px;
-
-  font-weight: 700;
-
-  letter-spacing: .18em;
 }
 
 .footerBrand p {
@@ -9719,4 +9680,37 @@ html[dir="rtl"] .desktopNav a::after {
 
 html[dir="rtl"] .desktopNav a {
   font-size: 14px;
+}
+
+
+/* =====================================================
+   BRAND LOGO
+===================================================== */
+
+.brandLogo {
+  display: block;
+
+  line-height: 0;
+}
+
+.brandLogo img {
+  width: auto;
+
+  height: 100%;
+}
+
+.brand .brandLogo {
+  height: 52px;
+}
+
+.footerLogo .brandLogo {
+  height: 64px;
+}
+
+@media (max-width: 900px) {
+
+  .brand .brandLogo {
+    height: 42px;
+  }
+
 }
