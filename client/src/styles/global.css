@@ -5359,279 +5359,6 @@ h2 {
 
 
 /* =====================================================
-   FOOTER
-===================================================== */
-
-.siteFooter {
-  padding:
-    80px
-    0
-    30px;
-
-  color: #fff;
-
-  background: #07090b;
-}
-
-
-/* FOOTER TOP */
-
-.footerTop {
-  display: grid;
-
-  grid-template-columns:
-    .8fr
-    1.6fr
-    .6fr;
-
-  gap: 80px;
-
-  padding-bottom: 90px;
-}
-
-.footerBrand {
-  max-width: 300px;
-}
-
-.footerLogo {
-  display: inline-flex;
-
-  margin-bottom: 28px;
-}
-
-.footerBrand p {
-  max-width: 280px;
-
-  margin: 0;
-
-  color: rgba(255,255,255,.42);
-
-  font-size: 13px;
-
-  line-height: 1.65;
-}
-
-
-/* FOOTER NAVIGATION */
-
-.footerNavigation {
-  display: grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
-
-  gap: 34px;
-}
-
-.footerGroupTitle {
-  display: block;
-
-  margin-bottom: 24px;
-
-  color: rgba(255,255,255,.32);
-
-  font-size: 8px;
-
-  font-weight: 700;
-
-  letter-spacing: .14em;
-
-  text-transform: uppercase;
-}
-
-.footerLinkGroup nav {
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: flex-start;
-
-  gap: 13px;
-}
-
-.footerLinkGroup a {
-  color: rgba(255,255,255,.72);
-
-  font-size: 13px;
-
-  transition:
-    color 180ms ease,
-    transform 180ms ease;
-}
-
-.footerLinkGroup a:hover {
-  color: #fff;
-
-  transform: translateX(calc(3px * var(--dir-x)));
-}
-
-
-/* FOOTER CONTACT */
-
-.footerContact > a:not(.footerLinkedin) {
-  display: inline-block;
-
-  margin-bottom: 28px;
-
-  font-size: 16px;
-
-  font-weight: 500;
-
-  letter-spacing: -.025em;
-}
-
-.footerContact p {
-  margin:
-    0
-    0
-    30px;
-
-  color: rgba(255,255,255,.42);
-
-  font-size: 13px;
-
-  line-height: 1.7;
-}
-
-.footerLinkedin {
-  width: max-content;
-
-  padding-bottom: 7px;
-
-  display: flex;
-
-  gap: 20px;
-
-  align-items: center;
-
-  border-bottom:
-    1px solid
-    rgba(255,255,255,.3);
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: .06em;
-
-  text-transform: uppercase;
-}
-
-.footerLinkedin span {
-  color: var(--red);
-}
-
-
-/* FOOTER WORDMARK */
-
-.footerMiddle {
-  position: relative;
-
-  display: flex;
-
-  align-items: flex-end;
-
-  gap: 20px;
-
-  overflow: hidden;
-
-  border-top:
-    1px solid
-    rgba(255,255,255,.12);
-
-  border-bottom:
-    1px solid
-    rgba(255,255,255,.12);
-}
-
-.footerWordmark {
-  margin-inline-start: -8px;
-
-  margin-bottom: -24px;
-
-  color: #fff;
-
-  font-size: clamp(
-    150px,
-    24vw,
-    400px
-  );
-
-  font-weight: 700;
-
-  line-height: .82;
-
-  letter-spacing: -.095em;
-}
-
-.footerWordmarkSub {
-  padding-bottom: 28px;
-
-  color: rgba(255,255,255,.25);
-
-  font-size: clamp(
-    18px,
-    2.5vw,
-    36px
-  );
-
-  font-weight: 700;
-
-  letter-spacing: .2em;
-}
-
-
-/* FOOTER BOTTOM */
-
-.footerBottom {
-  padding-top: 28px;
-
-  display: grid;
-
-  grid-template-columns:
-    1fr
-    1fr
-    1fr;
-
-  align-items: center;
-
-  color: rgba(255,255,255,.3);
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-  letter-spacing: .09em;
-
-  text-transform: uppercase;
-}
-
-.footerBottom > div {
-  display: flex;
-
-  justify-content: center;
-
-  gap: 24px;
-}
-
-.footerBottom button {
-  justify-self: end;
-
-  padding: 0;
-
-  color: rgba(255,255,255,.55);
-
-  background: transparent;
-
-  font: inherit;
-
-  text-transform: uppercase;
-
-  cursor: pointer;
-}
-
-
-/* =====================================================
    CTA + FOOTER MOBILE
 ===================================================== */
 
@@ -5697,65 +5424,6 @@ h2 {
 
   .finalCtaBottom > div:last-child {
     border-bottom: 0;
-  }
-
-
-  /* FOOTER */
-
-  .siteFooter {
-    padding-top: 65px;
-  }
-
-  .footerTop {
-    grid-template-columns: 1fr;
-
-    gap: 60px;
-
-    padding-bottom: 65px;
-  }
-
-  .footerNavigation {
-    grid-template-columns:
-      repeat(2,1fr);
-
-    gap:
-      48px
-      28px;
-  }
-
-  .footerWordmark {
-    margin-bottom: -10px;
-
-    font-size: 35vw;
-  }
-
-  .footerWordmarkSub {
-    display: none;
-  }
-
-  .footerBottom {
-    grid-template-columns: 1fr;
-
-    gap: 20px;
-
-    align-items: flex-start;
-  }
-
-  .footerBottom > div {
-    justify-content: flex-start;
-  }
-
-  .footerBottom button {
-    justify-self: start;
-  }
-
-}
-
-
-@media (max-width: 480px) {
-
-  .footerNavigation {
-    grid-template-columns: 1fr;
   }
 
 }
@@ -9703,14 +9371,254 @@ html[dir="rtl"] .desktopNav a {
   height: 52px;
 }
 
-.footerLogo .brandLogo {
-  height: 64px;
-}
-
 @media (max-width: 900px) {
 
   .brand .brandLogo {
     height: 42px;
+  }
+
+}
+
+
+/* =====================================================
+   FOOTER (footer-4 layout)
+===================================================== */
+
+.siteFooter {
+  padding: 64px 0;
+
+  color: var(--text);
+
+  /* footer-4: bg-muted/30 — a light tint of the muted surface */
+  background: color-mix(in srgb, var(--background-secondary) 45%, var(--background));
+
+  border-top: 1px solid var(--line);
+}
+
+.footerGrid {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 40px;
+}
+
+.footerBrand {
+  grid-column: span 2;
+}
+
+.footerLogo {
+  display: inline-flex;
+}
+
+.footerLogo .brandLogo {
+  height: 56px;
+}
+
+.footerBrand p {
+  max-width: 320px;
+
+  margin: 16px 0 0;
+
+  color: var(--text-secondary);
+
+  font-size: 14px;
+
+  line-height: 1.65;
+}
+
+.footerSocials {
+  margin-top: 24px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+.footerIconButton {
+  width: 36px;
+
+  height: 36px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: 1px solid var(--line);
+
+  border-radius: 8px;
+
+  color: var(--text);
+
+  background: var(--background);
+
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.footerIconButton:hover {
+  color: #fff;
+
+  background: var(--dark);
+
+  border-color: var(--dark);
+}
+
+.footerIcon {
+  flex: none;
+
+  width: 16px;
+
+  height: 16px;
+}
+
+.footerColumn {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.footerColumn h3 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  letter-spacing: -.01em;
+}
+
+.footerColumn ul {
+  margin: 0;
+
+  padding: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  list-style: none;
+}
+
+.footerColumn li {
+  color: var(--text-secondary);
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
+
+.footerColumn a {
+  color: var(--text-secondary);
+
+  overflow-wrap: anywhere;
+
+  transition: color 160ms ease;
+}
+
+.footerColumn a:hover {
+  color: var(--text);
+}
+
+.footerAddress {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 8px;
+}
+
+.footerAddress .footerIcon {
+  margin-top: 2px;
+}
+
+.footerSeparator {
+  height: 1px;
+
+  margin: 32px 0;
+
+  border: 0;
+
+  background: var(--line);
+}
+
+.footerBottom {
+  display: flex;
+
+  flex-direction: column-reverse;
+
+  align-items: flex-start;
+
+  gap: 16px;
+}
+
+.footerBottom p {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 14px;
+}
+
+/* Language switcher in the footer: rounded "outline sm" button, opens upwards */
+.footerLanguage .languageSwitcherButton {
+  height: 32px;
+
+  border-radius: 8px;
+
+  background: var(--background);
+}
+
+.footerLanguage .languageSwitcherMenu {
+  border-radius: 8px;
+}
+
+.languageSwitcherUp .languageSwitcherMenu {
+  top: auto;
+
+  bottom: calc(100% + 8px);
+}
+
+@media (min-width: 640px) {
+
+  .footerGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .footerBrand {
+    grid-column: span 3;
+  }
+
+  .footerBottom {
+    flex-direction: row;
+
+    align-items: center;
+
+    justify-content: space-between;
+  }
+
+}
+
+@media (min-width: 768px) {
+
+  .footerGrid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .footerBrand {
+    grid-column: span 2;
   }
 
 }

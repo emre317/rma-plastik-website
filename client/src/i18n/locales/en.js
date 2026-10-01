@@ -70,9 +70,12 @@ const en = {
       products: 'Products',
       requestQuote: 'Request a Quote',
     },
-    address: ['Mersin', 'Istanbul', 'Türkiye'],
-    linkedin: 'LinkedIn',
-    backToTop: 'Back to top',
+    addressLine: 'Mersin, Istanbul, Türkiye',
+    rights: 'All rights reserved.',
+    social: {
+      linkedin: 'RMA Plastik on LinkedIn',
+      email: 'Email RMA Plastik',
+    },
   },
 
   hero: {

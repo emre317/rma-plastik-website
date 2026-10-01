@@ -69,9 +69,12 @@ const tr = {
       products: 'Ürünler',
       requestQuote: 'Teklif İste',
     },
-    address: ['Mersin', 'İstanbul', 'Türkiye'],
-    linkedin: 'LinkedIn',
-    backToTop: 'Başa dön',
+    addressLine: 'Mersin, İstanbul, Türkiye',
+    rights: 'Tüm hakları saklıdır.',
+    social: {
+      linkedin: 'LinkedIn’de RMA Plastik',
+      email: 'RMA Plastik’e e-posta gönderin',
+    },
   },
 
   hero: {

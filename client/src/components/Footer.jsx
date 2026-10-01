@@ -1,16 +1,27 @@
 import { useTranslation } from 'react-i18next';
+import { Mail, MapPin } from 'lucide-react';
 
 import { LocalizedLink } from './i18n/LocalizedLink';
-import Arrow from './i18n/Arrow';
+import LanguageSwitcher from './i18n/LanguageSwitcher';
 import BrandLogo from './BrandLogo';
 
-const footerLinks = [
+/*
+  Layout follows the "footer-4" block: brand column (logo, text, social
+  buttons) + four link columns, a separator, then copyright and the
+  language switcher.
+*/
+
+const CONTACT_EMAIL = 'info@rmaplastik.com';
+const LINKEDIN_URL = 'https://www.linkedin.com/company/rmaplastik/';
+
+const linkColumns = [
   {
     group: 'company',
     links: [
       { key: 'about', path: '/company' },
       { key: 'facilities', path: '/company' },
       { key: 'quality', path: '/company' },
+      { key: 'engineering', path: '/engineering' },
     ],
   },
   {
@@ -29,21 +40,43 @@ const footerLinks = [
       { key: 'rotational', path: '/technologies/rotational-moulding' },
       { key: 'injection', path: '/technologies/injection-moulding' },
       { key: 'blow', path: '/technologies/blow-moulding' },
-      { key: 'engineering', path: '/engineering' },
     ],
   },
 ];
 
+// Brand mark inlined: lucide-react no longer ships brand logos
+function LinkedinMark(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
+      <path d="M18.3362 18.339H15.6707V14.1622C15.6707 13.1662 15.6505 11.8845 14.2817 11.8845C12.892 11.8845 12.6797 12.9683 12.6797 14.0887V18.339H10.0142V9.75H12.5747V10.9207H12.6092C12.967 10.2457 13.837 9.53325 15.1367 9.53325C17.8375 9.53325 18.337 11.3108 18.337 13.6245V18.339H18.3362ZM7.00373 8.57475C6.14573 8.57475 5.45648 7.88025 5.45648 7.026C5.45648 6.1725 6.14648 5.47875 7.00373 5.47875C7.85873 5.47875 8.55173 6.1725 8.55173 7.026C8.55173 7.88025 7.85798 8.57475 7.00373 8.57475ZM8.34023 18.339H5.66723V9.75H8.34023V18.339ZM19.6697 3H4.32923C3.59498 3 3.00098 3.5805 3.00098 4.29675V19.7033C3.00098 20.4202 3.59498 21 4.32923 21H19.6675C20.401 21 21.001 20.4202 21.001 19.7033V4.29675C21.001 3.5805 20.401 3 19.6675 3H19.6697Z" />
+    </svg>
+  );
+}
+
 export default function Footer() {
   const { t } = useTranslation();
 
-  const address = t('footer.address', { returnObjects: true });
+  const socials = [
+    {
+      key: 'linkedin',
+      href: LINKEDIN_URL,
+      label: t('footer.social.linkedin'),
+      icon: LinkedinMark,
+      external: true,
+    },
+    {
+      key: 'email',
+      href: `mailto:${CONTACT_EMAIL}`,
+      label: t('footer.social.email'),
+      icon: Mail,
+    },
+  ];
 
   return (
     <footer className="siteFooter">
       <div className="container">
 
-        <div className="footerTop">
+        <div className="footerGrid">
 
           <div className="footerBrand">
 
@@ -52,116 +85,90 @@ export default function Footer() {
               className="footerLogo"
               aria-label={t('nav.homeLink')}
             >
-              <BrandLogo variant="light" alt="" />
+              <BrandLogo alt="" />
             </LocalizedLink>
 
             <p>
               {t('footer.description')}
             </p>
 
+            <div className="footerSocials">
+              {socials.map((social) => (
+                <a
+                  key={social.key}
+                  href={social.href}
+                  className="footerIconButton"
+                  aria-label={social.label}
+                  title={social.label}
+                  {...(social.external
+                    ? { target: '_blank', rel: 'noreferrer' }
+                    : {})}
+                >
+                  <social.icon className="footerIcon" />
+                </a>
+              ))}
+            </div>
+
           </div>
 
-          <div className="footerNavigation">
+          {linkColumns.map((column) => (
+            <nav
+              key={column.group}
+              className="footerColumn"
+              aria-label={t(`footer.groups.${column.group}`)}
+            >
+              <h3>
+                {t(`footer.groups.${column.group}`)}
+              </h3>
 
-            {footerLinks.map((group) => (
-              <div
-                className="footerLinkGroup"
-                key={group.group}
-              >
-
-                <span className="footerGroupTitle">
-                  {t(`footer.groups.${group.group}`)}
-                </span>
-
-                <nav aria-label={t(`footer.groups.${group.group}`)}>
-                  {group.links.map((link) => (
-                    <LocalizedLink
-                      to={link.path}
-                      key={link.key}
-                    >
+              <ul>
+                {column.links.map((link) => (
+                  <li key={link.key}>
+                    <LocalizedLink to={link.path}>
                       {t(`footer.links.${link.key}`)}
                     </LocalizedLink>
-                  ))}
-                </nav>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))}
 
-              </div>
-            ))}
-
-          </div>
-
-          <div className="footerContact">
-
-            <span className="footerGroupTitle">
+          <div className="footerColumn">
+            <h3>
               {t('footer.groups.contact')}
-            </span>
+            </h3>
 
-            <a href="mailto:info@rmaplastik.com" dir="ltr">
-              info@rmaplastik.com
-            </a>
+            <ul>
+              <li>
+                <a href={`mailto:${CONTACT_EMAIL}`} dir="ltr">
+                  {CONTACT_EMAIL}
+                </a>
+              </li>
 
-            <p>
-              {address.map((line, index) => (
-                <span key={line}>
-                  {index > 0 && <br />}
-                  {line}
-                </span>
-              ))}
-            </p>
+              <li className="footerAddress">
+                <MapPin className="footerIcon" aria-hidden="true" />
+                <span>{t('footer.addressLine')}</span>
+              </li>
 
-            <a
-              href="https://www.linkedin.com/company/rmaplastik/"
-              target="_blank"
-              rel="noreferrer"
-              className="footerLinkedin"
-            >
-              {t('footer.linkedin')}
-              <Arrow />
-            </a>
-
+              <li>
+                <LocalizedLink to="/contact">
+                  {t('footer.links.requestQuote')}
+                </LocalizedLink>
+              </li>
+            </ul>
           </div>
 
         </div>
 
-        <div className="footerMiddle" dir="ltr">
-
-          <div className="footerWordmark">
-            RMA
-          </div>
-
-          <span className="footerWordmarkSub">
-            PLASTIK
-          </span>
-
-        </div>
+        <hr className="footerSeparator" />
 
         <div className="footerBottom">
 
-          <span>
-            © {new Date().getFullYear()} RMA Plastik
-          </span>
+          <p>
+            © {new Date().getFullYear()} RMA Plastik. {t('footer.rights')}
+          </p>
 
-          <div>
-            {/* TODO: add Privacy / KVKK and Cookies pages once legal texts are approved */}
-            <LocalizedLink to="/products">
-              {t('footer.links.products')}
-            </LocalizedLink>
-
-            <LocalizedLink to="/contact">
-              {t('footer.links.requestQuote')}
-            </LocalizedLink>
-          </div>
-
-          <button
-            type="button"
-            onClick={() =>
-              window.scrollTo({
-                top: 0,
-                behavior: 'smooth',
-              })
-            }
-          >
-            {t('footer.backToTop')} <Arrow direction="up" />
-          </button>
+          <LanguageSwitcher placement="top" className="footerLanguage" />
 
         </div>
 

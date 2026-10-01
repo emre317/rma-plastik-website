@@ -70,9 +70,12 @@ const ar = {
       products: 'المنتجات',
       requestQuote: 'اطلب عرض سعر',
     },
-    address: ['مرسين', 'إسطنبول', 'تركيا'],
-    linkedin: 'LinkedIn',
-    backToTop: 'العودة إلى الأعلى',
+    addressLine: 'مرسين، إسطنبول، تركيا',
+    rights: 'جميع الحقوق محفوظة.',
+    social: {
+      linkedin: 'RMA Plastik على LinkedIn',
+      email: 'راسل RMA Plastik عبر البريد الإلكتروني',
+    },
   },
 
   hero: {

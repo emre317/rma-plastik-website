@@ -14,7 +14,8 @@ import {
   Keyboard: Enter/Space/ArrowDown opens, arrows move, Home/End jump,
   Escape closes and returns focus to the trigger, Tab closes.
 */
-export default function LanguageSwitcher({ className = '' }) {
+// placement="top" opens the menu upwards (e.g. at the bottom of the page)
+export default function LanguageSwitcher({ className = '', placement = 'bottom' }) {
   const { t } = useTranslation();
   const current = useLanguage();
   const location = useLocation();
@@ -126,7 +127,7 @@ export default function LanguageSwitcher({ className = '' }) {
   return (
     <div
       ref={rootRef}
-      className={`languageSwitcher ${open ? 'open' : ''} ${className}`}
+      className={`languageSwitcher ${open ? 'open' : ''} ${placement === 'top' ? 'languageSwitcherUp' : ''} ${className}`}
     >
       <button
         ref={buttonRef}
