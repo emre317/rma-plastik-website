@@ -13,6 +13,10 @@ import {
   requireAdmin,
 } from '../middleware/authMiddleware.js';
 
+import {
+  quoteSubmitLimiter,
+} from '../middleware/rateLimit.js';
+
 const router = express.Router();
 
 
@@ -20,6 +24,7 @@ const router = express.Router();
 
 router.post(
   '/',
+  quoteSubmitLimiter,
   createQuoteRequest
 );
 

@@ -1,26 +1,62 @@
-import QuoteRequest from '../models/QuoteRequest.js';
+import mongoose from 'mongoose';
+
+import QuoteRequest, {
+  QUOTE_LANGUAGES,
+  QUOTE_STATUSES,
+} from '../models/QuoteRequest.js';
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const OPTIONAL_FIELD_LIMITS = {
+  phone: 40,
+  country: 80,
+  product: 150,
+  capacity: 80,
+  application: 200,
+};
+
+function cleanString(value) {
+  return typeof value === 'string'
+    ? value.trim()
+    : '';
+}
+
+function escapeRegex(value) {
+  return value.replace(
+    /[.*+?^${}()|[\]\\]/g,
+    '\\$&'
+  );
+}
+
+function parsePositiveInt(value, fallback) {
+  const number = Number.parseInt(value, 10);
+
+  return Number.isFinite(number) && number > 0
+    ? number
+    : fallback;
+}
+
+function isValidId(id) {
+  return mongoose.isValidObjectId(id);
+}
+
+function notFound(res) {
+  return res.status(404).json({
+    success: false,
+    message: 'Quote request not found.',
+  });
+}
 
 export async function createQuoteRequest(req, res) {
   try {
-    const {
-      company,
-      name,
-      email,
-      phone,
-      country,
-      product,
-      capacity,
-      quantity,
-      application,
-      message,
-    } = req.body;
+    const body = req.body || {};
 
-    if (
-      !company?.trim() ||
-      !name?.trim() ||
-      !email?.trim() ||
-      !message?.trim()
-    ) {
+    const company = cleanString(body.company);
+    const name = cleanString(body.name);
+    const email = cleanString(body.email).toLowerCase();
+    const message = cleanString(body.message);
+
+    if (!company || !name || !email || !message) {
       return res.status(400).json({
         success: false,
         message:
@@ -28,24 +64,66 @@ export async function createQuoteRequest(req, res) {
       });
     }
 
+    if (!EMAIL_PATTERN.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message:
+          'Please enter a valid email address.',
+      });
+    }
+
+    const optional = {};
+
+    for (const [field, maxLength] of Object.entries(
+      OPTIONAL_FIELD_LIMITS
+    )) {
+      const value = cleanString(body[field]);
+
+      if (value.length > maxLength) {
+        return res.status(400).json({
+          success: false,
+          message: `${field} must be at most ${maxLength} characters.`,
+        });
+      }
+
+      optional[field] = value;
+    }
+
+    let quantity = null;
+
+    if (
+      body.quantity !== undefined &&
+      body.quantity !== null &&
+      body.quantity !== ''
+    ) {
+      quantity = Number(body.quantity);
+
+      if (
+        !Number.isInteger(quantity) ||
+        quantity < 1
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            'Quantity must be a whole number greater than zero.',
+        });
+      }
+    }
+
+    // Unknown values are ignored rather than rejected
+    const language = QUOTE_LANGUAGES.includes(body.language)
+      ? body.language
+      : '';
+
     const quoteRequest =
       await QuoteRequest.create({
-        company: company.trim(),
-        name: name.trim(),
-        email: email.trim(),
-        phone: phone?.trim() || '',
-        country: country?.trim() || '',
-        product: product?.trim() || '',
-        capacity: capacity?.trim() || '',
-
-        quantity: quantity
-          ? Number(quantity)
-          : null,
-
-        application:
-          application?.trim() || '',
-
-        message: message.trim(),
+        company,
+        name,
+        email,
+        ...optional,
+        quantity,
+        message,
+        language,
       });
 
     return res.status(201).json({
@@ -57,6 +135,14 @@ export async function createQuoteRequest(req, res) {
       requestId: quoteRequest._id,
     });
   } catch (error) {
+    if (error instanceof mongoose.Error.ValidationError) {
+      return res.status(400).json({
+        success: false,
+        message:
+          'Please check the submitted information.',
+      });
+    }
+
     console.error(
       'Create quote error:',
       error
@@ -78,24 +164,50 @@ export async function getQuoteRequests(
   try {
     const {
       status,
-      page = 1,
-      limit = 20,
+      search,
     } = req.query;
 
     const filter = {};
 
-    if (status) {
+    if (typeof status === 'string' && status) {
+      if (!QUOTE_STATUSES.includes(status)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid status.',
+        });
+      }
+
       filter.status = status;
     }
 
-    const currentPage =
-      Math.max(Number(page), 1);
+    const searchTerm = cleanString(search).slice(0, 100);
 
-    const pageLimit =
-      Math.min(
-        Math.max(Number(limit), 1),
-        100
+    if (searchTerm) {
+      const pattern = new RegExp(
+        escapeRegex(searchTerm),
+        'i'
       );
+
+      filter.$or = [
+        'company',
+        'name',
+        'email',
+        'product',
+        'country',
+      ].map((field) => ({
+        [field]: pattern,
+      }));
+    }
+
+    const currentPage = parsePositiveInt(
+      req.query.page,
+      1
+    );
+
+    const pageLimit = Math.min(
+      parsePositiveInt(req.query.limit, 20),
+      100
+    );
 
     const skip =
       (currentPage - 1) * pageLimit;
@@ -125,10 +237,10 @@ export async function getQuoteRequests(
         page: currentPage,
         limit: pageLimit,
         total,
-        pages:
-          Math.ceil(
-            total / pageLimit
-          ),
+        pages: Math.max(
+          Math.ceil(total / pageLimit),
+          1
+        ),
       },
     });
   } catch (error) {
@@ -151,17 +263,17 @@ export async function getQuoteRequestById(
   res
 ) {
   try {
+    if (!isValidId(req.params.id)) {
+      return notFound(res);
+    }
+
     const quote =
       await QuoteRequest.findById(
         req.params.id
       );
 
     if (!quote) {
-      return res.status(404).json({
-        success: false,
-        message:
-          'Quote request not found.',
-      });
+      return notFound(res);
     }
 
     if (!quote.isRead) {
@@ -174,6 +286,11 @@ export async function getQuoteRequestById(
       data: quote,
     });
   } catch (error) {
+    console.error(
+      'Get quote error:',
+      error
+    );
+
     return res.status(500).json({
       success: false,
       message:
@@ -190,23 +307,19 @@ export async function updateQuoteStatus(
   try {
     const {
       status,
-    } = req.body;
-
-    const allowedStatuses = [
-      'new',
-      'reviewing',
-      'contacted',
-      'quoted',
-      'closed',
-    ];
+    } = req.body || {};
 
     if (
-      !allowedStatuses.includes(status)
+      !QUOTE_STATUSES.includes(status)
     ) {
       return res.status(400).json({
         success: false,
         message: 'Invalid status.',
       });
+    }
+
+    if (!isValidId(req.params.id)) {
+      return notFound(res);
     }
 
     const quote =
@@ -224,11 +337,7 @@ export async function updateQuoteStatus(
       );
 
     if (!quote) {
-      return res.status(404).json({
-        success: false,
-        message:
-          'Quote request not found.',
-      });
+      return notFound(res);
     }
 
     return res.json({
@@ -236,6 +345,11 @@ export async function updateQuoteStatus(
       data: quote,
     });
   } catch (error) {
+    console.error(
+      'Update quote status error:',
+      error
+    );
+
     return res.status(500).json({
       success: false,
       message:
@@ -250,8 +364,12 @@ export async function getQuoteStats(
   res
 ) {
   try {
-    const results =
-      await QuoteRequest.aggregate([
+    const [
+      results,
+      unread,
+      total,
+    ] = await Promise.all([
+      QuoteRequest.aggregate([
         {
           $group: {
             _id: '$status',
@@ -260,30 +378,28 @@ export async function getQuoteStats(
             },
           },
         },
-      ]);
+      ]),
 
-    const unread =
-      await QuoteRequest.countDocuments({
+      QuoteRequest.countDocuments({
         isRead: false,
-      });
+      }),
 
-    const total =
-      await QuoteRequest.countDocuments();
+      QuoteRequest.countDocuments(),
+    ]);
 
     const stats = {
       total,
       unread,
-
-      new: 0,
-      reviewing: 0,
-      contacted: 0,
-      quoted: 0,
-      closed: 0,
     };
 
+    QUOTE_STATUSES.forEach((status) => {
+      stats[status] = 0;
+    });
+
     results.forEach((item) => {
-      stats[item._id] =
-        item.count;
+      if (QUOTE_STATUSES.includes(item._id)) {
+        stats[item._id] = item.count;
+      }
     });
 
     return res.json({
@@ -291,6 +407,11 @@ export async function getQuoteStats(
       data: stats,
     });
   } catch (error) {
+    console.error(
+      'Get quote stats error:',
+      error
+    );
+
     return res.status(500).json({
       success: false,
       message:
@@ -312,6 +433,11 @@ export async function getUnreadQuoteCount(req, res) {
       },
     });
   } catch (error) {
+    console.error(
+      'Unread count error:',
+      error
+    );
+
     return res.status(500).json({
       success: false,
       message: 'Unread count could not be loaded.',

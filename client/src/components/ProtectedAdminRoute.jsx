@@ -1,10 +1,18 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+
+import { hasValidAdminSession } from '../services/adminAuth';
 
 export default function ProtectedAdminRoute() {
-  const token = localStorage.getItem('rma_admin_token');
+  const location = useLocation();
 
-  if (!token) {
-    return <Navigate to="/admin/login" replace />;
+  if (!hasValidAdminSession()) {
+    return (
+      <Navigate
+        to="/admin/login"
+        replace
+        state={{ from: location }}
+      />
+    );
   }
 
   return <Outlet />;

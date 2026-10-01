@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Link,
   useNavigate,
@@ -6,6 +6,22 @@ import {
 } from 'react-router-dom';
 
 import { getQuotes } from '../../services/adminApi';
+import {
+  clearAdminSession,
+  getAdminToken,
+  isAuthError,
+} from '../../services/adminAuth';
+import usePageTitle from '../../hooks/usePageTitle';
+
+const PAGE_SIZE = 10;
+
+const statusLabels = {
+  new: 'New',
+  reviewing: 'Reviewing',
+  contacted: 'Contacted',
+  quoted: 'Quoted',
+  closed: 'Closed',
+};
 
 const allowedStatuses = [
   'all',
@@ -17,22 +33,34 @@ const allowedStatuses = [
 ];
 
 export default function AdminQuotes() {
+  usePageTitle('Quote Requests');
+
   const navigate = useNavigate();
 
   const [searchParams, setSearchParams] =
     useSearchParams();
 
-  const token = localStorage.getItem(
-    'rma_admin_token'
+  const token = getAdminToken();
+
+  // The URL is the single source of truth for filters and paging,
+  // so dashboard links, sidebar links and back/forward all stay in sync.
+  const requestedStatus =
+    searchParams.get('status');
+
+  const statusFilter =
+    allowedStatuses.includes(requestedStatus)
+      ? requestedStatus
+      : 'all';
+
+  const page = Math.max(
+    Number.parseInt(searchParams.get('page'), 10) || 1,
+    1
   );
 
-  const initialStatus =
-    searchParams.get('status') || 'all';
+  const search = searchParams.get('q') || '';
 
-  const initialPage =
-    Number(
-      searchParams.get('page')
-    ) || 1;
+  const [searchInput, setSearchInput] =
+    useState(search);
 
   const [quotes, setQuotes] =
     useState([]);
@@ -43,26 +71,62 @@ export default function AdminQuotes() {
   const [error, setError] =
     useState('');
 
-  const [search, setSearch] =
-    useState('');
-
-  const [statusFilter, setStatusFilter] =
-    useState(
-      allowedStatuses.includes(initialStatus)
-        ? initialStatus
-        : 'all'
-    );
-
-  const [page, setPage] =
-    useState(initialPage);
+  const [reloadKey, setReloadKey] =
+    useState(0);
 
   const [pagination, setPagination] =
     useState({
       page: 1,
-      limit: 10,
+      limit: PAGE_SIZE,
       total: 0,
       pages: 1,
     });
+
+  function updateParams(changes) {
+    const next = {
+      status: statusFilter,
+      page,
+      q: search,
+      ...changes,
+    };
+
+    const params = {};
+
+    if (next.status && next.status !== 'all') {
+      params.status = next.status;
+    }
+
+    if (next.page > 1) {
+      params.page = String(next.page);
+    }
+
+    if (next.q?.trim()) {
+      params.q = next.q.trim();
+    }
+
+    setSearchParams(params, { replace: true });
+  }
+
+  // Keep the input in sync when the URL changes from outside (e.g. sidebar link)
+  useEffect(() => {
+    setSearchInput(search);
+  }, [search]);
+
+  // Debounce typing before hitting the API
+  useEffect(() => {
+    if (searchInput.trim() === search) {
+      return undefined;
+    }
+
+    const timeout = setTimeout(() => {
+      updateParams({
+        q: searchInput,
+        page: 1,
+      });
+    }, 350);
+
+    return () => clearTimeout(timeout);
+  }, [searchInput]);
 
   useEffect(() => {
     if (!token) {
@@ -73,8 +137,10 @@ export default function AdminQuotes() {
         }
       );
 
-      return;
+      return undefined;
     }
+
+    let cancelled = false;
 
     async function loadQuotes() {
       try {
@@ -86,11 +152,16 @@ export default function AdminQuotes() {
             token,
             {
               page,
-              limit: 10,
+              limit: PAGE_SIZE,
               status:
                 statusFilter,
+              search,
             }
           );
+
+        if (cancelled) {
+          return;
+        }
 
         setQuotes(
           Array.isArray(
@@ -103,109 +174,68 @@ export default function AdminQuotes() {
         setPagination(
           response.pagination || {
             page: 1,
-            limit: 10,
+            limit: PAGE_SIZE,
             total: 0,
             pages: 1,
           }
         );
       } catch (err) {
-        console.error(err);
+        if (cancelled) {
+          return;
+        }
 
-        localStorage.removeItem(
-          'rma_admin_token'
-        );
+        if (isAuthError(err)) {
+          clearAdminSession();
 
-        localStorage.removeItem(
-          'rma_admin_user'
-        );
+          navigate(
+            '/admin/login',
+            {
+              replace: true,
+            }
+          );
 
-        navigate(
-          '/admin/login',
-          {
-            replace: true,
-          }
-        );
+          return;
+        }
+
+        setError(err.message);
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     }
 
     loadQuotes();
+
+    return () => {
+      cancelled = true;
+    };
   }, [
     navigate,
     token,
     page,
     statusFilter,
+    search,
+    reloadKey,
   ]);
 
+  // A page number past the end (e.g. after filtering) falls back to the last page
   useEffect(() => {
-    const params = {};
-
     if (
-      statusFilter !== 'all'
+      !loading &&
+      page > pagination.pages
     ) {
-      params.status =
-        statusFilter;
+      updateParams({ page: pagination.pages });
     }
-
-    if (page > 1) {
-      params.page =
-        String(page);
-    }
-
-    setSearchParams(params);
-  }, [
-    page,
-    statusFilter,
-    setSearchParams,
-  ]);
-
-  const filteredQuotes =
-    useMemo(() => {
-      const normalizedSearch =
-        search
-          .trim()
-          .toLowerCase();
-
-      if (!normalizedSearch) {
-        return quotes;
-      }
-
-      return quotes.filter(
-        (quote) => {
-          const values = [
-            quote.company,
-            quote.name,
-            quote.email,
-            quote.product,
-            quote.country,
-          ];
-
-          return values.some(
-            (value) =>
-              String(
-                value || ''
-              )
-                .toLowerCase()
-                .includes(
-                  normalizedSearch
-                )
-          );
-        }
-      );
-    }, [
-      quotes,
-      search,
-    ]);
+  }, [loading, page, pagination.pages]);
 
   function handleStatusChange(
     event
   ) {
-    setStatusFilter(
-      event.target.value
-    );
-
-    setPage(1);
+    updateParams({
+      status: event.target.value,
+      page: 1,
+    });
   }
 
   function goToPage(
@@ -219,14 +249,16 @@ export default function AdminQuotes() {
       return;
     }
 
-    setPage(nextPage);
+    updateParams({ page: nextPage });
   }
 
   function clearFilters() {
-    setSearch('');
-    setStatusFilter('all');
-    setPage(1);
+    setSearchInput('');
+    setSearchParams({}, { replace: true });
   }
+
+  const hasFilters =
+    statusFilter !== 'all' || Boolean(search);
 
   function formatDate(date) {
     if (!date) {
@@ -273,16 +305,18 @@ export default function AdminQuotes() {
 
         <input
           type="search"
-          value={search}
+          value={searchInput}
           onChange={(event) =>
-            setSearch(
+            setSearchInput(
               event.target.value
             )
           }
-          placeholder="Search current page..."
+          placeholder="Search company, contact, email, product..."
+          aria-label="Search quote requests"
         />
 
         <select
+          aria-label="Filter by status"
           value={statusFilter}
           onChange={
             handleStatusChange
@@ -316,7 +350,7 @@ export default function AdminQuotes() {
       </div>
 
 
-      {statusFilter !== 'all' && (
+      {hasFilters && (
         <div className="adminActiveFilter">
 
           <span>
@@ -324,7 +358,14 @@ export default function AdminQuotes() {
           </span>
 
           <strong>
-            {statusFilter}
+            {[
+              statusFilter !== 'all'
+                ? statusLabels[statusFilter]
+                : null,
+              search ? `“${search}”` : null,
+            ]
+              .filter(Boolean)
+              .join(' · ')}
           </strong>
 
           <button
@@ -345,9 +386,37 @@ export default function AdminQuotes() {
       )}
 
 
+      {!loading && error && (
+        <div className="adminErrorState">
+
+          <span className="adminLabel">
+            ERROR
+          </span>
+
+          <h2>
+            Requests could not be loaded.
+          </h2>
+
+          <p>
+            {error}
+          </p>
+
+          <button
+            type="button"
+            onClick={() =>
+              setReloadKey((key) => key + 1)
+            }
+          >
+            Try Again
+          </button>
+
+        </div>
+      )}
+
+
       {!loading &&
         !error &&
-        filteredQuotes.length >
+        quotes.length >
           0 && (
           <>
             <div className="adminQuoteTable">
@@ -372,7 +441,7 @@ export default function AdminQuotes() {
                 <span />
               </div>
 
-              {filteredQuotes.map(
+              {quotes.map(
                 (quote) => (
                   <Link
                     key={quote._id}
@@ -402,7 +471,7 @@ export default function AdminQuotes() {
                     <span
                       className={`quoteStatus ${quote.status}`}
                     >
-                      {quote.status}
+                      {statusLabels[quote.status] || quote.status}
                     </span>
 
                     <span>
@@ -422,6 +491,7 @@ export default function AdminQuotes() {
             </div>
 
 
+            {pagination.pages > 1 && (
             <div className="adminPagination">
 
               <button
@@ -485,13 +555,14 @@ export default function AdminQuotes() {
               </button>
 
             </div>
+            )}
           </>
         )}
 
 
       {!loading &&
         !error &&
-        filteredQuotes.length ===
+        quotes.length ===
           0 && (
           <div className="adminEmptyState">
 
@@ -500,15 +571,19 @@ export default function AdminQuotes() {
             </span>
 
             <h2>
-              No quote requests found.
+              {hasFilters
+                ? 'No quote requests match these filters.'
+                : 'No quote requests yet.'}
             </h2>
 
-            <button
-              type="button"
-              onClick={clearFilters}
-            >
-              Clear Filters
-            </button>
+            {hasFilters && (
+              <button
+                type="button"
+                onClick={clearFilters}
+              >
+                Clear Filters
+              </button>
+            )}
 
           </div>
         )}

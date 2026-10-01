@@ -1,144 +1,67 @@
-const API_BASE_URL = 'http://localhost:5000/api';
+import { request } from './http';
 
-export async function adminLogin(payload) {
-  const response = await fetch(`${API_BASE_URL}/auth/login`, {
+export function adminLogin(payload) {
+  return request('/auth/login', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
+    body: payload,
+    fallbackMessage: 'Login failed.',
   });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || 'Login failed.');
-  }
-
-  return data;
 }
 
-export async function getQuoteStats(token) {
-  const response = await fetch(`${API_BASE_URL}/quote/stats`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+export function getQuoteStats(token) {
+  return request('/quote/stats', {
+    token,
+    fallbackMessage: 'Statistics could not be loaded.',
   });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || 'Statistics could not be loaded.');
-  }
-
-  return data;
 }
-export async function getQuotes(
+
+export function getQuotes(
   token,
   {
     page = 1,
     limit = 10,
     status,
+    search,
   } = {}
 ) {
   const params = new URLSearchParams();
 
-  params.set(
-    'page',
-    String(page)
-  );
+  params.set('page', String(page));
+  params.set('limit', String(limit));
 
-  params.set(
-    'limit',
-    String(limit)
-  );
-
-  if (
-    status &&
-    status !== 'all'
-  ) {
-    params.set(
-      'status',
-      status
-    );
+  if (status && status !== 'all') {
+    params.set('status', status);
   }
 
-  const response = await fetch(
-    `${API_BASE_URL}/quote?${params.toString()}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(
-      data.message ||
-      'Quotes could not be loaded.'
-    );
+  if (search?.trim()) {
+    params.set('search', search.trim());
   }
 
-  return data;
-}
-
-export async function getQuoteById(id, token) {
-  const response = await fetch(`${API_BASE_URL}/quote/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+  return request(`/quote?${params.toString()}`, {
+    token,
+    fallbackMessage: 'Quotes could not be loaded.',
   });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || 'Quote could not be loaded.');
-  }
-
-  return data;
 }
 
-export async function updateQuoteStatus(id, status, token) {
-  const response = await fetch(`${API_BASE_URL}/quote/${id}/status`, {
+export function getQuoteById(id, token) {
+  return request(`/quote/${encodeURIComponent(id)}`, {
+    token,
+    fallbackMessage: 'Quote could not be loaded.',
+  });
+}
+
+export function updateQuoteStatus(id, status, token) {
+  return request(`/quote/${encodeURIComponent(id)}/status`, {
     method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      status,
-    }),
+    body: { status },
+    token,
+    fallbackMessage: 'Status could not be updated.',
   });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || 'Status could not be updated.');
-  }
-
-  return data;
 }
 
-export async function getUnreadQuoteCount(token) {
-  const response = await fetch(
-    `${API_BASE_URL}/quote/unread-count`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(
-      data.message ||
-      'Unread count could not be loaded.'
-    );
-  }
-
-  return data;
+export function getUnreadQuoteCount(token) {
+  return request('/quote/unread-count', {
+    token,
+    fallbackMessage: 'Unread count could not be loaded.',
+  });
 }

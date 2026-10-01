@@ -9,6 +9,27 @@ import {
   getQuoteById,
   updateQuoteStatus,
 } from '../../services/adminApi';
+import {
+  clearAdminSession,
+  getAdminToken,
+  isAuthError,
+  notifyQuotesChanged,
+} from '../../services/adminAuth';
+
+const languageLabels = {
+  tr: 'Turkish',
+  en: 'English',
+  ar: 'Arabic',
+};
+
+const statusLabels = {
+  new: 'New',
+  reviewing: 'Reviewing',
+  contacted: 'Contacted',
+  quoted: 'Quoted',
+  closed: 'Closed',
+};
+import usePageTitle from '../../hooks/usePageTitle';
 
 const statuses = [
   'new',
@@ -19,10 +40,12 @@ const statuses = [
 ];
 
 export default function AdminQuoteDetail() {
+  usePageTitle('Quote Request');
+
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const token = localStorage.getItem('rma_admin_token');
+  const token = getAdminToken();
 
   const [quote, setQuote] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -43,8 +66,15 @@ export default function AdminQuoteDetail() {
         const response = await getQuoteById(id, token);
 
         setQuote(response.data);
+
+        // Opening a request marks it as read on the server
+        notifyQuotesChanged();
       } catch (err) {
-        console.error(err);
+        if (isAuthError(err)) {
+          clearAdminSession();
+          navigate('/admin/login', { replace: true });
+          return;
+        }
 
         setError(
           err.message ||
@@ -73,7 +103,11 @@ export default function AdminQuoteDetail() {
 
       setQuote(response.data);
     } catch (err) {
-      console.error(err);
+      if (isAuthError(err)) {
+        clearAdminSession();
+        navigate('/admin/login', { replace: true });
+        return;
+      }
 
       setError(
         err.message ||
@@ -150,7 +184,10 @@ export default function AdminQuoteDetail() {
           </h1>
 
           <p>
-            {quote.name} · {quote.email}
+            {quote.name} ·{' '}
+            <a href={`mailto:${quote.email}`}>
+              {quote.email}
+            </a>
           </p>
 
         </div>
@@ -162,6 +199,7 @@ export default function AdminQuoteDetail() {
           </span>
 
           <select
+            aria-label="Request status"
             value={quote.status}
             disabled={saving}
             onChange={handleStatusChange}
@@ -171,7 +209,7 @@ export default function AdminQuoteDetail() {
                 key={status}
                 value={status}
               >
-                {status}
+                {statusLabels[status]}
               </option>
             ))}
           </select>
@@ -187,7 +225,7 @@ export default function AdminQuoteDetail() {
       </div>
 
       {error && (
-        <div className="adminInlineError">
+        <div className="adminInlineError" role="alert">
           {error}
         </div>
       )}
@@ -216,7 +254,9 @@ export default function AdminQuoteDetail() {
             <span>Email</span>
 
             <strong>
-              {quote.email}
+              <a href={`mailto:${quote.email}`}>
+                {quote.email}
+              </a>
             </strong>
           </div>
 
@@ -224,7 +264,11 @@ export default function AdminQuoteDetail() {
             <span>Phone</span>
 
             <strong>
-              {quote.phone || '-'}
+              {quote.phone ? (
+                <a href={`tel:${quote.phone.replace(/[^\d+]/g, '')}`}>
+                  {quote.phone}
+                </a>
+              ) : '-'}
             </strong>
           </div>
 
@@ -265,6 +309,14 @@ export default function AdminQuoteDetail() {
 
             <strong>
               {quote.application || '-'}
+            </strong>
+          </div>
+
+          <div>
+            <span>Language</span>
+
+            <strong>
+              {languageLabels[quote.language] || '-'}
             </strong>
           </div>
 

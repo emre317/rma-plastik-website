@@ -1,28 +1,13 @@
-const technologies = [
-  {
-    index: '01',
-    title: 'Rotational\nMoulding',
-    description:
-      'High-capacity polyethylene manufacturing for tanks, industrial containers and large-format applications.',
-    meta: 'LARGE FORMAT / DURABLE / INDUSTRIAL',
-  },
-  {
-    index: '02',
-    title: 'Injection\nMoulding',
-    description:
-      'Repeatable manufacturing for high-volume components requiring consistent geometry and performance.',
-    meta: 'PRECISION / SCALE / CONSISTENCY',
-  },
-  {
-    index: '03',
-    title: 'Blow\nMoulding',
-    description:
-      'Efficient production technology for hollow polyethylene products and application-specific components.',
-    meta: 'HOLLOW PRODUCTS / EFFICIENT / FLEXIBLE',
-  },
-];
+import { useTranslation } from 'react-i18next';
+
+import Arrow from '../components/i18n/Arrow';
 
 export default function TechnologySection() {
+  const { t } = useTranslation();
+
+  const technologies = t('technology.items', { returnObjects: true });
+  const footer = t('technology.footer', { returnObjects: true });
+
   return (
     <section className="technologySection dark" id="technologies">
 
@@ -32,38 +17,36 @@ export default function TechnologySection() {
 
           <div>
             <span className="sectionIndex light">
-              03 / TECHNOLOGIES
+              {t('technology.index')}
             </span>
 
             <p className="eyebrow">
-              MANUFACTURING CAPABILITIES
+              {t('technology.eyebrow')}
             </p>
           </div>
 
           <h2>
-            Built around
-            <span>the process.</span>
+            {t('technology.title')}
+            <span>{t('technology.titleAccent')}</span>
           </h2>
 
         </div>
 
         <div className="technologyGrid">
 
-          {technologies.map((technology) => (
+          {technologies.map((technology, index) => (
             <article
               className="technologyCard"
-              key={technology.index}
+              key={technology.title.join(' ')}
             >
 
               <div className="technologyCardTop">
 
                 <span className="technologyNumber">
-                  {technology.index}
+                  {String(index + 1).padStart(2, '0')}
                 </span>
 
-                <span className="technologyArrow">
-                  ↗
-                </span>
+                <Arrow className="technologyArrow" />
 
               </div>
 
@@ -80,13 +63,11 @@ export default function TechnologySection() {
               <div className="technologyContent">
 
                 <h3>
-                  {technology.title
-                    .split('\n')
-                    .map((line) => (
-                      <span key={line}>
-                        {line}
-                      </span>
-                    ))}
+                  {technology.title.map((line) => (
+                    <span key={line}>
+                      {line}
+                    </span>
+                  ))}
                 </h3>
 
                 <p>
@@ -107,14 +88,14 @@ export default function TechnologySection() {
         <div className="technologyFooter">
 
           <p>
-            Different processes.
+            {footer[0]}
             <br />
-            One manufacturing standard.
+            {footer[1]}
           </p>
 
           <a href="#engineering">
-            Explore Our Capabilities
-            <span>↗</span>
+            {t('technology.explore')}
+            <Arrow />
           </a>
 
         </div>

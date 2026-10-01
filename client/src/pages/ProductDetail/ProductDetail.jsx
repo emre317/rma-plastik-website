@@ -1,11 +1,40 @@
-import { Link, useParams } from 'react-router-dom';
-import products from '../../data/products';
+import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
+import { LocalizedLink } from '../../components/i18n/LocalizedLink';
+import Arrow from '../../components/i18n/Arrow';
+import useProducts from '../../hooks/useProducts';
+import usePageTitle from '../../hooks/usePageTitle';
+
+const technicalFields = [
+  'name',
+  'categoryLabel',
+  'capacity',
+  'material',
+  'application',
+  'technology',
+];
+
+const technicalFieldLabels = {
+  name: 'product',
+  categoryLabel: 'category',
+  capacity: 'capacity',
+  material: 'material',
+  application: 'application',
+  technology: 'technology',
+};
 
 export default function ProductDetail() {
+  const { t } = useTranslation();
   const { slug } = useParams();
+  const products = useProducts();
 
   const product = products.find(
     (item) => item.slug === slug
+  );
+
+  usePageTitle(
+    product ? product.name : t('meta.titles.productNotFound')
   );
 
   if (!product) {
@@ -14,17 +43,17 @@ export default function ProductDetail() {
         <section className="productNotFound">
           <div className="container">
             <span className="eyebrow">
-              PRODUCT NOT FOUND
+              {t('productDetail.notFoundEyebrow')}
             </span>
 
             <h1>
-              Product
-              <span>not available.</span>
+              {t('productDetail.notFoundTitle')}
+              <span>{t('productDetail.notFoundTitleAccent')}</span>
             </h1>
 
-            <Link to="/products">
-              Back to Products ↗
-            </Link>
+            <LocalizedLink to="/products">
+              {t('productDetail.backToProducts')} <Arrow />
+            </LocalizedLink>
           </div>
         </section>
       </main>
@@ -36,7 +65,22 @@ export default function ProductDetail() {
       (item) =>
         item.slug !== product.slug
     )
+    .sort(
+      (a, b) =>
+        Number(b.category === product.category) -
+        Number(a.category === product.category)
+    )
     .slice(0, 3);
+
+  const quotePath = `/contact?product=${product.slug}`;
+
+  const applications = t('productDetail.applications.items', {
+    returnObjects: true,
+  });
+
+  const resources = t('productDetail.resources.items', {
+    returnObjects: true,
+  });
 
   return (
     <main className="productDetailPage">
@@ -47,10 +91,10 @@ export default function ProductDetail() {
 
           <div className="productDetailMeta">
             <span>
-              PRODUCT / {product.categoryLabel}
+              {t('productDetail.metaProduct')} / {product.categoryLabel}
             </span>
 
-            <span>
+            <span dir="ltr">
               RMA / {product.slug}
             </span>
           </div>
@@ -77,17 +121,17 @@ export default function ProductDetail() {
                   href="#technical-data"
                   className="button primary"
                 >
-                  Technical Data
-                  <span>↓</span>
+                  {t('productDetail.technicalData')}
+                  <Arrow direction="down" />
                 </a>
 
-                <Link
-                  to="/contact"
+                <LocalizedLink
+                  to={quotePath}
                   className="button ghost"
                 >
-                  Request a Quote
-                  <span>↗</span>
-                </Link>
+                  {t('common.requestQuote')}
+                  <Arrow />
+                </LocalizedLink>
 
               </div>
 
@@ -96,7 +140,7 @@ export default function ProductDetail() {
             <div className="productDetailVisual">
 
               <div className="productDetailVisualTop">
-                <span>PRODUCT SERIES</span>
+                <span>{t('productDetail.series')}</span>
                 <span>{product.capacity}</span>
               </div>
 
@@ -115,14 +159,14 @@ export default function ProductDetail() {
               <div className="productDetailVisualBottom">
 
                 <div>
-                  <span>Material</span>
+                  <span>{t('productDetail.fields.material')}</span>
                   <strong>
                     {product.material}
                   </strong>
                 </div>
 
                 <div>
-                  <span>Technology</span>
+                  <span>{t('productDetail.fields.technology')}</span>
                   <strong>
                     {product.technology}
                   </strong>
@@ -150,17 +194,17 @@ export default function ProductDetail() {
 
             <div>
               <span className="sectionIndex">
-                01 / TECHNICAL DATA
+                {t('productDetail.technical.index')}
               </span>
 
               <p className="eyebrow">
-                PRODUCT SPECIFICATION
+                {t('productDetail.technical.eyebrow')}
               </p>
             </div>
 
             <h2>
-              Technical
-              <span>overview.</span>
+              {t('productDetail.technical.title')}
+              <span>{t('productDetail.technical.titleAccent')}</span>
             </h2>
 
           </div>
@@ -170,60 +214,27 @@ export default function ProductDetail() {
             <div className="technicalDataIntro">
 
               <span className="technicalLabel">
-                PRODUCT INFORMATION
+                {t('productDetail.technical.label')}
               </span>
 
               <p>
-                Core technical information for
-                the selected RMA polyethylene
-                product.
+                {t('productDetail.technical.text')}
               </p>
 
             </div>
 
             <div className="technicalTable">
 
-              <div>
-                <span>Product</span>
-                <strong>
-                  {product.name}
-                </strong>
-              </div>
-
-              <div>
-                <span>Category</span>
-                <strong>
-                  {product.categoryLabel}
-                </strong>
-              </div>
-
-              <div>
-                <span>Capacity</span>
-                <strong>
-                  {product.capacity}
-                </strong>
-              </div>
-
-              <div>
-                <span>Material</span>
-                <strong>
-                  {product.material}
-                </strong>
-              </div>
-
-              <div>
-                <span>Application</span>
-                <strong>
-                  {product.application}
-                </strong>
-              </div>
-
-              <div>
-                <span>Technology</span>
-                <strong>
-                  {product.technology}
-                </strong>
-              </div>
+              {technicalFields.map((field) => (
+                <div key={field}>
+                  <span>
+                    {t(`productDetail.fields.${technicalFieldLabels[field]}`)}
+                  </span>
+                  <strong>
+                    {product[field]}
+                  </strong>
+                </div>
+              ))}
 
             </div>
 
@@ -242,25 +253,22 @@ export default function ProductDetail() {
 
             <div>
               <span className="sectionIndex light">
-                02 / APPLICATION
+                {t('productDetail.applications.index')}
               </span>
 
               <p className="eyebrow">
-                BUILT FOR USE
+                {t('productDetail.applications.eyebrow')}
               </p>
             </div>
 
             <div>
               <h2>
-                Designed around
-                <span>real applications.</span>
+                {t('productDetail.applications.title')}
+                <span>{t('productDetail.applications.titleAccent')}</span>
               </h2>
 
               <p>
-                Product selection, geometry and
-                technical requirements should
-                always be evaluated according to
-                actual operating conditions.
+                {t('productDetail.applications.text')}
               </p>
             </div>
 
@@ -268,50 +276,19 @@ export default function ProductDetail() {
 
           <div className="productApplicationsGrid">
 
-            <article>
-              <span>01</span>
+            {applications.map((item, index) => (
+              <article key={item.title}>
+                <span>{String(index + 1).padStart(2, '0')}</span>
 
-              <h3>
-                Industrial
-                Storage
-              </h3>
+                <h3>
+                  {item.title}
+                </h3>
 
-              <p>
-                Suitable for industrial environments
-                where reliable polyethylene storage
-                is required.
-              </p>
-            </article>
-
-            <article>
-              <span>02</span>
-
-              <h3>
-                Process
-                Applications
-              </h3>
-
-              <p>
-                Supports application-specific
-                process requirements depending on
-                selected product configuration.
-              </p>
-            </article>
-
-            <article>
-              <span>03</span>
-
-              <h3>
-                Custom
-                Requirements
-              </h3>
-
-              <p>
-                RMA engineering support can be
-                considered where standard catalogue
-                configurations are not sufficient.
-              </p>
-            </article>
+                <p>
+                  {item.description}
+                </p>
+              </article>
+            ))}
 
           </div>
 
@@ -328,64 +305,38 @@ export default function ProductDetail() {
 
             <div>
               <span className="sectionIndex">
-                03 / RESOURCES
+                {t('productDetail.resources.index')}
               </span>
 
               <p className="eyebrow">
-                DOCUMENTATION
+                {t('productDetail.resources.eyebrow')}
               </p>
             </div>
 
             <h2>
-              Product
-              <span>resources.</span>
+              {t('productDetail.resources.title')}
+              <span>{t('productDetail.resources.titleAccent')}</span>
             </h2>
 
           </div>
 
           <div className="productDownloadsList">
 
-            <div>
-              <div>
-                <span>PDF</span>
+            {resources.map((resource) => (
+              <div key={resource.title}>
+                <div>
+                  <span>{resource.type}</span>
 
-                <strong>
-                  Technical Datasheet
-                </strong>
+                  <strong>
+                    {resource.title}
+                  </strong>
+                </div>
+
+                <button type="button" disabled>
+                  {t('productDetail.resources.comingSoon')}
+                </button>
               </div>
-
-              <button type="button">
-                Coming Soon
-              </button>
-            </div>
-
-            <div>
-              <div>
-                <span>PDF</span>
-
-                <strong>
-                  Product Catalogue
-                </strong>
-              </div>
-
-              <button type="button">
-                Coming Soon
-              </button>
-            </div>
-
-            <div>
-              <div>
-                <span>DOC</span>
-
-                <strong>
-                  Certificates
-                </strong>
-              </div>
-
-              <button type="button">
-                Coming Soon
-              </button>
-            </div>
+            ))}
 
           </div>
 
@@ -402,18 +353,18 @@ export default function ProductDetail() {
 
             <div>
               <span className="sectionIndex">
-                04 / RELATED
+                {t('productDetail.related.index')}
               </span>
 
               <p className="eyebrow">
-                MORE PRODUCTS
+                {t('productDetail.related.eyebrow')}
               </p>
             </div>
 
-            <Link to="/products">
-              View All Products
-              <span>↗</span>
-            </Link>
+            <LocalizedLink to="/products">
+              {t('productDetail.related.viewAll')}
+              <Arrow />
+            </LocalizedLink>
 
           </div>
 
@@ -421,10 +372,10 @@ export default function ProductDetail() {
 
             {relatedProducts.map(
               (item, index) => (
-                <Link
+                <LocalizedLink
                   to={`/products/${item.slug}`}
                   className="relatedProductCard"
-                  key={item.id}
+                  key={item.slug}
                 >
 
                   <div className="relatedProductTop">
@@ -457,13 +408,11 @@ export default function ProductDetail() {
                       {item.name}
                     </h3>
 
-                    <span>
-                      ↗
-                    </span>
+                    <Arrow />
 
                   </div>
 
-                </Link>
+                </LocalizedLink>
               )
             )}
 
@@ -481,28 +430,26 @@ export default function ProductDetail() {
           <div>
 
             <span className="eyebrow">
-              NEED MORE INFORMATION?
+              {t('productDetail.cta.eyebrow')}
             </span>
 
             <h2>
-              Let&apos;s discuss
-              <span>your requirement.</span>
+              {t('productDetail.cta.title')}
+              <span>{t('productDetail.cta.titleAccent')}</span>
             </h2>
 
           </div>
 
-          <Link
-            to="/contact"
+          <LocalizedLink
+            to={quotePath}
             className="productDetailCtaButton"
           >
             <span>
-              Request a Quote
+              {t('common.requestQuote')}
             </span>
 
-            <span>
-              ↗
-            </span>
-          </Link>
+            <Arrow />
+          </LocalizedLink>
 
         </div>
 

@@ -1,21 +1,9 @@
-const API_BASE_URL = 'http://localhost:5000/api';
+import { request } from './http';
 
-export async function submitQuote(payload) {
-  const response = await fetch(`${API_BASE_URL}/quote`, {
+export function submitQuote(payload) {
+  return request('/quote', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
+    body: payload,
+    fallbackMessage: 'Quote request could not be submitted.',
   });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(
-      data.message || 'Quote request could not be submitted.'
-    );
-  }
-
-  return data;
 }

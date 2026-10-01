@@ -1,41 +1,22 @@
-const stats = [
-  {
-    value: '1998',
-    label: 'Established',
-    detail: 'More than two decades of manufacturing experience.',
-  },
-  {
-    value: '2',
-    label: 'Production Facilities',
-    detail: 'Manufacturing operations in Mersin and Istanbul.',
-  },
-  {
-    value: '42,000 L',
-    label: 'Production Range',
-    detail: 'Polyethylene solutions across a wide capacity range.',
-  },
-  {
-    value: '25+',
-    label: 'Years of Experience',
-    detail: 'Industrial know-how developed through continuous production.',
-  },
-];
+import { useTranslation } from 'react-i18next';
 
 export default function StatsSection() {
+  const { t } = useTranslation();
+
+  const stats = t('stats.items', { returnObjects: true });
+
   return (
     <section className="statsSection" id="company">
       <div className="container">
 
         <div className="sectionIntro statsIntro">
           <div>
-            <span className="sectionIndex">02 / COMPANY</span>
-            <p className="eyebrow">MANUFACTURING EXPERIENCE</p>
+            <span className="sectionIndex">{t('stats.index')}</span>
+            <p className="eyebrow">{t('stats.eyebrow')}</p>
           </div>
 
           <p className="sectionDescription">
-            RMA combines production expertise, industrial infrastructure and
-            application-focused manufacturing for demanding polyethylene
-            solutions.
+            {t('stats.description')}
           </p>
         </div>
 

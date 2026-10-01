@@ -9,10 +9,15 @@ import {
   requireAdmin,
 } from '../middleware/authMiddleware.js';
 
+import {
+  loginLimiter,
+} from '../middleware/rateLimit.js';
+
 const router = express.Router();
 
 router.post(
   '/login',
+  loginLimiter,
   adminLogin
 );
 

@@ -1,23 +1,31 @@
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
+import { LocalizedLink } from '../../components/i18n/LocalizedLink';
+import Arrow from '../../components/i18n/Arrow';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function NotFound() {
+  const { t } = useTranslation();
+
+  usePageTitle(t('meta.titles.notFound'));
+
   return (
     <main className="notFoundPage">
 
       <div className="container">
 
         <span className="eyebrow">
-          ERROR / 404
+          {t('pages.notFound.eyebrow')}
         </span>
 
         <h1>
-          Page
-          <span>not found.</span>
+          {t('pages.notFound.title')}
+          <span>{t('pages.notFound.titleAccent')}</span>
         </h1>
 
-        <Link to="/">
-          Return Home ↗
-        </Link>
+        <LocalizedLink to="/">
+          {t('pages.notFound.home')} <Arrow />
+        </LocalizedLink>
 
       </div>
 

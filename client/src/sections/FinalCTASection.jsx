@@ -1,15 +1,22 @@
+import { useTranslation } from 'react-i18next';
+
+import { LocalizedLink } from '../components/i18n/LocalizedLink';
+import Arrow from '../components/i18n/Arrow';
+
 export default function FinalCTASection() {
+  const { t } = useTranslation();
+
   return (
     <section className="finalCtaSection" id="contact">
       <div className="container">
 
         <div className="finalCtaTop">
           <span className="sectionIndex">
-            10 / CONTACT
+            {t('finalCta.index')}
           </span>
 
           <span className="finalCtaMeta">
-            SALES / ENGINEERING / PROJECTS
+            {t('finalCta.meta')}
           </span>
         </div>
 
@@ -17,30 +24,27 @@ export default function FinalCTASection() {
 
           <div>
             <p className="eyebrow">
-              START A PROJECT
+              {t('finalCta.eyebrow')}
             </p>
 
             <h2>
-              Let&apos;s build
-              <span>the right solution.</span>
+              {t('finalCta.title')}
+              <span>{t('finalCta.titleAccent')}</span>
             </h2>
           </div>
 
           <div className="finalCtaSide">
             <p>
-              Have a product requirement, technical question or custom
-              manufacturing project? Share the details with our team.
+              {t('finalCta.text')}
             </p>
 
-            <a href="mailto:info@rmaplastik.com" className="finalCtaButton">
+            <LocalizedLink to="/contact" className="finalCtaButton">
               <span>
-                Request a Solution
+                {t('finalCta.button')}
               </span>
 
-              <span className="finalCtaButtonArrow">
-                ↗
-              </span>
-            </a>
+              <Arrow className="finalCtaButtonArrow" />
+            </LocalizedLink>
           </div>
 
         </div>
@@ -48,18 +52,18 @@ export default function FinalCTASection() {
         <div className="finalCtaBottom">
 
           <div>
-            <span>PRODUCTION</span>
-            <strong>Mersin / Istanbul</strong>
+            <span>{t('finalCta.production')}</span>
+            <strong>{t('common.locations')}</strong>
           </div>
 
           <div>
-            <span>COUNTRY</span>
-            <strong>Türkiye</strong>
+            <span>{t('finalCta.country')}</span>
+            <strong>{t('common.country')}</strong>
           </div>
 
           <div>
-            <span>FOCUS</span>
-            <strong>Industrial Polyethylene Solutions</strong>
+            <span>{t('finalCta.focus')}</span>
+            <strong>{t('finalCta.focusValue')}</strong>
           </div>
 
         </div>

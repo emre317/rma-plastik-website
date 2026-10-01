@@ -1,70 +1,30 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
+import { LocalizedLink } from '../components/i18n/LocalizedLink';
+import Arrow from '../components/i18n/Arrow';
+
+// Text lives in the locale files under productExplorer.items.<id>
 const productCategories = [
-  {
-    id: 'industrial',
-    number: '01',
-    label: 'Industrial Tanks',
-    title: 'Industrial Storage Tanks',
-    capacity: '500 — 42,000 L',
-    application: 'Industrial / Process / Storage',
-    description:
-      'High-capacity polyethylene storage solutions developed for demanding industrial environments and long-term operation.',
-  },
-  {
-    id: 'chemical',
-    number: '02',
-    label: 'Chemical Tanks',
-    title: 'Chemical Storage Solutions',
-    capacity: '500 — 30,000 L',
-    application: 'Chemical / Process',
-    description:
-      'Polyethylene tanks engineered for chemical storage applications where durability, compatibility and operational reliability are critical.',
-  },
-  {
-    id: 'water',
-    number: '03',
-    label: 'Water Tanks',
-    title: 'Water Storage Tanks',
-    capacity: '100 — 20,000 L',
-    application: 'Water / Infrastructure',
-    description:
-      'Reliable polyethylene water storage solutions designed for residential, commercial, agricultural and industrial use.',
-  },
-  {
-    id: 'agriculture',
-    number: '04',
-    label: 'Agricultural',
-    title: 'Agricultural Solutions',
-    capacity: 'Application Based',
-    application: 'Agriculture / Farming',
-    description:
-      'Durable polyethylene products developed for agricultural operations, liquid storage and field applications.',
-  },
-  {
-    id: 'material',
-    number: '05',
-    label: 'Material Handling',
-    title: 'Material Handling Products',
-    capacity: 'Multiple Formats',
-    application: 'Logistics / Industry',
-    description:
-      'Industrial handling products designed for repeated use across logistics, production and warehouse operations.',
-  },
-  {
-    id: 'custom',
-    number: '06',
-    label: 'Custom Products',
-    title: 'Custom Engineered Products',
-    capacity: 'Project Based',
-    application: 'OEM / Custom',
-    description:
-      'Application-specific polyethylene products developed according to project requirements, geometry and operational needs.',
-  },
+  { id: 'industrial', catalogCategory: 'industrial-tanks' },
+  { id: 'chemical', catalogCategory: 'chemical-tanks' },
+  { id: 'water', catalogCategory: 'water-tanks' },
+  { id: 'agriculture', catalogCategory: 'agriculture' },
+  { id: 'material', catalogCategory: null },
+  { id: 'custom', catalogCategory: 'custom' },
 ];
 
 export default function ProductExplorerSection() {
-  const [activeProduct, setActiveProduct] = useState(productCategories[0]);
+  const { t } = useTranslation();
+
+  const [activeId, setActiveId] = useState(productCategories[0].id);
+
+  const activeCategory = productCategories.find(
+    (item) => item.id === activeId
+  );
+
+  const active = (field) =>
+    t(`productExplorer.items.${activeId}.${field}`);
 
   return (
     <section className="productExplorerSection" id="products">
@@ -74,23 +34,22 @@ export default function ProductExplorerSection() {
 
           <div>
             <span className="sectionIndex">
-              04 / PRODUCTS
+              {t('productExplorer.index')}
             </span>
 
             <p className="eyebrow">
-              PRODUCT PORTFOLIO
+              {t('productExplorer.eyebrow')}
             </p>
           </div>
 
           <div>
             <h2>
-              Solutions for
-              <span>every application.</span>
+              {t('productExplorer.title')}
+              <span>{t('productExplorer.titleAccent')}</span>
             </h2>
 
             <p className="productIntroText">
-              Explore RMA's polyethylene product portfolio across industrial,
-              chemical, agricultural and application-specific requirements.
+              {t('productExplorer.intro')}
             </p>
           </div>
 
@@ -100,27 +59,26 @@ export default function ProductExplorerSection() {
 
           <div className="productCategoryList">
 
-            {productCategories.map((item) => {
-              const active = activeProduct.id === item.id;
+            {productCategories.map((item, index) => {
+              const isActive = activeId === item.id;
 
               return (
                 <button
                   key={item.id}
-                  className={`productCategoryItem ${active ? 'active' : ''}`}
-                  onClick={() => setActiveProduct(item)}
+                  className={`productCategoryItem ${isActive ? 'active' : ''}`}
+                  onClick={() => setActiveId(item.id)}
+                  aria-pressed={isActive}
                   type="button"
                 >
                   <span className="productCategoryNumber">
-                    {item.number}
+                    {String(index + 1).padStart(2, '0')}
                   </span>
 
                   <span className="productCategoryLabel">
-                    {item.label}
+                    {t(`productExplorer.items.${item.id}.label`)}
                   </span>
 
-                  <span className="productCategoryArrow">
-                    ↗
-                  </span>
+                  <Arrow className="productCategoryArrow" />
                 </button>
               );
             })}
@@ -131,11 +89,11 @@ export default function ProductExplorerSection() {
 
             <div className="productPreviewTop">
               <span>
-                {activeProduct.application}
+                {active('application')}
               </span>
 
               <span>
-                RMA / PRODUCT SYSTEM
+                {t('productExplorer.previewTop')}
               </span>
             </div>
 
@@ -155,40 +113,49 @@ export default function ProductExplorerSection() {
 
               <div>
                 <span className="productPreviewLabel">
-                  SELECTED CATEGORY
+                  {t('productExplorer.selected')}
                 </span>
 
                 <h3>
-                  {activeProduct.title}
+                  {active('title')}
                 </h3>
               </div>
 
               <div className="productPreviewMeta">
 
                 <div>
-                  <span>Capacity</span>
+                  <span>{t('productExplorer.capacity')}</span>
                   <strong>
-                    {activeProduct.capacity}
+                    {active('capacity')}
                   </strong>
                 </div>
 
                 <div>
-                  <span>Application</span>
+                  <span>{t('productExplorer.application')}</span>
                   <strong>
-                    {activeProduct.application}
+                    {active('application')}
                   </strong>
                 </div>
 
               </div>
 
               <p>
-                {activeProduct.description}
+                {active('description')}
               </p>
 
-              <a href="#contact" className="productExploreLink">
-                Explore Product Range
-                <span>↗</span>
-              </a>
+              <LocalizedLink
+                to={
+                  activeCategory.catalogCategory
+                    ? `/products?category=${activeCategory.catalogCategory}`
+                    : '/contact'
+                }
+                className="productExploreLink"
+              >
+                {activeCategory.catalogCategory
+                  ? t('productExplorer.exploreRange')
+                  : t('productExplorer.askRange')}
+                <Arrow />
+              </LocalizedLink>
 
             </div>
 

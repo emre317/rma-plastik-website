@@ -1,8 +1,9 @@
 import { Routes, Route } from 'react-router-dom';
 
-import PublicLayout from '../layouts/PublicLayout';
+import LanguageLayout from '../layouts/LanguageLayout';
 import AdminLayout from '../layouts/AdminLayout';
 import ProtectedAdminRoute from '../components/ProtectedAdminRoute';
+import RootRedirect from '../components/i18n/RootRedirect';
 
 import Home from '../pages/Home/Home';
 import Company from '../pages/Company/Company';
@@ -25,34 +26,37 @@ export default function AppRoutes() {
   return (
     <Routes>
 
-      <Route element={<PublicLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/company" element={<Company />} />
+      <Route path="/" element={<RootRedirect />} />
 
-        <Route path="/products" element={<Products />} />
-        <Route path="/products/:slug" element={<ProductDetail />} />
+      {/* Public site: /tr/..., /en/..., /ar/... */}
+      <Route path="/:lang" element={<LanguageLayout />}>
+        <Route index element={<Home />} />
+        <Route path="company" element={<Company />} />
 
-        <Route path="/technologies" element={<Technologies />} />
+        <Route path="products" element={<Products />} />
+        <Route path="products/:slug" element={<ProductDetail />} />
+
+        <Route path="technologies" element={<Technologies />} />
         <Route
-          path="/technologies/:slug"
+          path="technologies/:slug"
           element={<TechnologyDetail />}
         />
 
-        <Route path="/industries" element={<Industries />} />
+        <Route path="industries" element={<Industries />} />
         <Route
-          path="/industries/:slug"
+          path="industries/:slug"
           element={<IndustryDetail />}
         />
 
-        <Route path="/engineering" element={<Engineering />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="engineering" element={<Engineering />} />
+        <Route path="contact" element={<Contact />} />
 
         <Route path="*" element={<NotFound />} />
       </Route>
 
 
+      {/* Admin panel (English only, not language-prefixed) */}
       <Route path="/admin/login" element={<AdminLogin />} />
-
 
       <Route element={<ProtectedAdminRoute />}>
         <Route element={<AdminLayout />}>

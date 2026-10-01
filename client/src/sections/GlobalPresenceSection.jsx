@@ -1,12 +1,13 @@
-const regions = [
-  'Europe',
-  'Middle East',
-  'North Africa',
-  'Central Asia',
-  'Türkiye',
-];
+import { useTranslation } from 'react-i18next';
+
+import { LocalizedLink } from '../components/i18n/LocalizedLink';
+import Arrow from '../components/i18n/Arrow';
 
 export default function GlobalPresenceSection() {
+  const { t } = useTranslation();
+
+  const regions = t('global.regions', { returnObjects: true });
+
   return (
     <section className="globalSection dark" id="global">
       <div className="container">
@@ -15,18 +16,18 @@ export default function GlobalPresenceSection() {
 
           <div>
             <span className="sectionIndex light">
-              09 / GLOBAL
+              {t('global.index')}
             </span>
 
             <p className="eyebrow">
-              GLOBAL REACH
+              {t('global.eyebrow')}
             </p>
           </div>
 
           <div>
             <h2>
-              Manufactured in Türkiye.
-              <span>Built for industry worldwide.</span>
+              {t('global.title')}
+              <span>{t('global.titleAccent')}</span>
             </h2>
           </div>
 
@@ -34,30 +35,31 @@ export default function GlobalPresenceSection() {
 
         <div className="globalGrid">
 
-          <div className="globalMap">
+          {/* Map keeps geographic orientation in every language */}
+          <div className="globalMap" dir="ltr">
 
             <div className="mapGrid" />
 
             <div className="mapOrigin">
               <span className="mapPulse" />
               <strong>TR</strong>
-              <small>MERSIN / ISTANBUL</small>
+              <small>{t('global.origin')}</small>
             </div>
 
             <span className="mapPoint pointEurope">
-              EU
+              {t('global.points.europe')}
             </span>
 
             <span className="mapPoint pointMiddleEast">
-              ME
+              {t('global.points.middleEast')}
             </span>
 
             <span className="mapPoint pointAfrica">
-              NA
+              {t('global.points.africa')}
             </span>
 
             <span className="mapPoint pointAsia">
-              CA
+              {t('global.points.asia')}
             </span>
 
             <div className="mapLine lineEurope" />
@@ -70,12 +72,11 @@ export default function GlobalPresenceSection() {
           <div className="globalContent">
 
             <span className="globalLabel">
-              MARKETS & APPLICATIONS
+              {t('global.label')}
             </span>
 
             <p>
-              RMA's production base in Türkiye provides access to multiple
-              industrial markets and regional supply routes.
+              {t('global.text')}
             </p>
 
             <div className="regionList">
@@ -94,10 +95,10 @@ export default function GlobalPresenceSection() {
 
             </div>
 
-            <a href="#contact" className="globalLink">
-              Discuss Your Requirement
-              <span>↗</span>
-            </a>
+            <LocalizedLink to="/contact" className="globalLink">
+              {t('global.discuss')}
+              <Arrow />
+            </LocalizedLink>
 
           </div>
 

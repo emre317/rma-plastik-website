@@ -1,4 +1,14 @@
+import { useTranslation } from 'react-i18next';
+
+import usePageTitle from '../../hooks/usePageTitle';
+
 export default function Engineering() {
+  const { t } = useTranslation();
+
+  usePageTitle(t('meta.titles.engineering'));
+
+  const meta = t('pages.engineering.meta', { returnObjects: true });
+
   return (
     <main className="internalPage">
 
@@ -6,24 +16,19 @@ export default function Engineering() {
         <div className="container">
 
           <div className="internalHeroMeta">
-            <span>
-              05 / ENGINEERING
-            </span>
-
-            <span>
-              CUSTOM MANUFACTURING
-            </span>
+            <span>{meta[0]}</span>
+            <span>{meta[1]}</span>
           </div>
 
           <div className="internalHeroGrid">
 
             <p className="eyebrow">
-              ENGINEERED SOLUTIONS
+              {t('pages.engineering.eyebrow')}
             </p>
 
             <h1>
-              From requirement
-              <span>to production.</span>
+              {t('pages.engineering.title')}
+              <span>{t('pages.engineering.titleAccent')}</span>
             </h1>
 
           </div>

@@ -1,67 +1,105 @@
-import { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
+import {
+  LocalizedLink,
+  LocalizedNavLink,
+} from './i18n/LocalizedLink';
+import LanguageSwitcher from './i18n/LanguageSwitcher';
+import Arrow from './i18n/Arrow';
+
+const navItems = [
+  { key: 'company', path: '/company' },
+  { key: 'products', path: '/products' },
+  { key: 'technologies', path: '/technologies' },
+  { key: 'industries', path: '/industries' },
+  { key: 'engineering', path: '/engineering' },
+];
+
+const mobileNavItems = [
+  ...navItems,
+  { key: 'contact', path: '/contact' },
+];
 
 export default function Header() {
+  const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { pathname } = useLocation();
 
   const closeMenu = () => {
     setMenuOpen(false);
   };
+
+  // Close the menu whenever the route changes (incl. browser back/forward)
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
+  // Lock page scroll and allow Escape to close while the menu is open
+  useEffect(() => {
+    if (!menuOpen) {
+      return undefined;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    function handleKeyDown(event) {
+      if (event.key === 'Escape') {
+        setMenuOpen(false);
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [menuOpen]);
 
   return (
     <>
       <header className="siteHeader">
         <div className="container headerInner">
 
-          <Link to="/" className="brand" onClick={closeMenu}>
+          <LocalizedLink
+            to="/"
+            className="brand"
+            onClick={closeMenu}
+            aria-label={t('nav.homeLink')}
+          >
             <span className="brandMain">RMA</span>
             <span className="brandSub">PLASTIK</span>
-          </Link>
+          </LocalizedLink>
 
-          <nav className="desktopNav">
-            <NavLink to="/company">
-              Company
-            </NavLink>
-
-            <NavLink to="/products">
-              Products
-            </NavLink>
-
-            <NavLink to="/technologies">
-              Technologies
-            </NavLink>
-
-            <NavLink to="/industries">
-              Industries
-            </NavLink>
-
-            <NavLink to="/engineering">
-              Engineering
-            </NavLink>
+          <nav className="desktopNav" aria-label={t('nav.main')}>
+            {navItems.map((item) => (
+              <LocalizedNavLink to={item.path} key={item.key}>
+                {t(`nav.${item.key}`)}
+              </LocalizedNavLink>
+            ))}
           </nav>
 
           <div className="headerActions">
 
-            <button
-              className="languageButton"
-              type="button"
-            >
-              EN
-            </button>
+            <LanguageSwitcher />
 
-            <Link
+            <LocalizedLink
               to="/contact"
               className="headerContact"
             >
-              Contact
-              <span>↗</span>
-            </Link>
+              {t('nav.contact')}
+              <Arrow />
+            </LocalizedLink>
 
             <button
               className={`menuButton ${menuOpen ? 'active' : ''}`}
               onClick={() => setMenuOpen((current) => !current)}
-              aria-label="Toggle navigation"
+              aria-label={menuOpen ? t('nav.closeMenu') : t('nav.openMenu')}
               aria-expanded={menuOpen}
+              aria-controls="mobile-menu"
               type="button"
             >
               <span />
@@ -73,52 +111,38 @@ export default function Header() {
         </div>
       </header>
 
-      <div className={`mobileMenu ${menuOpen ? 'open' : ''}`}>
+      <div
+        id="mobile-menu"
+        className={`mobileMenu ${menuOpen ? 'open' : ''}`}
+        aria-hidden={!menuOpen}
+        inert={!menuOpen}
+      >
 
         <div className="container mobileMenuInner">
 
           <div className="mobileMenuTop">
-            <span>Navigation</span>
+            <span>{t('nav.navigation')}</span>
             <span>RMA</span>
           </div>
 
-          <nav className="mobileNav">
-
-            <Link to="/company" onClick={closeMenu}>
-              <span>01</span>
-              Company
-            </Link>
-
-            <Link to="/products" onClick={closeMenu}>
-              <span>02</span>
-              Products
-            </Link>
-
-            <Link to="/technologies" onClick={closeMenu}>
-              <span>03</span>
-              Technologies
-            </Link>
-
-            <Link to="/industries" onClick={closeMenu}>
-              <span>04</span>
-              Industries
-            </Link>
-
-            <Link to="/engineering" onClick={closeMenu}>
-              <span>05</span>
-              Engineering
-            </Link>
-
-            <Link to="/contact" onClick={closeMenu}>
-              <span>06</span>
-              Contact
-            </Link>
-
+          <nav className="mobileNav" aria-label={t('nav.mobile')}>
+            {mobileNavItems.map((item, index) => (
+              <LocalizedNavLink
+                to={item.path}
+                key={item.key}
+                onClick={closeMenu}
+              >
+                <span>
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                {t(`nav.${item.key}`)}
+              </LocalizedNavLink>
+            ))}
           </nav>
 
           <div className="mobileMenuBottom">
-            <span>Mersin / Istanbul</span>
-            <span>Türkiye</span>
+            <span>{t('common.locations')}</span>
+            <span>{t('common.country')}</span>
           </div>
 
         </div>
