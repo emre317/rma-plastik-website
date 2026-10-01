@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { LocalizedLink } from './i18n/LocalizedLink';
 import Arrow from './i18n/Arrow';
+import BrandLogo from './BrandLogo';
 
 const footerLinks = [
   {
@@ -46,9 +47,12 @@ export default function Footer() {
 
           <div className="footerBrand">
 
-            <LocalizedLink to="/" className="footerLogo">
-              <span>RMA</span>
-              <small>PLASTIK</small>
+            <LocalizedLink
+              to="/"
+              className="footerLogo"
+              aria-label={t('nav.homeLink')}
+            >
+              <BrandLogo variant="light" alt="" />
             </LocalizedLink>
 
             <p>
