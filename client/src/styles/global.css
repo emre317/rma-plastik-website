@@ -9444,17 +9444,36 @@ html[dir="rtl"] .desktopNav a {
   justify-content: center;
 }
 
+.exportMapFrame {
+  position: relative;
+
+  width: 100%;
+}
+
 .exportMap {
   position: relative;
 
   width: 100%;
 
+  overflow: hidden;
+
+  touch-action: pan-y;
+
   /* soft fade at the top and bottom edges, as in the original block */
-  mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 6%, #000 94%, transparent);
 }
 
-.exportMapDots,
-.exportMapRoutes {
+.exportMap.canPan {
+  cursor: grab;
+
+  touch-action: none;
+}
+
+.exportMap.dragging {
+  cursor: grabbing;
+}
+
+.exportMapCanvas {
   position: absolute;
 
   inset: 0;
@@ -9464,8 +9483,68 @@ html[dir="rtl"] .desktopNav a {
   height: 100%;
 
   user-select: none;
+}
 
-  pointer-events: none;
+.exportMapControls {
+  position: absolute;
+
+  bottom: 12px;
+
+  right: 12px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, .16);
+
+  border-radius: 8px;
+
+  background: rgba(11, 13, 16, .85);
+}
+
+.exportMapControls button {
+  width: 34px;
+
+  height: 34px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: 0;
+
+  color: #fff;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  transition: background-color 160ms ease, opacity 160ms ease;
+}
+
+.exportMapControls button + button {
+  border-top: 1px solid rgba(255, 255, 255, .12);
+}
+
+.exportMapControls button:hover:not(:disabled) {
+  background: var(--red);
+}
+
+.exportMapControls button:disabled {
+  opacity: .35;
+
+  cursor: default;
+}
+
+.exportMapControls svg {
+  width: 16px;
+
+  height: 16px;
 }
 
 .exportRoute {
@@ -9557,6 +9636,48 @@ html[dir="rtl"] .desktopNav a {
   cursor: default;
 }
 
+/* Countries appear one by one, in step with the map */
+.regionItem {
+  opacity: 0;
+
+  transform: translateY(8px);
+
+  transition:
+    opacity 450ms ease,
+    transform 450ms ease,
+    padding 200ms ease;
+}
+
+.regionItem.revealed {
+  opacity: 1;
+
+  transform: none;
+}
+
+.regionItem:not(.revealed) {
+  pointer-events: none;
+}
+
+.regionWorldwide span {
+  display: flex;
+
+  align-items: center;
+}
+
+.regionWorldwide span svg {
+  width: 14px;
+
+  height: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .regionItem {
+    transition: none;
+  }
+
+}
+
 .regionList > li.active {
   padding-inline-start: 10px;
 }
@@ -9618,6 +9739,23 @@ html[dir="rtl"] .desktopNav a {
 
   .exportMapLabelHub {
     font-size: 10px;
+  }
+
+  /* Zoom controls move under the map so they never cover the routes */
+  .exportMapControls {
+    position: static;
+
+    width: max-content;
+
+    margin: 12px 0 0 auto;
+
+    flex-direction: row;
+  }
+
+  .exportMapControls button + button {
+    border-top: 0;
+
+    border-left: 1px solid rgba(255, 255, 255, .12);
   }
 
   /* The hub sits near the right edge: keep its label inside the map */

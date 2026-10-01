@@ -15,23 +15,24 @@ import DottedMap from 'dotted-map';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 
-// Visible area: US east coast to the Eastern Mediterranean
-const region = { lat: { min: 12, max: 64 }, lng: { min: -95, max: 60 } };
+// Whole world: the component zooms into the export region and lets
+// visitors zoom out to the full map.
 
 // Central distribution hub
 const hub = { key: 'mersin', lat: 36.8121, lng: 34.6415, labelPosition: 'right' };
 
-// Export destinations (capital cities mark each country on the map).
+// Export destinations in display order (capital cities mark each country).
 // labelPosition keeps nearby labels (UK / NL) from overlapping.
 const destinations = [
   { key: 'uk', lat: 51.5074, lng: -0.1278, labelPosition: 'left' },
   { key: 'nl', lat: 52.3676, lng: 4.9041, labelPosition: 'top' },
-  { key: 'bg', lat: 42.6977, lng: 23.3219, labelPosition: 'top' },
   { key: 'eg', lat: 30.0444, lng: 31.2357, labelPosition: 'bottom' },
   { key: 'us', lat: 38.9072, lng: -77.0369, labelPosition: 'top' },
+  { key: 'bg', lat: 42.6977, lng: 23.3219, labelPosition: 'top' },
+  { key: 'jp', lat: 35.6762, lng: 139.6503, labelPosition: 'top' },
 ];
 
-const map = new DottedMap({ height: 70, grid: 'diagonal', region });
+const map = new DottedMap({ height: 90, grid: 'diagonal' });
 
 // Land dots first, before pins add any extra points.
 // Written as one path of zero-length segments with round caps: identical

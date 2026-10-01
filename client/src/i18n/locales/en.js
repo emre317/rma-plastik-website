@@ -376,9 +376,9 @@ const en = {
     titleAccent: 'Delivered worldwide.',
     hub: 'Mersin · Central hub',
     hubShort: 'Mersin',
-    label: 'Export markets',
+    label: 'Key export markets',
     text:
-      'From our central distribution hub in Mersin, we export to customers in the United Kingdom, the Netherlands, Egypt, the United States and Bulgaria.',
+      'From our central distribution hub in Mersin, we export to customers all around the world. Our key markets include the United Kingdom, the Netherlands, Egypt, the United States, Bulgaria and Japan.',
     hubRow: 'Mersin, Türkiye',
     hubRowTag: 'Central hub',
     countries: {
@@ -387,9 +387,16 @@ const en = {
       bg: { name: 'Bulgaria', short: 'BG' },
       eg: { name: 'Egypt', short: 'EG' },
       us: { name: 'United States', short: 'US' },
+      jp: { name: 'Japan', short: 'JP' },
     },
     mapLabel:
-      'Map of export routes from Mersin to the United Kingdom, the Netherlands, Bulgaria, Egypt and the United States',
+      'Map of export routes from Mersin to customers worldwide, including the United Kingdom, the Netherlands, Egypt, the United States, Bulgaria and Japan',
+    worldwide: 'Worldwide',
+    controls: {
+      zoomIn: 'Zoom in',
+      zoomOut: 'Zoom out',
+      reset: 'Reset view',
+    },
     discuss: 'Discuss Your Requirement',
   },
 

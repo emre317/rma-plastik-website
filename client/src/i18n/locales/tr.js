@@ -375,9 +375,9 @@ const tr = {
     titleAccent: 'Dünyaya ulaştırıldı.',
     hub: 'Mersin · Merkez',
     hubShort: 'Mersin',
-    label: 'İhracat pazarları',
+    label: 'Başlıca ihracat pazarları',
     text:
-      'Mersin’deki merkez dağıtım noktamızdan İngiltere, Hollanda, Mısır, ABD ve Bulgaristan’daki müşterilerimize ihracat yapıyoruz.',
+      'Mersin’deki merkez dağıtım noktamızdan dünyanın dört bir yanına ihracat yapıyoruz. Başlıca pazarlarımız arasında İngiltere, Hollanda, Mısır, ABD, Bulgaristan ve Japonya yer alıyor.',
     hubRow: 'Mersin, Türkiye',
     hubRowTag: 'Merkez',
     countries: {
@@ -386,9 +386,16 @@ const tr = {
       bg: { name: 'Bulgaristan', short: 'BG' },
       eg: { name: 'Mısır', short: 'EG' },
       us: { name: 'ABD', short: 'US' },
+      jp: { name: 'Japonya', short: 'JP' },
     },
     mapLabel:
-      'Mersin’den İngiltere, Hollanda, Bulgaristan, Mısır ve ABD’ye ihracat rotalarını gösteren harita',
+      'Mersin’den dünyanın dört bir yanına, başta İngiltere, Hollanda, Mısır, ABD, Bulgaristan ve Japonya olmak üzere ihracat rotalarını gösteren harita',
+    worldwide: 'Dünyanın dört bir yanı',
+    controls: {
+      zoomIn: 'Yakınlaştır',
+      zoomOut: 'Uzaklaştır',
+      reset: 'Görünümü sıfırla',
+    },
     discuss: 'İhtiyacınızı Görüşelim',
   },
 
