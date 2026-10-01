@@ -374,29 +374,37 @@ const en = {
     eyebrow: 'Export network',
     title: 'Manufactured in Türkiye.',
     titleAccent: 'Delivered worldwide.',
+    text:
+      'From our central distribution hub in Mersin, we export to customers all around the world. Our key markets include Bulgaria, Egypt, the Netherlands, the United Kingdom, the United States and Japan.',
     hub: 'Mersin · Central hub',
     hubShort: 'Mersin',
-    label: 'Key export markets',
-    text:
-      'From our central distribution hub in Mersin, we export to customers all around the world. Our key markets include the United Kingdom, the Netherlands, Egypt, the United States, Bulgaria and Japan.',
-    hubRow: 'Mersin, Türkiye',
-    hubRowTag: 'Central hub',
+    figures: [
+      { value: '6', label: 'Key export markets' },
+      { value: '4', label: 'Continents' },
+      { value: 'Mersin', label: 'Central distribution hub' },
+    ],
+    stepsLabel: 'Key export markets',
     countries: {
-      uk: { name: 'United Kingdom', short: 'UK' },
-      nl: { name: 'Netherlands', short: 'NL' },
-      bg: { name: 'Bulgaria', short: 'BG' },
-      eg: { name: 'Egypt', short: 'EG' },
-      us: { name: 'United States', short: 'US' },
-      jp: { name: 'Japan', short: 'JP' },
+      bg: { name: 'Bulgaria', short: 'BG', region: 'Balkans' },
+      eg: { name: 'Egypt', short: 'EG', region: 'North Africa' },
+      nl: { name: 'Netherlands', short: 'NL', region: 'Western Europe' },
+      uk: { name: 'United Kingdom', short: 'UK', region: 'Western Europe' },
+      us: { name: 'United States', short: 'US', region: 'North America' },
+      jp: { name: 'Japan', short: 'JP', region: 'Far East' },
     },
-    mapLabel:
-      'Map of export routes from Mersin to customers worldwide, including the United Kingdom, the Netherlands, Egypt, the United States, Bulgaria and Japan',
-    worldwide: 'Worldwide',
+    worldwide: { name: 'Worldwide', region: 'Global' },
+    legend: {
+      hub: 'Central hub · Mersin',
+      market: 'Export market',
+      route: 'Shipping route',
+    },
     controls: {
       zoomIn: 'Zoom in',
       zoomOut: 'Zoom out',
       reset: 'Reset view',
     },
+    mapLabel:
+      'World map of export routes from Mersin to customers worldwide, including Bulgaria, Egypt, the Netherlands, the United Kingdom, the United States and Japan',
     discuss: 'Discuss Your Requirement',
   },
 

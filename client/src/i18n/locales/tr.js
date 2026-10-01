@@ -373,29 +373,37 @@ const tr = {
     eyebrow: 'İhracat ağı',
     title: 'Türkiye’de üretildi.',
     titleAccent: 'Dünyaya ulaştırıldı.',
+    text:
+      'Mersin’deki merkez dağıtım noktamızdan dünyanın dört bir yanına ihracat yapıyoruz. Başlıca pazarlarımız arasında Bulgaristan, Mısır, Hollanda, İngiltere, ABD ve Japonya yer alıyor.',
     hub: 'Mersin · Merkez',
     hubShort: 'Mersin',
-    label: 'Başlıca ihracat pazarları',
-    text:
-      'Mersin’deki merkez dağıtım noktamızdan dünyanın dört bir yanına ihracat yapıyoruz. Başlıca pazarlarımız arasında İngiltere, Hollanda, Mısır, ABD, Bulgaristan ve Japonya yer alıyor.',
-    hubRow: 'Mersin, Türkiye',
-    hubRowTag: 'Merkez',
+    figures: [
+      { value: '6', label: 'Başlıca ihracat pazarı' },
+      { value: '4', label: 'Kıta' },
+      { value: 'Mersin', label: 'Merkez dağıtım noktası' },
+    ],
+    stepsLabel: 'Başlıca ihracat pazarları',
     countries: {
-      uk: { name: 'İngiltere', short: 'UK' },
-      nl: { name: 'Hollanda', short: 'NL' },
-      bg: { name: 'Bulgaristan', short: 'BG' },
-      eg: { name: 'Mısır', short: 'EG' },
-      us: { name: 'ABD', short: 'US' },
-      jp: { name: 'Japonya', short: 'JP' },
+      bg: { name: 'Bulgaristan', short: 'BG', region: 'Balkanlar' },
+      eg: { name: 'Mısır', short: 'EG', region: 'Kuzey Afrika' },
+      nl: { name: 'Hollanda', short: 'NL', region: 'Batı Avrupa' },
+      uk: { name: 'İngiltere', short: 'UK', region: 'Batı Avrupa' },
+      us: { name: 'ABD', short: 'US', region: 'Kuzey Amerika' },
+      jp: { name: 'Japonya', short: 'JP', region: 'Uzak Doğu' },
     },
-    mapLabel:
-      'Mersin’den dünyanın dört bir yanına, başta İngiltere, Hollanda, Mısır, ABD, Bulgaristan ve Japonya olmak üzere ihracat rotalarını gösteren harita',
-    worldwide: 'Dünyanın dört bir yanı',
+    worldwide: { name: 'Dünyanın dört bir yanı', region: 'Küresel' },
+    legend: {
+      hub: 'Merkez · Mersin',
+      market: 'İhracat pazarı',
+      route: 'Sevkiyat rotası',
+    },
     controls: {
       zoomIn: 'Yakınlaştır',
       zoomOut: 'Uzaklaştır',
       reset: 'Görünümü sıfırla',
     },
+    mapLabel:
+      'Mersin’den dünyanın dört bir yanına, başta Bulgaristan, Mısır, Hollanda, İngiltere, ABD ve Japonya olmak üzere ihracat rotalarını gösteren dünya haritası',
     discuss: 'İhtiyacınızı Görüşelim',
   },
 

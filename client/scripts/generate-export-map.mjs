@@ -6,7 +6,8 @@
 
   Outputs:
     src/assets/maps/export-map.svg  – the dotted land map (static image)
-    src/data/exportMap.js           – viewBox size + projected pin positions
+    src/data/exportMap.js           – size, hub, destinations (with the dots
+                                      of each highlighted country)
 */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -15,56 +16,71 @@ import DottedMap from 'dotted-map';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 
-// Whole world: the component zooms into the export region and lets
-// visitors zoom out to the full map.
+// World without Antarctica and the far north, so continents read clearly
+const region = { lat: { min: -56, max: 74 }, lng: { min: -168, max: 180 } };
+const HEIGHT = 96;
+const GRID = 'diagonal';
 
 // Central distribution hub
-const hub = { key: 'mersin', lat: 36.8121, lng: 34.6415, labelPosition: 'right' };
+const hub = { key: 'mersin', country: 'TUR', lat: 36.8121, lng: 34.6415, labelPosition: 'right' };
 
-// Export destinations in display order (capital cities mark each country).
-// labelPosition keeps nearby labels (UK / NL) from overlapping.
+// Export markets, ordered from nearest to farthest.
+// Each country is marked by its capital; `country` is the ISO3 code used
+// to highlight the whole country on the map.
 const destinations = [
-  { key: 'uk', lat: 51.5074, lng: -0.1278, labelPosition: 'left' },
-  { key: 'nl', lat: 52.3676, lng: 4.9041, labelPosition: 'top' },
-  { key: 'eg', lat: 30.0444, lng: 31.2357, labelPosition: 'bottom' },
-  { key: 'us', lat: 38.9072, lng: -77.0369, labelPosition: 'top' },
-  { key: 'bg', lat: 42.6977, lng: 23.3219, labelPosition: 'top' },
-  { key: 'jp', lat: 35.6762, lng: 139.6503, labelPosition: 'top' },
+  { key: 'bg', country: 'BGR', lat: 42.6977, lng: 23.3219, labelPosition: 'top' },
+  { key: 'eg', country: 'EGY', lat: 30.0444, lng: 31.2357, labelPosition: 'bottom' },
+  { key: 'nl', country: 'NLD', lat: 52.3676, lng: 4.9041, labelPosition: 'top' },
+  { key: 'uk', country: 'GBR', lat: 51.5074, lng: -0.1278, labelPosition: 'left' },
+  { key: 'us', country: 'USA', lat: 38.9072, lng: -77.0369, labelPosition: 'top' },
+  { key: 'jp', country: 'JPN', lat: 35.6762, lng: 139.6503, labelPosition: 'top' },
 ];
 
-const map = new DottedMap({ height: 90, grid: 'diagonal' });
-
-// Land dots first, before pins add any extra points.
-// Written as one path of zero-length segments with round caps: identical
-// rendering to thousands of <circle> elements at a fraction of the size.
 const DOT_RADIUS = 0.26;
-const points = map.getPoints();
 
-// Same coordinate frame dotted-map uses for its own SVG output
+const round = (n) => Number(n.toFixed(2));
+
+// One path of zero-length segments with round caps renders exactly like
+// thousands of <circle> elements at a fraction of the size.
+const toPath = (points) => points.map((p) => `M${round(p.x)} ${round(p.y)}h0`).join('');
+
+const map = new DottedMap({ height: HEIGHT, grid: GRID, region });
+
 const [, width, height] = map
   .getSVG({ radius: DOT_RADIUS })
   .match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/)
   .map(Number);
 
-const round = (n) => Number(n.toFixed(2));
-const d = points.map((p) => `M${round(p.x)} ${round(p.y)}h0`).join('');
+const landPath = toPath(map.getPoints());
 
-const svg =
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}">` +
-  `<path d="${d}" stroke="#ffffff" stroke-opacity="0.2" stroke-width="${DOT_RADIUS * 2}" stroke-linecap="round" fill="none"/>` +
-  `</svg>`;
+// Same region + height → the country grids line up exactly with the world grid
+const countryPath = (iso3) =>
+  toPath(new DottedMap({ height: HEIGHT, grid: GRID, region, countries: [iso3] }).getPoints());
 
-const project = ({ key, lat, lng, ...rest }) => {
+const project = ({ key, country, lat, lng, ...rest }) => {
   const pin = map.addPin({ lat, lng });
-  return { key, x: pin.x, y: Number(pin.y.toFixed(3)), ...rest };
+
+  return {
+    key,
+    x: pin.x,
+    y: round(pin.y),
+    ...rest,
+    dots: countryPath(country),
+  };
 };
 
 const data = {
   width,
   height,
+  dotRadius: DOT_RADIUS,
   hub: project(hub),
   destinations: destinations.map(project),
 };
+
+const svg =
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}">` +
+  `<path d="${landPath}" stroke="#ffffff" stroke-opacity="0.22" stroke-width="${DOT_RADIUS * 2}" stroke-linecap="round" fill="none"/>` +
+  `</svg>`;
 
 fs.writeFileSync(path.join(root, 'src/assets/maps/export-map.svg'), svg);
 fs.writeFileSync(

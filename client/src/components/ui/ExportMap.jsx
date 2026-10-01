@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   animate,
   motion,
@@ -11,24 +11,28 @@ import { Minus, Plus, RotateCcw } from 'lucide-react';
 import mapImage from '../../assets/maps/export-map.svg';
 
 /*
-  Animated export-route map, adapted from the "WorldMap" (map.tsx) block.
+  Export network map, adapted from the "WorldMap" (map.tsx) block.
 
-  Differences from the original:
-  - the dotted world map is pre-rendered by scripts/generate-export-map.mjs
-    instead of being computed in the browser
-  - next/image and next-themes are replaced (the section is always dark)
-  - the sequence is driven from outside (revealedCount / activeKey) so the
-    country list and the map stay in sync; the camera frames each active
-    route in turn and zooms out to the whole world at the end
-  - zoom in / out / reset buttons and drag-to-pan when zoomed in
-  - labels are HTML overlays so they stay readable at every zoom level
+  - The dotted world map is pre-rendered by scripts/generate-export-map.mjs.
+  - Export countries are highlighted dot-by-dot so they read as countries,
+    not just pins; the active market is brightest.
+  - The map always opens on the whole world; visitors can zoom in/out and
+    drag to pan. The sequence never moves the camera, so the map stays
+    recognisable.
+  - The sequence (revealed markets / active market) is driven from outside
+    so the step list and the map stay in sync.
 */
 
-const ROUTE_DRAW_SECONDS = 1.2;
-const SHIPMENT_SECONDS = 1.8;
-const VIEW_ANIMATION = { duration: 0.8, ease: [0.4, 0, 0.2, 1] };
+const ROUTE_DRAW_SECONDS = 1.1;
+const SHIPMENT_SECONDS = 1.7;
+const VIEW_ANIMATION = { duration: 0.7, ease: [0.4, 0, 0.2, 1] };
 const ZOOM_STEP = 1.6;
-const MAX_ZOOM = 8;
+const MAX_ZOOM = 5;
+
+const COLORS = {
+  market: '#e0313f',
+  hub: '#ffffff',
+};
 
 function curvedPath(start, end) {
   const midX = (start.x + end.x) / 2;
@@ -36,7 +40,7 @@ function curvedPath(start, end) {
   const distance = Math.hypot(end.x - start.x, end.y - start.y);
 
   // Arc upwards, higher for longer routes
-  return `M ${start.x} ${start.y} Q ${midX} ${midY - distance * 0.35} ${end.x} ${end.y}`;
+  return `M ${start.x} ${start.y} Q ${midX} ${midY - distance * 0.32} ${end.x} ${end.y}`;
 }
 
 // 'top' -> 'labelTop'
@@ -56,54 +60,24 @@ function clampView(view, width, height) {
   };
 }
 
-const MIN_ROUTE_VIEW_WIDTH = 64;
-
-/* View framing one route (hub → destination), at the map's aspect ratio */
-function routeView(hub, destination, width, height) {
-  const ratio = width / height;
-  const dx = Math.abs(destination.x - hub.x);
-  const dy = Math.abs(destination.y - hub.y);
-  const distance = Math.hypot(dx, dy);
-
-  let w = Math.max(dx * 1.6, MIN_ROUTE_VIEW_WIDTH);
-  let h = Math.max(dy * 2.4, distance * 0.6);
-
-  if (w / h > ratio) {
-    h = w / ratio;
-  } else {
-    w = h * ratio;
-  }
-
-  // The arc bulges upwards, so centre slightly above the straight line
-  const cx = (hub.x + destination.x) / 2;
-  const cy = (hub.y + destination.y) / 2 - distance * 0.09;
-
-  return clampView({ x: cx - w / 2, y: cy - h / 2, w, h }, width, height);
-}
-
-function Pulse({ x, y, color, radius, delay = 0 }) {
+function Pulse({ x, y, color, radius }) {
   return (
-    <>
-      <circle cx={x} cy={y} r={radius} fill={color} />
-      <circle cx={x} cy={y} r={radius} fill={color} opacity="0.5">
-        <animate
-          attributeName="r"
-          from={radius}
-          to={radius * 4}
-          dur="2s"
-          begin={`${delay}s`}
-          repeatCount="indefinite"
-        />
-        <animate
-          attributeName="opacity"
-          from="0.6"
-          to="0"
-          dur="2s"
-          begin={`${delay}s`}
-          repeatCount="indefinite"
-        />
-      </circle>
-    </>
+    <circle cx={x} cy={y} r={radius} fill={color} opacity="0.5">
+      <animate
+        attributeName="r"
+        from={radius}
+        to={radius * 4}
+        dur="2s"
+        repeatCount="indefinite"
+      />
+      <animate
+        attributeName="opacity"
+        from="0.6"
+        to="0"
+        dur="2s"
+        repeatCount="indefinite"
+      />
+    </circle>
   );
 }
 
@@ -135,23 +109,31 @@ function Shipment({ pathRef, radius }) {
     return () => controls.stop();
   }, [progress]);
 
-  return <motion.circle r={radius} fill="#fff" cx={cx} cy={cy} style={{ opacity }} />;
+  return (
+    <motion.circle
+      r={radius}
+      fill="#fff"
+      cx={cx}
+      cy={cy}
+      style={{ opacity }}
+    />
+  );
 }
 
-function Route({ hub, destination, active, dimmed, unit, lineColor, reduceMotion }) {
+function Route({ hub, destination, emphasis, unit, reduceMotion }) {
   const pathRef = useRef(null);
-  const d = curvedPath(hub, destination);
 
   const common = {
-    d,
+    d: curvedPath(hub, destination),
     fill: 'none',
-    stroke: lineColor,
-    strokeWidth: (active ? 0.55 : 0.32) * unit,
+    stroke: COLORS.market,
+    strokeWidth: (emphasis === 'active' ? 0.5 : 0.3) * unit,
     strokeLinecap: 'round',
+    strokeOpacity: emphasis === 'muted' ? 0.35 : 1,
   };
 
   return (
-    <g className="exportRoute" style={{ opacity: dimmed ? 0.3 : 1 }}>
+    <g className="exportRoute">
       {reduceMotion ? (
         <path ref={pathRef} {...common} />
       ) : (
@@ -164,58 +146,37 @@ function Route({ hub, destination, active, dimmed, unit, lineColor, reduceMotion
         />
       )}
 
-      {active && !reduceMotion && (
-        <Shipment pathRef={pathRef} radius={0.7 * unit} />
+      {emphasis === 'active' && !reduceMotion && (
+        <Shipment pathRef={pathRef} radius={0.65 * unit} />
       )}
-
-      <Pulse
-        x={destination.x}
-        y={destination.y}
-        color={lineColor}
-        radius={0.75 * unit}
-      />
     </g>
   );
 }
 
 export default function ExportMap({
   data,
+  labels,
   hubLabel,
   hubShortLabel,
-  labels,
   controlLabels,
-  revealedCount = Infinity,
+  legendLabels,
+  isRevealed = () => true,
   activeKey = null,
-  autoView = 'focus',
+  highlightAll = false,
   cycle = 0,
   onHoverChange,
-  lineColor = '#d51d2c',
 }) {
   const reduceMotion = useReducedMotion();
 
-  const { width, height, hub, destinations } = data;
+  const { width, height, dotRadius, hub, destinations } = data;
 
-  const world = useMemo(() => ({ x: 0, y: 0, w: width, h: height }), [width, height]);
-
-  // Where the automatic sequence wants the camera: the active route, or the world
-  const activeDestination = destinations.find((d) => d.key === activeKey);
-
-  const autoTarget = useMemo(
-    () =>
-      autoView === 'world' || !activeDestination
-        ? world
-        : routeView(hub, activeDestination, width, height),
-    [autoView, activeDestination, hub, width, height, world]
-  );
+  const world = { x: 0, y: 0, w: width, h: height };
 
   const [view, setView] = useState(world);
   const viewRef = useRef(view);
   const animationRef = useRef(null);
 
-  // Once a visitor zooms or pans, the automatic sequence stops moving the map
-  const [userControlled, setUserControlled] = useState(false);
   const [dragging, setDragging] = useState(false);
-
   const containerRef = useRef(null);
   const dragRef = useRef(null);
 
@@ -252,16 +213,7 @@ export default function ExportMap({
 
   useEffect(() => () => animationRef.current?.stop(), []);
 
-  // Follow the sequence: frame each route in turn, then zoom out to the world
-  useEffect(() => {
-    if (!userControlled) {
-      goTo(autoTarget);
-    }
-  }, [autoTarget, userControlled, goTo]);
-
   function zoom(factor) {
-    setUserControlled(true);
-
     const current = viewRef.current;
     const w = current.w * factor;
     const h = w * (height / width);
@@ -271,21 +223,16 @@ export default function ExportMap({
     goTo({ x: cx - w / 2, y: cy - h / 2, w, h });
   }
 
-  function reset() {
-    setUserControlled(false);
-    goTo(autoTarget);
-  }
+  const zoomLevel = width / view.w;
+  const canPan = zoomLevel > 1.01;
 
   /* Drag to pan when zoomed in */
-  const canPan = view.w < width - 0.01;
-
   function handlePointerDown(event) {
     if (!canPan || event.button !== 0) {
       return;
     }
 
     animationRef.current?.stop();
-    setUserControlled(true);
     setDragging(true);
 
     dragRef.current = {
@@ -326,8 +273,8 @@ export default function ExportMap({
     setDragging(false);
   }
 
-  // Line widths and dot sizes stay constant on screen at any zoom level
-  const unit = view.w / 150;
+  // Lines and markers keep the same on-screen size at every zoom level
+  const unit = view.w / 190;
 
   const toPercent = (point) => {
     const left = ((point.x - view.x) / view.w) * 100;
@@ -335,13 +282,21 @@ export default function ExportMap({
 
     return {
       style: { left: `${left}%`, top: `${top}%` },
-      visible: left >= -2 && left <= 102 && top >= -2 && top <= 102,
+      visible: left >= -1 && left <= 101 && top >= -1 && top <= 101,
     };
   };
 
-  const zoomLevel = width / view.w;
+  const emphasisFor = (key) => {
+    if (highlightAll || !activeKey) {
+      return 'normal';
+    }
+
+    return key === activeKey ? 'active' : 'muted';
+  };
 
   const hubPosition = toPercent(hub);
+  const activeDestination = destinations.find((d) => d.key === activeKey);
+  const activePosition = activeDestination && toPercent(activeDestination);
 
   return (
     <div className="exportMapFrame">
@@ -362,29 +317,86 @@ export default function ExportMap({
         >
           <image href={mapImage} x="0" y="0" width={width} height={height} />
 
-          {destinations.map((destination, index) =>
-            index < revealedCount ? (
+          {/* Home country */}
+          <path
+            d={hub.dots}
+            stroke={COLORS.hub}
+            strokeOpacity="0.45"
+            strokeWidth={dotRadius * 2}
+            strokeLinecap="round"
+            fill="none"
+          />
+
+          {/* Export markets, highlighted dot by dot */}
+          {destinations.map((destination) =>
+            isRevealed(destination.key) ? (
+              <path
+                key={`country-${destination.key}`}
+                className="exportCountry"
+                d={destination.dots}
+                stroke={COLORS.market}
+                strokeOpacity={emphasisFor(destination.key) === 'active' || highlightAll ? 1 : 0.55}
+                strokeWidth={dotRadius * 2}
+                strokeLinecap="round"
+                fill="none"
+              />
+            ) : null
+          )}
+
+          {destinations.map((destination) =>
+            isRevealed(destination.key) ? (
               <Route
                 key={`${destination.key}-${cycle}`}
                 hub={hub}
                 destination={destination}
-                active={activeKey === destination.key}
-                dimmed={Boolean(activeKey) && activeKey !== destination.key}
+                emphasis={emphasisFor(destination.key)}
                 unit={unit}
-                lineColor={lineColor}
                 reduceMotion={reduceMotion}
               />
             ) : null
           )}
 
+          {/* Market pins */}
+          {destinations.map((destination) => {
+            if (!isRevealed(destination.key)) {
+              return null;
+            }
+
+            const active = destination.key === activeKey;
+
+            return (
+              <g key={`pin-${destination.key}`}>
+                {(active || highlightAll) && !reduceMotion && (
+                  <Pulse
+                    x={destination.x}
+                    y={destination.y}
+                    color={COLORS.market}
+                    radius={0.8 * unit}
+                  />
+                )}
+                <circle
+                  cx={destination.x}
+                  cy={destination.y}
+                  r={(active ? 1 : 0.75) * unit}
+                  fill={COLORS.market}
+                  stroke="#0b0d10"
+                  strokeWidth={0.25 * unit}
+                />
+              </g>
+            );
+          })}
+
           {/* Central distribution hub */}
-          <Pulse x={hub.x} y={hub.y} color="#fff" radius={1.1 * unit} />
+          {!reduceMotion && (
+            <Pulse x={hub.x} y={hub.y} color={COLORS.hub} radius={1 * unit} />
+          )}
+          <circle cx={hub.x} cy={hub.y} r={1.05 * unit} fill={COLORS.hub} />
           <circle
             cx={hub.x}
             cy={hub.y}
-            r={2.4 * unit}
+            r={2.1 * unit}
             fill="none"
-            stroke={lineColor}
+            stroke={COLORS.market}
             strokeWidth={0.35 * unit}
           />
         </svg>
@@ -401,38 +413,37 @@ export default function ExportMap({
           </span>
         )}
 
-        {destinations.map((destination, index) => {
-          const position = toPercent(destination);
-
-          if (index >= revealedCount || !position.visible) {
-            return null;
-          }
-
-          const label = labels[destination.key];
-
-          return (
-            <motion.span
-              key={`${destination.key}-${cycle}`}
-              className={[
-                'exportMapLabel',
-                positionClass(destination.labelPosition),
-                activeKey === destination.key ? 'active' : '',
-              ].join(' ')}
-              style={position.style}
-              initial={reduceMotion ? false : { opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, delay: ROUTE_DRAW_SECONDS * 0.7 }}
-              onMouseEnter={() => onHoverChange?.(destination.key)}
-              onMouseLeave={() => onHoverChange?.(null)}
-            >
-              <span className="exportMapLabelFull">{label.name}</span>
-              <span className="exportMapLabelShort" aria-hidden="true">
-                {label.short}
-              </span>
-            </motion.span>
-          );
-        })}
+        {/* Only the active market is labelled, so labels never collide */}
+        {activeDestination && activePosition.visible && (
+          <motion.span
+            key={`${activeDestination.key}-${cycle}`}
+            className={`exportMapLabel exportMapLabelActive ${positionClass(activeDestination.labelPosition)}`}
+            style={activePosition.style}
+            initial={reduceMotion ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.35, delay: reduceMotion ? 0 : 0.25 }}
+            onMouseEnter={() => onHoverChange?.(activeDestination.key)}
+            onMouseLeave={() => onHoverChange?.(null)}
+          >
+            {labels[activeDestination.key].name}
+          </motion.span>
+        )}
       </div>
+
+      <ul className="exportMapLegend" aria-hidden="true">
+        <li>
+          <span className="legendHub" />
+          {legendLabels.hub}
+        </li>
+        <li>
+          <span className="legendMarket" />
+          {legendLabels.market}
+        </li>
+        <li>
+          <span className="legendRoute" />
+          {legendLabels.route}
+        </li>
+      </ul>
 
       <div className="exportMapControls">
         <button
@@ -448,7 +459,7 @@ export default function ExportMap({
         <button
           type="button"
           onClick={() => zoom(ZOOM_STEP)}
-          disabled={zoomLevel <= 1.01}
+          disabled={!canPan}
           aria-label={controlLabels.zoomOut}
           title={controlLabels.zoomOut}
         >
@@ -457,8 +468,8 @@ export default function ExportMap({
 
         <button
           type="button"
-          onClick={reset}
-          disabled={!userControlled}
+          onClick={() => goTo(world)}
+          disabled={!canPan}
           aria-label={controlLabels.reset}
           title={controlLabels.reset}
         >

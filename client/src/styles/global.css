@@ -4669,59 +4669,6 @@ h2 {
 }
 
 
-/* GLOBAL GRID */
-
-.globalGrid {
-  display: grid;
-
-  grid-template-columns:
-    1.25fr
-    .75fr;
-
-  min-height: 680px;
-
-  border-top:
-    1px solid
-    rgba(255,255,255,.15);
-
-  border-bottom:
-    1px solid
-    rgba(255,255,255,.15);
-}
-
-
-/* MAP */
-
-.globalMap {
-  position: relative;
-
-  min-height: 680px;
-
-  overflow: hidden;
-
-  border-right:
-    1px solid
-    rgba(255,255,255,.15);
-
-  background:
-    radial-gradient(
-      circle at 52% 47%,
-      #25292d,
-      #121417 55%,
-      #0b0d10
-    );
-}
-
-/* GLOBAL CONTENT */
-
-.globalContent {
-  padding: 42px;
-
-  display: flex;
-
-  flex-direction: column;
-}
-
 .globalLabel {
   color: rgba(255,255,255,.35);
 
@@ -4730,59 +4677,6 @@ h2 {
   font-weight: 700;
 
   letter-spacing: .13em;
-}
-
-.globalContent > p {
-  max-width: 480px;
-
-  margin: 70px 0 45px;
-
-  color: rgba(255,255,255,.65);
-
-  font-size: 20px;
-
-  line-height: 1.55;
-
-  letter-spacing: -.025em;
-}
-
-
-/* REGION LIST */
-
-.regionList {
-  border-top:
-    1px solid
-    rgba(255,255,255,.14);
-}
-
-.regionList > li {
-  padding: 20px 0;
-
-  display: grid;
-
-  grid-template-columns:
-    48px
-    1fr;
-
-  border-bottom:
-    1px solid
-    rgba(255,255,255,.14);
-}
-
-.regionList span {
-  color: var(--red);
-
-  font-size: 8px;
-
-  font-weight: 700;
-}
-
-.regionList strong {
-  font-size: 20px;
-
-  font-weight: 500;
-
-  letter-spacing: -.025em;
 }
 
 .globalLink {
@@ -4884,49 +4778,10 @@ h2 {
       40px;
   }
 
-  .globalGrid {
-    display: block;
-  }
-
-  .globalMap {
-    min-height: 520px;
-
-    border-inline-end: 0;
-
-    border-bottom:
-      1px solid
-      rgba(255,255,255,.15);
-  }
-
-  .globalContent {
-    min-height: 570px;
-
-    padding:
-      35px
-      0;
-  }
-
-  .globalContent > p {
-    margin:
-      50px
-      0
-      40px;
-
-    font-size: 18px;
-  }
-
 }
 
 
 /* SMALL MOBILE */
-
-@media (max-width: 480px) {
-
-  .globalMap {
-    min-height: 460px;
-  }
-
-}
 
 /* =====================================================
    FINAL CTA
@@ -9428,26 +9283,86 @@ html[dir="rtl"] .desktopNav a {
 }
 
 
+
+
 /* =====================================================
-   EXPORT MAP (Global section)
+   EXPORT NETWORK (Global section)
 ===================================================== */
 
-.globalMap {
-  margin: 0;
+.globalIntro {
+  max-width: 640px;
 
-  padding: 40px 32px;
+  margin: 36px 0 0;
+
+  color: rgba(255, 255, 255, .62);
+
+  font-size: 18px;
+
+  line-height: 1.6;
+}
+
+.globalFigures {
+  margin: 40px 0 0;
 
   display: flex;
 
-  align-items: center;
+  flex-wrap: wrap;
 
-  justify-content: center;
+  gap: 18px 56px;
+}
+
+.globalFigures div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.globalFigures dt {
+  font-size: 34px;
+
+  font-weight: 500;
+
+  line-height: 1;
+
+  letter-spacing: -.04em;
+}
+
+.globalFigures dd {
+  margin: 0;
+
+  color: rgba(255, 255, 255, .45);
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  letter-spacing: .04em;
+
+  text-transform: uppercase;
+}
+
+/* Map panel */
+
+.exportMapPanel {
+  margin: 0;
+
+  padding: 28px;
+
+  border: 1px solid rgba(255, 255, 255, .12);
+
+  background:
+    radial-gradient(
+      ellipse at 55% 40%,
+      #1d2125,
+      #121417 60%,
+      #0e1013
+    );
 }
 
 .exportMapFrame {
   position: relative;
-
-  width: 100%;
 }
 
 .exportMap {
@@ -9458,9 +9373,6 @@ html[dir="rtl"] .desktopNav a {
   overflow: hidden;
 
   touch-action: pan-y;
-
-  /* soft fade at the top and bottom edges, as in the original block */
-  mask-image: linear-gradient(to bottom, transparent, #000 6%, #000 94%, transparent);
 }
 
 .exportMap.canPan {
@@ -9485,20 +9397,156 @@ html[dir="rtl"] .desktopNav a {
   user-select: none;
 }
 
-.exportMapControls {
+.exportCountry,
+.exportRoute path {
+  transition: stroke-opacity 400ms ease;
+}
+
+/* Map labels */
+
+.exportMapLabel {
   position: absolute;
 
-  bottom: 12px;
+  z-index: 2;
 
-  right: 12px;
+  padding: 6px 10px;
+
+  border-radius: 6px;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  line-height: 1.2;
+
+  white-space: nowrap;
+
+  pointer-events: none;
+}
+
+.exportMapLabelHub {
+  border: 1px solid var(--red);
+
+  color: #fff;
+
+  background: rgba(11, 13, 16, .9);
+}
+
+.exportMapLabelActive {
+  color: #0b0d10;
+
+  background: #fff;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .45);
+
+  pointer-events: auto;
+}
+
+.labelTop {
+  transform: translate(-50%, calc(-100% - 12px));
+}
+
+.labelBottom {
+  transform: translate(-50%, 12px);
+}
+
+.labelLeft {
+  transform: translate(calc(-100% - 12px), -50%);
+}
+
+.labelRight {
+  transform: translate(12px, -50%);
+}
+
+.exportMapLabelShort {
+  display: none;
+}
+
+/* Legend */
+
+.exportMapLegend {
+  position: absolute;
+
+  bottom: 0;
+
+  left: 0;
+
+  margin: 0;
+
+  padding: 10px 14px;
 
   display: flex;
 
-  flex-direction: column;
+  flex-wrap: wrap;
+
+  gap: 8px 18px;
+
+  list-style: none;
+
+  border: 1px solid rgba(255, 255, 255, .1);
+
+  border-radius: 8px;
+
+  background: rgba(11, 13, 16, .8);
+
+  color: rgba(255, 255, 255, .7);
+
+  font-size: 12px;
+
+  font-weight: 500;
+}
+
+.exportMapLegend li {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+.legendHub,
+.legendMarket {
+  width: 10px;
+
+  height: 10px;
+
+  border-radius: 50%;
+}
+
+.legendHub {
+  background: #fff;
+
+  box-shadow: 0 0 0 2px var(--red);
+}
+
+.legendMarket {
+  background: #e0313f;
+}
+
+.legendRoute {
+  width: 18px;
+
+  height: 2px;
+
+  border-radius: 2px;
+
+  background: #e0313f;
+}
+
+/* Zoom controls */
+
+.exportMapControls {
+  position: absolute;
+
+  bottom: 0;
+
+  right: 0;
+
+  display: flex;
 
   overflow: hidden;
 
-  border: 1px solid rgba(255, 255, 255, .16);
+  border: 1px solid rgba(255, 255, 255, .14);
 
   border-radius: 8px;
 
@@ -9506,9 +9554,9 @@ html[dir="rtl"] .desktopNav a {
 }
 
 .exportMapControls button {
-  width: 34px;
+  width: 36px;
 
-  height: 34px;
+  height: 36px;
 
   display: flex;
 
@@ -9528,7 +9576,7 @@ html[dir="rtl"] .desktopNav a {
 }
 
 .exportMapControls button + button {
-  border-top: 1px solid rgba(255, 255, 255, .12);
+  border-left: 1px solid rgba(255, 255, 255, .12);
 }
 
 .exportMapControls button:hover:not(:disabled) {
@@ -9536,7 +9584,7 @@ html[dir="rtl"] .desktopNav a {
 }
 
 .exportMapControls button:disabled {
-  opacity: .35;
+  opacity: .3;
 
   cursor: default;
 }
@@ -9547,220 +9595,283 @@ html[dir="rtl"] .desktopNav a {
   height: 16px;
 }
 
-.exportRoute {
-  transition: opacity 250ms ease;
+/* Steps */
+
+.exportStepsHeader {
+  margin: 48px 0 18px;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap: 24px;
 }
 
-.exportMapLabel {
-  position: absolute;
+.exportStepsHeader .globalLink {
+  margin: 0;
 
-  z-index: 2;
-
-  padding: 5px 9px;
-
-  border: 1px solid rgba(255, 255, 255, .16);
-
-  border-radius: 6px;
-
-  color: #fff;
-
-  background: rgba(11, 13, 16, .88);
-
-  font: inherit;
-
-  font-size: 12px;
-
-  font-weight: 600;
-
-  line-height: 1.2;
-
-  white-space: nowrap;
-
-  cursor: default;
-
-  transition:
-    border-color 200ms ease,
-    background-color 200ms ease;
+  padding-top: 0;
 }
 
-.exportMapLabel.active,
-.exportMapLabel:hover,
-.exportMapLabel:focus-visible {
-  border-color: var(--red);
-
-  background: var(--red);
-}
-
-.exportMapLabelHub {
-  border-color: var(--red);
-
-  font-weight: 700;
-}
-
-.labelTop {
-  transform: translate(-50%, calc(-100% - 10px));
-}
-
-.labelBottom {
-  transform: translate(-50%, 12px);
-}
-
-.labelLeft {
-  transform: translate(calc(-100% - 10px), -50%);
-}
-
-.labelRight {
-  transform: translate(10px, -50%);
-}
-
-.exportMapLabelShort {
-  display: none;
-}
-
-/* Country list next to the map */
-.regionList {
+.exportSteps {
   margin: 0;
 
   padding: 0;
 
+  display: grid;
+
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+
+  gap: 1px;
+
   list-style: none;
+
+  border: 1px solid rgba(255, 255, 255, .12);
+
+  background: rgba(255, 255, 255, .12);
 }
 
-.regionList > li {
-  align-items: baseline;
-
-  transition: color 200ms ease, padding 200ms ease;
+.exportSteps > li {
+  display: flex;
 }
 
-.regionList > li:not(.regionHub) {
-  cursor: default;
-}
+.exportStep {
+  position: relative;
 
-/* Countries appear one by one, in step with the map */
-.regionItem {
-  opacity: 0;
+  width: 100%;
 
-  transform: translateY(8px);
+  padding: 20px 18px 24px;
 
-  transition:
-    opacity 450ms ease,
-    transform 450ms ease,
-    padding 200ms ease;
-}
-
-.regionItem.revealed {
-  opacity: 1;
-
-  transform: none;
-}
-
-.regionItem:not(.revealed) {
-  pointer-events: none;
-}
-
-.regionWorldwide span {
   display: flex;
 
-  align-items: center;
-}
+  flex-direction: column;
 
-.regionWorldwide span svg {
-  width: 14px;
+  align-items: flex-start;
 
-  height: 14px;
-}
+  gap: 6px;
 
-@media (prefers-reduced-motion: reduce) {
-
-  .regionItem {
-    transition: none;
-  }
-
-}
-
-.regionList > li.active {
-  padding-inline-start: 10px;
-}
-
-.regionList > li.active strong {
-  color: var(--red);
-}
-
-.regionList > .regionHub {
-  grid-template-columns: 48px 1fr auto;
-}
-
-.regionHub em {
-  padding: 3px 8px;
-
-  border: 1px solid var(--red);
-
-  border-radius: 999px;
+  border: 0;
 
   color: #fff;
 
-  font-size: 10px;
+  background: var(--dark);
 
-  font-style: normal;
+  font: inherit;
+
+  text-align: start;
+
+  cursor: default;
+
+  transition:
+    background-color 300ms ease,
+    opacity 300ms ease;
+}
+
+.exportStep.upcoming {
+  opacity: .38;
+}
+
+.exportStep.active {
+  background: #16191d;
+}
+
+.exportStepIndex {
+  height: 16px;
+
+  display: flex;
+
+  align-items: center;
+
+  color: var(--red);
+
+  font-size: 10px;
 
   font-weight: 700;
 
-  letter-spacing: .08em;
+  letter-spacing: .12em;
+}
 
-  text-transform: uppercase;
+.exportStepIndex svg {
+  width: 15px;
+
+  height: 15px;
+}
+
+.exportStep strong {
+  margin-top: 10px;
+
+  font-size: 17px;
+
+  font-weight: 600;
+
+  letter-spacing: -.02em;
+}
+
+.exportStep.active strong {
+  color: #fff;
+}
+
+.exportStepRegion {
+  color: rgba(255, 255, 255, .45);
+
+  font-size: 12px;
+}
+
+.exportStepProgress {
+  position: absolute;
+
+  left: 0;
+
+  right: 0;
+
+  bottom: 0;
+
+  height: 3px;
+
+  background: transparent;
+}
+
+.exportStep.active .exportStepProgress {
+  background: rgba(255, 255, 255, .08);
+}
+
+.exportStepProgress span {
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+  background: var(--red);
+
+  transform: scaleX(0);
+
+  transform-origin: left center;
+
+  animation: exportStepProgress 3s linear forwards;
+}
+
+html[dir="rtl"] .exportStepProgress span {
+  transform-origin: right center;
+}
+
+@keyframes exportStepProgress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (max-width: 1100px) {
+
+  .exportSteps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
 }
 
 @media (max-width: 800px) {
 
-  .globalMap {
-    min-height: 0;
+  .exportMapPanel {
+    padding: 14px;
+  }
 
-    padding: 28px 0;
+  .exportMapLegend {
+    position: static;
+
+    margin-top: 12px;
+
+    width: max-content;
+
+    max-width: calc(100% - 130px);
+
+    font-size: 11px;
+  }
+
+  .exportMapControls {
+    top: auto;
+  }
+
+  .exportStepsHeader {
+    margin-top: 36px;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  /* Steps scroll sideways on small screens */
+  .exportSteps {
+    display: flex;
+
+    overflow-x: auto;
+
+    scroll-snap-type: x mandatory;
+
+    scrollbar-width: none;
+  }
+
+  .exportSteps::-webkit-scrollbar {
+    display: none;
+  }
+
+  .exportSteps > li {
+    flex: 0 0 46%;
+
+    scroll-snap-align: start;
   }
 
 }
 
-/* Small screens: country codes instead of names so labels never overlap */
 @media (max-width: 640px) {
 
-  .exportMapLabel {
-    padding: 3px 6px;
+  /* Give the world map every pixel of width available */
+  .exportMapPanel {
+    margin-inline: -8px;
 
-    font-size: 10px;
+    padding: 10px 8px 12px;
   }
 
-  .exportMapLabelFull {
+  .exportMapLabel {
+    padding: 4px 7px;
+
+    font-size: 11px;
+  }
+
+  .exportMapLabelHub .exportMapLabelFull {
     display: none;
   }
 
-  .exportMapLabelShort {
+  .exportMapLabelHub .exportMapLabelShort {
     display: inline;
   }
 
-  .exportMapLabelHub {
-    font-size: 10px;
+  /* Keep the hub label inside the map on narrow screens */
+  .exportMapLabelHub.labelRight {
+    transform: translate(10px, -50%);
   }
 
-  /* Zoom controls move under the map so they never cover the routes */
+  .exportMapLegend {
+    max-width: none;
+
+    gap: 6px 12px;
+  }
+
   .exportMapControls {
     position: static;
 
     width: max-content;
 
-    margin: 12px 0 0 auto;
-
-    flex-direction: row;
+    margin: 10px 0 0 auto;
   }
 
-  .exportMapControls button + button {
-    border-top: 0;
+}
 
-    border-left: 1px solid rgba(255, 255, 255, .12);
-  }
+@media (prefers-reduced-motion: reduce) {
 
-  /* The hub sits near the right edge: keep its label inside the map */
-  .exportMapLabelHub.labelRight {
-    transform: translate(calc(-100% - 8px), -50%);
+  .exportStep {
+    transition: none;
   }
 
 }
