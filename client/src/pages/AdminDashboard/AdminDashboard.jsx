@@ -2,11 +2,19 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { getQuoteStats } from '../../services/adminApi';
+import {
+  clearAdminSession,
+  getAdminToken,
+  isAuthError,
+} from '../../services/adminAuth';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function AdminDashboard() {
+  usePageTitle('Admin Dashboard');
+
   const navigate = useNavigate();
 
-  const token = localStorage.getItem('rma_admin_token');
+  const token = getAdminToken();
 
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -30,14 +38,17 @@ export default function AdminDashboard() {
 
         setStats(data.data);
       } catch (err) {
-        console.error(err);
+        if (isAuthError(err)) {
+          clearAdminSession();
 
-        localStorage.removeItem('rma_admin_token');
-        localStorage.removeItem('rma_admin_user');
+          navigate('/admin/login', {
+            replace: true,
+          });
 
-        navigate('/admin/login', {
-          replace: true,
-        });
+          return;
+        }
+
+        setError(err.message);
       } finally {
         setLoading(false);
       }

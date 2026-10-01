@@ -8,8 +8,11 @@ import FacilitiesSection from '../../sections/FacilitiesSection';
 import QualitySection from '../../sections/QualitySection';
 import GlobalPresenceSection from '../../sections/GlobalPresenceSection';
 import FinalCTASection from '../../sections/FinalCTASection';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function Home() {
+  usePageTitle(null);
+
   return (
     <main>
       <HeroSection />

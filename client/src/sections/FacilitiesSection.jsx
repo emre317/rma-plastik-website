@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const facilities = [
   {
     index: '01',
@@ -133,10 +135,10 @@ export default function FacilitiesSection() {
             One manufacturing standard.
           </p>
 
-          <a href="#contact">
+          <Link to="/contact">
             Contact Our Team
             <span>↗</span>
-          </a>
+          </Link>
 
         </div>
 

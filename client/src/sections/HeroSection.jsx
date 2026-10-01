@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function HeroSection() {
   return (
     <section className="hero" id="home">
@@ -40,13 +42,13 @@ export default function HeroSection() {
                 <span className="buttonArrow">↗</span>
               </a>
 
-              <a
+              <Link
                 className="button ghost"
-                href="#contact"
+                to="/contact"
               >
                 <span>Request a Solution</span>
                 <span className="buttonArrow">↗</span>
-              </a>
+              </Link>
 
             </div>
 

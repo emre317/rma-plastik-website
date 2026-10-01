@@ -1,5 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
+
 import products from '../../data/products';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function ProductDetail() {
   const { slug } = useParams();
@@ -7,6 +9,8 @@ export default function ProductDetail() {
   const product = products.find(
     (item) => item.slug === slug
   );
+
+  usePageTitle(product ? product.name : 'Product not found');
 
   if (!product) {
     return (
@@ -35,6 +39,11 @@ export default function ProductDetail() {
     .filter(
       (item) =>
         item.slug !== product.slug
+    )
+    .sort(
+      (a, b) =>
+        Number(b.category === product.category) -
+        Number(a.category === product.category)
     )
     .slice(0, 3);
 
@@ -82,7 +91,7 @@ export default function ProductDetail() {
                 </a>
 
                 <Link
-                  to="/contact"
+                  to={`/contact?product=${product.slug}`}
                   className="button ghost"
                 >
                   Request a Quote
@@ -354,7 +363,7 @@ export default function ProductDetail() {
                 </strong>
               </div>
 
-              <button type="button">
+              <button type="button" disabled>
                 Coming Soon
               </button>
             </div>
@@ -368,7 +377,7 @@ export default function ProductDetail() {
                 </strong>
               </div>
 
-              <button type="button">
+              <button type="button" disabled>
                 Coming Soon
               </button>
             </div>
@@ -382,7 +391,7 @@ export default function ProductDetail() {
                 </strong>
               </div>
 
-              <button type="button">
+              <button type="button" disabled>
                 Coming Soon
               </button>
             </div>
@@ -492,7 +501,7 @@ export default function ProductDetail() {
           </div>
 
           <Link
-            to="/contact"
+            to={`/contact?product=${product.slug}`}
             className="productDetailCtaButton"
           >
             <span>

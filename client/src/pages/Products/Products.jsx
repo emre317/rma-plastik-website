@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 import products from '../../data/products';
+import usePageTitle from '../../hooks/usePageTitle';
 
 const filters = [
   {
@@ -31,7 +31,24 @@ const filters = [
 ];
 
 export default function Products() {
-  const [activeFilter, setActiveFilter] = useState('all');
+  usePageTitle('Products');
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const requestedFilter = searchParams.get('category');
+
+  const activeFilter = filters.some(
+    (filter) => filter.id === requestedFilter
+  )
+    ? requestedFilter
+    : 'all';
+
+  function setActiveFilter(filterId) {
+    setSearchParams(
+      filterId === 'all' ? {} : { category: filterId },
+      { replace: true }
+    );
+  }
 
   const filteredProducts =
     activeFilter === 'all'
@@ -121,6 +138,7 @@ export default function Products() {
                     ? 'active'
                     : ''
                 }
+                aria-pressed={activeFilter === filter.id}
                 onClick={() =>
                   setActiveFilter(filter.id)
                 }
@@ -130,6 +148,19 @@ export default function Products() {
             ))}
 
           </div>
+
+          {filteredProducts.length === 0 && (
+            <div className="productsEmpty">
+              <p>
+                No products listed in this category yet.
+              </p>
+
+              <Link to="/contact">
+                Ask our team
+                <span>↗</span>
+              </Link>
+            </div>
+          )}
 
           <div className="productsCatalogGrid">
 

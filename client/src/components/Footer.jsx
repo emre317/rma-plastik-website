@@ -168,12 +168,13 @@ export default function Footer() {
           </span>
 
           <div>
-            <Link to="/privacy">
-              Privacy
+            {/* TODO: add Privacy / KVKK and Cookies pages once legal texts are approved */}
+            <Link to="/products">
+              Products
             </Link>
 
-            <Link to="/cookies">
-              Cookies
+            <Link to="/contact">
+              Request a Quote
             </Link>
           </div>
 

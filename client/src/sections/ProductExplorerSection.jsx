@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const productCategories = [
   {
     id: 'industrial',
+    catalogCategory: 'industrial-tanks',
     number: '01',
     label: 'Industrial Tanks',
     title: 'Industrial Storage Tanks',
@@ -13,6 +15,7 @@ const productCategories = [
   },
   {
     id: 'chemical',
+    catalogCategory: 'chemical-tanks',
     number: '02',
     label: 'Chemical Tanks',
     title: 'Chemical Storage Solutions',
@@ -23,6 +26,7 @@ const productCategories = [
   },
   {
     id: 'water',
+    catalogCategory: 'water-tanks',
     number: '03',
     label: 'Water Tanks',
     title: 'Water Storage Tanks',
@@ -33,6 +37,7 @@ const productCategories = [
   },
   {
     id: 'agriculture',
+    catalogCategory: 'agriculture',
     number: '04',
     label: 'Agricultural',
     title: 'Agricultural Solutions',
@@ -43,6 +48,7 @@ const productCategories = [
   },
   {
     id: 'material',
+    catalogCategory: null,
     number: '05',
     label: 'Material Handling',
     title: 'Material Handling Products',
@@ -53,6 +59,7 @@ const productCategories = [
   },
   {
     id: 'custom',
+    catalogCategory: 'custom',
     number: '06',
     label: 'Custom Products',
     title: 'Custom Engineered Products',
@@ -108,6 +115,7 @@ export default function ProductExplorerSection() {
                   key={item.id}
                   className={`productCategoryItem ${active ? 'active' : ''}`}
                   onClick={() => setActiveProduct(item)}
+                  aria-pressed={active}
                   type="button"
                 >
                   <span className="productCategoryNumber">
@@ -185,10 +193,19 @@ export default function ProductExplorerSection() {
                 {activeProduct.description}
               </p>
 
-              <a href="#contact" className="productExploreLink">
-                Explore Product Range
+              <Link
+                to={
+                  activeProduct.catalogCategory
+                    ? `/products?category=${activeProduct.catalogCategory}`
+                    : '/contact'
+                }
+                className="productExploreLink"
+              >
+                {activeProduct.catalogCategory
+                  ? 'Explore Product Range'
+                  : 'Ask About This Range'}
                 <span>↗</span>
-              </a>
+              </Link>
 
             </div>
 

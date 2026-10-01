@@ -1,4 +1,8 @@
+import usePageTitle from '../../hooks/usePageTitle';
+
 export default function Company() {
+  usePageTitle('Company');
+
   return (
     <main className="internalPage">
 

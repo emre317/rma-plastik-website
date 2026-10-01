@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function EngineeringSection() {
   return (
     <section className="engineeringSection dark" id="engineering">
@@ -102,10 +104,10 @@ export default function EngineeringSection() {
 
             </div>
 
-            <a href="#contact" className="engineeringLink">
+            <Link to="/contact" className="engineeringLink">
               Discuss Your Project
               <span>↗</span>
-            </a>
+            </Link>
 
           </div>
 

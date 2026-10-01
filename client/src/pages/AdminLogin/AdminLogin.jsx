@@ -1,10 +1,23 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 import { adminLogin } from '../../services/adminApi';
+import {
+  hasValidAdminSession,
+  saveAdminSession,
+} from '../../services/adminAuth';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function AdminLogin() {
+  usePageTitle('Admin Login');
+
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const redirectTo =
+    location.state?.from?.pathname?.startsWith('/admin')
+      ? location.state.from.pathname + (location.state.from.search || '')
+      : '/admin';
 
   const [form, setForm] = useState({
     email: '',
@@ -32,21 +45,17 @@ export default function AdminLogin() {
     try {
       const data = await adminLogin(form);
 
-      localStorage.setItem(
-        'rma_admin_token',
-        data.token
-      );
+      saveAdminSession(data.token, data.admin);
 
-      localStorage.setItem(
-        'rma_admin_user',
-        JSON.stringify(data.admin)
-      );
-
-      navigate('/admin');
+      navigate(redirectTo, { replace: true });
     } catch (err) {
       setStatus('error');
       setError(err.message);
     }
+  }
+
+  if (status === 'idle' && hasValidAdminSession()) {
+    return <Navigate to={redirectTo} replace />;
   }
 
   return (
@@ -83,6 +92,7 @@ export default function AdminLogin() {
               <input
                 type="email"
                 name="email"
+                autoComplete="username"
                 value={form.email}
                 onChange={handleChange}
                 required
@@ -95,6 +105,7 @@ export default function AdminLogin() {
               <input
                 type="password"
                 name="password"
+                autoComplete="current-password"
                 value={form.password}
                 onChange={handleChange}
                 required
@@ -102,7 +113,7 @@ export default function AdminLogin() {
             </label>
 
             {error && (
-              <div className="adminLoginError">
+              <div className="adminLoginError" role="alert">
                 {error}
               </div>
             )}

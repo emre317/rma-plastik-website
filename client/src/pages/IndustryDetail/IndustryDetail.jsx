@@ -1,7 +1,11 @@
 import { useParams } from 'react-router-dom';
+import usePageTitle from '../../hooks/usePageTitle';
+import formatSlug from '../../utils/formatSlug';
 
 export default function IndustryDetail() {
   const { slug } = useParams();
+
+  usePageTitle(formatSlug(slug));
 
   return (
     <main className="internalPage">

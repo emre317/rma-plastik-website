@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const regions = [
   'Europe',
   'Middle East',
@@ -94,10 +96,10 @@ export default function GlobalPresenceSection() {
 
             </div>
 
-            <a href="#contact" className="globalLink">
+            <Link to="/contact" className="globalLink">
               Discuss Your Requirement
               <span>↗</span>
-            </a>
+            </Link>
 
           </div>
 

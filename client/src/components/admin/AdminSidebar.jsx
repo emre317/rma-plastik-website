@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
   NavLink,
+  useLocation,
   useNavigate,
 } from 'react-router-dom';
 
@@ -8,46 +9,71 @@ import {
   getUnreadQuoteCount,
 } from '../../services/adminApi';
 
+import {
+  QUOTES_CHANGED_EVENT,
+  clearAdminSession,
+  getAdminToken,
+  getAdminUser,
+  isAuthError,
+} from '../../services/adminAuth';
+
 export default function AdminSidebar() {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
-  const token = localStorage.getItem(
-    'rma_admin_token'
-  );
+  const token = getAdminToken();
+  const admin = getAdminUser();
 
   const [unread, setUnread] = useState(0);
 
+  // Re-fetch on navigation so opening a request updates the badge
   useEffect(() => {
     if (!token) {
-      return;
+      return undefined;
     }
+
+    let cancelled = false;
 
     async function loadUnreadCount() {
       try {
         const response =
           await getUnreadQuoteCount(token);
 
-        setUnread(
-          response.data?.unread || 0
-        );
-      } catch {
-        // Sidebar should not break
+        if (!cancelled) {
+          setUnread(
+            response.data?.unread || 0
+          );
+        }
+      } catch (error) {
+        if (!cancelled && isAuthError(error)) {
+          clearAdminSession();
+          navigate('/admin/login', { replace: true });
+        }
+        // Other errors: sidebar should not break
       }
     }
 
     loadUnreadCount();
-  }, [token]);
+
+    window.addEventListener(
+      QUOTES_CHANGED_EVENT,
+      loadUnreadCount
+    );
+
+    return () => {
+      cancelled = true;
+
+      window.removeEventListener(
+        QUOTES_CHANGED_EVENT,
+        loadUnreadCount
+      );
+    };
+  }, [token, pathname, navigate]);
 
   function logout() {
-    localStorage.removeItem(
-      'rma_admin_token'
-    );
+    clearAdminSession();
 
-    localStorage.removeItem(
-      'rma_admin_user'
-    );
-
-    navigate('/admin/login');
+    navigate('/admin/login', { replace: true });
   }
 
   return (
@@ -81,7 +107,10 @@ export default function AdminSidebar() {
           </span>
 
           {unread > 0 && (
-            <span className="adminSidebarBadge">
+            <span
+              className="adminSidebarBadge"
+              aria-label={`${unread} unread`}
+            >
               {unread}
             </span>
           )}
@@ -92,6 +121,12 @@ export default function AdminSidebar() {
         </NavLink>
 
       </nav>
+
+      {admin?.email && (
+        <span className="adminSidebarUser">
+          {admin.email}
+        </span>
+      )}
 
       <button
         type="button"

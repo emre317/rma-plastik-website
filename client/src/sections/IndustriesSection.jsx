@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const industries = [
   {
     index: '01',
@@ -122,10 +124,10 @@ export default function IndustriesSection() {
                 application?
               </h3>
 
-              <a href="#contact">
+              <Link to="/contact">
                 Talk to RMA
                 <span>↗</span>
-              </a>
+              </Link>
             </div>
 
           </article>

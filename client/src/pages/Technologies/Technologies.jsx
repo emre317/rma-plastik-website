@@ -1,4 +1,8 @@
+import usePageTitle from '../../hooks/usePageTitle';
+
 export default function Technologies() {
+  usePageTitle('Technologies');
+
   return (
     <main className="internalPage">
 

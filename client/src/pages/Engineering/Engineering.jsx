@@ -1,4 +1,8 @@
+import usePageTitle from '../../hooks/usePageTitle';
+
 export default function Engineering() {
+  usePageTitle('Engineering');
+
   return (
     <main className="internalPage">
 

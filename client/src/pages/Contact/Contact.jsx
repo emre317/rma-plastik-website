@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+
 import products from '../../data/products';
 import { submitQuote } from '../../services/api';
+import usePageTitle from '../../hooks/usePageTitle';
 
 const initialForm = {
   company: '',
@@ -15,8 +18,25 @@ const initialForm = {
   message: '',
 };
 
+function getInitialForm(productSlug) {
+  const product = products.find(
+    (item) => item.slug === productSlug
+  );
+
+  return {
+    ...initialForm,
+    product: product ? product.name : '',
+  };
+}
+
 export default function Contact() {
-  const [form, setForm] = useState(initialForm);
+  usePageTitle('Contact');
+
+  const [searchParams] = useSearchParams();
+
+  const [form, setForm] = useState(() =>
+    getInitialForm(searchParams.get('product'))
+  );
   const [status, setStatus] = useState('idle');
   const [feedback, setFeedback] = useState('');
 
@@ -161,7 +181,9 @@ export default function Contact() {
                 <div>
                   <span>Email</span>
                   <strong>
-                    info@rmaplastik.com
+                    <a href="mailto:info@rmaplastik.com">
+                      info@rmaplastik.com
+                    </a>
                   </strong>
                 </div>
 
@@ -185,6 +207,7 @@ export default function Contact() {
                   <input
                     type="text"
                     name="company"
+                    maxLength={150}
                     value={form.company}
                     onChange={handleChange}
                     required
@@ -201,6 +224,7 @@ export default function Contact() {
                   <input
                     type="text"
                     name="name"
+                    maxLength={120}
                     value={form.name}
                     onChange={handleChange}
                     required
@@ -217,6 +241,7 @@ export default function Contact() {
                   <input
                     type="email"
                     name="email"
+                    autoComplete="email"
                     value={form.email}
                     onChange={handleChange}
                     required
@@ -233,6 +258,7 @@ export default function Contact() {
                   <input
                     type="tel"
                     name="phone"
+                    maxLength={40}
                     value={form.phone}
                     onChange={handleChange}
                     placeholder="+90 ..."
@@ -248,6 +274,7 @@ export default function Contact() {
                   <input
                     type="text"
                     name="country"
+                    maxLength={80}
                     value={form.country}
                     onChange={handleChange}
                     placeholder="Country"
@@ -293,6 +320,7 @@ export default function Contact() {
                   <input
                     type="text"
                     name="capacity"
+                    maxLength={80}
                     value={form.capacity}
                     onChange={handleChange}
                     placeholder="e.g. 10,000 L"
@@ -324,6 +352,7 @@ export default function Contact() {
                   <input
                     type="text"
                     name="application"
+                    maxLength={200}
                     value={form.application}
                     onChange={handleChange}
                     placeholder="Chemical storage, water storage, OEM project..."
@@ -338,6 +367,7 @@ export default function Contact() {
 
                   <textarea
                     name="message"
+                    maxLength={5000}
                     value={form.message}
                     onChange={handleChange}
                     required
@@ -378,6 +408,7 @@ export default function Contact() {
               {feedback && (
                 <div
                   className={`quoteFeedback ${status}`}
+                  role={status === 'error' ? 'alert' : 'status'}
                 >
                   {feedback}
                 </div>

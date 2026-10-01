@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function FinalCTASection() {
   return (
     <section className="finalCtaSection" id="contact">
@@ -32,7 +34,7 @@ export default function FinalCTASection() {
               manufacturing project? Share the details with our team.
             </p>
 
-            <a href="mailto:info@rmaplastik.com" className="finalCtaButton">
+            <Link to="/contact" className="finalCtaButton">
               <span>
                 Request a Solution
               </span>
@@ -40,7 +42,7 @@ export default function FinalCTASection() {
               <span className="finalCtaButtonArrow">
                 ↗
               </span>
-            </a>
+            </Link>
           </div>
 
         </div>
