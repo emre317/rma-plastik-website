@@ -70,10 +70,11 @@ const ar = {
       products: 'المنتجات',
       requestQuote: 'اطلب عرض سعر',
     },
-    addressLine: 'مرسين، إسطنبول، تركيا',
     rights: 'جميع الحقوق محفوظة.',
     social: {
       linkedin: 'RMA Plastik على LinkedIn',
+      instagram: 'RMA Plastik على Instagram',
+      youtube: 'RMA Plastik على YouTube',
       email: 'راسل RMA Plastik عبر البريد الإلكتروني',
     },
   },
@@ -624,6 +625,26 @@ const ar = {
   },
 
   contact: {
+    locations: {
+      index: '01 / الموقع',
+      eyebrow: 'المرفق الرئيسي',
+      title: 'مرفقنا الرئيسي.',
+      titleAccent: 'المنطقة الصناعية مرسين طرسوس.',
+      text:
+        'يقع مركز الإنتاج والتوزيع لدينا في المنطقة الصناعية المنظمة في مرسين – طرسوس. تواصلوا معنا لترتيب الزيارات واجتماعات المشاريع.',
+      addressLabel: 'العنوان',
+      directions: 'احصل على الاتجاهات',
+      openMap: 'افتح في خرائط Google',
+      mapTitle: 'موقع RMA Plastik – خرائط Google',
+      channels: 'قنوات التواصل',
+      email: 'البريد الإلكتروني',
+      linkedin: 'LinkedIn',
+      linkedinValue: 'RMA Plastik',
+      instagram: 'Instagram',
+      youtube: 'YouTube',
+      form: 'نموذج طلب عرض السعر',
+      formValue: 'أخبرنا عن مشروعك',
+    },
     meta: ['06 / اتصل بنا', 'ابدأ مشروعاً'],
     eyebrow: 'تحدّث إلى RMA',
     title: 'أخبرنا',
@@ -631,7 +652,7 @@ const ar = {
     text:
       'شارك فريقنا متطلباتك من المنتجات أو التطبيقات أو التصنيع المخصص.',
     tag: 'المبيعات / الهندسة',
-    formIndex: 'طلب / 01',
+    formIndex: 'طلب / 02',
     formEyebrow: 'معلومات المشروع',
     formTitle: 'اطلب',
     formTitleAccent: 'حلاً.',
@@ -641,8 +662,7 @@ const ar = {
     sidebarTitle: 'لنفهم متطلباتك.',
     sidebarText:
       'يُرجى تعبئة النموذج بأكبر قدر ممكن من المعلومات حتى نتمكن من مراجعة متطلبات المنتج والتصنيع ذات الصلة.',
-    sidebarLocations: 'المواقع',
-    sidebarCountry: 'الدولة',
+    sidebarAddress: 'العنوان',
     sidebarEmail: 'البريد الإلكتروني',
     fields: {
       company: 'الشركة',

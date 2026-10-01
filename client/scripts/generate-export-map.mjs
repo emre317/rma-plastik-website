@@ -5,7 +5,7 @@
     npm run generate:map
 
   Outputs:
-    src/assets/maps/export-map.svg  – the dotted land map (static image)
+    src/assets/maps/export-map.svg  – dotted world map (Global section)
     src/data/exportMap.js           – size, hub, destinations (with the dots
                                       of each highlighted country)
 */
@@ -90,3 +90,4 @@ fs.writeFileSync(
 );
 
 console.log(`Export map: ${width}x${height}, ${data.destinations.length} destinations`);
+

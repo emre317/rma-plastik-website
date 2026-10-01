@@ -69,10 +69,11 @@ const tr = {
       products: 'Ürünler',
       requestQuote: 'Teklif İste',
     },
-    addressLine: 'Mersin, İstanbul, Türkiye',
     rights: 'Tüm hakları saklıdır.',
     social: {
       linkedin: 'LinkedIn’de RMA Plastik',
+      instagram: 'Instagram’da RMA Plastik',
+      youtube: 'YouTube’da RMA Plastik',
       email: 'RMA Plastik’e e-posta gönderin',
     },
   },
@@ -623,6 +624,26 @@ const tr = {
   },
 
   contact: {
+    locations: {
+      index: '01 / Konum',
+      eyebrow: 'Merkez tesis',
+      title: 'Merkez tesisimiz.',
+      titleAccent: 'Mersin Tarsus OSB.',
+      text:
+        'Üretim ve dağıtım merkezimiz Mersin Tarsus Organize Sanayi Bölgesi’nde yer alıyor. Ziyaret ve proje görüşmeleri için bize ulaşın.',
+      addressLabel: 'Adres',
+      directions: 'Yol tarifi al',
+      openMap: 'Google Haritalar’da aç',
+      mapTitle: 'RMA Plastik konumu – Google Haritalar',
+      channels: 'İletişim kanalları',
+      email: 'E-posta',
+      linkedin: 'LinkedIn',
+      linkedinValue: 'RMA Plastik',
+      instagram: 'Instagram',
+      youtube: 'YouTube',
+      form: 'Teklif formu',
+      formValue: 'Projenizi bize anlatın',
+    },
     meta: ['06 / İletişim', 'Bir proje başlatın'],
     eyebrow: 'RMA ile görüşün',
     title: 'İhtiyacınızı',
@@ -630,7 +651,7 @@ const tr = {
     text:
       'Ürün, uygulama veya özel üretim ihtiyacınızı ekibimizle paylaşın.',
     tag: 'Satış / Mühendislik',
-    formIndex: 'Talep / 01',
+    formIndex: 'Talep / 02',
     formEyebrow: 'Proje bilgileri',
     formTitle: 'Çözüm',
     formTitleAccent: 'talep edin.',
@@ -640,8 +661,7 @@ const tr = {
     sidebarTitle: 'İhtiyacınızı doğru anlayalım.',
     sidebarText:
       'İlgili ürün ve üretim gereksinimlerinin değerlendirilebilmesi için formu mümkün olduğunca ayrıntılı doldurun.',
-    sidebarLocations: 'Lokasyonlar',
-    sidebarCountry: 'Ülke',
+    sidebarAddress: 'Adres',
     sidebarEmail: 'E-posta',
     fields: {
       company: 'Firma',

@@ -70,10 +70,11 @@ const en = {
       products: 'Products',
       requestQuote: 'Request a Quote',
     },
-    addressLine: 'Mersin, Istanbul, Türkiye',
     rights: 'All rights reserved.',
     social: {
       linkedin: 'RMA Plastik on LinkedIn',
+      instagram: 'RMA Plastik on Instagram',
+      youtube: 'RMA Plastik on YouTube',
       email: 'Email RMA Plastik',
     },
   },
@@ -625,6 +626,26 @@ const en = {
   },
 
   contact: {
+    locations: {
+      index: '01 / Location',
+      eyebrow: 'Main facility',
+      title: 'Our main facility.',
+      titleAccent: 'Mersin Tarsus OSB.',
+      text:
+        'Our production and distribution hub is located in the Mersin Tarsus Organized Industrial Zone. Contact us for visits and project meetings.',
+      addressLabel: 'Address',
+      directions: 'Get directions',
+      openMap: 'Open in Google Maps',
+      mapTitle: 'RMA Plastik location – Google Maps',
+      channels: 'Contact channels',
+      email: 'Email',
+      linkedin: 'LinkedIn',
+      linkedinValue: 'RMA Plastik',
+      instagram: 'Instagram',
+      youtube: 'YouTube',
+      form: 'Quote form',
+      formValue: 'Tell us about your project',
+    },
     meta: ['06 / Contact', 'Start a project'],
     eyebrow: 'Talk to RMA',
     title: 'Tell us what',
@@ -632,7 +653,7 @@ const en = {
     text:
       'Share your product, application or custom manufacturing requirement with our team.',
     tag: 'Sales / Engineering',
-    formIndex: 'Request / 01',
+    formIndex: 'Request / 02',
     formEyebrow: 'Project information',
     formTitle: 'Request a',
     formTitleAccent: 'solution.',
@@ -642,8 +663,7 @@ const en = {
     sidebarTitle: "Let's understand your requirement.",
     sidebarText:
       'Complete the form with as much information as possible so the relevant product and manufacturing requirements can be reviewed.',
-    sidebarLocations: 'Locations',
-    sidebarCountry: 'Country',
+    sidebarAddress: 'Address',
     sidebarEmail: 'Email',
     fields: {
       company: 'Company',
