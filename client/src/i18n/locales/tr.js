@@ -38,7 +38,7 @@ const tr = {
   },
 
   common: {
-    locations: 'Mersin / İstanbul',
+    locations: 'Mersin',
     country: 'Türkiye',
     requestQuote: 'Teklif İste',
     requestSolution: 'Çözüm Talep Et',
@@ -55,7 +55,7 @@ const tr = {
     },
     links: {
       about: 'RMA Hakkında',
-      facilities: 'Üretim Tesisleri',
+      facilities: 'Üretim Tesisi',
       quality: 'Kalite',
       industrialTanks: 'Endüstriyel Tanklar',
       chemicalTanks: 'Kimyasal Tanklar',
@@ -107,9 +107,9 @@ const tr = {
         detail: 'Yirmi yılı aşkın üretim deneyimi.',
       },
       {
-        value: '2',
-        label: 'Üretim Tesisi',
-        detail: 'Mersin ve İstanbul’da üretim faaliyetleri.',
+        value: '6',
+        label: 'Başlıca İhracat Pazarı',
+        detail: 'Dört kıtada ihracat.',
       },
       {
         value: '42.000 L',
@@ -310,32 +310,26 @@ const tr = {
   },
 
   facilities: {
-    index: '07 / TESİSLER',
-    eyebrow: 'Üretim ağı',
+    index: '07 / TESİS',
+    eyebrow: 'Üretim merkezi',
     title: 'Üretim,',
     titleAccent: 'ihtiyacın olduğu yerde.',
     description:
-      'RMA, Mersin ve İstanbul’daki üretim tesisleriyle üretim altyapısını bölgesel erişim ve endüstriyel yetkinlikle birleştirir.',
+      'RMA’nın üretim ve dağıtım merkezi Mersin Tarsus Organize Sanayi Bölgesi’nde yer alır; üretim altyapısını bölgesel erişim ve endüstriyel yetkinlikle birleştirir.',
     country: 'Türkiye',
     mediaTag: 'RMA / Türkiye',
     placeholder: 'Fabrika görseli / videosu',
     items: [
       {
         city: 'Mersin',
-        title: 'Ana Üretim Tesisi',
+        title: 'Üretim ve Dağıtım Merkezi',
         description:
-          'Büyük ölçekli polietilen üretimini, endüstriyel depolama çözümlerini ve uygulamaya özel üretimi destekleyen ana üretim lokasyonu.',
-        meta: ['Üretim', 'Mühendislik', 'Endüstriyel'],
-      },
-      {
-        city: 'İstanbul',
-        title: 'Üretim ve Operasyon Tesisi',
-        description:
-          'Üretimi, müşteri ihtiyaçlarını ve bölgesel endüstriyel talebi destekleyen stratejik üretim ve operasyon lokasyonu.',
-        meta: ['Üretim', 'Operasyon', 'Müşteri Desteği'],
+          'Büyük ölçekli polietilen üretimini, endüstriyel depolama çözümlerini ve uygulamaya özel üretimi destekleyen ana üretim lokasyonu; ihracatın da merkezi.',
+        meta: ['Üretim', 'Mühendislik', 'İhracat'],
       },
     ],
-    bottom: ['İki lokasyon.', 'Tek üretim standardı.'],
+    bottom: ['Tek merkez.', 'Dünyaya ihracat.'],
+    directions: 'Yol tarifi al',
     contact: 'Ekibimizle İletişime Geçin',
   },
 
@@ -408,20 +402,6 @@ const tr = {
     discuss: 'İhtiyacınızı Görüşelim',
   },
 
-  finalCta: {
-    index: '10 / İLETİŞİM',
-    meta: 'Satış / Mühendislik / Projeler',
-    eyebrow: 'Bir proje başlatın',
-    title: 'Doğru çözümü',
-    titleAccent: 'birlikte geliştirelim.',
-    text:
-      'Bir ürün ihtiyacınız, teknik sorunuz veya özel üretim projeniz mi var? Detayları ekibimizle paylaşın.',
-    button: 'Çözüm Talep Et',
-    production: 'Üretim',
-    country: 'Ülke',
-    focus: 'Odak',
-    focusValue: 'Endüstriyel Polietilen Çözümleri',
-  },
 
   pages: {
     company: {
@@ -624,6 +604,7 @@ const tr = {
   },
 
   contact: {
+    homeIndex: '10 / İLETİŞİM',
     locations: {
       index: '01 / Konum',
       eyebrow: 'Merkez tesis',

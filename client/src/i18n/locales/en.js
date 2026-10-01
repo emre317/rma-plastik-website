@@ -39,7 +39,7 @@ const en = {
   },
 
   common: {
-    locations: 'Mersin / Istanbul',
+    locations: 'Mersin',
     country: 'Türkiye',
     requestQuote: 'Request a Quote',
     requestSolution: 'Request a Solution',
@@ -56,7 +56,7 @@ const en = {
     },
     links: {
       about: 'About RMA',
-      facilities: 'Production Facilities',
+      facilities: 'Production Facility',
       quality: 'Quality',
       industrialTanks: 'Industrial Tanks',
       chemicalTanks: 'Chemical Tanks',
@@ -108,9 +108,9 @@ const en = {
         detail: 'More than two decades of manufacturing experience.',
       },
       {
-        value: '2',
-        label: 'Production Facilities',
-        detail: 'Manufacturing operations in Mersin and Istanbul.',
+        value: '6',
+        label: 'Key Export Markets',
+        detail: 'Exports across four continents.',
       },
       {
         value: '42,000 L',
@@ -311,32 +311,26 @@ const en = {
   },
 
   facilities: {
-    index: '07 / FACILITIES',
-    eyebrow: 'Production network',
+    index: '07 / FACILITY',
+    eyebrow: 'Production hub',
     title: 'Manufacturing',
     titleAccent: 'where it matters.',
     description:
-      'RMA operates through production facilities in Mersin and Istanbul, combining manufacturing infrastructure with regional access and industrial capability.',
+      'RMA’s production and distribution hub is located in the Mersin Tarsus Organized Industrial Zone, combining manufacturing infrastructure with regional access and industrial capability.',
     country: 'Türkiye',
     mediaTag: 'RMA / Türkiye',
     placeholder: 'Factory image / video',
     items: [
       {
         city: 'Mersin',
-        title: 'Primary Production Facility',
+        title: 'Production & Distribution Hub',
         description:
-          'A core manufacturing location supporting large-scale polyethylene production, industrial storage solutions and application-specific manufacturing.',
-        meta: ['Production', 'Engineering', 'Industrial'],
-      },
-      {
-        city: 'Istanbul',
-        title: 'Production & Operations Facility',
-        description:
-          'A strategic production and operational location supporting manufacturing, customer requirements and regional industrial demand.',
-        meta: ['Production', 'Operations', 'Customer Support'],
+          'The core manufacturing location supporting large-scale polyethylene production, industrial storage solutions and application-specific manufacturing — and the hub for our exports.',
+        meta: ['Production', 'Engineering', 'Export'],
       },
     ],
-    bottom: ['Two locations.', 'One manufacturing standard.'],
+    bottom: ['One hub.', 'Exporting worldwide.'],
+    directions: 'Get directions',
     contact: 'Contact Our Team',
   },
 
@@ -409,20 +403,6 @@ const en = {
     discuss: 'Discuss Your Requirement',
   },
 
-  finalCta: {
-    index: '10 / CONTACT',
-    meta: 'Sales / Engineering / Projects',
-    eyebrow: 'Start a project',
-    title: "Let's build",
-    titleAccent: 'the right solution.',
-    text:
-      'Have a product requirement, technical question or custom manufacturing project? Share the details with our team.',
-    button: 'Request a Solution',
-    production: 'Production',
-    country: 'Country',
-    focus: 'Focus',
-    focusValue: 'Industrial Polyethylene Solutions',
-  },
 
   pages: {
     company: {
@@ -626,6 +606,7 @@ const en = {
   },
 
   contact: {
+    homeIndex: '10 / CONTACT',
     locations: {
       index: '01 / Location',
       eyebrow: 'Main facility',

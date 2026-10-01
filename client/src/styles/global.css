@@ -6,7 +6,7 @@
 ===================================================== */
 
 :root {
-  font-family: "Inter", Arial, sans-serif;
+  font-family: var(--font-body);
 
   color: #101214;
   background: #f5f5f3;
@@ -29,6 +29,10 @@
 
   /* Horizontal direction multiplier: 1 for LTR, -1 for RTL (used by arrow nudges) */
   --dir-x: 1;
+
+  /* Typography: Manrope for headings and figures, Inter for running text */
+  --font-display: "Manrope", "IBM Plex Sans Arabic", "Inter", Arial, sans-serif;
+  --font-body: "Inter", "IBM Plex Sans Arabic", Arial, sans-serif;
 }
 
 html[dir="rtl"] {
@@ -112,7 +116,7 @@ img {
 
   line-height: 1;
 
-  letter-spacing: 0.18em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -129,17 +133,13 @@ h2 {
 
   margin-bottom: 56px;
 
-  font-size: clamp(
-    52px,
-    7vw,
-    108px
-  );
+  font-size: clamp(37px, 5.04vw, 73px);
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: 0.95;
+  line-height: 1.08;
 
-  letter-spacing: -0.06em;
+  letter-spacing: -0.025em;
 }
 
 .lead {
@@ -205,10 +205,10 @@ h2 {
 
   border-bottom: 1px solid rgba(16, 18, 20, 0.15);
 
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
 
-  letter-spacing: 0.15em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -264,17 +264,13 @@ h2 {
 
   margin-bottom: 34px;
 
-  font-size: clamp(
-    68px,
-    7.4vw,
-    130px
-  );
+  font-size: clamp(49px, 5.33vw, 88px);
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: 0.87;
+  line-height: 1.08;
 
-  letter-spacing: -0.075em;
+  letter-spacing: -0.025em;
 }
 
 .heroContent h1 span {
@@ -437,11 +433,11 @@ h2 {
 
   align-items: flex-start;
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -587,7 +583,7 @@ h2 {
 
   font-weight: 500;
 
-  letter-spacing: -0.04em;
+  letter-spacing: -0.025em;
 }
 
 .visualLabel {
@@ -629,11 +625,11 @@ h2 {
 
   color: var(--text-secondary);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -671,15 +667,11 @@ h2 {
 .stat strong {
   display: block;
 
-  font-size: clamp(
-    38px,
-    4vw,
-    62px
-  );
+  font-size: clamp(32px, 3.4vw, 53px);
 
   font-weight: 500;
 
-  letter-spacing: -0.06em;
+  letter-spacing: -0.025em;
 }
 
 .stat span {
@@ -693,7 +685,7 @@ h2 {
 
   font-weight: 700;
 
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -752,9 +744,9 @@ h2 {
 
   font-size: 34px;
 
-  font-weight: 500;
+  font-weight: 600;
 
-  letter-spacing: -0.045em;
+  letter-spacing: -0.025em;
 }
 
 
@@ -779,7 +771,7 @@ h2 {
 
   font-size: 28px;
 
-  letter-spacing: -0.035em;
+  letter-spacing: -0.02em;
 
   transition:
     padding-left 200ms ease;
@@ -858,7 +850,7 @@ h2 {
 
   font-weight: 500;
 
-  letter-spacing: -0.055em;
+  letter-spacing: -0.025em;
 }
 
 .facilityGrid span {
@@ -867,19 +859,6 @@ h2 {
   margin-top: 8px;
 
   color: var(--text-secondary);
-}
-
-
-/* =====================================================
-   FINAL CTA
-===================================================== */
-
-.finalCta {
-  padding: 180px 0;
-}
-
-.finalCta h2 {
-  max-width: 900px;
 }
 
 
@@ -905,12 +884,7 @@ h2 {
   }
 
   .heroContent h1 {
-    font-size:
-      clamp(
-        62px,
-        8vw,
-        95px
-      );
+    font-size: clamp(45px, 5.76vw, 65px);
   }
 
   .heroVisual {
@@ -987,14 +961,9 @@ h2 {
 
     margin-bottom: 28px;
 
-    font-size:
-      clamp(
-        54px,
-        16vw,
-        82px
-      );
+    font-size: clamp(39px, 11.52vw, 56px);
 
-    line-height: 0.9;
+    line-height: 1.08;
   }
 
   .heroContent .lead {
@@ -1100,12 +1069,7 @@ h2 {
 @media (max-width: 480px) {
 
   .heroContent h1 {
-    font-size:
-      clamp(
-        47px,
-        15.5vw,
-        68px
-      );
+    font-size: clamp(40px, 13.17vw, 58px);
   }
 
   .heroVisual {
@@ -1357,11 +1321,11 @@ h2 {
 
   color: rgba(255,255,255,.45);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -1393,13 +1357,13 @@ h2 {
 
   border-bottom: 1px solid rgba(255,255,255,.12);
 
-  font-size: clamp(38px, 8vw, 64px);
+  font-size: clamp(32px, 6.8vw, 54px);
 
   font-weight: 500;
 
   line-height: 1;
 
-  letter-spacing: -0.05em;
+  letter-spacing: -0.025em;
 }
 
 .mobileNav a span {
@@ -1407,11 +1371,11 @@ h2 {
 
   color: var(--red);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: 0.15em;
+  letter-spacing: 0.08em;
 }
 
 
@@ -1426,7 +1390,7 @@ h2 {
   }
 
   .desktopNav a {
-    font-size: 10px;
+    font-size: 11px;
   }
 
 }
@@ -1480,11 +1444,11 @@ h2 {
 
   color: var(--text-secondary);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -1502,7 +1466,7 @@ h2 {
 
   line-height: 1.5;
 
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
 
   color: var(--text-secondary);
 }
@@ -1555,23 +1519,23 @@ h2 {
 
   color: var(--text-secondary);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
 }
 
 .statsSection .stat strong {
   margin-bottom: 12px;
 
-  font-size: clamp(42px, 4.2vw, 68px);
+  font-size: clamp(36px, 3.57vw, 58px);
 
   font-weight: 500;
 
   line-height: 1;
 
-  letter-spacing: -0.065em;
+  letter-spacing: -0.025em;
 }
 
 .statLabel {
@@ -1583,7 +1547,7 @@ h2 {
 
   font-weight: 700 !important;
 
-  letter-spacing: 0.1em !important;
+  letter-spacing: 0.06em !important;
 
   text-transform: uppercase;
 }
@@ -1632,13 +1596,13 @@ h2 {
 
   margin: 0;
 
-  font-size: clamp(60px, 7.2vw, 112px);
+  font-size: clamp(43px, 5.18vw, 76px);
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .92;
+  line-height: 1.08;
 
-  letter-spacing: -.07em;
+  letter-spacing: -0.025em;
 }
 
 .technologyHeader h2 span {
@@ -1704,11 +1668,11 @@ h2 {
 .technologyNumber {
   color: rgba(255,255,255,.42);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .14em;
+  letter-spacing: 0.08em;
 }
 
 .technologyArrow {
@@ -1826,13 +1790,13 @@ h2 {
 .technologyContent h3 {
   margin: 0 0 24px;
 
-  font-size: clamp(38px, 3.2vw, 54px);
+  font-size: clamp(32px, 2.72vw, 46px);
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .95;
+  line-height: 1.08;
 
-  letter-spacing: -.055em;
+  letter-spacing: -0.025em;
 }
 
 .technologyContent h3 span {
@@ -1860,11 +1824,11 @@ h2 {
 
   color: rgba(255,255,255,.35);
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .12em;
+  letter-spacing: 0.08em;
 }
 
 
@@ -2009,12 +1973,7 @@ h2 {
   }
 
   .technologyHeader h2 {
-    font-size:
-      clamp(
-        56px,
-        15vw,
-        82px
-      );
+    font-size: clamp(40px, 10.8vw, 56px);
   }
 
   .technologyGrid {
@@ -2080,17 +2039,13 @@ h2 {
 .productExplorerHeader h2 {
   margin: 0 0 32px;
 
-  font-size: clamp(
-    60px,
-    7.2vw,
-    112px
-  );
+  font-size: clamp(43px, 5.18vw, 76px);
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .92;
+  line-height: 1.08;
 
-  letter-spacing: -.07em;
+  letter-spacing: -0.025em;
 }
 
 .productExplorerHeader h2 span {
@@ -2110,7 +2065,7 @@ h2 {
 
   line-height: 1.6;
 
-  letter-spacing: -.025em;
+  letter-spacing: -0.02em;
 }
 
 
@@ -2198,11 +2153,11 @@ h2 {
 .productCategoryNumber {
   color: var(--text-secondary);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .12em;
+  letter-spacing: 0.08em;
 }
 
 .productCategoryItem.active .productCategoryNumber {
@@ -2218,7 +2173,7 @@ h2 {
 
   font-weight: 500;
 
-  letter-spacing: -.045em;
+  letter-spacing: -0.025em;
 }
 
 .productCategoryArrow {
@@ -2295,11 +2250,11 @@ h2 {
 
   color: rgba(255,255,255,.5);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .13em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -2469,11 +2424,11 @@ h2 {
 
   color: rgba(255,255,255,.4);
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .14em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -2483,17 +2438,13 @@ h2 {
 
   margin: 0;
 
-  font-size: clamp(
-    34px,
-    3.2vw,
-    58px
-  );
+  font-size: clamp(29px, 2.72vw, 49px);
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .95;
+  line-height: 1.08;
 
-  letter-spacing: -.055em;
+  letter-spacing: -0.025em;
 }
 
 .productPreviewMeta {
@@ -2521,11 +2472,11 @@ h2 {
 
   color: rgba(255,255,255,.38);
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .12em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -2637,12 +2588,7 @@ h2 {
   }
 
   .productExplorerHeader h2 {
-    font-size:
-      clamp(
-        55px,
-        15vw,
-        82px
-      );
+    font-size: clamp(40px, 10.8vw, 56px);
   }
 
   .productIntroText {
@@ -2784,17 +2730,13 @@ h2 {
 .industriesHeader h2 {
   margin: 0 0 30px;
 
-  font-size: clamp(
-    60px,
-    7.2vw,
-    110px
-  );
+  font-size: clamp(43px, 5.18vw, 75px);
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .92;
+  line-height: 1.08;
 
-  letter-spacing: -.07em;
+  letter-spacing: -0.025em;
 }
 
 .industriesHeader h2 span {
@@ -2814,7 +2756,7 @@ h2 {
 
   line-height: 1.6;
 
-  letter-spacing: -.025em;
+  letter-spacing: -0.02em;
 }
 
 
@@ -2877,11 +2819,11 @@ h2 {
 .industryIndex {
   color: var(--text-secondary);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .13em;
+  letter-spacing: 0.08em;
 }
 
 .industryArrow {
@@ -2929,11 +2871,11 @@ h2 {
     42px
   );
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .96;
+  line-height: 1.08;
 
-  letter-spacing: -.05em;
+  letter-spacing: -0.025em;
 }
 
 .industryItemContent p {
@@ -2980,11 +2922,11 @@ h2 {
 
   color: rgba(255,255,255,.55);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .13em;
+  letter-spacing: 0.08em;
 }
 
 .industryItemCta h3 {
@@ -3057,12 +2999,7 @@ h2 {
   }
 
   .industriesHeader h2 {
-    font-size:
-      clamp(
-        55px,
-        15vw,
-        82px
-      );
+    font-size: clamp(40px, 10.8vw, 56px);
   }
 
   .industriesHeader > div:last-child > p {
@@ -3114,17 +3051,13 @@ h2 {
 .engineeringHeader h2 {
   margin: 0 0 32px;
 
-  font-size: clamp(
-    60px,
-    7.2vw,
-    110px
-  );
+  font-size: clamp(43px, 5.18vw, 75px);
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .92;
+  line-height: 1.08;
 
-  letter-spacing: -.07em;
+  letter-spacing: -0.025em;
 }
 
 .engineeringHeader h2 span {
@@ -3144,7 +3077,7 @@ h2 {
 
   line-height: 1.6;
 
-  letter-spacing: -.025em;
+  letter-spacing: -0.02em;
 }
 
 
@@ -3202,11 +3135,11 @@ h2 {
 
   color: rgba(255,255,255,.35);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .14em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -3222,7 +3155,7 @@ h2 {
 
   line-height: 1.5;
 
-  letter-spacing: -.03em;
+  letter-spacing: -0.02em;
 }
 
 
@@ -3257,11 +3190,11 @@ h2 {
 
   color: var(--red);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .13em;
+  letter-spacing: 0.08em;
 }
 
 .engineeringSteps h3 {
@@ -3269,11 +3202,11 @@ h2 {
 
   font-size: 26px;
 
-  font-weight: 500;
+  font-weight: 600;
 
   line-height: 1;
 
-  letter-spacing: -.04em;
+  letter-spacing: -0.025em;
 }
 
 .engineeringSteps p {
@@ -3384,11 +3317,11 @@ h2 {
 
   color: rgba(255,255,255,.42);
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .14em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -3548,11 +3481,11 @@ h2 {
 
   color: rgba(255,255,255,.35);
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .12em;
+  letter-spacing: 0.08em;
 }
 
 .drawingDimensionLeft {
@@ -3602,11 +3535,11 @@ h2 {
 
   color: rgba(255,255,255,.26);
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .12em;
+  letter-spacing: 0.08em;
 }
 
 .drawingNoteOne {
@@ -3707,12 +3640,7 @@ h2 {
   }
 
   .engineeringHeader h2 {
-    font-size:
-      clamp(
-        55px,
-        15vw,
-        82px
-      );
+    font-size: clamp(40px, 10.8vw, 56px);
   }
 
   .engineeringHeader > div:last-child > p {
@@ -3825,17 +3753,13 @@ h2 {
 .facilitiesHeader h2 {
   margin: 0 0 30px;
 
-  font-size: clamp(
-    60px,
-    7.2vw,
-    110px
-  );
+  font-size: clamp(43px, 5.18vw, 75px);
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .92;
+  line-height: 1.08;
 
-  letter-spacing: -.07em;
+  letter-spacing: -0.025em;
 }
 
 .facilitiesHeader h2 span {
@@ -3855,7 +3779,7 @@ h2 {
 
   line-height: 1.6;
 
-  letter-spacing: -.025em;
+  letter-spacing: -0.02em;
 }
 
 
@@ -3937,11 +3861,11 @@ h2 {
 
   color: rgba(255,255,255,.45);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .13em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -4092,11 +4016,11 @@ h2 {
 
   color: rgba(255,255,255,.35);
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .14em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -4130,27 +4054,23 @@ h2 {
 
   color: var(--red);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .13em;
+  letter-spacing: 0.08em;
 }
 
 .facilityContent h3 {
   margin: 0;
 
-  font-size: clamp(
-    46px,
-    4vw,
-    68px
-  );
+  font-size: clamp(39px, 3.4vw, 58px);
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .95;
+  line-height: 1.08;
 
-  letter-spacing: -.06em;
+  letter-spacing: -0.025em;
 }
 
 .facilityArrow {
@@ -4229,7 +4149,7 @@ h2 {
 
   border: 1px solid var(--line);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -4337,12 +4257,7 @@ h2 {
   }
 
   .facilitiesHeader h2 {
-    font-size:
-      clamp(
-        55px,
-        15vw,
-        82px
-      );
+    font-size: clamp(40px, 10.8vw, 56px);
   }
 
   .facilitiesHeader > div:last-child > p {
@@ -4414,15 +4329,11 @@ h2 {
 .qualityHeader h2 {
   margin: 0 0 30px;
 
-  font-size: clamp(
-    60px,
-    7.2vw,
-    110px
-  );
+  font-size: clamp(43px, 5.18vw, 75px);
 
-  font-weight: 500;
-  line-height: .92;
-  letter-spacing: -.07em;
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
 }
 
 .qualityHeader h2 span {
@@ -4469,27 +4380,23 @@ h2 {
 .qualityStatementLabel {
   color: var(--text-secondary);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .13em;
+  letter-spacing: 0.08em;
 }
 
 .qualityStatement strong {
   margin-top: auto;
 
-  font-size: clamp(
-    52px,
-    5vw,
-    82px
-  );
+  font-size: clamp(37px, 3.6vw, 56px);
 
   font-weight: 500;
 
-  line-height: .92;
+  line-height: 1.08;
 
-  letter-spacing: -.065em;
+  letter-spacing: -0.025em;
 }
 
 .qualityStatement p {
@@ -4545,11 +4452,11 @@ h2 {
 
   color: var(--red);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .13em;
+  letter-spacing: 0.08em;
 }
 
 .qualityList h3 {
@@ -4561,11 +4468,11 @@ h2 {
     40px
   );
 
-  font-weight: 500;
+  font-weight: 600;
 
   line-height: 1;
 
-  letter-spacing: -.045em;
+  letter-spacing: -0.025em;
 }
 
 .qualityList p {
@@ -4649,17 +4556,13 @@ h2 {
 .globalHeader h2 {
   margin: 0;
 
-  font-size: clamp(
-    60px,
-    7vw,
-    108px
-  );
+  font-size: clamp(43px, 5.04vw, 73px);
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .92;
+  line-height: 1.08;
 
-  letter-spacing: -.07em;
+  letter-spacing: -0.025em;
 }
 
 .globalHeader h2 span {
@@ -4672,11 +4575,11 @@ h2 {
 .globalLabel {
   color: rgba(255,255,255,.35);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .13em;
+  letter-spacing: 0.08em;
 }
 
 .globalLink {
@@ -4738,12 +4641,7 @@ h2 {
 
   .qualityHeader h2,
   .globalHeader h2 {
-    font-size:
-      clamp(
-        54px,
-        15vw,
-        80px
-      );
+    font-size: clamp(39px, 10.8vw, 54px);
   }
 
   .qualityLayout {
@@ -4782,310 +4680,6 @@ h2 {
 
 
 /* SMALL MOBILE */
-
-/* =====================================================
-   FINAL CTA
-===================================================== */
-
-.finalCtaSection {
-  padding:
-    140px
-    0
-    80px;
-
-  color: var(--text);
-
-  background: var(--red);
-}
-
-.finalCtaTop {
-  padding-bottom: 28px;
-
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-  border-bottom:
-    1px solid
-    rgba(16,18,20,.22);
-}
-
-.finalCtaTop .sectionIndex {
-  margin: 0;
-
-  color: rgba(16,18,20,.5);
-}
-
-.finalCtaMeta {
-  color: rgba(16,18,20,.55);
-
-  font-size: 9px;
-
-  font-weight: 700;
-
-  letter-spacing: .14em;
-
-  text-transform: uppercase;
-}
-
-
-/* CTA CONTENT */
-
-.finalCtaContent {
-  padding:
-    80px
-    0
-    90px;
-
-  display: grid;
-
-  grid-template-columns:
-    1.25fr
-    .75fr;
-
-  gap: 90px;
-
-  align-items: end;
-}
-
-.finalCtaContent .eyebrow {
-  margin-bottom: 28px;
-
-  color: rgba(16,18,20,.55);
-}
-
-.finalCtaContent h2 {
-  max-width: 980px;
-
-  margin: 0;
-
-  color: #0b0d10;
-
-  font-size: clamp(
-    68px,
-    8.2vw,
-    136px
-  );
-
-  font-weight: 500;
-
-  line-height: .86;
-
-  letter-spacing: -.075em;
-}
-
-.finalCtaContent h2 span {
-  display: block;
-
-  color: rgba(16,18,20,.38);
-}
-
-.finalCtaSide {
-  padding-bottom: 10px;
-}
-
-.finalCtaSide > p {
-  max-width: 480px;
-
-  margin: 0 0 40px;
-
-  color: rgba(16,18,20,.72);
-
-  font-size: 18px;
-
-  line-height: 1.6;
-
-  letter-spacing: -.025em;
-}
-
-
-/* CTA BUTTON */
-
-.finalCtaButton {
-  min-height: 72px;
-
-  padding:
-    0
-    24px
-    0
-    28px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  gap: 70px;
-
-  color: #fff;
-
-  background: var(--dark);
-
-  font-size: 12px;
-
-  font-weight: 700;
-
-  letter-spacing: .05em;
-
-  text-transform: uppercase;
-
-  transition:
-    transform 220ms ease,
-    background-color 220ms ease;
-}
-
-.finalCtaButton:hover {
-  background: #17191c;
-
-  transform: translateY(-3px);
-}
-
-.finalCtaButtonArrow {
-  font-size: 21px;
-
-  transition: transform 220ms ease;
-}
-
-.finalCtaButton:hover .finalCtaButtonArrow {
-  transform:
-    translate(calc(4px * var(--dir-x)), -4px);
-}
-
-
-/* CTA BOTTOM */
-
-.finalCtaBottom {
-  display: grid;
-
-  grid-template-columns:
-    1fr
-    1fr
-    1.5fr;
-
-  border-top:
-    1px solid
-    rgba(16,18,20,.22);
-}
-
-.finalCtaBottom > div {
-  min-height: 105px;
-
-  padding:
-    24px
-    24px
-    24px
-    0;
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 12px;
-
-  border-right:
-    1px solid
-    rgba(16,18,20,.22);
-}
-
-.finalCtaBottom > div:not(:first-child) {
-  padding-inline-start: 24px;
-}
-
-.finalCtaBottom > div:last-child {
-  border-inline-end: 0;
-}
-
-.finalCtaBottom span {
-  color: rgba(16,18,20,.48);
-
-  font-size: 8px;
-
-  font-weight: 700;
-
-  letter-spacing: .13em;
-}
-
-.finalCtaBottom strong {
-  font-size: 15px;
-
-  font-weight: 600;
-
-  letter-spacing: -.02em;
-}
-
-
-/* =====================================================
-   CTA + FOOTER MOBILE
-===================================================== */
-
-@media (max-width: 800px) {
-
-  .finalCtaSection {
-    padding:
-      100px
-      0
-      55px;
-  }
-
-  .finalCtaMeta {
-    display: none;
-  }
-
-  .finalCtaContent {
-    padding:
-      60px
-      0
-      65px;
-
-    grid-template-columns: 1fr;
-
-    gap: 50px;
-  }
-
-  .finalCtaContent h2 {
-    font-size:
-      clamp(
-        58px,
-        16vw,
-        90px
-      );
-  }
-
-  .finalCtaSide > p {
-    font-size: 16px;
-  }
-
-  .finalCtaButton {
-    width: 100%;
-  }
-
-  .finalCtaBottom {
-    grid-template-columns: 1fr;
-  }
-
-  .finalCtaBottom > div,
-  .finalCtaBottom > div:not(:first-child) {
-    min-height: auto;
-
-    padding:
-      22px
-      0;
-
-    border-inline-end: 0;
-
-    border-bottom:
-      1px solid
-      rgba(16,18,20,.22);
-  }
-
-  .finalCtaBottom > div:last-child {
-    border-bottom: 0;
-  }
-
-}
 
 /* =====================================================
    INTERNAL PAGE
@@ -5137,11 +4731,11 @@ h2 {
 
   color: var(--text-secondary);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .14em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -5175,17 +4769,13 @@ h2 {
 
   margin: 0;
 
-  font-size: clamp(
-    72px,
-    9vw,
-    150px
-  );
+  font-size: clamp(52px, 6.48vw, 102px);
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .87;
+  line-height: 1.08;
 
-  letter-spacing: -.075em;
+  letter-spacing: -0.025em;
 }
 
 .internalHeroGrid h1 span {
@@ -5221,11 +4811,11 @@ h2 {
 .internalHeroBottom span {
   color: var(--text-secondary);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .14em;
+  letter-spacing: 0.08em;
 }
 
 
@@ -5279,17 +4869,13 @@ h2 {
     0
     60px;
 
-  font-size: clamp(
-    80px,
-    12vw,
-    190px
-  );
+  font-size: clamp(58px, 8.64vw, 129px);
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .82;
+  line-height: 1.08;
 
-  letter-spacing: -.08em;
+  letter-spacing: -0.025em;
 }
 
 .notFoundPage h1 span {
@@ -5341,12 +4927,7 @@ h2 {
   }
 
   .internalHeroGrid h1 {
-    font-size:
-      clamp(
-        58px,
-        16vw,
-        90px
-      );
+    font-size: clamp(42px, 11.52vw, 61px);
   }
 
   .internalHeroBottom {
@@ -5392,11 +4973,7 @@ h2 {
 .productsCatalogTop h2 {
   margin: 0;
 
-  font-size: clamp(
-    58px,
-    7vw,
-    108px
-  );
+  font-size: clamp(42px, 5.04vw, 73px);
 }
 
 .productsCatalogTop h2 span {
@@ -5443,7 +5020,7 @@ h2 {
 
   background: transparent;
 
-  font-size: 10px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -5525,11 +5102,11 @@ h2 {
       .42
     );
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .12em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -5717,17 +5294,13 @@ h2 {
     0
     38px;
 
-  font-size: clamp(
-    34px,
-    3vw,
-    48px
-  );
+  font-size: clamp(29px, 2.55vw, 41px);
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .95;
+  line-height: 1.08;
 
-  letter-spacing: -.05em;
+  letter-spacing: -0.025em;
 }
 
 .productCatalogMeta {
@@ -5752,11 +5325,11 @@ h2 {
 
   color: var(--text-secondary);
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .1em;
+  letter-spacing: 0.06em;
 
   text-transform: uppercase;
 }
@@ -5898,11 +5471,11 @@ h2 {
 
   color: var(--text-secondary);
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .13em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -5915,17 +5488,13 @@ h2 {
     0
     28px;
 
-  font-size: clamp(
-    40px,
-    4vw,
-    62px
-  );
+  font-size: clamp(34px, 3.4vw, 53px);
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .95;
+  line-height: 1.08;
 
-  letter-spacing: -.055em;
+  letter-spacing: -0.025em;
 }
 
 .quoteSidebar > p {
@@ -5968,11 +5537,11 @@ h2 {
 .quoteSidebarDetails span {
   color: var(--text-secondary);
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .1em;
+  letter-spacing: 0.06em;
 
   text-transform: uppercase;
 }
@@ -6022,11 +5591,11 @@ h2 {
 .formField > span {
   color: var(--text-secondary);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .09em;
+  letter-spacing: 0.06em;
 
   text-transform: uppercase;
 }
@@ -6325,11 +5894,11 @@ h2 {
 }
 
 .adminLoginBrand small {
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .16em;
+  letter-spacing: 0.08em;
 }
 
 .adminLoginContent {
@@ -6352,17 +5921,13 @@ h2 {
     0
     25px;
 
-  font-size: clamp(
-    70px,
-    8vw,
-    120px
-  );
+  font-size: clamp(50px, 5.76vw, 82px);
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .85;
+  line-height: 1.08;
 
-  letter-spacing: -.075em;
+  letter-spacing: -0.025em;
 }
 
 .adminLoginContent h1 span {
@@ -6396,11 +5961,11 @@ h2 {
 .adminLoginForm label > span {
   color: var(--text-secondary);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .1em;
+  letter-spacing: 0.06em;
 
   text-transform: uppercase;
 }
@@ -6508,11 +6073,11 @@ h2 {
 }
 
 .adminLogo small {
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .16em;
+  letter-spacing: 0.08em;
 }
 
 .adminSidebar nav {
@@ -6580,11 +6145,11 @@ h2 {
 
   color: var(--text-secondary);
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .12em;
+  letter-spacing: 0.08em;
 }
 
 .adminPageHeader h1,
@@ -6593,9 +6158,9 @@ h2 {
 
   font-size: 54px;
 
-  font-weight: 500;
+  font-weight: 600;
 
-  letter-spacing: -.05em;
+  letter-spacing: -0.025em;
 }
 
 .adminPageHeader > span {
@@ -6639,7 +6204,7 @@ h2 {
 .adminStatsGrid span {
   color: var(--text-secondary);
 
-  font-size: 10px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -6651,7 +6216,7 @@ h2 {
 
   font-weight: 500;
 
-  letter-spacing: -.06em;
+  letter-spacing: -0.025em;
 }
 
 .adminDashboardAction {
@@ -6673,7 +6238,7 @@ h2 {
 .adminDashboardAction span {
   color: rgba(255,255,255,.35);
 
-  font-size: 9px;
+  font-size: 11px;
 }
 
 .adminDashboardAction h2 {
@@ -6684,9 +6249,9 @@ h2 {
 
   font-size: 44px;
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .95;
+  line-height: 1.08;
 }
 
 .adminDashboardAction a {
@@ -6737,7 +6302,7 @@ h2 {
 
   color: var(--text-secondary);
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -6798,7 +6363,7 @@ h2 {
 
   text-transform: uppercase;
 
-  font-size: 8px !important;
+  font-size: 11px !important;
 
   font-weight: 700;
 }
@@ -6856,7 +6421,7 @@ h2 {
 .adminStatusControl > span {
   color: var(--text-secondary);
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -6910,7 +6475,7 @@ h2 {
 .adminQuoteInfo span {
   color: var(--text-secondary);
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -6936,7 +6501,7 @@ h2 {
 .adminQuoteMessage > span {
   color: var(--text-secondary);
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 }
@@ -7068,7 +6633,7 @@ h2 {
 .adminStatCard > span {
   color: var(--text-secondary);
 
-  font-size: 10px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -7090,13 +6655,13 @@ h2 {
 
   line-height: 1;
 
-  letter-spacing: -.06em;
+  letter-spacing: -0.025em;
 }
 
 .adminStatCard small {
   color: var(--text-secondary);
 
-  font-size: 10px;
+  font-size: 11px;
 
   transition: color 180ms ease;
 }
@@ -7125,9 +6690,9 @@ h2 {
 
   font-size: 34px;
 
-  font-weight: 500;
+  font-weight: 600;
 
-  letter-spacing: -.04em;
+  letter-spacing: -0.025em;
 }
 
 .adminWorkflow {
@@ -7166,7 +6731,7 @@ h2 {
 .adminWorkflow > div > span {
   color: var(--red);
 
-  font-size: 8px;
+  font-size: 11px;
 
   font-weight: 700;
 }
@@ -7180,7 +6745,7 @@ h2 {
 
   font-weight: 500;
 
-  letter-spacing: -.03em;
+  letter-spacing: -0.02em;
 }
 
 .adminWorkflow p {
@@ -7262,9 +6827,9 @@ h2 {
   margin: 15px 0;
 
   font-size: 36px;
-  font-weight: 500;
+  font-weight: 600;
 
-  letter-spacing: -0.04em;
+  letter-spacing: -0.025em;
 }
 
 .adminEmptyState p,
@@ -7331,7 +6896,7 @@ h2 {
 
   background: var(--dark);
 
-  font-size: 9px;
+  font-size: 11px;
 
   letter-spacing: .08em;
 
@@ -7381,7 +6946,7 @@ h2 {
 
   background: var(--red);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 }
@@ -7484,11 +7049,7 @@ h2 {
 .productDetailPage h2 {
   margin: 0;
 
-  font-size: clamp(
-    48px,
-    6vw,
-    96px
-  );
+  font-size: clamp(35px, 4.32vw, 65px);
 }
 
 .productDetailPage h2 span {
@@ -7536,11 +7097,11 @@ h2 {
 
   color: var(--text-secondary);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .14em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -7578,17 +7139,13 @@ h2 {
 
   margin: 0 0 32px;
 
-  font-size: clamp(
-    56px,
-    6.4vw,
-    104px
-  );
+  font-size: clamp(40px, 4.61vw, 71px);
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .9;
+  line-height: 1.08;
 
-  letter-spacing: -.065em;
+  letter-spacing: -0.025em;
 }
 
 .productDetailHeroContent p {
@@ -7657,11 +7214,11 @@ h2 {
 
   color: rgba(255,255,255,.42);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .12em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -7792,11 +7349,11 @@ h2 {
 
   margin-bottom: 8px;
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .12em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -7863,11 +7420,11 @@ h2 {
 
   color: var(--text-secondary);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .14em;
+  letter-spacing: 0.08em;
 }
 
 .technicalDataIntro p {
@@ -7913,7 +7470,7 @@ h2 {
 
   font-weight: 500;
 
-  letter-spacing: -.03em;
+  letter-spacing: -0.02em;
 }
 
 
@@ -7971,11 +7528,11 @@ h2 {
 .productApplicationsGrid article > span {
   color: var(--red);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .15em;
+  letter-spacing: 0.08em;
 }
 
 .productApplicationsGrid h3 {
@@ -7987,11 +7544,11 @@ h2 {
     42px
   );
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .95;
+  line-height: 1.08;
 
-  letter-spacing: -.05em;
+  letter-spacing: -0.025em;
 }
 
 .productApplicationsGrid p {
@@ -8046,11 +7603,11 @@ h2 {
 
   color: var(--red);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .14em;
+  letter-spacing: 0.08em;
 }
 
 .productDownloadsList strong {
@@ -8062,7 +7619,7 @@ h2 {
 
   font-weight: 500;
 
-  letter-spacing: -.04em;
+  letter-spacing: -0.025em;
 }
 
 .productDownloadsList button {
@@ -8074,7 +7631,7 @@ h2 {
 
   background: transparent;
 
-  font-size: 10px;
+  font-size: 11px;
 
   font-weight: 700;
 
@@ -8292,11 +7849,11 @@ h2 {
     34px
   );
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .95;
+  line-height: 1.08;
 
-  letter-spacing: -.05em;
+  letter-spacing: -0.025em;
 }
 
 .relatedProductBottom > span {
@@ -8411,17 +7968,13 @@ h2 {
 .productNotFound h1 {
   margin: 30px 0 60px;
 
-  font-size: clamp(
-    64px,
-    10vw,
-    160px
-  );
+  font-size: clamp(46px, 7.2vw, 109px);
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .85;
+  line-height: 1.08;
 
-  letter-spacing: -.075em;
+  letter-spacing: -0.025em;
 }
 
 .productNotFound h1 span {
@@ -8765,11 +8318,11 @@ textarea:focus-visible {
 
   font: inherit;
 
-  font-size: 10px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .12em;
+  letter-spacing: 0.08em;
 
   cursor: pointer;
 
@@ -8850,11 +8403,11 @@ textarea:focus-visible {
 
   color: var(--text-secondary);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .14em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -8915,11 +8468,11 @@ textarea:focus-visible {
 .languageSwitcherShort {
   color: var(--text-secondary);
 
-  font-size: 9px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .12em;
+  letter-spacing: 0.08em;
 }
 
 .languageSwitcherCheck {
@@ -9289,76 +8842,100 @@ html[dir="rtl"] .desktopNav a {
    EXPORT NETWORK (Global section)
 ===================================================== */
 
+.globalSection {
+  position: relative;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(circle at 78% 8%, rgba(213, 29, 44, .14), transparent 32%),
+    radial-gradient(circle at 10% 90%, rgba(255, 255, 255, .04), transparent 40%),
+    var(--dark);
+}
+
 .globalIntro {
   max-width: 640px;
 
-  margin: 36px 0 0;
+  margin: 32px 0 0;
 
-  color: rgba(255, 255, 255, .62);
+  color: rgba(255, 255, 255, .64);
 
   font-size: 18px;
 
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
 .globalFigures {
-  margin: 40px 0 0;
+  margin: 36px 0 0;
 
   display: flex;
 
   flex-wrap: wrap;
 
-  gap: 18px 56px;
+  gap: 12px;
 }
 
 .globalFigures div {
+  min-width: 150px;
+
+  padding: 16px 20px;
+
   display: flex;
 
   flex-direction: column;
 
   gap: 6px;
+
+  border: 1px solid rgba(255, 255, 255, .08);
+
+  border-radius: 14px;
+
+  background: linear-gradient(160deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .015));
 }
 
 .globalFigures dt {
-  font-size: 34px;
+  font-size: 30px;
 
-  font-weight: 500;
+  font-weight: 700;
 
   line-height: 1;
 
-  letter-spacing: -.04em;
+  letter-spacing: -0.02em;
 }
 
 .globalFigures dd {
   margin: 0;
 
-  color: rgba(255, 255, 255, .45);
+  color: rgba(255, 255, 255, .5);
 
   font-size: 12px;
 
-  font-weight: 600;
-
-  letter-spacing: .04em;
-
-  text-transform: uppercase;
+  font-weight: 500;
 }
 
 /* Map panel */
 
 .exportMapPanel {
+  position: relative;
+
   margin: 0;
 
-  padding: 28px;
+  padding: 32px;
 
-  border: 1px solid rgba(255, 255, 255, .12);
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, .08);
+
+  border-radius: 24px;
 
   background:
-    radial-gradient(
-      ellipse at 55% 40%,
-      #1d2125,
-      #121417 60%,
-      #0e1013
-    );
+    radial-gradient(ellipse 45% 55% at 58% 42%, rgba(213, 29, 44, .16), transparent 70%),
+    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, .06), transparent 60%),
+    linear-gradient(180deg, #15181c, #0f1114);
+
+  box-shadow:
+    0 40px 80px -40px rgba(0, 0, 0, .7),
+    inset 0 1px 0 rgba(255, 255, 255, .06);
 }
 
 .exportMapFrame {
@@ -9372,7 +8949,12 @@ html[dir="rtl"] .desktopNav a {
 
   overflow: hidden;
 
+  border-radius: 14px;
+
   touch-action: pan-y;
+
+  /* soft edges so the map blends into the panel */
+  mask-image: radial-gradient(ellipse 98% 92% at 50% 50%, #000 70%, transparent 100%);
 }
 
 .exportMap.canPan {
@@ -9402,6 +8984,10 @@ html[dir="rtl"] .desktopNav a {
   transition: stroke-opacity 400ms ease;
 }
 
+.exportRoute path {
+  filter: drop-shadow(0 0 1.2px rgba(224, 49, 63, .7));
+}
+
 /* Map labels */
 
 .exportMapLabel {
@@ -9409,13 +8995,13 @@ html[dir="rtl"] .desktopNav a {
 
   z-index: 2;
 
-  padding: 6px 10px;
+  padding: 7px 12px;
 
-  border-radius: 6px;
+  border-radius: 999px;
 
   font-size: 13px;
 
-  font-weight: 700;
+  font-weight: 600;
 
   line-height: 1.2;
 
@@ -9425,11 +9011,15 @@ html[dir="rtl"] .desktopNav a {
 }
 
 .exportMapLabelHub {
-  border: 1px solid var(--red);
+  border: 1px solid rgba(224, 49, 63, .7);
 
   color: #fff;
 
-  background: rgba(11, 13, 16, .9);
+  background: rgba(15, 17, 20, .82);
+
+  backdrop-filter: blur(8px);
+
+  box-shadow: 0 0 0 4px rgba(224, 49, 63, .12);
 }
 
 .exportMapLabelActive {
@@ -9437,43 +9027,56 @@ html[dir="rtl"] .desktopNav a {
 
   background: #fff;
 
-  box-shadow: 0 8px 24px rgba(0, 0, 0, .45);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
 
   pointer-events: auto;
 }
 
 .labelTop {
-  transform: translate(-50%, calc(-100% - 12px));
+  transform: translate(-50%, calc(-100% - 14px));
 }
 
 .labelBottom {
-  transform: translate(-50%, 12px);
+  transform: translate(-50%, 14px);
 }
 
 .labelLeft {
-  transform: translate(calc(-100% - 12px), -50%);
+  transform: translate(calc(-100% - 14px), -50%);
 }
 
 .labelRight {
-  transform: translate(12px, -50%);
+  transform: translate(14px, -50%);
 }
 
 .exportMapLabelShort {
   display: none;
 }
 
-/* Legend */
+/* Legend + zoom controls: frosted pills */
+
+.exportMapLegend,
+.exportMapControls {
+  border: 1px solid rgba(255, 255, 255, .1);
+
+  border-radius: 999px;
+
+  background: rgba(15, 17, 20, .7);
+
+  backdrop-filter: blur(12px);
+
+  -webkit-backdrop-filter: blur(12px);
+}
 
 .exportMapLegend {
   position: absolute;
 
-  bottom: 0;
+  bottom: 4px;
 
-  left: 0;
+  left: 4px;
 
   margin: 0;
 
-  padding: 10px 14px;
+  padding: 9px 16px;
 
   display: flex;
 
@@ -9483,13 +9086,7 @@ html[dir="rtl"] .desktopNav a {
 
   list-style: none;
 
-  border: 1px solid rgba(255, 255, 255, .1);
-
-  border-radius: 8px;
-
-  background: rgba(11, 13, 16, .8);
-
-  color: rgba(255, 255, 255, .7);
+  color: rgba(255, 255, 255, .72);
 
   font-size: 12px;
 
@@ -9506,9 +9103,9 @@ html[dir="rtl"] .desktopNav a {
 
 .legendHub,
 .legendMarket {
-  width: 10px;
+  width: 9px;
 
-  height: 10px;
+  height: 9px;
 
   border-radius: 50%;
 }
@@ -9521,6 +9118,8 @@ html[dir="rtl"] .desktopNav a {
 
 .legendMarket {
   background: #e0313f;
+
+  box-shadow: 0 0 8px rgba(224, 49, 63, .8);
 }
 
 .legendRoute {
@@ -9530,33 +9129,29 @@ html[dir="rtl"] .desktopNav a {
 
   border-radius: 2px;
 
-  background: #e0313f;
+  background: linear-gradient(90deg, rgba(224, 49, 63, .3), #e0313f);
 }
-
-/* Zoom controls */
 
 .exportMapControls {
   position: absolute;
 
-  bottom: 0;
+  bottom: 4px;
 
-  right: 0;
+  right: 4px;
+
+  padding: 3px;
 
   display: flex;
 
+  gap: 2px;
+
   overflow: hidden;
-
-  border: 1px solid rgba(255, 255, 255, .14);
-
-  border-radius: 8px;
-
-  background: rgba(11, 13, 16, .85);
 }
 
 .exportMapControls button {
-  width: 36px;
+  width: 34px;
 
-  height: 36px;
+  height: 34px;
 
   display: flex;
 
@@ -9565,6 +9160,8 @@ html[dir="rtl"] .desktopNav a {
   justify-content: center;
 
   border: 0;
+
+  border-radius: 999px;
 
   color: #fff;
 
@@ -9575,12 +9172,8 @@ html[dir="rtl"] .desktopNav a {
   transition: background-color 160ms ease, opacity 160ms ease;
 }
 
-.exportMapControls button + button {
-  border-left: 1px solid rgba(255, 255, 255, .12);
-}
-
 .exportMapControls button:hover:not(:disabled) {
-  background: var(--red);
+  background: rgba(255, 255, 255, .12);
 }
 
 .exportMapControls button:disabled {
@@ -9598,7 +9191,7 @@ html[dir="rtl"] .desktopNav a {
 /* Steps */
 
 .exportStepsHeader {
-  margin: 48px 0 18px;
+  margin: 44px 0 16px;
 
   display: flex;
 
@@ -9607,6 +9200,16 @@ html[dir="rtl"] .desktopNav a {
   justify-content: space-between;
 
   gap: 24px;
+}
+
+.exportStepsHeader .globalLabel {
+  color: rgba(255, 255, 255, .55);
+
+  font-size: 12px;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
 }
 
 .exportStepsHeader .globalLink {
@@ -9624,13 +9227,9 @@ html[dir="rtl"] .desktopNav a {
 
   grid-template-columns: repeat(7, minmax(0, 1fr));
 
-  gap: 1px;
+  gap: 12px;
 
   list-style: none;
-
-  border: 1px solid rgba(255, 255, 255, .12);
-
-  background: rgba(255, 255, 255, .12);
 }
 
 .exportSteps > li {
@@ -9642,7 +9241,7 @@ html[dir="rtl"] .desktopNav a {
 
   width: 100%;
 
-  padding: 20px 18px 24px;
+  padding: 18px 18px 22px;
 
   display: flex;
 
@@ -9650,13 +9249,17 @@ html[dir="rtl"] .desktopNav a {
 
   align-items: flex-start;
 
-  gap: 6px;
+  gap: 4px;
 
-  border: 0;
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, .08);
+
+  border-radius: 16px;
 
   color: #fff;
 
-  background: var(--dark);
+  background: linear-gradient(165deg, rgba(255, 255, 255, .055), rgba(255, 255, 255, .015));
 
   font: inherit;
 
@@ -9665,56 +9268,87 @@ html[dir="rtl"] .desktopNav a {
   cursor: default;
 
   transition:
-    background-color 300ms ease,
-    opacity 300ms ease;
+    transform 350ms cubic-bezier(.2, .7, .2, 1),
+    border-color 350ms ease,
+    background 350ms ease,
+    box-shadow 350ms ease,
+    opacity 350ms ease;
+}
+
+button.exportStep:hover {
+  border-color: rgba(255, 255, 255, .2);
+
+  transform: translateY(-2px);
 }
 
 .exportStep.upcoming {
-  opacity: .38;
+  opacity: .45;
 }
 
 .exportStep.active {
-  background: #16191d;
+  border-color: rgba(224, 49, 63, .6);
+
+  background:
+    radial-gradient(circle at 0% 0%, rgba(224, 49, 63, .28), transparent 60%),
+    linear-gradient(165deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .02));
+
+  box-shadow:
+    0 18px 40px -18px rgba(224, 49, 63, .55),
+    inset 0 1px 0 rgba(255, 255, 255, .08);
+
+  transform: translateY(-4px);
 }
 
 .exportStepIndex {
-  height: 16px;
+  width: 28px;
+
+  height: 28px;
 
   display: flex;
 
   align-items: center;
 
-  color: var(--red);
+  justify-content: center;
 
-  font-size: 10px;
+  border: 1px solid rgba(255, 255, 255, .12);
+
+  border-radius: 50%;
+
+  color: rgba(255, 255, 255, .7);
+
+  font-family: var(--font-display);
+
+  font-size: 11px;
 
   font-weight: 700;
+}
 
-  letter-spacing: .12em;
+.exportStep.active .exportStepIndex {
+  border-color: transparent;
+
+  color: #fff;
+
+  background: var(--red);
 }
 
 .exportStepIndex svg {
-  width: 15px;
+  width: 14px;
 
-  height: 15px;
+  height: 14px;
 }
 
 .exportStep strong {
-  margin-top: 10px;
+  margin-top: 14px;
 
-  font-size: 17px;
+  font-size: 16px;
 
-  font-weight: 600;
+  font-weight: 700;
 
-  letter-spacing: -.02em;
-}
-
-.exportStep.active strong {
-  color: #fff;
+  letter-spacing: -0.01em;
 }
 
 .exportStepRegion {
-  color: rgba(255, 255, 255, .45);
+  color: rgba(255, 255, 255, .5);
 
   font-size: 12px;
 }
@@ -9722,19 +9356,23 @@ html[dir="rtl"] .desktopNav a {
 .exportStepProgress {
   position: absolute;
 
-  left: 0;
+  left: 14px;
 
-  right: 0;
+  right: 14px;
 
-  bottom: 0;
+  bottom: 10px;
 
   height: 3px;
+
+  overflow: hidden;
+
+  border-radius: 3px;
 
   background: transparent;
 }
 
 .exportStep.active .exportStepProgress {
-  background: rgba(255, 255, 255, .08);
+  background: rgba(255, 255, 255, .1);
 }
 
 .exportStepProgress span {
@@ -9744,7 +9382,9 @@ html[dir="rtl"] .desktopNav a {
 
   height: 100%;
 
-  background: var(--red);
+  border-radius: inherit;
+
+  background: linear-gradient(90deg, #b51522, #ff4d5a);
 
   transform: scaleX(0);
 
@@ -9774,7 +9414,9 @@ html[dir="rtl"] .exportStepProgress span {
 @media (max-width: 800px) {
 
   .exportMapPanel {
-    padding: 14px;
+    padding: 16px;
+
+    border-radius: 18px;
   }
 
   .exportMapLegend {
@@ -9789,10 +9431,6 @@ html[dir="rtl"] .exportStepProgress span {
     font-size: 11px;
   }
 
-  .exportMapControls {
-    top: auto;
-  }
-
   .exportStepsHeader {
     margin-top: 36px;
 
@@ -9804,6 +9442,8 @@ html[dir="rtl"] .exportStepProgress span {
   /* Steps scroll sideways on small screens */
   .exportSteps {
     display: flex;
+
+    padding: 6px 2px 4px;
 
     overflow-x: auto;
 
@@ -9826,7 +9466,6 @@ html[dir="rtl"] .exportStepProgress span {
 
 @media (max-width: 640px) {
 
-  /* Give the world map every pixel of width available */
   .exportMapPanel {
     margin-inline: -8px;
 
@@ -9834,7 +9473,7 @@ html[dir="rtl"] .exportStepProgress span {
   }
 
   .exportMapLabel {
-    padding: 4px 7px;
+    padding: 4px 9px;
 
     font-size: 11px;
   }
@@ -9847,13 +9486,14 @@ html[dir="rtl"] .exportStepProgress span {
     display: inline;
   }
 
-  /* Keep the hub label inside the map on narrow screens */
   .exportMapLabelHub.labelRight {
     transform: translate(10px, -50%);
   }
 
   .exportMapLegend {
     max-width: none;
+
+    border-radius: 14px;
 
     gap: 6px 12px;
   }
@@ -9875,7 +9515,6 @@ html[dir="rtl"] .exportStepProgress span {
   }
 
 }
-
 
 /* =====================================================
    CONTACT PAGE — LOCATIONS
@@ -9915,13 +9554,13 @@ html[dir="rtl"] .exportStepProgress span {
 .contactLocationsHeader h2 {
   margin: 0;
 
-  font-size: clamp(48px, 6vw, 92px);
+  font-size: clamp(35px, 4.32vw, 63px);
 
-  font-weight: 500;
+  font-weight: 600;
 
-  line-height: .95;
+  line-height: 1.08;
 
-  letter-spacing: -.065em;
+  letter-spacing: -0.025em;
 }
 
 .contactLocationsHeader h2 span {
@@ -9985,11 +9624,11 @@ html[dir="rtl"] .exportStepProgress span {
 
   color: rgba(255, 255, 255, .4);
 
-  font-size: 10px;
+  font-size: 11px;
 
   font-weight: 700;
 
-  letter-spacing: .12em;
+  letter-spacing: 0.08em;
 
   text-transform: uppercase;
 }
@@ -10193,7 +9832,7 @@ html[dir="rtl"] .exportStepProgress span {
 
   font-weight: 600;
 
-  letter-spacing: -.03em;
+  letter-spacing: -0.02em;
 }
 
 .contactAddressActions {
@@ -10254,4 +9893,175 @@ html[dir="rtl"] .exportStepProgress span {
     min-height: 300px;
   }
 
+}
+
+
+/* =====================================================
+   TYPOGRAPHY
+===================================================== */
+
+body {
+  font-size: 16px;
+
+  line-height: 1.6;
+
+  text-rendering: optimizeLegibility;
+
+  -webkit-font-smoothing: antialiased;
+
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+.stat strong,
+.globalFigures dt,
+.heroVisualBottom strong,
+.qualityStatement strong,
+.exportStep strong,
+.facilityContent h3,
+.contactAddressCard address strong,
+.adminPageHeader h1 {
+  font-family: var(--font-display);
+
+  font-feature-settings: "ss01", "cv01";
+}
+
+/* Headline accent lines read lighter, not just greyer */
+h1 span,
+h2 span {
+  font-weight: 500;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+
+/* =====================================================
+   FACILITIES — single production hub
+===================================================== */
+
+.facilitiesGrid.single {
+  grid-template-columns: 1fr;
+
+  gap: 0;
+
+  overflow: hidden;
+
+  border: 1px solid var(--line);
+
+  border-radius: 24px;
+
+  background: transparent;
+}
+
+.facilitiesGrid.single .facilityCard {
+  display: grid;
+
+  grid-template-columns: 1.2fr 1fr;
+}
+
+.facilitiesGrid.single .facilityMedia {
+  min-height: 460px;
+}
+
+.facilitiesGrid.single .facilityContent {
+  min-height: 0;
+
+  padding: 44px 44px 40px;
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+.facilityAddress {
+  margin-top: auto;
+
+  padding-top: 28px;
+
+  display: flex;
+
+  gap: 12px;
+
+  border-top: 1px solid var(--line);
+}
+
+.facilityAddress > svg {
+  flex: none;
+
+  width: 18px;
+
+  height: 18px;
+
+  margin-top: 2px;
+
+  color: var(--red);
+}
+
+.facilityAddress div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.facilityAddress span:first-child {
+  color: var(--text-secondary);
+
+  font-size: 14px;
+
+  line-height: 1.6;
+}
+
+.facilityAddress a {
+  width: max-content;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding-bottom: 4px;
+
+  border-bottom: 1px solid var(--text);
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+.facilityAddress a > span {
+  color: var(--red);
+}
+
+@media (max-width: 900px) {
+
+  .facilitiesGrid.single .facilityCard {
+    grid-template-columns: 1fr;
+  }
+
+  .facilitiesGrid.single .facilityMedia {
+    min-height: 340px;
+  }
+
+  .facilitiesGrid.single .facilityContent {
+    padding: 28px 24px 32px;
+  }
+
+}
+
+/* Home: contact follows the dark export section directly */
+.globalSection + .contactLocations {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }

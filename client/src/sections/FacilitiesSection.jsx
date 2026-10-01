@@ -1,7 +1,10 @@
 import { useTranslation } from 'react-i18next';
 
+import { MapPin } from 'lucide-react';
+
 import { LocalizedLink } from '../components/i18n/LocalizedLink';
 import Arrow from '../components/i18n/Arrow';
+import company from '../data/company';
 
 export default function FacilitiesSection() {
   const { t } = useTranslation();
@@ -36,7 +39,7 @@ export default function FacilitiesSection() {
           </div>
         </div>
 
-        <div className="facilitiesGrid">
+        <div className={`facilitiesGrid ${facilities.length === 1 ? 'single' : ''}`}>
 
           {facilities.map((facility, index) => (
             <article
@@ -104,6 +107,29 @@ export default function FacilitiesSection() {
                     </span>
                   ))}
                 </div>
+
+                {index === 0 && (
+                  <div className="facilityAddress">
+                    <MapPin aria-hidden="true" />
+
+                    <div>
+                      <span>
+                        {company.address.street}
+                        <br />
+                        {company.address.district}, {company.address.country}
+                      </span>
+
+                      <a
+                        href={company.maps.directions}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {t('facilities.directions')}
+                        <Arrow />
+                      </a>
+                    </div>
+                  </div>
+                )}
 
               </div>
 

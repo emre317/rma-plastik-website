@@ -7,10 +7,14 @@ import EngineeringSection from '../../sections/EngineeringSection';
 import FacilitiesSection from '../../sections/FacilitiesSection';
 import QualitySection from '../../sections/QualitySection';
 import GlobalPresenceSection from '../../sections/GlobalPresenceSection';
-import FinalCTASection from '../../sections/FinalCTASection';
+import ContactSection from '../../sections/ContactSection';
+import { useTranslation } from 'react-i18next';
+
 import usePageTitle from '../../hooks/usePageTitle';
 
 export default function Home() {
+  const { t } = useTranslation();
+
   usePageTitle(null);
 
   return (
@@ -24,7 +28,7 @@ export default function Home() {
       <FacilitiesSection />
       <QualitySection />
       <GlobalPresenceSection />
-      <FinalCTASection />
+      <ContactSection index={t('contact.homeIndex')} />
     </main>
   );
 }
