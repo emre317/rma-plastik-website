@@ -1,7 +1,13 @@
+import { useTranslation } from 'react-i18next';
+
 import usePageTitle from '../../hooks/usePageTitle';
 
 export default function Technologies() {
-  usePageTitle('Technologies');
+  const { t } = useTranslation();
+
+  usePageTitle(t('meta.titles.technologies'));
+
+  const meta = t('pages.technologies.meta', { returnObjects: true });
 
   return (
     <main className="internalPage">
@@ -10,24 +16,19 @@ export default function Technologies() {
         <div className="container">
 
           <div className="internalHeroMeta">
-            <span>
-              03 / TECHNOLOGIES
-            </span>
-
-            <span>
-              MANUFACTURING
-            </span>
+            <span>{meta[0]}</span>
+            <span>{meta[1]}</span>
           </div>
 
           <div className="internalHeroGrid">
 
             <p className="eyebrow">
-              PRODUCTION TECHNOLOGIES
+              {t('pages.technologies.eyebrow')}
             </p>
 
             <h1>
-              Built around
-              <span>the process.</span>
+              {t('pages.technologies.title')}
+              <span>{t('pages.technologies.titleAccent')}</span>
             </h1>
 
           </div>

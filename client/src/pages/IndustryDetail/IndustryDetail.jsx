@@ -1,8 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import usePageTitle from '../../hooks/usePageTitle';
+
 import formatSlug from '../../utils/formatSlug';
+import usePageTitle from '../../hooks/usePageTitle';
 
 export default function IndustryDetail() {
+  const { t } = useTranslation();
   const { slug } = useParams();
 
   usePageTitle(formatSlug(slug));
@@ -14,24 +17,19 @@ export default function IndustryDetail() {
         <div className="container">
 
           <div className="internalHeroMeta">
-            <span>
-              INDUSTRY
-            </span>
-
-            <span>
-              {slug}
-            </span>
+            <span>{t('pages.industryDetail.meta')}</span>
+            <span>{formatSlug(slug)}</span>
           </div>
 
           <div className="internalHeroGrid">
 
             <p className="eyebrow">
-              INDUSTRY SOLUTION
+              {t('pages.industryDetail.eyebrow')}
             </p>
 
             <h1>
-              Application-focused
-              <span>solutions.</span>
+              {t('pages.industryDetail.title')}
+              <span>{t('pages.industryDetail.titleAccent')}</span>
             </h1>
 
           </div>

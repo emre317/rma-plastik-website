@@ -7,9 +7,11 @@ import {
   saveAdminSession,
 } from '../../services/adminAuth';
 import usePageTitle from '../../hooks/usePageTitle';
+import useAdminDocumentLanguage from '../../hooks/useAdminDocumentLanguage';
 
 export default function AdminLogin() {
   usePageTitle('Admin Login');
+  useAdminDocumentLanguage();
 
   const navigate = useNavigate();
   const location = useLocation();

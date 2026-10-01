@@ -1,25 +1,13 @@
-const qualityItems = [
-  {
-    number: '01',
-    title: 'Controlled Production',
-    description:
-      'Structured manufacturing processes focused on repeatability, product consistency and reliable industrial performance.',
-  },
-  {
-    number: '02',
-    title: 'Material Focus',
-    description:
-      'Polyethylene-based production built around application requirements, durability and long-term use.',
-  },
-  {
-    number: '03',
-    title: 'Technical Validation',
-    description:
-      'Product requirements are reviewed through dimensions, application criteria and manufacturing feasibility.',
-  },
-];
+import { useTranslation } from 'react-i18next';
+
+import Arrow from '../components/i18n/Arrow';
 
 export default function QualitySection() {
+  const { t } = useTranslation();
+
+  const qualityItems = t('quality.items', { returnObjects: true });
+  const statement = t('quality.statement', { returnObjects: true });
+
   return (
     <section className="qualitySection" id="quality">
       <div className="container">
@@ -28,23 +16,22 @@ export default function QualitySection() {
 
           <div>
             <span className="sectionIndex">
-              08 / QUALITY
+              {t('quality.index')}
             </span>
 
             <p className="eyebrow">
-              BUILT INTO THE PROCESS
+              {t('quality.eyebrow')}
             </p>
           </div>
 
           <div>
             <h2>
-              Quality is not
-              <span>an extra step.</span>
+              {t('quality.title')}
+              <span>{t('quality.titleAccent')}</span>
             </h2>
 
             <p>
-              It is integrated into how products are developed, manufactured
-              and prepared for industrial use.
+              {t('quality.description')}
             </p>
           </div>
 
@@ -55,31 +42,31 @@ export default function QualitySection() {
           <div className="qualityStatement">
 
             <span className="qualityStatementLabel">
-              RMA MANUFACTURING STANDARD
+              {t('quality.statementLabel')}
             </span>
 
             <strong>
-              Designed.
-              <br />
-              Manufactured.
-              <br />
-              Controlled.
+              {statement.map((line, index) => (
+                <span key={line}>
+                  {index > 0 && <br />}
+                  {line}
+                </span>
+              ))}
             </strong>
 
             <p>
-              From production planning to final manufacturing, each stage
-              contributes to consistent and dependable product performance.
+              {t('quality.statementText')}
             </p>
 
           </div>
 
           <div className="qualityList">
 
-            {qualityItems.map((item) => (
-              <article key={item.number}>
+            {qualityItems.map((item, index) => (
+              <article key={item.title}>
 
                 <span className="qualityNumber">
-                  {item.number}
+                  {String(index + 1).padStart(2, '0')}
                 </span>
 
                 <div>
@@ -92,9 +79,7 @@ export default function QualitySection() {
                   </p>
                 </div>
 
-                <span className="qualityArrow">
-                  ↗
-                </span>
+                <Arrow className="qualityArrow" />
 
               </article>
             ))}

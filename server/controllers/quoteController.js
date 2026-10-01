@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 import QuoteRequest, {
+  QUOTE_LANGUAGES,
   QUOTE_STATUSES,
 } from '../models/QuoteRequest.js';
 
@@ -109,6 +110,11 @@ export async function createQuoteRequest(req, res) {
       }
     }
 
+    // Unknown values are ignored rather than rejected
+    const language = QUOTE_LANGUAGES.includes(body.language)
+      ? body.language
+      : '';
+
     const quoteRequest =
       await QuoteRequest.create({
         company,
@@ -117,6 +123,7 @@ export async function createQuoteRequest(req, res) {
         ...optional,
         quantity,
         message,
+        language,
       });
 
     return res.status(201).json({

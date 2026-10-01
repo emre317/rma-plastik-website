@@ -1,6 +1,14 @@
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
+import { LocalizedLink } from '../components/i18n/LocalizedLink';
+import Arrow from '../components/i18n/Arrow';
 
 export default function EngineeringSection() {
+  const { t } = useTranslation();
+
+  const steps = t('engineering.steps', { returnObjects: true });
+  const visualTop = t('engineering.visualTop', { returnObjects: true });
+
   return (
     <section className="engineeringSection dark" id="engineering">
       <div className="container">
@@ -9,24 +17,22 @@ export default function EngineeringSection() {
 
           <div>
             <span className="sectionIndex light">
-              06 / ENGINEERING
+              {t('engineering.index')}
             </span>
 
             <p className="eyebrow">
-              CUSTOM MANUFACTURING
+              {t('engineering.eyebrow')}
             </p>
           </div>
 
           <div>
             <h2>
-              Not every solution
-              <span>comes from a catalogue.</span>
+              {t('engineering.title')}
+              <span>{t('engineering.titleAccent')}</span>
             </h2>
 
             <p>
-              RMA develops application-specific polyethylene products for
-              projects that require custom geometry, capacity, production
-              method or operational performance.
+              {t('engineering.description')}
             </p>
           </div>
 
@@ -38,87 +44,48 @@ export default function EngineeringSection() {
 
             <div className="engineeringIntro">
               <span className="engineeringSmallLabel">
-                FROM IDEA TO PRODUCTION
+                {t('engineering.introLabel')}
               </span>
 
               <p>
-                From initial requirement to industrial production, RMA supports
-                product development through engineering, mold development and
-                manufacturing expertise.
+                {t('engineering.intro')}
               </p>
             </div>
 
             <div className="engineeringSteps">
 
-              <article>
-                <span>01</span>
+              {steps.map((step, index) => (
+                <article key={step.title}>
+                  <span>{String(index + 1).padStart(2, '0')}</span>
 
-                <div>
-                  <h3>Requirement Analysis</h3>
+                  <div>
+                    <h3>{step.title}</h3>
 
-                  <p>
-                    Understanding application, dimensions, capacity, working
-                    conditions and project-specific requirements.
-                  </p>
-                </div>
-              </article>
-
-              <article>
-                <span>02</span>
-
-                <div>
-                  <h3>Product Development</h3>
-
-                  <p>
-                    Translating the technical requirement into a manufacturable
-                    polyethylene product concept.
-                  </p>
-                </div>
-              </article>
-
-              <article>
-                <span>03</span>
-
-                <div>
-                  <h3>Mold Development</h3>
-
-                  <p>
-                    Preparing the manufacturing infrastructure required for
-                    repeatable industrial production.
-                  </p>
-                </div>
-              </article>
-
-              <article>
-                <span>04</span>
-
-                <div>
-                  <h3>Industrial Production</h3>
-
-                  <p>
-                    Moving the approved product into controlled and scalable
-                    production.
-                  </p>
-                </div>
-              </article>
+                    <p>
+                      {step.description}
+                    </p>
+                  </div>
+                </article>
+              ))}
 
             </div>
 
-            <Link to="/contact" className="engineeringLink">
-              Discuss Your Project
-              <span>↗</span>
-            </Link>
+            <LocalizedLink to="/contact" className="engineeringLink">
+              {t('engineering.discuss')}
+              <Arrow />
+            </LocalizedLink>
 
           </div>
 
           <div className="engineeringVisual">
 
             <div className="engineeringVisualTop">
-              <span>TECHNICAL DEVELOPMENT</span>
-              <span>RMA / ENGINEERING</span>
+              <span>{visualTop[0]}</span>
+              <span>{visualTop[1]}</span>
             </div>
 
-            <div className="technicalDrawing">
+            {/* Technical drawing stays LTR: dimensions read left-to-right */}
+            <div className="technicalDrawing" dir="ltr">
 
               <div className="drawingAxis drawingAxisHorizontal" />
               <div className="drawingAxis drawingAxisVertical" />
@@ -150,11 +117,11 @@ export default function EngineeringSection() {
               </div>
 
               <span className="drawingNote drawingNoteOne">
-                MATERIAL / PE
+                {t('engineering.noteMaterial')}
               </span>
 
               <span className="drawingNote drawingNoteTwo">
-                PROJECT SPECIFIC
+                {t('engineering.noteProject')}
               </span>
 
             </div>
@@ -162,13 +129,13 @@ export default function EngineeringSection() {
             <div className="engineeringVisualBottom">
 
               <div>
-                <span>TYPE</span>
-                <strong>Custom Product</strong>
+                <span>{t('engineering.typeLabel')}</span>
+                <strong>{t('engineering.typeValue')}</strong>
               </div>
 
               <div>
-                <span>PROCESS</span>
-                <strong>Engineering + Production</strong>
+                <span>{t('engineering.processLabel')}</span>
+                <strong>{t('engineering.processValue')}</strong>
               </div>
 
             </div>

@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import products from '../../data/products';
 import { submitQuote } from '../../services/api';
+import Arrow from '../../components/i18n/Arrow';
+import useProducts from '../../hooks/useProducts';
 import usePageTitle from '../../hooks/usePageTitle';
 
 const initialForm = {
@@ -25,12 +28,31 @@ function getInitialForm(productSlug) {
 
   return {
     ...initialForm,
-    product: product ? product.name : '',
+    product: product ? product.quoteName : '',
   };
 }
 
+function errorMessageKey(error) {
+  if (error?.status === 0) {
+    return 'contact.errors.network';
+  }
+
+  if (error?.status === 429) {
+    return 'contact.errors.rateLimited';
+  }
+
+  if (error?.status === 400) {
+    return 'contact.errors.validation';
+  }
+
+  return 'contact.errors.generic';
+}
+
 export default function Contact() {
-  usePageTitle('Contact');
+  const { t, i18n } = useTranslation();
+  const localizedProducts = useProducts();
+
+  usePageTitle(t('meta.titles.contact'));
 
   const [searchParams] = useSearchParams();
 
@@ -38,7 +60,7 @@ export default function Contact() {
     getInitialForm(searchParams.get('product'))
   );
   const [status, setStatus] = useState('idle');
-  const [feedback, setFeedback] = useState('');
+  const [feedbackKey, setFeedbackKey] = useState('');
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -53,19 +75,27 @@ export default function Contact() {
     event.preventDefault();
 
     setStatus('loading');
-    setFeedback('');
+    setFeedbackKey('');
 
     try {
-      const response = await submitQuote(form);
+      await submitQuote({
+        ...form,
+        language: i18n.resolvedLanguage,
+      });
 
       setStatus('success');
-      setFeedback(response.message);
+      setFeedbackKey('contact.success');
       setForm(initialForm);
     } catch (error) {
       setStatus('error');
-      setFeedback(error.message);
+      setFeedbackKey(errorMessageKey(error));
     }
   }
+
+  const meta = t('contact.meta', { returnObjects: true });
+
+  const fieldLabel = (name, required = false) =>
+    `${t(`contact.fields.${name}`)}${required ? ' *' : ''}`;
 
   return (
     <main className="contactPage">
@@ -74,24 +104,19 @@ export default function Contact() {
         <div className="container">
 
           <div className="internalHeroMeta">
-            <span>
-              06 / CONTACT
-            </span>
-
-            <span>
-              START A PROJECT
-            </span>
+            <span>{meta[0]}</span>
+            <span>{meta[1]}</span>
           </div>
 
           <div className="internalHeroGrid">
 
             <p className="eyebrow">
-              TALK TO RMA
+              {t('contact.eyebrow')}
             </p>
 
             <h1>
-              Tell us what
-              <span>you need.</span>
+              {t('contact.title')}
+              <span>{t('contact.titleAccent')}</span>
             </h1>
 
           </div>
@@ -99,12 +124,11 @@ export default function Contact() {
           <div className="internalHeroBottom">
 
             <p>
-              Share your product, application or custom manufacturing
-              requirement with our team.
+              {t('contact.text')}
             </p>
 
             <span>
-              SALES / ENGINEERING
+              {t('contact.tag')}
             </span>
 
           </div>
@@ -121,23 +145,22 @@ export default function Contact() {
 
             <div>
               <span className="sectionIndex">
-                REQUEST / 01
+                {t('contact.formIndex')}
               </span>
 
               <p className="eyebrow">
-                PROJECT INFORMATION
+                {t('contact.formEyebrow')}
               </p>
             </div>
 
             <div>
               <h2>
-                Request a
-                <span>solution.</span>
+                {t('contact.formTitle')}
+                <span>{t('contact.formTitleAccent')}</span>
               </h2>
 
               <p>
-                Provide the basic project information below. More technical
-                details can be discussed with the RMA team after submission.
+                {t('contact.formText')}
               </p>
             </div>
 
@@ -149,39 +172,37 @@ export default function Contact() {
             <aside className="quoteSidebar">
 
               <span className="quoteSidebarLabel">
-                CONTACT
+                {t('contact.sidebarLabel')}
               </span>
 
               <h3>
-                Let&apos;s understand
-                your requirement.
+                {t('contact.sidebarTitle')}
               </h3>
 
               <p>
-                Complete the form with as much information as possible so the
-                relevant product and manufacturing requirements can be reviewed.
+                {t('contact.sidebarText')}
               </p>
 
               <div className="quoteSidebarDetails">
 
                 <div>
-                  <span>Locations</span>
+                  <span>{t('contact.sidebarLocations')}</span>
                   <strong>
-                    Mersin / Istanbul
+                    {t('common.locations')}
                   </strong>
                 </div>
 
                 <div>
-                  <span>Country</span>
+                  <span>{t('contact.sidebarCountry')}</span>
                   <strong>
-                    Türkiye
+                    {t('common.country')}
                   </strong>
                 </div>
 
                 <div>
-                  <span>Email</span>
+                  <span>{t('contact.sidebarEmail')}</span>
                   <strong>
-                    <a href="mailto:info@rmaplastik.com">
+                    <a href="mailto:info@rmaplastik.com" dir="ltr">
                       info@rmaplastik.com
                     </a>
                   </strong>
@@ -201,7 +222,7 @@ export default function Contact() {
 
                 <label className="formField">
                   <span>
-                    Company *
+                    {fieldLabel('company', true)}
                   </span>
 
                   <input
@@ -211,14 +232,14 @@ export default function Contact() {
                     value={form.company}
                     onChange={handleChange}
                     required
-                    placeholder="Company name"
+                    placeholder={t('contact.placeholders.company')}
                   />
                 </label>
 
 
                 <label className="formField">
                   <span>
-                    Contact Name *
+                    {fieldLabel('name', true)}
                   </span>
 
                   <input
@@ -228,47 +249,49 @@ export default function Contact() {
                     value={form.name}
                     onChange={handleChange}
                     required
-                    placeholder="Full name"
+                    placeholder={t('contact.placeholders.name')}
                   />
                 </label>
 
 
                 <label className="formField">
                   <span>
-                    Email *
+                    {fieldLabel('email', true)}
                   </span>
 
                   <input
                     type="email"
                     name="email"
+                    dir="ltr"
                     autoComplete="email"
                     value={form.email}
                     onChange={handleChange}
                     required
-                    placeholder="name@company.com"
+                    placeholder={t('contact.placeholders.email')}
                   />
                 </label>
 
 
                 <label className="formField">
                   <span>
-                    Phone
+                    {fieldLabel('phone')}
                   </span>
 
                   <input
                     type="tel"
                     name="phone"
+                    dir="ltr"
                     maxLength={40}
                     value={form.phone}
                     onChange={handleChange}
-                    placeholder="+90 ..."
+                    placeholder={t('contact.placeholders.phone')}
                   />
                 </label>
 
 
                 <label className="formField">
                   <span>
-                    Country
+                    {fieldLabel('country')}
                   </span>
 
                   <input
@@ -277,14 +300,14 @@ export default function Contact() {
                     maxLength={80}
                     value={form.country}
                     onChange={handleChange}
-                    placeholder="Country"
+                    placeholder={t('contact.placeholders.country')}
                   />
                 </label>
 
 
                 <label className="formField">
                   <span>
-                    Product
+                    {fieldLabel('product')}
                   </span>
 
                   <select
@@ -293,20 +316,20 @@ export default function Contact() {
                     onChange={handleChange}
                   >
                     <option value="">
-                      Select product
+                      {t('contact.placeholders.product')}
                     </option>
 
-                    {products.map((product) => (
+                    {localizedProducts.map((product) => (
                       <option
-                        key={product.id}
-                        value={product.name}
+                        key={product.slug}
+                        value={product.quoteName}
                       >
                         {product.name}
                       </option>
                     ))}
 
                     <option value="Custom Requirement">
-                      Custom Requirement
+                      {t('contact.customRequirement')}
                     </option>
                   </select>
                 </label>
@@ -314,7 +337,7 @@ export default function Contact() {
 
                 <label className="formField">
                   <span>
-                    Required Capacity
+                    {fieldLabel('capacity')}
                   </span>
 
                   <input
@@ -323,14 +346,14 @@ export default function Contact() {
                     maxLength={80}
                     value={form.capacity}
                     onChange={handleChange}
-                    placeholder="e.g. 10,000 L"
+                    placeholder={t('contact.placeholders.capacity')}
                   />
                 </label>
 
 
                 <label className="formField">
                   <span>
-                    Quantity
+                    {fieldLabel('quantity')}
                   </span>
 
                   <input
@@ -339,14 +362,14 @@ export default function Contact() {
                     name="quantity"
                     value={form.quantity}
                     onChange={handleChange}
-                    placeholder="Quantity"
+                    placeholder={t('contact.placeholders.quantity')}
                   />
                 </label>
 
 
                 <label className="formField formFieldFull">
                   <span>
-                    Application
+                    {fieldLabel('application')}
                   </span>
 
                   <input
@@ -355,14 +378,14 @@ export default function Contact() {
                     maxLength={200}
                     value={form.application}
                     onChange={handleChange}
-                    placeholder="Chemical storage, water storage, OEM project..."
+                    placeholder={t('contact.placeholders.application')}
                   />
                 </label>
 
 
                 <label className="formField formFieldFull">
                   <span>
-                    Project Details *
+                    {fieldLabel('message', true)}
                   </span>
 
                   <textarea
@@ -372,7 +395,7 @@ export default function Contact() {
                     onChange={handleChange}
                     required
                     rows="7"
-                    placeholder="Please describe your requirement, operating conditions and other relevant project information."
+                    placeholder={t('contact.placeholders.message')}
                   />
                 </label>
 
@@ -382,8 +405,7 @@ export default function Contact() {
               <div className="quoteFormBottom">
 
                 <p>
-                  By submitting this form, you confirm that the provided
-                  information may be used to respond to your request.
+                  {t('contact.consent')}
                 </p>
 
                 <button
@@ -393,24 +415,22 @@ export default function Contact() {
                 >
                   <span>
                     {status === 'loading'
-                      ? 'Sending...'
-                      : 'Submit Request'}
+                      ? t('contact.sending')
+                      : t('contact.submit')}
                   </span>
 
-                  <span>
-                    ↗
-                  </span>
+                  <Arrow />
                 </button>
 
               </div>
 
 
-              {feedback && (
+              {feedbackKey && (
                 <div
                   className={`quoteFeedback ${status}`}
                   role={status === 'error' ? 'alert' : 'status'}
                 >
-                  {feedback}
+                  {t(feedbackKey)}
                 </div>
               )}
 

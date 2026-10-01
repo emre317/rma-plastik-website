@@ -1,51 +1,13 @@
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
-const industries = [
-  {
-    index: '01',
-    title: 'Chemical',
-    description:
-      'Storage and handling solutions designed for demanding chemical applications and process environments.',
-  },
-  {
-    index: '02',
-    title: 'Food & Beverage',
-    description:
-      'Polyethylene solutions suitable for food-related applications, storage and controlled industrial use.',
-  },
-  {
-    index: '03',
-    title: 'Agriculture',
-    description:
-      'Durable products for farming, irrigation, liquid storage and field-based operations.',
-  },
-  {
-    index: '04',
-    title: 'Automotive',
-    description:
-      'Application-specific polyethylene components and production solutions for automotive requirements.',
-  },
-  {
-    index: '05',
-    title: 'Textile',
-    description:
-      'Industrial polyethylene solutions supporting textile production, process and material handling.',
-  },
-  {
-    index: '06',
-    title: 'Infrastructure',
-    description:
-      'Reliable storage and technical solutions for construction, infrastructure and utility applications.',
-  },
-  {
-    index: '07',
-    title: 'Marine',
-    description:
-      'Durable polyethylene products for marine environments and specialized operational requirements.',
-  },
-];
+import { LocalizedLink } from '../components/i18n/LocalizedLink';
+import Arrow from '../components/i18n/Arrow';
 
 export default function IndustriesSection() {
+  const { t } = useTranslation();
+
+  const industries = t('industries.items', { returnObjects: true });
+
   return (
     <section className="industriesSection muted" id="industries">
       <div className="container">
@@ -54,24 +16,22 @@ export default function IndustriesSection() {
 
           <div>
             <span className="sectionIndex">
-              05 / INDUSTRIES
+              {t('industries.index')}
             </span>
 
             <p className="eyebrow">
-              APPLICATION SECTORS
+              {t('industries.eyebrow')}
             </p>
           </div>
 
           <div>
             <h2>
-              Designed for
-              <span>real industries.</span>
+              {t('industries.title')}
+              <span>{t('industries.titleAccent')}</span>
             </h2>
 
             <p>
-              RMA develops polyethylene solutions around the operational needs
-              of different industries — from chemical storage to agriculture,
-              infrastructure and specialized production environments.
+              {t('industries.description')}
             </p>
           </div>
 
@@ -79,19 +39,17 @@ export default function IndustriesSection() {
 
         <div className="industriesMatrix">
 
-          {industries.map((industry) => (
+          {industries.map((industry, index) => (
             <article
               className="industryItem"
-              key={industry.index}
+              key={industry.title}
             >
               <div className="industryItemTop">
                 <span className="industryIndex">
-                  {industry.index}
+                  {String(index + 1).padStart(2, '0')}
                 </span>
 
-                <span className="industryArrow">
-                  ↗
-                </span>
+                <Arrow className="industryArrow" />
               </div>
 
               <div className="industryItemContent">
@@ -110,24 +68,23 @@ export default function IndustriesSection() {
 
             <div className="industryItemTop">
               <span className="industryIndex">
-                08
+                {String(industries.length + 1).padStart(2, '0')}
               </span>
             </div>
 
             <div className="industryItemContent">
               <span className="industryCtaEyebrow">
-                YOUR INDUSTRY
+                {t('industries.ctaEyebrow')}
               </span>
 
               <h3>
-                Need a custom
-                application?
+                {t('industries.ctaTitle')}
               </h3>
 
-              <Link to="/contact">
-                Talk to RMA
-                <span>↗</span>
-              </Link>
+              <LocalizedLink to="/contact">
+                {t('industries.ctaLink')}
+                <Arrow />
+              </LocalizedLink>
             </div>
 
           </article>

@@ -16,6 +16,12 @@ import {
   notifyQuotesChanged,
 } from '../../services/adminAuth';
 
+const languageLabels = {
+  tr: 'Turkish',
+  en: 'English',
+  ar: 'Arabic',
+};
+
 const statusLabels = {
   new: 'New',
   reviewing: 'Reviewing',
@@ -303,6 +309,14 @@ export default function AdminQuoteDetail() {
 
             <strong>
               {quote.application || '-'}
+            </strong>
+          </div>
+
+          <div>
+            <span>Language</span>
+
+            <strong>
+              {languageLabels[quote.language] || '-'}
             </strong>
           </div>
 

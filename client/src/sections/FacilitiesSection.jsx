@@ -1,25 +1,14 @@
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
-const facilities = [
-  {
-    index: '01',
-    city: 'Mersin',
-    title: 'Primary Production Facility',
-    description:
-      'A core manufacturing location supporting large-scale polyethylene production, industrial storage solutions and application-specific manufacturing.',
-    meta: ['Production', 'Engineering', 'Industrial'],
-  },
-  {
-    index: '02',
-    city: 'Istanbul',
-    title: 'Production & Operations Facility',
-    description:
-      'A strategic production and operational location supporting manufacturing, customer requirements and regional industrial demand.',
-    meta: ['Production', 'Operations', 'Customer Support'],
-  },
-];
+import { LocalizedLink } from '../components/i18n/LocalizedLink';
+import Arrow from '../components/i18n/Arrow';
 
 export default function FacilitiesSection() {
+  const { t } = useTranslation();
+
+  const facilities = t('facilities.items', { returnObjects: true });
+  const bottom = t('facilities.bottom', { returnObjects: true });
+
   return (
     <section className="facilitiesSection" id="facilities">
       <div className="container">
@@ -27,31 +16,29 @@ export default function FacilitiesSection() {
         <div className="facilitiesHeader">
           <div>
             <span className="sectionIndex">
-              07 / FACILITIES
+              {t('facilities.index')}
             </span>
 
             <p className="eyebrow">
-              PRODUCTION NETWORK
+              {t('facilities.eyebrow')}
             </p>
           </div>
 
           <div>
             <h2>
-              Manufacturing
-              <span>where it matters.</span>
+              {t('facilities.title')}
+              <span>{t('facilities.titleAccent')}</span>
             </h2>
 
             <p>
-              RMA operates through production facilities in Mersin and
-              Istanbul, combining manufacturing infrastructure with regional
-              access and industrial capability.
+              {t('facilities.description')}
             </p>
           </div>
         </div>
 
         <div className="facilitiesGrid">
 
-          {facilities.map((facility) => (
+          {facilities.map((facility, index) => (
             <article
               className="facilityCard"
               key={facility.city}
@@ -60,11 +47,11 @@ export default function FacilitiesSection() {
 
                 <div className="facilityMediaTop">
                   <span>
-                    {facility.index}
+                    {String(index + 1).padStart(2, '0')}
                   </span>
 
                   <span>
-                    RMA / TÜRKİYE
+                    {t('facilities.mediaTag')}
                   </span>
                 </div>
 
@@ -85,7 +72,7 @@ export default function FacilitiesSection() {
                 </div>
 
                 <span className="facilityPlaceholderLabel">
-                  FACTORY IMAGE / VIDEO
+                  {t('facilities.placeholder')}
                 </span>
 
               </div>
@@ -95,7 +82,7 @@ export default function FacilitiesSection() {
                 <div className="facilityTitleRow">
                   <div>
                     <span className="facilityCountry">
-                      TÜRKİYE
+                      {t('facilities.country')}
                     </span>
 
                     <h3>
@@ -103,9 +90,7 @@ export default function FacilitiesSection() {
                     </h3>
                   </div>
 
-                  <span className="facilityArrow">
-                    ↗
-                  </span>
+                  <Arrow className="facilityArrow" />
                 </div>
 
                 <p>
@@ -130,15 +115,15 @@ export default function FacilitiesSection() {
         <div className="facilitiesBottom">
 
           <p>
-            Two locations.
+            {bottom[0]}
             <br />
-            One manufacturing standard.
+            {bottom[1]}
           </p>
 
-          <Link to="/contact">
-            Contact Our Team
-            <span>↗</span>
-          </Link>
+          <LocalizedLink to="/contact">
+            {t('facilities.contact')}
+            <Arrow />
+          </LocalizedLink>
 
         </div>
 

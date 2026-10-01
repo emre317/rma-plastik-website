@@ -1,45 +1,31 @@
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
-import products from '../../data/products';
+import { LocalizedLink } from '../../components/i18n/LocalizedLink';
+import Arrow from '../../components/i18n/Arrow';
+import useProducts from '../../hooks/useProducts';
 import usePageTitle from '../../hooks/usePageTitle';
 
-const filters = [
-  {
-    id: 'all',
-    label: 'All Products',
-  },
-  {
-    id: 'industrial-tanks',
-    label: 'Industrial Tanks',
-  },
-  {
-    id: 'chemical-tanks',
-    label: 'Chemical Tanks',
-  },
-  {
-    id: 'water-tanks',
-    label: 'Water Tanks',
-  },
-  {
-    id: 'agriculture',
-    label: 'Agriculture',
-  },
-  {
-    id: 'custom',
-    label: 'Custom',
-  },
+const filterIds = [
+  'all',
+  'industrial-tanks',
+  'chemical-tanks',
+  'water-tanks',
+  'agriculture',
+  'custom',
 ];
 
 export default function Products() {
-  usePageTitle('Products');
+  const { t } = useTranslation();
+  const products = useProducts();
+
+  usePageTitle(t('meta.titles.products'));
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   const requestedFilter = searchParams.get('category');
 
-  const activeFilter = filters.some(
-    (filter) => filter.id === requestedFilter
-  )
+  const activeFilter = filterIds.includes(requestedFilter)
     ? requestedFilter
     : 'all';
 
@@ -58,6 +44,8 @@ export default function Products() {
             product.category === activeFilter
         );
 
+  const meta = t('productsPage.meta', { returnObjects: true });
+
   return (
     <main className="productsPage">
 
@@ -65,24 +53,19 @@ export default function Products() {
         <div className="container">
 
           <div className="internalHeroMeta">
-            <span>
-              02 / PRODUCTS
-            </span>
-
-            <span>
-              PRODUCT PORTFOLIO
-            </span>
+            <span>{meta[0]}</span>
+            <span>{meta[1]}</span>
           </div>
 
           <div className="internalHeroGrid">
 
             <p className="eyebrow">
-              POLYETHYLENE SOLUTIONS
+              {t('productsPage.eyebrow')}
             </p>
 
             <h1>
-              Products built
-              <span>for industry.</span>
+              {t('productsPage.title')}
+              <span>{t('productsPage.titleAccent')}</span>
             </h1>
 
           </div>
@@ -90,13 +73,11 @@ export default function Products() {
           <div className="internalHeroBottom">
 
             <p>
-              Explore RMA polyethylene products developed
-              for industrial, chemical, agricultural and
-              application-specific requirements.
+              {t('productsPage.text')}
             </p>
 
             <span>
-              RMA / PRODUCTS
+              {t('productsPage.tag')}
             </span>
 
           </div>
@@ -111,39 +92,38 @@ export default function Products() {
 
             <div>
               <span className="sectionIndex">
-                PRODUCT INDEX
+                {t('productsPage.catalogIndex')}
               </span>
 
               <h2>
-                Explore the
-                <span>portfolio.</span>
+                {t('productsPage.catalogTitle')}
+                <span>{t('productsPage.catalogTitleAccent')}</span>
               </h2>
             </div>
 
             <p>
-              Filter products by application and product
-              family.
+              {t('productsPage.catalogText')}
             </p>
 
           </div>
 
           <div className="productFilters">
 
-            {filters.map((filter) => (
+            {filterIds.map((filterId) => (
               <button
                 type="button"
-                key={filter.id}
+                key={filterId}
                 className={
-                  activeFilter === filter.id
+                  activeFilter === filterId
                     ? 'active'
                     : ''
                 }
-                aria-pressed={activeFilter === filter.id}
+                aria-pressed={activeFilter === filterId}
                 onClick={() =>
-                  setActiveFilter(filter.id)
+                  setActiveFilter(filterId)
                 }
               >
-                {filter.label}
+                {t(`productsPage.filters.${filterId}`)}
               </button>
             ))}
 
@@ -152,13 +132,13 @@ export default function Products() {
           {filteredProducts.length === 0 && (
             <div className="productsEmpty">
               <p>
-                No products listed in this category yet.
+                {t('productsPage.empty')}
               </p>
 
-              <Link to="/contact">
-                Ask our team
-                <span>↗</span>
-              </Link>
+              <LocalizedLink to="/contact">
+                {t('productsPage.askTeam')}
+                <Arrow />
+              </LocalizedLink>
             </div>
           )}
 
@@ -166,10 +146,10 @@ export default function Products() {
 
             {filteredProducts.map(
               (product, index) => (
-                <Link
+                <LocalizedLink
                   to={`/products/${product.slug}`}
                   className="productCatalogCard"
-                  key={product.id}
+                  key={product.slug}
                 >
 
                   <div className="productCatalogMedia">
@@ -197,9 +177,7 @@ export default function Products() {
 
                     </div>
 
-                    <span className="productCatalogArrow">
-                      ↗
-                    </span>
+                    <Arrow className="productCatalogArrow" />
 
                   </div>
 
@@ -212,7 +190,7 @@ export default function Products() {
                     <div className="productCatalogMeta">
 
                       <div>
-                        <span>Capacity</span>
+                        <span>{t('productsPage.capacity')}</span>
 
                         <strong>
                           {product.capacity}
@@ -220,7 +198,7 @@ export default function Products() {
                       </div>
 
                       <div>
-                        <span>Technology</span>
+                        <span>{t('productsPage.technology')}</span>
 
                         <strong>
                           {product.technology}
@@ -231,7 +209,7 @@ export default function Products() {
 
                   </div>
 
-                </Link>
+                </LocalizedLink>
               )
             )}
 

@@ -1,5 +1,11 @@
 import mongoose from 'mongoose';
 
+export const QUOTE_LANGUAGES = [
+  'tr',
+  'en',
+  'ar',
+];
+
 export const QUOTE_STATUSES = [
   'new',
   'reviewing',
@@ -91,6 +97,13 @@ const quoteRequestSchema = new mongoose.Schema(
     source: {
       type: String,
       default: 'website',
+    },
+
+    // Site language the customer used when submitting the request
+    language: {
+      type: String,
+      enum: [...QUOTE_LANGUAGES, ''],
+      default: '',
     },
 
     isRead: {

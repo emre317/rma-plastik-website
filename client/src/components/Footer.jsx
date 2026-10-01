@@ -1,74 +1,43 @@
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
+import { LocalizedLink } from './i18n/LocalizedLink';
+import Arrow from './i18n/Arrow';
 
 const footerLinks = [
   {
-    title: 'Company',
+    group: 'company',
     links: [
-      {
-        label: 'About RMA',
-        path: '/company',
-      },
-      {
-        label: 'Production Facilities',
-        path: '/company',
-      },
-      {
-        label: 'Quality',
-        path: '/company',
-      },
+      { key: 'about', path: '/company' },
+      { key: 'facilities', path: '/company' },
+      { key: 'quality', path: '/company' },
     ],
   },
-
   {
-    title: 'Products',
+    group: 'products',
     links: [
-      {
-        label: 'Industrial Tanks',
-        path: '/products',
-      },
-      {
-        label: 'Chemical Tanks',
-        path: '/products',
-      },
-      {
-        label: 'Water Tanks',
-        path: '/products',
-      },
-      {
-        label: 'Agricultural Solutions',
-        path: '/products',
-      },
-      {
-        label: 'Custom Products',
-        path: '/products',
-      },
+      { key: 'industrialTanks', path: '/products?category=industrial-tanks' },
+      { key: 'chemicalTanks', path: '/products?category=chemical-tanks' },
+      { key: 'waterTanks', path: '/products?category=water-tanks' },
+      { key: 'agricultural', path: '/products?category=agriculture' },
+      { key: 'custom', path: '/products?category=custom' },
     ],
   },
-
   {
-    title: 'Capabilities',
+    group: 'capabilities',
     links: [
-      {
-        label: 'Rotational Moulding',
-        path: '/technologies/rotational-moulding',
-      },
-      {
-        label: 'Injection Moulding',
-        path: '/technologies/injection-moulding',
-      },
-      {
-        label: 'Blow Moulding',
-        path: '/technologies/blow-moulding',
-      },
-      {
-        label: 'Engineering',
-        path: '/engineering',
-      },
+      { key: 'rotational', path: '/technologies/rotational-moulding' },
+      { key: 'injection', path: '/technologies/injection-moulding' },
+      { key: 'blow', path: '/technologies/blow-moulding' },
+      { key: 'engineering', path: '/engineering' },
     ],
   },
 ];
 
 export default function Footer() {
+  const { t } = useTranslation();
+
+  const address = t('footer.address', { returnObjects: true });
+
   return (
     <footer className="siteFooter">
       <div className="container">
@@ -77,14 +46,13 @@ export default function Footer() {
 
           <div className="footerBrand">
 
-            <Link to="/" className="footerLogo">
+            <LocalizedLink to="/" className="footerLogo">
               <span>RMA</span>
               <small>PLASTIK</small>
-            </Link>
+            </LocalizedLink>
 
             <p>
-              Industrial polyethylene manufacturing
-              and engineered product solutions.
+              {t('footer.description')}
             </p>
 
           </div>
@@ -94,21 +62,21 @@ export default function Footer() {
             {footerLinks.map((group) => (
               <div
                 className="footerLinkGroup"
-                key={group.title}
+                key={group.group}
               >
 
                 <span className="footerGroupTitle">
-                  {group.title}
+                  {t(`footer.groups.${group.group}`)}
                 </span>
 
-                <nav>
+                <nav aria-label={t(`footer.groups.${group.group}`)}>
                   {group.links.map((link) => (
-                    <Link
+                    <LocalizedLink
                       to={link.path}
-                      key={link.label}
+                      key={link.key}
                     >
-                      {link.label}
-                    </Link>
+                      {t(`footer.links.${link.key}`)}
+                    </LocalizedLink>
                   ))}
                 </nav>
 
@@ -120,19 +88,20 @@ export default function Footer() {
           <div className="footerContact">
 
             <span className="footerGroupTitle">
-              Contact
+              {t('footer.groups.contact')}
             </span>
 
-            <a href="mailto:info@rmaplastik.com">
+            <a href="mailto:info@rmaplastik.com" dir="ltr">
               info@rmaplastik.com
             </a>
 
             <p>
-              Mersin
-              <br />
-              Istanbul
-              <br />
-              Türkiye
+              {address.map((line, index) => (
+                <span key={line}>
+                  {index > 0 && <br />}
+                  {line}
+                </span>
+              ))}
             </p>
 
             <a
@@ -141,15 +110,15 @@ export default function Footer() {
               rel="noreferrer"
               className="footerLinkedin"
             >
-              LinkedIn
-              <span>↗</span>
+              {t('footer.linkedin')}
+              <Arrow />
             </a>
 
           </div>
 
         </div>
 
-        <div className="footerMiddle">
+        <div className="footerMiddle" dir="ltr">
 
           <div className="footerWordmark">
             RMA
@@ -169,13 +138,13 @@ export default function Footer() {
 
           <div>
             {/* TODO: add Privacy / KVKK and Cookies pages once legal texts are approved */}
-            <Link to="/products">
-              Products
-            </Link>
+            <LocalizedLink to="/products">
+              {t('footer.links.products')}
+            </LocalizedLink>
 
-            <Link to="/contact">
-              Request a Quote
-            </Link>
+            <LocalizedLink to="/contact">
+              {t('footer.links.requestQuote')}
+            </LocalizedLink>
           </div>
 
           <button
@@ -187,7 +156,7 @@ export default function Footer() {
               })
             }
           >
-            Back to top ↑
+            {t('footer.backToTop')} <Arrow direction="up" />
           </button>
 
         </div>

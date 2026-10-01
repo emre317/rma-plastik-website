@@ -1,20 +1,29 @@
 import { useEffect, useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
+import {
+  LocalizedLink,
+  LocalizedNavLink,
+} from './i18n/LocalizedLink';
+import LanguageSwitcher from './i18n/LanguageSwitcher';
+import Arrow from './i18n/Arrow';
 
 const navItems = [
-  { label: 'Company', path: '/company' },
-  { label: 'Products', path: '/products' },
-  { label: 'Technologies', path: '/technologies' },
-  { label: 'Industries', path: '/industries' },
-  { label: 'Engineering', path: '/engineering' },
+  { key: 'company', path: '/company' },
+  { key: 'products', path: '/products' },
+  { key: 'technologies', path: '/technologies' },
+  { key: 'industries', path: '/industries' },
+  { key: 'engineering', path: '/engineering' },
 ];
 
 const mobileNavItems = [
   ...navItems,
-  { label: 'Contact', path: '/contact' },
+  { key: 'contact', path: '/contact' },
 ];
 
 export default function Header() {
+  const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
   const { pathname } = useLocation();
 
@@ -55,40 +64,40 @@ export default function Header() {
       <header className="siteHeader">
         <div className="container headerInner">
 
-          <Link to="/" className="brand" onClick={closeMenu}>
+          <LocalizedLink
+            to="/"
+            className="brand"
+            onClick={closeMenu}
+            aria-label={t('nav.homeLink')}
+          >
             <span className="brandMain">RMA</span>
             <span className="brandSub">PLASTIK</span>
-          </Link>
+          </LocalizedLink>
 
-          <nav className="desktopNav" aria-label="Main navigation">
+          <nav className="desktopNav" aria-label={t('nav.main')}>
             {navItems.map((item) => (
-              <NavLink to={item.path} key={item.path}>
-                {item.label}
-              </NavLink>
+              <LocalizedNavLink to={item.path} key={item.key}>
+                {t(`nav.${item.key}`)}
+              </LocalizedNavLink>
             ))}
           </nav>
 
           <div className="headerActions">
 
-            <button
-              className="languageButton"
-              type="button"
-            >
-              EN
-            </button>
+            <LanguageSwitcher />
 
-            <Link
+            <LocalizedLink
               to="/contact"
               className="headerContact"
             >
-              Contact
-              <span>↗</span>
-            </Link>
+              {t('nav.contact')}
+              <Arrow />
+            </LocalizedLink>
 
             <button
               className={`menuButton ${menuOpen ? 'active' : ''}`}
               onClick={() => setMenuOpen((current) => !current)}
-              aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}
+              aria-label={menuOpen ? t('nav.closeMenu') : t('nav.openMenu')}
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
               type="button"
@@ -112,28 +121,28 @@ export default function Header() {
         <div className="container mobileMenuInner">
 
           <div className="mobileMenuTop">
-            <span>Navigation</span>
+            <span>{t('nav.navigation')}</span>
             <span>RMA</span>
           </div>
 
-          <nav className="mobileNav" aria-label="Mobile navigation">
+          <nav className="mobileNav" aria-label={t('nav.mobile')}>
             {mobileNavItems.map((item, index) => (
-              <NavLink
+              <LocalizedNavLink
                 to={item.path}
-                key={item.path}
+                key={item.key}
                 onClick={closeMenu}
               >
                 <span>
                   {String(index + 1).padStart(2, '0')}
                 </span>
-                {item.label}
-              </NavLink>
+                {t(`nav.${item.key}`)}
+              </LocalizedNavLink>
             ))}
           </nav>
 
           <div className="mobileMenuBottom">
-            <span>Mersin / Istanbul</span>
-            <span>Türkiye</span>
+            <span>{t('common.locations')}</span>
+            <span>{t('common.country')}</span>
           </div>
 
         </div>

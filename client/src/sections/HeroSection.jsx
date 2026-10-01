@@ -1,15 +1,22 @@
-import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
+import { LocalizedLink } from '../components/i18n/LocalizedLink';
+import Arrow from '../components/i18n/Arrow';
 
 export default function HeroSection() {
+  const { t } = useTranslation();
+
+  const visualTop = t('hero.visualTop', { returnObjects: true });
+
   return (
     <section className="hero" id="home">
       <div className="container heroContainer">
 
         <div className="heroTop">
-          <span className="heroIndex">01 / RMA PLASTIK</span>
+          <span className="heroIndex">{t('hero.index')}</span>
 
           <span className="heroSince">
-            MANUFACTURING SINCE 1998
+            {t('hero.since')}
           </span>
         </div>
 
@@ -18,18 +25,17 @@ export default function HeroSection() {
           <div className="heroContent">
 
             <p className="eyebrow">
-              ENGINEERED FOR INDUSTRY
+              {t('hero.eyebrow')}
             </p>
 
             <h1>
-              Polyethylene
-              <span>Solutions.</span>
-              Built to Perform.
+              {t('hero.titleLine1')}
+              <span>{t('hero.titleAccent')}</span>
+              {t('hero.titleLine2')}
             </h1>
 
             <p className="lead">
-              Advanced polyethylene manufacturing solutions engineered
-              for demanding industrial applications.
+              {t('hero.lead')}
             </p>
 
             <div className="actions">
@@ -38,17 +44,17 @@ export default function HeroSection() {
                 className="button primary"
                 href="#products"
               >
-                <span>Explore Products</span>
-                <span className="buttonArrow">↗</span>
+                <span>{t('hero.exploreProducts')}</span>
+                <Arrow className="buttonArrow" />
               </a>
 
-              <Link
+              <LocalizedLink
                 className="button ghost"
                 to="/contact"
               >
-                <span>Request a Solution</span>
-                <span className="buttonArrow">↗</span>
-              </Link>
+                <span>{t('hero.requestSolution')}</span>
+                <Arrow className="buttonArrow" />
+              </LocalizedLink>
 
             </div>
 
@@ -57,15 +63,9 @@ export default function HeroSection() {
           <div className="heroVisual">
 
             <div className="heroVisualTop">
-
-              <span>
-                INDUSTRIAL
-              </span>
-
-              <span>
-                POLYETHYLENE
-              </span>
-
+              {visualTop.map((item) => (
+                <span key={item}>{item}</span>
+              ))}
             </div>
 
             <div className="tankVisual">
@@ -86,11 +86,11 @@ export default function HeroSection() {
 
               <div>
                 <span className="visualLabel">
-                  PRODUCTION RANGE
+                  {t('hero.productionRange')}
                 </span>
 
                 <strong>
-                  10 — 42,000 L
+                  {t('hero.productionRangeValue')}
                 </strong>
               </div>
 
@@ -107,11 +107,11 @@ export default function HeroSection() {
         <div className="heroBottom">
 
           <span>
-            MERSIN / ISTANBUL
+            {t('common.locations')}
           </span>
 
           <span>
-            SCROLL TO EXPLORE
+            {t('hero.scroll')}
           </span>
 
         </div>
