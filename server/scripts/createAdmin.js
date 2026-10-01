@@ -11,7 +11,9 @@ async function createAdmin() {
     );
 
     const email =
-      process.env.ADMIN_EMAIL;
+      process.env.ADMIN_EMAIL
+        ?.trim()
+        .toLowerCase();
 
     const password =
       process.env.ADMIN_PASSWORD;
@@ -19,6 +21,12 @@ async function createAdmin() {
     if (!email || !password) {
       throw new Error(
         'ADMIN_EMAIL and ADMIN_PASSWORD are required.'
+      );
+    }
+
+    if (password.length < 8) {
+      throw new Error(
+        'ADMIN_PASSWORD must be at least 8 characters.'
       );
     }
 
@@ -36,7 +44,7 @@ async function createAdmin() {
     }
 
     await AdminUser.create({
-      name: 'RMA Admin',
+      name: process.env.ADMIN_NAME || 'RMA Admin',
       email,
       password,
     });

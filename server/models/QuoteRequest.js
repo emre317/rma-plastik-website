@@ -1,5 +1,13 @@
 import mongoose from 'mongoose';
 
+export const QUOTE_STATUSES = [
+  'new',
+  'reviewing',
+  'contacted',
+  'quoted',
+  'closed',
+];
+
 const quoteRequestSchema = new mongoose.Schema(
   {
     company: {
@@ -21,30 +29,35 @@ const quoteRequestSchema = new mongoose.Schema(
       required: true,
       trim: true,
       lowercase: true,
+      maxlength: 254,
     },
 
     phone: {
       type: String,
       trim: true,
       default: '',
+      maxlength: 40,
     },
 
     country: {
       type: String,
       trim: true,
       default: '',
+      maxlength: 80,
     },
 
     product: {
       type: String,
       trim: true,
       default: '',
+      maxlength: 150,
     },
 
     capacity: {
       type: String,
       trim: true,
       default: '',
+      maxlength: 80,
     },
 
     quantity: {
@@ -57,6 +70,7 @@ const quoteRequestSchema = new mongoose.Schema(
       type: String,
       trim: true,
       default: '',
+      maxlength: 200,
     },
 
     message: {
@@ -69,13 +83,7 @@ const quoteRequestSchema = new mongoose.Schema(
     status: {
       type: String,
 
-      enum: [
-        'new',
-        'reviewing',
-        'contacted',
-        'quoted',
-        'closed',
-      ],
+      enum: QUOTE_STATUSES,
 
       default: 'new',
     },
@@ -101,6 +109,10 @@ quoteRequestSchema.index({
 
 quoteRequestSchema.index({
   status: 1,
+});
+
+quoteRequestSchema.index({
+  isRead: 1,
 });
 
 const QuoteRequest = mongoose.model(
