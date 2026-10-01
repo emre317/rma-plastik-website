@@ -4712,190 +4712,6 @@ h2 {
     );
 }
 
-.mapGrid {
-  position: absolute;
-
-  inset: 0;
-
-  opacity: .18;
-
-  background-image:
-    linear-gradient(
-      rgba(255,255,255,.08) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(255,255,255,.08) 1px,
-      transparent 1px
-    );
-
-  background-size: 46px 46px;
-}
-
-.mapOrigin {
-  position: absolute;
-
-  left: 50%;
-  top: 52%;
-
-  width: 110px;
-  height: 110px;
-
-  transform:
-    translate(-50%,-50%);
-
-  display: flex;
-
-  flex-direction: column;
-
-  align-items: center;
-
-  justify-content: center;
-
-  z-index: 4;
-
-  border:
-    1px solid
-    rgba(255,255,255,.22);
-
-  border-radius: 50%;
-
-  background: rgba(213,29,44,.08);
-}
-
-.mapOrigin strong {
-  font-size: 22px;
-
-  font-weight: 600;
-}
-
-.mapOrigin small {
-  margin-top: 6px;
-
-  color: rgba(255,255,255,.35);
-
-  font-size: 7px;
-
-  letter-spacing: .1em;
-}
-
-.mapPulse {
-  position: absolute;
-
-  inset: -18px;
-
-  border:
-    1px solid
-    rgba(213,29,44,.35);
-
-  border-radius: 50%;
-}
-
-
-/* MAP POINTS */
-
-.mapPoint {
-  position: absolute;
-
-  z-index: 3;
-
-  width: 48px;
-  height: 48px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  border:
-    1px solid
-    rgba(255,255,255,.2);
-
-  border-radius: 50%;
-
-  color: rgba(255,255,255,.72);
-
-  font-size: 8px;
-
-  font-weight: 700;
-
-  letter-spacing: .08em;
-}
-
-.pointEurope {
-  inset-inline-start: 31%;
-  top: 26%;
-}
-
-.pointMiddleEast {
-  inset-inline-end: 23%;
-  top: 55%;
-}
-
-.pointAfrica {
-  inset-inline-start: 27%;
-  bottom: 20%;
-}
-
-.pointAsia {
-  inset-inline-end: 15%;
-  top: 24%;
-}
-
-
-/* CONNECTION LINES */
-
-.mapLine {
-  position: absolute;
-
-  left: 50%;
-  top: 52%;
-
-  z-index: 2;
-
-  height: 1px;
-
-  transform-origin: left center;
-
-  background:
-    linear-gradient(
-      90deg,
-      rgba(213,29,44,.8),
-      rgba(255,255,255,.08)
-    );
-}
-
-.lineEurope {
-  width: 215px;
-
-  transform:
-    rotate(-145deg);
-}
-
-.lineMiddleEast {
-  width: 185px;
-
-  transform:
-    rotate(5deg);
-}
-
-.lineAfrica {
-  width: 225px;
-
-  transform:
-    rotate(145deg);
-}
-
-.lineAsia {
-  width: 265px;
-
-  transform:
-    rotate(-28deg);
-}
-
-
 /* GLOBAL CONTENT */
 
 .globalContent {
@@ -4939,7 +4755,7 @@ h2 {
     rgba(255,255,255,.14);
 }
 
-.regionList > div {
+.regionList > li {
   padding: 20px 0;
 
   display: grid;
@@ -5108,18 +4924,6 @@ h2 {
 
   .globalMap {
     min-height: 460px;
-  }
-
-  .mapOrigin {
-    width: 90px;
-
-    height: 90px;
-  }
-
-  .mapPoint {
-    width: 40px;
-
-    height: 40px;
   }
 
 }
@@ -9619,6 +9423,206 @@ html[dir="rtl"] .desktopNav a {
 
   .footerBrand {
     grid-column: span 2;
+  }
+
+}
+
+
+/* =====================================================
+   EXPORT MAP (Global section)
+===================================================== */
+
+.globalMap {
+  margin: 0;
+
+  padding: 40px 32px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.exportMap {
+  position: relative;
+
+  width: 100%;
+
+  /* soft fade at the top and bottom edges, as in the original block */
+  mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
+}
+
+.exportMapDots,
+.exportMapRoutes {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+
+  height: 100%;
+
+  user-select: none;
+
+  pointer-events: none;
+}
+
+.exportRoute {
+  transition: opacity 250ms ease;
+}
+
+.exportMapLabel {
+  position: absolute;
+
+  z-index: 2;
+
+  padding: 5px 9px;
+
+  border: 1px solid rgba(255, 255, 255, .16);
+
+  border-radius: 6px;
+
+  color: #fff;
+
+  background: rgba(11, 13, 16, .88);
+
+  font: inherit;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  line-height: 1.2;
+
+  white-space: nowrap;
+
+  cursor: default;
+
+  transition:
+    border-color 200ms ease,
+    background-color 200ms ease;
+}
+
+.exportMapLabel.active,
+.exportMapLabel:hover,
+.exportMapLabel:focus-visible {
+  border-color: var(--red);
+
+  background: var(--red);
+}
+
+.exportMapLabelHub {
+  border-color: var(--red);
+
+  font-weight: 700;
+}
+
+.labelTop {
+  transform: translate(-50%, calc(-100% - 10px));
+}
+
+.labelBottom {
+  transform: translate(-50%, 12px);
+}
+
+.labelLeft {
+  transform: translate(calc(-100% - 10px), -50%);
+}
+
+.labelRight {
+  transform: translate(10px, -50%);
+}
+
+.exportMapLabelShort {
+  display: none;
+}
+
+/* Country list next to the map */
+.regionList {
+  margin: 0;
+
+  padding: 0;
+
+  list-style: none;
+}
+
+.regionList > li {
+  align-items: baseline;
+
+  transition: color 200ms ease, padding 200ms ease;
+}
+
+.regionList > li:not(.regionHub) {
+  cursor: default;
+}
+
+.regionList > li.active {
+  padding-inline-start: 10px;
+}
+
+.regionList > li.active strong {
+  color: var(--red);
+}
+
+.regionList > .regionHub {
+  grid-template-columns: 48px 1fr auto;
+}
+
+.regionHub em {
+  padding: 3px 8px;
+
+  border: 1px solid var(--red);
+
+  border-radius: 999px;
+
+  color: #fff;
+
+  font-size: 10px;
+
+  font-style: normal;
+
+  font-weight: 700;
+
+  letter-spacing: .08em;
+
+  text-transform: uppercase;
+}
+
+@media (max-width: 800px) {
+
+  .globalMap {
+    min-height: 0;
+
+    padding: 28px 0;
+  }
+
+}
+
+/* Small screens: country codes instead of names so labels never overlap */
+@media (max-width: 640px) {
+
+  .exportMapLabel {
+    padding: 3px 6px;
+
+    font-size: 10px;
+  }
+
+  .exportMapLabelFull {
+    display: none;
+  }
+
+  .exportMapLabelShort {
+    display: inline;
+  }
+
+  .exportMapLabelHub {
+    font-size: 10px;
+  }
+
+  /* The hub sits near the right edge: keep its label inside the map */
+  .exportMapLabelHub.labelRight {
+    transform: translate(calc(-100% - 8px), -50%);
   }
 
 }

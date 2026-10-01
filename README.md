@@ -38,7 +38,7 @@ In production, set `VITE_API_URL` for the client build and `CLIENT_URL` (comma-s
 ## Languages (TR / EN / AR)
 
 - Public pages live under a language prefix: `/tr/...`, `/en/...`, `/ar/...`.
-  `/` and old unprefixed links redirect to the visitor's saved or browser language (fallback: English).
+  `/` and old unprefixed links redirect to the visitor's saved language, otherwise Turkish (default).
 - Texts are in `client/src/i18n/locales/{tr,en,ar}.js`. All three files must keep the same keys;
   product texts are under `catalog.<product-slug>`.
 - Arabic switches the page to right-to-left. Use logical CSS properties

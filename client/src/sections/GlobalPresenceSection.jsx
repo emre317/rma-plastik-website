@@ -1,12 +1,18 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { LocalizedLink } from '../components/i18n/LocalizedLink';
 import Arrow from '../components/i18n/Arrow';
+import ExportMap from '../components/ui/ExportMap';
+import exportMap from '../data/exportMap';
 
 export default function GlobalPresenceSection() {
   const { t } = useTranslation();
 
-  const regions = t('global.regions', { returnObjects: true });
+  // Hovering a country in the list or on the map highlights its route
+  const [activeKey, setActiveKey] = useState(null);
+
+  const labels = t('global.countries', { returnObjects: true });
 
   return (
     <section className="globalSection dark" id="global">
@@ -35,39 +41,16 @@ export default function GlobalPresenceSection() {
 
         <div className="globalGrid">
 
-          {/* Map keeps geographic orientation in every language */}
-          <div className="globalMap" dir="ltr">
-
-            <div className="mapGrid" />
-
-            <div className="mapOrigin">
-              <span className="mapPulse" />
-              <strong>TR</strong>
-              <small>{t('global.origin')}</small>
-            </div>
-
-            <span className="mapPoint pointEurope">
-              {t('global.points.europe')}
-            </span>
-
-            <span className="mapPoint pointMiddleEast">
-              {t('global.points.middleEast')}
-            </span>
-
-            <span className="mapPoint pointAfrica">
-              {t('global.points.africa')}
-            </span>
-
-            <span className="mapPoint pointAsia">
-              {t('global.points.asia')}
-            </span>
-
-            <div className="mapLine lineEurope" />
-            <div className="mapLine lineMiddleEast" />
-            <div className="mapLine lineAfrica" />
-            <div className="mapLine lineAsia" />
-
-          </div>
+          <figure className="globalMap" aria-label={t('global.mapLabel')}>
+            <ExportMap
+              data={exportMap}
+              hubLabel={t('global.hub')}
+              hubShortLabel={t('global.hubShort')}
+              labels={labels}
+              activeKey={activeKey}
+              onActiveChange={setActiveKey}
+            />
+          </figure>
 
           <div className="globalContent">
 
@@ -79,21 +62,32 @@ export default function GlobalPresenceSection() {
               {t('global.text')}
             </p>
 
-            <div className="regionList">
+            <ul className="regionList">
 
-              {regions.map((region, index) => (
-                <div key={region}>
+              <li className="regionHub">
+                <span>00</span>
+                <strong>{t('global.hubRow')}</strong>
+                <em>{t('global.hubRowTag')}</em>
+              </li>
+
+              {exportMap.destinations.map((destination, index) => (
+                <li
+                  key={destination.key}
+                  className={activeKey === destination.key ? 'active' : ''}
+                  onMouseEnter={() => setActiveKey(destination.key)}
+                  onMouseLeave={() => setActiveKey(null)}
+                >
                   <span>
                     {String(index + 1).padStart(2, '0')}
                   </span>
 
                   <strong>
-                    {region}
+                    {labels[destination.key].name}
                   </strong>
-                </div>
+                </li>
               ))}
 
-            </div>
+            </ul>
 
             <LocalizedLink to="/contact" className="globalLink">
               {t('global.discuss')}

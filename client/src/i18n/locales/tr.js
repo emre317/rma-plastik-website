@@ -370,26 +370,25 @@ const tr = {
 
   global: {
     index: '09 / GLOBAL',
-    eyebrow: 'Küresel erişim',
+    eyebrow: 'İhracat ağı',
     title: 'Türkiye’de üretildi.',
-    titleAccent: 'Dünya endüstrisi için.',
-    origin: 'Mersin / İstanbul',
-    points: {
-      europe: 'AB',
-      middleEast: 'OD',
-      africa: 'KA',
-      asia: 'OA',
-    },
-    label: 'Pazarlar ve uygulamalar',
+    titleAccent: 'Dünyaya ulaştırıldı.',
+    hub: 'Mersin · Merkez',
+    hubShort: 'Mersin',
+    label: 'İhracat pazarları',
     text:
-      'RMA’nın Türkiye’deki üretim üssü, birçok endüstriyel pazara ve bölgesel tedarik rotalarına erişim sağlar.',
-    regions: [
-      'Avrupa',
-      'Orta Doğu',
-      'Kuzey Afrika',
-      'Orta Asya',
-      'Türkiye',
-    ],
+      'Mersin’deki merkez dağıtım noktamızdan İngiltere, Hollanda, Mısır, ABD ve Bulgaristan’daki müşterilerimize ihracat yapıyoruz.',
+    hubRow: 'Mersin, Türkiye',
+    hubRowTag: 'Merkez',
+    countries: {
+      uk: { name: 'İngiltere', short: 'UK' },
+      nl: { name: 'Hollanda', short: 'NL' },
+      bg: { name: 'Bulgaristan', short: 'BG' },
+      eg: { name: 'Mısır', short: 'EG' },
+      us: { name: 'ABD', short: 'US' },
+    },
+    mapLabel:
+      'Mersin’den İngiltere, Hollanda, Bulgaristan, Mısır ve ABD’ye ihracat rotalarını gösteren harita',
     discuss: 'İhtiyacınızı Görüşelim',
   },
 

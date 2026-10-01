@@ -22,7 +22,7 @@ export const SUPPORTED_LANGUAGES = [
   },
 ];
 
-export const DEFAULT_LANGUAGE = 'en';
+export const DEFAULT_LANGUAGE = 'tr';
 
 const STORAGE_KEY = 'rma_language';
 
@@ -53,7 +53,11 @@ export function storeLanguage(code) {
   }
 }
 
-/* Saved choice → browser languages → default. */
+/*
+  Saved choice → Turkish.
+  The site opens in Turkish for every new visitor; once someone picks a
+  language from the switcher, that choice is remembered.
+*/
 export function getPreferredLanguage() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -63,21 +67,6 @@ export function getPreferredLanguage() {
     }
   } catch {
     // Ignore storage errors
-  }
-
-  const browserLanguages =
-    typeof navigator !== 'undefined'
-      ? navigator.languages || [navigator.language]
-      : [];
-
-  for (const browserLanguage of browserLanguages) {
-    const base = String(browserLanguage || '')
-      .toLowerCase()
-      .split('-')[0];
-
-    if (isSupportedLanguage(base)) {
-      return base;
-    }
   }
 
   return DEFAULT_LANGUAGE;

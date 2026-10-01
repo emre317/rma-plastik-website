@@ -371,26 +371,25 @@ const en = {
 
   global: {
     index: '09 / GLOBAL',
-    eyebrow: 'Global reach',
+    eyebrow: 'Export network',
     title: 'Manufactured in Türkiye.',
-    titleAccent: 'Built for industry worldwide.',
-    origin: 'Mersin / Istanbul',
-    points: {
-      europe: 'EU',
-      middleEast: 'ME',
-      africa: 'NA',
-      asia: 'CA',
-    },
-    label: 'Markets & applications',
+    titleAccent: 'Delivered worldwide.',
+    hub: 'Mersin · Central hub',
+    hubShort: 'Mersin',
+    label: 'Export markets',
     text:
-      "RMA's production base in Türkiye provides access to multiple industrial markets and regional supply routes.",
-    regions: [
-      'Europe',
-      'Middle East',
-      'North Africa',
-      'Central Asia',
-      'Türkiye',
-    ],
+      'From our central distribution hub in Mersin, we export to customers in the United Kingdom, the Netherlands, Egypt, the United States and Bulgaria.',
+    hubRow: 'Mersin, Türkiye',
+    hubRowTag: 'Central hub',
+    countries: {
+      uk: { name: 'United Kingdom', short: 'UK' },
+      nl: { name: 'Netherlands', short: 'NL' },
+      bg: { name: 'Bulgaria', short: 'BG' },
+      eg: { name: 'Egypt', short: 'EG' },
+      us: { name: 'United States', short: 'US' },
+    },
+    mapLabel:
+      'Map of export routes from Mersin to the United Kingdom, the Netherlands, Bulgaria, Egypt and the United States',
     discuss: 'Discuss Your Requirement',
   },
 
