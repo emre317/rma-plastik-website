@@ -10065,3 +10065,734 @@ h3 {
 .globalSection + .contactLocations {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
+
+
+/* =====================================================
+   SHAPE SYSTEM
+   One set of radii for the whole site:
+   xs  – icon buttons / arrows
+   sm  – buttons, inputs, list rows
+   md  – small cards, menus
+   lg  – panels, framed grids, media
+===================================================== */
+
+:root {
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  --line-dark: rgba(255, 255, 255, 0.14);
+
+  --shadow-soft:
+    0 1px 2px rgba(16, 18, 20, 0.04),
+    0 18px 40px -24px rgba(16, 18, 20, 0.22);
+}
+
+/* Controls */
+
+.button,
+.quoteSubmit,
+.productDetailCtaButton,
+.headerQuote,
+.mobileMenuQuote,
+.languageSwitcherButton,
+.productFilters > *,
+.contactChannel,
+.quoteFeedback,
+.productDownloadsList button {
+  border-radius: var(--radius-sm);
+}
+
+.languageSwitcherMenu {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+/* Icon buttons */
+
+.technologyArrow,
+.qualityArrow,
+.facilityArrow,
+.productCatalogArrow,
+.industryArrow,
+.relatedProductBottom > span,
+.footerIconButton {
+  border-radius: var(--radius-xs);
+}
+
+/* Tags */
+
+.facilityMeta span {
+  border-radius: var(--radius-pill);
+}
+
+/* Panels & media */
+
+.heroVisual,
+.productDetailVisual,
+.contactMap,
+.contactLocationsSide {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.heroVisual,
+.productDetailVisual {
+  box-shadow: 0 30px 60px -36px rgba(11, 13, 16, 0.55);
+}
+
+.contactMap iframe {
+  border-radius: inherit;
+}
+
+/* Framed grids: rounded outer frame, inner dividers kept */
+
+.technologyGrid,
+.engineeringGrid {
+  border: 1px solid var(--line-dark);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.qualityLayout,
+.productExplorer {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.engineeringContent,
+.qualityStatement,
+.productCategoryList {
+  padding-inline: 32px;
+}
+
+.productCategoryList {
+  padding-inline: 0;
+}
+
+.productCategoryItem {
+  padding-inline: 24px;
+}
+
+/* Cell grids: 1px gaps act as dividers inside a rounded frame */
+
+.industriesMatrix,
+.productApplicationsGrid,
+.relatedProductsGrid {
+  gap: 1px;
+
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+
+  background: var(--line);
+}
+
+.industryItem,
+.productApplicationsGrid > * {
+  border: 0;
+}
+
+.productApplicationsGrid {
+  border-color: var(--line-dark);
+
+  background: var(--line-dark);
+}
+
+.productApplicationsGrid > * {
+  background: var(--dark);
+}
+
+/* Stats: separate soft cards */
+
+.statGrid {
+  gap: 16px;
+
+  border-top: 0;
+}
+
+.stat {
+  padding: 28px;
+
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+
+  background: rgba(255, 255, 255, 0.55);
+}
+
+/* Product catalogue: individual rounded cards */
+
+.productsCatalogGrid {
+  gap: 20px;
+
+  background: transparent;
+}
+
+.productCatalogCard {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+
+  background: #fff;
+
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.productCatalogCard:hover {
+  transform: translateY(-3px);
+
+  box-shadow: var(--shadow-soft);
+}
+
+/* Data tables: framed, rounded */
+
+.technicalTable,
+.productDownloadsList {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.technicalTable > div,
+.productDownloadsList > div {
+  padding-inline: 24px;
+}
+
+.technicalTable > div:last-child,
+.productDownloadsList > div:last-child {
+  border-bottom: 0;
+}
+
+@media (max-width: 800px) {
+
+  .engineeringContent,
+  .qualityStatement {
+    padding-inline: 20px;
+  }
+
+  .productCategoryItem {
+    padding-inline: 18px;
+  }
+
+  .technicalTable > div,
+  .productDownloadsList > div {
+    padding-inline: 18px;
+  }
+
+  .statGrid {
+    gap: 12px;
+  }
+
+}
+
+
+/* =====================================================
+   HEADER – quote button
+===================================================== */
+
+.headerQuote {
+  height: 40px;
+
+  padding: 0 18px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  border: 1px solid var(--red);
+
+  color: #fff;
+
+  background: var(--red);
+
+  cursor: pointer;
+
+  font-family: inherit;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.06em;
+
+  text-transform: uppercase;
+
+  white-space: nowrap;
+
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.headerQuote:hover {
+  border-color: var(--red-dark);
+
+  background: var(--red-dark);
+
+  transform: translateY(-1px);
+}
+
+.mobileMenuQuote {
+  width: 100%;
+
+  min-height: 56px;
+
+  margin-bottom: 28px;
+
+  padding: 0 22px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  border: 0;
+
+  color: #fff;
+
+  background: var(--red);
+
+  cursor: pointer;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.06em;
+
+  text-transform: uppercase;
+}
+
+@media (max-width: 560px) {
+
+  .headerQuote {
+    display: none;
+  }
+
+}
+
+
+/* =====================================================
+   FOOTER – contact items
+===================================================== */
+
+.footerContactItem {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+.footerQuoteLink {
+  margin-top: 4px;
+
+  padding: 9px 14px;
+
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+
+  color: var(--text);
+
+  background: #fff;
+
+  cursor: pointer;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  transition:
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.footerQuoteLink:hover {
+  border-color: var(--red);
+
+  color: var(--red);
+}
+
+
+/* =====================================================
+   CONTACT – quote channel as a button
+===================================================== */
+
+button.contactChannel {
+  width: 100%;
+
+  color: inherit;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  font: inherit;
+
+  text-align: start;
+}
+
+.contactChannelOutline {
+  color: #fff;
+}
+
+
+/* =====================================================
+   QUOTE DIALOG
+===================================================== */
+
+.quoteModal {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1200;
+
+  display: grid;
+
+  place-items: center;
+
+  padding: 24px;
+
+  visibility: hidden;
+
+  opacity: 0;
+
+  transition:
+    opacity 220ms ease,
+    visibility 0s linear 220ms;
+}
+
+.quoteModal.open {
+  visibility: visible;
+
+  opacity: 1;
+
+  transition:
+    opacity 220ms ease,
+    visibility 0s;
+}
+
+.quoteModalBackdrop {
+  position: absolute;
+
+  inset: 0;
+
+  background: rgba(11, 13, 16, 0.62);
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.quoteModalDialog {
+  position: relative;
+
+  width: min(1120px, 100%);
+
+  max-height: calc(100dvh - 48px);
+
+  display: grid;
+
+  grid-template-columns: 360px 1fr;
+
+  border-radius: var(--radius-lg);
+
+  overflow: hidden;
+
+  background: var(--background);
+
+  box-shadow: 0 40px 100px -30px rgba(0, 0, 0, 0.55);
+
+  transform: translateY(16px) scale(0.985);
+
+  transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.quoteModal.open .quoteModalDialog {
+  transform: none;
+}
+
+.quoteModalAside {
+  padding: 40px 36px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  color: #fff;
+
+  background:
+    radial-gradient(120% 70% at 0% 0%, rgba(213, 29, 44, 0.28), transparent 60%),
+    var(--dark);
+}
+
+.quoteModalAside .eyebrow {
+  margin: 0 0 22px;
+
+  color: var(--red);
+}
+
+.quoteModalAside h2 {
+  margin: 0 0 20px;
+
+  font-size: clamp(34px, 3.2vw, 46px);
+
+  line-height: 1.08;
+}
+
+.quoteModalAside h2 span {
+  display: block;
+
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.quoteModalAside > p {
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.68);
+
+  font-size: 15px;
+
+  line-height: 1.6;
+}
+
+.quoteModalContacts {
+  margin: auto 0 0;
+
+  padding: 32px 0 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 14px;
+
+  list-style: none;
+}
+
+.quoteModalContacts li {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 12px;
+
+  color: rgba(255, 255, 255, 0.78);
+
+  font-size: 14px;
+
+  line-height: 1.5;
+}
+
+.quoteModalContacts svg {
+  flex: none;
+
+  width: 18px;
+
+  height: 18px;
+
+  margin-top: 1px;
+
+  color: var(--red);
+}
+
+.quoteModalContacts a {
+  color: #fff;
+}
+
+.quoteModalContacts a:hover {
+  color: var(--red);
+}
+
+.quoteModalForm {
+  position: relative;
+
+  padding: 40px;
+
+  overflow-y: auto;
+
+  overscroll-behavior: contain;
+}
+
+.quoteModalForm .formGrid {
+  gap: 20px;
+}
+
+.quoteModalForm .quoteFormBottom {
+  margin-top: 28px;
+}
+
+.quoteModalClose {
+  position: absolute;
+
+  top: 16px;
+
+  inset-inline-end: 16px;
+
+  z-index: 1;
+
+  width: 40px;
+
+  height: 40px;
+
+  display: grid;
+
+  place-items: center;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius-pill);
+
+  color: var(--text);
+
+  background: #fff;
+
+  cursor: pointer;
+
+  transition:
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.quoteModalClose:hover {
+  border-color: var(--red);
+
+  color: var(--red);
+
+  transform: rotate(90deg);
+}
+
+.quoteModalClose svg {
+  width: 18px;
+
+  height: 18px;
+}
+
+/* Boxed, rounded form fields (whole site) */
+
+.formField input,
+.formField select,
+.formField textarea {
+  padding: 12px 14px;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius-sm);
+
+  background: #fff;
+
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.formField input:focus,
+.formField select:focus,
+.formField textarea:focus {
+  border-color: var(--red);
+
+  box-shadow: 0 0 0 4px rgba(213, 29, 44, 0.12);
+}
+
+.formField textarea {
+  min-height: 130px;
+}
+
+@media (max-width: 900px) {
+
+  .quoteModal {
+    padding: 0;
+
+    place-items: end center;
+  }
+
+  .quoteModalDialog {
+    max-height: 94dvh;
+
+    display: block;
+
+    overflow-y: auto;
+
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+
+    transform: translateY(40px);
+  }
+
+  .quoteModalAside {
+    padding: 28px 20px 24px;
+  }
+
+  .quoteModalAside h2 {
+    padding-inline-end: 48px;
+  }
+
+  .quoteModalContacts {
+    padding-top: 20px;
+  }
+
+  .quoteModalForm {
+    padding: 24px 20px 32px;
+
+    overflow: visible;
+  }
+
+  .quoteModalClose {
+    position: sticky;
+
+    top: 14px;
+
+    margin-block: 14px -54px;
+
+    margin-inline: auto 14px;
+
+    border-color: rgba(255, 255, 255, 0.2);
+
+    color: #fff;
+
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+}
+
+.formField input:focus-visible,
+.formField select:focus-visible,
+.formField textarea:focus-visible {
+  outline: 0;
+}
+
+/* Stats cards: same padding and full border at every breakpoint */
+.statsSection .statGrid .stat,
+.statsSection .statGrid .stat:first-child,
+.statsSection .statGrid .stat:nth-child(even),
+.statsSection .statGrid .stat:last-child {
+  padding: 28px;
+
+  border: 1px solid var(--line);
+}
+
+@media (max-width: 640px) {
+
+  .statsSection .statGrid .stat,
+  .statsSection .statGrid .stat:first-child,
+  .statsSection .statGrid .stat:nth-child(even),
+  .statsSection .statGrid .stat:last-child {
+    padding: 20px;
+  }
+
+}

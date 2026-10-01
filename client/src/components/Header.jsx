@@ -9,6 +9,7 @@ import {
 import LanguageSwitcher from './i18n/LanguageSwitcher';
 import Arrow from './i18n/Arrow';
 import BrandLogo from './BrandLogo';
+import { useQuote } from './quote/QuoteContext';
 
 const navItems = [
   { key: 'company', path: '/company' },
@@ -27,6 +28,7 @@ export default function Header() {
   const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
   const { pathname } = useLocation();
+  const { openQuote } = useQuote();
 
   const closeMenu = () => {
     setMenuOpen(false);
@@ -95,6 +97,14 @@ export default function Header() {
             </LocalizedLink>
 
             <button
+              type="button"
+              className="headerQuote"
+              onClick={() => openQuote()}
+            >
+              {t('common.requestQuote')}
+            </button>
+
+            <button
               className={`menuButton ${menuOpen ? 'active' : ''}`}
               onClick={() => setMenuOpen((current) => !current)}
               aria-label={menuOpen ? t('nav.closeMenu') : t('nav.openMenu')}
@@ -139,6 +149,18 @@ export default function Header() {
               </LocalizedNavLink>
             ))}
           </nav>
+
+          <button
+            type="button"
+            className="mobileMenuQuote"
+            onClick={() => {
+              closeMenu();
+              openQuote();
+            }}
+          >
+            {t('common.requestQuote')}
+            <Arrow />
+          </button>
 
           <div className="mobileMenuBottom">
             <span>{t('common.locations')}</span>

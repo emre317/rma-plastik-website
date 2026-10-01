@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next';
 
-import { LocalizedLink } from '../components/i18n/LocalizedLink';
 import Arrow from '../components/i18n/Arrow';
+import { useQuote } from '../components/quote/QuoteContext';
 
 export default function HeroSection() {
   const { t } = useTranslation();
+  const { openQuote } = useQuote();
 
   const visualTop = t('hero.visualTop', { returnObjects: true });
 
@@ -48,13 +49,14 @@ export default function HeroSection() {
                 <Arrow className="buttonArrow" />
               </a>
 
-              <LocalizedLink
+              <button
+                type="button"
                 className="button ghost"
-                to="/contact"
+                onClick={() => openQuote()}
               >
                 <span>{t('hero.requestSolution')}</span>
                 <Arrow className="buttonArrow" />
-              </LocalizedLink>
+              </button>
 
             </div>
 

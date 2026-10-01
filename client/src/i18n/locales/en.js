@@ -42,7 +42,7 @@ const en = {
     locations: 'Mersin',
     country: 'Türkiye',
     requestQuote: 'Request a Quote',
-    requestSolution: 'Request a Solution',
+    requestSolution: 'Get a Quote',
   },
 
   footer: {
@@ -89,7 +89,7 @@ const en = {
     lead:
       'Advanced polyethylene manufacturing solutions engineered for demanding industrial applications.',
     exploreProducts: 'Explore Products',
-    requestSolution: 'Request a Solution',
+    requestSolution: 'Get a Quote',
     visualTop: ['Industrial', 'Polyethylene'],
     productionRange: 'Production range',
     productionRangeValue: '10 — 42,000 L',
@@ -607,7 +607,9 @@ const en = {
 
   contact: {
     homeIndex: '10 / CONTACT',
+    close: 'Close',
     locations: {
+      phone: 'Phone',
       index: '01 / Location',
       eyebrow: 'Main facility',
       title: 'Our main facility.',
@@ -634,18 +636,11 @@ const en = {
     text:
       'Share your product, application or custom manufacturing requirement with our team.',
     tag: 'Sales / Engineering',
-    formIndex: 'Request / 02',
     formEyebrow: 'Project information',
-    formTitle: 'Request a',
-    formTitleAccent: 'solution.',
+    formTitle: 'Get a',
+    formTitleAccent: 'quote.',
     formText:
-      'Provide the basic project information below. More technical details can be discussed with the RMA team after submission.',
-    sidebarLabel: 'Contact',
-    sidebarTitle: "Let's understand your requirement.",
-    sidebarText:
-      'Complete the form with as much information as possible so the relevant product and manufacturing requirements can be reviewed.',
-    sidebarAddress: 'Address',
-    sidebarEmail: 'Email',
+      'Share the key details of your project. Technical specifics can be clarified with the RMA team after you submit.',
     fields: {
       company: 'Company',
       name: 'Contact Name',
@@ -674,7 +669,7 @@ const en = {
     customRequirement: 'Custom Requirement',
     consent:
       'By submitting this form, you confirm that the provided information may be used to respond to your request.',
-    submit: 'Submit Request',
+    submit: 'Send Quote Request',
     sending: 'Sending...',
     success:
       'Thank you. Your request has been received. Our team will review it and get back to you.',

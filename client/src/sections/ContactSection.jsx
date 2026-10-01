@@ -1,10 +1,5 @@
-import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
-import products from '../data/products';
-import { submitQuote } from '../services/api';
-import { ArrowDown, Mail, MapPin, Navigation } from 'lucide-react';
+import { FileText, Mail, MapPin, Navigation, Phone } from 'lucide-react';
 
 import Arrow from '../components/i18n/Arrow';
 import {
@@ -12,96 +7,26 @@ import {
   LinkedinIcon,
   YoutubeIcon,
 } from '../components/icons/SocialIcons';
+import { useQuote } from '../components/quote/QuoteContext';
 import company from '../data/company';
-import useProducts from '../hooks/useProducts';
-
-const initialForm = {
-  company: '',
-  name: '',
-  email: '',
-  phone: '',
-  country: '',
-  product: '',
-  capacity: '',
-  quantity: '',
-  application: '',
-  message: '',
-};
-
-function getInitialForm(productSlug) {
-  const product = products.find(
-    (item) => item.slug === productSlug
-  );
-
-  return {
-    ...initialForm,
-    product: product ? product.quoteName : '',
-  };
-}
-
-function errorMessageKey(error) {
-  if (error?.status === 0) {
-    return 'contact.errors.network';
-  }
-
-  if (error?.status === 429) {
-    return 'contact.errors.rateLimited';
-  }
-
-  if (error?.status === 400) {
-    return 'contact.errors.validation';
-  }
-
-  return 'contact.errors.generic';
-}
 
 /*
-  Location, channels and quote form. Used as-is on the home page and on
-  the contact page, so visitors can get in touch without an extra click.
+  Location, address and contact channels. Used on the home page and on
+  the contact page; the quote form itself opens as a dialog.
 */
 export default function ContactSection({ index }) {
   const { t, i18n } = useTranslation();
-  const localizedProducts = useProducts();
-
-  const [searchParams] = useSearchParams();
-
-  const [form, setForm] = useState(() =>
-    getInitialForm(searchParams.get('product'))
-  );
-  const [status, setStatus] = useState('idle');
-  const [feedbackKey, setFeedbackKey] = useState('');
-
-  function handleChange(event) {
-    const { name, value } = event.target;
-
-    setForm((current) => ({
-      ...current,
-      [name]: value,
-    }));
-  }
-
-  async function handleSubmit(event) {
-    event.preventDefault();
-
-    setStatus('loading');
-    setFeedbackKey('');
-
-    try {
-      await submitQuote({
-        ...form,
-        language: i18n.resolvedLanguage,
-      });
-
-      setStatus('success');
-      setFeedbackKey('contact.success');
-      setForm(initialForm);
-    } catch (error) {
-      setStatus('error');
-      setFeedbackKey(errorMessageKey(error));
-    }
-  }
+  const { openQuote } = useQuote();
 
   const channels = [
+    {
+      key: 'phone',
+      href: company.phone.href,
+      icon: Phone,
+      label: t('contact.locations.phone'),
+      value: company.phone.display,
+      ltr: true,
+    },
     {
       key: 'email',
       href: `mailto:${company.email}`,
@@ -138,434 +63,133 @@ export default function ContactSection({ index }) {
     },
   ];
 
-  const fieldLabel = (name, required = false) =>
-    `${t(`contact.fields.${name}`)}${required ? ' *' : ''}`;
-
   return (
-    <>
-        <section className="contactLocations dark" id="contact">
-          <div className="container">
+    <section className="contactLocations dark" id="contact">
+      <div className="container">
 
-            <div className="contactLocationsHeader">
+        <div className="contactLocationsHeader">
 
-              <div>
-                <span className="sectionIndex light">
-                  {index || t('contact.locations.index')}
-                </span>
+          <div>
+            <span className="sectionIndex light">
+              {index || t('contact.locations.index')}
+            </span>
 
-                <p className="eyebrow">
-                  {t('contact.locations.eyebrow')}
-                </p>
-              </div>
-
-              <div>
-                <h2>
-                  {t('contact.locations.title')}
-                  <span>{t('contact.locations.titleAccent')}</span>
-                </h2>
-
-                <p>
-                  {t('contact.locations.text')}
-                </p>
-              </div>
-
-            </div>
-
-            <div className="contactLocationsGrid">
-
-              <div className="contactMap">
-                <iframe
-                  title={t('contact.locations.mapTitle')}
-                  src={company.maps.embed(i18n.resolvedLanguage)}
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  allowFullScreen
-                />
-              </div>
-
-              <div className="contactLocationsSide">
-
-                <div className="contactAddressCard">
-                  <span className="contactChannelsLabel">
-                    <MapPin aria-hidden="true" />
-                    {t('contact.locations.addressLabel')}
-                  </span>
-
-                  <address>
-                    <strong>{company.name}</strong>
-                    <span>{company.address.street}</span>
-                    <span>{company.address.district}</span>
-                    <span>{company.address.country}</span>
-                  </address>
-
-                  <div className="contactAddressActions">
-                    <a
-                      href={company.maps.directions}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="contactChannel contactChannelPrimary"
-                    >
-                      <Navigation aria-hidden="true" />
-                      <span>
-                        <strong>{t('contact.locations.directions')}</strong>
-                      </span>
-                    </a>
-
-                    <a
-                      href={company.maps.open}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="contactTextLink"
-                    >
-                      {t('contact.locations.openMap')}
-                      <Arrow />
-                    </a>
-                  </div>
-                </div>
-
-                <div className="contactChannels">
-
-                  <span className="contactChannelsLabel">
-                    {t('contact.locations.channels')}
-                  </span>
-
-                  {channels.map((channel) => (
-                    <a
-                      key={channel.key}
-                      href={channel.href}
-                      className="contactChannel"
-                      {...(channel.external
-                        ? { target: '_blank', rel: 'noreferrer' }
-                        : {})}
-                    >
-                      <channel.icon aria-hidden="true" />
-                      <span>
-                        <small>{channel.label}</small>
-                        <strong dir={channel.ltr ? 'ltr' : undefined}>
-                          {channel.value}
-                        </strong>
-                      </span>
-                      {channel.external && <Arrow />}
-                    </a>
-                  ))}
-
-                  <a href="#quote-form" className="contactChannel contactChannelOutline">
-                    <ArrowDown aria-hidden="true" />
-                    <span>
-                      <small>{t('contact.locations.form')}</small>
-                      <strong>{t('contact.locations.formValue')}</strong>
-                    </span>
-                  </a>
-
-                </div>
-
-              </div>
-
-            </div>
-
+            <p className="eyebrow">
+              {t('contact.locations.eyebrow')}
+            </p>
           </div>
-        </section>
 
+          <div>
+            <h2>
+              {t('contact.locations.title')}
+              <span>{t('contact.locations.titleAccent')}</span>
+            </h2>
 
-        <section className="quoteSection" id="quote-form">
+            <p>
+              {t('contact.locations.text')}
+            </p>
+          </div>
 
-          <div className="container">
+        </div>
 
-            <div className="quoteHeader">
+        <div className="contactLocationsGrid">
 
-              <div>
-                <span className="sectionIndex">
-                  {t('contact.formIndex')}
-                </span>
+          <div className="contactMap">
+            <iframe
+              title={t('contact.locations.mapTitle')}
+              src={company.maps.embed(i18n.resolvedLanguage)}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
+          </div>
 
-                <p className="eyebrow">
-                  {t('contact.formEyebrow')}
-                </p>
+          <div className="contactLocationsSide">
+
+            <div className="contactAddressCard">
+              <span className="contactChannelsLabel">
+                <MapPin aria-hidden="true" />
+                {t('contact.locations.addressLabel')}
+              </span>
+
+              <address>
+                <strong>{company.name}</strong>
+                <span>{company.address.street}</span>
+                <span>{company.address.district}</span>
+                <span>{company.address.country}</span>
+              </address>
+
+              <div className="contactAddressActions">
+                <a
+                  href={company.maps.directions}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="contactChannel contactChannelPrimary"
+                >
+                  <Navigation aria-hidden="true" />
+                  <span>
+                    <strong>{t('contact.locations.directions')}</strong>
+                  </span>
+                </a>
+
+                <a
+                  href={company.maps.open}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="contactTextLink"
+                >
+                  {t('contact.locations.openMap')}
+                  <Arrow />
+                </a>
               </div>
-
-              <div>
-                <h2>
-                  {t('contact.formTitle')}
-                  <span>{t('contact.formTitleAccent')}</span>
-                </h2>
-
-                <p>
-                  {t('contact.formText')}
-                </p>
-              </div>
-
             </div>
 
+            <div className="contactChannels">
 
-            <div className="quoteLayout">
+              <span className="contactChannelsLabel">
+                {t('contact.locations.channels')}
+              </span>
 
-              <aside className="quoteSidebar">
-
-                <span className="quoteSidebarLabel">
-                  {t('contact.sidebarLabel')}
-                </span>
-
-                <h3>
-                  {t('contact.sidebarTitle')}
-                </h3>
-
-                <p>
-                  {t('contact.sidebarText')}
-                </p>
-
-                <div className="quoteSidebarDetails">
-
-                  <div>
-                    <span>{t('contact.sidebarAddress')}</span>
-                    <strong>
-                      {company.address.street}
-                      <br />
-                      {company.address.district}, {company.address.country}
+              {channels.map((channel) => (
+                <a
+                  key={channel.key}
+                  href={channel.href}
+                  className="contactChannel"
+                  {...(channel.external
+                    ? { target: '_blank', rel: 'noreferrer' }
+                    : {})}
+                >
+                  <channel.icon aria-hidden="true" />
+                  <span>
+                    <small>{channel.label}</small>
+                    <strong dir={channel.ltr ? 'ltr' : undefined}>
+                      {channel.value}
                     </strong>
-                  </div>
+                  </span>
+                  {channel.external && <Arrow />}
+                </a>
+              ))}
 
-                  <div>
-                    <span>{t('contact.sidebarEmail')}</span>
-                    <strong>
-                      <a href={`mailto:${company.email}`} dir="ltr">
-                        {company.email}
-                      </a>
-                    </strong>
-                  </div>
-
-                </div>
-
-              </aside>
-
-
-              <form
-                className="quoteForm"
-                onSubmit={handleSubmit}
+              <button
+                type="button"
+                className="contactChannel contactChannelOutline"
+                onClick={() => openQuote()}
               >
-
-                <div className="formGrid">
-
-                  <label className="formField">
-                    <span>
-                      {fieldLabel('company', true)}
-                    </span>
-
-                    <input
-                      type="text"
-                      name="company"
-                      maxLength={150}
-                      value={form.company}
-                      onChange={handleChange}
-                      required
-                      placeholder={t('contact.placeholders.company')}
-                    />
-                  </label>
-
-
-                  <label className="formField">
-                    <span>
-                      {fieldLabel('name', true)}
-                    </span>
-
-                    <input
-                      type="text"
-                      name="name"
-                      maxLength={120}
-                      value={form.name}
-                      onChange={handleChange}
-                      required
-                      placeholder={t('contact.placeholders.name')}
-                    />
-                  </label>
-
-
-                  <label className="formField">
-                    <span>
-                      {fieldLabel('email', true)}
-                    </span>
-
-                    <input
-                      type="email"
-                      name="email"
-                      dir="ltr"
-                      autoComplete="email"
-                      value={form.email}
-                      onChange={handleChange}
-                      required
-                      placeholder={t('contact.placeholders.email')}
-                    />
-                  </label>
-
-
-                  <label className="formField">
-                    <span>
-                      {fieldLabel('phone')}
-                    </span>
-
-                    <input
-                      type="tel"
-                      name="phone"
-                      dir="ltr"
-                      maxLength={40}
-                      value={form.phone}
-                      onChange={handleChange}
-                      placeholder={t('contact.placeholders.phone')}
-                    />
-                  </label>
-
-
-                  <label className="formField">
-                    <span>
-                      {fieldLabel('country')}
-                    </span>
-
-                    <input
-                      type="text"
-                      name="country"
-                      maxLength={80}
-                      value={form.country}
-                      onChange={handleChange}
-                      placeholder={t('contact.placeholders.country')}
-                    />
-                  </label>
-
-
-                  <label className="formField">
-                    <span>
-                      {fieldLabel('product')}
-                    </span>
-
-                    <select
-                      name="product"
-                      value={form.product}
-                      onChange={handleChange}
-                    >
-                      <option value="">
-                        {t('contact.placeholders.product')}
-                      </option>
-
-                      {localizedProducts.map((product) => (
-                        <option
-                          key={product.slug}
-                          value={product.quoteName}
-                        >
-                          {product.name}
-                        </option>
-                      ))}
-
-                      <option value="Custom Requirement">
-                        {t('contact.customRequirement')}
-                      </option>
-                    </select>
-                  </label>
-
-
-                  <label className="formField">
-                    <span>
-                      {fieldLabel('capacity')}
-                    </span>
-
-                    <input
-                      type="text"
-                      name="capacity"
-                      maxLength={80}
-                      value={form.capacity}
-                      onChange={handleChange}
-                      placeholder={t('contact.placeholders.capacity')}
-                    />
-                  </label>
-
-
-                  <label className="formField">
-                    <span>
-                      {fieldLabel('quantity')}
-                    </span>
-
-                    <input
-                      type="number"
-                      min="1"
-                      name="quantity"
-                      value={form.quantity}
-                      onChange={handleChange}
-                      placeholder={t('contact.placeholders.quantity')}
-                    />
-                  </label>
-
-
-                  <label className="formField formFieldFull">
-                    <span>
-                      {fieldLabel('application')}
-                    </span>
-
-                    <input
-                      type="text"
-                      name="application"
-                      maxLength={200}
-                      value={form.application}
-                      onChange={handleChange}
-                      placeholder={t('contact.placeholders.application')}
-                    />
-                  </label>
-
-
-                  <label className="formField formFieldFull">
-                    <span>
-                      {fieldLabel('message', true)}
-                    </span>
-
-                    <textarea
-                      name="message"
-                      maxLength={5000}
-                      value={form.message}
-                      onChange={handleChange}
-                      required
-                      rows="7"
-                      placeholder={t('contact.placeholders.message')}
-                    />
-                  </label>
-
-                </div>
-
-
-                <div className="quoteFormBottom">
-
-                  <p>
-                    {t('contact.consent')}
-                  </p>
-
-                  <button
-                    type="submit"
-                    disabled={status === 'loading'}
-                    className="quoteSubmit"
-                  >
-                    <span>
-                      {status === 'loading'
-                        ? t('contact.sending')
-                        : t('contact.submit')}
-                    </span>
-
-                    <Arrow />
-                  </button>
-
-                </div>
-
-
-                {feedbackKey && (
-                  <div
-                    className={`quoteFeedback ${status}`}
-                    role={status === 'error' ? 'alert' : 'status'}
-                  >
-                    {t(feedbackKey)}
-                  </div>
-                )}
-
-              </form>
+                <FileText aria-hidden="true" />
+                <span>
+                  <small>{t('contact.locations.form')}</small>
+                  <strong>{t('contact.locations.formValue')}</strong>
+                </span>
+                <Arrow />
+              </button>
 
             </div>
 
           </div>
 
-        </section>
-    </>
+        </div>
+
+      </div>
+    </section>
   );
 }

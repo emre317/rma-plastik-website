@@ -14,6 +14,10 @@ const mapsQuery = `RMA Plastik, ${address.street.replace(/\u00a0/g, ' ')}, ${add
 const company = {
   name: 'RMA Plastik',
   email: 'info@rmaplastik.com',
+  phone: {
+    display: '+90 (324) 676 4500',
+    href: 'tel:+903246764500',
+  },
   address,
   maps: {
     // Interactive map embed (no API key needed)

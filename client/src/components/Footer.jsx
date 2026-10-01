@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Mail, MapPin } from 'lucide-react';
+import { Mail, MapPin, Phone } from 'lucide-react';
 
 import { LocalizedLink } from './i18n/LocalizedLink';
 import LanguageSwitcher from './i18n/LanguageSwitcher';
@@ -10,6 +10,7 @@ import {
   YoutubeIcon,
 } from './icons/SocialIcons';
 import company from '../data/company';
+import { useQuote } from './quote/QuoteContext';
 
 /*
   Layout follows the "footer-4" block: brand column (logo, text, social
@@ -49,6 +50,7 @@ const linkColumns = [
 
 export default function Footer() {
   const { t } = useTranslation();
+  const { openQuote } = useQuote();
 
   const socials = [
     {
@@ -147,7 +149,15 @@ export default function Footer() {
             </h3>
 
             <ul>
-              <li>
+              <li className="footerContactItem">
+                <Phone className="footerIcon" aria-hidden="true" />
+                <a href={company.phone.href} dir="ltr">
+                  {company.phone.display}
+                </a>
+              </li>
+
+              <li className="footerContactItem">
+                <Mail className="footerIcon" aria-hidden="true" />
                 <a href={`mailto:${company.email}`} dir="ltr">
                   {company.email}
                 </a>
@@ -163,9 +173,13 @@ export default function Footer() {
               </li>
 
               <li>
-                <LocalizedLink to="/contact">
+                <button
+                  type="button"
+                  className="footerQuoteLink"
+                  onClick={() => openQuote()}
+                >
                   {t('footer.links.requestQuote')}
-                </LocalizedLink>
+                </button>
               </li>
             </ul>
           </div>

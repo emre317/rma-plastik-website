@@ -5,6 +5,7 @@ import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import useProducts from '../../hooks/useProducts';
 import usePageTitle from '../../hooks/usePageTitle';
+import { useQuote } from '../../components/quote/QuoteContext';
 
 const technicalFields = [
   'name',
@@ -28,6 +29,7 @@ export default function ProductDetail() {
   const { t } = useTranslation();
   const { slug } = useParams();
   const products = useProducts();
+  const { openQuote } = useQuote();
 
   const product = products.find(
     (item) => item.slug === slug
@@ -72,7 +74,7 @@ export default function ProductDetail() {
     )
     .slice(0, 3);
 
-  const quotePath = `/contact?product=${product.slug}`;
+  const requestQuote = () => openQuote(product.quoteName);
 
   const applications = t('productDetail.applications.items', {
     returnObjects: true,
@@ -125,13 +127,14 @@ export default function ProductDetail() {
                   <Arrow direction="down" />
                 </a>
 
-                <LocalizedLink
-                  to={quotePath}
+                <button
+                  type="button"
                   className="button ghost"
+                  onClick={requestQuote}
                 >
                   {t('common.requestQuote')}
                   <Arrow />
-                </LocalizedLink>
+                </button>
 
               </div>
 
@@ -440,16 +443,17 @@ export default function ProductDetail() {
 
           </div>
 
-          <LocalizedLink
-            to={quotePath}
+          <button
+            type="button"
             className="productDetailCtaButton"
+            onClick={requestQuote}
           >
             <span>
               {t('common.requestQuote')}
             </span>
 
             <Arrow />
-          </LocalizedLink>
+          </button>
 
         </div>
 

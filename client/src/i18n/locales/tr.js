@@ -41,7 +41,7 @@ const tr = {
     locations: 'Mersin',
     country: 'Türkiye',
     requestQuote: 'Teklif İste',
-    requestSolution: 'Çözüm Talep Et',
+    requestSolution: 'Teklif Al',
   },
 
   footer: {
@@ -88,7 +88,7 @@ const tr = {
     lead:
       'Zorlu endüstriyel uygulamalar için tasarlanmış ileri polietilen üretim çözümleri.',
     exploreProducts: 'Ürünleri İncele',
-    requestSolution: 'Çözüm Talep Et',
+    requestSolution: 'Teklif Al',
     visualTop: ['Endüstriyel', 'Polietilen'],
     productionRange: 'Üretim aralığı',
     productionRangeValue: '10 — 42.000 L',
@@ -605,7 +605,9 @@ const tr = {
 
   contact: {
     homeIndex: '10 / İLETİŞİM',
+    close: 'Kapat',
     locations: {
+      phone: 'Telefon',
       index: '01 / Konum',
       eyebrow: 'Merkez tesis',
       title: 'Merkez tesisimiz.',
@@ -632,18 +634,11 @@ const tr = {
     text:
       'Ürün, uygulama veya özel üretim ihtiyacınızı ekibimizle paylaşın.',
     tag: 'Satış / Mühendislik',
-    formIndex: 'Talep / 02',
     formEyebrow: 'Proje bilgileri',
-    formTitle: 'Çözüm',
-    formTitleAccent: 'talep edin.',
+    formTitle: 'Teklif',
+    formTitleAccent: 'alın.',
     formText:
-      'Aşağıdaki temel proje bilgilerini paylaşın. Teknik detaylar, talebinizin ardından RMA ekibiyle birlikte ele alınabilir.',
-    sidebarLabel: 'İletişim',
-    sidebarTitle: 'İhtiyacınızı doğru anlayalım.',
-    sidebarText:
-      'İlgili ürün ve üretim gereksinimlerinin değerlendirilebilmesi için formu mümkün olduğunca ayrıntılı doldurun.',
-    sidebarAddress: 'Adres',
-    sidebarEmail: 'E-posta',
+      'Temel proje bilgilerinizi paylaşın. Teknik detayları, talebinizin ardından RMA ekibiyle birlikte netleştiririz.',
     fields: {
       company: 'Firma',
       name: 'Yetkili Adı',
@@ -672,7 +667,7 @@ const tr = {
     customRequirement: 'Özel İhtiyaç',
     consent:
       'Bu formu göndererek, paylaştığınız bilgilerin talebinize yanıt vermek amacıyla kullanılabileceğini onaylamış olursunuz.',
-    submit: 'Talebi Gönder',
+    submit: 'Teklif Talebini Gönder',
     sending: 'Gönderiliyor...',
     success:
       'Teşekkür ederiz. Talebiniz alındı; ekibimiz inceleyip sizinle iletişime geçecektir.',
