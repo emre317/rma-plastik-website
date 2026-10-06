@@ -7,6 +7,7 @@ Panel adresi: `https://ALAN-ADI/admin` (giriş: `npm run create-admin` ile oluş
 | Menü | Ne yapılır |
 | --- | --- |
 | **Ürünler** | Ürün ekleme, düzenleme, silme, gizleme; 3 dilde metin; ürün görseli; sıra ve kategori |
+| **Ürün tabloları** | Ürün Tabloları ve Su Depoları sayfalarındaki model tabloları: ürün aileleri, sütunlar, modeller (Excel’den yapıştırma), görseller, su deposu seçici ayarları |
 | **Sayfa metinleri** | Sitedeki tüm yazılar (ana sayfa bölümleri, iç sayfalar, SEO başlık/açıklamaları, footer, çerez bandı…) 3 dilde |
 | **Blog yazıları** | 3 dilde yazı, kapak görseli, metin içi görsel, YouTube videosu, ilgili ürünler, SEO başlık/açıklama, zamanlanmış yayın |
 | **Videolar** | YouTube videolarını bağlantıyla ekleme; Videolar sayfasında gösterim |
@@ -29,6 +30,18 @@ Panel adresi: `https://ALAN-ADI/admin` (giriş: `npm run create-admin` ile oluş
 - **Ticari bilgiler** (SKU, fiyat, stok, online satış): yalnızca veritabanında saklanır, siteye
   **gönderilmez**. İleride e-ticaret açıldığında kullanılacak.
 - Kategoriler sabittir (Endüstriyel/Kimyasal/Su/Tarım/Özel). Yeni kategori geliştirme gerektirir.
+
+### Ürün tabloları
+- Veritabanında tablo yokken sitede broşürdeki tablolar (21 ürün ailesi, 162 model) gösterilir.
+  Düzenlemek için ekrandaki **Broşür tablolarını içe aktar** butonuna basın (veya `npm run seed-content`).
+- Her ürün ailesi: 3 dilde başlık ve açıklama, grup, sıra, görsel ve tabloda görünecek **sütunlar**.
+- **Modeller:** “Satır ekle” ile tek tek veya **Excel’den yapıştır** ile toplu eklenir. Excel’de sütun
+  sırası ekranda yazan sırayla aynı olmalıdır (ilk sütun ürün kodu). Satırlar ↑ ↓ ile sıralanır, ⧉ ile kopyalanır.
+- Sayılar (1000, 48) sıralama ve filtrelerde kullanılır; “40-60”, “35 x 35”, 3/4" gibi değerler yazıldığı gibi gösterilir.
+- Bir modele özel görsel eklenebilir; boşsa ailenin görseli kullanılır (Su Depoları kartları ve teklif formu).
+- **Su deposu seçici:** işaretlenen ailelerin modelleri Su Depoları sayfasında filtrelenir (tip, yapı ve kullanım
+  alanları buradan seçilir). Hacim ve Yükseklik sütunları dolu olmalıdır.
+- Bir ürün ailesini sitede gizlemek için “Yayında / Gizli” düğmesini kullanın; silmek geri alınamaz.
 
 ### Blog yazıları
 - **Taslak** sitede görünmez; **Yayına al** dedikten sonra “Yayınla” ile siteye çıkar.

@@ -62,3 +62,11 @@ async function uploadImage(kind, file, token) {
 
   return data;
 }
+
+/* Product tables (Ürün tabloları) */
+export const listFamilies = (token) => request('/admin/product-families', { token, fallbackMessage: 'Ürün tabloları yüklenemedi.' });
+export const getFamily = (id, token) => request(`/admin/product-families/${encodeURIComponent(id)}`, { token, fallbackMessage: 'Ürün ailesi yüklenemedi.' });
+export const createFamily = (body, token) => request('/admin/product-families', { method: 'POST', body, token, fallbackMessage: 'Ürün ailesi kaydedilemedi.' });
+export const updateFamily = (id, body, token) => request(`/admin/product-families/${encodeURIComponent(id)}`, { method: 'PUT', body, token, fallbackMessage: 'Ürün ailesi kaydedilemedi.' });
+export const deleteFamily = (id, token) => request(`/admin/product-families/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Ürün ailesi silinemedi.' });
+export const importFamilies = (token) => request('/admin/product-families/import-defaults', { method: 'POST', token, fallbackMessage: 'Broşür tabloları aktarılamadı.' });

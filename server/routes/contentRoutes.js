@@ -12,6 +12,14 @@ import {
   updateProduct,
   updateSettings,
 } from '../controllers/contentController.js';
+import {
+  createFamily,
+  deleteFamily,
+  getFamily,
+  importDefaultFamilies,
+  listFamilies,
+  updateFamily,
+} from '../controllers/productFamilyController.js';
 import { requireAdmin } from '../middleware/authMiddleware.js';
 import { uploadPostImage, uploadProductImage } from '../middleware/upload.js';
 import {
@@ -43,6 +51,13 @@ adminContentRouter.post('/products', createProduct);
 adminContentRouter.get('/products/:id', getProduct);
 adminContentRouter.put('/products/:id', updateProduct);
 adminContentRouter.delete('/products/:id', deleteProduct);
+
+adminContentRouter.get('/product-families', listFamilies);
+adminContentRouter.post('/product-families', createFamily);
+adminContentRouter.post('/product-families/import-defaults', importDefaultFamilies);
+adminContentRouter.get('/product-families/:id', getFamily);
+adminContentRouter.put('/product-families/:id', updateFamily);
+adminContentRouter.delete('/product-families/:id', deleteFamily);
 
 adminContentRouter.post('/uploads/product-image', uploadProductImage);
 adminContentRouter.post('/uploads/post-image', uploadPostImage);

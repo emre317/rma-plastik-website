@@ -8,16 +8,18 @@ import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
 import useLanguage from '../../hooks/useLanguage';
 import formatNumber from '../../utils/formatNumber';
-import { waterTanks } from '../../data/productTables';
+import { familyText, waterTanks, WATER_USES } from '../../data/productTables';
 
 // Every distinct volume is a stop on the volume slider
-const VOLUME_STEPS = [...new Set(waterTanks.map((tank) => tank.volume))].sort((a, b) => a - b);
-const MAX_HEIGHT = Math.max(...waterTanks.map((tank) => tank.height));
-const MIN_HEIGHT = Math.min(...waterTanks.map((tank) => tank.height));
-const MAX_DIAMETER = Math.max(...waterTanks.map((tank) => tank.diameter));
-const MIN_DIAMETER = Math.min(...waterTanks.map((tank) => tank.diameter));
+const VOLUME_STEPS = waterTanks.length ? [...new Set(waterTanks.map((tank) => tank.volume))].sort((a, b) => a - b) : [0];
+const MAX_HEIGHT = Math.max(0, ...waterTanks.map((tank) => tank.height));
+const MIN_HEIGHT = Math.min(MAX_HEIGHT, ...waterTanks.map((tank) => tank.height));
+const MAX_DIAMETER = Math.max(0, ...waterTanks.map((tank) => tank.diameter));
+const MIN_DIAMETER = Math.min(MAX_DIAMETER, ...waterTanks.map((tank) => tank.diameter));
 const OUTLETS = [...new Set(waterTanks.map((tank) => tank.outlet).filter(Boolean))];
-const USES = ['water', 'food', 'chemical', 'acid'];
+const USES = WATER_USES.filter((use) => waterTanks.some((tank) => tank.uses.includes(use)));
+const TYPE_COUNT = new Set(waterTanks.map((tank) => `${tank.orientation}-${tank.layer}`)).size;
+const percent = (value, min, max) => (max > min ? ((value - min) / (max - min)) * 100 : 100);
 
 const PRESETS = [
   [0, 1000],
@@ -109,8 +111,8 @@ export default function WaterTanks() {
   const features = t('waterTanks.features', { returnObjects: true });
 
   const rangeStyle = {
-    '--from': `${(filters.minIndex / (VOLUME_STEPS.length - 1)) * 100}%`,
-    '--to': `${(filters.maxIndex / (VOLUME_STEPS.length - 1)) * 100}%`,
+    '--from': `${percent(filters.minIndex, 0, VOLUME_STEPS.length - 1)}%`,
+    '--to': `${VOLUME_STEPS.length > 1 ? percent(filters.maxIndex, 0, VOLUME_STEPS.length - 1) : 100}%`,
   };
 
   const badges = (tank) => [
@@ -135,13 +137,13 @@ export default function WaterTanks() {
 
     return {
       name: `${tank.code} – ${num(tank.volume)} L`,
-      title: t(`productTables.families.${tank.family}.title`),
+      title: familyText(tank.familyData, 'title', lang, t),
       code: tank.code,
       image: tank.image,
       capacity: `${num(tank.volume)} L`,
       specs: specsFor(tank, t),
       summary: [
-        tr(`productTables.families.${tank.family}.title`),
+        familyText(tank.familyData, 'title', 'tr', tr),
         tank.code,
         `${tr('productTables.columns.volume')}: ${formatNumber(tank.volume, 'tr')}`,
         ...specsFor(tank, tr).map((spec) => `${spec.label}: ${spec.value}`),
@@ -202,7 +204,7 @@ export default function WaterTanks() {
                 <dd>{w('statRange')}</dd>
               </div>
               <div>
-                <dt>4</dt>
+                <dt>{TYPE_COUNT}</dt>
                 <dd>{w('statTypes')}</dd>
               </div>
             </dl>
@@ -335,7 +337,7 @@ export default function WaterTanks() {
                   max={MAX_HEIGHT}
                   step="1"
                   value={filters.maxHeight}
-                  style={{ '--fill': `${((filters.maxHeight - MIN_HEIGHT) / (MAX_HEIGHT - MIN_HEIGHT)) * 100}%` }}
+                  style={{ '--fill': `${percent(filters.maxHeight, MIN_HEIGHT, MAX_HEIGHT)}%` }}
                   aria-label={w('maxHeight')}
                   onChange={(event) => update({ maxHeight: Number(event.target.value) })}
                 />
@@ -353,7 +355,7 @@ export default function WaterTanks() {
                   max={MAX_DIAMETER}
                   step="1"
                   value={filters.maxDiameter}
-                  style={{ '--fill': `${((filters.maxDiameter - MIN_DIAMETER) / (MAX_DIAMETER - MIN_DIAMETER)) * 100}%` }}
+                  style={{ '--fill': `${percent(filters.maxDiameter, MIN_DIAMETER, MAX_DIAMETER)}%` }}
                   aria-label={w('maxDiameter')}
                   onChange={(event) => update({ maxDiameter: Number(event.target.value) })}
                 />

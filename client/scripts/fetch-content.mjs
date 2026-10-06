@@ -52,6 +52,11 @@ try {
     data.products = null;
   }
 
+  // No product tables in the database yet: keep the built-in brochure tables
+  if (!Array.isArray(data.productFamilies) || data.productFamilies.length === 0) {
+    data.productFamilies = null;
+  }
+
   fs.writeFileSync(target, `${JSON.stringify(data, null, 2)}\n`);
 
   console.log(`Content: ${data.products?.length ?? 'built-in'} products, saved to src/data/content.live.json`);

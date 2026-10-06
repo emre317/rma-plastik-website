@@ -28,6 +28,8 @@ const AdminQuotes = lazy(() => import('../pages/AdminQuotes/AdminQuotes'));
 const AdminQuoteDetail = lazy(() => import('../pages/AdminQuoteDetail/AdminQuoteDetail'));
 const AdminProducts = lazy(() => import('../pages/AdminProducts/AdminProducts'));
 const AdminProductEdit = lazy(() => import('../pages/AdminProductEdit/AdminProductEdit'));
+const AdminProductFamilies = lazy(() => import('../pages/AdminProductFamilies/AdminProductFamilies'));
+const AdminProductFamilyEdit = lazy(() => import('../pages/AdminProductFamilyEdit/AdminProductFamilyEdit'));
 const AdminTexts = lazy(() => import('../pages/AdminTexts/AdminTexts'));
 const AdminSettings = lazy(() => import('../pages/AdminSettings/AdminSettings'));
 const AdminPosts = lazy(() => import('../pages/AdminPosts/AdminPosts'));
@@ -82,6 +84,8 @@ export default function AppRoutes() {
           />
           <Route path="/admin/products" element={<AdminProducts />} />
           <Route path="/admin/products/:id" element={<AdminProductEdit />} />
+          <Route path="/admin/product-families" element={<AdminProductFamilies />} />
+          <Route path="/admin/product-families/:id" element={<AdminProductFamilyEdit />} />
           <Route path="/admin/texts" element={<AdminTexts />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
           <Route path="/admin/posts" element={<AdminPosts />} />

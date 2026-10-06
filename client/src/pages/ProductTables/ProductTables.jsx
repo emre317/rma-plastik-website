@@ -8,9 +8,7 @@ import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
 import useLanguage from '../../hooks/useLanguage';
 import formatNumber from '../../utils/formatNumber';
-import families, { groups } from '../../data/productTables';
-
-const WATER_FAMILIES = ['vertical-tanks', 'horizontal-tanks', 'two-layer-vertical', 'two-layer-horizontal'];
+import families, { familyText, groups } from '../../data/productTables';
 
 const normalise = (text) => String(text).toLocaleLowerCase('tr').replace(/\s+/g, '');
 
@@ -120,7 +118,7 @@ export default function ProductTables() {
                 </h2>
 
                 {list.map((family) => {
-                  const title = p(`families.${family.id}.title`);
+                  const title = familyText(family, 'title', lang, t);
 
                   return (
                     <article key={family.id} className="ptFamily" id={family.id}>
@@ -133,13 +131,13 @@ export default function ProductTables() {
 
                         <div className="ptFamilyText">
                           <h3>{title}</h3>
-                          <p>{p(`families.${family.id}.text`)}</p>
+                          <p>{familyText(family, 'text', lang, t)}</p>
 
                           <div className="ptFamilyMeta">
                             <span>
                               {family.rows.length} {p('models')}
                             </span>
-                            {WATER_FAMILIES.includes(family.id) && (
+                            {family.waterTank && (
                               <LocalizedLink to="/water-tanks" className="ptFamilyLink">
                                 {p('waterLink')}
                                 <Arrow />
@@ -172,7 +170,7 @@ export default function ProductTables() {
                                 <td>
                                   <button type="button" className="ptRowQuote" onClick={() =>
                                       openQuote({
-                                        name: `${i18n.getFixedT('tr')(`productTables.families.${family.id}.title`)} – ${row.code}`,
+                                        name: `${familyText(family, 'title', 'tr', i18n.getFixedT('tr'))} – ${row.code}`,
                                         title,
                                         code: row.code,
                                         image: family.image || '',
@@ -181,7 +179,7 @@ export default function ProductTables() {
                                           .filter((key) => key !== 'code' && key !== 'volume' && row[key] !== undefined)
                                           .map((key) => ({ label: p(`columns.${key}`), value: formatNumber(row[key], lang) })),
                                         summary: [
-                                          i18n.getFixedT('tr')(`productTables.families.${family.id}.title`),
+                                          familyText(family, 'title', 'tr', i18n.getFixedT('tr')),
                                           row.code,
                                           ...family.columns
                                             .filter((key) => key !== 'code' && row[key] !== undefined)

@@ -5,6 +5,8 @@ import mongoose from 'mongoose';
 import Product from '../models/Product.js';
 import SiteSettings from '../models/SiteSettings.js';
 import Post from '../models/Post.js';
+import ProductFamily from '../models/ProductFamily.js';
+import { builtInFamilyDocs } from '../controllers/productFamilyController.js';
 import draftPosts from './seed-data/posts.js';
 
 import builtInProducts from '../../client/src/data/products.builtin.js';
@@ -91,6 +93,16 @@ async function seed() {
       }))
     );
     console.log(`Blog: imported ${draftPosts.length} draft posts (review and publish them in the admin panel).`);
+  }
+
+  const familyCount = await ProductFamily.countDocuments();
+
+  if (familyCount > 0) {
+    console.log(`Product tables: ${familyCount} families already in the database, skipped.`);
+  } else {
+    const docs = await builtInFamilyDocs();
+    await ProductFamily.insertMany(docs);
+    console.log(`Product tables: imported ${docs.length} brochure families.`);
   }
 
   await mongoose.disconnect();
