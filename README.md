@@ -44,6 +44,12 @@ Page `<head>` tags come from `src/seo/Seo.jsx`; measurement goes through Google 
 [docs/analytics-seo-setup.md](docs/analytics-seo-setup.md) for GTM, GA4, Google Ads,
 Meta Pixel, Hotjar, Search Console and nginx setup.
 
+## Content management (admin panel)
+
+Products, page texts and contact settings are edited at `/admin` and stored in MongoDB.
+"Yayınla" (Publish) rebuilds the static site from `/api/content`. First run on the server:
+`cd server && npm run seed-content`. Details: [docs/content-management.md](docs/content-management.md).
+
 ## Quote request emails
 
 Every quote form submission is saved to MongoDB and emailed to `QUOTE_NOTIFY_TO`

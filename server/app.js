@@ -5,6 +5,8 @@ import mongoose from 'mongoose';
 
 import quoteRoutes from './routes/quoteRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import { adminContentRouter, publicContentRouter } from './routes/contentRoutes.js';
+import { UPLOAD_ROOT } from './middleware/upload.js';
 
 const app = express();
 
@@ -89,6 +91,20 @@ app.use(
 app.use(
   '/api/quote',
   quoteRoutes
+);
+
+app.use('/api/content', publicContentRouter);
+
+app.use('/api/admin', adminContentRouter);
+
+// Uploaded product images (nginx can serve this folder directly in production)
+app.use(
+  '/uploads',
+  express.static(UPLOAD_ROOT, {
+    maxAge: '30d',
+    index: false,
+    setHeaders: (res) => res.set('Cross-Origin-Resource-Policy', 'cross-origin'),
+  })
 );
 
 

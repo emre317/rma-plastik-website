@@ -164,17 +164,27 @@ export default function Products() {
                       {product.categoryLabel}
                     </span>
 
-                    <div className="catalogTank">
+                    {product.image ? (
+                      <img
+                        className="productPhoto"
+                        src={product.image}
+                        alt={product.name}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : (
+                      <div className="catalogTank">
 
-                      <div className="catalogTankCap" />
+                        <div className="catalogTankCap" />
 
-                      <div className="catalogTankBody">
-                        <span />
-                        <span />
-                        <span />
+                        <div className="catalogTankBody">
+                          <span />
+                          <span />
+                          <span />
+                        </div>
+
                       </div>
-
-                    </div>
+                    )}
 
                     <Arrow className="productCatalogArrow" />
 

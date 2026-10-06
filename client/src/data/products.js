@@ -1,41 +1,16 @@
+import content from '@content';
+
+import builtInProducts from './products.builtin';
+
 /*
-  Product structure only. Display text (name, capacity, description...)
-  lives in the locale files under `catalog.<slug>`.
+  Product structure. When products are managed in the admin panel they come
+  from the published content snapshot (`@content`, see vite.config.js) with
+  their own texts in `i18n`; otherwise the built-in list is used.
 
   `quoteName` is the English name sent with quote requests so the admin
   panel always shows a consistent product name whatever the site language.
 */
-const products = [
-  {
-    slug: 'industrial-storage-tank',
-    category: 'industrial-tanks',
-    quoteName: 'Industrial Storage Tank',
-    featured: true,
-  },
-  {
-    slug: 'chemical-storage-tank',
-    category: 'chemical-tanks',
-    quoteName: 'Chemical Storage Tank',
-    featured: true,
-  },
-  {
-    slug: 'water-storage-tank',
-    category: 'water-tanks',
-    quoteName: 'Water Storage Tank',
-    featured: true,
-  },
-  {
-    slug: 'agricultural-tank',
-    category: 'agriculture',
-    quoteName: 'Agricultural Tank',
-    featured: false,
-  },
-  {
-    slug: 'custom-engineered-product',
-    category: 'custom',
-    quoteName: 'Custom Engineered Product',
-    featured: true,
-  },
-];
+
+const products = Array.isArray(content.products) ? content.products : builtInProducts;
 
 export default products;

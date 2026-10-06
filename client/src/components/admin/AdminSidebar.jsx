@@ -8,6 +8,7 @@ import {
 import {
   getUnreadQuoteCount,
 } from '../../services/adminApi';
+import PublishPanel from './PublishPanel';
 
 import {
   QUOTES_CHANGED_EVENT,
@@ -93,7 +94,7 @@ export default function AdminSidebar() {
             isActive ? 'active' : ''
           }
         >
-          Dashboard
+          Özet
         </NavLink>
 
         <NavLink
@@ -103,7 +104,7 @@ export default function AdminSidebar() {
           }
         >
           <span>
-            Quote Requests
+            Teklif talepleri
           </span>
 
           {unread > 0 && (
@@ -116,11 +117,42 @@ export default function AdminSidebar() {
           )}
         </NavLink>
 
-        <NavLink to="/">
-          View Website
+        <span className="adminNavGroup">İçerik</span>
+
+        <NavLink
+          to="/admin/products"
+          className={({ isActive }) =>
+            isActive ? 'active' : ''
+          }
+        >
+          Ürünler
+        </NavLink>
+
+        <NavLink
+          to="/admin/texts"
+          className={({ isActive }) =>
+            isActive ? 'active' : ''
+          }
+        >
+          Sayfa metinleri
+        </NavLink>
+
+        <NavLink
+          to="/admin/settings"
+          className={({ isActive }) =>
+            isActive ? 'active' : ''
+          }
+        >
+          Site ayarları
+        </NavLink>
+
+        <NavLink to="/" target="_blank" rel="noreferrer">
+          Siteyi görüntüle ↗
         </NavLink>
 
       </nav>
+
+      <PublishPanel />
 
       {admin?.email && (
         <span className="adminSidebarUser">
@@ -132,7 +164,7 @@ export default function AdminSidebar() {
         type="button"
         onClick={logout}
       >
-        Log Out
+        Çıkış yap
       </button>
 
     </aside>

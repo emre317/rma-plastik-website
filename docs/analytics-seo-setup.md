@@ -149,6 +149,11 @@ server {
     try_files $uri =404;
   }
 
+  location /uploads/ {
+    alias /var/www/rma/server/uploads/;
+    add_header Cache-Control "public, max-age=2592000";
+  }
+
   location /api/ {
     proxy_pass http://127.0.0.1:5000;
     proxy_set_header Host $host;

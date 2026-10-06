@@ -1,9 +1,12 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
+import content from '@content';
+
 import en from './locales/en';
 import tr from './locales/tr';
 import ar from './locales/ar';
+import applyOverrides from './applyOverrides';
 
 import {
   DEFAULT_LANGUAGE,
@@ -24,9 +27,10 @@ i18n
   .use(initReactI18next)
   .init({
     resources: {
-      en: { translation: en },
-      tr: { translation: tr },
-      ar: { translation: ar },
+      // Texts edited in the admin panel (published snapshot) override the defaults
+      en: { translation: applyOverrides(en, content.texts?.en) },
+      tr: { translation: applyOverrides(tr, content.texts?.tr) },
+      ar: { translation: applyOverrides(ar, content.texts?.ar) },
     },
     lng: initialLanguage,
     fallbackLng: DEFAULT_LANGUAGE,

@@ -22,8 +22,15 @@ export default function useProducts() {
       products.map((product) => {
         const localized = { ...product };
 
+        const lang = i18n.resolvedLanguage || i18n.language;
+
+        // Admin-managed text first, then the built-in locale text, then Turkish
         TEXT_FIELDS.forEach((field) => {
-          localized[field] = t(`catalog.${product.slug}.${field}`);
+          localized[field] =
+            product.i18n?.[lang]?.[field] ||
+            t(`catalog.${product.slug}.${field}`, { defaultValue: '' }) ||
+            product.i18n?.tr?.[field] ||
+            '';
         });
 
         return localized;

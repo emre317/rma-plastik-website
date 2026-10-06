@@ -1,26 +1,34 @@
+import content from '@content';
+
 /*
-  Company contact details, used in the footer and on the Contact page.
-  Keep this file as the single source of truth.
+  Company contact details, used across the site.
+  Values saved in the admin panel (Site Ayarları) override these defaults
+  once the site is published.
 */
+const saved = content.settings || {};
+const pick = (value, fallback) => (value ? value : fallback);
+
 const address = {
   // Non-breaking space keeps "No: 22" together when the line wraps
-  street: 'Mersin Tarsus OSB, Cumhuriyet Bulvarı No:\u00a022',
-  district: 'Akdeniz, Mersin',
-  country: 'Türkiye',
+  street: pick(saved.address?.street, 'Mersin Tarsus OSB, Cumhuriyet Bulvarı No: 22').replace(/No: (\d)/, 'No: $1'),
+  district: pick(saved.address?.district, 'Akdeniz, Mersin'),
+  country: pick(saved.address?.country, 'Türkiye'),
 };
 
-const mapsQuery = `RMA Plastik, ${address.street.replace(/\u00a0/g, ' ')}, ${address.district}, ${address.country}`;
+const mapsQuery = `RMA Plastik, ${address.street.replace(/ /g, ' ')}, ${address.district}, ${address.country}`;
+
+const phoneNumber = pick(saved.phone, '+903246764500');
 
 const company = {
   name: 'RMA Plastik',
-  email: 'info@rmaplastik.com',
+  email: pick(saved.email, 'info@rmaplastik.com'),
   phone: {
-    display: '+90 (324) 676 4500',
-    href: 'tel:+903246764500',
+    display: pick(saved.phoneDisplay, '+90 (324) 676 4500'),
+    href: `tel:${phoneNumber}`,
   },
   // WhatsApp number in international format, digits only (e.g. '905321234567').
-  // Leave empty to hide the WhatsApp bubble.
-  whatsapp: '905366700969',
+  // Empty hides the WhatsApp bubble.
+  whatsapp: pick(saved.whatsapp, '905366700969'),
   address,
   maps: {
     // Interactive map embed (no API key needed)
@@ -30,13 +38,13 @@ const company = {
     directions: `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(mapsQuery)}`,
   },
   social: {
-    linkedin: 'https://www.linkedin.com/company/rmaplastik/',
-    instagram: 'https://www.instagram.com/rmaplastik/',
-    youtube: 'https://www.youtube.com/@rmaplastik5113',
+    linkedin: pick(saved.social?.linkedin, 'https://www.linkedin.com/company/rmaplastik/'),
+    instagram: pick(saved.social?.instagram, 'https://www.instagram.com/rmaplastik/'),
+    youtube: pick(saved.social?.youtube, 'https://www.youtube.com/@rmaplastik5113'),
   },
   handles: {
-    instagram: '@rmaplastik',
-    youtube: '@rmaplastik5113',
+    instagram: pick(saved.handles?.instagram, '@rmaplastik'),
+    youtube: pick(saved.handles?.youtube, '@rmaplastik5113'),
   },
 };
 

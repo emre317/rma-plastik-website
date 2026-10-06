@@ -37,3 +37,13 @@ Thumbs.db
 # Prerender build output
 dist-ssr/
 **/dist-ssr/
+
+# Uploaded files
+server/uploads/
+
+# Live content snapshot fetched at build time
+client/src/data/content.live.json
+
+# Publish build folders
+client/dist-next/
+client/dist-prev/

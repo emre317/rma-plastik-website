@@ -23,6 +23,10 @@ const AdminLogin = lazy(() => import('../pages/AdminLogin/AdminLogin'));
 const AdminDashboard = lazy(() => import('../pages/AdminDashboard/AdminDashboard'));
 const AdminQuotes = lazy(() => import('../pages/AdminQuotes/AdminQuotes'));
 const AdminQuoteDetail = lazy(() => import('../pages/AdminQuoteDetail/AdminQuoteDetail'));
+const AdminProducts = lazy(() => import('../pages/AdminProducts/AdminProducts'));
+const AdminProductEdit = lazy(() => import('../pages/AdminProductEdit/AdminProductEdit'));
+const AdminTexts = lazy(() => import('../pages/AdminTexts/AdminTexts'));
+const AdminSettings = lazy(() => import('../pages/AdminSettings/AdminSettings'));
 
 export default function AppRoutes() {
   return (
@@ -69,6 +73,10 @@ export default function AppRoutes() {
             path="/admin/quotes/:id"
             element={<AdminQuoteDetail />}
           />
+          <Route path="/admin/products" element={<AdminProducts />} />
+          <Route path="/admin/products/:id" element={<AdminProductEdit />} />
+          <Route path="/admin/texts" element={<AdminTexts />} />
+          <Route path="/admin/settings" element={<AdminSettings />} />
         </Route>
       </Route>
 

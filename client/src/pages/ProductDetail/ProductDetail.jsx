@@ -5,7 +5,7 @@ import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import useProducts from '../../hooks/useProducts';
 import Seo from '../../seo/Seo';
-import { OG_IMAGE, SITE_URL } from '../../seo/site';
+import { OG_IMAGE, SITE_URL, absoluteUrl } from '../../seo/site';
 import { useQuote } from '../../components/quote/QuoteContext';
 
 const technicalFields = [
@@ -93,6 +93,7 @@ export default function ProductDetail() {
         title={product.name}
         description={product.description}
         type="product"
+        image={product.image ? absoluteUrl(product.image) : undefined}
         breadcrumbs={[
           { name: t('meta.titles.products'), path: '/products' },
           { name: product.name, path: `/products/${product.slug}` },
@@ -104,7 +105,7 @@ export default function ProductDetail() {
             description: product.description,
             category: product.categoryLabel,
             material: product.material,
-            image: OG_IMAGE,
+            image: product.image ? absoluteUrl(product.image) : OG_IMAGE,
             brand: { '@type': 'Brand', name: 'RMA Plastik' },
             manufacturer: { '@id': `${SITE_URL}/#organization` },
           },
@@ -172,17 +173,27 @@ export default function ProductDetail() {
                 <span>{product.capacity}</span>
               </div>
 
-              <div className="productDetailTank">
+              {product.image ? (
+                <img
+                  className="productPhoto productPhotoLarge"
+                  src={product.image}
+                  alt={product.name}
+                  loading="eager"
+                  decoding="async"
+                />
+              ) : (
+                <div className="productDetailTank">
 
-                <div className="productDetailTankCap" />
+                  <div className="productDetailTankCap" />
 
-                <div className="productDetailTankBody">
-                  <span />
-                  <span />
-                  <span />
+                  <div className="productDetailTankBody">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+
                 </div>
-
-              </div>
+              )}
 
               <div className="productDetailVisualBottom">
 
@@ -419,16 +430,26 @@ export default function ProductDetail() {
                     </span>
                   </div>
 
-                  <div className="relatedProductObject">
+                  {item.image ? (
+                    <img
+                      className="productPhoto"
+                      src={item.image}
+                      alt={item.name}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    <div className="relatedProductObject">
 
-                    <div className="relatedProductCap" />
+                      <div className="relatedProductCap" />
 
-                    <div className="relatedProductBody">
-                      <span />
-                      <span />
+                      <div className="relatedProductBody">
+                        <span />
+                        <span />
+                      </div>
+
                     </div>
-
-                  </div>
+                  )}
 
                   <div className="relatedProductBottom">
 

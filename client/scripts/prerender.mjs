@@ -9,7 +9,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const dist = path.join(root, 'dist');
+const dist = path.join(root, process.env.BUILD_OUT_DIR || 'dist');
 const ssrDir = path.join(root, 'dist-ssr');
 
 const { render, getPublicPaths, languages, SITE_URL } = await import(

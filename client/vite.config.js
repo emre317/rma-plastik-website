@@ -1,3 +1,6 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -52,15 +55,38 @@ try{var c=JSON.parse(localStorage.getItem('rma_consent'));if(c&&c.version===1){g
   };
 }
 
+/*
+  `@content` = published content snapshot from the admin panel
+  (src/data/content.live.json, written by scripts/fetch-content.mjs);
+  falls back to the built-in defaults when it has never been fetched.
+*/
+function contentFile() {
+  const live = path.resolve('src/data/content.live.json');
+
+  return fs.existsSync(live) ? live : path.resolve('src/data/content.default.json');
+}
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_');
 
   return {
     plugins: [react(), siteTags(env)],
 
+    resolve: {
+      alias: {
+        '@content': contentFile(),
+      },
+    },
+
+    build: {
+      // The admin "Publish" button builds into dist-next and swaps it in
+      outDir: process.env.BUILD_OUT_DIR || 'dist',
+    },
+
     server: {
       proxy: {
         '/api': 'http://localhost:5000',
+        '/uploads': 'http://localhost:5000',
       },
     },
   };
