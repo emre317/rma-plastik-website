@@ -11,6 +11,7 @@ import {
 } from './icons/SocialIcons';
 import company from '../data/company';
 import { useQuote } from './quote/QuoteContext';
+import { openConsentSettings } from '../analytics/consent';
 
 /*
   Layout follows the "footer-4" block: brand column (logo, text, social
@@ -83,7 +84,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="siteFooter">
+    <footer className="siteFooter" data-track-area="footer">
       <div className="container">
 
         <div className="footerGrid">
@@ -193,6 +194,14 @@ export default function Footer() {
           <p>
             © {new Date().getFullYear()} RMA Plastik. {t('footer.rights')}
           </p>
+
+          <button
+            type="button"
+            className="footerCookieLink"
+            onClick={openConsentSettings}
+          >
+            {t('cookies.settings')}
+          </button>
 
           <LanguageSwitcher placement="top" className="footerLanguage" />
 

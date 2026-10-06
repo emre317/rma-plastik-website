@@ -10,15 +10,14 @@ import GlobalPresenceSection from '../../sections/GlobalPresenceSection';
 import ContactSection from '../../sections/ContactSection';
 import { useTranslation } from 'react-i18next';
 
-import usePageTitle from '../../hooks/usePageTitle';
+import Seo from '../../seo/Seo';
 
 export default function Home() {
   const { t } = useTranslation();
 
-  usePageTitle(null);
-
   return (
     <main>
+      <Seo description={t('meta.descriptions.home')} />
       <HeroSection />
       <StatsSection />
       <TechnologySection />

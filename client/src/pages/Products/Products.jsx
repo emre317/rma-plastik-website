@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import useProducts from '../../hooks/useProducts';
-import usePageTitle from '../../hooks/usePageTitle';
+import Seo from '../../seo/Seo';
 
 const filterIds = [
   'all',
@@ -18,8 +18,6 @@ const filterIds = [
 export default function Products() {
   const { t } = useTranslation();
   const products = useProducts();
-
-  usePageTitle(t('meta.titles.products'));
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -48,6 +46,7 @@ export default function Products() {
 
   return (
     <main className="productsPage">
+      <Seo title={t('meta.titles.products')} description={t('meta.descriptions.products')} breadcrumbs={[{ name: t('meta.titles.products'), path: '/products' }]} />
 
       <section className="internalHero">
         <div className="container">

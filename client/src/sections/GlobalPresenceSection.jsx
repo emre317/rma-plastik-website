@@ -1,12 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useReducedMotion } from 'framer-motion';
 import { Globe } from 'lucide-react';
 
 import { LocalizedLink } from '../components/i18n/LocalizedLink';
 import Arrow from '../components/i18n/Arrow';
-import ExportMap from '../components/ui/ExportMap';
+import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion';
 import exportMap from '../data/exportMap';
+
+// The interactive map (and its animation library) loads separately, below the fold
+const ExportMap = lazy(() => import('../components/ui/ExportMap'));
 
 // Each market (and finally "worldwide") is shown this long
 const STEP_MS = 3000;
@@ -22,7 +24,7 @@ const WORLDWIDE_STEP = destinations.length;
 */
 export default function GlobalPresenceSection() {
   const { t } = useTranslation();
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = usePrefersReducedMotion();
 
   const sectionRef = useRef(null);
   const stepsRef = useRef(null);
@@ -171,6 +173,14 @@ export default function GlobalPresenceSection() {
         </div>
 
         <figure className="exportMapPanel" aria-label={t('global.mapLabel')}>
+          <Suspense
+            fallback={
+              <div
+                className="exportMapPlaceholder"
+                style={{ aspectRatio: `${exportMap.width} / ${exportMap.height}` }}
+              />
+            }
+          >
           <ExportMap
             data={exportMap}
             labels={labels}
@@ -184,6 +194,7 @@ export default function GlobalPresenceSection() {
             cycle={cycle}
             onHoverChange={setHoverKey}
           />
+          </Suspense>
         </figure>
 
         <div className="exportStepsHeader">

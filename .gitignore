@@ -34,3 +34,6 @@ Thumbs.db
 *.tmp
 *.temp
 .cache/
+# Prerender build output
+dist-ssr/
+**/dist-ssr/

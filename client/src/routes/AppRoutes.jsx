@@ -1,8 +1,7 @@
+import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import LanguageLayout from '../layouts/LanguageLayout';
-import AdminLayout from '../layouts/AdminLayout';
-import ProtectedAdminRoute from '../components/ProtectedAdminRoute';
 import RootRedirect from '../components/i18n/RootRedirect';
 
 import Home from '../pages/Home/Home';
@@ -17,13 +16,17 @@ import Engineering from '../pages/Engineering/Engineering';
 import Contact from '../pages/Contact/Contact';
 import NotFound from '../pages/NotFound/NotFound';
 
-import AdminLogin from '../pages/AdminLogin/AdminLogin';
-import AdminDashboard from '../pages/AdminDashboard/AdminDashboard';
-import AdminQuotes from '../pages/AdminQuotes/AdminQuotes';
-import AdminQuoteDetail from '../pages/AdminQuoteDetail/AdminQuoteDetail';
+// Admin panel is loaded on demand so visitors never download it
+const AdminLayout = lazy(() => import('../layouts/AdminLayout'));
+const ProtectedAdminRoute = lazy(() => import('../components/ProtectedAdminRoute'));
+const AdminLogin = lazy(() => import('../pages/AdminLogin/AdminLogin'));
+const AdminDashboard = lazy(() => import('../pages/AdminDashboard/AdminDashboard'));
+const AdminQuotes = lazy(() => import('../pages/AdminQuotes/AdminQuotes'));
+const AdminQuoteDetail = lazy(() => import('../pages/AdminQuoteDetail/AdminQuoteDetail'));
 
 export default function AppRoutes() {
   return (
+    <Suspense fallback={null}>
     <Routes>
 
       <Route path="/" element={<RootRedirect />} />
@@ -70,5 +73,6 @@ export default function AppRoutes() {
       </Route>
 
     </Routes>
+    </Suspense>
   );
 }

@@ -2,16 +2,15 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import formatSlug from '../../utils/formatSlug';
-import usePageTitle from '../../hooks/usePageTitle';
+import Seo from '../../seo/Seo';
 
 export default function IndustryDetail() {
   const { t } = useTranslation();
   const { slug } = useParams();
 
-  usePageTitle(formatSlug(slug));
-
   return (
     <main className="internalPage">
+      <Seo title={formatSlug(slug)} description={t('meta.descriptions.industries')} noindex />
 
       <section className="internalHero">
         <div className="container">

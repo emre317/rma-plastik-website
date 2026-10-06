@@ -1,17 +1,16 @@
 import { useTranslation } from 'react-i18next';
 
 import ContactSection from '../../sections/ContactSection';
-import usePageTitle from '../../hooks/usePageTitle';
+import Seo from '../../seo/Seo';
 
 export default function Contact() {
   const { t } = useTranslation();
-
-  usePageTitle(t('meta.titles.contact'));
 
   const meta = t('contact.meta', { returnObjects: true });
 
   return (
     <main className="contactPage">
+      <Seo title={t('meta.titles.contact')} description={t('meta.descriptions.contact')} breadcrumbs={[{ name: t('meta.titles.contact'), path: '/contact' }]} />
 
       <section className="internalHero contactPageHero">
         <div className="container">

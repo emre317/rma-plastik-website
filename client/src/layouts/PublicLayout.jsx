@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import { QuoteProvider } from '../components/quote/QuoteContext';
 import QuoteModal from '../components/quote/QuoteModal';
 import FloatingContact from '../components/ui/FloatingContact';
+import CookieConsent from '../components/CookieConsent';
 
 export default function PublicLayout() {
   return (
@@ -13,6 +14,7 @@ export default function PublicLayout() {
       <Outlet />
       <Footer />
       <FloatingContact />
+      <CookieConsent />
       <QuoteModal />
     </QuoteProvider>
   );

@@ -13,9 +13,12 @@ import {
 } from './languages';
 
 // Start in the URL's language so the first render is already correct
+// (On the server/prerender there is no window; the renderer sets the language.)
+const isBrowser = typeof window !== 'undefined';
+
 const initialLanguage =
-  getLanguageFromPath(window.location.pathname) ||
-  getPreferredLanguage();
+  (isBrowser && getLanguageFromPath(window.location.pathname)) ||
+  (isBrowser ? getPreferredLanguage() : DEFAULT_LANGUAGE);
 
 i18n
   .use(initReactI18next)
@@ -36,7 +39,7 @@ i18n
   });
 
 // Set <html lang/dir> before the first paint to avoid an LTR flash on Arabic pages
-if (!window.location.pathname.startsWith('/admin')) {
+if (isBrowser && !window.location.pathname.startsWith('/admin')) {
   applyDocumentLanguage(
     initialLanguage,
     getLanguage(initialLanguage).dir

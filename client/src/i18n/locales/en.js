@@ -6,6 +6,17 @@ const en = {
   meta: {
     tagline: 'Industrial Polyethylene Solutions',
     description: 'RMA Plastik industrial polyethylene solutions',
+    descriptions: {
+      home: 'RMA Plastik manufactures industrial polyethylene storage tanks, chemical tanks, water tanks, agricultural tanks and custom products in Mersin. Get a quote.',
+      company: 'About RMA Plastik: manufacturing industrial polyethylene products in Mersin since 1998, backed by engineering experience and production infrastructure.',
+      products: 'Industrial storage tanks, chemical storage tanks, water tanks, agricultural tanks and custom polyethylene products. Explore the RMA Plastik portfolio.',
+      technologies: 'RMA Plastik manufacturing technologies: moulding processes and application-specific production capabilities for polyethylene products.',
+      technologyDetail: '{{name}}: the manufacturing technology and process RMA Plastik uses to produce polyethylene products.',
+      industries: 'Polyethylene storage and custom manufacturing solutions for the chemical, food, agriculture, automotive, textile, infrastructure and marine sectors.',
+      engineering: 'From idea to production: needs analysis, product development, mould development and industrial manufacturing of application-specific polyethylene products.',
+      contact: 'Contact RMA Plastik: Mersin Tarsus OSB, Cumhuriyet Bulvarı No: 22, Türkiye. Phone +90 (324) 676 4500, WhatsApp and online quote form.',
+      notFound: 'The page you are looking for could not be found. Explore RMA Plastik products and solutions from the home page.',
+    },
     titles: {
       company: 'Company',
       products: 'Products',
@@ -24,6 +35,7 @@ const en = {
   },
 
   nav: {
+    home: 'Home',
     company: 'Company',
     products: 'Products',
     technologies: 'Technologies',
@@ -43,6 +55,21 @@ const en = {
     country: 'Türkiye',
     requestQuote: 'Get a Quote',
     requestSolution: 'Get a Quote',
+  },
+
+  cookies: {
+    title: 'Your cookie preferences',
+    text: 'We use essential cookies to make this site work. With your permission we also use analytics and marketing cookies to measure visits and evaluate our advertising. You can change your choice at any time via “Cookie settings” at the bottom of the page.',
+    accept: 'Accept all',
+    reject: 'Reject',
+    customize: 'Manage preferences',
+    save: 'Save choice',
+    settings: 'Cookie settings',
+    categories: {
+      necessary: { name: 'Essential', description: 'Required for core site functions and remembering your preferences.' },
+      analytics: { name: 'Analytics', description: 'Google Analytics and Hotjar measure how the site is used, anonymously.' },
+      marketing: { name: 'Marketing', description: 'Measurement and personalisation of Google Ads and Meta (Facebook) ads.' },
+    },
   },
 
   floatingContact: {

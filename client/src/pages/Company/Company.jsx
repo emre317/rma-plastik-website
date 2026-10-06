@@ -1,16 +1,15 @@
 import { useTranslation } from 'react-i18next';
 
-import usePageTitle from '../../hooks/usePageTitle';
+import Seo from '../../seo/Seo';
 
 export default function Company() {
   const { t } = useTranslation();
-
-  usePageTitle(t('meta.titles.company'));
 
   const meta = t('pages.company.meta', { returnObjects: true });
 
   return (
     <main className="internalPage">
+      <Seo title={t('meta.titles.company')} description={t('meta.descriptions.company')} breadcrumbs={[{ name: t('meta.titles.company'), path: '/company' }]} />
 
       <section className="internalHero">
         <div className="container">

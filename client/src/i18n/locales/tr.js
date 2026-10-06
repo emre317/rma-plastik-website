@@ -5,6 +5,17 @@ const tr = {
   meta: {
     tagline: 'Endüstriyel Polietilen Çözümleri',
     description: 'RMA Plastik endüstriyel polietilen çözümleri',
+    descriptions: {
+      home: 'RMA Plastik, Mersin’de endüstriyel polietilen depolama tankları, kimyasal tanklar, su depoları, tarım tankları ve özel ürünler üretir. Hemen teklif alın.',
+      company: 'RMA Plastik hakkında: 1998’den beri Mersin’de mühendislik deneyimi ve üretim altyapısıyla endüstriyel polietilen ürünler üretiyoruz.',
+      products: 'Endüstriyel depolama tankı, kimyasal depolama tankı, su deposu, tarım tankı ve özel polietilen ürünler. RMA Plastik ürün portföyünü inceleyin.',
+      technologies: 'RMA Plastik üretim teknolojileri: polietilen ürünler için kalıplama süreçleri ve uygulamaya özel üretim yetkinlikleri.',
+      technologyDetail: '{{name}}: RMA Plastik’in polietilen ürün üretiminde kullandığı üretim teknolojisi ve süreç bilgileri.',
+      industries: 'Kimya, gıda, tarım, otomotiv, tekstil, altyapı ve denizcilik sektörleri için polietilen depolama ve özel üretim çözümleri.',
+      engineering: 'Fikirden üretime: ihtiyaç analizi, ürün geliştirme, kalıp geliştirme ve endüstriyel üretimle uygulamaya özel polietilen ürünler.',
+      contact: 'RMA Plastik iletişim: Mersin Tarsus OSB, Cumhuriyet Bulvarı No: 22. Telefon +90 (324) 676 4500, WhatsApp ve online teklif formu.',
+      notFound: 'Aradığınız sayfa bulunamadı. RMA Plastik ürünlerini ve çözümlerini ana sayfadan inceleyebilirsiniz.',
+    },
     titles: {
       company: 'Kurumsal',
       products: 'Ürünler',
@@ -23,6 +34,7 @@ const tr = {
   },
 
   nav: {
+    home: 'Ana Sayfa',
     company: 'Kurumsal',
     products: 'Ürünler',
     technologies: 'Teknolojiler',
@@ -42,6 +54,21 @@ const tr = {
     country: 'Türkiye',
     requestQuote: 'Teklif Al',
     requestSolution: 'Teklif Al',
+  },
+
+  cookies: {
+    title: 'Çerez tercihleriniz',
+    text: 'Sitenin çalışması için zorunlu çerezler kullanıyoruz. İzin verirseniz ziyaret istatistiklerini ölçmek ve reklamlarımızın etkisini değerlendirmek için analiz ve pazarlama çerezleri de kullanırız. Tercihinizi istediğiniz zaman sayfanın altındaki “Çerez tercihleri” bağlantısından değiştirebilirsiniz.',
+    accept: 'Tümünü kabul et',
+    reject: 'Reddet',
+    customize: 'Tercihleri yönet',
+    save: 'Seçimi kaydet',
+    settings: 'Çerez tercihleri',
+    categories: {
+      necessary: { name: 'Zorunlu', description: 'Sitenin temel işlevleri ve tercihlerinizin hatırlanması için gereklidir.' },
+      analytics: { name: 'Analiz', description: 'Google Analytics ve Hotjar ile sitenin nasıl kullanıldığını anonim olarak ölçer.' },
+      marketing: { name: 'Pazarlama', description: 'Google Ads ve Meta (Facebook) reklamlarının ölçümü ve kişiselleştirilmesi.' },
+    },
   },
 
   floatingContact: {

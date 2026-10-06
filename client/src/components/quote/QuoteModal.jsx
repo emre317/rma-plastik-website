@@ -7,6 +7,7 @@ import company from '../../data/company';
 import useProducts from '../../hooks/useProducts';
 import { submitQuote } from '../../services/api';
 import { useQuote } from './QuoteContext';
+import { track } from '../../analytics/track';
 
 const initialForm = {
   company: '',
@@ -61,6 +62,8 @@ export default function QuoteModal() {
 
     setStatus('idle');
     setFeedbackKey('');
+
+    track('quote_form_open', { product: product || '(none)' });
 
     if (product) {
       setForm((current) => ({ ...current, product }));
@@ -136,6 +139,14 @@ export default function QuoteModal() {
 
       setStatus('success');
       setFeedbackKey('contact.success');
+
+      // Conversion for GA4 / Google Ads / Meta (configured in GTM)
+      track('generate_lead', {
+        form_name: 'quote',
+        product: form.product || '(none)',
+        country: form.country || '(not set)',
+        site_language: i18n.resolvedLanguage,
+      });
       setForm(initialForm);
     } catch (error) {
       setStatus('error');
@@ -157,6 +168,7 @@ export default function QuoteModal() {
       <div
         className="quoteModalDialog"
         role="dialog"
+        data-track-area="quote_dialog"
         aria-modal="true"
         aria-labelledby="quote-modal-title"
         ref={dialogRef}

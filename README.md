@@ -35,6 +35,15 @@ npm run dev                 # http://localhost:5173 (proxies /api to :5000)
 
 In production, set `VITE_API_URL` for the client build and `CLIENT_URL` (comma-separated allowed origins) for the API.
 
+## SEO, analytics and production build
+
+`npm run build` (client) builds the app, prerenders every public page in TR/EN/AR to
+static HTML (`dist/<lang>/<path>/index.html`) and writes `sitemap.xml` and `robots.txt`.
+Page `<head>` tags come from `src/seo/Seo.jsx`; measurement goes through Google Tag Manager
+(`VITE_GTM_ID`) with Consent Mode v2 and a cookie banner. See
+[docs/analytics-seo-setup.md](docs/analytics-seo-setup.md) for GTM, GA4, Google Ads,
+Meta Pixel, Hotjar, Search Console and nginx setup.
+
 ## Quote request emails
 
 Every quote form submission is saved to MongoDB and emailed to `QUOTE_NOTIFY_TO`

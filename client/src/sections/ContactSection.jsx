@@ -64,7 +64,7 @@ export default function ContactSection({ index }) {
   ];
 
   return (
-    <section className="contactLocations dark" id="contact">
+    <section className="contactLocations dark" id="contact" data-track-area="contact_section">
       <div className="container">
 
         <div className="contactLocationsHeader">

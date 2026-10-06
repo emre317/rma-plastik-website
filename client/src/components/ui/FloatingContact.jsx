@@ -38,7 +38,7 @@ export default function FloatingContact() {
   ].filter(Boolean);
 
   return (
-    <nav className="floatingContact" aria-label={t('floatingContact.label')}>
+    <nav className="floatingContact" data-track-area="floating_bubbles" aria-label={t('floatingContact.label')}>
       <ul>
         {items.map((item, index) => (
           <li

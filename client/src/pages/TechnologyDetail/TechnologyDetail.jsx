@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import formatSlug from '../../utils/formatSlug';
-import usePageTitle from '../../hooks/usePageTitle';
+import Seo from '../../seo/Seo';
 
 // Known technology slugs reuse the translated names from the footer
 const technologyNameKeys = {
@@ -19,10 +19,9 @@ export default function TechnologyDetail() {
     ? t(technologyNameKeys[slug])
     : formatSlug(slug);
 
-  usePageTitle(technologyName);
-
   return (
     <main className="internalPage">
+      <Seo title={technologyName} description={t('meta.descriptions.technologyDetail', { name: technologyName })} breadcrumbs={[{ name: t('meta.titles.technologies'), path: '/technologies' }, { name: technologyName, path: `/technologies/${slug}` }]} />
 
       <section className="internalHero internalHeroDark">
         <div className="container">

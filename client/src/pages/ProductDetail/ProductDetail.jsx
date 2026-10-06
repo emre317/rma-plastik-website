@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import useProducts from '../../hooks/useProducts';
-import usePageTitle from '../../hooks/usePageTitle';
+import Seo from '../../seo/Seo';
+import { OG_IMAGE, SITE_URL } from '../../seo/site';
 import { useQuote } from '../../components/quote/QuoteContext';
 
 const technicalFields = [
@@ -35,13 +36,15 @@ export default function ProductDetail() {
     (item) => item.slug === slug
   );
 
-  usePageTitle(
-    product ? product.name : t('meta.titles.productNotFound')
-  );
-
   if (!product) {
     return (
       <main className="productDetailPage">
+        <Seo
+          title={t('meta.titles.productNotFound')}
+          description={t('meta.descriptions.notFound')}
+          noindex
+        />
+
         <section className="productNotFound">
           <div className="container">
             <span className="eyebrow">
@@ -86,6 +89,28 @@ export default function ProductDetail() {
 
   return (
     <main className="productDetailPage">
+      <Seo
+        title={product.name}
+        description={product.description}
+        type="product"
+        breadcrumbs={[
+          { name: t('meta.titles.products'), path: '/products' },
+          { name: product.name, path: `/products/${product.slug}` },
+        ]}
+        jsonLd={[
+          {
+            '@type': 'Product',
+            name: product.name,
+            description: product.description,
+            category: product.categoryLabel,
+            material: product.material,
+            image: OG_IMAGE,
+            brand: { '@type': 'Brand', name: 'RMA Plastik' },
+            manufacturer: { '@id': `${SITE_URL}/#organization` },
+          },
+        ]}
+      />
+
 
       <section className="productDetailHero">
 
