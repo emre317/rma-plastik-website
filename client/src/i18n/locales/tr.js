@@ -44,6 +44,14 @@ const tr = {
     requestSolution: 'Teklif Al',
   },
 
+  floatingContact: {
+    label: 'Hızlı iletişim',
+    whatsapp: 'WhatsApp’tan yazın',
+    phone: 'Bizi arayın',
+    email: 'E-posta gönderin',
+    whatsappMessage: 'Merhaba RMA Plastik, ürünleriniz hakkında bilgi almak istiyorum.',
+  },
+
   footer: {
     description:
       'Endüstriyel polietilen üretimi ve mühendislik odaklı ürün çözümleri.',

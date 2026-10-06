@@ -4,6 +4,7 @@ import QuoteRequest, {
   QUOTE_LANGUAGES,
   QUOTE_STATUSES,
 } from '../models/QuoteRequest.js';
+import { sendQuoteNotification } from '../services/quoteEmail.js';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -125,6 +126,11 @@ export async function createQuoteRequest(req, res) {
         message,
         language,
       });
+
+    // Email the sales team; a mail failure must not fail the request
+    sendQuoteNotification(quoteRequest).catch((error) => {
+      console.error('Quote notification email error:', error);
+    });
 
     return res.status(201).json({
       success: true,

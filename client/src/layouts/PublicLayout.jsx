@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { QuoteProvider } from '../components/quote/QuoteContext';
 import QuoteModal from '../components/quote/QuoteModal';
+import FloatingContact from '../components/ui/FloatingContact';
 
 export default function PublicLayout() {
   return (
@@ -11,6 +12,7 @@ export default function PublicLayout() {
       <Header />
       <Outlet />
       <Footer />
+      <FloatingContact />
       <QuoteModal />
     </QuoteProvider>
   );

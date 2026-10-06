@@ -45,6 +45,14 @@ const en = {
     requestSolution: 'Get a Quote',
   },
 
+  floatingContact: {
+    label: 'Quick contact',
+    whatsapp: 'Message us on WhatsApp',
+    phone: 'Call us',
+    email: 'Send an email',
+    whatsappMessage: 'Hello RMA Plastik, I would like information about your products.',
+  },
+
   footer: {
     description:
       'Industrial polyethylene manufacturing and engineered product solutions.',

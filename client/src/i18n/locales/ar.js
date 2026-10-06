@@ -45,6 +45,14 @@ const ar = {
     requestSolution: 'احصل على عرض سعر',
   },
 
+  floatingContact: {
+    label: 'تواصل سريع',
+    whatsapp: 'راسلنا عبر واتساب',
+    phone: 'اتصل بنا',
+    email: 'أرسل بريدًا إلكترونيًا',
+    whatsappMessage: 'مرحبًا RMA Plastik، أود الحصول على معلومات حول منتجاتكم.',
+  },
+
   footer: {
     description:
       'تصنيع البولي إيثيلين الصناعي وحلول المنتجات الهندسية.',

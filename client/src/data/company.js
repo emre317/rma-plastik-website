@@ -18,6 +18,9 @@ const company = {
     display: '+90 (324) 676 4500',
     href: 'tel:+903246764500',
   },
+  // WhatsApp number in international format, digits only (e.g. '905321234567').
+  // Leave empty to hide the WhatsApp bubble.
+  whatsapp: '',
   address,
   maps: {
     // Interactive map embed (no API key needed)

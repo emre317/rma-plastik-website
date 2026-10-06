@@ -35,6 +35,23 @@ npm run dev                 # http://localhost:5173 (proxies /api to :5000)
 
 In production, set `VITE_API_URL` for the client build and `CLIENT_URL` (comma-separated allowed origins) for the API.
 
+## Quote request emails
+
+Every quote form submission is saved to MongoDB and emailed to `QUOTE_NOTIFY_TO`
+(`server/services/quoteEmail.js`). "Reply" in the inbox goes straight to the customer.
+Set these in `server/.env`:
+
+| Variable | Example |
+| --- | --- |
+| `SMTP_HOST` / `SMTP_PORT` | `smtp.gmail.com` / `465` |
+| `SMTP_USER` | Gmail address that sends the mail |
+| `SMTP_PASS` | Google **App Password** (Google Account → Security → 2-Step Verification → App passwords) |
+| `MAIL_FROM` | optional, e.g. `"RMA Plastik Web" <info@rmaplastik.com>` |
+| `QUOTE_NOTIFY_TO` | `emreayranci007@gmail.com` (comma-separated for several) |
+
+Without SMTP settings the request is still saved and a warning is logged; a mail
+error never fails the customer's submission.
+
 ## Languages (TR / EN / AR)
 
 - Public pages live under a language prefix: `/tr/...`, `/en/...`, `/ar/...`.
