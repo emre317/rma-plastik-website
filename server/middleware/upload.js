@@ -15,43 +15,53 @@ const TYPES = {
   'image/webp': '.webp',
 };
 
-const productDir = path.join(UPLOAD_ROOT, 'products');
-fs.mkdirSync(productDir, { recursive: true });
+const FOLDERS = ['products', 'posts'];
 
-export const productImageUpload = multer({
-  storage: multer.diskStorage({
-    destination: productDir,
-    // Random file names: nothing from the client ends up in the path
-    filename: (req, file, cb) => cb(null, `${crypto.randomUUID()}${TYPES[file.mimetype]}`),
-  }),
-  limits: { fileSize: 5 * 1024 * 1024, files: 1 },
-  fileFilter: (req, file, cb) => {
-    if (TYPES[file.mimetype]) {
-      cb(null, true);
-    } else {
-      cb(new multer.MulterError('LIMIT_UNEXPECTED_FILE', 'image'));
-    }
-  },
-}).single('image');
+FOLDERS.forEach((folder) => fs.mkdirSync(path.join(UPLOAD_ROOT, folder), { recursive: true }));
 
-export function uploadProductImage(req, res) {
-  productImageUpload(req, res, (error) => {
-    if (error) {
-      const message =
-        error.code === 'LIMIT_FILE_SIZE'
-          ? 'Görsel en fazla 5 MB olabilir.'
-          : 'Yalnızca JPG, PNG veya WEBP görsel yüklenebilir.';
-
-      return res.status(400).json({ success: false, message });
-    }
-
-    if (!req.file) {
-      return res.status(400).json({ success: false, message: 'Görsel seçilmedi.' });
-    }
-
-    return res.status(201).json({
-      success: true,
-      data: { url: `/uploads/products/${req.file.filename}` },
-    });
-  });
+function imageUploader(folder) {
+  return multer({
+    storage: multer.diskStorage({
+      destination: path.join(UPLOAD_ROOT, folder),
+      // Random file names: nothing from the client ends up in the path
+      filename: (req, file, cb) => cb(null, `${crypto.randomUUID()}${TYPES[file.mimetype]}`),
+    }),
+    limits: { fileSize: 5 * 1024 * 1024, files: 1 },
+    fileFilter: (req, file, cb) => {
+      if (TYPES[file.mimetype]) {
+        cb(null, true);
+      } else {
+        cb(new multer.MulterError('LIMIT_UNEXPECTED_FILE', 'image'));
+      }
+    },
+  }).single('image');
 }
+
+function uploadHandler(folder) {
+  const upload = imageUploader(folder);
+
+  return (req, res) => {
+    upload(req, res, (error) => {
+      if (error) {
+        const message =
+          error.code === 'LIMIT_FILE_SIZE'
+            ? 'Görsel en fazla 5 MB olabilir.'
+            : 'Yalnızca JPG, PNG veya WEBP görsel yüklenebilir.';
+
+        return res.status(400).json({ success: false, message });
+      }
+
+      if (!req.file) {
+        return res.status(400).json({ success: false, message: 'Görsel seçilmedi.' });
+      }
+
+      return res.status(201).json({
+        success: true,
+        data: { url: `/uploads/${folder}/${req.file.filename}` },
+      });
+    });
+  };
+}
+
+export const uploadProductImage = uploadHandler('products');
+export const uploadPostImage = uploadHandler('posts');

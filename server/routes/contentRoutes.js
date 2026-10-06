@@ -13,7 +13,18 @@ import {
   updateSettings,
 } from '../controllers/contentController.js';
 import { requireAdmin } from '../middleware/authMiddleware.js';
-import { uploadProductImage } from '../middleware/upload.js';
+import { uploadPostImage, uploadProductImage } from '../middleware/upload.js';
+import {
+  createPost,
+  createVideo,
+  deletePost,
+  deleteVideo,
+  getPost,
+  listPosts,
+  listVideos,
+  updatePost,
+  updateVideo,
+} from '../controllers/mediaController.js';
 import { getPublishState, startPublish } from '../services/publisher.js';
 import { getSiteSettings } from '../models/SiteSettings.js';
 
@@ -34,6 +45,18 @@ adminContentRouter.put('/products/:id', updateProduct);
 adminContentRouter.delete('/products/:id', deleteProduct);
 
 adminContentRouter.post('/uploads/product-image', uploadProductImage);
+adminContentRouter.post('/uploads/post-image', uploadPostImage);
+
+adminContentRouter.get('/posts', listPosts);
+adminContentRouter.post('/posts', createPost);
+adminContentRouter.get('/posts/:id', getPost);
+adminContentRouter.put('/posts/:id', updatePost);
+adminContentRouter.delete('/posts/:id', deletePost);
+
+adminContentRouter.get('/videos', listVideos);
+adminContentRouter.post('/videos', createVideo);
+adminContentRouter.put('/videos/:id', updateVideo);
+adminContentRouter.delete('/videos/:id', deleteVideo);
 
 adminContentRouter.get('/texts', listTexts);
 adminContentRouter.put('/texts', saveTexts);

@@ -6,6 +6,8 @@ const tr = {
     tagline: 'Endüstriyel Polietilen Çözümleri',
     description: 'RMA Plastik endüstriyel polietilen çözümleri',
     descriptions: {
+      blog: 'Polietilen tanklar, rotasyonel kalıplama, kimyasal ve su depolama hakkında RMA Plastik’ten teknik bilgiler ve rehberler.',
+      videos: 'RMA Plastik üretim, ürün ve uygulama videoları: polietilen tanklar ve rotasyonel kalıplama süreçleri.',
       home: 'RMA Plastik, Mersin’de endüstriyel polietilen depolama tankları, kimyasal tanklar, su depoları, tarım tankları ve özel ürünler üretir. Hemen teklif alın.',
       company: 'RMA Plastik hakkında: 1998’den beri Mersin’de mühendislik deneyimi ve üretim altyapısıyla endüstriyel polietilen ürünler üretiyoruz.',
       products: 'Endüstriyel depolama tankı, kimyasal depolama tankı, su deposu, tarım tankı ve özel polietilen ürünler. RMA Plastik ürün portföyünü inceleyin.',
@@ -17,6 +19,8 @@ const tr = {
       notFound: 'Aradığınız sayfa bulunamadı. RMA Plastik ürünlerini ve çözümlerini ana sayfadan inceleyebilirsiniz.',
     },
     titles: {
+      blog: 'Blog',
+      videos: 'Videolar',
       company: 'Kurumsal',
       products: 'Ürünler',
       productNotFound: 'Ürün bulunamadı',
@@ -34,6 +38,7 @@ const tr = {
   },
 
   nav: {
+    blog: 'Blog',
     home: 'Ana Sayfa',
     company: 'Kurumsal',
     products: 'Ürünler',
@@ -89,6 +94,8 @@ const tr = {
       contact: 'İletişim',
     },
     links: {
+      blog: 'Blog',
+      videos: 'Videolar',
       about: 'RMA Hakkında',
       facilities: 'Üretim Tesisi',
       quality: 'Kalite',
@@ -636,6 +643,34 @@ const tr = {
       description:
         'Proje geometrisine, çalışma koşullarına ve üretim gereksinimlerine göre geliştirilen uygulamaya özel polietilen ürün.',
     },
+  },
+
+  blog: {
+    meta: 'Bilgi merkezi',
+    eyebrow: 'Blog',
+    title: 'Teknik bilgiler,',
+    titleAccent: 'doğru seçimler.',
+    text: 'Polietilen depolama çözümleri, malzeme seçimi ve üretim süreçleri hakkında rehberler.',
+    empty: 'Henüz yayınlanmış bir yazı yok. Yakında burada teknik rehberler olacak.',
+    emptyLink: 'Ürünleri inceleyin',
+    readMore: 'Devamını oku',
+    readingTime_one: '{{count}} dk okuma',
+    readingTime_other: '{{count}} dk okuma',
+    back: 'Tüm yazılar',
+    relatedProducts: 'İlgili ürünler',
+    ctaTitle: 'Projeniz için doğru tankı birlikte seçelim.',
+    ctaText: 'Kapasite, kullanım koşulları ve uygulamanızı paylaşın; ekibimiz size uygun çözümü önersin.',
+  },
+
+  videos: {
+    meta: 'Video',
+    eyebrow: 'RMA Plastik YouTube',
+    title: 'Üretimden',
+    titleAccent: 'görüntüler.',
+    empty: 'Henüz video eklenmedi. YouTube kanalımızı ziyaret edebilirsiniz.',
+    play: 'Videoyu oynat',
+    all: 'Tüm videolar',
+    channel: 'YouTube kanalımıza abone olun',
   },
 
   contact: {

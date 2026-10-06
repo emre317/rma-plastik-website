@@ -14,6 +14,9 @@ import Industries from '../pages/Industries/Industries';
 import IndustryDetail from '../pages/IndustryDetail/IndustryDetail';
 import Engineering from '../pages/Engineering/Engineering';
 import Contact from '../pages/Contact/Contact';
+import Blog from '../pages/Blog/Blog';
+import BlogPost from '../pages/BlogPost/BlogPost';
+import Videos from '../pages/Videos/Videos';
 import NotFound from '../pages/NotFound/NotFound';
 
 // Admin panel is loaded on demand so visitors never download it
@@ -27,6 +30,9 @@ const AdminProducts = lazy(() => import('../pages/AdminProducts/AdminProducts'))
 const AdminProductEdit = lazy(() => import('../pages/AdminProductEdit/AdminProductEdit'));
 const AdminTexts = lazy(() => import('../pages/AdminTexts/AdminTexts'));
 const AdminSettings = lazy(() => import('../pages/AdminSettings/AdminSettings'));
+const AdminPosts = lazy(() => import('../pages/AdminPosts/AdminPosts'));
+const AdminPostEdit = lazy(() => import('../pages/AdminPostEdit/AdminPostEdit'));
+const AdminVideos = lazy(() => import('../pages/AdminVideos/AdminVideos'));
 
 export default function AppRoutes() {
   return (
@@ -58,6 +64,10 @@ export default function AppRoutes() {
         <Route path="engineering" element={<Engineering />} />
         <Route path="contact" element={<Contact />} />
 
+        <Route path="blog" element={<Blog />} />
+        <Route path="blog/:slug" element={<BlogPost />} />
+        <Route path="videos" element={<Videos />} />
+
         <Route path="*" element={<NotFound />} />
       </Route>
 
@@ -77,6 +87,9 @@ export default function AppRoutes() {
           <Route path="/admin/products/:id" element={<AdminProductEdit />} />
           <Route path="/admin/texts" element={<AdminTexts />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
+          <Route path="/admin/posts" element={<AdminPosts />} />
+          <Route path="/admin/posts/:id" element={<AdminPostEdit />} />
+          <Route path="/admin/videos" element={<AdminVideos />} />
         </Route>
       </Route>
 

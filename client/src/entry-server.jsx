@@ -9,6 +9,7 @@ import { StaticRouter } from 'react-router-dom';
 import i18n from './i18n';
 import App from './App';
 import products from './data/products';
+import { postsForLanguage } from './data/posts';
 import { SUPPORTED_LANGUAGES } from './i18n/languages';
 import { SeoCollectorContext, renderHeadTags } from './seo/Seo';
 import { SITE_URL } from './seo/site';
@@ -17,8 +18,8 @@ export { SITE_URL };
 
 const TECHNOLOGY_SLUGS = ['rotational-moulding', 'injection-moulding', 'blow-moulding'];
 
-/* Every indexable public path, without the language prefix */
-export function getPublicPaths() {
+/* Every indexable public path for a language, without the language prefix */
+export function getPublicPaths(lang) {
   return [
     '',
     '/company',
@@ -29,6 +30,10 @@ export function getPublicPaths() {
     '/industries',
     '/engineering',
     '/contact',
+    '/blog',
+    // Articles only exist in the languages they were written in
+    ...postsForLanguage(lang).map((post) => `/blog/${post.slug}`),
+    '/videos',
   ];
 }
 

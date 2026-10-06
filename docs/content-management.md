@@ -8,6 +8,8 @@ Panel adresi: `https://ALAN-ADI/admin` (giriş: `npm run create-admin` ile oluş
 | --- | --- |
 | **Ürünler** | Ürün ekleme, düzenleme, silme, gizleme; 3 dilde metin; ürün görseli; sıra ve kategori |
 | **Sayfa metinleri** | Sitedeki tüm yazılar (ana sayfa bölümleri, iç sayfalar, SEO başlık/açıklamaları, footer, çerez bandı…) 3 dilde |
+| **Blog yazıları** | 3 dilde yazı, kapak görseli, metin içi görsel, YouTube videosu, ilgili ürünler, SEO başlık/açıklama, zamanlanmış yayın |
+| **Videolar** | YouTube videolarını bağlantıyla ekleme; Videolar sayfasında gösterim |
 | **Site ayarları** | Telefon, WhatsApp, e-posta, adres, sosyal medya adresleri |
 | **Yayınla** (sol alt) | Kaydedilen değişiklikleri siteye uygular |
 
@@ -27,6 +29,26 @@ Panel adresi: `https://ALAN-ADI/admin` (giriş: `npm run create-admin` ile oluş
 - **Ticari bilgiler** (SKU, fiyat, stok, online satış): yalnızca veritabanında saklanır, siteye
   **gönderilmez**. İleride e-ticaret açıldığında kullanılacak.
 - Kategoriler sabittir (Endüstriyel/Kimyasal/Su/Tarım/Özel). Yeni kategori geliştirme gerektirir.
+
+### Blog yazıları
+- **Taslak** sitede görünmez; **Yayına al** dedikten sonra “Yayınla” ile siteye çıkar.
+- Yayın tarihi ileri bir tarihse yazı zamanlanır; o tarihten sonraki ilk “Yayınla”da görünür.
+- Yazı yalnızca **başlığı ve metni dolu olan dillerde** yayınlanır (boş dil için sayfa oluşturulmaz,
+  Google'da tekrar eden içerik oluşmaz).
+- Metin biçimi: `## Ara başlık`, `**kalın**`, `- liste`, `[bağlantı](https://…)`, tablo. Araç çubuğu
+  ve **Önizleme** düğmesi yardımcı olur. Güvenlik için metne yazılan HTML kodu çalıştırılmaz.
+- “Google görünümü (SEO)” bölümünde başlığın ve açıklamanın Google'da nasıl görüneceği önizlenir
+  (başlık ~60, açıklama ~160 karakter önerilir).
+- İlgili ürünler yazının sonunda bağlantı olarak çıkar; yazının sonundaki “Teklif Al” butonu
+  ilk seçilen ürünü forma otomatik yazar.
+- `npm run seed-content` ile 4 adet **taslak** yazı gelir (rotasyonel kalıplama, LLDPE/HDPE,
+  kimyasal tank seçimi, AdBlue depolama). Genel teknik bilgilerdir; **yayından önce teknik
+  ekip kontrol etmeli** ve firmaya özel bilgilerle zenginleştirilmelidir.
+
+### Videolar
+- YouTube bağlantısını yapıştırın (youtu.be, watch?v=, shorts bağlantıları kabul edilir).
+- Sayfada önce yalnızca kapak görüntüsü yüklenir, video tıklanınca oynar (site hızlı kalır).
+- **YouTube yükleme tarihi** girilen videolar Google video sonuçları için işaretlenir.
 
 ### Sayfa metinleri
 - Boş alan = sitedeki varsayılan metin (gri yazı olarak görünür). "Varsayılana dön" özelleştirmeyi kaldırır.

@@ -129,6 +129,24 @@ export default function AdminSidebar() {
         </NavLink>
 
         <NavLink
+          to="/admin/posts"
+          className={({ isActive }) =>
+            isActive ? 'active' : ''
+          }
+        >
+          Blog yazıları
+        </NavLink>
+
+        <NavLink
+          to="/admin/videos"
+          className={({ isActive }) =>
+            isActive ? 'active' : ''
+          }
+        >
+          Videolar
+        </NavLink>
+
+        <NavLink
           to="/admin/texts"
           className={({ isActive }) =>
             isActive ? 'active' : ''

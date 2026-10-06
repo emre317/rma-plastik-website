@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
 
 import Product from '../models/Product.js';
 import SiteSettings from '../models/SiteSettings.js';
+import Post from '../models/Post.js';
+import draftPosts from './seed-data/posts.js';
 
 import builtInProducts from '../../client/src/data/products.builtin.js';
 import tr from '../../client/src/i18n/locales/tr.js';
@@ -12,7 +14,8 @@ import ar from '../../client/src/i18n/locales/ar.js';
 
 /*
   One-time import of the current site content into the database so the admin
-  panel starts with everything the site shows today. Existing records are kept.
+  panel starts with everything the site shows today, plus draft blog posts.
+  Existing records are kept.
     npm run seed-content
 */
 
@@ -72,6 +75,22 @@ async function seed() {
       { upsert: true }
     );
     console.log('Settings: imported current contact details.');
+  }
+
+  const postCount = await Post.countDocuments();
+
+  if (postCount > 0) {
+    console.log(`Blog: ${postCount} posts already in the database, skipped.`);
+  } else {
+    await Post.insertMany(
+      draftPosts.map(({ slug, relatedProducts, tr }) => ({
+        slug,
+        relatedProducts,
+        status: 'draft',
+        i18n: { tr, en: {}, ar: {} },
+      }))
+    );
+    console.log(`Blog: imported ${draftPosts.length} draft posts (review and publish them in the admin panel).`);
   }
 
   await mongoose.disconnect();

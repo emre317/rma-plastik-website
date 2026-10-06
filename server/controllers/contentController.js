@@ -6,6 +6,7 @@ import Product, {
   PRODUCT_TEXT_FIELDS,
 } from '../models/Product.js';
 import SiteText from '../models/SiteText.js';
+import { publicPosts, publicVideos } from './mediaController.js';
 import SiteSettings, {
   getSiteSettings,
   markContentChanged,
@@ -89,10 +90,12 @@ function toPublicSettings(settings) {
 
 export async function getPublicContent(req, res) {
   try {
-    const [products, texts, settings] = await Promise.all([
+    const [products, texts, settings, posts, videos] = await Promise.all([
       Product.find({ published: true }).sort({ order: 1, createdAt: 1 }),
       SiteText.find(),
       SiteSettings.findOne({ singleton: 'site' }),
+      publicPosts(),
+      publicVideos(),
     ]);
 
     const textMap = Object.fromEntries(CONTENT_LANGUAGES.map((lang) => [lang, {}]));
@@ -111,6 +114,8 @@ export async function getPublicContent(req, res) {
       products: products.map(toPublicProduct),
       texts: textMap,
       settings: toPublicSettings(settings),
+      posts,
+      videos,
     });
   } catch (error) {
     return handleError(res, error, 'Public content error');

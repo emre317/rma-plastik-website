@@ -29,11 +29,11 @@ function pageHtml({ html, head }, lang, dir) {
     .replace('<div id="root"></div>', `<div id="root">${html}</div>`);
 }
 
-const paths = getPublicPaths();
+const pathsByLang = Object.fromEntries(languages.map(({ code }) => [code, getPublicPaths(code)]));
 let count = 0;
 
 for (const { code, dir } of languages) {
-  for (const rest of paths) {
+  for (const rest of pathsByLang[code]) {
     const url = `/${code}${rest}`;
     const result = await render(url, code);
     const outDir = path.join(dist, url);
@@ -57,20 +57,30 @@ for (const { code, dir } of languages) {
 /* sitemap.xml */
 const today = new Date().toISOString().slice(0, 10);
 
-const urls = paths
-  .flatMap((rest) =>
-    languages.map(({ code }) => {
-      const alternates = languages
-        .map((alt) => `<xhtml:link rel="alternate" hreflang="${alt.code}" href="${SITE_URL}/${alt.code}${rest}"/>`)
-        .join('');
+const allPaths = [...new Set(Object.values(pathsByLang).flat())];
 
-      return (
-        `<url><loc>${SITE_URL}/${code}${rest}</loc><lastmod>${today}</lastmod>` +
-        `${alternates}<xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}/tr${rest}"/>` +
-        `<changefreq>${rest === '' ? 'weekly' : 'monthly'}</changefreq><priority>${rest === '' ? '1.0' : rest.split('/').length > 2 ? '0.7' : '0.8'}</priority></url>`
-      );
-    })
-  )
+const urls = allPaths
+  .flatMap((rest) => {
+    // Only the languages this page exists in
+    const available = languages.filter(({ code }) => pathsByLang[code].includes(rest));
+    const fallback = available.some(({ code }) => code === 'tr') ? 'tr' : available[0].code;
+
+    const alternates =
+      available
+        .map((alt) => `<xhtml:link rel="alternate" hreflang="${alt.code}" href="${SITE_URL}/${alt.code}${rest}"/>`)
+        .join('') +
+      `<xhtml:link rel="alternate" hreflang="x-default" href="${SITE_URL}/${fallback}${rest}"/>`;
+
+    const depth = rest.split('/').length;
+    const priority = rest === '' ? '1.0' : depth > 2 ? '0.7' : '0.8';
+    const changefreq = rest === '' || rest === '/blog' ? 'weekly' : 'monthly';
+
+    return available.map(
+      ({ code }) =>
+        `<url><loc>${SITE_URL}/${code}${rest}</loc><lastmod>${today}</lastmod>${alternates}` +
+        `<changefreq>${changefreq}</changefreq><priority>${priority}</priority></url>`
+    );
+  })
   .join('\n');
 
 fs.writeFileSync(

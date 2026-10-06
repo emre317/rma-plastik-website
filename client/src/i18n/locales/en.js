@@ -7,6 +7,8 @@ const en = {
     tagline: 'Industrial Polyethylene Solutions',
     description: 'RMA Plastik industrial polyethylene solutions',
     descriptions: {
+      blog: 'Technical insights and guides from RMA Plastik on polyethylene tanks, rotational moulding, chemical and water storage.',
+      videos: 'RMA Plastik production, product and application videos: polyethylene tanks and rotational moulding.',
       home: 'RMA Plastik manufactures industrial polyethylene storage tanks, chemical tanks, water tanks, agricultural tanks and custom products in Mersin. Get a quote.',
       company: 'About RMA Plastik: manufacturing industrial polyethylene products in Mersin since 1998, backed by engineering experience and production infrastructure.',
       products: 'Industrial storage tanks, chemical storage tanks, water tanks, agricultural tanks and custom polyethylene products. Explore the RMA Plastik portfolio.',
@@ -18,6 +20,8 @@ const en = {
       notFound: 'The page you are looking for could not be found. Explore RMA Plastik products and solutions from the home page.',
     },
     titles: {
+      blog: 'Blog',
+      videos: 'Videos',
       company: 'Company',
       products: 'Products',
       productNotFound: 'Product not found',
@@ -35,6 +39,7 @@ const en = {
   },
 
   nav: {
+    blog: 'Blog',
     home: 'Home',
     company: 'Company',
     products: 'Products',
@@ -90,6 +95,8 @@ const en = {
       contact: 'Contact',
     },
     links: {
+      blog: 'Blog',
+      videos: 'Videos',
       about: 'About RMA',
       facilities: 'Production Facility',
       quality: 'Quality',
@@ -638,6 +645,34 @@ const en = {
       description:
         'Application-specific polyethylene product developed according to project geometry, operational conditions and manufacturing requirements.',
     },
+  },
+
+  blog: {
+    meta: 'Knowledge centre',
+    eyebrow: 'Blog',
+    title: 'Technical insight,',
+    titleAccent: 'better decisions.',
+    text: 'Guides on polyethylene storage solutions, material selection and manufacturing processes.',
+    empty: 'No articles published yet. Technical guides are coming soon.',
+    emptyLink: 'Explore products',
+    readMore: 'Read more',
+    readingTime_one: '{{count}} min read',
+    readingTime_other: '{{count}} min read',
+    back: 'All articles',
+    relatedProducts: 'Related products',
+    ctaTitle: 'Let’s choose the right tank for your project.',
+    ctaText: 'Share your capacity, operating conditions and application; our team will recommend a suitable solution.',
+  },
+
+  videos: {
+    meta: 'Video',
+    eyebrow: 'RMA Plastik on YouTube',
+    title: 'Inside',
+    titleAccent: 'our production.',
+    empty: 'No videos yet. Visit our YouTube channel.',
+    play: 'Play video',
+    all: 'All videos',
+    channel: 'Subscribe to our YouTube channel',
   },
 
   contact: {

@@ -38,6 +38,8 @@ export function buildHead({
   noindex = false,
   jsonLd = [],
   breadcrumbs,
+  languages,
+  extraMeta = [],
   homeLabel,
   tagline,
 }) {
@@ -45,12 +47,16 @@ export function buildHead({
   const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} | ${tagline}`;
   const canonical = absoluteUrl(`/${lang}${rest}`);
 
+  // `languages`: only the languages this page exists in (e.g. a post written in Turkish only)
+  const codes = (languages || SUPPORTED_LANGUAGES.map(({ code }) => code)).filter(Boolean);
+  const defaultCode = codes.includes(DEFAULT_LANGUAGE) ? DEFAULT_LANGUAGE : codes[0] || lang;
+
   const alternates = [
-    ...SUPPORTED_LANGUAGES.map(({ code }) => ({
+    ...codes.map((code) => ({
       hreflang: code,
       href: absoluteUrl(`/${code}${rest}`),
     })),
-    { hreflang: 'x-default', href: absoluteUrl(`/${DEFAULT_LANGUAGE}${rest}`) },
+    { hreflang: 'x-default', href: absoluteUrl(`/${defaultCode}${rest}`) },
   ];
 
   const meta = [
@@ -67,6 +73,7 @@ export function buildHead({
     { name: 'twitter:title', content: fullTitle },
     { name: 'twitter:description', content: description },
     { name: 'twitter:image', content: image },
+    ...extraMeta,
   ];
 
   // Breadcrumb paths are given without the language prefix
@@ -98,14 +105,14 @@ export function renderHeadTags(head) {
   const metaTags = head.meta
     .map((item) => {
       const key = item.name ? `name="${escapeAttr(item.name)}"` : `property="${escapeAttr(item.property)}"`;
-      return `<meta ${key} content="${escapeAttr(item.content)}">`;
+      return `<meta ${key} content="${escapeAttr(item.content)}" data-seo>`;
     })
     .join('');
 
   const links =
-    `<link rel="canonical" href="${escapeAttr(head.canonical)}">` +
+    `<link rel="canonical" href="${escapeAttr(head.canonical)}" data-seo>` +
     head.alternates
-      .map((alt) => `<link rel="alternate" hreflang="${alt.hreflang}" href="${escapeAttr(alt.href)}">`)
+      .map((alt) => `<link rel="alternate" hreflang="${alt.hreflang}" href="${escapeAttr(alt.href)}" data-seo>`)
       .join('');
 
   // "<" is escaped so content can never close the script element
@@ -119,53 +126,46 @@ export function renderHeadTags(head) {
   );
 }
 
-/* Browser: head object -> document.head */
-function upsert(selector, create) {
-  let element = document.head.querySelector(selector);
-
-  if (!element) {
-    element = create();
-    document.head.appendChild(element);
-  }
-
-  return element;
-}
-
+/* Browser: head object -> document.head (previous page's tags are replaced) */
 function applyHead(head) {
   document.title = head.title;
 
-  head.meta.forEach((item) => {
-    const attr = item.name ? 'name' : 'property';
-    const key = item.name || item.property;
+  document.head
+    .querySelectorAll('[data-seo], meta[name="description"], link[rel="canonical"], link[rel="alternate"][hreflang], script#seo-jsonld')
+    .forEach((element) => element.remove());
 
-    upsert(`meta[${attr}="${key}"]`, () => {
-      const element = document.createElement('meta');
-      element.setAttribute(attr, key);
-      return element;
-    }).setAttribute('content', item.content);
+  const fragment = document.createDocumentFragment();
+
+  head.meta.forEach((item) => {
+    const element = document.createElement('meta');
+    element.setAttribute(item.name ? 'name' : 'property', item.name || item.property);
+    element.setAttribute('content', item.content);
+    element.dataset.seo = '';
+    fragment.appendChild(element);
   });
 
-  upsert('link[rel="canonical"]', () => {
-    const element = document.createElement('link');
-    element.rel = 'canonical';
-    return element;
-  }).href = head.canonical;
+  const canonical = document.createElement('link');
+  canonical.rel = 'canonical';
+  canonical.href = head.canonical;
+  canonical.dataset.seo = '';
+  fragment.appendChild(canonical);
 
   head.alternates.forEach((alt) => {
-    upsert(`link[rel="alternate"][hreflang="${alt.hreflang}"]`, () => {
-      const element = document.createElement('link');
-      element.rel = 'alternate';
-      element.hreflang = alt.hreflang;
-      return element;
-    }).href = alt.href;
+    const element = document.createElement('link');
+    element.rel = 'alternate';
+    element.hreflang = alt.hreflang;
+    element.href = alt.href;
+    element.dataset.seo = '';
+    fragment.appendChild(element);
   });
 
-  upsert('script#seo-jsonld', () => {
-    const element = document.createElement('script');
-    element.type = 'application/ld+json';
-    element.id = 'seo-jsonld';
-    return element;
-  }).textContent = JSON.stringify(head.graph);
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.id = 'seo-jsonld';
+  script.textContent = JSON.stringify(head.graph);
+  fragment.appendChild(script);
+
+  document.head.appendChild(fragment);
 }
 
 export default function Seo(props) {

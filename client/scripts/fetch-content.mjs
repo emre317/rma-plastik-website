@@ -8,7 +8,7 @@
 */
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const target = path.join(root, 'src/data/content.live.json');
@@ -33,6 +33,19 @@ try {
   if (data?.version !== 1 || !Array.isArray(data.products)) {
     throw new Error('Unexpected response');
   }
+
+  // Blog posts: Markdown is converted here, so visitors never download the converter
+  const { renderMarkdown, readingMinutes } = await import(
+    pathToFileURL(path.join(root, 'src/components/content/markdown.js')).href
+  );
+
+  (data.posts || []).forEach((post) => {
+    Object.values(post.i18n || {}).forEach((text) => {
+      text.bodyHtml = text.body ? renderMarkdown(text.body) : '';
+      text.readingMinutes = readingMinutes(text.body);
+      delete text.body;
+    });
+  });
 
   // No products in the database yet: keep the built-in catalogue
   if (data.products.length === 0) {

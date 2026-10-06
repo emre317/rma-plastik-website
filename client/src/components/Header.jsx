@@ -17,6 +17,7 @@ const navItems = [
   { key: 'technologies', path: '/technologies' },
   { key: 'industries', path: '/industries' },
   { key: 'engineering', path: '/engineering' },
+  { key: 'blog', path: '/blog' },
 ];
 
 const mobileNavItems = [

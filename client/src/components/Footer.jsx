@@ -27,6 +27,8 @@ const linkColumns = [
       { key: 'facilities', path: '/company' },
       { key: 'quality', path: '/company' },
       { key: 'engineering', path: '/engineering' },
+      { key: 'blog', path: '/blog' },
+      { key: 'videos', path: '/videos' },
     ],
   },
   {

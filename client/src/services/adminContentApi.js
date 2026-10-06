@@ -17,19 +17,35 @@ export const saveTexts = (items, token) => request('/admin/texts', { method: 'PU
 export const getSettings = (token) => request('/admin/settings', { token, fallbackMessage: 'Ayarlar yüklenemedi.' });
 export const updateSettings = (body, token) => request('/admin/settings', { method: 'PUT', body, token, fallbackMessage: 'Ayarlar kaydedilemedi.' });
 
+/* Blog posts */
+export const listPosts = (token) => request('/admin/posts', { token, fallbackMessage: 'Yazılar yüklenemedi.' });
+export const getPost = (id, token) => request(`/admin/posts/${encodeURIComponent(id)}`, { token, fallbackMessage: 'Yazı yüklenemedi.' });
+export const createPost = (body, token) => request('/admin/posts', { method: 'POST', body, token, fallbackMessage: 'Yazı kaydedilemedi.' });
+export const updatePost = (id, body, token) => request(`/admin/posts/${encodeURIComponent(id)}`, { method: 'PUT', body, token, fallbackMessage: 'Yazı kaydedilemedi.' });
+export const deletePost = (id, token) => request(`/admin/posts/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Yazı silinemedi.' });
+
+/* Videos */
+export const listVideos = (token) => request('/admin/videos', { token, fallbackMessage: 'Videolar yüklenemedi.' });
+export const createVideo = (body, token) => request('/admin/videos', { method: 'POST', body, token, fallbackMessage: 'Video kaydedilemedi.' });
+export const updateVideo = (id, body, token) => request(`/admin/videos/${encodeURIComponent(id)}`, { method: 'PUT', body, token, fallbackMessage: 'Video kaydedilemedi.' });
+export const deleteVideo = (id, token) => request(`/admin/videos/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Video silinemedi.' });
+
 /* Publishing */
 export const getPublishStatus = (token) => request('/admin/publish', { token, fallbackMessage: 'Yayın durumu alınamadı.' });
 export const startPublish = (token) => request('/admin/publish', { method: 'POST', token, fallbackMessage: 'Yayınlama başlatılamadı.' });
 
 /* Image upload (multipart, so not through request()) */
-export async function uploadProductImage(file, token) {
+export const uploadProductImage = (file, token) => uploadImage('product-image', file, token);
+export const uploadPostImage = (file, token) => uploadImage('post-image', file, token);
+
+async function uploadImage(kind, file, token) {
   const form = new FormData();
   form.append('image', file);
 
   let response;
 
   try {
-    response = await fetch(`${API_BASE_URL}/admin/uploads/product-image`, {
+    response = await fetch(`${API_BASE_URL}/admin/uploads/${kind}`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
       body: form,
