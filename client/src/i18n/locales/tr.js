@@ -14,6 +14,7 @@ const tr = {
       industries: 'Kimya, gıda, tarım, otomotiv, tekstil, altyapı ve denizcilik sektörleri için polietilen depolama ve özel üretim çözümleri.',
       contact: 'RMA Plastik iletişim: Mersin Tarsus OSB, Cumhuriyet Bulvarı No: 22. Telefon +90 (324) 676 4500, WhatsApp ve online teklif formu.',
       notFound: 'Aradığınız sayfa bulunamadı. RMA Plastik ürünlerini ve çözümlerini ana sayfadan inceleyebilirsiniz.',
+      customMolding: 'RMA Plastik özel üretim (custom molding): 25 yıllık kalıp imalat tecrübesi, CAD/CAM tasarım, prototip ve 3D baskı, CNC kalıp imalatı ve rotasyonel, şişirme ve enjeksiyon ile seri üretim.',
     },
     titles: {
       blog: 'Blog',
@@ -24,6 +25,7 @@ const tr = {
       industries: 'Sektörler',
       contact: 'İletişim',
       notFound: 'Sayfa bulunamadı',
+      customMolding: 'Özel Üretim',
     },
   },
 
@@ -33,6 +35,7 @@ const tr = {
   },
 
   nav: {
+    customMolding: 'Özel Üretim',
     blog: 'Blog',
     home: 'Ana Sayfa',
     company: 'Kurumsal',
@@ -86,6 +89,7 @@ const tr = {
       contact: 'İletişim',
     },
     links: {
+      customMolding: 'Özel Üretim',
       blog: 'Blog',
       videos: 'Videolar',
       about: 'RMA Hakkında',
@@ -291,8 +295,32 @@ const tr = {
     ctaLink: 'RMA ile görüşün',
   },
 
+  customMolding: {
+    index: '05 / ÖZEL ÜRETİM',
+    eyebrow: 'Custom Molding',
+    title: 'Fikir ve projelerinizi',
+    titleAccent: 'hayata geçiriyoruz.',
+    text: 'Tasarım ve mühendislik ekibimiz; CAD/CAM tasarımdan prototip üretimine, kalıp imalatından seri üretime kadar ürün geliştirmenin tüm aşamalarında hizmet sunar.',
+    figures: [
+      {
+        value: '25',
+        label: 'Yıllık kalıp imalat tecrübesi',
+      },
+      {
+        value: '5',
+        label: 'Kalıp imalatı yöntemi',
+      },
+      {
+        value: '6',
+        label: 'Rotasyon makinası',
+      },
+    ],
+    referencesLabel: 'Özel üretim uygulamalarından',
+    link: 'Özel üretimi keşfedin',
+  },
+
   global: {
-    index: '05 / GLOBAL',
+    index: '06 / GLOBAL',
     eyebrow: 'İhracat ağı',
     title: 'Türkiye’de üretildi.',
     titleAccent: 'Dünyaya ulaştırıldı.',
@@ -352,6 +380,111 @@ const tr = {
       eyebrow: 'Sektörel çözüm',
       title: 'Uygulama odaklı',
       titleAccent: 'çözümler.',
+    },
+    customMolding: {
+      meta: ['Özel Üretim', '25 yıllık kalıp imalat tecrübesi'],
+      eyebrow: 'Custom Molding',
+      title: 'Fikir ve projelerinizi',
+      titleAccent: 'hayata geçiriyoruz.',
+      intro: 'Tasarım ve mühendislik ekibimiz, ürün geliştirme sürecinde CAM ve CAD programlarında tasarım, prototip üretimi, kalıp imalatı ve üretime başlama gibi aşamalarda profesyonel hizmet sunmaktadır.',
+      methodsLabel: 'Kalıp imalatı yöntemlerimiz',
+      methods: [
+        'Rotasyonel kalıplama',
+        'Şişirme',
+        'Ekstrüzyon',
+        'Enjeksiyon',
+        'Fiber (kompozit)',
+      ],
+      servicesLabel: 'Özel üretim hizmetlerimiz',
+      services: [
+        'CNC Kalıp İmalatı',
+        'Maliyeti Düşük Kalıp İmalatı ve Metal Konstrüksiyon',
+        'Endüstriyel Tasarım',
+        'Prototip ve 3D Print',
+        'Seri Üretim ve Sevkiyat',
+      ],
+      processLabel: 'Plastik ürün geliştirme süreci',
+      processTitle: 'Talepten seri üretime,',
+      processTitleAccent: 'adım adım.',
+      steps: [
+        'Projenin teslim alınması',
+        'Taleplerin görüşülmesi',
+        'Benzer ürünlerin araştırılması',
+        'Prototip hazırlığı',
+        'Ürün tasarımı ve teknik çizimlerin sunumu',
+        'Kalıp imalatı',
+        'İlk numunenin üretilmesi ve gerektiğinde düzeltmeler',
+        'Ürünlerin seri üretimi',
+      ],
+      machinesLabel: 'Makina parkuru',
+      machinesTitle: 'Yüksek kapasite',
+      machinesTitleAccent: 'üretim.',
+      machinesText: 'Tam donanımlı makina parkurumuz ile hammadde işlenmesi, boyanmasından, geri dönüşüme, ürün tasarlanmasından, kalıp üretimine ve rotomolding, şişirme ve enjeksiyon teknolojileri ile plastik üretimine kadar üretimin tüm aşamalarında hizmet sağlamaktayız.',
+      machines: [
+        {
+          count: '6',
+          name: 'Rotasyon makinası',
+          spec: '100 – 40.000 L · 50 cm – 7 m',
+          text: 'Monoblok plastik parçaların üretimi.',
+        },
+        {
+          count: '2',
+          name: 'Enjeksiyon makinası',
+          spec: '1,5 kg / 600 ton · 300 gr / 150 ton',
+          text: 'Küçük plastik parçaların üretimi.',
+        },
+        {
+          count: '1',
+          name: 'Şişirme makinası',
+          spec: '2 m yükseklik · 2.500 L’ye kadar',
+          text: 'Büyük hacimli ürünlerde seri üretim.',
+        },
+        {
+          count: '2',
+          name: 'Ekstrüder makinası',
+          spec: 'Boyama · fitil · granül · profil',
+          text: 'Hammadde boyaması, fitil üretimi, granül yapma ve profil çekme.',
+        },
+        {
+          count: '2',
+          name: 'Grinder makinası',
+          spec: '400 kg/sa · 350 kg/sa',
+          text: 'Plastik malzemelerin kırılması ve geri dönüştürülmesi.',
+        },
+        {
+          count: '',
+          name: 'Metal atölyesi',
+          spec: '10 kaynak makinası · 200 ton hidrolik pres',
+          text: 'Torna, bükme, kesme, freze, sütun matkap, hızar ve boya ünitesiyle tam kapasiteli atölye.',
+        },
+      ],
+      referencesLabel: 'Referans projeler',
+      referencesTitle: 'Özel üretim',
+      referencesTitleAccent: 'uygulamaları.',
+      projects: [
+        {
+          client: 'Baibars Mekatronik Havacılık',
+          title: 'Drone tarım ilaçlama deposu',
+        },
+        {
+          client: 'TCI Cabin Interior',
+          title: 'Uçak içi yanmaz çöp kovası',
+        },
+        {
+          client: 'Alstom',
+          title: 'Tren akıllı tuvalet pis ve temiz su tankları',
+        },
+        {
+          client: 'İTÜ Uçak ve Uzay Bilimleri Fakültesi',
+          title: 'Büyükçekmece Gölü üzerinde güneş paneli yüzer iskelesi',
+        },
+      ],
+      galleryLabel: 'Ürettiğimiz özel parçalardan örnekler',
+      galleryAlt: 'RMA Plastik özel üretim parçası',
+      ctaTitle: 'Projenizi bize anlatın.',
+      ctaText: 'Fikrinizi, çiziminizi veya numunenizi paylaşın; ekibimiz uygun üretim yöntemini birlikte değerlendirsin.',
+      ctaQuote: 'Teklif Al',
+      ctaContact: 'İletişime geçin',
     },
     notFound: {
       eyebrow: 'Hata / 404',
@@ -542,7 +675,7 @@ const tr = {
   },
 
   contact: {
-    homeIndex: '06 / İLETİŞİM',
+    homeIndex: '07 / İLETİŞİM',
     close: 'Kapat',
     locations: {
       phone: 'Telefon',

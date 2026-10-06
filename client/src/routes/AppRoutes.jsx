@@ -8,6 +8,7 @@ import Home from '../pages/Home/Home';
 import Company from '../pages/Company/Company';
 import Products from '../pages/Products/Products';
 import ProductDetail from '../pages/ProductDetail/ProductDetail';
+import CustomMolding from '../pages/CustomMolding/CustomMolding';
 import Industries from '../pages/Industries/Industries';
 import IndustryDetail from '../pages/IndustryDetail/IndustryDetail';
 import Contact from '../pages/Contact/Contact';
@@ -45,6 +46,8 @@ export default function AppRoutes() {
 
         <Route path="products" element={<Products />} />
         <Route path="products/:slug" element={<ProductDetail />} />
+
+        <Route path="custom-molding" element={<CustomMolding />} />
 
         <Route path="industries" element={<Industries />} />
         <Route

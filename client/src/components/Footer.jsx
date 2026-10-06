@@ -24,6 +24,7 @@ const linkColumns = [
     group: 'company',
     links: [
       { key: 'about', path: '/company' },
+      { key: 'customMolding', path: '/custom-molding' },
       { key: 'facilities', path: '/company' },
       { key: 'quality', path: '/company' },
       { key: 'blog', path: '/blog' },

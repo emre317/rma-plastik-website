@@ -2,6 +2,7 @@ import HeroSection from '../../sections/HeroSection';
 import StatsSection from '../../sections/StatsSection';
 import ProductExplorerSection from '../../sections/ProductExplorerSection';
 import IndustriesSection from '../../sections/IndustriesSection';
+import CustomMoldingSection from '../../sections/CustomMoldingSection';
 import GlobalPresenceSection from '../../sections/GlobalPresenceSection';
 import ContactSection from '../../sections/ContactSection';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +19,7 @@ export default function Home() {
       <StatsSection />
       <ProductExplorerSection />
       <IndustriesSection />
+      <CustomMoldingSection />
       <GlobalPresenceSection />
       <ContactSection index={t('contact.homeIndex')} />
     </main>

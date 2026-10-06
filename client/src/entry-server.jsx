@@ -23,6 +23,7 @@ export function getPublicPaths(lang) {
     '/company',
     '/products',
     ...products.map((product) => `/products/${product.slug}`),
+    '/custom-molding',
     '/industries',
     '/contact',
     '/blog',

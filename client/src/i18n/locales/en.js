@@ -15,6 +15,7 @@ const en = {
       industries: 'Polyethylene storage and custom manufacturing solutions for the chemical, food, agriculture, automotive, textile, infrastructure and marine sectors.',
       contact: 'Contact RMA Plastik: Mersin Tarsus OSB, Cumhuriyet Bulvarı No: 22, Türkiye. Phone +90 (324) 676 4500, WhatsApp and online quote form.',
       notFound: 'The page you are looking for could not be found. Explore RMA Plastik products and solutions from the home page.',
+      customMolding: 'RMA Plastik custom molding: 25 years of mold manufacturing experience, CAD/CAM design, prototyping and 3D printing, CNC mold manufacturing and serial production with rotational, blow and injection molding.',
     },
     titles: {
       blog: 'Blog',
@@ -25,6 +26,7 @@ const en = {
       industries: 'Industries',
       contact: 'Contact',
       notFound: 'Page not found',
+      customMolding: 'Custom Molding',
     },
   },
 
@@ -34,6 +36,7 @@ const en = {
   },
 
   nav: {
+    customMolding: 'Custom Molding',
     blog: 'Blog',
     home: 'Home',
     company: 'Company',
@@ -87,6 +90,7 @@ const en = {
       contact: 'Contact',
     },
     links: {
+      customMolding: 'Custom Molding',
       blog: 'Blog',
       videos: 'Videos',
       about: 'About RMA',
@@ -292,8 +296,32 @@ const en = {
     ctaLink: 'Talk to RMA',
   },
 
+  customMolding: {
+    index: '05 / CUSTOM MOLDING',
+    eyebrow: 'Custom Molding',
+    title: 'We bring your ideas',
+    titleAccent: 'and projects to life.',
+    text: 'Our design and engineering team supports every stage of product development, from CAD/CAM design and prototyping to mold manufacturing and serial production.',
+    figures: [
+      {
+        value: '25',
+        label: 'Years of mold manufacturing experience',
+      },
+      {
+        value: '5',
+        label: 'Mold manufacturing methods',
+      },
+      {
+        value: '6',
+        label: 'Rotational molding machines',
+      },
+    ],
+    referencesLabel: 'From our custom molding projects',
+    link: 'Explore custom molding',
+  },
+
   global: {
-    index: '05 / GLOBAL',
+    index: '06 / GLOBAL',
     eyebrow: 'Export network',
     title: 'Manufactured in Türkiye.',
     titleAccent: 'Delivered worldwide.',
@@ -353,6 +381,111 @@ const en = {
       eyebrow: 'Industry solution',
       title: 'Application-focused',
       titleAccent: 'solutions.',
+    },
+    customMolding: {
+      meta: ['Custom Molding', '25 years of mold manufacturing experience'],
+      eyebrow: 'Custom Molding',
+      title: 'We bring your ideas',
+      titleAccent: 'and projects to life.',
+      intro: 'Our design and engineering team offers comprehensive services for product development, from CAM and CAD design to prototyping and mold manufacturing.',
+      methodsLabel: 'Our mold manufacturing methods',
+      methods: [
+        'Rotational molding',
+        'Blow molding',
+        'Extrusion',
+        'Injection',
+        'Fiber (composite)',
+      ],
+      servicesLabel: 'Custom molding services',
+      services: [
+        'CNC Mold Manufacturing',
+        'Low Cost Mold Manufacturing and Metal Construction',
+        'Industrial Design',
+        'Prototyping and 3D Printing',
+        'Mass Production and Shipment',
+      ],
+      processLabel: 'Plastic product development process',
+      processTitle: 'From request to serial production,',
+      processTitleAccent: 'step by step.',
+      steps: [
+        'Receiving the project',
+        'Discussing the requirements',
+        'Researching similar products',
+        'Preparing prototypes',
+        'Product design and technical drawings',
+        'Mold manufacturing',
+        'Initial samples with potential adjustments',
+        'Serial production of the products',
+      ],
+      machinesLabel: 'Machinery fleet',
+      machinesTitle: 'High capacity',
+      machinesTitleAccent: 'production.',
+      machinesText: 'With our fully equipped machinery fleet, we provide services at every stage of production, from raw material processing, painting and recycling to product design, mold production and plastic manufacturing using rotational molding, blow molding and injection technologies.',
+      machines: [
+        {
+          count: '6',
+          name: 'Rotomolding machines',
+          spec: '100 – 40,000 L · 50 cm – 7 m',
+          text: 'Monoblock plastic components.',
+        },
+        {
+          count: '2',
+          name: 'Injection molding machines',
+          spec: '1.5 kg / 600 t · 300 g / 150 t',
+          text: 'Small plastic components.',
+        },
+        {
+          count: '1',
+          name: 'Blow molding machine',
+          spec: '2 m height · up to 2,500 L',
+          text: 'Mass production of large products.',
+        },
+        {
+          count: '2',
+          name: 'Extruder machines',
+          spec: 'Coloring · filament · granule · profile',
+          text: 'Raw material coloring, filament production, granule formation and profile extrusion.',
+        },
+        {
+          count: '2',
+          name: 'Grinder machines',
+          spec: '400 kg/h · 350 kg/h',
+          text: 'Crushing and recycling of plastic materials.',
+        },
+        {
+          count: '',
+          name: 'Metal workshop',
+          spec: '10 welding machines · 200 t hydraulic press',
+          text: 'Fully equipped with lathes, bending, cutting, milling, column drilling, band saws and a paint unit.',
+        },
+      ],
+      referencesLabel: 'Reference projects',
+      referencesTitle: 'Custom molding',
+      referencesTitleAccent: 'applications.',
+      projects: [
+        {
+          client: 'Baibars Mechatronics Aviation',
+          title: 'Agricultural spraying drone tank',
+        },
+        {
+          client: 'TCI Cabin Interior',
+          title: 'Fire-resistant aircraft cabin waste bin',
+        },
+        {
+          client: 'Alstom',
+          title: 'Waste and fresh water tanks for smart train toilets',
+        },
+        {
+          client: 'ITU Faculty of Aeronautics and Astronautics',
+          title: 'Floating solar panel pier on Lake Büyükçekmece',
+        },
+      ],
+      galleryLabel: 'Examples of custom parts we produce',
+      galleryAlt: 'RMA Plastik custom molded part',
+      ctaTitle: 'Tell us about your project.',
+      ctaText: 'Share your idea, drawing or sample, and our team will assess the right production method with you.',
+      ctaQuote: 'Request a Quote',
+      ctaContact: 'Contact us',
     },
     notFound: {
       eyebrow: 'Error / 404',
@@ -544,7 +677,7 @@ const en = {
   },
 
   contact: {
-    homeIndex: '06 / CONTACT',
+    homeIndex: '07 / CONTACT',
     close: 'Close',
     locations: {
       phone: 'Phone',
