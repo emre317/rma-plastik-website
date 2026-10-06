@@ -4,6 +4,7 @@ import Arrow from '../components/i18n/Arrow';
 import { useQuote } from '../components/quote/QuoteContext';
 import videos from '../data/videos';
 import HeroVideo from './HeroVideo';
+import { EcoBadge } from '../components/ui/EcoMarks';
 
 export default function HeroSection() {
   const { t } = useTranslation();
@@ -23,8 +24,11 @@ export default function HeroSection() {
         <div className="heroTop">
           <span className="heroIndex">{t('hero.index')}</span>
 
-          <span className="heroSince">
-            {t('hero.since')}
+          <span className="heroTopRight">
+            <EcoBadge type="solar" />
+            <span className="heroSince">
+              {t('hero.since')}
+            </span>
           </span>
         </div>
 

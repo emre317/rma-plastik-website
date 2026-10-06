@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { Mail, MapPin, Phone, Sun } from 'lucide-react';
 
 import { LocalizedLink } from './i18n/LocalizedLink';
 import LanguageSwitcher from './i18n/LanguageSwitcher';
@@ -10,6 +10,7 @@ import {
   YoutubeIcon,
 } from './icons/SocialIcons';
 import company from '../data/company';
+import { EcoStrip } from './ui/EcoMarks';
 import { useQuote } from './quote/QuoteContext';
 import { openConsentSettings } from '../analytics/consent';
 
@@ -183,12 +184,18 @@ export default function Footer() {
 
         </div>
 
+        <EcoStrip />
+
         <hr className="footerSeparator" />
 
         <div className="footerBottom">
 
           <p>
             © {new Date().getFullYear()} RMA Plastik. {t('footer.rights')}
+            <span className="footerMadeWith">
+              <Sun aria-hidden="true" />
+              {t('eco.madeWith')}
+            </span>
           </p>
 
           <button

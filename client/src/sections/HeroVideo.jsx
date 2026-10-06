@@ -10,6 +10,7 @@ import { track } from '../analytics/track';
 import { videoText } from '../data/videos';
 import useLanguage from '../hooks/useLanguage';
 import portfolio from '../data/productPortfolio';
+import { EcoBadge } from '../components/ui/EcoMarks';
 
 const PLAYER_ORIGIN = 'https://www.youtube-nocookie.com';
 
@@ -226,7 +227,10 @@ export default function HeroVideo({ video }) {
       <div className="container heroVideoInner">
         <div className="heroTop">
           <span className="heroIndex">{t('hero.index')}</span>
-          <span className="heroSince">{t('hero.since')}</span>
+          <span className="heroTopRight">
+            <EcoBadge type="solar" tone="glass" />
+            <span className="heroSince">{t('hero.since')}</span>
+          </span>
         </div>
 
         <div className="heroVideoGrid">

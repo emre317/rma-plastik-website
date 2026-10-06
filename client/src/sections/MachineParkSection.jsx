@@ -4,6 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { LocalizedLink } from '../components/i18n/LocalizedLink';
 import Arrow from '../components/i18n/Arrow';
 import { machineIcons } from '../data/customMolding';
+import { EcoBadge } from '../components/ui/EcoMarks';
+
+// Grinders crush production scrap for reuse (brochure p. 5–6)
+const RECYCLING_MACHINE = 4;
 
 const pad = (n) => String(n).padStart(2, '0');
 
@@ -111,6 +115,7 @@ export default function MachineParkSection() {
 
                 <span className="machineParkSpec">{current.spec}</span>
                 <p>{current.text}</p>
+                {active === RECYCLING_MACHINE && <EcoBadge type="noWaste" tone="glass" withText />}
               </div>
 
               <LocalizedLink to="/custom-molding" className="machineParkLink">

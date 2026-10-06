@@ -12,6 +12,7 @@ import families, { familyText, groups, modelPath } from '../../data/productTable
 import useModelQuote from '../../hooks/useModelQuote';
 import AddToCartButton from '../../components/quote/AddToCartButton';
 import CompareButton from '../../components/compare/CompareButton';
+import { EcoBadge } from '../../components/ui/EcoMarks';
 
 const normalise = (text) => String(text).toLocaleLowerCase('tr').replace(/\s+/g, '');
 
@@ -194,7 +195,10 @@ export default function ProductTables() {
             );
           })}
 
-          <p className="ptSource">{p('source')}</p>
+          <p className="ptSource">
+            {p('source')}
+            <EcoBadge type="recycle" />
+          </p>
         </div>
       </section>
     </main>

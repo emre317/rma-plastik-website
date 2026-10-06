@@ -313,6 +313,21 @@ const tr = {
     },
   },
 
+  eco: {
+    title: 'Sorumlu üretim',
+    solar: 'Güneş enerjisiyle üretim',
+    solarText: 'Tesisimiz enerjisini güneşten alıyor.',
+    noWaste: 'Fireler geri dönüşümde',
+    noWasteText: 'Üretim firesi tesis içinde kırılıp yeniden kullanılıyor.',
+    recycle: '%100 geri dönüştürülebilir',
+    recycleText: 'Kullandığımız tüm malzeme geri dönüştürülebilir.',
+    ev: 'Elektrikli araç filosu',
+    evText: 'Araçlarımızı elektrikli modellerle değiştirdik.',
+    longLife: 'Tek parça, uzun ömürlü',
+    longLifeText: 'Kaynaksız monoblok gövde, uzun kullanım ömrü.',
+    madeWith: 'Güneş enerjisiyle üretilir',
+  },
+
   compare: {
     eyebrow: 'Karşılaştırma',
     title: 'Ürün karşılaştırma',

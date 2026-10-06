@@ -314,6 +314,21 @@ const en = {
     },
   },
 
+  eco: {
+    title: 'Responsible production',
+    solar: 'Solar-powered production',
+    solarText: 'Our facility draws its energy from the sun.',
+    noWaste: 'Scrap is recycled',
+    noWasteText: 'Production scrap is ground and reused in-house.',
+    recycle: '100% recyclable',
+    recycleText: 'All the material we use is recyclable.',
+    ev: 'Electric vehicle fleet',
+    evText: 'We have replaced our vehicles with electric models.',
+    longLife: 'Single piece, long life',
+    longLifeText: 'Seamless monoblock body for a long service life.',
+    madeWith: 'Made with solar energy',
+  },
+
   compare: {
     eyebrow: 'Comparison',
     title: 'Product comparison',

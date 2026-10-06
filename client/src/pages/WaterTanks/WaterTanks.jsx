@@ -13,6 +13,7 @@ import useModelQuote from '../../hooks/useModelQuote';
 import AddToCartButton from '../../components/quote/AddToCartButton';
 import CompareButton from '../../components/compare/CompareButton';
 import FinderCta from '../../components/ui/FinderCta';
+import { EcoBadge } from '../../components/ui/EcoMarks';
 
 // Every distinct volume is a stop on the volume slider
 const VOLUME_STEPS = waterTanks.length ? [...new Set(waterTanks.map((tank) => tank.volume))].sort((a, b) => a - b) : [0];
@@ -545,6 +546,10 @@ export default function WaterTanks() {
             </div>
 
             <div className="wtStandardLinks">
+              <div className="wtEco">
+                <EcoBadge type="recycle" tone="glass" />
+                <EcoBadge type="solar" tone="glass" />
+              </div>
               <LocalizedLink to="/product-tables" className="button primary">
                 <span>{w('allTables')}</span>
                 <Arrow className="buttonArrow" />

@@ -21407,3 +21407,311 @@ button.contactChannel {
     display: none;
   }
 }
+
+/* =====================================================
+   SUSTAINABILITY CUES (eco badges, footer strip)
+===================================================== */
+
+:root {
+  --eco: #1f8a5b;
+
+  --eco-light: #6fd3a2;
+
+  --eco-soft: rgba(31, 138, 91, 0.08);
+}
+
+.ecoBadge {
+  padding: 5px 11px 5px 8px;
+
+  display: inline-flex;
+
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  gap: 6px;
+
+  border: 1px solid rgba(31, 138, 91, 0.22);
+
+  border-radius: var(--radius-pill);
+
+  background: var(--eco-soft);
+
+  color: var(--eco);
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  line-height: 1.2;
+
+  white-space: nowrap;
+}
+
+.ecoBadge svg {
+  width: 14px;
+
+  height: 14px;
+
+  flex-shrink: 0;
+}
+
+.ecoBadge.glass {
+  border-color: rgba(111, 211, 162, 0.35);
+
+  background: rgba(111, 211, 162, 0.1);
+
+  color: var(--eco-light);
+}
+
+.ecoBadge small {
+  width: 100%;
+
+  padding-inline-start: 20px;
+
+  color: inherit;
+
+  font-size: 12px;
+
+  font-weight: 500;
+
+  white-space: normal;
+
+  opacity: 0.85;
+}
+
+.ecoBadge:has(small) {
+  padding: 10px 14px;
+
+  border-radius: var(--radius-sm);
+}
+
+/* Sun icon turns very slowly */
+.ecoBadge svg.lucide-sun {
+  animation: ecoSun 18s linear infinite;
+}
+
+@keyframes ecoSun {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.heroTopRight {
+  display: inline-flex;
+
+  flex-wrap: wrap;
+
+  justify-content: flex-end;
+
+  align-items: center;
+
+  gap: 14px;
+}
+
+.modelEco,
+.wtEco {
+  margin-top: 18px;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 6px;
+}
+
+.wtEco {
+  margin: 0 0 4px;
+}
+
+.ptSource {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.machineParkPanel .ecoBadge {
+  margin-top: 16px;
+}
+
+/* Footer strip */
+.ecoStrip {
+  margin-top: 44px;
+
+  padding: 18px 20px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 24px;
+
+  border: 1px solid rgba(31, 138, 91, 0.16);
+
+  border-radius: var(--radius-md);
+
+  background:
+    radial-gradient(60% 140% at 0% 50%, rgba(111, 211, 162, 0.14), transparent 70%),
+    var(--eco-soft);
+}
+
+.ecoStripTitle {
+  display: inline-flex;
+
+  flex-shrink: 0;
+
+  align-items: center;
+
+  gap: 10px;
+
+  color: var(--eco);
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+/* Small leaf mark */
+.ecoStripTitle i {
+  width: 14px;
+
+  height: 14px;
+
+  border-radius: 0 70% 0 70%;
+
+  background: linear-gradient(135deg, var(--eco-light), var(--eco));
+
+  transform: rotate(-8deg);
+}
+
+.ecoStrip ul {
+  margin: 0;
+
+  padding: 0;
+
+  display: grid;
+
+  flex: 1;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 18px;
+
+  list-style: none;
+}
+
+.ecoStrip li {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.ecoStripIcon {
+  width: 34px;
+
+  height: 34px;
+
+  display: grid;
+
+  flex-shrink: 0;
+
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: #fff;
+
+  box-shadow: 0 0 0 1px rgba(31, 138, 91, 0.18);
+
+  color: var(--eco);
+}
+
+.ecoStripIcon svg {
+  width: 16px;
+
+  height: 16px;
+}
+
+.ecoStrip strong {
+  display: block;
+
+  color: var(--text);
+
+  font-size: 13px;
+}
+
+.ecoStrip small {
+  display: block;
+
+  color: var(--text-secondary);
+
+  font-size: 12px;
+
+  line-height: 1.4;
+}
+
+.footerMadeWith {
+  margin-inline-start: 12px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  color: var(--eco);
+
+  font-weight: 600;
+}
+
+.footerMadeWith svg {
+  width: 13px;
+
+  height: 13px;
+}
+
+@media (max-width: 1000px) {
+  .ecoStrip {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .ecoStrip ul {
+    width: 100%;
+
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .ecoStrip ul {
+    grid-template-columns: 1fr;
+  }
+
+  .footerMadeWith {
+    margin: 6px 0 0;
+
+    display: flex;
+  }
+
+  .heroTopRight .ecoBadge {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ecoBadge svg.lucide-sun {
+    animation: none;
+  }
+}

@@ -9,6 +9,7 @@ import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
 import AddToCartButton from '../../components/quote/AddToCartButton';
 import CompareButton from '../../components/compare/CompareButton';
+import { EcoBadge } from '../../components/ui/EcoMarks';
 import useLanguage from '../../hooks/useLanguage';
 import useModelQuote from '../../hooks/useModelQuote';
 import formatNumber from '../../utils/formatNumber';
@@ -139,6 +140,12 @@ export default function ProductModel() {
                   </div>
                 ))}
               </dl>
+
+              <div className="modelEco">
+                <EcoBadge type="recycle" />
+                {['tanks', 'chemical', 'food'].includes(family.group) && <EcoBadge type="longLife" />}
+                <EcoBadge type="solar" />
+              </div>
 
               <div className="modelActions">
                 <button type="button" className="button primary" onClick={() => openQuote(product)}>
