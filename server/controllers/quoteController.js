@@ -337,7 +337,7 @@ export async function updateQuoteStatus(
         },
 
         {
-          new: true,
+          returnDocument: 'after',
           runValidators: true,
         }
       );

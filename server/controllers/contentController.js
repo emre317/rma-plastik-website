@@ -194,7 +194,7 @@ export async function updateProduct(req, res) {
     if (!payload.i18n.tr.name) return fail(res, 400, 'Türkçe ürün adı zorunludur.');
 
     const product = await Product.findByIdAndUpdate(req.params.id, payload, {
-      new: true,
+      returnDocument: 'after',
       runValidators: true,
     });
 
@@ -285,7 +285,7 @@ export async function updateSettings(req, res) {
     const settings = await SiteSettings.findOneAndUpdate(
       { singleton: 'site' },
       { $set: { ...update, contentChangedAt: new Date() } },
-      { new: true, upsert: true, runValidators: true }
+      { returnDocument: 'after', upsert: true, runValidators: true }
     );
 
     return res.json({ success: true, data: settings });

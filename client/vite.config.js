@@ -57,26 +57,51 @@ try{var c=JSON.parse(localStorage.getItem('rma_consent'));if(c&&c.version===1){g
 
 /*
   `@content` = published content snapshot from the admin panel
-  (src/data/content.live.json, written by scripts/fetch-content.mjs);
+  (src/data/content.live.json, written by scripts/fetch-content.mjs on "Yayınla");
   falls back to the built-in defaults when it has never been fetched.
+  Resolved on every import (not once at start-up), and the dev server reloads
+  the page when a new snapshot is published.
 */
-function contentFile() {
+function contentModule() {
   const live = path.resolve('src/data/content.live.json');
+  const fallback = path.resolve('src/data/content.default.json');
 
-  return fs.existsSync(live) ? live : path.resolve('src/data/content.default.json');
+  return {
+    name: 'rma-content',
+    enforce: 'pre',
+
+    resolveId(id) {
+      if (id === '@content') {
+        return fs.existsSync(live) ? live : fallback;
+      }
+
+      return null;
+    },
+
+    configureServer(server) {
+      server.watcher.add(live);
+
+      const reload = (file) => {
+        if (path.resolve(file) !== live) {
+          return;
+        }
+
+        server.moduleGraph.invalidateAll();
+        server.ws.send({ type: 'full-reload' });
+      };
+
+      server.watcher.on('add', reload);
+      server.watcher.on('change', reload);
+      server.watcher.on('unlink', reload);
+    },
+  };
 }
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_');
 
   return {
-    plugins: [react(), siteTags(env)],
-
-    resolve: {
-      alias: {
-        '@content': contentFile(),
-      },
-    },
+    plugins: [contentModule(), react(), siteTags(env)],
 
     build: {
       // The admin "Publish" button builds into dist-next and swaps it in

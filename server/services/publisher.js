@@ -124,13 +124,11 @@ export function startPublish() {
   let child;
 
   try {
-    child = spawn(isWindows ? 'npm.cmd' : 'npm', ['run', 'build'], {
-      cwd: CLIENT_DIR,
-      env,
-      // .cmd files can only be started through a shell on Windows
-      shell: isWindows,
-      windowsHide: true,
-    });
+    // Windows: npm is a .cmd file that must run through a shell; a single fixed
+    // command string (no argument array) is used for that.
+    child = isWindows
+      ? spawn('npm run build', { cwd: CLIENT_DIR, env, shell: true, windowsHide: true })
+      : spawn('npm', ['run', 'build'], { cwd: CLIENT_DIR, env });
   } catch (error) {
     fail(`Could not start npm: ${error.message}`);
     return true;
