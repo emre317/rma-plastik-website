@@ -17,7 +17,7 @@ const GROUPS = [
   {
     title: 'Adres',
     fields: [
-      { key: 'addressStreet', label: 'Sokak / OSB', placeholder: 'Mersin Tarsus OSB, Cumhuriyet Bulvarı No: 22' },
+      { key: 'addressStreet', label: 'Sokak / OSB', placeholder: 'Nacarlı OSB, Cumhuriyet Cd. No: 22' },
       { key: 'addressDistrict', label: 'İlçe, il', placeholder: 'Akdeniz, Mersin' },
       { key: 'addressCountry', label: 'Ülke', placeholder: 'Türkiye' },
     ],

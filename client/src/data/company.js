@@ -10,7 +10,7 @@ const pick = (value, fallback) => (value ? value : fallback);
 
 const address = {
   // Non-breaking space keeps "No: 22" together when the line wraps
-  street: pick(saved.address?.street, 'Mersin Tarsus OSB, Cumhuriyet Bulvarı No: 22').replace(/No: (\d)/, 'No: $1'),
+  street: pick(saved.address?.street, 'Nacarlı OSB, Cumhuriyet Cd. No: 22').replace(/No: (\d)/, 'No: $1'),
   district: pick(saved.address?.district, 'Akdeniz, Mersin'),
   country: pick(saved.address?.country, 'Türkiye'),
 };

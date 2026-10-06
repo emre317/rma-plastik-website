@@ -12,7 +12,7 @@ const tr = {
       company: 'RMA Plastik hakkında: 1998’den beri Mersin’de mühendislik deneyimi ve üretim altyapısıyla endüstriyel polietilen ürünler üretiyoruz.',
       products: 'Endüstriyel depolama tankı, kimyasal depolama tankı, su deposu, tarım tankı ve özel polietilen ürünler. RMA Plastik ürün portföyünü inceleyin.',
       industries: 'Kimya, gıda, tarım, otomotiv, tekstil, altyapı ve denizcilik sektörleri için polietilen depolama ve özel üretim çözümleri.',
-      contact: 'RMA Plastik iletişim: Mersin Tarsus OSB, Cumhuriyet Bulvarı No: 22. Telefon +90 (324) 676 4500, WhatsApp ve online teklif formu.',
+      contact: 'RMA Plastik iletişim: Nacarlı OSB, Cumhuriyet Cd. No: 22, Akdeniz, Mersin. Telefon +90 (324) 676 4500, WhatsApp ve online teklif formu.',
       notFound: 'Aradığınız sayfa bulunamadı. RMA Plastik ürünlerini ve çözümlerini ana sayfadan inceleyebilirsiniz.',
       customMolding: 'RMA Plastik özel üretim (custom molding): 25 yıllık kalıp imalat tecrübesi, CAD/CAM tasarım, prototip ve 3D baskı, CNC kalıp imalatı ve rotasyonel, şişirme ve enjeksiyon ile seri üretim.',
     },
@@ -134,7 +134,7 @@ const tr = {
     requestSolution: 'Teklif Al',
     visualTop: ['Endüstriyel', 'Polietilen'],
     productionRange: 'Üretim aralığı',
-    productionRangeValue: '10 — 42.000 L',
+    productionRangeValue: '100 — 40.000 L',
     scroll: 'Keşfetmek için kaydırın',
   },
 
@@ -154,17 +154,17 @@ const tr = {
       {
         value: '1998',
         label: 'Kuruluş',
-        detail: 'Yirmi yılı aşkın üretim deneyimi.',
+        detail: 'Mersin Organize Sanayi Bölgesi’nde kuruldu.',
       },
       {
-        value: '6',
-        label: 'Başlıca İhracat Pazarı',
-        detail: 'Dört kıtada ihracat.',
+        value: '1000+',
+        label: 'Kurumsal Müşteri',
+        detail: 'Gıda, kimya, otomotiv, tarım ve tekstil başta olmak üzere birçok sektörde.',
       },
       {
-        value: '42.000 L',
-        label: 'Üretim Aralığı',
-        detail: 'Geniş kapasite aralığında polietilen çözümler.',
+        value: '500+',
+        label: 'Ürün Çeşidi',
+        detail: 'Su ve asit tanklarından tekstil arabalarına geniş ürün portföyü.',
       },
       {
         value: '25+',
@@ -194,7 +194,7 @@ const tr = {
       industrial: {
         label: 'Endüstriyel Tanklar',
         title: 'Endüstriyel Depolama Tankları',
-        capacity: '500 — 42.000 L',
+        capacity: '100 — 37.000 L',
         application: 'Endüstri / Proses / Depolama',
         description:
           'Zorlu endüstriyel ortamlar ve uzun süreli kullanım için geliştirilmiş yüksek kapasiteli polietilen depolama çözümleri.',
@@ -202,7 +202,7 @@ const tr = {
       chemical: {
         label: 'Kimyasal Tanklar',
         title: 'Kimyasal Depolama Çözümleri',
-        capacity: '500 — 30.000 L',
+        capacity: '100 — 37.000 L',
         application: 'Kimya / Proses',
         description:
           'Dayanıklılığın, uyumluluğun ve operasyonel güvenilirliğin kritik olduğu kimyasal depolama uygulamaları için tasarlanmış polietilen tanklar.',
@@ -210,7 +210,7 @@ const tr = {
       water: {
         label: 'Su Depoları',
         title: 'Su Depolama Tankları',
-        capacity: '100 — 20.000 L',
+        capacity: '100 — 37.000 L',
         application: 'Su / Altyapı',
         description:
           'Konut, ticari, tarımsal ve endüstriyel kullanım için tasarlanmış güvenilir polietilen su depolama çözümleri.',
@@ -597,7 +597,7 @@ const tr = {
     'industrial-storage-tank': {
       name: 'Endüstriyel Depolama Tankı',
       categoryLabel: 'Endüstriyel Tanklar',
-      capacity: '500 — 42.000 L',
+      capacity: '100 — 37.000 L',
       material: 'Polietilen',
       application: 'Endüstriyel Depolama',
       technology: 'Rotasyonel Kalıplama',
@@ -607,7 +607,7 @@ const tr = {
     'chemical-storage-tank': {
       name: 'Kimyasal Depolama Tankı',
       categoryLabel: 'Kimyasal Tanklar',
-      capacity: '500 — 30.000 L',
+      capacity: '100 — 37.000 L',
       material: 'Polietilen',
       application: 'Kimyasal Depolama',
       technology: 'Rotasyonel Kalıplama',
@@ -617,7 +617,7 @@ const tr = {
     'water-storage-tank': {
       name: 'Su Deposu',
       categoryLabel: 'Su Depoları',
-      capacity: '100 — 20.000 L',
+      capacity: '100 — 37.000 L',
       material: 'Polietilen',
       application: 'Su Depolama',
       technology: 'Rotasyonel Kalıplama',
@@ -682,9 +682,9 @@ const tr = {
       index: '01 / Konum',
       eyebrow: 'Merkez tesis',
       title: 'Merkez tesisimiz.',
-      titleAccent: 'Mersin Tarsus OSB.',
+      titleAccent: 'Mersin Nacarlı OSB.',
       text:
-        'Üretim ve dağıtım merkezimiz Mersin Tarsus Organize Sanayi Bölgesi’nde yer alıyor. Ziyaret ve proje görüşmeleri için bize ulaşın.',
+        'Üretim ve dağıtım merkezimiz Mersin Nacarlı Organize Sanayi Bölgesi’nde yer alıyor. Ziyaret ve proje görüşmeleri için bize ulaşın.',
       addressLabel: 'Adres',
       directions: 'Yol tarifi al',
       openMap: 'Google Haritalar’da aç',

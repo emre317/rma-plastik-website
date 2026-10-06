@@ -20,7 +20,7 @@ const LANGUAGES = [
 const TEXT_FIELDS = [
   { key: 'name', label: 'Ürün adı', required: true },
   { key: 'categoryLabel', label: 'Kategori adı (sayfada görünen)' },
-  { key: 'capacity', label: 'Kapasite', placeholder: 'ör. 500 — 42.000 L' },
+  { key: 'capacity', label: 'Kapasite', placeholder: 'ör. 100 — 37.000 L' },
   { key: 'material', label: 'Malzeme' },
   { key: 'application', label: 'Uygulama' },
   { key: 'technology', label: 'Üretim teknolojisi' },

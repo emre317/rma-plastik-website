@@ -35,7 +35,7 @@ function HighlightedTitle({ text }) {
   );
 }
 
-/* Counts the number in "42.000 L" / "25+" up once visible; years stay as they are */
+/* Counts the number in "1000+" / "25+" up once visible; years stay as they are */
 function CountUp({ value, active }) {
   const match = String(value).match(/^(\D*)([\d.,]+)(.*)$/);
   const target = match ? Number(match[2].replace(/[.,]/g, '')) : NaN;

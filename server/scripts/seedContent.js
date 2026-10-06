@@ -62,7 +62,7 @@ async function seed() {
           phone: '+903246764500',
           email: 'info@rmaplastik.com',
           whatsapp: '905366700969',
-          addressStreet: 'Mersin Tarsus OSB, Cumhuriyet Bulvarı No: 22',
+          addressStreet: 'Nacarlı OSB, Cumhuriyet Cd. No: 22',
           addressDistrict: 'Akdeniz, Mersin',
           addressCountry: 'Türkiye',
           linkedin: 'https://www.linkedin.com/company/rmaplastik/',

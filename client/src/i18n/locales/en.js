@@ -13,7 +13,7 @@ const en = {
       company: 'About RMA Plastik: manufacturing industrial polyethylene products in Mersin since 1998, backed by engineering experience and production infrastructure.',
       products: 'Industrial storage tanks, chemical storage tanks, water tanks, agricultural tanks and custom polyethylene products. Explore the RMA Plastik portfolio.',
       industries: 'Polyethylene storage and custom manufacturing solutions for the chemical, food, agriculture, automotive, textile, infrastructure and marine sectors.',
-      contact: 'Contact RMA Plastik: Mersin Tarsus OSB, Cumhuriyet Bulvarı No: 22, Türkiye. Phone +90 (324) 676 4500, WhatsApp and online quote form.',
+      contact: 'Contact RMA Plastik: Nacarlı OSB, Cumhuriyet Cd. No: 22, Akdeniz, Mersin, Türkiye. Phone +90 (324) 676 4500, WhatsApp and online quote form.',
       notFound: 'The page you are looking for could not be found. Explore RMA Plastik products and solutions from the home page.',
       customMolding: 'RMA Plastik custom molding: 25 years of mold manufacturing experience, CAD/CAM design, prototyping and 3D printing, CNC mold manufacturing and serial production with rotational, blow and injection molding.',
     },
@@ -135,7 +135,7 @@ const en = {
     requestSolution: 'Get a Quote',
     visualTop: ['Industrial', 'Polyethylene'],
     productionRange: 'Production range',
-    productionRangeValue: '10 — 42,000 L',
+    productionRangeValue: '100 — 40,000 L',
     scroll: 'Scroll to explore',
   },
 
@@ -155,17 +155,17 @@ const en = {
       {
         value: '1998',
         label: 'Established',
-        detail: 'More than two decades of manufacturing experience.',
+        detail: 'Established in the Mersin Organized Industrial Zone.',
       },
       {
-        value: '6',
-        label: 'Key Export Markets',
-        detail: 'Exports across four continents.',
+        value: '1000+',
+        label: 'Corporate Clients',
+        detail: 'Across food, chemical, automotive, agriculture, textile and more.',
       },
       {
-        value: '42,000 L',
-        label: 'Production Range',
-        detail: 'Polyethylene solutions across a wide capacity range.',
+        value: '500+',
+        label: 'Product Range',
+        detail: 'From water and acid tanks to textile trolleys.',
       },
       {
         value: '25+',
@@ -195,7 +195,7 @@ const en = {
       industrial: {
         label: 'Industrial Tanks',
         title: 'Industrial Storage Tanks',
-        capacity: '500 — 42,000 L',
+        capacity: '100 — 37,000 L',
         application: 'Industrial / Process / Storage',
         description:
           'High-capacity polyethylene storage solutions developed for demanding industrial environments and long-term operation.',
@@ -203,7 +203,7 @@ const en = {
       chemical: {
         label: 'Chemical Tanks',
         title: 'Chemical Storage Solutions',
-        capacity: '500 — 30,000 L',
+        capacity: '100 — 37,000 L',
         application: 'Chemical / Process',
         description:
           'Polyethylene tanks engineered for chemical storage applications where durability, compatibility and operational reliability are critical.',
@@ -211,7 +211,7 @@ const en = {
       water: {
         label: 'Water Tanks',
         title: 'Water Storage Tanks',
-        capacity: '100 — 20,000 L',
+        capacity: '100 — 37,000 L',
         application: 'Water / Infrastructure',
         description:
           'Reliable polyethylene water storage solutions designed for residential, commercial, agricultural and industrial use.',
@@ -599,7 +599,7 @@ const en = {
     'industrial-storage-tank': {
       name: 'Industrial Storage Tank',
       categoryLabel: 'Industrial Tanks',
-      capacity: '500 — 42,000 L',
+      capacity: '100 — 37,000 L',
       material: 'Polyethylene',
       application: 'Industrial Storage',
       technology: 'Rotational Moulding',
@@ -609,7 +609,7 @@ const en = {
     'chemical-storage-tank': {
       name: 'Chemical Storage Tank',
       categoryLabel: 'Chemical Tanks',
-      capacity: '500 — 30,000 L',
+      capacity: '100 — 37,000 L',
       material: 'Polyethylene',
       application: 'Chemical Storage',
       technology: 'Rotational Moulding',
@@ -619,7 +619,7 @@ const en = {
     'water-storage-tank': {
       name: 'Water Storage Tank',
       categoryLabel: 'Water Tanks',
-      capacity: '100 — 20,000 L',
+      capacity: '100 — 37,000 L',
       material: 'Polyethylene',
       application: 'Water Storage',
       technology: 'Rotational Moulding',
@@ -684,9 +684,9 @@ const en = {
       index: '01 / Location',
       eyebrow: 'Main facility',
       title: 'Our main facility.',
-      titleAccent: 'Mersin Tarsus OSB.',
+      titleAccent: 'Mersin Nacarlı OSB.',
       text:
-        'Our production and distribution hub is located in the Mersin Tarsus Organized Industrial Zone. Contact us for visits and project meetings.',
+        'Our production and distribution hub is located in the Mersin Nacarlı Organized Industrial Zone. Contact us for visits and project meetings.',
       addressLabel: 'Address',
       directions: 'Get directions',
       openMap: 'Open in Google Maps',
