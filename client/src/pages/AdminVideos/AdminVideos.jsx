@@ -118,7 +118,11 @@ export default function AdminVideos() {
         {!form && <button type="button" className="cmsButton cmsButtonPrimary" onClick={() => edit(null)}>+ Video ekle</button>}
       </div>
 
-      <p className="cmsHint">YouTube’daki videolarınızın bağlantısını ekleyin; Videolar sayfasında hızlı yüklenen oynatıcıyla gösterilir.</p>
+      <p className="cmsHint">
+        YouTube’daki videolarınızın bağlantısını ekleyin; Videolar sayfasında hızlı yüklenen oynatıcıyla gösterilir.
+        <br />
+        <strong>Sırası en küçük olan (ör. 0) yayındaki video, ana sayfanın açılışında sessiz ve otomatik oynar.</strong>
+      </p>
 
       {message && <div className={`cmsMessage ${message.type}`}>{message.text}</div>}
 
@@ -193,7 +197,12 @@ export default function AdminVideos() {
             <div key={video._id} className="cmsVideoItem">
               <img src={youtubeThumbnail(video.youtubeId)} alt="" />
               <div>
-                <strong>{video.i18n?.tr?.title}</strong>
+                <strong>
+                  {video.i18n?.tr?.title}
+                  {video._id === videos.find((item) => item.published)?._id && (
+                    <span className="cmsStatus on cmsStatusStatic cmsHeroBadge">Ana sayfa açılışı</span>
+                  )}
+                </strong>
                 <small>{video.published ? 'Sitede' : 'Gizli'} · sıra {video.order}</small>
               </div>
               <div className="cmsRowActions">

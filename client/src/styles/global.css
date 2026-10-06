@@ -13234,3 +13234,395 @@ button.contactChannel {
   }
 
 }
+
+
+/* =====================================================
+   HOME – VIDEO OPENING (first video in the admin panel)
+===================================================== */
+
+.heroVideo {
+  --accent: var(--accent-light);
+
+  position: relative;
+
+  min-height: max(640px, 100svh);
+
+  padding: 100px 0 28px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  overflow: hidden;
+
+  isolation: isolate;
+
+  color: #fff;
+
+  background: var(--dark);
+}
+
+.heroVideoMedia {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: -2;
+
+  overflow: hidden;
+
+  background: var(--dark);
+}
+
+.heroVideoPoster,
+.heroVideoFrame {
+  position: absolute;
+
+  top: 50%;
+
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+}
+
+.heroVideoPoster {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+  transform: translate(-50%, -50%) scale(1.04);
+
+  filter: saturate(0.9);
+}
+
+.heroVideoFrame {
+  width: 177.78svh;
+
+  min-width: 100%;
+
+  height: 56.25vw;
+
+  min-height: 100%;
+
+  border: 0;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transition: opacity 1.2s ease;
+}
+
+.heroVideoFrame.visible {
+  opacity: 1;
+}
+
+/* Navy shade: strongest behind the text, lighter on the right, darker at the edges */
+.heroVideoShade {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: -1;
+
+  background:
+    linear-gradient(90deg, rgba(10, 22, 46, 0.92) 0%, rgba(10, 22, 46, 0.72) 38%, rgba(10, 22, 46, 0.28) 72%, rgba(10, 22, 46, 0.45) 100%),
+    linear-gradient(180deg, rgba(10, 22, 46, 0.65) 0%, rgba(10, 22, 46, 0) 22%, rgba(10, 22, 46, 0) 62%, rgba(10, 22, 46, 0.9) 100%),
+    radial-gradient(70% 60% at 15% 60%, rgba(29, 103, 213, 0.22), transparent 70%);
+}
+
+.heroVideoInner {
+  position: relative;
+
+  flex: 1 0 auto;
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+.heroVideo .heroTop {
+  border-bottom-color: rgba(255, 255, 255, 0.18);
+}
+
+.heroVideo .heroIndex {
+  color: #fff;
+}
+
+.heroVideo .heroSince {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.heroVideoContent {
+  max-width: 760px;
+
+  margin: auto 0;
+
+  padding: 36px 0;
+}
+
+.heroVideoContent .eyebrow {
+  color: var(--accent-light);
+}
+
+.heroVideoContent h1 {
+  margin: 18px 0 24px;
+
+  color: #fff;
+
+  font-size: clamp(44px, min(6.2vw, 10svh), 92px);
+
+  line-height: 1.02;
+
+  letter-spacing: -0.04em;
+
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.25);
+}
+
+.heroVideoContent h1 span {
+  display: block;
+
+  color: var(--accent-light);
+}
+
+.heroVideoContent .lead {
+  max-width: 540px;
+
+  margin: 0 0 36px;
+
+  color: rgba(255, 255, 255, 0.82);
+
+  font-size: clamp(17px, 1.4vw, 20px);
+
+  line-height: 1.6;
+}
+
+.heroVideo .actions {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 12px;
+}
+
+.heroVideo .button.primary {
+  border-color: #1d67d5;
+
+  background: #1d67d5;
+}
+
+.heroVideo .button.primary:hover {
+  border-color: #1655b4;
+
+  background: #1655b4;
+}
+
+.heroVideoGhost {
+  border-color: rgba(255, 255, 255, 0.45) !important;
+
+  color: #fff !important;
+
+  background: rgba(255, 255, 255, 0.06) !important;
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.heroVideoGhost:hover {
+  border-color: #fff !important;
+
+  color: var(--dark) !important;
+
+  background: #fff !important;
+}
+
+.heroVideoBottom {
+  padding-top: 18px;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  justify-content: flex-start;
+
+  gap: 14px 28px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.06em;
+
+  text-transform: uppercase;
+}
+
+.heroVideoLabel {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.heroVideoTitle {
+  color: rgba(255, 255, 255, 0.55);
+
+  font-weight: 600;
+
+  letter-spacing: 0.02em;
+
+  text-transform: none;
+}
+
+.heroVideoDot {
+  width: 8px;
+
+  height: 8px;
+
+  border-radius: 50%;
+
+  background: var(--accent-light);
+
+  box-shadow: 0 0 0 0 rgba(77, 148, 245, 0.6);
+
+  animation: heroDot 2.4s ease-out infinite;
+}
+
+.heroVideoControls {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.heroVideoSound,
+.heroVideoYoutube {
+  min-height: 40px;
+
+  padding: 0 14px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  border: 1px solid rgba(255, 255, 255, 0.3);
+
+  border-radius: var(--radius-pill);
+
+  color: #fff;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  cursor: pointer;
+
+  font: inherit;
+
+  font-size: 12px;
+
+  letter-spacing: 0.04em;
+
+  transition: background-color 180ms ease, border-color 180ms ease, opacity 180ms ease;
+}
+
+.heroVideoSound:hover:not(:disabled),
+.heroVideoYoutube:hover {
+  border-color: #fff;
+
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.heroVideoSound:disabled {
+  cursor: default;
+
+  opacity: 0.45;
+}
+
+.heroVideoSound svg {
+  width: 16px;
+
+  height: 16px;
+}
+
+@keyframes heroDot {
+  0% {
+    box-shadow: 0 0 0 0 rgba(77, 148, 245, 0.6);
+  }
+
+  70%,
+  100% {
+    box-shadow: 0 0 0 10px rgba(77, 148, 245, 0);
+  }
+}
+
+@media (max-width: 700px) {
+
+  .heroVideo {
+    min-height: max(600px, 92svh);
+
+    padding-top: 92px;
+  }
+
+  .heroVideoShade {
+    background:
+      linear-gradient(180deg, rgba(10, 22, 46, 0.7) 0%, rgba(10, 22, 46, 0.55) 40%, rgba(10, 22, 46, 0.92) 100%);
+  }
+
+  .heroVideoContent {
+    padding: 32px 0;
+  }
+
+  .heroVideo .actions .button {
+    width: 100%;
+  }
+
+  .heroVideoTitle {
+    display: none;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .heroVideoDot {
+    animation: none;
+  }
+
+}
+
+.cmsHeroBadge {
+  margin-inline-start: 10px;
+
+  vertical-align: middle;
+
+  font-size: 11px;
+}
+
+/* RTL: text sits on the right, so the shade is strongest on the right */
+[dir="rtl"] .heroVideoShade {
+  background:
+    linear-gradient(270deg, rgba(10, 22, 46, 0.92) 0%, rgba(10, 22, 46, 0.72) 38%, rgba(10, 22, 46, 0.28) 72%, rgba(10, 22, 46, 0.45) 100%),
+    linear-gradient(180deg, rgba(10, 22, 46, 0.65) 0%, rgba(10, 22, 46, 0) 22%, rgba(10, 22, 46, 0) 62%, rgba(10, 22, 46, 0.9) 100%),
+    radial-gradient(70% 60% at 85% 60%, rgba(29, 103, 213, 0.22), transparent 70%);
+}
+
+@media (max-width: 700px) {
+
+  [dir="rtl"] .heroVideoShade {
+    background: linear-gradient(180deg, rgba(10, 22, 46, 0.7) 0%, rgba(10, 22, 46, 0.55) 40%, rgba(10, 22, 46, 0.92) 100%);
+  }
+
+}

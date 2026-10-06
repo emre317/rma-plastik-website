@@ -2,12 +2,19 @@ import { useTranslation } from 'react-i18next';
 
 import Arrow from '../components/i18n/Arrow';
 import { useQuote } from '../components/quote/QuoteContext';
+import videos from '../data/videos';
+import HeroVideo from './HeroVideo';
 
 export default function HeroSection() {
   const { t } = useTranslation();
   const { openQuote } = useQuote();
 
   const visualTop = t('hero.visualTop', { returnObjects: true });
+
+  // The first video (lowest order in the admin panel) becomes the opening film
+  if (videos[0]) {
+    return <HeroVideo video={videos[0]} />;
+  }
 
   return (
     <section className="hero" id="home">

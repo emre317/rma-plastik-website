@@ -122,6 +122,10 @@ const ar = {
   },
 
   hero: {
+    videoLabel: 'فيلم تعريفي',
+    soundOn: 'تشغيل الصوت',
+    soundOff: 'كتم الصوت',
+    watchOnYoutube: 'شاهد على يوتيوب',
     index: '01 / RMA PLASTIK',
     since: 'نُصنّع منذ عام 1998',
     eyebrow: 'مصمَّم للصناعة',

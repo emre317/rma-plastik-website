@@ -122,6 +122,10 @@ const en = {
   },
 
   hero: {
+    videoLabel: 'Company film',
+    soundOn: 'Sound on',
+    soundOff: 'Sound off',
+    watchOnYoutube: 'Watch on YouTube',
     index: '01 / RMA PLASTIK',
     since: 'Manufacturing since 1998',
     eyebrow: 'Engineered for industry',

@@ -121,6 +121,10 @@ const tr = {
   },
 
   hero: {
+    videoLabel: 'Tanıtım filmi',
+    soundOn: 'Sesi aç',
+    soundOff: 'Sesi kapat',
+    watchOnYoutube: 'YouTube’da izle',
     index: '01 / RMA PLASTIK',
     since: '1998’den beri üretim',
     eyebrow: 'Endüstri için tasarlandı',
