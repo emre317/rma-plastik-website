@@ -1,6 +1,5 @@
 /* Fonts are self-hosted via @fontsource (imported in main.jsx) */
 
-
 /* =====================================================
    ROOT
 ===================================================== */
@@ -40,7 +39,6 @@
 html[dir="rtl"] {
   --dir-x: -1;
 }
-
 
 /* =====================================================
    RESET
@@ -85,7 +83,6 @@ img {
   max-width: 100%;
 }
 
-
 /* =====================================================
    LAYOUT
 ===================================================== */
@@ -104,7 +101,6 @@ img {
 
   border-bottom: 1px solid var(--line);
 }
-
 
 /* =====================================================
    GLOBAL TYPOGRAPHY
@@ -156,7 +152,6 @@ h2 {
   color: var(--text-secondary);
 }
 
-
 /* =====================================================
    HERO
 ===================================================== */
@@ -184,14 +179,12 @@ h2 {
     );
 }
 
-
 .heroContainer {
   min-height: calc(100vh - 64px);
 
   display: flex;
   flex-direction: column;
 }
-
 
 /* =====================================================
    HERO TOP
@@ -223,7 +216,6 @@ h2 {
   color: var(--text-secondary);
 }
 
-
 /* =====================================================
    HERO GRID
 ===================================================== */
@@ -243,7 +235,6 @@ h2 {
 
   padding: 70px 0 55px;
 }
-
 
 /* =====================================================
    HERO CONTENT
@@ -284,7 +275,6 @@ h2 {
 .heroContent .lead {
   margin-bottom: 0;
 }
-
 
 /* =====================================================
    BUTTONS
@@ -368,7 +358,6 @@ h2 {
   transform: translateY(-2px);
 }
 
-
 /* =====================================================
    HERO INDUSTRIAL VISUAL
 ===================================================== */
@@ -422,7 +411,6 @@ h2 {
   background-size: 42px 42px;
 }
 
-
 .heroVisualTop,
 .heroVisualBottom {
   position: relative;
@@ -443,7 +431,6 @@ h2 {
 
   text-transform: uppercase;
 }
-
 
 /* =====================================================
    FAKE INDUSTRIAL TANK
@@ -563,7 +550,6 @@ h2 {
   top: 74%;
 }
 
-
 /* =====================================================
    HERO VISUAL BOTTOM
 ===================================================== */
@@ -606,7 +592,6 @@ h2 {
   );
 }
 
-
 /* =====================================================
    HERO BOTTOM
 ===================================================== */
@@ -630,7 +615,6 @@ h2 {
 
   text-transform: uppercase;
 }
-
 
 /* =====================================================
    STATS
@@ -687,7 +671,6 @@ h2 {
   text-transform: uppercase;
 }
 
-
 /* =====================================================
    DARK SECTIONS
 ===================================================== */
@@ -703,7 +686,6 @@ h2 {
 .muted {
   background: var(--background-secondary);
 }
-
 
 /* =====================================================
    CARDS
@@ -746,7 +728,6 @@ h2 {
   letter-spacing: -0.025em;
 }
 
-
 /* =====================================================
    LISTS
 ===================================================== */
@@ -778,7 +759,6 @@ h2 {
   padding-inline-start: 10px;
 }
 
-
 /* =====================================================
    CHIPS
 ===================================================== */
@@ -801,7 +781,6 @@ h2 {
   font-size: 13px;
 }
 
-
 /* =====================================================
    SPLIT SECTION
 ===================================================== */
@@ -817,7 +796,6 @@ h2 {
 
   align-items: end;
 }
-
 
 /* =====================================================
    FACILITIES
@@ -858,7 +836,6 @@ h2 {
   color: var(--text-secondary);
 }
 
-
 /* =====================================================
    TABLET
 ===================================================== */
@@ -890,7 +867,6 @@ h2 {
 
 }
 
-
 /* =====================================================
    MOBILE
 ===================================================== */
@@ -907,7 +883,6 @@ h2 {
   .section {
     padding: 90px 0;
   }
-
 
   /* HERO */
 
@@ -969,7 +944,6 @@ h2 {
     font-size: 16px;
   }
 
-
   /* BUTTONS */
 
   .actions {
@@ -983,7 +957,6 @@ h2 {
   .button {
     width: 100%;
   }
-
 
   /* HERO VISUAL */
 
@@ -999,13 +972,11 @@ h2 {
     height: 67%;
   }
 
-
   /* HERO BOTTOM */
 
   .heroBottom {
     margin-top: 10px;
   }
-
 
   /* STATS */
 
@@ -1035,7 +1006,6 @@ h2 {
     border-inline-end: none;
   }
 
-
   /* GENERIC */
 
   .cardGrid,
@@ -1057,7 +1027,6 @@ h2 {
   }
 
 }
-
 
 /* =====================================================
    SMALL MOBILE
@@ -1117,7 +1086,6 @@ h2 {
   justify-content: space-between;
 }
 
-
 /* BRAND */
 
 .brand {
@@ -1172,7 +1140,6 @@ h2 {
   width: 100%;
 }
 
-
 /* HEADER ACTIONS */
 
 .headerActions {
@@ -1186,7 +1153,6 @@ h2 {
 
   gap: 18px;
 }
-
 
 .headerContact {
   display: flex;
@@ -1207,7 +1173,6 @@ h2 {
 .headerContact span {
   color: var(--accent);
 }
-
 
 /* MENU BUTTON */
 
@@ -1262,7 +1227,6 @@ h2 {
 
   transform: rotate(-45deg);
 }
-
 
 /* =====================================================
    MOBILE MENU
@@ -1375,7 +1339,6 @@ h2 {
   letter-spacing: 0.08em;
 }
 
-
 /* =====================================================
    HEADER RESPONSIVE
 ===================================================== */
@@ -1408,7 +1371,6 @@ h2 {
   }
 
 }
-
 
 /* Push hero below fixed header */
 
@@ -1467,7 +1429,6 @@ h2 {
 
   color: var(--text-secondary);
 }
-
 
 /* =====================================================
    STATS SECTION
@@ -1561,350 +1522,21 @@ h2 {
   line-height: 1.55;
 }
 
-
 /* =====================================================
    TECHNOLOGY SECTION
 ===================================================== */
 
-.technologySection {
-  padding: 150px 0 110px;
-}
-
-.technologyHeader {
-  display: grid;
-
-  grid-template-columns:
-    minmax(230px, .65fr)
-    1.35fr;
-
-  gap: 80px;
-
-  align-items: start;
-
-  margin-bottom: 90px;
-}
-
-.technologyHeader .eyebrow {
-  color: var(--accent);
-}
-
-.technologyHeader h2 {
-  max-width: 900px;
-
-  margin: 0;
-
-  font-size: clamp(43px, 5.18vw, 76px);
-
-  font-weight: 600;
-
-  line-height: 1.08;
-
-  letter-spacing: -0.025em;
-}
-
-.technologyHeader h2 span {
-  display: block;
-
-  color: rgba(255,255,255,.35);
-}
-
-
 /* TECHNOLOGY GRID */
-
-.technologyGrid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(3, 1fr);
-
-  border-top: 1px solid rgba(255,255,255,.16);
-
-  border-bottom: 1px solid rgba(255,255,255,.16);
-}
-
-.technologyCard {
-  position: relative;
-
-  min-height: 720px;
-
-  padding: 26px;
-
-  overflow: hidden;
-
-  display: flex;
-
-  flex-direction: column;
-
-  border-inline-end: 1px solid rgba(255,255,255,.16);
-
-  transition:
-    background-color 300ms ease,
-    transform 300ms ease;
-}
-
-.technologyCard:last-child {
-  border-inline-end: none;
-}
-
-.technologyCard:hover {
-  background: #13274d;
-}
-
-.technologyCardTop {
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-  position: relative;
-
-  z-index: 2;
-}
-
-.technologyNumber {
-  color: rgba(255,255,255,.42);
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.08em;
-}
-
-.technologyArrow {
-  width: 42px;
-
-  height: 42px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  border: 1px solid rgba(255,255,255,.2);
-
-  font-size: 16px;
-
-  transition:
-    background-color 250ms ease,
-    color 250ms ease,
-    transform 250ms ease;
-}
-
-.technologyCard:hover .technologyArrow {
-  color: #fff;
-
-  background: var(--accent);
-
-  border-color: var(--accent);
-
-  transform: translate(calc(3px * var(--dir-x)), -3px);
-}
-
 
 /* VISUAL */
 
-.technologyVisual {
-  flex: 1;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  min-height: 270px;
-}
-
-.technologyShape {
-  position: relative;
-
-  width: 175px;
-
-  height: 220px;
-
-  transition:
-    transform 400ms ease;
-}
-
-.technologyCard:hover .technologyShape {
-  transform: scale(1.06) rotate(-2deg);
-}
-
-.technologyShape > div {
-  position: absolute;
-
-  left: 50%;
-
-  transform: translateX(-50%);
-
-  border: 1px solid rgba(255,255,255,.22);
-
-  background:
-    linear-gradient(
-      90deg,
-      rgba(255,255,255,.04),
-      rgba(255,255,255,.18),
-      rgba(255,255,255,.03)
-    );
-}
-
-.technologyShape > div:nth-child(1) {
-  top: 0;
-
-  width: 92px;
-
-  height: 52px;
-}
-
-.technologyShape > div:nth-child(2) {
-  top: 48px;
-
-  width: 175px;
-
-  height: 118px;
-}
-
-.technologyShape > div:nth-child(3) {
-  bottom: 0;
-
-  width: 128px;
-
-  height: 55px;
-}
-
-
 /* CONTENT */
 
-.technologyContent {
-  position: relative;
-
-  z-index: 2;
-}
-
-.technologyContent h3 {
-  margin: 0 0 24px;
-
-  font-size: clamp(32px, 2.72vw, 46px);
-
-  font-weight: 600;
-
-  line-height: 1.08;
-
-  letter-spacing: -0.025em;
-}
-
-.technologyContent h3 span {
-  display: block;
-}
-
-.technologyContent p {
-  max-width: 360px;
-
-  margin: 0;
-
-  color: rgba(255,255,255,.55);
-
-  font-size: 14px;
-
-  line-height: 1.65;
-}
-
-.technologyMeta {
-  margin-top: 35px;
-
-  padding-top: 18px;
-
-  border-top: 1px solid rgba(255,255,255,.15);
-
-  color: rgba(255,255,255,.35);
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.08em;
-}
-
-
 /* TECHNOLOGY FOOTER */
-
-.technologyFooter {
-  padding-top: 44px;
-
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: flex-end;
-}
-
-.technologyFooter p {
-  margin: 0;
-
-  color: rgba(255,255,255,.45);
-
-  font-size: 13px;
-
-  line-height: 1.5;
-}
-
-.technologyFooter a {
-  display: inline-flex;
-
-  gap: 30px;
-
-  align-items: center;
-
-  padding-bottom: 8px;
-
-  border-bottom: 1px solid rgba(255,255,255,.35);
-
-  font-size: 12px;
-
-  font-weight: 700;
-
-  text-transform: uppercase;
-
-  letter-spacing: .06em;
-}
-
-.technologyFooter a span {
-  color: var(--accent);
-
-  font-size: 17px;
-}
-
 
 /* =====================================================
    TABLET
 ===================================================== */
-
-@media (max-width: 1050px) {
-
-  .technologyGrid {
-    grid-template-columns:
-      repeat(2, 1fr);
-  }
-
-  .technologyCard:nth-child(2) {
-    border-inline-end: none;
-  }
-
-  .technologyCard:nth-child(3) {
-    border-top: 1px solid rgba(255,255,255,.16);
-
-    grid-column: 1 / -1;
-  }
-
-  .technologyCard:nth-child(3) .technologyContent {
-    max-width: 520px;
-  }
-
-}
-
 
 /* =====================================================
    MOBILE
@@ -1912,8 +1544,7 @@ h2 {
 
 @media (max-width: 800px) {
 
-  .sectionIntro,
-  .technologyHeader {
+  .sectionIntro {
     grid-template-columns: 1fr;
 
     gap: 34px;
@@ -1924,7 +1555,6 @@ h2 {
   .sectionDescription {
     font-size: 18px;
   }
-
 
   /* STATS */
 
@@ -1959,49 +1589,7 @@ h2 {
     margin-top: 52px;
   }
 
-
   /* TECHNOLOGY */
-
-  .technologySection {
-    padding:
-      100px
-      0
-      80px;
-  }
-
-  .technologyHeader h2 {
-    font-size: clamp(40px, 10.8vw, 56px);
-  }
-
-  .technologyGrid {
-    display: block;
-  }
-
-  .technologyCard {
-    min-height: 610px;
-
-    border-inline-end: 0;
-
-    border-bottom:
-      1px solid
-      rgba(255,255,255,.16);
-  }
-
-  .technologyCard:nth-child(3) {
-    border-top: 0;
-  }
-
-  .technologyVisual {
-    min-height: 240px;
-  }
-
-  .technologyFooter {
-    gap: 40px;
-
-    align-items: flex-start;
-
-    flex-direction: column;
-  }
 
 }
 
@@ -2065,7 +1653,6 @@ h2 {
   letter-spacing: -0.02em;
 }
 
-
 /* =====================================================
    PRODUCT EXPLORER GRID
 ===================================================== */
@@ -2083,7 +1670,6 @@ h2 {
 
   border-bottom: 1px solid var(--line);
 }
-
 
 /* =====================================================
    PRODUCT CATEGORY LIST
@@ -2188,7 +1774,6 @@ h2 {
   transform: translate(calc(3px * var(--dir-x)), -3px);
 }
 
-
 /* =====================================================
    PRODUCT PREVIEW
 ===================================================== */
@@ -2255,7 +1840,6 @@ h2 {
 
   text-transform: uppercase;
 }
-
 
 /* =====================================================
    PRODUCT OBJECT
@@ -2386,7 +1970,6 @@ h2 {
 .productObjectBody span:nth-child(3) {
   top: 76%;
 }
-
 
 /* =====================================================
    PRODUCT PREVIEW CONTENT
@@ -2540,7 +2123,6 @@ h2 {
   transform: translate(calc(3px * var(--dir-x)), -3px);
 }
 
-
 /* =====================================================
    PRODUCT TABLET
 ===================================================== */
@@ -2562,7 +2144,6 @@ h2 {
   }
 
 }
-
 
 /* =====================================================
    PRODUCT MOBILE
@@ -2678,7 +2259,6 @@ h2 {
 
 }
 
-
 /* =====================================================
    PRODUCT SMALL MOBILE
 ===================================================== */
@@ -2755,7 +2335,6 @@ h2 {
 
   letter-spacing: -0.02em;
 }
-
 
 /* =====================================================
    INDUSTRY MATRIX
@@ -2893,7 +2472,6 @@ h2 {
   color: rgba(255,255,255,.55);
 }
 
-
 /* =====================================================
    INDUSTRY CTA CARD
 ===================================================== */
@@ -2960,7 +2538,6 @@ h2 {
   font-size: 17px;
 }
 
-
 /* =====================================================
    INDUSTRIES TABLET
 ===================================================== */
@@ -2973,7 +2550,6 @@ h2 {
   }
 
 }
-
 
 /* =====================================================
    INDUSTRIES MOBILE
@@ -3023,1506 +2599,91 @@ h2 {
    ENGINEERING SECTION
 ===================================================== */
 
-.engineeringSection {
-  padding: 150px 0;
-
-  background: var(--dark);
-}
-
-.engineeringHeader {
-  display: grid;
-
-  grid-template-columns:
-    minmax(220px, .65fr)
-    1.35fr;
-
-  gap: 80px;
-
-  margin-bottom: 90px;
-}
-
-.engineeringHeader .eyebrow {
-  color: var(--accent);
-}
-
-.engineeringHeader h2 {
-  margin: 0 0 32px;
-
-  font-size: clamp(43px, 5.18vw, 75px);
-
-  font-weight: 600;
-
-  line-height: 1.08;
-
-  letter-spacing: -0.025em;
-}
-
-.engineeringHeader h2 span {
-  display: block;
-
-  color: rgba(255,255,255,.28);
-}
-
-.engineeringHeader > div:last-child > p {
-  max-width: 680px;
-
-  margin: 0;
-
-  color: rgba(255,255,255,.5);
-
-  font-size: 18px;
-
-  line-height: 1.6;
-
-  letter-spacing: -0.02em;
-}
-
-
 /* =====================================================
    ENGINEERING GRID
 ===================================================== */
-
-.engineeringGrid {
-  display: grid;
-
-  grid-template-columns:
-    .9fr
-    1.1fr;
-
-  min-height: 780px;
-
-  border-top:
-    1px solid
-    rgba(255,255,255,.15);
-
-  border-bottom:
-    1px solid
-    rgba(255,255,255,.15);
-}
-
 
 /* =====================================================
    ENGINEERING CONTENT
 ===================================================== */
 
-.engineeringContent {
-  padding: 42px 48px 42px 0;
-
-  display: flex;
-
-  flex-direction: column;
-
-  border-right:
-    1px solid
-    rgba(255,255,255,.15);
-}
-
-.engineeringIntro {
-  padding-bottom: 40px;
-
-  border-bottom:
-    1px solid
-    rgba(255,255,255,.15);
-}
-
-.engineeringSmallLabel {
-  display: block;
-
-  margin-bottom: 18px;
-
-  color: rgba(255,255,255,.35);
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.08em;
-
-  text-transform: uppercase;
-}
-
-.engineeringIntro p {
-  max-width: 530px;
-
-  margin: 0;
-
-  color: rgba(255,255,255,.7);
-
-  font-size: 20px;
-
-  line-height: 1.5;
-
-  letter-spacing: -0.02em;
-}
-
-
 /* =====================================================
    ENGINEERING STEPS
 ===================================================== */
-
-.engineeringSteps {
-  flex: 1;
-}
-
-.engineeringSteps article {
-  min-height: 132px;
-
-  padding: 26px 0;
-
-  display: grid;
-
-  grid-template-columns:
-    55px
-    1fr;
-
-  gap: 20px;
-
-  border-bottom:
-    1px solid
-    rgba(255,255,255,.13);
-}
-
-.engineeringSteps article > span {
-  padding-top: 4px;
-
-  color: var(--accent);
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.08em;
-}
-
-.engineeringSteps h3 {
-  margin: 0 0 10px;
-
-  font-size: 26px;
-
-  font-weight: 600;
-
-  line-height: 1;
-
-  letter-spacing: -0.025em;
-}
-
-.engineeringSteps p {
-  max-width: 470px;
-
-  margin: 0;
-
-  color: rgba(255,255,255,.42);
-
-  font-size: 13px;
-
-  line-height: 1.55;
-}
-
-.engineeringLink {
-  width: max-content;
-
-  margin-top: 40px;
-
-  padding-bottom: 8px;
-
-  display: flex;
-
-  gap: 30px;
-
-  align-items: center;
-
-  border-bottom:
-    1px solid
-    rgba(255,255,255,.35);
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: .06em;
-
-  text-transform: uppercase;
-}
-
-.engineeringLink span {
-  color: var(--accent);
-
-  font-size: 17px;
-
-  transition: transform 220ms ease;
-}
-
-.engineeringLink:hover span {
-  transform: translate(calc(3px * var(--dir-x)), -3px);
-}
-
 
 /* =====================================================
    ENGINEERING VISUAL
 ===================================================== */
 
-.engineeringVisual {
-  position: relative;
-
-  min-height: 780px;
-
-  padding: 28px;
-
-  overflow: hidden;
-
-  background:
-    radial-gradient(
-      circle at 50% 42%,
-      #1f3665 0%,
-      #13274d 48%,
-      #0f1e3c 82%
-    );
-}
-
-.engineeringVisual::before {
-  content: "";
-
-  position: absolute;
-
-  inset: 0;
-
-  opacity: .2;
-
-  background-image:
-    linear-gradient(
-      rgba(255,255,255,.07) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(255,255,255,.07) 1px,
-      transparent 1px
-    );
-
-  background-size: 38px 38px;
-}
-
-.engineeringVisualTop,
-.engineeringVisualBottom {
-  position: relative;
-
-  z-index: 3;
-
-  display: flex;
-
-  justify-content: space-between;
-
-  color: rgba(255,255,255,.42);
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.08em;
-
-  text-transform: uppercase;
-}
-
-
 /* =====================================================
    TECHNICAL DRAWING
 ===================================================== */
 
-.technicalDrawing {
-  position: absolute;
-
-  inset:
-    90px
-    40px
-    110px;
-
-  z-index: 2;
-}
-
-.drawingAxis {
-  position: absolute;
-
-  background: rgba(255,255,255,.1);
-}
-
-.drawingAxisHorizontal {
-  inset-inline-start: 0;
-
-  inset-inline-end: 0;
-
-  top: 50%;
-
-  height: 1px;
-}
-
-.drawingAxisVertical {
-  top: 0;
-
-  bottom: 0;
-
-  left: 50%;
-
-  width: 1px;
-}
-
-
 /* DRAWING OBJECT */
-
-.drawingObject {
-  position: absolute;
-
-  top: 50%;
-
-  left: 50%;
-
-  width: 250px;
-
-  height: 390px;
-
-  transform:
-    translate(-50%,-50%);
-}
-
-.drawingCap {
-  position: absolute;
-
-  top: 0;
-
-  left: 50%;
-
-  width: 42%;
-
-  height: 11%;
-
-  transform: translateX(-50%);
-
-  border:
-    1px solid
-    rgba(255,255,255,.58);
-}
-
-.drawingBody {
-  position: absolute;
-
-  top: 9%;
-
-  bottom: 0;
-
-  width: 100%;
-
-  border:
-    1px solid
-    rgba(255,255,255,.58);
-
-  border-radius:
-    46% 46%
-    10% 10%
-    /
-    9% 9%
-    3% 3%;
-}
-
-.drawingBody::before {
-  content: "";
-
-  position: absolute;
-
-  left: 50%;
-
-  top: 0;
-
-  bottom: 0;
-
-  width: 1px;
-
-  background:
-    rgba(255,255,255,.13);
-}
-
-.drawingRing {
-  position: absolute;
-
-  inset-inline-start: 0;
-
-  inset-inline-end: 0;
-
-  height: 1px;
-
-  background:
-    rgba(255,255,255,.35);
-}
-
-.drawingRingOne {
-  top: 28%;
-}
-
-.drawingRingTwo {
-  top: 53%;
-}
-
-.drawingRingThree {
-  top: 76%;
-}
-
 
 /* =====================================================
    DRAWING DIMENSIONS
 ===================================================== */
 
-.drawingDimension {
-  position: absolute;
-
-  display: flex;
-
-  align-items: center;
-
-  color: rgba(255,255,255,.35);
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.08em;
-}
-
-.drawingDimensionLeft {
-  inset-inline-start: 9%;
-
-  top: 18%;
-
-  bottom: 18%;
-
-  flex-direction: column;
-
-  justify-content: space-between;
-}
-
-.drawingDimensionLeft div {
-  flex: 1;
-
-  width: 1px;
-
-  margin: 10px 0;
-
-  background:
-    rgba(255,255,255,.25);
-}
-
-.drawingDimensionBottom {
-  inset-inline-start: 30%;
-
-  inset-inline-end: 30%;
-
-  bottom: 6%;
-}
-
-.drawingDimensionBottom div {
-  flex: 1;
-
-  height: 1px;
-
-  margin: 0 10px;
-
-  background:
-    rgba(255,255,255,.25);
-}
-
-.drawingNote {
-  position: absolute;
-
-  color: rgba(255,255,255,.26);
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.08em;
-}
-
-.drawingNoteOne {
-  top: 18%;
-
-  inset-inline-end: 5%;
-}
-
-.drawingNoteTwo {
-  inset-inline-end: 4%;
-
-  bottom: 18%;
-}
-
-
 /* =====================================================
    ENGINEERING VISUAL BOTTOM
 ===================================================== */
-
-.engineeringVisualBottom {
-  position: absolute;
-
-  inset-inline-start: 28px;
-
-  inset-inline-end: 28px;
-
-  bottom: 28px;
-
-  align-items: flex-end;
-}
-
-.engineeringVisualBottom > div {
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 8px;
-}
-
-.engineeringVisualBottom span {
-  color: rgba(255,255,255,.35);
-}
-
-.engineeringVisualBottom strong {
-  color: rgba(255,255,255,.85);
-
-  font-size: 13px;
-
-  font-weight: 500;
-
-  letter-spacing: -.01em;
-}
-
 
 /* =====================================================
    ENGINEERING TABLET
 ===================================================== */
 
-@media (max-width: 1050px) {
-
-  .engineeringGrid {
-    grid-template-columns:
-      1fr
-      1fr;
-  }
-
-  .engineeringContent {
-    padding-inline-end: 30px;
-  }
-
-  .drawingObject {
-    width: 200px;
-
-    height: 330px;
-  }
-
-}
-
-
 /* =====================================================
    ENGINEERING MOBILE
 ===================================================== */
-
-@media (max-width: 800px) {
-
-  .engineeringSection {
-    padding:
-      100px
-      0;
-  }
-
-  .engineeringHeader {
-    grid-template-columns: 1fr;
-
-    gap: 34px;
-
-    margin-bottom: 55px;
-  }
-
-  .engineeringHeader h2 {
-    font-size: clamp(40px, 10.8vw, 56px);
-  }
-
-  .engineeringHeader > div:last-child > p {
-    font-size: 16px;
-  }
-
-  .engineeringGrid {
-    display: block;
-  }
-
-  .engineeringContent {
-    padding:
-      36px
-      0
-      50px;
-
-    border-inline-end: 0;
-  }
-
-  .engineeringIntro p {
-    font-size: 18px;
-  }
-
-  .engineeringSteps article {
-    grid-template-columns:
-      42px
-      1fr;
-  }
-
-  .engineeringVisual {
-    min-height: 650px;
-
-    border-top:
-      1px solid
-      rgba(255,255,255,.15);
-  }
-
-  .technicalDrawing {
-    inset:
-      90px
-      24px
-      120px;
-  }
-
-  .drawingObject {
-    width: 190px;
-
-    height: 310px;
-  }
-
-}
-
 
 /* =====================================================
    ENGINEERING SMALL MOBILE
 ===================================================== */
 
-@media (max-width: 480px) {
-
-  .engineeringVisual {
-    min-height: 590px;
-  }
-
-  .drawingObject {
-    width: 160px;
-
-    height: 270px;
-  }
-
-  .drawingDimensionLeft {
-    inset-inline-start: 4%;
-  }
-
-  .drawingDimensionBottom {
-    inset-inline-start: 24%;
-
-    inset-inline-end: 24%;
-  }
-
-}
-
 /* =====================================================
    FACILITIES SECTION
 ===================================================== */
-
-.facilitiesSection {
-  padding: 150px 0;
-
-  background: #f0f3f8;
-
-  border-bottom: 1px solid var(--line);
-}
-
-.facilitiesHeader {
-  display: grid;
-
-  grid-template-columns:
-    minmax(220px, .65fr)
-    1.35fr;
-
-  gap: 80px;
-
-  margin-bottom: 85px;
-}
-
-.facilitiesHeader .eyebrow {
-  color: var(--accent);
-}
-
-.facilitiesHeader h2 {
-  margin: 0 0 30px;
-
-  font-size: clamp(43px, 5.18vw, 75px);
-
-  font-weight: 600;
-
-  line-height: 1.08;
-
-  letter-spacing: -0.025em;
-}
-
-.facilitiesHeader h2 span {
-  display: block;
-
-  color: #959fb3;
-}
-
-.facilitiesHeader > div:last-child > p {
-  max-width: 660px;
-
-  margin: 0;
-
-  color: var(--text-secondary);
-
-  font-size: 18px;
-
-  line-height: 1.6;
-
-  letter-spacing: -0.02em;
-}
-
 
 /* =====================================================
    FACILITIES GRID
 ===================================================== */
 
-.facilitiesGrid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, 1fr);
-
-  gap: 1px;
-
-  background: var(--line);
-}
-
-.facilityCard {
-  background: #f0f3f8;
-}
-
-
 /* =====================================================
    FACILITY MEDIA
 ===================================================== */
-
-.facilityMedia {
-  position: relative;
-
-  min-height: 520px;
-
-  padding: 26px;
-
-  overflow: hidden;
-
-  color: #fff;
-
-  background:
-    radial-gradient(
-      circle at 55% 45%,
-      #344b79 0%,
-      #172e5a 44%,
-      #0f1e3c 80%
-    );
-}
-
-.facilityMedia::before {
-  content: "";
-
-  position: absolute;
-
-  inset: 0;
-
-  opacity: .15;
-
-  background-image:
-    linear-gradient(
-      rgba(255,255,255,.08) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(255,255,255,.08) 1px,
-      transparent 1px
-    );
-
-  background-size: 42px 42px;
-}
-
-.facilityMediaTop {
-  position: relative;
-
-  z-index: 3;
-
-  display: flex;
-
-  justify-content: space-between;
-
-  color: rgba(255,255,255,.45);
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.08em;
-
-  text-transform: uppercase;
-}
-
 
 /* =====================================================
    FACTORY PLACEHOLDER
 ===================================================== */
 
-.facilityBuilding {
-  position: absolute;
-
-  left: 50%;
-
-  top: 52%;
-
-  width: 68%;
-
-  height: 42%;
-
-  transform:
-    translate(
-      -50%,
-      -50%
-    );
-
-  filter:
-    drop-shadow(
-      0 35px 35px
-      rgba(0,0,0,.35)
-    );
-}
-
-.facilityBuildingRoof {
-  position: absolute;
-
-  top: 0;
-
-  inset-inline-start: 3%;
-
-  width: 94%;
-
-  height: 16%;
-
-  clip-path:
-    polygon(
-      0 100%,
-      12% 20%,
-      34% 100%,
-      48% 20%,
-      67% 100%,
-      82% 20%,
-      100% 100%
-    );
-
-  background:
-    linear-gradient(
-      180deg,
-      #d3d9e4,
-      #a2aabb
-    );
-}
-
-.facilityBuildingBody {
-  position: absolute;
-
-  inset-inline-start: 0;
-
-  inset-inline-end: 0;
-
-  bottom: 0;
-
-  height: 84%;
-
-  border:
-    1px solid
-    rgba(255,255,255,.25);
-
-  background:
-    linear-gradient(
-      135deg,
-      #909aaf,
-      #cbd2df 50%,
-      #7e8aa1
-    );
-}
-
-.facilityDoor {
-  position: absolute;
-
-  inset-inline-start: 8%;
-
-  bottom: 0;
-
-  width: 24%;
-
-  height: 64%;
-
-  background:
-    linear-gradient(
-      180deg,
-      #415682,
-      #1d3563
-    );
-
-  border:
-    1px solid
-    rgba(255,255,255,.16);
-}
-
-.facilityWindow {
-  position: absolute;
-
-  top: 24%;
-
-  width: 14%;
-
-  height: 21%;
-
-  background:
-    rgba(32, 56, 102, .72);
-
-  border:
-    1px solid
-    rgba(255,255,255,.22);
-}
-
-.facilityWindowOne {
-  inset-inline-start: 42%;
-}
-
-.facilityWindowTwo {
-  inset-inline-start: 61%;
-}
-
-.facilityWindowThree {
-  inset-inline-start: 80%;
-}
-
-.facilityPlaceholderLabel {
-  position: absolute;
-
-  inset-inline-start: 26px;
-
-  bottom: 24px;
-
-  z-index: 3;
-
-  color: rgba(255,255,255,.35);
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.08em;
-
-  text-transform: uppercase;
-}
-
-
 /* =====================================================
    FACILITY CONTENT
 ===================================================== */
-
-.facilityContent {
-  min-height: 330px;
-
-  padding:
-    32px
-    32px
-    38px;
-}
-
-.facilityTitleRow {
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: flex-start;
-}
-
-.facilityCountry {
-  display: block;
-
-  margin-bottom: 14px;
-
-  color: var(--accent);
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.08em;
-}
-
-.facilityContent h3 {
-  margin: 0;
-
-  font-size: clamp(39px, 3.4vw, 58px);
-
-  font-weight: 600;
-
-  line-height: 1.08;
-
-  letter-spacing: -0.025em;
-}
-
-.facilityArrow {
-  width: 46px;
-
-  height: 46px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  border: 1px solid var(--line);
-
-  color: var(--accent);
-
-  font-size: 18px;
-
-  transition:
-    color 220ms ease,
-    border-color 220ms ease,
-    background-color 220ms ease,
-    transform 220ms ease;
-}
-
-.facilityCard:hover .facilityArrow {
-  color: #fff;
-
-  border-color: var(--dark);
-
-  background: var(--dark);
-
-  transform:
-    translate(calc(3px * var(--dir-x)), -3px);
-}
-
-.facilityContent > p {
-  max-width: 580px;
-
-  margin:
-    35px
-    0
-    0;
-
-  color: var(--text-secondary);
-
-  font-size: 14px;
-
-  line-height: 1.65;
-}
-
 
 /* =====================================================
    FACILITY META
 ===================================================== */
 
-.facilityMeta {
-  margin-top: 32px;
-
-  padding-top: 20px;
-
-  display: flex;
-
-  flex-wrap: wrap;
-
-  gap: 8px;
-
-  border-top: 1px solid var(--line);
-}
-
-.facilityMeta span {
-  padding:
-    9px
-    12px;
-
-  border: 1px solid var(--line);
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: .08em;
-
-  text-transform: uppercase;
-}
-
-
 /* =====================================================
    FACILITIES BOTTOM
 ===================================================== */
-
-.facilitiesBottom {
-  padding-top: 42px;
-
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: flex-end;
-}
-
-.facilitiesBottom p {
-  margin: 0;
-
-  color: var(--text-secondary);
-
-  font-size: 13px;
-
-  line-height: 1.5;
-}
-
-.facilitiesBottom a {
-  padding-bottom: 8px;
-
-  display: flex;
-
-  gap: 30px;
-
-  align-items: center;
-
-  border-bottom:
-    1px solid
-    var(--text);
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: .06em;
-
-  text-transform: uppercase;
-}
-
-.facilitiesBottom a span {
-  color: var(--accent);
-
-  font-size: 17px;
-
-  transition: transform 220ms ease;
-}
-
-.facilitiesBottom a:hover span {
-  transform:
-    translate(calc(3px * var(--dir-x)), -3px);
-}
-
 
 /* =====================================================
    FACILITIES TABLET
 ===================================================== */
 
-@media (max-width: 1050px) {
-
-  .facilityMedia {
-    min-height: 440px;
-  }
-
-  .facilityContent {
-    min-height: 350px;
-  }
-
-}
-
-
 /* =====================================================
    FACILITIES MOBILE
 ===================================================== */
-
-@media (max-width: 800px) {
-
-  .facilitiesSection {
-    padding:
-      100px
-      0;
-  }
-
-  .facilitiesHeader {
-    grid-template-columns: 1fr;
-
-    gap: 34px;
-
-    margin-bottom: 55px;
-  }
-
-  .facilitiesHeader h2 {
-    font-size: clamp(40px, 10.8vw, 56px);
-  }
-
-  .facilitiesHeader > div:last-child > p {
-    font-size: 16px;
-  }
-
-  .facilitiesGrid {
-    grid-template-columns: 1fr;
-
-    gap: 30px;
-
-    background: transparent;
-  }
-
-  .facilityCard {
-    border:
-      1px solid
-      var(--line);
-  }
-
-  .facilityMedia {
-    min-height: 420px;
-  }
-
-  .facilityBuilding {
-    width: 78%;
-  }
-
-  .facilityContent {
-    min-height: auto;
-
-    padding:
-      28px
-      24px
-      32px;
-  }
-
-  .facilitiesBottom {
-    gap: 36px;
-
-    align-items: flex-start;
-
-    flex-direction: column;
-  }
-
-}
 
 /* =====================================================
    QUALITY
 ===================================================== */
 
-.qualitySection {
-  padding: 150px 0;
-  background: #f0f3f8;
-  border-bottom: 1px solid var(--line);
-}
-
-.qualityHeader {
-  display: grid;
-  grid-template-columns: minmax(220px, .65fr) 1.35fr;
-  gap: 80px;
-  margin-bottom: 85px;
-}
-
-.qualityHeader .eyebrow {
-  color: var(--accent);
-}
-
-.qualityHeader h2 {
-  margin: 0 0 30px;
-
-  font-size: clamp(43px, 5.18vw, 75px);
-
-  font-weight: 600;
-  line-height: 1.08;
-  letter-spacing: -0.025em;
-}
-
-.qualityHeader h2 span {
-  display: block;
-  color: #959fb3;
-}
-
-.qualityHeader > div:last-child > p {
-  max-width: 620px;
-
-  margin: 0;
-
-  color: var(--text-secondary);
-
-  font-size: 18px;
-  line-height: 1.6;
-}
-
-
 /* QUALITY LAYOUT */
 
-.qualityLayout {
-  display: grid;
-
-  grid-template-columns:
-    .9fr
-    1.1fr;
-
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-
-.qualityStatement {
-  min-height: 620px;
-
-  padding: 36px 50px 42px 0;
-
-  display: flex;
-  flex-direction: column;
-
-  border-inline-end: 1px solid var(--line);
-}
-
-.qualityStatementLabel {
-  color: var(--text-secondary);
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.08em;
-}
-
-.qualityStatement strong {
-  margin-top: auto;
-
-  font-size: clamp(37px, 3.6vw, 56px);
-
-  font-weight: 500;
-
-  line-height: 1.08;
-
-  letter-spacing: -0.025em;
-}
-
-.qualityStatement p {
-  max-width: 490px;
-
-  margin: 34px 0 0;
-
-  color: var(--text-secondary);
-
-  font-size: 14px;
-
-  line-height: 1.65;
-}
-
-
 /* QUALITY LIST */
-
-.qualityList article {
-  min-height: 205px;
-
-  padding: 32px;
-
-  display: grid;
-
-  grid-template-columns:
-    60px
-    1fr
-    44px;
-
-  gap: 20px;
-
-  align-items: start;
-
-  border-bottom: 1px solid var(--line);
-
-  transition:
-    background-color 220ms ease,
-    color 220ms ease;
-}
-
-.qualityList article:last-child {
-  border-bottom: none;
-}
-
-.qualityList article:hover {
-  color: #fff;
-
-  background: var(--dark);
-}
-
-.qualityNumber {
-  padding-top: 7px;
-
-  color: var(--accent);
-
-  font-size: 11px;
-
-  font-weight: 700;
-
-  letter-spacing: 0.08em;
-}
-
-.qualityList h3 {
-  margin: 0 0 16px;
-
-  font-size: clamp(
-    28px,
-    2.6vw,
-    40px
-  );
-
-  font-weight: 600;
-
-  line-height: 1;
-
-  letter-spacing: -0.025em;
-}
-
-.qualityList p {
-  max-width: 500px;
-
-  margin: 0;
-
-  color: var(--text-secondary);
-
-  font-size: 13px;
-
-  line-height: 1.6;
-
-  transition: color 220ms ease;
-}
-
-.qualityList article:hover p {
-  color: rgba(255,255,255,.5);
-}
-
-.qualityArrow {
-  width: 40px;
-
-  height: 40px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  border: 1px solid var(--line);
-
-  color: var(--accent);
-
-  font-size: 16px;
-
-  transition:
-    background-color 220ms ease,
-    border-color 220ms ease,
-    transform 220ms ease;
-}
-
-.qualityList article:hover .qualityArrow {
-  color: #fff;
-
-  background: var(--accent);
-
-  border-color: var(--accent);
-
-  transform: translate(calc(3px * var(--dir-x)), -3px);
-}
-
 
 /* =====================================================
    GLOBAL PRESENCE
@@ -4568,7 +2729,6 @@ h2 {
   color: rgba(255,255,255,.28);
 }
 
-
 .globalLabel {
   color: rgba(255,255,255,.35);
 
@@ -4613,21 +2773,18 @@ h2 {
   font-size: 17px;
 }
 
-
 /* =====================================================
    QUALITY + GLOBAL MOBILE
 ===================================================== */
 
 @media (max-width: 800px) {
 
-  .qualitySection,
   .globalSection {
     padding:
       100px
       0;
   }
 
-  .qualityHeader,
   .globalHeader {
     grid-template-columns: 1fr;
 
@@ -4636,45 +2793,11 @@ h2 {
     margin-bottom: 55px;
   }
 
-  .qualityHeader h2,
   .globalHeader h2 {
     font-size: clamp(39px, 10.8vw, 54px);
   }
 
-  .qualityLayout {
-    display: block;
-  }
-
-  .qualityStatement {
-    min-height: 460px;
-
-    padding:
-      30px
-      0
-      45px;
-
-    border-inline-end: 0;
-
-    border-bottom:
-      1px solid
-      var(--line);
-  }
-
-  .qualityList article {
-    min-height: 180px;
-
-    padding:
-      28px
-      0;
-
-    grid-template-columns:
-      42px
-      1fr
-      40px;
-  }
-
 }
-
 
 /* SMALL MOBILE */
 
@@ -4815,7 +2938,6 @@ h2 {
   letter-spacing: 0.08em;
 }
 
-
 /* DARK INTERNAL HERO */
 
 .internalHeroDark {
@@ -4838,7 +2960,6 @@ h2 {
 .internalHeroDark .internalHeroGrid h1 span {
   color: rgba(255,255,255,.25);
 }
-
 
 /* =====================================================
    404
@@ -4894,7 +3015,6 @@ h2 {
 
   text-transform: uppercase;
 }
-
 
 /* =====================================================
    INTERNAL MOBILE
@@ -4991,7 +3111,6 @@ h2 {
   line-height: 1.6;
 }
 
-
 /* FILTERS */
 
 .productFilters {
@@ -5042,7 +3161,6 @@ h2 {
   border-color: var(--dark);
 }
 
-
 /* GRID */
 
 .productsCatalogGrid {
@@ -5061,7 +3179,6 @@ h2 {
 .productCatalogCard {
   background: var(--background);
 }
-
 
 /* MEDIA */
 
@@ -5155,7 +3272,6 @@ h2 {
   transform:
     translate(calc(3px * var(--dir-x)), -3px);
 }
-
 
 /* PRODUCT PLACEHOLDER */
 
@@ -5271,7 +3387,6 @@ h2 {
   top: 76%;
 }
 
-
 /* PRODUCT CONTENT */
 
 .productCatalogContent {
@@ -5336,7 +3451,6 @@ h2 {
 
   font-weight: 600;
 }
-
 
 /* MOBILE */
 
@@ -5425,7 +3539,6 @@ h2 {
   line-height: 1.6;
 }
 
-
 /* =====================================================
    QUOTE LAYOUT
 ===================================================== */
@@ -5445,7 +3558,6 @@ h2 {
     1px solid
     var(--line);
 }
-
 
 /* SIDEBAR */
 
@@ -5549,7 +3661,6 @@ h2 {
   font-weight: 500;
 }
 
-
 /* =====================================================
    FORM
 ===================================================== */
@@ -5652,7 +3763,6 @@ h2 {
   border-color: var(--accent);
 }
 
-
 /* =====================================================
    FORM BOTTOM
 ===================================================== */
@@ -5742,7 +3852,6 @@ h2 {
   font-size: 18px;
 }
 
-
 /* =====================================================
    FEEDBACK
 ===================================================== */
@@ -5772,7 +3881,6 @@ h2 {
 
   border-color: var(--accent);
 }
-
 
 /* =====================================================
    QUOTE MOBILE
@@ -6016,7 +4124,6 @@ h2 {
   font-size: 13px;
 }
 
-
 /* =====================================================
    ADMIN LAYOUT
 ===================================================== */
@@ -6166,7 +4273,6 @@ h2 {
   font-size: 11px;
 }
 
-
 /* =====================================================
    ADMIN STATS
 ===================================================== */
@@ -6262,7 +4368,6 @@ h2 {
 
   font-weight: 700;
 }
-
 
 /* =====================================================
    ADMIN TABLE
@@ -6368,7 +4473,6 @@ h2 {
 .quoteStatus.new {
   color: var(--accent);
 }
-
 
 /* =====================================================
    ADMIN QUOTE DETAIL
@@ -6520,7 +4624,6 @@ h2 {
   line-height: 1.6;
 }
 
-
 /* =====================================================
    ADMIN MOBILE
 ===================================================== */
@@ -6666,7 +4769,6 @@ h2 {
 .adminStatCard:hover small {
   color: rgba(255,255,255,.45);
 }
-
 
 /* =====================================================
    ADMIN WORKFLOW
@@ -7059,7 +5161,6 @@ h2 {
   color: rgba(255,255,255,.25);
 }
 
-
 /* HERO */
 
 .productDetailHero {
@@ -7168,7 +5269,6 @@ h2 {
 
   gap: 12px;
 }
-
 
 /* HERO VISUAL */
 
@@ -7367,7 +5467,6 @@ h2 {
   letter-spacing: -.02em;
 }
 
-
 /* TECHNICAL DATA */
 
 .technicalDataSection {
@@ -7470,7 +5569,6 @@ h2 {
   letter-spacing: -0.02em;
 }
 
-
 /* APPLICATIONS (DARK) */
 
 .productApplicationsSection {
@@ -7560,7 +5658,6 @@ h2 {
   line-height: 1.6;
 }
 
-
 /* DOWNLOADS */
 
 .productDownloadsSection {
@@ -7640,7 +5737,6 @@ h2 {
 .productDownloadsList button:disabled {
   cursor: not-allowed;
 }
-
 
 /* RELATED PRODUCTS */
 
@@ -7884,7 +5980,6 @@ h2 {
   transform: translate(calc(3px * var(--dir-x)), -3px);
 }
 
-
 /* CTA */
 
 .productDetailCta {
@@ -7949,7 +6044,6 @@ h2 {
   transform: translateY(-2px);
 }
 
-
 /* NOT FOUND */
 
 .productNotFound {
@@ -7992,7 +6086,6 @@ h2 {
   text-transform: uppercase;
 }
 
-
 /* PRODUCT DETAIL TABLET */
 
 @media (max-width: 1050px) {
@@ -8017,7 +6110,6 @@ h2 {
   }
 
 }
-
 
 /* PRODUCT DETAIL MOBILE */
 
@@ -8119,7 +6211,6 @@ h2 {
 
 }
 
-
 /* =====================================================
    SMALL FIXES
 ===================================================== */
@@ -8180,7 +6271,6 @@ textarea:focus-visible {
 
   outline-offset: 3px;
 }
-
 
 /* =====================================================
    ADMIN ADDITIONS
@@ -8245,7 +6335,6 @@ textarea:focus-visible {
   text-underline-offset: 3px;
 }
 
-
 /* =====================================================
    FLAGS
 ===================================================== */
@@ -8286,7 +6375,6 @@ textarea:focus-visible {
 
   box-shadow: inset 0 0 0 1px rgba(17, 34, 68, .14);
 }
-
 
 /* =====================================================
    LANGUAGE SWITCHER
@@ -8507,7 +6595,6 @@ textarea:focus-visible {
 
 }
 
-
 /* =====================================================
    ARABIC / RTL
 ===================================================== */
@@ -8529,7 +6616,6 @@ html[lang="ar"] body * {
 html[lang="ar"] h1,
 html[lang="ar"] h2,
 html[lang="ar"] h3,
-html[lang="ar"] .qualityStatement strong,
 html[lang="ar"] .stat strong {
   line-height: 1.25;
 }
@@ -8559,7 +6645,6 @@ html[dir="rtl"] .desktopNav a {
   font-size: 14px;
 }
 
-
 /* =====================================================
    BRAND LOGO
 ===================================================== */
@@ -8587,7 +6672,6 @@ html[dir="rtl"] .desktopNav a {
   }
 
 }
-
 
 /* =====================================================
    FOOTER (footer-4 layout)
@@ -8831,9 +6915,6 @@ html[dir="rtl"] .desktopNav a {
   }
 
 }
-
-
-
 
 /* =====================================================
    EXPORT NETWORK (Global section)
@@ -9751,7 +7832,6 @@ html[dir="rtl"] .exportStepProgress span {
 
 }
 
-
 /* Contact: real map + address */
 
 .contactMap {
@@ -9892,7 +7972,6 @@ html[dir="rtl"] .exportStepProgress span {
 
 }
 
-
 /* =====================================================
    TYPOGRAPHY
 ===================================================== */
@@ -9915,9 +7994,7 @@ h3,
 .stat strong,
 .globalFigures dt,
 .heroVisualBottom strong,
-.qualityStatement strong,
 .exportStep strong,
-.facilityContent h3,
 .contactAddressCard address strong,
 .adminPageHeader h1 {
   font-family: var(--font-display);
@@ -9941,128 +8018,14 @@ h3 {
   text-wrap: balance;
 }
 
-
 /* =====================================================
    FACILITIES — single production hub
 ===================================================== */
-
-.facilitiesGrid.single {
-  grid-template-columns: 1fr;
-
-  gap: 0;
-
-  overflow: hidden;
-
-  border: 1px solid var(--line);
-
-  border-radius: 24px;
-
-  background: transparent;
-}
-
-.facilitiesGrid.single .facilityCard {
-  display: grid;
-
-  grid-template-columns: 1.2fr 1fr;
-}
-
-.facilitiesGrid.single .facilityMedia {
-  min-height: 460px;
-}
-
-.facilitiesGrid.single .facilityContent {
-  min-height: 0;
-
-  padding: 44px 44px 40px;
-
-  display: flex;
-
-  flex-direction: column;
-}
-
-.facilityAddress {
-  margin-top: auto;
-
-  padding-top: 28px;
-
-  display: flex;
-
-  gap: 12px;
-
-  border-top: 1px solid var(--line);
-}
-
-.facilityAddress > svg {
-  flex: none;
-
-  width: 18px;
-
-  height: 18px;
-
-  margin-top: 2px;
-
-  color: var(--accent);
-}
-
-.facilityAddress div {
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 12px;
-}
-
-.facilityAddress span:first-child {
-  color: var(--text-secondary);
-
-  font-size: 14px;
-
-  line-height: 1.6;
-}
-
-.facilityAddress a {
-  width: max-content;
-
-  display: inline-flex;
-
-  align-items: center;
-
-  gap: 10px;
-
-  padding-bottom: 4px;
-
-  border-bottom: 1px solid var(--text);
-
-  font-size: 13px;
-
-  font-weight: 600;
-}
-
-.facilityAddress a > span {
-  color: var(--accent);
-}
-
-@media (max-width: 900px) {
-
-  .facilitiesGrid.single .facilityCard {
-    grid-template-columns: 1fr;
-  }
-
-  .facilitiesGrid.single .facilityMedia {
-    min-height: 340px;
-  }
-
-  .facilitiesGrid.single .facilityContent {
-    padding: 28px 24px 32px;
-  }
-
-}
 
 /* Home: contact follows the dark export section directly */
 .globalSection + .contactLocations {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
-
 
 /* =====================================================
    SHAPE SYSTEM
@@ -10109,9 +8072,6 @@ h3 {
 
 /* Icon buttons */
 
-.technologyArrow,
-.qualityArrow,
-.facilityArrow,
 .productCatalogArrow,
 .industryArrow,
 .relatedProductBottom > span,
@@ -10120,10 +8080,6 @@ h3 {
 }
 
 /* Tags */
-
-.facilityMeta span {
-  border-radius: var(--radius-pill);
-}
 
 /* Panels & media */
 
@@ -10146,14 +8102,6 @@ h3 {
 
 /* Framed grids: rounded outer frame, inner dividers kept */
 
-.technologyGrid,
-.engineeringGrid {
-  border: 1px solid var(--line-dark);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-}
-
-.qualityLayout,
 .productExplorer {
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
@@ -10162,8 +8110,6 @@ h3 {
   background: rgba(255, 255, 255, 0.45);
 }
 
-.engineeringContent,
-.qualityStatement,
 .productCategoryList {
   padding-inline: 32px;
 }
@@ -10271,11 +8217,6 @@ h3 {
 
 @media (max-width: 800px) {
 
-  .engineeringContent,
-  .qualityStatement {
-    padding-inline: 20px;
-  }
-
   .productCategoryItem {
     padding-inline: 18px;
   }
@@ -10290,7 +8231,6 @@ h3 {
   }
 
 }
-
 
 /* =====================================================
    HEADER – quote button
@@ -10381,7 +8321,6 @@ h3 {
 
 }
 
-
 /* =====================================================
    FOOTER – contact items
 ===================================================== */
@@ -10425,7 +8364,6 @@ h3 {
   color: var(--accent);
 }
 
-
 /* =====================================================
    CONTACT – quote channel as a button
 ===================================================== */
@@ -10447,7 +8385,6 @@ button.contactChannel {
 .contactChannelOutline {
   color: #fff;
 }
-
 
 /* =====================================================
    QUOTE DIALOG
@@ -10794,7 +8731,6 @@ button.contactChannel {
 
 }
 
-
 /* =====================================================
    FLOATING CONTACT BUBBLES
 ===================================================== */
@@ -11034,7 +8970,6 @@ button.contactChannel {
 
 }
 
-
 /* =====================================================
    BRAND – lighter blue accent on navy surfaces for contrast
 ===================================================== */
@@ -11045,8 +8980,7 @@ button.contactChannel {
 .productDetailCta,
 .heroVisual,
 .productPreview,
-.productDetailVisual,
-.facilityMedia {
+.productDetailVisual {
   --accent: var(--accent-light);
 }
 
@@ -11059,7 +8993,6 @@ button.contactChannel {
 
   border-color: #1d67d5;
 }
-
 
 /* =====================================================
    COOKIE CONSENT
@@ -11361,7 +9294,6 @@ button.contactChannel {
   background: radial-gradient(ellipse at 50% 50%, rgba(77, 148, 245, 0.08), transparent 70%);
 }
 
-
 /* =====================================================
    PRODUCT PHOTOS (uploaded in the admin panel)
 ===================================================== */
@@ -11391,7 +9323,6 @@ button.contactChannel {
 .productPhotoLarge {
   max-height: 420px;
 }
-
 
 /* =====================================================
    ADMIN – CONTENT MANAGEMENT
@@ -12241,7 +10172,6 @@ button.contactChannel {
   word-break: break-word;
 }
 
-
 /* =====================================================
    BLOG & VIDEOS
 ===================================================== */
@@ -12903,7 +10833,6 @@ button.contactChannel {
 
 }
 
-
 /* =====================================================
    ADMIN – BLOG & VIDEOS
 ===================================================== */
@@ -13234,9 +11163,6 @@ button.contactChannel {
   }
 
 }
-
-
-
 
 /* =====================================================
    HOME – VIDEO OPENING (first video in the admin panel)
@@ -14348,7 +12274,6 @@ button.contactChannel {
   font-size: 11px;
 }
 
-
 /* =====================================================
    02 / KURUMSAL – production experience (IntegrationShowcase style)
 ===================================================== */
@@ -14661,7 +12586,6 @@ button.contactChannel {
   }
 
 }
-
 
 /* =====================================================
    04 / ÜRÜNLER – 3D portfolio gallery
@@ -15233,9 +13157,6 @@ button.contactChannel {
   }
 
 }
-
-
-
 
 /* =====================================================
    05 / SEKTÖRLER – dark industry showcase

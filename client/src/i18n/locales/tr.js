@@ -182,35 +182,6 @@ const tr = {
     ],
   },
 
-  technology: {
-    index: '03 / TEKNOLOJİLER',
-    eyebrow: 'Üretim yetkinlikleri',
-    title: 'Sürecin',
-    titleAccent: 'etrafında şekillenir.',
-    items: [
-      {
-        title: ['Rotasyonel', 'Kalıplama'],
-        description:
-          'Tanklar, endüstriyel konteynerler ve büyük ölçekli uygulamalar için yüksek kapasiteli polietilen üretimi.',
-        meta: 'Büyük ölçek / Dayanıklı / Endüstriyel',
-      },
-      {
-        title: ['Enjeksiyon', 'Kalıplama'],
-        description:
-          'Tutarlı geometri ve performans gerektiren yüksek hacimli parçalar için tekrarlanabilir üretim.',
-        meta: 'Hassasiyet / Ölçek / Tutarlılık',
-      },
-      {
-        title: ['Şişirme', 'Kalıplama'],
-        description:
-          'İçi boş polietilen ürünler ve uygulamaya özel parçalar için verimli üretim teknolojisi.',
-        meta: 'İçi boş ürünler / Verimli / Esnek',
-      },
-    ],
-    footer: ['Farklı süreçler.', 'Tek üretim standardı.'],
-    explore: 'Yetkinliklerimizi Keşfedin',
-  },
-
   productExplorer: {
     rotateHint: 'Kaydırın veya sürükleyin',
     prev: 'Önceki ürün grubu',
@@ -330,102 +301,6 @@ const tr = {
     ctaEyebrow: 'Sizin sektörünüz',
     ctaTitle: 'Özel bir uygulamaya mı ihtiyacınız var?',
     ctaLink: 'RMA ile görüşün',
-  },
-
-  engineering: {
-    index: '05 / MÜHENDİSLİK',
-    eyebrow: 'Özel üretim',
-    title: 'Her çözüm',
-    titleAccent: 'katalogda bulunmaz.',
-    description:
-      'RMA; özel geometri, kapasite, üretim yöntemi veya operasyonel performans gerektiren projeler için uygulamaya özel polietilen ürünler geliştirir.',
-    introLabel: 'Fikirden üretime',
-    intro:
-      'RMA, ilk ihtiyaçtan endüstriyel üretime kadar ürün geliştirme sürecini mühendislik, kalıp geliştirme ve üretim uzmanlığıyla destekler.',
-    steps: [
-      {
-        title: 'İhtiyaç Analizi',
-        description:
-          'Uygulamanın, ölçülerin, kapasitenin, çalışma koşullarının ve projeye özel gereksinimlerin anlaşılması.',
-      },
-      {
-        title: 'Ürün Geliştirme',
-        description:
-          'Teknik ihtiyacın üretilebilir bir polietilen ürün konseptine dönüştürülmesi.',
-      },
-      {
-        title: 'Kalıp Geliştirme',
-        description:
-          'Tekrarlanabilir endüstriyel üretim için gerekli üretim altyapısının hazırlanması.',
-      },
-      {
-        title: 'Endüstriyel Üretim',
-        description:
-          'Onaylanan ürünün kontrollü ve ölçeklenebilir üretime alınması.',
-      },
-    ],
-    discuss: 'Projenizi Görüşelim',
-    visualTop: ['Teknik geliştirme', 'RMA / Mühendislik'],
-    noteMaterial: 'Malzeme / PE',
-    noteProject: 'Projeye özel',
-    typeLabel: 'Tür',
-    typeValue: 'Özel Ürün',
-    processLabel: 'Süreç',
-    processValue: 'Mühendislik + Üretim',
-  },
-
-  facilities: {
-    index: '07 / TESİS',
-    eyebrow: 'Üretim merkezi',
-    title: 'Üretim,',
-    titleAccent: 'ihtiyacın olduğu yerde.',
-    description:
-      'RMA’nın üretim ve dağıtım merkezi Mersin Tarsus Organize Sanayi Bölgesi’nde yer alır; üretim altyapısını bölgesel erişim ve endüstriyel yetkinlikle birleştirir.',
-    country: 'Türkiye',
-    mediaTag: 'RMA / Türkiye',
-    placeholder: 'Fabrika görseli / videosu',
-    items: [
-      {
-        city: 'Mersin',
-        title: 'Üretim ve Dağıtım Merkezi',
-        description:
-          'Büyük ölçekli polietilen üretimini, endüstriyel depolama çözümlerini ve uygulamaya özel üretimi destekleyen ana üretim lokasyonu; ihracatın da merkezi.',
-        meta: ['Üretim', 'Mühendislik', 'İhracat'],
-      },
-    ],
-    bottom: ['Tek merkez.', 'Dünyaya ihracat.'],
-    directions: 'Yol tarifi al',
-    contact: 'Ekibimizle İletişime Geçin',
-  },
-
-  quality: {
-    index: '07 / KALİTE',
-    eyebrow: 'Sürecin bir parçası',
-    title: 'Kalite',
-    titleAccent: 'ek bir adım değildir.',
-    description:
-      'Ürünlerin geliştirilme, üretilme ve endüstriyel kullanıma hazırlanma biçiminin ayrılmaz bir parçasıdır.',
-    statementLabel: 'RMA üretim standardı',
-    statement: ['Tasarlandı.', 'Üretildi.', 'Kontrol edildi.'],
-    statementText:
-      'Üretim planlamasından nihai üretime kadar her aşama, tutarlı ve güvenilir ürün performansına katkı sağlar.',
-    items: [
-      {
-        title: 'Kontrollü Üretim',
-        description:
-          'Tekrarlanabilirlik, ürün tutarlılığı ve güvenilir endüstriyel performansa odaklanan yapılandırılmış üretim süreçleri.',
-      },
-      {
-        title: 'Malzeme Odağı',
-        description:
-          'Uygulama gereksinimleri, dayanıklılık ve uzun ömürlü kullanım esas alınarak yapılan polietilen bazlı üretim.',
-      },
-      {
-        title: 'Teknik Doğrulama',
-        description:
-          'Ürün gereksinimleri; ölçüler, uygulama kriterleri ve üretilebilirlik açısından değerlendirilir.',
-      },
-    ],
   },
 
   global: {

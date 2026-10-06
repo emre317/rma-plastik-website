@@ -183,35 +183,6 @@ const en = {
     ],
   },
 
-  technology: {
-    index: '03 / TECHNOLOGIES',
-    eyebrow: 'Manufacturing capabilities',
-    title: 'Built around',
-    titleAccent: 'the process.',
-    items: [
-      {
-        title: ['Rotational', 'Moulding'],
-        description:
-          'High-capacity polyethylene manufacturing for tanks, industrial containers and large-format applications.',
-        meta: 'Large format / Durable / Industrial',
-      },
-      {
-        title: ['Injection', 'Moulding'],
-        description:
-          'Repeatable manufacturing for high-volume components requiring consistent geometry and performance.',
-        meta: 'Precision / Scale / Consistency',
-      },
-      {
-        title: ['Blow', 'Moulding'],
-        description:
-          'Efficient production technology for hollow polyethylene products and application-specific components.',
-        meta: 'Hollow products / Efficient / Flexible',
-      },
-    ],
-    footer: ['Different processes.', 'One manufacturing standard.'],
-    explore: 'Explore Our Capabilities',
-  },
-
   productExplorer: {
     rotateHint: 'Scroll or drag to rotate',
     prev: 'Previous product group',
@@ -331,102 +302,6 @@ const en = {
     ctaEyebrow: 'Your industry',
     ctaTitle: 'Need a custom application?',
     ctaLink: 'Talk to RMA',
-  },
-
-  engineering: {
-    index: '05 / ENGINEERING',
-    eyebrow: 'Custom manufacturing',
-    title: 'Not every solution',
-    titleAccent: 'comes from a catalogue.',
-    description:
-      'RMA develops application-specific polyethylene products for projects that require custom geometry, capacity, production method or operational performance.',
-    introLabel: 'From idea to production',
-    intro:
-      'From initial requirement to industrial production, RMA supports product development through engineering, mold development and manufacturing expertise.',
-    steps: [
-      {
-        title: 'Requirement Analysis',
-        description:
-          'Understanding application, dimensions, capacity, working conditions and project-specific requirements.',
-      },
-      {
-        title: 'Product Development',
-        description:
-          'Translating the technical requirement into a manufacturable polyethylene product concept.',
-      },
-      {
-        title: 'Mold Development',
-        description:
-          'Preparing the manufacturing infrastructure required for repeatable industrial production.',
-      },
-      {
-        title: 'Industrial Production',
-        description:
-          'Moving the approved product into controlled and scalable production.',
-      },
-    ],
-    discuss: 'Discuss Your Project',
-    visualTop: ['Technical development', 'RMA / Engineering'],
-    noteMaterial: 'Material / PE',
-    noteProject: 'Project specific',
-    typeLabel: 'Type',
-    typeValue: 'Custom Product',
-    processLabel: 'Process',
-    processValue: 'Engineering + Production',
-  },
-
-  facilities: {
-    index: '07 / FACILITY',
-    eyebrow: 'Production hub',
-    title: 'Manufacturing',
-    titleAccent: 'where it matters.',
-    description:
-      'RMA’s production and distribution hub is located in the Mersin Tarsus Organized Industrial Zone, combining manufacturing infrastructure with regional access and industrial capability.',
-    country: 'Türkiye',
-    mediaTag: 'RMA / Türkiye',
-    placeholder: 'Factory image / video',
-    items: [
-      {
-        city: 'Mersin',
-        title: 'Production & Distribution Hub',
-        description:
-          'The core manufacturing location supporting large-scale polyethylene production, industrial storage solutions and application-specific manufacturing — and the hub for our exports.',
-        meta: ['Production', 'Engineering', 'Export'],
-      },
-    ],
-    bottom: ['One hub.', 'Exporting worldwide.'],
-    directions: 'Get directions',
-    contact: 'Contact Our Team',
-  },
-
-  quality: {
-    index: '07 / QUALITY',
-    eyebrow: 'Built into the process',
-    title: 'Quality is not',
-    titleAccent: 'an extra step.',
-    description:
-      'It is integrated into how products are developed, manufactured and prepared for industrial use.',
-    statementLabel: 'RMA manufacturing standard',
-    statement: ['Designed.', 'Manufactured.', 'Controlled.'],
-    statementText:
-      'From production planning to final manufacturing, each stage contributes to consistent and dependable product performance.',
-    items: [
-      {
-        title: 'Controlled Production',
-        description:
-          'Structured manufacturing processes focused on repeatability, product consistency and reliable industrial performance.',
-      },
-      {
-        title: 'Material Focus',
-        description:
-          'Polyethylene-based production built around application requirements, durability and long-term use.',
-      },
-      {
-        title: 'Technical Validation',
-        description:
-          'Product requirements are reviewed through dimensions, application criteria and manufacturing feasibility.',
-      },
-    ],
   },
 
   global: {
