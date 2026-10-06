@@ -14,9 +14,7 @@ import { useQuote } from './quote/QuoteContext';
 const navItems = [
   { key: 'company', path: '/company' },
   { key: 'products', path: '/products' },
-  { key: 'technologies', path: '/technologies' },
   { key: 'industries', path: '/industries' },
-  { key: 'engineering', path: '/engineering' },
   { key: 'blog', path: '/blog' },
 ];
 

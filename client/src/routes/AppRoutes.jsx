@@ -8,11 +8,8 @@ import Home from '../pages/Home/Home';
 import Company from '../pages/Company/Company';
 import Products from '../pages/Products/Products';
 import ProductDetail from '../pages/ProductDetail/ProductDetail';
-import Technologies from '../pages/Technologies/Technologies';
-import TechnologyDetail from '../pages/TechnologyDetail/TechnologyDetail';
 import Industries from '../pages/Industries/Industries';
 import IndustryDetail from '../pages/IndustryDetail/IndustryDetail';
-import Engineering from '../pages/Engineering/Engineering';
 import Contact from '../pages/Contact/Contact';
 import Blog from '../pages/Blog/Blog';
 import BlogPost from '../pages/BlogPost/BlogPost';
@@ -49,19 +46,12 @@ export default function AppRoutes() {
         <Route path="products" element={<Products />} />
         <Route path="products/:slug" element={<ProductDetail />} />
 
-        <Route path="technologies" element={<Technologies />} />
-        <Route
-          path="technologies/:slug"
-          element={<TechnologyDetail />}
-        />
-
         <Route path="industries" element={<Industries />} />
         <Route
           path="industries/:slug"
           element={<IndustryDetail />}
         />
 
-        <Route path="engineering" element={<Engineering />} />
         <Route path="contact" element={<Contact />} />
 
         <Route path="blog" element={<Blog />} />

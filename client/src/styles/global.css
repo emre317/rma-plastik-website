@@ -6700,6 +6700,17 @@ html[dir="rtl"] .desktopNav a {
   grid-column: span 2;
 }
 
+/* Contact column takes the full row on phones (two link columns above it) */
+.footerContact {
+  grid-column: span 2;
+}
+
+@media (min-width: 640px) {
+  .footerContact {
+    grid-column: auto;
+  }
+}
+
 .footerLogo {
   display: inline-flex;
 }
@@ -6907,7 +6918,7 @@ html[dir="rtl"] .desktopNav a {
 @media (min-width: 768px) {
 
   .footerGrid {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
   .footerBrand {
@@ -13785,4 +13796,131 @@ button.contactChannel {
     display: none;
   }
 
+}
+
+/* =====================================================
+   05 / GLOBAL – showcase header (intro + glass figures panel)
+===================================================== */
+
+.globalSection::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+
+  background-size: 26px 26px;
+
+  mask-image: linear-gradient(180deg, #000, transparent 45%);
+
+  pointer-events: none;
+}
+
+.globalSection > .container {
+  position: relative;
+}
+
+/* Dark industries → dark export section: keep a visible seam */
+.industriesShowcase + .globalSection {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.globalHeaderShowcase {
+  grid-template-columns: 1.5fr 0.8fr;
+
+  gap: 64px;
+
+  align-items: end;
+}
+
+.globalHeaderIntro .sectionIndex {
+  display: block;
+
+  margin-bottom: 14px;
+}
+
+.globalHeaderIntro h2 {
+  margin-top: 18px;
+}
+
+.globalMeta {
+  padding: 26px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 22px;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  border-radius: var(--radius-lg);
+
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 40px 80px -50px rgba(0, 0, 0, 0.7);
+
+  backdrop-filter: blur(10px);
+}
+
+.globalMeta .globalFigures {
+  margin: 0;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 0;
+}
+
+.globalMeta .globalFigures div {
+  min-width: 0;
+
+  padding: 16px 0;
+
+  border: 0;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 0;
+
+  background: none;
+}
+
+.globalMeta .globalFigures div:first-child {
+  grid-column: 1 / -1;
+
+  padding-top: 0;
+}
+
+.globalMeta .globalFigures div:first-child dt {
+  font-size: 64px;
+
+  background: linear-gradient(180deg, #fff, var(--accent-light));
+
+  -webkit-background-clip: text;
+
+  background-clip: text;
+
+  color: transparent;
+}
+
+.globalMeta .globalFigures div:nth-child(3) {
+  padding-inline-start: 18px;
+
+  border-inline-start: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.globalMeta .button {
+  justify-content: space-between;
+}
+
+@media (max-width: 1000px) {
+  .globalHeaderShowcase {
+    grid-template-columns: 1fr;
+
+    gap: 36px;
+  }
 }

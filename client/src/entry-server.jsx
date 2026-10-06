@@ -16,8 +16,6 @@ import { SITE_URL } from './seo/site';
 
 export { SITE_URL };
 
-const TECHNOLOGY_SLUGS = ['rotational-moulding', 'injection-moulding', 'blow-moulding'];
-
 /* Every indexable public path for a language, without the language prefix */
 export function getPublicPaths(lang) {
   return [
@@ -25,10 +23,7 @@ export function getPublicPaths(lang) {
     '/company',
     '/products',
     ...products.map((product) => `/products/${product.slug}`),
-    '/technologies',
-    ...TECHNOLOGY_SLUGS.map((slug) => `/technologies/${slug}`),
     '/industries',
-    '/engineering',
     '/contact',
     '/blog',
     // Articles only exist in the languages they were written in

@@ -138,9 +138,9 @@ export default function GlobalPresenceSection() {
     <section className="globalSection dark" id="global" ref={sectionRef}>
       <div className="container">
 
-        <div className="globalHeader">
+        <div className="globalHeader globalHeaderShowcase">
 
-          <div>
+          <div className="globalHeaderIntro">
             <span className="sectionIndex light">
               {t('global.index')}
             </span>
@@ -148,9 +148,7 @@ export default function GlobalPresenceSection() {
             <p className="eyebrow">
               {t('global.eyebrow')}
             </p>
-          </div>
 
-          <div>
             <h2>
               {t('global.title')}
               <span>{t('global.titleAccent')}</span>
@@ -159,7 +157,9 @@ export default function GlobalPresenceSection() {
             <p className="globalIntro">
               {t('global.text')}
             </p>
+          </div>
 
+          <aside className="globalMeta">
             <dl className="globalFigures">
               {figures.map((figure) => (
                 <div key={figure.label}>
@@ -168,7 +168,12 @@ export default function GlobalPresenceSection() {
                 </div>
               ))}
             </dl>
-          </div>
+
+            <LocalizedLink to="/contact" className="button primary">
+              <span>{t('global.discuss')}</span>
+              <Arrow className="buttonArrow" />
+            </LocalizedLink>
+          </aside>
 
         </div>
 
@@ -202,10 +207,6 @@ export default function GlobalPresenceSection() {
             {t('global.stepsLabel')}
           </span>
 
-          <LocalizedLink to="/contact" className="globalLink">
-            {t('global.discuss')}
-            <Arrow />
-          </LocalizedLink>
         </div>
 
         <ol className="exportSteps" ref={stepsRef}>

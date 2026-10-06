@@ -29,7 +29,7 @@ const SECTION_LABELS = {
   productExplorer: 'Ana sayfa – Ürün gezgini',
   industries: 'Ana sayfa – Sektörler',
   global: 'Ana sayfa – İhracat',
-  pages: 'İç sayfalar (Kurumsal, Teknolojiler…)',
+  pages: 'İç sayfalar (Kurumsal, Sektörler…)',
   productsPage: 'Ürünler sayfası',
   productDetail: 'Ürün detay sayfası',
   contact: 'İletişim ve teklif formu',

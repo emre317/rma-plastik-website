@@ -26,7 +26,6 @@ const linkColumns = [
       { key: 'about', path: '/company' },
       { key: 'facilities', path: '/company' },
       { key: 'quality', path: '/company' },
-      { key: 'engineering', path: '/engineering' },
       { key: 'blog', path: '/blog' },
       { key: 'videos', path: '/videos' },
     ],
@@ -39,14 +38,6 @@ const linkColumns = [
       { key: 'waterTanks', path: '/products?category=water-tanks' },
       { key: 'agricultural', path: '/products?category=agriculture' },
       { key: 'custom', path: '/products?category=custom' },
-    ],
-  },
-  {
-    group: 'capabilities',
-    links: [
-      { key: 'rotational', path: '/technologies/rotational-moulding' },
-      { key: 'injection', path: '/technologies/injection-moulding' },
-      { key: 'blow', path: '/technologies/blow-moulding' },
     ],
   },
 ];
@@ -146,7 +137,7 @@ export default function Footer() {
             </nav>
           ))}
 
-          <div className="footerColumn">
+          <div className="footerColumn footerContact">
             <h3>
               {t('footer.groups.contact')}
             </h3>
