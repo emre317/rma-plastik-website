@@ -41,7 +41,7 @@ const ar = {
   common: {
     locations: 'مرسين',
     country: 'تركيا',
-    requestQuote: 'اطلب عرض سعر',
+    requestQuote: 'احصل على عرض سعر',
     requestSolution: 'احصل على عرض سعر',
   },
 
@@ -68,7 +68,7 @@ const ar = {
       blow: 'القولبة بالنفخ',
       engineering: 'الهندسة',
       products: 'المنتجات',
-      requestQuote: 'اطلب عرض سعر',
+      requestQuote: 'احصل على عرض سعر',
     },
     rights: 'جميع الحقوق محفوظة.',
     social: {

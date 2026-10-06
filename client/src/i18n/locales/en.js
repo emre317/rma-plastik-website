@@ -41,7 +41,7 @@ const en = {
   common: {
     locations: 'Mersin',
     country: 'Türkiye',
-    requestQuote: 'Request a Quote',
+    requestQuote: 'Get a Quote',
     requestSolution: 'Get a Quote',
   },
 
@@ -68,7 +68,7 @@ const en = {
       blow: 'Blow Moulding',
       engineering: 'Engineering',
       products: 'Products',
-      requestQuote: 'Request a Quote',
+      requestQuote: 'Get a Quote',
     },
     rights: 'All rights reserved.',
     social: {

@@ -40,7 +40,7 @@ const tr = {
   common: {
     locations: 'Mersin',
     country: 'Türkiye',
-    requestQuote: 'Teklif İste',
+    requestQuote: 'Teklif Al',
     requestSolution: 'Teklif Al',
   },
 
@@ -67,7 +67,7 @@ const tr = {
       blow: 'Şişirme Kalıplama',
       engineering: 'Mühendislik',
       products: 'Ürünler',
-      requestQuote: 'Teklif İste',
+      requestQuote: 'Teklif Al',
     },
     rights: 'Tüm hakları saklıdır.',
     social: {
