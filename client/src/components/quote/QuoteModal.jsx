@@ -4,7 +4,7 @@ import { Mail, MapPin, Minus, Package, Phone, Plus, ShoppingBag, X } from 'lucid
 
 import Arrow from '../i18n/Arrow';
 import company from '../../data/company';
-import useProducts from '../../hooks/useProducts';
+import portfolio from '../../data/productPortfolio';
 import { submitQuote } from '../../services/api';
 import { useQuote } from './QuoteContext';
 import { track } from '../../analytics/track';
@@ -55,7 +55,14 @@ function errorMessageKey(error) {
 */
 export default function QuoteModal() {
   const { t, i18n } = useTranslation();
-  const localizedProducts = useProducts();
+  // Product groups of the catalogue; the Turkish title is sent so the sales
+  // team always sees the same name whatever the site language
+  const trT = i18n.getFixedT('tr');
+  const productOptions = portfolio.map((group) => ({
+    id: group.id,
+    value: trT(`productExplorer.items.${group.id}.title`),
+    label: t(`productExplorer.items.${group.id}.title`),
+  }));
   const {
     open, product, details, mode, closeQuote, clearProduct,
     cart, addToCart, removeFromCart, setCartQuantity, clearCart, openCart,
@@ -114,7 +121,7 @@ export default function QuoteModal() {
   const productInList =
     !form.product ||
     form.product === 'Custom Requirement' ||
-    localizedProducts.some((item) => item.quoteName === form.product);
+    productOptions.some((item) => item.value === form.product);
 
   // Scroll lock, Escape to close, focus handling
   useEffect(() => {
@@ -497,9 +504,9 @@ export default function QuoteModal() {
                   </option>
                 )}
 
-                {localizedProducts.map((item) => (
-                  <option key={item.slug} value={item.quoteName}>
-                    {item.name}
+                {productOptions.map((item) => (
+                  <option key={item.id} value={item.value}>
+                    {item.label}
                   </option>
                 ))}
 

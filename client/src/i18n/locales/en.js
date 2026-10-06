@@ -58,6 +58,8 @@ const en = {
     openMenu: 'Open navigation',
     closeMenu: 'Close navigation',
     homeLink: 'RMA Plastik home page',
+    breadcrumb: 'Breadcrumb',
+    allProducts: 'All products',
   },
 
   common: {
@@ -65,6 +67,8 @@ const en = {
     country: 'Türkiye',
     requestQuote: 'Get a Quote',
     requestSolution: 'Get a Quote',
+    catalog: 'Download Catalogue',
+    catalogMeta: 'PDF · 3.5 MB',
   },
 
   cookies: {
@@ -107,11 +111,7 @@ const en = {
       about: 'About RMA',
       facilities: 'Production Facility',
       quality: 'Quality',
-      industrialTanks: 'Industrial Tanks',
-      chemicalTanks: 'Chemical Tanks',
       waterTanks: 'Water Tanks',
-      agricultural: 'Agricultural Solutions',
-      custom: 'Custom Products',
       products: 'Products',
       requestQuote: 'Get a Quote',
     },
@@ -125,7 +125,7 @@ const en = {
   },
 
   hero: {
-    watchFilm: 'Watch the company film',
+    watchFilm: 'Watch the Company Film',
     pause: 'Pause',
     play: 'Play',
     close: 'Close',
@@ -187,7 +187,6 @@ const en = {
   },
 
   productTables: {
-    meta: ['Product Tables', 'RMA Plastik 2025 catalogue'],
     eyebrow: 'Technical data',
     title: 'Product tables,',
     titleAccent: 'on one page.',
@@ -197,14 +196,15 @@ const en = {
     noResults: 'No model matches this code.',
     models: 'models',
     familiesLabel: 'product families',
+    groupsLabel: 'product groups',
     families: {
       'vertical-tanks': {
         title: 'Vertical Tanks',
-        text: 'Food, water, chemical and acid storage tanks from 100 to 37,000 litres.',
+        text: 'Food, water, chemical and acid storage tanks from 100 to 37,500 litres.',
       },
       'horizontal-tanks': {
         title: 'Horizontal Tanks',
-        text: 'Food and water storage tanks from 500 to 5,000 litres.',
+        text: 'Food and water storage tanks from 500 to 5,500 litres.',
       },
       'two-layer-vertical': {
         title: 'Two-Layer Vertical Tanks',
@@ -216,7 +216,7 @@ const en = {
       },
       'textile-trolleys': {
         title: 'Textile Trolleys',
-        text: 'From 230 to 2,600 litres for textile factories and dyeing workshops. High-strength metal frame, polyethylene body resistant to chemicals and paints; wheels in the desired size can be fitted.',
+        text: 'From 230 to 3,500 litres for textile factories and dyeing workshops. High-strength metal frame, polyethylene body resistant to chemicals and paints; wheels in the desired size can be fitted.',
       },
       'cylinder-trolleys': {
         title: 'Cylinder Textile Trolleys',
@@ -283,7 +283,7 @@ const en = {
         text: 'Road safety barriers produced with rotational and blow molding. Suitable for mass production, 300 units can be delivered per day; can be filled with water or sand.',
       },
     },
-    quote: 'Request a quote',
+    quote: 'Request a Quote',
     waterLink: 'Filter water tanks',
     source: 'Values are taken from the RMA Plastik 2025 product catalogue.',
     groups: {
@@ -333,7 +333,7 @@ const en = {
     eyebrow: 'Comparison',
     title: 'Product comparison',
     short: 'Compare',
-    add: 'Add to comparison',
+    add: 'Add to Comparison',
     added: 'Comparing',
     remove: 'Remove from comparison',
     trayLabel: 'Comparison {{count}}/{{max}}',
@@ -348,7 +348,7 @@ const en = {
     family: 'Product family',
     onlyDifferences: 'Show differences only',
     noDifferences: 'All values of the selected models are the same.',
-    addAll: 'Add all to quote cart',
+    addAll: 'Add All to Quote Cart',
     allInCart: 'All in cart',
     max: 'largest',
     min: 'smallest',
@@ -423,14 +423,14 @@ const en = {
     noResults: 'No model matches these conditions',
     noResultsText: 'Widen the space limits or contact us for a tank made to your dimensions.',
     disclaimer: 'Suggestions are based on catalogue dimensions. Confirm suitability for your application (chemical, temperature, installation) with our technical team when you request a quote.',
-    cta: 'Use the tank finder',
+    cta: 'Use the Tank Finder',
     ctaText: 'Find the right tank in 3 questions',
   },
 
   quoteCart: {
     button: 'Quote cart',
     summary: '{{count}} models · {{total}} units',
-    add: 'Add to quote cart',
+    add: 'Add to Quote Cart',
     addShort: 'Add to cart',
     added: 'In cart',
     removeHint: 'Remove from cart',
@@ -449,7 +449,7 @@ const en = {
     usesTitle: 'Uses',
     similar: 'Other models in this family',
     allModels: 'See all models',
-    quote: 'Request a quote',
+    quote: 'Request a Quote',
     standardTitle: 'Standard on our tanks',
     description: '{{code}} – {{family}}. {{specs}}. Polyethylene product by RMA Plastik; see dimensions and request a quote.',
     notFoundTitle: 'Model not found',
@@ -460,7 +460,6 @@ const en = {
   },
 
   waterTanks: {
-    meta: ['Water Tanks', 'Model finder'],
     eyebrow: 'Polyethylene water tanks',
     title: 'Find the water tank',
     titleAccent: 'that fits your needs.',
@@ -506,7 +505,7 @@ const en = {
     noResultsHint: 'Widen the filters or contact us for a solution that fits your dimensions.',
     cards: 'Cards',
     table: 'Table',
-    quote: 'Request a quote',
+    quote: 'Request a Quote',
     standardTitle: 'Standard on our tanks',
     allTables: 'All product tables',
     showFilters: 'Show filters',
@@ -550,7 +549,7 @@ const en = {
     selectLabel: 'Select a machine',
     countLabel: 'units',
     workshop: 'Fully equipped',
-    link: 'Our custom molding services',
+    link: 'Our Custom Molding Services',
     items: [
       {
         count: '6',
@@ -611,10 +610,10 @@ const en = {
     familiesLabel: 'Product families',
     range: 'Volume range',
     familiesTitle: 'Product families in this group',
-    explore: 'View models',
-    finder: 'Use the tank finder',
-    quote: 'Request a quote',
-    customLink: 'Explore custom molding',
+    explore: 'View Models',
+    finder: 'Use the Tank Finder',
+    quote: 'Request a Quote',
+    customLink: 'Explore Custom Molding',
     projectBased: 'Project based',
     quickLinks: 'Quick access',
     statsFamilies: 'product families',
@@ -685,7 +684,7 @@ const en = {
 
   industries: {
     countLabel: 'Industries',
-    more: 'Learn more',
+    more: 'Learn More',
     pause: 'Pause',
     play: 'Play',
     index: '05 / INDUSTRIES',
@@ -757,7 +756,7 @@ const en = {
       },
     ],
     referencesLabel: 'From our custom molding projects',
-    link: 'Explore custom molding',
+    link: 'Explore Custom Molding',
   },
 
   global: {
@@ -802,28 +801,77 @@ const en = {
 
   pages: {
     company: {
-      meta: ['01 / Company', 'RMA Plastik'],
       eyebrow: 'About RMA',
-      title: 'Manufacturing',
-      titleAccent: 'with purpose.',
+      title: 'Since 1998,',
+      titleAccent: 'single-piece production.',
       text:
-        'Industrial polyethylene manufacturing supported by engineering experience, production infrastructure and application-focused product development.',
-      since: 'Since 1998',
+        'RMA Plastik was established in 1998 in the Mersin Organized Industrial Zone. Using rotational molding, injection molding and blow molding, we manufacture polyethylene products from water and chemical tanks to textile carts.',
+      about: {
+        label: 'About us',
+        title: 'From Mersin,',
+        titleAccent: 'to the needs of industry.',
+        text: 'Through rotational molding, which allows rapid and cost-effective mold development, we produce molds and design new products according to our customers’ demands and needs.',
+        cards: [
+          {
+            title: 'Products',
+            text: 'Water and acid tanks, food storage and transport tanks, mixer and heated tanks, AdBlue and diesel tanks, road barriers, sumps for petrol stations, calf hutches, acid pools and textile carts.',
+          },
+          {
+            title: 'Sectors',
+            text: 'We work for the food, chemical, automotive, toy, agriculture, plastics and textile sectors.',
+          },
+          {
+            title: 'Capacity',
+            text: 'With 6 rotational molding, 2 injection, 1 blow molding, 2 grinder and 2 extruder machines and a fully equipped metal workshop, we can produce single-piece (monoblock) products 7.5 metres long and weighing up to 1,200 kg.',
+          },
+        ],
+      },
+      why: {
+        label: 'Material and quality',
+        title: 'Why rotational molding',
+        titleAccent: 'and polyethylene?',
+        text: 'Formed as a single piece by rotational molding, polyethylene performs reliably for many years outdoors and in demanding conditions.',
+        items: [
+          { title: 'Recyclable', text: 'All the materials we use are 100% recyclable.' },
+          { title: 'Weather resistant', text: 'Can be kept outdoors in very hot and very cold weather.' },
+          { title: 'Chemical resistant', text: 'Used to store many chemicals such as sulphuric acid, caustic and adhesives.' },
+          { title: 'Monoblock', text: 'Produced as a single piece, without welding, riveting or other joining methods.' },
+          { title: 'Food-code compliant', text: 'Polyethylene complies with food codes; there is no change in the taste or odour of the stored product.' },
+          { title: 'Long lasting', text: 'Single-piece parts formed by centrifugal force last long thanks to their high strength.' },
+          { title: 'Durable', text: 'High impact resistance, which is why it is also used for petrol and diesel tanks in the automotive sector.' },
+          { title: 'Safe', text: 'Its durability and the properties of the raw material make it safe to use.' },
+        ],
+      },
+      eco: {
+        label: 'Responsible production',
+        title: 'Powered by the sun,',
+        titleAccent: 'recovering our scrap.',
+        text: 'We are guided by principles that prioritise environmental responsibility, ethical labour practices and efficient use of resources.',
+        items: [
+          { title: 'Our energy comes from the sun', text: 'We draw our energy directly from the sun and reduce our environmental impact.' },
+          { title: 'Our fuel is electricity', text: 'We have replaced our vehicles with electric models.' },
+          { title: 'Sustainable manufacturing', text: 'Every step of our production process is designed with the environment in mind.' },
+          { title: 'We recycle all our scrap', text: 'Production scrap is ground in our grinders and reused.' },
+        ],
+        social: 'We respect gender equality, safeguard workers’ rights and work carefully on occupational health and safety.',
+      },
+      cta: {
+        title: 'Let’s evaluate your project together.',
+        text: 'Share the capacity, operating conditions and dimensions you need; our team will suggest a catalogue or custom solution.',
+      },
     },
     industries: {
-      meta: ['04 / Industries', 'Applications'],
       eyebrow: 'Industrial applications',
       title: 'Solutions designed',
       titleAccent: 'around industries.',
-    },
-    industryDetail: {
-      meta: 'Industry',
-      eyebrow: 'Industry solution',
-      title: 'Application-focused',
-      titleAccent: 'solutions.',
+      sectorsLabel: 'Industries',
+      relatedLabel: 'Related product groups',
+      quote: 'Request a Quote for This Industry',
+      ctaTitle: 'Don’t see your industry?',
+      ctaText: 'Our custom molding team develops the right product with you, from design to serial production.',
+      ctaLink: 'Explore Custom Molding',
     },
     customMolding: {
-      meta: ['Custom Molding', '25 years of mold manufacturing experience'],
       eyebrow: 'Custom Molding',
       title: 'We bring your ideas',
       titleAccent: 'and projects to life.',
@@ -883,7 +931,7 @@ const en = {
       ctaTitle: 'Tell us about your project.',
       ctaText: 'Share your idea, drawing or sample, and our team will assess the right production method with you.',
       ctaQuote: 'Request a Quote',
-      ctaContact: 'Contact us',
+      ctaContact: 'Contact Us',
     },
     notFound: {
       eyebrow: 'Error / 404',
@@ -894,17 +942,19 @@ const en = {
   },
 
   productsPage: {
-    meta: ['02 / Products', 'Product portfolio'],
-    eyebrow: 'Polyethylene solutions',
-    title: 'Products built',
-    titleAccent: 'for industry.',
+    eyebrow: 'Product portfolio',
+    title: 'The right polyethylene',
+    titleAccent: 'product for every use.',
     text:
-      'Explore RMA polyethylene products developed for industrial, chemical, agricultural and application-specific requirements.',
-    tag: 'RMA / Products',
-    catalogIndex: 'Product index',
-    catalogTitle: 'Explore the',
-    catalogTitleAccent: 'portfolio.',
-    catalogText: 'Filter products by application and product family.',
+      'From water and chemical tanks to food tanks, from textile carts to road barriers: every product group and model of our 2025 catalogue in one place.',
+    catalogIndex: 'Product groups',
+    catalogTitle: 'Explore',
+    catalogTitleAccent: 'the portfolio.',
+    catalogText: 'Review the models of each group with their dimensions, compare them and request a quote directly.',
+    tablesText: 'Review the models of every product family with their dimensions on one page.',
+    ctaTitle: 'Can’t find the product you need?',
+    ctaText: 'For sizes and shapes not in our catalogue, let’s evaluate custom mold and production options together.',
+    // Categories of the admin product list (Admin > Ürünler)
     filters: {
       all: 'All Products',
       'industrial-tanks': 'Industrial Tanks',
@@ -912,83 +962,6 @@ const en = {
       'water-tanks': 'Water Tanks',
       agriculture: 'Agriculture',
       custom: 'Custom',
-    },
-    capacity: 'Capacity',
-    technology: 'Technology',
-    empty: 'No products listed in this category yet.',
-    askTeam: 'Ask our team',
-  },
-
-  productDetail: {
-    notFoundEyebrow: 'Product not found',
-    notFoundTitle: 'Product',
-    notFoundTitleAccent: 'not available.',
-    backToProducts: 'Back to Products',
-    metaProduct: 'Product',
-    technicalData: 'Technical Data',
-    series: 'Product series',
-    fields: {
-      product: 'Product',
-      category: 'Category',
-      capacity: 'Capacity',
-      material: 'Material',
-      application: 'Application',
-      technology: 'Technology',
-    },
-    technical: {
-      index: '01 / Technical data',
-      eyebrow: 'Product specification',
-      title: 'Technical',
-      titleAccent: 'overview.',
-      label: 'Product information',
-      text: 'Core technical information for the selected RMA polyethylene product.',
-    },
-    applications: {
-      index: '02 / Application',
-      eyebrow: 'Built for use',
-      title: 'Designed around',
-      titleAccent: 'real applications.',
-      text:
-        'Product selection, geometry and technical requirements should always be evaluated according to actual operating conditions.',
-      items: [
-        {
-          title: 'Industrial Storage',
-          description:
-            'Suitable for industrial environments where reliable polyethylene storage is required.',
-        },
-        {
-          title: 'Process Applications',
-          description:
-            'Supports application-specific process requirements depending on selected product configuration.',
-        },
-        {
-          title: 'Custom Requirements',
-          description:
-            'RMA engineering support can be considered where standard catalogue configurations are not sufficient.',
-        },
-      ],
-    },
-    resources: {
-      index: '03 / Resources',
-      eyebrow: 'Documentation',
-      title: 'Product',
-      titleAccent: 'resources.',
-      comingSoon: 'Coming Soon',
-      items: [
-        { type: 'PDF', title: 'Technical Datasheet' },
-        { type: 'PDF', title: 'Product Catalogue' },
-        { type: 'DOC', title: 'Certificates' },
-      ],
-    },
-    related: {
-      index: '04 / Related',
-      eyebrow: 'More products',
-      viewAll: 'View All Products',
-    },
-    cta: {
-      eyebrow: 'Need more information?',
-      title: "Let's discuss",
-      titleAccent: 'your requirement.',
     },
   },
 
@@ -1047,14 +1020,13 @@ const en = {
   },
 
   blog: {
-    meta: 'Knowledge centre',
     eyebrow: 'Blog',
     title: 'Technical insight,',
     titleAccent: 'better decisions.',
     text: 'Guides on polyethylene storage solutions, material selection and manufacturing processes.',
     empty: 'No articles published yet. Technical guides are coming soon.',
-    emptyLink: 'Explore products',
-    readMore: 'Read more',
+    emptyLink: 'Explore Products',
+    readMore: 'Read More',
     readingTime_one: '{{count}} min read',
     readingTime_other: '{{count}} min read',
     back: 'All articles',
@@ -1064,10 +1036,10 @@ const en = {
   },
 
   videos: {
-    meta: 'Video',
     eyebrow: 'RMA Plastik on YouTube',
     title: 'Inside',
     titleAccent: 'our production.',
+    text: 'Videos from our production line, our products and our custom projects.',
     empty: 'No videos yet. Visit our YouTube channel.',
     play: 'Play video',
     all: 'All videos',
@@ -1098,13 +1070,11 @@ const en = {
       form: 'Quote form',
       formValue: 'Tell us about your project',
     },
-    meta: ['06 / Contact', 'Start a project'],
     eyebrow: 'Talk to RMA',
     title: 'Tell us what',
     titleAccent: 'you need.',
     text:
       'Share your product, application or custom manufacturing requirement with our team.',
-    tag: 'Sales / Engineering',
     formEyebrow: 'Project information',
     formTitle: 'Get a',
     formTitleAccent: 'quote.',

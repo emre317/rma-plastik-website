@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { ChevronDown, GitCompareArrows, Table2, Wand2, Wrench } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -10,6 +11,8 @@ import LanguageSwitcher from './i18n/LanguageSwitcher';
 import Arrow from './i18n/Arrow';
 import BrandLogo from './BrandLogo';
 import { useQuote } from './quote/QuoteContext';
+import portfolio from '../data/productPortfolio';
+import CatalogLink from './ui/CatalogLink';
 
 const navItems = [
   { key: 'company', path: '/company' },
@@ -20,6 +23,13 @@ const navItems = [
   { key: 'blog', path: '/blog' },
 ];
 
+const quickLinks = [
+  { path: '/product-tables', label: 'meta.titles.productTables', icon: Table2 },
+  { path: '/tank-finder', label: 'meta.titles.tankFinder', icon: Wand2 },
+  { path: '/compare', label: 'meta.titles.compare', icon: GitCompareArrows },
+  { path: '/custom-molding', label: 'nav.customMolding', icon: Wrench },
+];
+
 const mobileNavItems = [
   ...navItems,
   { key: 'contact', path: '/contact' },
@@ -28,6 +38,8 @@ const mobileNavItems = [
 export default function Header() {
   const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [productsOpen, setProductsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { pathname } = useLocation();
   const { openQuote } = useQuote();
 
@@ -35,10 +47,34 @@ export default function Header() {
     setMenuOpen(false);
   };
 
-  // Close the menu whenever the route changes (incl. browser back/forward)
+  // Close the menus whenever the route changes (incl. browser back/forward)
   useEffect(() => {
     setMenuOpen(false);
+    setProductsOpen(false);
   }, [pathname]);
+
+  // Solid header with a shadow once the page is scrolled
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Escape closes the products menu
+  useEffect(() => {
+    if (!productsOpen) return undefined;
+
+    const onKey = (event) => {
+      if (event.key === 'Escape') setProductsOpen(false);
+    };
+
+    window.addEventListener('keydown', onKey);
+
+    return () => window.removeEventListener('keydown', onKey);
+  }, [productsOpen]);
 
   // Lock page scroll and allow Escape to close while the menu is open
   useEffect(() => {
@@ -65,7 +101,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="siteHeader">
+      <header className={`siteHeader ${scrolled ? 'scrolled' : ''}`}>
         <div className="container headerInner">
 
           <LocalizedLink
@@ -79,9 +115,66 @@ export default function Header() {
 
           <nav className="desktopNav" aria-label={t('nav.main')}>
             {navItems.map((item) => (
-              <LocalizedNavLink to={item.path} key={item.key}>
-                {t(`nav.${item.key}`)}
-              </LocalizedNavLink>
+              item.key === 'products' ? (
+                <div
+                  key={item.key}
+                  className={`navDropdown ${productsOpen ? 'open' : ''}`}
+                  onMouseEnter={() => setProductsOpen(true)}
+                  onMouseLeave={() => setProductsOpen(false)}
+                  onFocus={() => setProductsOpen(true)}
+                  onBlur={(event) => {
+                    if (!event.currentTarget.contains(event.relatedTarget)) setProductsOpen(false);
+                  }}
+                >
+                  <LocalizedNavLink to={item.path} aria-haspopup="true" aria-expanded={productsOpen}>
+                    {t(`nav.${item.key}`)}
+                    <ChevronDown className="navCaret" aria-hidden="true" />
+                  </LocalizedNavLink>
+
+                  <div className="megaMenu" role="region" aria-label={t('nav.products')}>
+                    <div className="megaMenuInner">
+                      <ul className="megaGroups">
+                        {portfolio.map((group) => (
+                          <li key={group.id}>
+                            <LocalizedLink to={group.link} onClick={() => setProductsOpen(false)}>
+                              <span className="megaThumb">
+                                <img src={group.image} alt="" loading="lazy" decoding="async" />
+                              </span>
+                              <span className="megaText">
+                                <strong>{t(`productExplorer.items.${group.id}.label`)}</strong>
+                                <small>
+                                  {group.custom
+                                    ? t('productExplorer.projectBased')
+                                    : `${group.models} ${t('productExplorer.models')}`}
+                                </small>
+                              </span>
+                            </LocalizedLink>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <div className="megaSide">
+                        <span className="megaSideLabel">{t('productExplorer.quickLinks')}</span>
+                        {quickLinks.map((link) => (
+                          <LocalizedLink key={link.path} to={link.path} onClick={() => setProductsOpen(false)}>
+                            <link.icon aria-hidden="true" />
+                            <span>{t(link.label)}</span>
+                          </LocalizedLink>
+                        ))}
+                        <CatalogLink className="megaCatalog" placement="mega_menu" compact />
+                        <LocalizedLink to="/products" className="megaAll" onClick={() => setProductsOpen(false)}>
+                          {t('nav.allProducts')}
+                          <Arrow />
+                        </LocalizedLink>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <LocalizedNavLink to={item.path} key={item.key}>
+                  {t(`nav.${item.key}`)}
+                </LocalizedNavLink>
+              )
             ))}
           </nav>
 

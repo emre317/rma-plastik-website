@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import Seo from '../../seo/Seo';
+import PageHeader from '../../components/ui/PageHeader';
 import Arrow from '../../components/i18n/Arrow';
 import { YoutubeIcon } from '../../components/icons/SocialIcons';
 import YouTubeEmbed, { youtubeThumbnail } from '../../components/content/YouTubeEmbed';
@@ -34,22 +35,20 @@ export default function Videos() {
         jsonLd={videoLd}
       />
 
-      <section className="internalHero internalHeroDark">
-        <div className="container">
-          <div className="internalHeroMeta">
-            <span>{t('videos.meta')}</span>
-            <span>YouTube</span>
-          </div>
-
-          <div className="internalHeroGrid">
-            <p className="eyebrow">{t('videos.eyebrow')}</p>
-            <h1>
-              {t('videos.title')}
-              <span>{t('videos.titleAccent')}</span>
-            </h1>
-          </div>
-        </div>
-      </section>
+      <PageHeader
+        compact
+        crumbs={[{ label: t('meta.titles.videos') }]}
+        eyebrow={t('videos.eyebrow')}
+        title={t('videos.title')}
+        accent={t('videos.titleAccent')}
+        lead={t('videos.text')}
+        actions={(
+          <a href={company.social.youtube} className="button ghost" target="_blank" rel="noreferrer">
+            <span>{t('videos.channel')}</span>
+            <YoutubeIcon aria-hidden="true" className="buttonIcon" />
+          </a>
+        )}
+      />
 
       <section className="videosSection">
         <div className="container">

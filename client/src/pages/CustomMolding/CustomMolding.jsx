@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import Seo from '../../seo/Seo';
+import PageHeader from '../../components/ui/PageHeader';
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
@@ -18,12 +19,13 @@ export default function CustomMolding() {
   };
   const text = (key) => t(`pages.customMolding.${key}`);
 
-  const meta = list('meta');
   const services = list('services');
   const steps = list('steps');
   const machinery = t('machinePark.items', { returnObjects: true });
   const machines = Array.isArray(machinery) ? machinery : [];
   const projects = list('projects');
+  const figureList = t('customMolding.figures', { returnObjects: true });
+  const figures = Array.isArray(figureList) ? figureList : [];
 
   return (
     <main className="internalPage cmPage">
@@ -34,38 +36,41 @@ export default function CustomMolding() {
       />
 
       {/* Hero */}
-      <section className="internalHero internalHeroDark cmHero">
-        <div className="container">
-
-          <div className="internalHeroMeta">
-            <span>{meta[0]}</span>
-            <span>{meta[1]}</span>
-          </div>
-
-          <div className="internalHeroGrid">
-            <p className="eyebrow">{text('eyebrow')}</p>
-
-            <h1>
-              {text('title')}
-              <span>{text('titleAccent')}</span>
-            </h1>
-          </div>
-
-          <div className="cmHeroBottom">
-            <p>{text('intro')}</p>
-
-            <div className="cmMethods">
-              <span className="cmLabel">{text('methodsLabel')}</span>
-              <ul>
-                {list('methods').map((method) => (
-                  <li key={method}>{method}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
+      <PageHeader
+        crumbs={[{ label: t('nav.customMolding') }]}
+        eyebrow={text('eyebrow')}
+        title={text('title')}
+        accent={text('titleAccent')}
+        lead={text('intro')}
+        mediaTone="glass"
+        media={[
+          { src: projectImages[2] },
+          { src: projectImages[0] },
+          { src: projectImages[1] },
+        ]}
+        actions={(
+          <>
+            <button type="button" className="button primary" onClick={() => openQuote()}>
+              <span>{text('ctaQuote')}</span>
+              <Arrow className="buttonArrow" />
+            </button>
+            <a href="#references" className="button ghost">
+              <span>{text('referencesLabel')}</span>
+              <Arrow direction="down" className="buttonArrow" />
+            </a>
+          </>
+        )}
+        facts={figures.map((figure) => ({ value: figure.value, label: figure.label }))}
+      >
+        <div className="phChips">
+          <span className="phChipsLabel">{text('methodsLabel')}</span>
+          <ul>
+            {list('methods').map((method) => (
+              <li key={method}>{method}</li>
+            ))}
+          </ul>
         </div>
-      </section>
+      </PageHeader>
 
       {/* Services */}
       <section className="cmBlock">
@@ -152,7 +157,7 @@ export default function CustomMolding() {
       </section>
 
       {/* References */}
-      <section className="cmReferences">
+      <section className="cmReferences" id="references">
         <div className="container">
           <div className="cmSectionHead">
             <p className="eyebrow">{text('referencesLabel')}</p>

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { GitCompareArrows, Package, X } from 'lucide-react';
 
 import Seo from '../../seo/Seo';
+import PageHeader from '../../components/ui/PageHeader';
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
@@ -101,16 +102,17 @@ export default function Compare() {
     <main className="internalPage comparePage">
       <Seo title={t('compare.title')} description={t('compare.description')} noindex />
 
-      <section className="compareHero">
-        <div className="container">
-          <p className="eyebrow">
-            <GitCompareArrows aria-hidden="true" />
-            {t('compare.eyebrow')}
-          </p>
-          <h1>{t('compare.title')}</h1>
-          <p>{t('compare.intro', { max: MAX_COMPARE })}</p>
-        </div>
-      </section>
+      <PageHeader
+        compact
+        crumbs={[
+          { label: t('nav.products'), to: '/products' },
+          { label: t('compare.title') },
+        ]}
+        eyebrow={t('compare.eyebrow')}
+        icon={GitCompareArrows}
+        title={t('compare.title')}
+        lead={t('compare.intro', { max: MAX_COMPARE })}
+      />
 
       <section className="compareBody">
         <div className="container">

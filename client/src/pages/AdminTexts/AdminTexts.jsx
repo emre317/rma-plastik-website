@@ -35,7 +35,6 @@ const SECTION_LABELS = {
   productsPage: 'Ürünler sayfası',
   waterTanks: 'Su depoları sayfası',
   productTables: 'Ürün tabloları sayfası',
-  productDetail: 'Ürün detay sayfası',
   contact: 'İletişim ve teklif formu',
 };
 

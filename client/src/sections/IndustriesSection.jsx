@@ -1,31 +1,10 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Building2,
-  Car,
-  FlaskConical,
-  Pause,
-  Play,
-  Shirt,
-  Ship,
-  Sprout,
-  UtensilsCrossed,
-} from 'lucide-react';
+import { Pause, Play } from 'lucide-react';
 
 import { LocalizedLink } from '../components/i18n/LocalizedLink';
 import Arrow from '../components/i18n/Arrow';
-
-// Icon + colour tone follow the order of industries.items
-// (chemicals, food, agriculture, automotive, textile, infrastructure, marine)
-const LOOKS = [
-  { icon: FlaskConical, hue: 200 },
-  { icon: UtensilsCrossed, hue: 28 },
-  { icon: Sprout, hue: 145 },
-  { icon: Car, hue: 222 },
-  { icon: Shirt, hue: 262 },
-  { icon: Building2, hue: 210 },
-  { icon: Ship, hue: 190 },
-];
+import INDUSTRIES from '../data/industries';
 
 /*
   Industries: dark showcase with a slowly moving row of industry cards
@@ -92,7 +71,7 @@ export default function IndustriesSection() {
           {[0, 1].map((copy) => (
             <ul key={copy} className="industriesRowGroup" aria-hidden={copy === 1 ? 'true' : undefined}>
               {list.map((industry, index) => {
-                const { icon: Icon, hue } = LOOKS[index % LOOKS.length];
+                const { icon: Icon, hue, slug } = INDUSTRIES[index % INDUSTRIES.length];
 
                 return (
                   <li key={industry.title} className="industryShowCard" style={{ '--hue': hue }}>
@@ -113,7 +92,7 @@ export default function IndustriesSection() {
                       <p>{industry.description}</p>
 
                       <LocalizedLink
-                        to="/industries"
+                        to={`/industries#${slug}`}
                         className="industryShowLink"
                         tabIndex={copy === 1 ? -1 : undefined}
                       >

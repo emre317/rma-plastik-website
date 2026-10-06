@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Check, Package } from 'lucide-react';
 
 import Seo from '../../seo/Seo';
+import { CATALOG_PDF } from '../../components/ui/CatalogLink';
 import { OG_IMAGE, SITE_URL, absoluteUrl } from '../../seo/site';
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
@@ -156,7 +157,10 @@ export default function ProductModel() {
                 <CompareButton family={family} row={row} />
               </div>
 
-              <p className="modelSource">{t('productModel.source')}</p>
+              <p className="modelSource">
+                {t('productModel.source')}{' '}
+                <a href={CATALOG_PDF} download className="sourceLink">{t('common.catalog')} (PDF)</a>
+              </p>
             </div>
           </div>
         </div>

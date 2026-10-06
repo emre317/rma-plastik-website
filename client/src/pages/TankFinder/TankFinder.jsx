@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 
 import Seo from '../../seo/Seo';
+import PageHeader from '../../components/ui/PageHeader';
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
@@ -100,19 +101,18 @@ export default function TankFinder() {
         ]}
       />
 
-      <section className="finderHero">
-        <div className="container">
-          <p className="eyebrow">
-            <Wand2 aria-hidden="true" />
-            {f('eyebrow')}
-          </p>
-          <h1>
-            {f('title')}
-            <span>{f('titleAccent')}</span>
-          </h1>
-          <p>{f('intro')}</p>
-        </div>
-      </section>
+      <PageHeader
+        compact
+        crumbs={[
+          { label: t('nav.waterTanks'), to: '/water-tanks' },
+          { label: t('meta.titles.tankFinder') },
+        ]}
+        eyebrow={f('eyebrow')}
+        icon={Wand2}
+        title={f('title')}
+        accent={f('titleAccent')}
+        lead={f('intro')}
+      />
 
       <section className="finderBody">
         <div className="container finderLayout">

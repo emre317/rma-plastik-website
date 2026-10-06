@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import Seo from '../../seo/Seo';
+import PageHeader from '../../components/ui/PageHeader';
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import { youtubeThumbnail } from '../../components/content/YouTubeEmbed';
@@ -32,26 +33,14 @@ export default function Blog() {
         breadcrumbs={[{ name: t('meta.titles.blog'), path: '/blog' }]}
       />
 
-      <section className="internalHero">
-        <div className="container">
-          <div className="internalHeroMeta">
-            <span>{t('blog.meta')}</span>
-            <span>RMA Plastik</span>
-          </div>
-
-          <div className="internalHeroGrid">
-            <p className="eyebrow">{t('blog.eyebrow')}</p>
-            <h1>
-              {t('blog.title')}
-              <span>{t('blog.titleAccent')}</span>
-            </h1>
-          </div>
-
-          <div className="internalHeroBottom">
-            <p>{t('blog.text')}</p>
-          </div>
-        </div>
-      </section>
+      <PageHeader
+        compact
+        crumbs={[{ label: t('meta.titles.blog') }]}
+        eyebrow={t('blog.eyebrow')}
+        title={t('blog.title')}
+        accent={t('blog.titleAccent')}
+        lead={t('blog.text')}
+      />
 
       <section className="blogListSection">
         <div className="container">

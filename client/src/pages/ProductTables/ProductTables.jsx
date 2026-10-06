@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Search } from 'lucide-react';
 
 import Seo from '../../seo/Seo';
+import PageHeader from '../../components/ui/PageHeader';
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
@@ -13,6 +14,8 @@ import useModelQuote from '../../hooks/useModelQuote';
 import AddToCartButton from '../../components/quote/AddToCartButton';
 import CompareButton from '../../components/compare/CompareButton';
 import { EcoBadge } from '../../components/ui/EcoMarks';
+import FinderCta from '../../components/ui/FinderCta';
+import CatalogLink, { CATALOG_PDF } from '../../components/ui/CatalogLink';
 
 const normalise = (text) => String(text).toLocaleLowerCase('tr').replace(/\s+/g, '');
 
@@ -26,7 +29,6 @@ export default function ProductTables() {
   const [group, setGroup] = useState('all');
 
   const p = (key, options) => t(`productTables.${key}`, options);
-  const meta = p('meta', { returnObjects: true });
   const totalModels = families.reduce((sum, family) => sum + family.rows.length, 0);
 
   const visible = useMemo(() => {
@@ -52,36 +54,32 @@ export default function ProductTables() {
         ]}
       />
 
-      <section className="internalHero ptHero">
-        <div className="container">
-          <div className="internalHeroMeta">
-            <span>{meta[0]}</span>
-            <span>{meta[1]}</span>
-          </div>
-
-          <div className="internalHeroGrid">
-            <p className="eyebrow">{p('eyebrow')}</p>
-            <h1>
-              {p('title')}
-              <span>{p('titleAccent')}</span>
-            </h1>
-          </div>
-
-          <div className="ptHeroBottom">
-            <p>{p('intro')}</p>
-            <dl>
-              <div>
-                <dt>{families.length}</dt>
-                <dd>{p('familiesLabel')}</dd>
-              </div>
-              <div>
-                <dt>{totalModels}</dt>
-                <dd>{p('models')}</dd>
-              </div>
-            </dl>
-          </div>
-        </div>
-      </section>
+      <PageHeader
+        crumbs={[
+          { label: t('nav.products'), to: '/products' },
+          { label: t('meta.titles.productTables') },
+        ]}
+        eyebrow={p('eyebrow')}
+        title={p('title')}
+        accent={p('titleAccent')}
+        lead={p('intro')}
+        actions={(
+          <>
+            <FinderCta tone="glass" />
+            <CatalogLink placement="product_tables" />
+          </>
+        )}
+        media={[
+          { src: '/images/products/silo-tank.webp' },
+          { src: '/images/products/textile-trolley.webp' },
+          { src: '/images/products/pickle-tank.webp' },
+        ]}
+        facts={[
+          { value: families.length, label: p('familiesLabel') },
+          { value: totalModels, label: p('models') },
+          { value: groups.length, label: p('groupsLabel') },
+        ]}
+      />
 
       <div className="ptBar">
         <div className="container ptBarInner">
@@ -197,6 +195,7 @@ export default function ProductTables() {
 
           <p className="ptSource">
             {p('source')}
+            <a href={CATALOG_PDF} download className="sourceLink">{t('common.catalog')} (PDF)</a>
             <EcoBadge type="recycle" />
           </p>
         </div>

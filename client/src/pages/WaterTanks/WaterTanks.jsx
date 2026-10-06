@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Check, LayoutGrid, RotateCcw, Search, SlidersHorizontal, Table2 } from 'lucide-react';
 
 import Seo from '../../seo/Seo';
+import PageHeader from '../../components/ui/PageHeader';
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
@@ -113,7 +114,6 @@ export default function WaterTanks() {
 
   const changed = JSON.stringify(filters) !== JSON.stringify(initialFilters);
 
-  const meta = t('waterTanks.meta', { returnObjects: true });
   const features = t('waterTanks.features', { returnObjects: true });
 
   const rangeStyle = {
@@ -152,46 +152,27 @@ export default function WaterTanks() {
         ]}
       />
 
-      <section className="internalHero internalHeroDark wtHero">
-        <div className="container">
-          <div className="internalHeroMeta">
-            <span>{meta[0]}</span>
-            <span>{meta[1]}</span>
-          </div>
-
-          <div className="internalHeroGrid">
-            <p className="eyebrow">{w('eyebrow')}</p>
-            <h1>
-              {w('title')}
-              <span>{w('titleAccent')}</span>
-            </h1>
-          </div>
-
-          <div className="wtHeroBottom">
-            <div className="wtHeroIntro">
-              <p>{w('intro')}</p>
-              <FinderCta tone="glass" />
-            </div>
-
-            <dl className="wtHeroStats">
-              <div>
-                <dt>{waterTanks.length}</dt>
-                <dd>{w('statModels')}</dd>
-              </div>
-              <div>
-                <dt>
-                  {num(VOLUME_STEPS[0])} – {num(VOLUME_STEPS[VOLUME_STEPS.length - 1])} L
-                </dt>
-                <dd>{w('statRange')}</dd>
-              </div>
-              <div>
-                <dt>{TYPE_COUNT}</dt>
-                <dd>{w('statTypes')}</dd>
-              </div>
-            </dl>
-          </div>
-        </div>
-      </section>
+      <PageHeader
+        crumbs={[
+          { label: t('nav.products'), to: '/products' },
+          { label: t('nav.waterTanks') },
+        ]}
+        eyebrow={w('eyebrow')}
+        title={w('title')}
+        accent={w('titleAccent')}
+        lead={w('intro')}
+        actions={<FinderCta tone="glass" />}
+        media={[
+          { src: '/images/products/rd-15000.webp' },
+          { src: '/images/products/ry-1000.webp' },
+          { src: '/images/products/sd-set.webp' },
+        ]}
+        facts={[
+          { value: waterTanks.length, label: w('statModels') },
+          { value: `${num(VOLUME_STEPS[0])} – ${num(VOLUME_STEPS[VOLUME_STEPS.length - 1])} L`, label: w('statRange') },
+          { value: TYPE_COUNT, label: w('statTypes') },
+        ]}
+      />
 
       <section className="wtFinder">
         <div className="container">

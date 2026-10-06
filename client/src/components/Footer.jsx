@@ -10,6 +10,8 @@ import {
   YoutubeIcon,
 } from './icons/SocialIcons';
 import company from '../data/company';
+import portfolio from '../data/productPortfolio';
+import { CATALOG_PDF } from './ui/CatalogLink';
 import { EcoStrip } from './ui/EcoMarks';
 import { useQuote } from './quote/QuoteContext';
 import { openConsentSettings } from '../analytics/consent';
@@ -25,9 +27,11 @@ const linkColumns = [
     group: 'company',
     links: [
       { key: 'about', path: '/company' },
+      { key: 'facilities', path: '/company#machinery' },
+      { key: 'quality', path: '/company#quality' },
+      { key: 'sustainability', path: '/company#sustainability', label: 'eco.title' },
+      { key: 'industries', path: '/industries', label: 'nav.industries' },
       { key: 'customMolding', path: '/custom-molding' },
-      { key: 'facilities', path: '/company' },
-      { key: 'quality', path: '/company' },
       { key: 'blog', path: '/blog' },
       { key: 'videos', path: '/videos' },
     ],
@@ -35,13 +39,13 @@ const linkColumns = [
   {
     group: 'products',
     links: [
-      { key: 'industrialTanks', path: '/products?category=industrial-tanks' },
-      { key: 'chemicalTanks', path: '/products?category=chemical-tanks' },
       { key: 'waterTanks', path: '/water-tanks' },
-      { key: 'agricultural', path: '/products?category=agriculture' },
-      { key: 'custom', path: '/products?category=custom' },
-      { key: 'tankFinder', path: '/tank-finder' },
+      ...portfolio
+        .filter((item) => ['silo', 'treatment', 'food', 'textile', 'fuel', 'barriers'].includes(item.id))
+        .map((item) => ({ key: item.id, path: item.link, label: `productExplorer.items.${item.id}.label` })),
       { key: 'productTables', path: '/product-tables' },
+      { key: 'tankFinder', path: '/tank-finder' },
+      { key: 'catalog', href: CATALOG_PDF, label: 'common.catalog' },
     ],
   },
 ];
@@ -132,9 +136,15 @@ export default function Footer() {
               <ul>
                 {column.links.map((link) => (
                   <li key={link.key}>
-                    <LocalizedLink to={link.path}>
-                      {t(`footer.links.${link.key}`)}
-                    </LocalizedLink>
+                    {link.href ? (
+                      <a href={link.href} download>
+                        {t(link.label)} (PDF)
+                      </a>
+                    ) : (
+                      <LocalizedLink to={link.path}>
+                        {t(link.label || `footer.links.${link.key}`)}
+                      </LocalizedLink>
+                    )}
                   </li>
                 ))}
               </ul>

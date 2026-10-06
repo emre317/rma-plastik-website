@@ -57,6 +57,8 @@ const tr = {
     openMenu: 'Menüyü aç',
     closeMenu: 'Menüyü kapat',
     homeLink: 'RMA Plastik ana sayfa',
+    breadcrumb: 'Sayfa konumu',
+    allProducts: 'Tüm ürünler',
   },
 
   common: {
@@ -64,6 +66,8 @@ const tr = {
     country: 'Türkiye',
     requestQuote: 'Teklif Al',
     requestSolution: 'Teklif Al',
+    catalog: 'Kataloğu İndir',
+    catalogMeta: 'PDF · 3,5 MB',
   },
 
   cookies: {
@@ -106,11 +110,7 @@ const tr = {
       about: 'RMA Hakkında',
       facilities: 'Üretim Tesisi',
       quality: 'Kalite',
-      industrialTanks: 'Endüstriyel Tanklar',
-      chemicalTanks: 'Kimyasal Tanklar',
       waterTanks: 'Su Depoları',
-      agricultural: 'Tarımsal Çözümler',
-      custom: 'Özel Ürünler',
       products: 'Ürünler',
       requestQuote: 'Teklif Al',
     },
@@ -124,7 +124,7 @@ const tr = {
   },
 
   hero: {
-    watchFilm: 'Tanıtım filmini izle',
+    watchFilm: 'Tanıtım Filmini İzle',
     pause: 'Durdur',
     play: 'Oynat',
     close: 'Kapat',
@@ -186,7 +186,6 @@ const tr = {
   },
 
   productTables: {
-    meta: ['Ürün Tabloları', 'RMA Plastik 2025 kataloğu'],
     eyebrow: 'Teknik veriler',
     title: 'Ürün tabloları,',
     titleAccent: 'tek sayfada.',
@@ -196,14 +195,15 @@ const tr = {
     noResults: 'Bu koda uyan model bulunamadı.',
     models: 'model',
     familiesLabel: 'ürün ailesi',
+    groupsLabel: 'ürün grubu',
     families: {
       'vertical-tanks': {
         title: 'Dikey Tanklar',
-        text: '100 litreden 37.000 litreye kadar gıda, su, kimyasal ve asit stoklama tankları.',
+        text: '100 litreden 37.500 litreye kadar gıda, su, kimyasal ve asit stoklama tankları.',
       },
       'horizontal-tanks': {
         title: 'Yatay Tanklar',
-        text: '500 litreden 5.000 litreye kadar gıda ve su stoklama tankları.',
+        text: '500 litreden 5.500 litreye kadar gıda ve su stoklama tankları.',
       },
       'two-layer-vertical': {
         title: 'Çift Katmanlı Dikey Tanklar',
@@ -215,7 +215,7 @@ const tr = {
       },
       'textile-trolleys': {
         title: 'Tekstil Arabaları',
-        text: '230 litreden 2.600 litreye kadar, tekstil fabrikaları ve boyahanelerde kullanılmak üzere. Yüksek mukavemetli metal araba, kimyasallara ve boyalara dayanıklı polietilen gövde; istenilen boyutta teker takılabilir.',
+        text: '230 litreden 3.500 litreye kadar, tekstil fabrikaları ve boyahanelerde kullanılmak üzere. Yüksek mukavemetli metal araba, kimyasallara ve boyalara dayanıklı polietilen gövde; istenilen boyutta teker takılabilir.',
       },
       'cylinder-trolleys': {
         title: 'Silindir Tekstil Arabaları',
@@ -282,7 +282,7 @@ const tr = {
         text: 'Rotasyonel kalıplama ve şişirme teknikleriyle üretilen yol güvenlik bariyerleri. Seri üretime uygundur, günde 300 adet teslim edilebilir; içerisine su veya kum doldurulabilir.',
       },
     },
-    quote: 'Teklif iste',
+    quote: 'Teklif İste',
     waterLink: 'Su depolarını filtreleyin',
     source: 'Değerler RMA Plastik 2025 ürün kataloğundan alınmıştır.',
     groups: {
@@ -332,7 +332,7 @@ const tr = {
     eyebrow: 'Karşılaştırma',
     title: 'Ürün karşılaştırma',
     short: 'Karşılaştır',
-    add: 'Karşılaştırmaya ekle',
+    add: 'Karşılaştırmaya Ekle',
     added: 'Karşılaştırmada',
     remove: 'Karşılaştırmadan çıkar',
     trayLabel: 'Karşılaştırma {{count}}/{{max}}',
@@ -347,7 +347,7 @@ const tr = {
     family: 'Ürün ailesi',
     onlyDifferences: 'Yalnızca farkları göster',
     noDifferences: 'Seçilen modellerin tüm değerleri aynı.',
-    addAll: 'Hepsini teklif sepetine ekle',
+    addAll: 'Hepsini Teklif Sepetine Ekle',
     allInCart: 'Hepsi sepette',
     max: 'en büyük',
     min: 'en küçük',
@@ -422,14 +422,14 @@ const tr = {
     noResults: 'Bu koşullara uygun model bulamadık',
     noResultsText: 'Yer sınırlarını genişletin ya da ölçülerinize özel üretim için bize ulaşın.',
     disclaimer: 'Öneriler katalogdaki ölçülere göre yapılır. Uygulamanıza uygunluğu (kimyasal türü, sıcaklık, montaj) teklif aşamasında teknik ekibimizle teyit edin.',
-    cta: 'Sihirbazla seçin',
+    cta: 'Sihirbazla Seçin',
     ctaText: '3 soruda size uygun depoyu bulun',
   },
 
   quoteCart: {
     button: 'Teklif sepeti',
     summary: '{{count}} model · {{total}} adet',
-    add: 'Teklif sepetine ekle',
+    add: 'Teklif Sepetine Ekle',
     addShort: 'Sepete ekle',
     added: 'Sepette',
     removeHint: 'Sepetten çıkar',
@@ -448,7 +448,7 @@ const tr = {
     usesTitle: 'Kullanım alanları',
     similar: 'Aynı ailedeki diğer modeller',
     allModels: 'Tüm modelleri gör',
-    quote: 'Teklif iste',
+    quote: 'Teklif İste',
     standardTitle: 'Tanklarımızda standart',
     description: '{{code}} – {{family}}. {{specs}}. RMA Plastik polietilen ürün; ölçüler ve teklif için inceleyin.',
     notFoundTitle: 'Model bulunamadı',
@@ -459,7 +459,6 @@ const tr = {
   },
 
   waterTanks: {
-    meta: ['Su Depoları', 'Model seçici'],
     eyebrow: 'Polietilen su depoları',
     title: 'İhtiyacınıza uygun',
     titleAccent: 'su deposunu bulun.',
@@ -505,7 +504,7 @@ const tr = {
     noResultsHint: 'Filtreleri genişletin ya da ölçülerinize uygun çözüm için bize ulaşın.',
     cards: 'Kart',
     table: 'Tablo',
-    quote: 'Teklif iste',
+    quote: 'Teklif İste',
     standardTitle: 'Tanklarımızda standart',
     allTables: 'Tüm ürün tabloları',
     showFilters: 'Filtreleri göster',
@@ -549,7 +548,7 @@ const tr = {
     selectLabel: 'Makina seçin',
     countLabel: 'adet',
     workshop: 'Tam donanımlı',
-    link: 'Özel üretim hizmetlerimiz',
+    link: 'Özel Üretim Hizmetlerimiz',
     items: [
       {
         count: '6',
@@ -610,10 +609,10 @@ const tr = {
     familiesLabel: 'Ürün ailesi',
     range: 'Hacim aralığı',
     familiesTitle: 'Bu gruptaki ürün aileleri',
-    explore: 'Modelleri incele',
-    finder: 'Sihirbazla seç',
-    quote: 'Teklif iste',
-    customLink: 'Özel üretimi keşfedin',
+    explore: 'Modelleri İncele',
+    finder: 'Sihirbazla Seç',
+    quote: 'Teklif İste',
+    customLink: 'Özel Üretimi Keşfedin',
     projectBased: 'Projeye özel',
     quickLinks: 'Hızlı erişim',
     statsFamilies: 'ürün ailesi',
@@ -684,7 +683,7 @@ const tr = {
 
   industries: {
     countLabel: 'Sektör',
-    more: 'Detaylı bilgi',
+    more: 'Detaylı Bilgi',
     pause: 'Akışı durdur',
     play: 'Akışı başlat',
     index: '05 / SEKTÖRLER',
@@ -732,7 +731,7 @@ const tr = {
     ],
     ctaEyebrow: 'Sizin sektörünüz',
     ctaTitle: 'Özel bir uygulamaya mı ihtiyacınız var?',
-    ctaLink: 'RMA ile görüşün',
+    ctaLink: 'RMA ile Görüşün',
   },
 
   customMolding: {
@@ -756,7 +755,7 @@ const tr = {
       },
     ],
     referencesLabel: 'Özel üretim uygulamalarından',
-    link: 'Özel üretimi keşfedin',
+    link: 'Özel Üretimi Keşfedin',
   },
 
   global: {
@@ -801,28 +800,77 @@ const tr = {
 
   pages: {
     company: {
-      meta: ['01 / Kurumsal', 'RMA Plastik'],
       eyebrow: 'RMA hakkında',
-      title: 'Amaca yönelik',
-      titleAccent: 'üretim.',
+      title: '1998’den beri',
+      titleAccent: 'tek parça üretim.',
       text:
-        'Mühendislik deneyimi, üretim altyapısı ve uygulama odaklı ürün geliştirmeyle desteklenen endüstriyel polietilen üretimi.',
-      since: '1998’den beri',
+        'RMA Plastik, 1998 yılında Mersin Organize Sanayi Bölgesi’nde kuruldu. Rotasyonel kalıplama, enjeksiyon ve şişirme teknolojileriyle su ve kimyasal tanklarından tekstil arabalarına kadar polietilen ürünler üretiyoruz.',
+      about: {
+        label: 'Hakkımızda',
+        title: 'Mersin’den,',
+        titleAccent: 'sektörlerin ihtiyacına.',
+        text: 'Hızlı ve düşük maliyetle kalıp geliştirme imkânı sağlayan rotasyonel kalıplama yöntemiyle, müşterilerimizin talep ve ihtiyaçları doğrultusunda kalıp üretip yeni ürünler tasarlıyoruz.',
+        cards: [
+          {
+            title: 'Ürünler',
+            text: 'Su ve asit tankları, gıda stoklama ve taşıma depoları, karıştırıcılı, mikserli ve ısıtmalı tanklar, AdBlue ve dizel tankları, yol bariyerleri, akaryakıt istasyonları için sumplar, buzağı kulübeleri, asit havuzları ve tekstil arabaları.',
+          },
+          {
+            title: 'Sektörler',
+            text: 'Gıda, kimya, otomotiv, oyun grubu, tarım, plastik ve tekstil sektörlerine yönelik çalışıyoruz.',
+          },
+          {
+            title: 'Kapasite',
+            text: '6 rotasyon, 2 enjeksiyon, 1 şişirme, 2 kırma ve 2 ekstrüder makinası ile tam donanımlı metal atölyemizde 7,5 metre uzunluğunda ve 1.200 kg ağırlığında tek parça (monoblok) ürün üretebiliyoruz.',
+          },
+        ],
+      },
+      why: {
+        label: 'Malzeme ve kalite',
+        title: 'Neden rotasyonel kalıplama',
+        titleAccent: 've polietilen?',
+        text: 'Polietilen, rotasyonel kalıplamayla tek parça olarak şekillendiğinde uzun yıllar dış ortamda ve zorlu kullanım koşullarında güvenle çalışır.',
+        items: [
+          { title: 'Geri dönüştürülebilir', text: 'Kullandığımız tüm malzeme %100 geri dönüştürülebilir.' },
+          { title: 'Hava koşullarına dayanıklı', text: 'Çok sıcak ve çok soğuk havalarda dış ortamda muhafaza edilebilir.' },
+          { title: 'Kimyasallara dayanıklı', text: 'Sülfürik asit, kostik, tutkal ve benzeri birçok kimyasalın stoklanmasında kullanılır.' },
+          { title: 'Monoblok', text: 'Punta, perçin veya kaynak gibi birleştirme yöntemleri olmadan tek parça üretilir.' },
+          { title: 'Gıda kodeksine uygun', text: 'Polietilen malzeme gıda kodeksine uygundur; stoklanan üründe tat ve koku değişikliği oluşmaz.' },
+          { title: 'Uzun ömürlü', text: 'Merkezkaç kuvvetiyle tek parça üretilen ürünler yüksek mukavemeti sayesinde uzun süre kullanılır.' },
+          { title: 'Dayanıklı', text: 'Darbe dayanımı yüksektir; bu nedenle otomotiv sektöründe benzin ve dizel tankı olarak da kullanılır.' },
+          { title: 'Güvenli', text: 'Dayanımı ve hammaddesinin özellikleri sayesinde güvenle kullanılır.' },
+        ],
+      },
+      eco: {
+        label: 'Sorumlu üretim',
+        title: 'Güneşle üretiyor,',
+        titleAccent: 'firemizi geri kazanıyoruz.',
+        text: 'Çevresel sorumluluk, etik işçi uygulamaları ve verimli kaynak kullanımını önceliklendiren ilkelerle çalışıyoruz.',
+        items: [
+          { title: 'Enerjimizi güneşten alıyoruz', text: 'Enerjimizi doğrudan güneşten alarak çevresel etkimizi azaltıyoruz.' },
+          { title: 'Yakıtımız elektrik', text: 'Araçlarımızı elektrikle çalışan modellerle değiştirdik.' },
+          { title: 'Sürdürülebilir üretim', text: 'Üretim sürecimizin her aşamasını çevreye duyarlı olacak şekilde tasarlıyoruz.' },
+          { title: 'Tüm firemizi geri dönüştürüyoruz', text: 'Üretimde oluşan fireyi kırma makinalarımızda geri kazanıp yeniden kullanıyoruz.' },
+        ],
+        social: 'Toplumsal cinsiyet eşitliğine saygı gösteriyor, çalışan haklarını koruyor ve iş sağlığı ve güvenliği konusunda özenle çalışıyoruz.',
+      },
+      cta: {
+        title: 'Projenizi birlikte değerlendirelim.',
+        text: 'Kapasite, kullanım koşulu ve ölçülerinizi paylaşın; ekibimiz katalogdan veya özel üretimle size uygun çözümü önersin.',
+      },
     },
     industries: {
-      meta: ['04 / Sektörler', 'Uygulamalar'],
       eyebrow: 'Endüstriyel uygulamalar',
       title: 'Sektörlere göre',
       titleAccent: 'tasarlanan çözümler.',
-    },
-    industryDetail: {
-      meta: 'Sektör',
-      eyebrow: 'Sektörel çözüm',
-      title: 'Uygulama odaklı',
-      titleAccent: 'çözümler.',
+      sectorsLabel: 'Sektör',
+      relatedLabel: 'İlgili ürün grupları',
+      quote: 'Bu Sektör İçin Teklif İste',
+      ctaTitle: 'Sektörünüzü listede göremediniz mi?',
+      ctaText: 'Özel üretim ekibimiz, ihtiyacınıza uygun ürünü tasarımdan seri üretime kadar birlikte geliştirir.',
+      ctaLink: 'Özel Üretimi Keşfedin',
     },
     customMolding: {
-      meta: ['Özel Üretim', '25 yıllık kalıp imalat tecrübesi'],
       eyebrow: 'Custom Molding',
       title: 'Fikir ve projelerinizi',
       titleAccent: 'hayata geçiriyoruz.',
@@ -882,7 +930,7 @@ const tr = {
       ctaTitle: 'Projenizi bize anlatın.',
       ctaText: 'Fikrinizi, çiziminizi veya numunenizi paylaşın; ekibimiz uygun üretim yöntemini birlikte değerlendirsin.',
       ctaQuote: 'Teklif Al',
-      ctaContact: 'İletişime geçin',
+      ctaContact: 'İletişime Geçin',
     },
     notFound: {
       eyebrow: 'Hata / 404',
@@ -893,17 +941,19 @@ const tr = {
   },
 
   productsPage: {
-    meta: ['02 / Ürünler', 'Ürün portföyü'],
-    eyebrow: 'Polietilen çözümler',
-    title: 'Endüstri için',
-    titleAccent: 'üretilen ürünler.',
+    eyebrow: 'Ürün portföyü',
+    title: 'Her uygulama için',
+    titleAccent: 'doğru polietilen ürün.',
     text:
-      'Endüstriyel, kimyasal, tarımsal ve uygulamaya özel ihtiyaçlar için geliştirilen RMA polietilen ürünlerini keşfedin.',
-    tag: 'RMA / Ürünler',
-    catalogIndex: 'Ürün dizini',
+      'Su ve kimyasal tanklarından gıda tanklarına, tekstil arabalarından yol bariyerlerine; 2025 kataloğumuzdaki tüm ürün grupları ve modeller tek yerde.',
+    catalogIndex: 'Ürün grupları',
     catalogTitle: 'Portföyü',
     catalogTitleAccent: 'keşfedin.',
-    catalogText: 'Ürünleri uygulama alanına ve ürün ailesine göre filtreleyin.',
+    catalogText: 'Her grubun modellerini ölçüleriyle inceleyin, karşılaştırın ve doğrudan teklif isteyin.',
+    tablesText: 'Tüm ürün ailelerinin modellerini ölçüleriyle tek sayfada inceleyin.',
+    ctaTitle: 'Aradığınız ürünü bulamadınız mı?',
+    ctaText: 'Kataloğumuzda olmayan ölçü ve formlar için özel kalıp ve üretim seçeneklerini birlikte değerlendirelim.',
+    // Categories of the admin product list (Admin > Ürünler)
     filters: {
       all: 'Tüm Ürünler',
       'industrial-tanks': 'Endüstriyel Tanklar',
@@ -911,83 +961,6 @@ const tr = {
       'water-tanks': 'Su Depoları',
       agriculture: 'Tarım',
       custom: 'Özel',
-    },
-    capacity: 'Kapasite',
-    technology: 'Teknoloji',
-    empty: 'Bu kategoride henüz listelenmiş ürün yok.',
-    askTeam: 'Ekibimize danışın',
-  },
-
-  productDetail: {
-    notFoundEyebrow: 'Ürün bulunamadı',
-    notFoundTitle: 'Ürün',
-    notFoundTitleAccent: 'mevcut değil.',
-    backToProducts: 'Ürünlere Dön',
-    metaProduct: 'Ürün',
-    technicalData: 'Teknik Veriler',
-    series: 'Ürün serisi',
-    fields: {
-      product: 'Ürün',
-      category: 'Kategori',
-      capacity: 'Kapasite',
-      material: 'Malzeme',
-      application: 'Uygulama',
-      technology: 'Teknoloji',
-    },
-    technical: {
-      index: '01 / Teknik veriler',
-      eyebrow: 'Ürün spesifikasyonu',
-      title: 'Teknik',
-      titleAccent: 'genel bakış.',
-      label: 'Ürün bilgileri',
-      text: 'Seçili RMA polietilen ürününe ait temel teknik bilgiler.',
-    },
-    applications: {
-      index: '02 / Uygulama',
-      eyebrow: 'Kullanım için üretildi',
-      title: 'Gerçek uygulamalar',
-      titleAccent: 'için tasarlandı.',
-      text:
-        'Ürün seçimi, geometri ve teknik gereksinimler her zaman gerçek çalışma koşullarına göre değerlendirilmelidir.',
-      items: [
-        {
-          title: 'Endüstriyel Depolama',
-          description:
-            'Güvenilir polietilen depolamanın gerektiği endüstriyel ortamlar için uygundur.',
-        },
-        {
-          title: 'Proses Uygulamaları',
-          description:
-            'Seçilen ürün konfigürasyonuna bağlı olarak uygulamaya özel proses gereksinimlerini destekler.',
-        },
-        {
-          title: 'Özel Gereksinimler',
-          description:
-            'Standart katalog konfigürasyonlarının yetersiz kaldığı durumlarda RMA mühendislik desteği değerlendirilebilir.',
-        },
-      ],
-    },
-    resources: {
-      index: '03 / Dokümanlar',
-      eyebrow: 'Dokümantasyon',
-      title: 'Ürün',
-      titleAccent: 'dokümanları.',
-      comingSoon: 'Yakında',
-      items: [
-        { type: 'PDF', title: 'Teknik Veri Föyü' },
-        { type: 'PDF', title: 'Ürün Kataloğu' },
-        { type: 'DOC', title: 'Sertifikalar' },
-      ],
-    },
-    related: {
-      index: '04 / İlgili',
-      eyebrow: 'Diğer ürünler',
-      viewAll: 'Tüm Ürünleri Gör',
-    },
-    cta: {
-      eyebrow: 'Daha fazla bilgiye mi ihtiyacınız var?',
-      title: 'İhtiyacınızı',
-      titleAccent: 'birlikte konuşalım.',
     },
   },
 
@@ -1045,14 +1018,13 @@ const tr = {
   },
 
   blog: {
-    meta: 'Bilgi merkezi',
     eyebrow: 'Blog',
     title: 'Teknik bilgiler,',
     titleAccent: 'doğru seçimler.',
     text: 'Polietilen depolama çözümleri, malzeme seçimi ve üretim süreçleri hakkında rehberler.',
     empty: 'Henüz yayınlanmış bir yazı yok. Yakında burada teknik rehberler olacak.',
-    emptyLink: 'Ürünleri inceleyin',
-    readMore: 'Devamını oku',
+    emptyLink: 'Ürünleri İnceleyin',
+    readMore: 'Devamını Oku',
     readingTime_one: '{{count}} dk okuma',
     readingTime_other: '{{count}} dk okuma',
     back: 'Tüm yazılar',
@@ -1062,10 +1034,10 @@ const tr = {
   },
 
   videos: {
-    meta: 'Video',
     eyebrow: 'RMA Plastik YouTube',
     title: 'Üretimden',
     titleAccent: 'görüntüler.',
+    text: 'Üretim hattımızdan, ürünlerimizden ve özel projelerimizden videolar.',
     empty: 'Henüz video eklenmedi. YouTube kanalımızı ziyaret edebilirsiniz.',
     play: 'Videoyu oynat',
     all: 'Tüm videolar',
@@ -1096,13 +1068,11 @@ const tr = {
       form: 'Teklif formu',
       formValue: 'Projenizi bize anlatın',
     },
-    meta: ['06 / İletişim', 'Bir proje başlatın'],
     eyebrow: 'RMA ile görüşün',
     title: 'İhtiyacınızı',
     titleAccent: 'bize anlatın.',
     text:
       'Ürün, uygulama veya özel üretim ihtiyacınızı ekibimizle paylaşın.',
-    tag: 'Satış / Mühendislik',
     formEyebrow: 'Proje bilgileri',
     formTitle: 'Teklif',
     formTitleAccent: 'alın.',

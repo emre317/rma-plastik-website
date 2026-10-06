@@ -1,265 +1,182 @@
-import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { GitCompareArrows, SlidersHorizontal, Table2, Wand2 } from 'lucide-react';
 
-import { SlidersHorizontal, Table2, Wand2 } from 'lucide-react';
-
+import Seo from '../../seo/Seo';
+import PageHeader from '../../components/ui/PageHeader';
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
-import useProducts from '../../hooks/useProducts';
-import Seo from '../../seo/Seo';
+import { useQuote } from '../../components/quote/QuoteContext';
+import FinderCta from '../../components/ui/FinderCta';
+import CatalogLink from '../../components/ui/CatalogLink';
+import useLanguage from '../../hooks/useLanguage';
+import formatNumber from '../../utils/formatNumber';
+import portfolio, { totals } from '../../data/productPortfolio';
 
-const filterIds = [
-  'all',
-  'industrial-tanks',
-  'chemical-tanks',
-  'water-tanks',
-  'agriculture',
-  'custom',
+/*
+  Products: the product groups of the 2025 brochure, built from the product
+  tables (model counts and volume ranges stay in sync with the admin panel).
+  Texts: productExplorer.items.<id> and productsPage.* in the locale files.
+*/
+
+const TOOLS = [
+  { to: '/water-tanks', icon: SlidersHorizontal, title: 'meta.titles.waterTanks', text: 'waterTanks.intro' },
+  { to: '/tank-finder', icon: Wand2, title: 'meta.titles.tankFinder', text: 'finder.ctaText' },
+  { to: '/product-tables', icon: Table2, title: 'meta.titles.productTables', text: 'productsPage.tablesText' },
+  { to: '/compare', icon: GitCompareArrows, title: 'meta.titles.compare', text: 'compare.description' },
 ];
+
+const pad = (n) => String(n).padStart(2, '0');
 
 export default function Products() {
   const { t } = useTranslation();
-  const products = useProducts();
+  const { openQuote } = useQuote();
+  const { code: lang } = useLanguage();
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const p = (key) => t(`productExplorer.${key}`);
+  const text = (id, field) => t(`productExplorer.items.${id}.${field}`);
+  const num = (value) => formatNumber(value, lang);
 
-  const requestedFilter = searchParams.get('category');
+  const range = (group) => {
+    if (group.minVolume === null) return '';
 
-  const activeFilter = filterIds.includes(requestedFilter)
-    ? requestedFilter
-    : 'all';
-
-  function setActiveFilter(filterId) {
-    setSearchParams(
-      filterId === 'all' ? {} : { category: filterId },
-      { replace: true }
-    );
-  }
-
-  const filteredProducts =
-    activeFilter === 'all'
-      ? products
-      : products.filter(
-          (product) =>
-            product.category === activeFilter
-        );
-
-  const meta = t('productsPage.meta', { returnObjects: true });
+    return group.minVolume === group.maxVolume
+      ? `${num(group.minVolume)} L`
+      : `${num(group.minVolume)} – ${num(group.maxVolume)} L`;
+  };
 
   return (
-    <main className="productsPage">
+    <main className="internalPage productsPage">
       <Seo title={t('meta.titles.products')} description={t('meta.descriptions.products')} breadcrumbs={[{ name: t('meta.titles.products'), path: '/products' }]} />
 
-      <section className="internalHero">
-        <div className="container">
-
-          <div className="internalHeroMeta">
-            <span>{meta[0]}</span>
-            <span>{meta[1]}</span>
-          </div>
-
-          <div className="internalHeroGrid">
-
-            <p className="eyebrow">
-              {t('productsPage.eyebrow')}
-            </p>
-
-            <h1>
-              {t('productsPage.title')}
-              <span>{t('productsPage.titleAccent')}</span>
-            </h1>
-
-          </div>
-
-          <div className="internalHeroBottom">
-
-            <p>
-              {t('productsPage.text')}
-            </p>
-
-            <span>
-              {t('productsPage.tag')}
-            </span>
-
-          </div>
-
-        </div>
-      </section>
+      <PageHeader
+        crumbs={[{ label: t('nav.products') }]}
+        eyebrow={t('productsPage.eyebrow')}
+        title={t('productsPage.title')}
+        accent={t('productsPage.titleAccent')}
+        lead={t('productsPage.text')}
+        media={[
+          { src: '/images/products/rd-15000.webp' },
+          { src: '/images/products/mixer-silo-tank.webp' },
+          { src: '/images/products/stackable-trolley.webp' },
+        ]}
+        actions={(
+          <>
+            <FinderCta tone="glass" />
+            <CatalogLink placement="products" />
+          </>
+        )}
+        facts={[
+          { value: portfolio.length, label: t('productTables.groupsLabel') },
+          { value: totals.families, label: p('statsFamilies') },
+          { value: totals.models, label: p('statsModels') },
+        ]}
+      />
 
       <section className="productsTools">
         <div className="container productsToolsGrid">
-          <LocalizedLink to="/water-tanks" className="productsTool">
-            <span className="productsToolIcon" aria-hidden="true"><SlidersHorizontal /></span>
-            <span className="productsToolText">
-              <strong>{t('meta.titles.waterTanks')}</strong>
-              <span>{t('waterTanks.intro')}</span>
-            </span>
-            <Arrow className="productsToolArrow" />
-          </LocalizedLink>
-
-          <LocalizedLink to="/tank-finder" className="productsTool">
-            <span className="productsToolIcon" aria-hidden="true"><Wand2 /></span>
-            <span className="productsToolText">
-              <strong>{t('meta.titles.tankFinder')}</strong>
-              <span>{t('finder.ctaText')}</span>
-            </span>
-            <Arrow className="productsToolArrow" />
-          </LocalizedLink>
-
-          <LocalizedLink to="/product-tables" className="productsTool">
-            <span className="productsToolIcon" aria-hidden="true"><Table2 /></span>
-            <span className="productsToolText">
-              <strong>{t('meta.titles.productTables')}</strong>
-              <span>{t('productTables.intro')}</span>
-            </span>
-            <Arrow className="productsToolArrow" />
-          </LocalizedLink>
+          {TOOLS.map((tool) => (
+            <LocalizedLink key={tool.to} to={tool.to} className="productsTool">
+              <span className="productsToolIcon" aria-hidden="true"><tool.icon /></span>
+              <span className="productsToolText">
+                <strong>{t(tool.title)}</strong>
+                <span>{t(tool.text, { max: 4 })}</span>
+              </span>
+              <Arrow className="productsToolArrow" />
+            </LocalizedLink>
+          ))}
         </div>
       </section>
 
-      <section className="productsCatalog">
+      <section className="cmBlock pfSection">
         <div className="container">
-
-          <div className="productsCatalogTop">
-
+          <div className="cmSectionHead cmSectionHeadSplit">
             <div>
-              <span className="sectionIndex">
-                {t('productsPage.catalogIndex')}
-              </span>
-
+              <p className="eyebrow">{t('productsPage.catalogIndex')}</p>
               <h2>
                 {t('productsPage.catalogTitle')}
                 <span>{t('productsPage.catalogTitleAccent')}</span>
               </h2>
             </div>
-
-            <p>
-              {t('productsPage.catalogText')}
-            </p>
-
+            <p className="cmLead">{t('productsPage.catalogText')}</p>
           </div>
 
-          <div className="productFilters">
-
-            {filterIds.map((filterId) => (
-              <button
-                type="button"
-                key={filterId}
-                className={
-                  activeFilter === filterId
-                    ? 'active'
-                    : ''
-                }
-                aria-pressed={activeFilter === filterId}
-                onClick={() =>
-                  setActiveFilter(filterId)
-                }
-              >
-                {t(`productsPage.filters.${filterId}`)}
-              </button>
-            ))}
-
-          </div>
-
-          {filteredProducts.length === 0 && (
-            <div className="productsEmpty">
-              <p>
-                {t('productsPage.empty')}
-              </p>
-
-              <LocalizedLink to="/contact">
-                {t('productsPage.askTeam')}
-                <Arrow />
-              </LocalizedLink>
-            </div>
-          )}
-
-          <div className="productsCatalogGrid">
-
-            {filteredProducts.map(
-              (product, index) => (
-                <LocalizedLink
-                  to={`/products/${product.slug}`}
-                  className="productCatalogCard"
-                  key={product.slug}
-                >
-
-                  <div className="productCatalogMedia">
-
-                    <span className="productCatalogNumber">
-                      {String(index + 1).padStart(
-                        2,
-                        '0'
-                      )}
-                    </span>
-
-                    <span className="productCatalogCategory">
-                      {product.categoryLabel}
-                    </span>
-
-                    {product.image ? (
-                      <img
-                        className="productPhoto"
-                        src={product.image}
-                        alt={product.name}
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    ) : (
-                      <div className="catalogTank">
-
-                        <div className="catalogTankCap" />
-
-                        <div className="catalogTankBody">
-                          <span />
-                          <span />
-                          <span />
-                        </div>
-
-                      </div>
-                    )}
-
-                    <Arrow className="productCatalogArrow" />
-
-                  </div>
-
-                  <div className="productCatalogContent">
-
-                    <h3>
-                      {product.name}
-                    </h3>
-
-                    <div className="productCatalogMeta">
-
-                      <div>
-                        <span>{t('productsPage.capacity')}</span>
-
-                        <strong>
-                          {product.capacity}
-                        </strong>
-                      </div>
-
-                      <div>
-                        <span>{t('productsPage.technology')}</span>
-
-                        <strong>
-                          {product.technology}
-                        </strong>
-                      </div>
-
-                    </div>
-
-                  </div>
-
+          <ul className="pfGrid">
+            {portfolio.map((group, index) => (
+              <li key={group.id} className="pfCard" id={group.id}>
+                <LocalizedLink to={group.link} className="pfMedia" tabIndex={-1} aria-hidden="true">
+                  <img
+                    src={group.image}
+                    alt=""
+                    loading={index < 3 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    className={group.round ? 'round' : ''}
+                  />
+                  <span className="pfIndex">{pad(index + 1)}</span>
+                  <span className="pfTag">{text(group.id, 'application')}</span>
                 </LocalizedLink>
-              )
-            )}
 
-          </div>
+                <div className="pfBody">
+                  <span className="pfLabel">{text(group.id, 'label')}</span>
+                  <h3>
+                    <LocalizedLink to={group.link}>{text(group.id, 'title')}</LocalizedLink>
+                  </h3>
+                  <p>{text(group.id, 'description')}</p>
 
+                  <dl className="pfMeta">
+                    <div>
+                      <dt>{group.custom ? p('application') : p('range')}</dt>
+                      <dd>{group.custom ? p('projectBased') : range(group) || '–'}</dd>
+                    </div>
+                    <div>
+                      <dt>{p('modelsLabel')}</dt>
+                      <dd>{group.custom ? '–' : group.models}</dd>
+                    </div>
+                  </dl>
+
+                  <div className="pfActions">
+                    <LocalizedLink to={group.link} className="pfPrimary">
+                      {group.custom ? p('customLink') : p('explore')}
+                      <Arrow />
+                    </LocalizedLink>
+                    {group.finder ? (
+                      <LocalizedLink to="/tank-finder" className="pfSecondary">
+                        <Wand2 aria-hidden="true" />
+                        {p('finder')}
+                      </LocalizedLink>
+                    ) : (
+                      <button type="button" className="pfSecondary" onClick={() => openQuote(text(group.id, 'title'))}>
+                        {p('quote')}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
+      <section className="cmCta">
+        <div className="container">
+          <div className="cmCtaPanel">
+            <div>
+              <h2>{t('productsPage.ctaTitle')}</h2>
+              <p>{t('productsPage.ctaText')}</p>
+            </div>
+
+            <div className="cmCtaActions">
+              <button type="button" className="button primary" onClick={() => openQuote()}>
+                <span>{t('common.requestQuote')}</span>
+                <Arrow className="buttonArrow" />
+              </button>
+              <LocalizedLink to="/custom-molding" className="cmCtaLink">
+                {p('customLink')}
+                <Arrow />
+              </LocalizedLink>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

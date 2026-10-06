@@ -22,7 +22,7 @@ const WORLDWIDE_STEP = destinations.length;
   step n       → "worldwide": every market and route lights up together
   then the sequence starts again.
 */
-export default function GlobalPresenceSection() {
+export default function GlobalPresenceSection({ index }) {
   const { t } = useTranslation();
   const reduceMotion = usePrefersReducedMotion();
 
@@ -141,9 +141,11 @@ export default function GlobalPresenceSection() {
         <div className="globalHeader globalHeaderShowcase">
 
           <div className="globalHeaderIntro">
-            <span className="sectionIndex light">
-              {t('global.index')}
-            </span>
+            {index !== false && (
+              <span className="sectionIndex light">
+                {index || t('global.index')}
+              </span>
+            )}
 
             <p className="eyebrow">
               {t('global.eyebrow')}

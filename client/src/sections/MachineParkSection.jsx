@@ -16,7 +16,7 @@ const pad = (n) => String(n).padStart(2, '0');
   then a machine list; the selected machine is shown large on the side.
   On phones every machine opens up in the list instead.
 */
-export default function MachineParkSection() {
+export default function MachineParkSection({ index }) {
   const { t } = useTranslation();
   const [active, setActive] = useState(0);
 
@@ -33,7 +33,7 @@ export default function MachineParkSection() {
 
         <div className="machineParkHeader">
           <div>
-            <span className="sectionIndex light">{t('machinePark.index')}</span>
+            {index !== false && <span className="sectionIndex light">{index || t('machinePark.index')}</span>}
             <p className="eyebrow">{t('machinePark.eyebrow')}</p>
 
             <h2>
