@@ -14,8 +14,10 @@ function siteTags(env) {
   const gtmId = /^GTM-[A-Z0-9]+$/.test(env.VITE_GTM_ID || '') ? env.VITE_GTM_ID : '';
   const gscCode = (env.VITE_GSC_VERIFICATION || '').replace(/[^\w-]/g, '');
 
+  // `js` class (scroll animations only hide content when JS runs) +
   // Google Consent Mode v2: deny by default, restore a saved choice before GTM loads
   const consentDefaults = `
+document.documentElement.classList.add('js');
 window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;
 gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',functionality_storage:'granted',security_storage:'granted',wait_for_update:500});
 gtag('set','ads_data_redaction',true);gtag('set','url_passthrough',true);

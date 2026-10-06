@@ -148,6 +148,13 @@ const en = {
   },
 
   stats: {
+    title: 'We bring ~manufacturing experience~ to your projects.',
+    capabilities: [
+      { title: 'Rotational moulding', description: 'One-piece, seamless polyethylene bodies.' },
+      { title: 'The right material', description: 'LLDPE and HDPE selected for each operating condition.' },
+      { title: 'Engineering support', description: 'A project partner from needs analysis to mould development.' },
+      { title: 'From Mersin to the world', description: 'Exports to markets on four continents.' },
+    ],
     index: '02 / COMPANY',
     eyebrow: 'Manufacturing experience',
     description:

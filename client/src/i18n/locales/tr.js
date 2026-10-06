@@ -147,6 +147,13 @@ const tr = {
   },
 
   stats: {
+    title: 'Üretim ~deneyimini~ projelerinize taşıyoruz.',
+    capabilities: [
+      { title: 'Rotasyonel kalıplama', description: 'Tek parça, ek yeri olmayan polietilen gövdeler.' },
+      { title: 'Uygulamaya uygun malzeme', description: 'LLDPE ve HDPE ile kullanım koşuluna göre malzeme seçimi.' },
+      { title: 'Mühendislik desteği', description: 'İhtiyaç analizinden kalıp geliştirmeye kadar proje ortaklığı.' },
+      { title: 'Mersin’den dünyaya', description: 'Dört kıtadaki pazarlara ihracat.' },
+    ],
     index: '02 / KURUMSAL',
     eyebrow: 'Üretim deneyimi',
     description:
