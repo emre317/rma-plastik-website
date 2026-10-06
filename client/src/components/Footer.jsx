@@ -39,6 +39,8 @@ const linkColumns = [
       { key: 'waterTanks', path: '/products?category=water-tanks' },
       { key: 'agricultural', path: '/products?category=agriculture' },
       { key: 'custom', path: '/products?category=custom' },
+      { key: 'waterTanks', path: '/water-tanks' },
+      { key: 'productTables', path: '/product-tables' },
     ],
   },
 ];

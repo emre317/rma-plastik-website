@@ -1,6 +1,8 @@
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { SlidersHorizontal, Table2 } from 'lucide-react';
+
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import useProducts from '../../hooks/useProducts';
@@ -81,6 +83,28 @@ export default function Products() {
 
           </div>
 
+        </div>
+      </section>
+
+      <section className="productsTools">
+        <div className="container productsToolsGrid">
+          <LocalizedLink to="/water-tanks" className="productsTool">
+            <span className="productsToolIcon" aria-hidden="true"><SlidersHorizontal /></span>
+            <span className="productsToolText">
+              <strong>{t('meta.titles.waterTanks')}</strong>
+              <span>{t('waterTanks.intro')}</span>
+            </span>
+            <Arrow className="productsToolArrow" />
+          </LocalizedLink>
+
+          <LocalizedLink to="/product-tables" className="productsTool">
+            <span className="productsToolIcon" aria-hidden="true"><Table2 /></span>
+            <span className="productsToolText">
+              <strong>{t('meta.titles.productTables')}</strong>
+              <span>{t('productTables.intro')}</span>
+            </span>
+            <Arrow className="productsToolArrow" />
+          </LocalizedLink>
         </div>
       </section>
 

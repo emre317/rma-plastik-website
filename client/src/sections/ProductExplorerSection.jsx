@@ -16,8 +16,10 @@ const productCategories = [
   { id: 'custom', catalogCategory: 'custom', hue: 240 },
 ];
 
-const linkFor = (category) =>
-  category.catalogCategory ? `/products?category=${category.catalogCategory}` : '/contact';
+const linkFor = (category) => {
+  if (category.id === 'water') return '/water-tanks';
+  return category.catalogCategory ? `/products?category=${category.catalogCategory}` : '/contact';
+};
 
 export default function ProductExplorerSection() {
   const { t } = useTranslation();

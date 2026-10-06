@@ -33,6 +33,8 @@ const SECTION_LABELS = {
   global: 'Ana sayfa – İhracat',
   pages: 'İç sayfalar (Kurumsal, Özel Üretim, Sektörler…)',
   productsPage: 'Ürünler sayfası',
+  waterTanks: 'Su depoları sayfası',
+  productTables: 'Ürün tabloları sayfası',
   productDetail: 'Ürün detay sayfası',
   contact: 'İletişim ve teklif formu',
 };

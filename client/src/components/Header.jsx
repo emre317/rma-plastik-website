@@ -14,6 +14,7 @@ import { useQuote } from './quote/QuoteContext';
 const navItems = [
   { key: 'company', path: '/company' },
   { key: 'products', path: '/products' },
+  { key: 'waterTanks', path: '/water-tanks' },
   { key: 'customMolding', path: '/custom-molding' },
   { key: 'industries', path: '/industries' },
   { key: 'blog', path: '/blog' },
