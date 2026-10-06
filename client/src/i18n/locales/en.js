@@ -122,6 +122,11 @@ const en = {
   },
 
   hero: {
+    watchFilm: 'Watch the company film',
+    pause: 'Pause',
+    play: 'Play',
+    close: 'Close',
+    categoriesLabel: 'Product groups',
     videoLabel: 'Company film',
     soundOn: 'Sound on',
     soundOff: 'Sound off',

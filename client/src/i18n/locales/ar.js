@@ -122,6 +122,11 @@ const ar = {
   },
 
   hero: {
+    watchFilm: 'شاهد الفيلم التعريفي',
+    pause: 'إيقاف مؤقت',
+    play: 'تشغيل',
+    close: 'إغلاق',
+    categoriesLabel: 'مجموعات المنتجات',
     videoLabel: 'فيلم تعريفي',
     soundOn: 'تشغيل الصوت',
     soundOff: 'كتم الصوت',

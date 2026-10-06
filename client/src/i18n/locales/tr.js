@@ -121,6 +121,11 @@ const tr = {
   },
 
   hero: {
+    watchFilm: 'Tanıtım filmini izle',
+    pause: 'Durdur',
+    play: 'Oynat',
+    close: 'Kapat',
+    categoriesLabel: 'Ürün grupları',
     videoLabel: 'Tanıtım filmi',
     soundOn: 'Sesi aç',
     soundOff: 'Sesi kapat',
