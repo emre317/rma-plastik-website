@@ -15,7 +15,7 @@ const WATER_FAMILIES = ['vertical-tanks', 'horizontal-tanks', 'two-layer-vertica
 const normalise = (text) => String(text).toLocaleLowerCase('tr').replace(/\s+/g, '');
 
 export default function ProductTables() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { code: lang } = useLanguage();
   const { openQuote } = useQuote();
 
@@ -170,7 +170,25 @@ export default function ProductTables() {
                                   )
                                 )}
                                 <td>
-                                  <button type="button" className="ptRowQuote" onClick={() => openQuote(`${title} – ${row.code}`)}>
+                                  <button type="button" className="ptRowQuote" onClick={() =>
+                                      openQuote({
+                                        name: `${i18n.getFixedT('tr')(`productTables.families.${family.id}.title`)} – ${row.code}`,
+                                        title,
+                                        code: row.code,
+                                        image: family.image || '',
+                                        capacity: typeof row.volume === 'number' ? `${formatNumber(row.volume, lang)} L` : '',
+                                        specs: family.columns
+                                          .filter((key) => key !== 'code' && key !== 'volume' && row[key] !== undefined)
+                                          .map((key) => ({ label: p(`columns.${key}`), value: formatNumber(row[key], lang) })),
+                                        summary: [
+                                          i18n.getFixedT('tr')(`productTables.families.${family.id}.title`),
+                                          row.code,
+                                          ...family.columns
+                                            .filter((key) => key !== 'code' && row[key] !== undefined)
+                                            .map((key) => `${i18n.getFixedT('tr')(`productTables.columns.${key}`)}: ${formatNumber(row[key], 'tr')}`),
+                                        ],
+                                      })
+                                    }>
                                     {p('quote')}
                                   </button>
                                 </td>

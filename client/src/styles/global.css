@@ -17599,3 +17599,236 @@ button.contactChannel {
 
   text-align: right;
 }
+
+/* =====================================================
+   QUOTE FORM – selected catalogue model
+===================================================== */
+
+.quoteProduct {
+  position: relative;
+
+  margin-bottom: 22px;
+
+  padding: 14px;
+
+  display: flex;
+
+  gap: 16px;
+
+  border: 1px solid rgba(29, 103, 213, 0.3);
+
+  border-radius: var(--radius-md);
+
+  background:
+    radial-gradient(80% 120% at 100% 0%, rgba(29, 103, 213, 0.1), transparent 70%),
+    #fff;
+
+  animation: quoteProductIn 350ms ease;
+}
+
+.quoteProductImage {
+  width: 104px;
+
+  height: 104px;
+
+  flex-shrink: 0;
+
+  display: grid;
+
+  place-items: center;
+
+  overflow: hidden;
+
+  border-radius: var(--radius-sm);
+
+  background: #f2f2f2;
+
+  color: var(--accent);
+}
+
+.quoteProductImage img {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: contain;
+}
+
+.quoteProductImage svg {
+  width: 32px;
+
+  height: 32px;
+}
+
+.quoteProductText {
+  min-width: 0;
+
+  flex: 1;
+
+  padding-inline-end: 30px;
+}
+
+.quoteProductLabel {
+  color: var(--accent);
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+.quoteProductText strong {
+  margin-top: 2px;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  align-items: baseline;
+
+  gap: 10px;
+
+  font-family: var(--font-display);
+
+  font-size: 19px;
+
+  font-weight: 700;
+}
+
+.quoteProductText strong em {
+  color: var(--accent);
+
+  font-style: normal;
+}
+
+.quoteProductFamily {
+  display: block;
+
+  color: var(--text-secondary);
+
+  font-size: 13px;
+}
+
+.quoteProductText dl {
+  margin: 10px 0 0;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 6px;
+}
+
+.quoteProductText dl div {
+  padding: 4px 9px;
+
+  display: flex;
+
+  gap: 5px;
+
+  border-radius: var(--radius-pill);
+
+  background: var(--background);
+
+  font-size: 11px;
+}
+
+.quoteProductText dt {
+  color: var(--text-secondary);
+}
+
+.quoteProductText dd {
+  margin: 0;
+
+  font-weight: 700;
+}
+
+[dir="rtl"] .quoteProductText dd {
+  direction: ltr;
+
+  unicode-bidi: isolate;
+}
+
+.quoteProductRemove {
+  position: absolute;
+
+  top: 10px;
+
+  inset-inline-end: 10px;
+
+  width: 28px;
+
+  height: 28px;
+
+  display: grid;
+
+  place-items: center;
+
+  border: 1px solid var(--line);
+
+  border-radius: 50%;
+
+  background: #fff;
+
+  color: var(--text-secondary);
+
+  cursor: pointer;
+}
+
+.quoteProductRemove:hover {
+  border-color: var(--accent);
+
+  color: var(--accent);
+}
+
+.quoteProductRemove svg {
+  width: 14px;
+
+  height: 14px;
+}
+
+/* Admin quote detail: product photo */
+.adminQuoteProduct strong {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.adminQuoteProduct img {
+  width: 64px;
+
+  height: 64px;
+
+  flex-shrink: 0;
+
+  object-fit: contain;
+
+  border-radius: 10px;
+
+  background: #f2f2f2;
+}
+
+@keyframes quoteProductIn {
+  from {
+    opacity: 0;
+
+    transform: translateY(-6px);
+  }
+}
+
+@media (max-width: 600px) {
+  .quoteProductImage {
+    width: 72px;
+
+    height: 72px;
+  }
+
+  .quoteProductText strong {
+    font-size: 16px;
+  }
+}

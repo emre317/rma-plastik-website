@@ -963,6 +963,8 @@ const en = {
         'Please describe your requirement, operating conditions and other relevant project information.',
     },
     customRequirement: 'Custom Requirement',
+    selectedProduct: 'Selected product',
+    removeProduct: 'Remove product',
     consent:
       'By submitting this form, you confirm that the provided information may be used to respond to your request.',
     submit: 'Send Quote Request',

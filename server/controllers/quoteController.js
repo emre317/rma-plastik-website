@@ -12,6 +12,7 @@ const OPTIONAL_FIELD_LIMITS = {
   phone: 40,
   country: 80,
   product: 150,
+  productDetails: 600,
   capacity: 80,
   application: 200,
 };
@@ -89,6 +90,12 @@ export async function createQuoteRequest(req, res) {
 
       optional[field] = value;
     }
+
+    // Only site images (e.g. /images/products/rd-200.webp) are kept
+    const productImage = cleanString(body.productImage);
+    optional.productImage = /^\/(images|uploads)\/[\w./-]{1,280}$/.test(productImage) && !productImage.includes('..')
+      ? productImage
+      : '';
 
     let quantity = null;
 

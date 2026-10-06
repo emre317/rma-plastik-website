@@ -961,6 +961,8 @@ const tr = {
         'Lütfen ihtiyacınızı, çalışma koşullarını ve projeyle ilgili diğer bilgileri açıklayın.',
     },
     customRequirement: 'Özel İhtiyaç',
+    selectedProduct: 'Seçilen ürün',
+    removeProduct: 'Ürünü kaldır',
     consent:
       'Bu formu göndererek, paylaştığınız bilgilerin talebinize yanıt vermek amacıyla kullanılabileceğini onaylamış olursunuz.',
     submit: 'Teklif Talebini Gönder',

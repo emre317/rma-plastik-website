@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Mail, MapPin, Phone, X } from 'lucide-react';
+import { Mail, MapPin, Package, Phone, X } from 'lucide-react';
 
 import Arrow from '../i18n/Arrow';
 import company from '../../data/company';
@@ -45,7 +45,7 @@ function errorMessageKey(error) {
 export default function QuoteModal() {
   const { t, i18n } = useTranslation();
   const localizedProducts = useProducts();
-  const { open, product, closeQuote } = useQuote();
+  const { open, product, details, closeQuote, clearProduct } = useQuote();
 
   const dialogRef = useRef(null);
   const firstFieldRef = useRef(null);
@@ -66,9 +66,37 @@ export default function QuoteModal() {
     track('quote_form_open', { product: product || '(none)' });
 
     if (product) {
-      setForm((current) => ({ ...current, product }));
+      setForm((current) => ({
+        ...current,
+        product,
+        // A catalogue model also fills the capacity, unless the visitor typed one
+        capacity: details?.capacity && !current.capacity ? details.capacity : current.capacity,
+      }));
     }
-  }, [open, product]);
+  }, [open, product, details]);
+
+  function removeProduct() {
+    clearProduct();
+    setForm((current) => ({
+      ...current,
+      product: '',
+      capacity: details?.capacity && current.capacity === details.capacity ? '' : current.capacity,
+    }));
+  }
+
+  // Selected model as one line for the sales team (e.g. "Dikey Tanklar · RD 100 · Çap (cm): 48");
+  // callers may pass a Turkish `summary` so the team reads it the same in every site language
+  const productDetails = details
+    ? (details.summary || [details.title, details.code, ...(details.specs || []).map((spec) => `${spec.label}: ${spec.value}`)])
+        .filter(Boolean)
+        .join(' · ')
+        .slice(0, 600)
+    : '';
+
+  const productInList =
+    !form.product ||
+    form.product === 'Custom Requirement' ||
+    localizedProducts.some((item) => item.quoteName === form.product);
 
   // Scroll lock, Escape to close, focus handling
   useEffect(() => {
@@ -134,6 +162,8 @@ export default function QuoteModal() {
     try {
       await submitQuote({
         ...form,
+        productDetails: details && form.product === details.name ? productDetails : '',
+        productImage: details && form.product === details.name ? details.image || '' : '',
         language: i18n.resolvedLanguage,
       });
 
@@ -148,6 +178,7 @@ export default function QuoteModal() {
         site_language: i18n.resolvedLanguage,
       });
       setForm(initialForm);
+      clearProduct();
     } catch (error) {
       setStatus('error');
       setFeedbackKey(errorMessageKey(error));
@@ -230,6 +261,48 @@ export default function QuoteModal() {
           onSubmit={handleSubmit}
         >
 
+          {details && form.product === details.name && (
+            <div className="quoteProduct">
+              <span className="quoteProductImage">
+                {details.image ? (
+                  <img src={details.image} alt={details.code || details.name} />
+                ) : (
+                  <Package aria-hidden="true" />
+                )}
+              </span>
+
+              <div className="quoteProductText">
+                <span className="quoteProductLabel">{t('contact.selectedProduct')}</span>
+                <strong>
+                  {details.code || details.name}
+                  {details.capacity && <em>{details.capacity}</em>}
+                </strong>
+                {details.title && <span className="quoteProductFamily">{details.title}</span>}
+
+                {details.specs?.length > 0 && (
+                  <dl>
+                    {details.specs.map((spec) => (
+                      <div key={spec.label}>
+                        <dt>{spec.label}</dt>
+                        <dd>{spec.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+              </div>
+
+              <button
+                type="button"
+                className="quoteProductRemove"
+                onClick={removeProduct}
+                aria-label={t('contact.removeProduct')}
+                title={t('contact.removeProduct')}
+              >
+                <X aria-hidden="true" />
+              </button>
+            </div>
+          )}
+
           <div className="formGrid">
 
             <label className="formField">
@@ -308,6 +381,12 @@ export default function QuoteModal() {
                 <option value="">
                   {t('contact.placeholders.product')}
                 </option>
+
+                {!productInList && (
+                  <option value={form.product}>
+                    {details?.code ? `${details.code}${details.title ? ` – ${details.title}` : ''}` : form.product}
+                  </option>
+                )}
 
                 {localizedProducts.map((item) => (
                   <option key={item.slug} value={item.quoteName}>

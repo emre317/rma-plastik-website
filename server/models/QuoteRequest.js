@@ -59,6 +59,22 @@ const quoteRequestSchema = new mongoose.Schema(
       maxlength: 150,
     },
 
+    // Selected catalogue model, e.g. "Dikey Tanklar · RD 100 · Hacim (lt): 100 · Çap (cm): 48"
+    productDetails: {
+      type: String,
+      trim: true,
+      default: '',
+      maxlength: 600,
+    },
+
+    // Site-relative image of the selected model (/images/...)
+    productImage: {
+      type: String,
+      trim: true,
+      default: '',
+      maxlength: 300,
+    },
+
     capacity: {
       type: String,
       trim: true,

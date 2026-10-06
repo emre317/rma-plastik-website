@@ -77,7 +77,16 @@ export default function ProductDetail() {
     )
     .slice(0, 3);
 
-  const requestQuote = () => openQuote(product.quoteName);
+  const requestQuote = () =>
+    openQuote({
+      name: product.quoteName,
+      title: product.categoryLabel,
+      code: product.name,
+      image: product.image || '',
+      specs: ['material', 'application', 'technology']
+        .filter((field) => product[field])
+        .map((field) => ({ label: t(`productDetail.fields.${technicalFieldLabels[field]}`), value: product[field] })),
+    });
 
   const applications = t('productDetail.applications.items', {
     returnObjects: true,

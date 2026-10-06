@@ -288,6 +288,19 @@ export default function AdminQuoteDetail() {
             </strong>
           </div>
 
+          {(quote.productDetails || quote.productImage) && (
+            <div className="adminQuoteProduct">
+              <span>Product details</span>
+
+              <strong>
+                {quote.productImage && (
+                  <img src={quote.productImage} alt="" loading="lazy" />
+                )}
+                {quote.productDetails || '-'}
+              </strong>
+            </div>
+          )}
+
           <div>
             <span>Capacity</span>
 

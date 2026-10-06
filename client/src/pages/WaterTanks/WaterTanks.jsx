@@ -59,7 +59,7 @@ const SORTERS = {
 };
 
 export default function WaterTanks() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { code: lang } = useLanguage();
   const { openQuote } = useQuote();
 
@@ -118,7 +118,36 @@ export default function WaterTanks() {
     tank.layer === 'double' ? w('double') : w('single'),
   ];
 
-  const quoteName = (tank) => `${tank.code} – ${num(tank.volume)} L`;
+  // Model shown in the quote form (image, family and measurements);
+  // `summary` is the same in Turkish for the sales team
+  const specsFor = (tank, tf) => [
+    {
+      label: tf('waterTanks.orientation'),
+      value: [tf(`waterTanks.${tank.orientation}`), tf(`waterTanks.${tank.layer}`)].join(' · '),
+    },
+    ...['diameter', 'height', 'length', 'cap', 'outlet']
+      .filter((key) => tank[key])
+      .map((key) => ({ label: tf(`productTables.columns.${key}`), value: String(tank[key]) })),
+  ];
+
+  const quoteFor = (tank) => {
+    const tr = i18n.getFixedT('tr');
+
+    return {
+      name: `${tank.code} – ${num(tank.volume)} L`,
+      title: t(`productTables.families.${tank.family}.title`),
+      code: tank.code,
+      image: tank.image,
+      capacity: `${num(tank.volume)} L`,
+      specs: specsFor(tank, t),
+      summary: [
+        tr(`productTables.families.${tank.family}.title`),
+        tank.code,
+        `${tr('productTables.columns.volume')}: ${formatNumber(tank.volume, 'tr')}`,
+        ...specsFor(tank, tr).map((spec) => `${spec.label}: ${spec.value}`),
+      ],
+    };
+  };
 
   const choice = (name, value, label, hint) => (
     <button
@@ -454,7 +483,7 @@ export default function WaterTanks() {
                           ))}
                         </ul>
 
-                        <button type="button" className="wtQuote" onClick={() => openQuote(quoteName(tank))}>
+                        <button type="button" className="wtQuote" onClick={() => openQuote(quoteFor(tank))}>
                           {w('quote')}
                           <Arrow />
                         </button>
@@ -488,7 +517,7 @@ export default function WaterTanks() {
                           <td>{tank.outlet ?? '–'}</td>
                           <td>{badges(tank).join(' · ')}</td>
                           <td>
-                            <button type="button" className="ptRowQuote" onClick={() => openQuote(quoteName(tank))}>
+                            <button type="button" className="ptRowQuote" onClick={() => openQuote(quoteFor(tank))}>
                               {w('quote')}
                             </button>
                           </td>

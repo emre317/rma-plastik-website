@@ -29,13 +29,19 @@ function formatDate(date) {
   }).format(date);
 }
 
-function adminUrl(id) {
+function siteOrigin() {
   const origin = (process.env.CLIENT_URL || '')
     .split(',')
     .map((item) => item.trim())
     .filter(Boolean)[0];
 
-  return origin ? `${origin.replace(/\/$/, '')}/admin/quotes/${id}` : '';
+  return origin ? origin.replace(/\/$/, '') : '';
+}
+
+function adminUrl(id) {
+  const origin = siteOrigin();
+
+  return origin ? `${origin}/admin/quotes/${id}` : '';
 }
 
 function quoteRows(quote) {
@@ -46,6 +52,7 @@ function quoteRows(quote) {
     ['Telefon', quote.phone, quote.phone ? `tel:${quote.phone.replace(/[^\d+]/g, '')}` : ''],
     ['Ülke', quote.country],
     ['Ürün', quote.product],
+    ['Ürün detayı', quote.productDetails],
     ['İstenen kapasite', quote.capacity],
     ['Adet', quote.quantity ?? ''],
     ['Uygulama', quote.application],
@@ -78,6 +85,18 @@ export function buildQuoteEmail(quote) {
 
   const messageHtml = escapeHtml(quote.message).replace(/\r?\n/g, '<br>');
 
+  // Photo of the selected catalogue model (needs CLIENT_URL for an absolute link)
+  const imageUrl = quote.productImage && siteOrigin() ? `${siteOrigin()}${quote.productImage}` : '';
+  const imageHtml = imageUrl
+    ? `
+          <tr>
+            <td style="padding:28px 32px 0;">
+              <p style="margin:0 0 14px;font-size:11px;font-weight:700;color:#5d6980;letter-spacing:0.08em;text-transform:uppercase;">Seçilen ürün</p>
+              <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(quote.product)}" width="180" style="display:block;width:180px;max-width:100%;border-radius:12px;background:#f2f2f2;">
+            </td>
+          </tr>`
+    : '';
+
   const html = `<!doctype html>
 <html lang="tr">
 <head>
@@ -106,6 +125,7 @@ export function buildQuoteEmail(quote) {
             </td>
           </tr>
 
+${imageHtml}
           <tr>
             <td style="padding:28px 32px 8px;">
               <p style="margin:0 0 14px;font-size:11px;font-weight:700;color:#5d6980;letter-spacing:0.08em;text-transform:uppercase;">Talep bilgileri</p>

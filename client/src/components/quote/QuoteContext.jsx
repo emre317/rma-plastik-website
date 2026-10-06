@@ -14,15 +14,26 @@ const QuoteContext = createContext(null);
 
 /*
   Shared state for the "Request a quote" dialog.
-  Any button can open it with openQuote(productQuoteName?).
+  Any button can open it with openQuote(productQuoteName?), or with a
+  catalogue model to show it in the form:
+    openQuote({ name, title, code, image, capacity, specs: [{ label, value }] })
   Old links such as /contact?product=<slug> still open it with that product.
 */
 export function QuoteProvider({ children }) {
-  const [state, setState] = useState({ open: false, product: '' });
+  const [state, setState] = useState({ open: false, product: '', details: null });
   const [searchParams, setSearchParams] = useSearchParams();
 
   const openQuote = useCallback((product = '') => {
-    setState({ open: true, product: typeof product === 'string' ? product : '' });
+    if (product && typeof product === 'object') {
+      setState({ open: true, product: product.name || '', details: product });
+      return;
+    }
+
+    setState({ open: true, product: typeof product === 'string' ? product : '', details: null });
+  }, []);
+
+  const clearProduct = useCallback(() => {
+    setState((current) => ({ ...current, product: '', details: null }));
   }, []);
 
   const closeQuote = useCallback(() => {
@@ -46,8 +57,8 @@ export function QuoteProvider({ children }) {
   }, [productSlug, searchParams, setSearchParams, openQuote]);
 
   const value = useMemo(
-    () => ({ ...state, openQuote, closeQuote }),
-    [state, openQuote, closeQuote]
+    () => ({ ...state, openQuote, closeQuote, clearProduct }),
+    [state, openQuote, closeQuote, clearProduct]
   );
 
   return (
