@@ -71,7 +71,18 @@ export default function PublishPanel() {
       <small>Son yayın: {formatTime(state?.publishedAt)}</small>
 
       {state?.status === 'failed' && (
-        <small className="publishPanelError">Son yayın başarısız oldu. Sunucu kaydına bakın.</small>
+        <>
+          <small className="publishPanelError">
+            Son yayın başarısız oldu{state.error ? `: ${state.error}` : '.'}
+          </small>
+
+          {state.log && (
+            <details className="publishPanelLog">
+              <summary>Ayrıntıları göster</summary>
+              <pre>{state.log.slice(-2500)}</pre>
+            </details>
+          )}
+        </>
       )}
 
       {error && <small className="publishPanelError">{error}</small>}

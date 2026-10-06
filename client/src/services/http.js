@@ -49,14 +49,23 @@ export async function request(
   }
 
   // Non-JSON responses (proxy errors, HTML pages) must not crash the caller.
-  const data = await response.json().catch(() => ({}));
+  const data = await response.json().catch(() => null);
 
   if (!response.ok) {
+    // No JSON from a 5xx = the API itself did not answer (e.g. the dev proxy
+    // could not reach the server on port 5000)
+    if (!data && response.status >= 500) {
+      throw new ApiError(
+        'API sunucusuna ulaşılamıyor. "server" klasöründe "npm run dev" çalışıyor mu? / The API server is not reachable.',
+        0
+      );
+    }
+
     throw new ApiError(
-      data.message || fallbackMessage,
+      data?.message || fallbackMessage,
       response.status
     );
   }
 
-  return data;
+  return data || {};
 }

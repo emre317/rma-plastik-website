@@ -12208,3 +12208,35 @@ button.contactChannel {
   }
 
 }
+
+.publishPanelLog summary {
+  color: rgba(255, 255, 255, 0.7);
+
+  cursor: pointer;
+
+  font-size: 12px;
+}
+
+.publishPanelLog pre {
+  max-height: 220px;
+
+  margin: 8px 0 0;
+
+  padding: 8px;
+
+  overflow: auto;
+
+  border-radius: var(--radius-xs);
+
+  color: rgba(255, 255, 255, 0.8);
+
+  background: rgba(0, 0, 0, 0.3);
+
+  font-size: 10px;
+
+  line-height: 1.4;
+
+  white-space: pre-wrap;
+
+  word-break: break-word;
+}

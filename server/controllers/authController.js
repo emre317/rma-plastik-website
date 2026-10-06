@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import AdminUser from '../models/AdminUser.js';
 
@@ -81,9 +82,14 @@ export async function adminLogin(
       error
     );
 
-    return res.status(500).json({
+    // Most often the database is not reachable
+    const databaseDown = mongoose.connection.readyState !== 1;
+
+    return res.status(databaseDown ? 503 : 500).json({
       success: false,
-      message: 'Login failed.',
+      message: databaseDown
+        ? 'Veritabanına bağlanılamadı (MongoDB çalışıyor mu?). / Database is not reachable.'
+        : 'Login failed.',
     });
   }
 }

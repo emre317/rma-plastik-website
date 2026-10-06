@@ -6,14 +6,15 @@
 */
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const dist = path.join(root, process.env.BUILD_OUT_DIR || 'dist');
 const ssrDir = path.join(root, 'dist-ssr');
 
+// file:// URL so the import also works with Windows paths (C:\...)
 const { render, getPublicPaths, languages, SITE_URL } = await import(
-  path.join(ssrDir, 'entry-server.js')
+  pathToFileURL(path.join(ssrDir, 'entry-server.js')).href
 );
 
 const template = fs.readFileSync(path.join(dist, 'index.html'), 'utf8');
