@@ -26,14 +26,14 @@ export default function FloatingContact() {
       href: company.phone.href,
       label: t('floatingContact.phone'),
       icon: Phone,
-      color: '#d51d2c',
+      color: 'var(--accent)',
     },
     {
       key: 'email',
       href: `mailto:${company.email}`,
       label: t('floatingContact.email'),
       icon: Mail,
-      color: '#0b0d10',
+      color: 'var(--dark)',
     },
   ].filter(Boolean);
 

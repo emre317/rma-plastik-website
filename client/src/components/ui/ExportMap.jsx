@@ -30,7 +30,7 @@ const ZOOM_STEP = 1.6;
 const MAX_ZOOM = 5;
 
 const COLORS = {
-  market: '#e0313f',
+  market: '#4d94f5',
   hub: '#ffffff',
 };
 
@@ -379,7 +379,7 @@ export default function ExportMap({
                   cy={destination.y}
                   r={(active ? 1 : 0.75) * unit}
                   fill={COLORS.market}
-                  stroke="#0b0d10"
+                  stroke="#0f1e3c"
                   strokeWidth={0.25 * unit}
                 />
               </g>

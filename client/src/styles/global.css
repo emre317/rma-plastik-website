@@ -8,22 +8,24 @@
 :root {
   font-family: var(--font-body);
 
-  color: #101214;
-  background: #f5f5f3;
+  color: #112244;
+  background: #f0f3f8;
 
-  --background: #f5f5f3;
-  --background-secondary: #ecece8;
+  --background: #f0f3f8;
+  --background-secondary: #e2e7f2;
 
-  --dark: #0b0d10;
-  --dark-secondary: #15171a;
+  --dark: #0f1e3c;
+  --dark-secondary: #13264c;
 
-  --red: #d51d2c;
-  --red-dark: #b51522;
+  /* Corporate palette: blue, white, navy */
+  --accent: #1d67d5;
+  --accent-dark: #1655b4;
+  --accent-light: #4d94f5;
 
-  --text: #101214;
-  --text-secondary: #6d6f70;
+  --text: #112244;
+  --text-secondary: #5d6980;
 
-  --line: #d8d8d4;
+  --line: #ccd3e0;
 
   --container: 1400px;
 
@@ -176,9 +178,9 @@ h2 {
     ),
     linear-gradient(
       135deg,
-      #ededE9 0%,
-      #f8f8f5 55%,
-      #e9e9e4 100%
+      #e3e8f3 0%,
+      #f3f5fa 55%,
+      #dde3f0 100%
     );
 }
 
@@ -203,7 +205,7 @@ h2 {
 
   padding-bottom: 24px;
 
-  border-bottom: 1px solid rgba(16, 18, 20, 0.15);
+  border-bottom: 1px solid rgba(17, 34, 68, 0.15);
 
   font-size: 11px;
   font-weight: 700;
@@ -256,7 +258,7 @@ h2 {
 .heroContent .eyebrow {
   margin-bottom: 30px;
 
-  color: var(--red);
+  color: var(--accent);
 }
 
 .heroContent h1 {
@@ -276,7 +278,7 @@ h2 {
 .heroContent h1 span {
   display: block;
 
-  color: var(--red);
+  color: var(--accent);
 }
 
 .heroContent .lead {
@@ -341,15 +343,15 @@ h2 {
 .button.primary {
   color: #ffffff;
 
-  background: var(--red);
+  background: var(--accent);
 
-  border-color: var(--red);
+  border-color: var(--accent);
 }
 
 .button.primary:hover {
-  background: var(--red-dark);
+  background: var(--accent-dark);
 
-  border-color: var(--red-dark);
+  border-color: var(--accent-dark);
 
   transform: translateY(-2px);
 }
@@ -391,9 +393,9 @@ h2 {
   background:
     radial-gradient(
       circle at 50% 30%,
-      #33373c 0%,
-      #1d2024 40%,
-      #0b0d10 80%
+      #2c4473 0%,
+      #172e5a 40%,
+      #0f1e3c 80%
     );
 }
 
@@ -486,9 +488,9 @@ h2 {
   background:
     linear-gradient(
       90deg,
-      #e8e8e5,
+      #dde3f0,
       #ffffff,
-      #c8c8c4
+      #bdc3cf
     );
 }
 
@@ -513,11 +515,11 @@ h2 {
   background:
     linear-gradient(
       90deg,
-      #bfc1be 0%,
-      #f4f4f0 22%,
+      #b5bcca 0%,
+      #edf0f7 22%,
       #ffffff 48%,
-      #d9dad6 72%,
-      #a9aaa7 100%
+      #cfd5e1 72%,
+      #9ba4b6 100%
     );
 }
 
@@ -546,7 +548,7 @@ h2 {
 
   height: 4px;
 
-  background: rgba(70,70,70,.18);
+  background: rgba(61, 83, 127, .18);
 }
 
 .tankLineOne {
@@ -616,12 +618,7 @@ h2 {
 
   justify-content: space-between;
 
-  border-top: 1px solid rgba(
-    16,
-    18,
-    20,
-    0.15
-  );
+  border-top: 1px solid rgba(17, 34, 68, 0.15);
 
   color: var(--text-secondary);
 
@@ -700,7 +697,7 @@ h2 {
 
   background: var(--dark);
 
-  border-color: #282a2e;
+  border-color: #203866;
 }
 
 .muted {
@@ -724,7 +721,7 @@ h2 {
 
   padding: 32px;
 
-  border: 1px solid #303237;
+  border: 1px solid #28406f;
 
   transition:
     background-color 250ms ease,
@@ -732,7 +729,7 @@ h2 {
 }
 
 .card:hover {
-  background: #17191c;
+  background: #142850;
 
   transform: translateY(-4px);
 }
@@ -799,7 +796,7 @@ h2 {
 .chips span {
   padding: 14px 18px;
 
-  border: 1px solid #bbb;
+  border: 1px solid #b0b7c6;
 
   font-size: 13px;
 }
@@ -1102,12 +1099,12 @@ h2 {
 
   z-index: 1000;
 
-  background: rgba(245, 245, 243, 0.88);
+  background: rgba(240, 243, 248, 0.88);
 
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
 
-  border-bottom: 1px solid rgba(16, 18, 20, 0.1);
+  border-bottom: 1px solid rgba(17, 34, 68, 0.1);
 }
 
 .headerInner {
@@ -1166,7 +1163,7 @@ h2 {
 
   height: 1px;
 
-  background: var(--red);
+  background: var(--accent);
 
   transition: width 200ms ease;
 }
@@ -1208,7 +1205,7 @@ h2 {
 }
 
 .headerContact span {
-  color: var(--red);
+  color: var(--accent);
 }
 
 
@@ -1369,7 +1366,7 @@ h2 {
 .mobileNav a span {
   margin-top: 7px;
 
-  color: var(--red);
+  color: var(--accent);
 
   font-size: 11px;
 
@@ -1483,7 +1480,7 @@ h2 {
 }
 
 .statsIntro .eyebrow {
-  color: var(--red);
+  color: var(--accent);
 }
 
 .statsSection .statGrid {
@@ -1588,7 +1585,7 @@ h2 {
 }
 
 .technologyHeader .eyebrow {
-  color: var(--red);
+  color: var(--accent);
 }
 
 .technologyHeader h2 {
@@ -1650,7 +1647,7 @@ h2 {
 }
 
 .technologyCard:hover {
-  background: #15181b;
+  background: #13274d;
 }
 
 .technologyCardTop {
@@ -1699,9 +1696,9 @@ h2 {
 .technologyCard:hover .technologyArrow {
   color: #fff;
 
-  background: var(--red);
+  background: var(--accent);
 
-  border-color: var(--red);
+  border-color: var(--accent);
 
   transform: translate(calc(3px * var(--dir-x)), -3px);
 }
@@ -1875,7 +1872,7 @@ h2 {
 }
 
 .technologyFooter a span {
-  color: var(--red);
+  color: var(--accent);
 
   font-size: 17px;
 }
@@ -2015,7 +2012,7 @@ h2 {
 .productExplorerSection {
   padding: 150px 0;
 
-  background: #f5f5f3;
+  background: #f0f3f8;
 
   border-bottom: 1px solid var(--line);
 }
@@ -2033,7 +2030,7 @@ h2 {
 }
 
 .productExplorerHeader .eyebrow {
-  color: var(--red);
+  color: var(--accent);
 }
 
 .productExplorerHeader h2 {
@@ -2051,7 +2048,7 @@ h2 {
 .productExplorerHeader h2 span {
   display: block;
 
-  color: #a7a7a1;
+  color: #959fb3;
 }
 
 .productIntroText {
@@ -2139,7 +2136,7 @@ h2 {
 .productCategoryItem:hover {
   padding-inline-start: 14px;
 
-  background: #ecece8;
+  background: #e2e7f2;
 }
 
 .productCategoryItem.active {
@@ -2179,7 +2176,7 @@ h2 {
 .productCategoryArrow {
   justify-self: end;
 
-  color: var(--red);
+  color: var(--accent);
 
   font-size: 17px;
 
@@ -2210,9 +2207,9 @@ h2 {
   background:
     radial-gradient(
       circle at 50% 40%,
-      #34383d 0%,
-      #181b1f 42%,
-      #0b0d10 78%
+      #2d4574 0%,
+      #152953 42%,
+      #0f1e3c 78%
     );
 }
 
@@ -2314,9 +2311,9 @@ h2 {
   background:
     linear-gradient(
       90deg,
-      #c9cac7,
+      #bbc4d6,
       #fff,
-      #b9bab7
+      #adb5c4
     );
 }
 
@@ -2341,11 +2338,11 @@ h2 {
   background:
     linear-gradient(
       90deg,
-      #aeb0ad 0%,
-      #eeeeea 20%,
+      #a2aabb 0%,
+      #e5eaf3 20%,
       #ffffff 48%,
-      #d7d8d4 74%,
-      #999b98 100%
+      #ccd3e0 74%,
+      #8994aa 100%
     );
 }
 
@@ -2375,7 +2372,7 @@ h2 {
   height: 4px;
 
   background:
-    rgba(50,50,50,.14);
+    rgba(39, 62, 110, .14);
 }
 
 .productObjectBody span:nth-child(1) {
@@ -2532,7 +2529,7 @@ h2 {
 }
 
 .productExploreLink span {
-  color: var(--red);
+  color: var(--accent);
 
   font-size: 17px;
 
@@ -2724,7 +2721,7 @@ h2 {
 }
 
 .industriesHeader .eyebrow {
-  color: var(--red);
+  color: var(--accent);
 }
 
 .industriesHeader h2 {
@@ -2742,7 +2739,7 @@ h2 {
 .industriesHeader h2 span {
   display: block;
 
-  color: #a7a7a1;
+  color: #959fb3;
 }
 
 .industriesHeader > div:last-child > p {
@@ -2792,7 +2789,7 @@ h2 {
 
   border-bottom: 1px solid var(--line);
 
-  background: #ecece8;
+  background: #e2e7f2;
 
   transition:
     background-color 250ms ease,
@@ -2837,7 +2834,7 @@ h2 {
 
   justify-content: center;
 
-  border: 1px solid rgba(16,18,20,.18);
+  border: 1px solid rgba(17, 34, 68, .18);
 
   font-size: 15px;
 
@@ -2848,9 +2845,9 @@ h2 {
 }
 
 .industryItem:hover .industryArrow {
-  background: var(--red);
+  background: var(--accent);
 
-  border-color: var(--red);
+  border-color: var(--accent);
 
   transform:
     translate(calc(3px * var(--dir-x)), -3px);
@@ -2904,11 +2901,11 @@ h2 {
 .industryItemCta {
   color: #ffffff;
 
-  background: var(--red);
+  background: var(--accent);
 }
 
 .industryItemCta:hover {
-  background: var(--red-dark);
+  background: var(--accent-dark);
 }
 
 .industryItemCta .industryIndex {
@@ -3045,7 +3042,7 @@ h2 {
 }
 
 .engineeringHeader .eyebrow {
-  color: var(--red);
+  color: var(--accent);
 }
 
 .engineeringHeader h2 {
@@ -3188,7 +3185,7 @@ h2 {
 .engineeringSteps article > span {
   padding-top: 4px;
 
-  color: var(--red);
+  color: var(--accent);
 
   font-size: 11px;
 
@@ -3248,7 +3245,7 @@ h2 {
 }
 
 .engineeringLink span {
-  color: var(--red);
+  color: var(--accent);
 
   font-size: 17px;
 
@@ -3276,9 +3273,9 @@ h2 {
   background:
     radial-gradient(
       circle at 50% 42%,
-      #25292e 0%,
-      #15181b 48%,
-      #0b0d10 82%
+      #1f3665 0%,
+      #13274d 48%,
+      #0f1e3c 82%
     );
 }
 
@@ -3729,7 +3726,7 @@ h2 {
 .facilitiesSection {
   padding: 150px 0;
 
-  background: #f5f5f3;
+  background: #f0f3f8;
 
   border-bottom: 1px solid var(--line);
 }
@@ -3747,7 +3744,7 @@ h2 {
 }
 
 .facilitiesHeader .eyebrow {
-  color: var(--red);
+  color: var(--accent);
 }
 
 .facilitiesHeader h2 {
@@ -3765,7 +3762,7 @@ h2 {
 .facilitiesHeader h2 span {
   display: block;
 
-  color: #a7a7a1;
+  color: #959fb3;
 }
 
 .facilitiesHeader > div:last-child > p {
@@ -3799,7 +3796,7 @@ h2 {
 }
 
 .facilityCard {
-  background: #f5f5f3;
+  background: #f0f3f8;
 }
 
 
@@ -3821,9 +3818,9 @@ h2 {
   background:
     radial-gradient(
       circle at 55% 45%,
-      #3a3e43 0%,
-      #1d2024 44%,
-      #0b0d10 80%
+      #344b79 0%,
+      #172e5a 44%,
+      #0f1e3c 80%
     );
 }
 
@@ -3924,8 +3921,8 @@ h2 {
   background:
     linear-gradient(
       180deg,
-      #ddddda,
-      #aeb0ad
+      #d3d9e4,
+      #a2aabb
     );
 }
 
@@ -3947,9 +3944,9 @@ h2 {
   background:
     linear-gradient(
       135deg,
-      #9fa19e,
-      #d6d7d3 50%,
-      #8f918e
+      #909aaf,
+      #cbd2df 50%,
+      #7e8aa1
     );
 }
 
@@ -3967,8 +3964,8 @@ h2 {
   background:
     linear-gradient(
       180deg,
-      #45494d,
-      #25282b
+      #415682,
+      #1d3563
     );
 
   border:
@@ -3986,7 +3983,7 @@ h2 {
   height: 21%;
 
   background:
-    rgba(36,45,50,.72);
+    rgba(32, 56, 102, .72);
 
   border:
     1px solid
@@ -4052,7 +4049,7 @@ h2 {
 
   margin-bottom: 14px;
 
-  color: var(--red);
+  color: var(--accent);
 
   font-size: 11px;
 
@@ -4086,7 +4083,7 @@ h2 {
 
   border: 1px solid var(--line);
 
-  color: var(--red);
+  color: var(--accent);
 
   font-size: 18px;
 
@@ -4206,7 +4203,7 @@ h2 {
 }
 
 .facilitiesBottom a span {
-  color: var(--red);
+  color: var(--accent);
 
   font-size: 17px;
 
@@ -4311,7 +4308,7 @@ h2 {
 
 .qualitySection {
   padding: 150px 0;
-  background: #f5f5f3;
+  background: #f0f3f8;
   border-bottom: 1px solid var(--line);
 }
 
@@ -4323,7 +4320,7 @@ h2 {
 }
 
 .qualityHeader .eyebrow {
-  color: var(--red);
+  color: var(--accent);
 }
 
 .qualityHeader h2 {
@@ -4338,7 +4335,7 @@ h2 {
 
 .qualityHeader h2 span {
   display: block;
-  color: #a7a7a1;
+  color: #959fb3;
 }
 
 .qualityHeader > div:last-child > p {
@@ -4450,7 +4447,7 @@ h2 {
 .qualityNumber {
   padding-top: 7px;
 
-  color: var(--red);
+  color: var(--accent);
 
   font-size: 11px;
 
@@ -4506,7 +4503,7 @@ h2 {
 
   border: 1px solid var(--line);
 
-  color: var(--red);
+  color: var(--accent);
 
   font-size: 16px;
 
@@ -4519,9 +4516,9 @@ h2 {
 .qualityList article:hover .qualityArrow {
   color: #fff;
 
-  background: var(--red);
+  background: var(--accent);
 
-  border-color: var(--red);
+  border-color: var(--accent);
 
   transform: translate(calc(3px * var(--dir-x)), -3px);
 }
@@ -4550,7 +4547,7 @@ h2 {
 }
 
 .globalHeader .eyebrow {
-  color: var(--red);
+  color: var(--accent);
 }
 
 .globalHeader h2 {
@@ -4611,7 +4608,7 @@ h2 {
 }
 
 .globalLink span {
-  color: var(--red);
+  color: var(--accent);
 
   font-size: 17px;
 }
@@ -4709,8 +4706,8 @@ h2 {
     ),
     linear-gradient(
       135deg,
-      #ecece8,
-      #f8f8f5
+      #e2e7f2,
+      #f3f5fa
     );
 }
 
@@ -4761,7 +4758,7 @@ h2 {
 .internalHeroGrid .eyebrow {
   padding-top: 13px;
 
-  color: var(--red);
+  color: var(--accent);
 }
 
 .internalHeroGrid h1 {
@@ -4781,7 +4778,7 @@ h2 {
 .internalHeroGrid h1 span {
   display: block;
 
-  color: #a7a7a1;
+  color: #959fb3;
 }
 
 .internalHeroBottom {
@@ -4827,8 +4824,8 @@ h2 {
   background:
     radial-gradient(
       circle at 72% 35%,
-      #272b30,
-      #0b0d10 65%
+      #213867,
+      #0f1e3c 65%
     );
 }
 
@@ -4941,7 +4938,7 @@ h2 {
 }
 
 .desktopNav a.active {
-  color: var(--red);
+  color: var(--accent);
 }
 
 .desktopNav a.active::after {
@@ -4979,7 +4976,7 @@ h2 {
 .productsCatalogTop h2 span {
   display: block;
 
-  color: #a7a7a1;
+  color: #959fb3;
 }
 
 .productsCatalogTop > p {
@@ -5082,9 +5079,9 @@ h2 {
   background:
     radial-gradient(
       circle at 50% 42%,
-      #34383d,
-      #181b1f 48%,
-      #0b0d10 80%
+      #2d4574,
+      #152953 48%,
+      #0f1e3c 80%
     );
 }
 
@@ -5151,9 +5148,9 @@ h2 {
 
 .productCatalogCard:hover
 .productCatalogArrow {
-  background: var(--red);
+  background: var(--accent);
 
-  border-color: var(--red);
+  border-color: var(--accent);
 
   transform:
     translate(calc(3px * var(--dir-x)), -3px);
@@ -5214,9 +5211,9 @@ h2 {
   background:
     linear-gradient(
       90deg,
-      #bfc0bd,
+      #b4bbc9,
       #fff,
-      #b4b5b2
+      #a7afc0
     );
 }
 
@@ -5241,11 +5238,11 @@ h2 {
   background:
     linear-gradient(
       90deg,
-      #a8aaa7,
-      #f1f1ed 24%,
+      #9ba4b6,
+      #e9edf5 24%,
       #fff 48%,
-      #d2d3cf 72%,
-      #949693
+      #c6cddc 72%,
+      #838fa6
     );
 }
 
@@ -5259,7 +5256,7 @@ h2 {
   height: 3px;
 
   background:
-    rgba(50,50,50,.16);
+    rgba(39, 62, 110, .16);
 }
 
 .catalogTankBody span:nth-child(1) {
@@ -5400,7 +5397,7 @@ h2 {
 }
 
 .quoteHeader .eyebrow {
-  color: var(--red);
+  color: var(--accent);
 }
 
 .quoteHeader h2 {
@@ -5413,7 +5410,7 @@ h2 {
 .quoteHeader h2 span {
   display: block;
 
-  color: #a7a7a1;
+  color: #959fb3;
 }
 
 .quoteHeader > div:last-child > p {
@@ -5609,7 +5606,7 @@ h2 {
 
   border-bottom:
     1px solid
-    #bfc0bc;
+    #b4bbc8;
 
   border-radius: 0;
 
@@ -5646,13 +5643,13 @@ h2 {
 
 .formField input::placeholder,
 .formField textarea::placeholder {
-  color: #aaa;
+  color: #9ca5b8;
 }
 
 .formField input:focus,
 .formField select:focus,
 .formField textarea:focus {
-  border-color: var(--red);
+  border-color: var(--accent);
 }
 
 
@@ -5730,7 +5727,7 @@ h2 {
 }
 
 .quoteSubmit:hover:not(:disabled) {
-  background: var(--red);
+  background: var(--accent);
 
   transform: translateY(-2px);
 }
@@ -5767,13 +5764,13 @@ h2 {
 }
 
 .quoteFeedback.success {
-  border-color: #87988a;
+  border-color: #7e8aa1;
 }
 
 .quoteFeedback.error {
-  color: var(--red);
+  color: var(--accent);
 
-  border-color: var(--red);
+  border-color: var(--accent);
 }
 
 
@@ -5856,7 +5853,7 @@ h2 {
 
   padding: 40px;
 
-  background: #0b0d10;
+  background: #0f1e3c;
 }
 
 .adminLoginPanel {
@@ -5870,7 +5867,7 @@ h2 {
     .7fr
     1.3fr;
 
-  background: #f5f5f3;
+  background: #f0f3f8;
 }
 
 .adminLoginBrand {
@@ -5884,7 +5881,7 @@ h2 {
 
   color: #fff;
 
-  background: var(--red);
+  background: var(--accent);
 }
 
 .adminLoginBrand span {
@@ -5912,7 +5909,7 @@ h2 {
 }
 
 .adminLoginContent .eyebrow {
-  color: var(--red);
+  color: var(--accent);
 }
 
 .adminLoginContent h1 {
@@ -5933,7 +5930,7 @@ h2 {
 .adminLoginContent h1 span {
   display: block;
 
-  color: #aaa;
+  color: #9ca5b8;
 }
 
 .adminLoginContent > p {
@@ -5990,7 +5987,7 @@ h2 {
 }
 
 .adminLoginForm input:focus {
-  border-color: var(--red);
+  border-color: var(--accent);
 }
 
 .adminLoginForm button {
@@ -6014,7 +6011,7 @@ h2 {
 }
 
 .adminLoginError {
-  color: var(--red);
+  color: var(--accent);
 
   font-size: 13px;
 }
@@ -6033,7 +6030,7 @@ h2 {
     260px
     1fr;
 
-  background: #f2f2ef;
+  background: #ebeff6;
 }
 
 .adminSidebar {
@@ -6053,7 +6050,7 @@ h2 {
 
   color: #fff;
 
-  background: #0b0d10;
+  background: #0f1e3c;
 }
 
 .adminLogo {
@@ -6324,13 +6321,13 @@ h2 {
 }
 
 .adminQuoteRow:hover {
-  background: #ecece8;
+  background: #e2e7f2;
 }
 
 .adminQuoteRow.unread {
   border-left:
     3px solid
-    var(--red);
+    var(--accent);
 }
 
 .adminQuoteRow > div {
@@ -6369,7 +6366,7 @@ h2 {
 }
 
 .quoteStatus.new {
-  color: var(--red);
+  color: var(--accent);
 }
 
 
@@ -6729,7 +6726,7 @@ h2 {
 }
 
 .adminWorkflow > div > span {
-  color: var(--red);
+  color: var(--accent);
 
   font-size: 11px;
 
@@ -6808,7 +6805,7 @@ h2 {
 
 .adminQuoteToolbar input:focus,
 .adminQuoteToolbar select:focus {
-  border-color: var(--red);
+  border-color: var(--accent);
 }
 
 .adminEmptyState,
@@ -6908,7 +6905,7 @@ h2 {
 
   border: 0;
 
-  color: var(--red);
+  color: var(--accent);
 
   background: transparent;
 
@@ -6944,7 +6941,7 @@ h2 {
 
   color: #fff;
 
-  background: var(--red);
+  background: var(--accent);
 
   font-size: 11px;
 
@@ -7055,7 +7052,7 @@ h2 {
 .productDetailPage h2 span {
   display: block;
 
-  color: #a7a7a1;
+  color: #959fb3;
 }
 
 .productDetailPage .dark h2 span {
@@ -7079,8 +7076,8 @@ h2 {
     ),
     linear-gradient(
       135deg,
-      #ecece8,
-      #f8f8f5
+      #e2e7f2,
+      #f3f5fa
     );
 }
 
@@ -7131,7 +7128,7 @@ h2 {
 .productDetailHeroContent .eyebrow {
   margin-bottom: 32px;
 
-  color: var(--red);
+  color: var(--accent);
 }
 
 .productDetailHeroContent h1 {
@@ -7195,9 +7192,9 @@ h2 {
   background:
     radial-gradient(
       circle at 50% 45%,
-      #34383d,
-      #181b1f 48%,
-      #0b0d10 80%
+      #2d4574,
+      #152953 48%,
+      #0f1e3c 80%
     );
 }
 
@@ -7261,9 +7258,9 @@ h2 {
   background:
     linear-gradient(
       90deg,
-      #bfc0bd,
+      #b4bbc9,
       #fff,
-      #b4b5b2
+      #a7afc0
     );
 }
 
@@ -7288,11 +7285,11 @@ h2 {
   background:
     linear-gradient(
       90deg,
-      #a8aaa7,
-      #f1f1ed 24%,
+      #9ba4b6,
+      #e9edf5 24%,
       #fff 48%,
-      #d2d3cf 72%,
-      #949693
+      #c6cddc 72%,
+      #838fa6
     );
 
   box-shadow:
@@ -7309,7 +7306,7 @@ h2 {
 
   height: 3px;
 
-  background: rgba(50,50,50,.16);
+  background: rgba(39, 62, 110, .16);
 }
 
 .productDetailTankBody span:nth-child(1) {
@@ -7400,7 +7397,7 @@ h2 {
 .technicalDataHeader .eyebrow,
 .productDownloadsHeader .eyebrow,
 .relatedProductsHeader .eyebrow {
-  color: var(--red);
+  color: var(--accent);
 }
 
 .technicalDataGrid {
@@ -7481,7 +7478,7 @@ h2 {
 }
 
 .productApplicationsHeader .eyebrow {
-  color: var(--red);
+  color: var(--accent);
 }
 
 .productApplicationsHeader p {
@@ -7526,7 +7523,7 @@ h2 {
 }
 
 .productApplicationsGrid article > span {
-  color: var(--red);
+  color: var(--accent);
 
   font-size: 11px;
 
@@ -7601,7 +7598,7 @@ h2 {
 .productDownloadsList > div > div span {
   min-width: 34px;
 
-  color: var(--red);
+  color: var(--accent);
 
   font-size: 11px;
 
@@ -7722,7 +7719,7 @@ h2 {
 
   color: rgba(255,255,255,.42);
 
-  background: #0b0d10;
+  background: #0f1e3c;
 }
 
 .relatedProductObject {
@@ -7733,9 +7730,9 @@ h2 {
   background:
     radial-gradient(
       circle at 50% 45%,
-      #34383d,
-      #181b1f 48%,
-      #0b0d10 80%
+      #2d4574,
+      #152953 48%,
+      #0f1e3c 80%
     );
 }
 
@@ -7759,9 +7756,9 @@ h2 {
   background:
     linear-gradient(
       90deg,
-      #bfc0bd,
+      #b4bbc9,
       #fff,
-      #b4b5b2
+      #a7afc0
     );
 
   z-index: 1;
@@ -7792,11 +7789,11 @@ h2 {
   background:
     linear-gradient(
       90deg,
-      #a8aaa7,
-      #f1f1ed 24%,
+      #9ba4b6,
+      #e9edf5 24%,
       #fff 48%,
-      #d2d3cf 72%,
-      #949693
+      #c6cddc 72%,
+      #838fa6
     );
 
   transition: transform 350ms ease;
@@ -7817,7 +7814,7 @@ h2 {
 
   height: 3px;
 
-  background: rgba(50,50,50,.16);
+  background: rgba(39, 62, 110, .16);
 }
 
 .relatedProductBody span:nth-child(1) {
@@ -7880,9 +7877,9 @@ h2 {
 .relatedProductCard:hover .relatedProductBottom > span {
   color: #fff;
 
-  background: var(--red);
+  background: var(--accent);
 
-  border-color: var(--red);
+  border-color: var(--accent);
 
   transform: translate(calc(3px * var(--dir-x)), -3px);
 }
@@ -7911,7 +7908,7 @@ h2 {
 .productDetailCta .eyebrow {
   margin-bottom: 32px;
 
-  color: var(--red);
+  color: var(--accent);
 }
 
 .productDetailCta h2 span {
@@ -7935,7 +7932,7 @@ h2 {
 
   gap: 40px;
 
-  background: var(--red);
+  background: var(--accent);
 
   font-size: 14px;
 
@@ -7947,7 +7944,7 @@ h2 {
 }
 
 .productDetailCtaButton:hover {
-  background: var(--red-dark);
+  background: var(--accent-dark);
 
   transform: translateY(-2px);
 }
@@ -7980,7 +7977,7 @@ h2 {
 .productNotFound h1 span {
   display: block;
 
-  color: #a7a7a1;
+  color: #959fb3;
 }
 
 .productNotFound a {
@@ -8135,7 +8132,7 @@ h2 {
 }
 
 .mobileNav a.active {
-  color: var(--red);
+  color: var(--accent);
 }
 
 /* Product catalogue empty state */
@@ -8179,7 +8176,7 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid var(--red);
+  outline: 2px solid var(--accent);
 
   outline-offset: 3px;
 }
@@ -8194,9 +8191,9 @@ textarea:focus-visible {
 
   padding: 14px 18px;
 
-  border-inline-start: 3px solid var(--red);
+  border-inline-start: 3px solid var(--accent);
 
-  color: var(--red);
+  color: var(--accent);
 
   background: #fff;
 
@@ -8287,7 +8284,7 @@ textarea:focus-visible {
 
   border-radius: inherit;
 
-  box-shadow: inset 0 0 0 1px rgba(16, 18, 20, .14);
+  box-shadow: inset 0 0 0 1px rgba(17, 34, 68, .14);
 }
 
 
@@ -8374,8 +8371,8 @@ textarea:focus-visible {
   background: #fff;
 
   box-shadow:
-    0 18px 40px rgba(11, 13, 16, .12),
-    0 2px 6px rgba(11, 13, 16, .06);
+    0 18px 40px rgba(15, 30, 60, .12),
+    0 2px 6px rgba(15, 30, 60, .06);
 
   animation: languageMenuIn 160ms ease-out;
 }
@@ -8480,7 +8477,7 @@ textarea:focus-visible {
 
   height: 10px;
 
-  color: var(--red);
+  color: var(--accent);
 
   opacity: 0;
 }
@@ -8848,7 +8845,7 @@ html[dir="rtl"] .desktopNav a {
   overflow: hidden;
 
   background:
-    radial-gradient(circle at 78% 8%, rgba(213, 29, 44, .14), transparent 32%),
+    radial-gradient(circle at 78% 8%, rgba(29, 103, 213, .14), transparent 32%),
     radial-gradient(circle at 10% 90%, rgba(255, 255, 255, .04), transparent 40%),
     var(--dark);
 }
@@ -8929,9 +8926,9 @@ html[dir="rtl"] .desktopNav a {
   border-radius: 24px;
 
   background:
-    radial-gradient(ellipse 45% 55% at 58% 42%, rgba(213, 29, 44, .16), transparent 70%),
+    radial-gradient(ellipse 45% 55% at 58% 42%, rgba(29, 103, 213, .16), transparent 70%),
     radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, .06), transparent 60%),
-    linear-gradient(180deg, #15181c, #0f1114);
+    linear-gradient(180deg, #13274e, #112143);
 
   box-shadow:
     0 40px 80px -40px rgba(0, 0, 0, .7),
@@ -8985,7 +8982,7 @@ html[dir="rtl"] .desktopNav a {
 }
 
 .exportRoute path {
-  filter: drop-shadow(0 0 1.2px rgba(224, 49, 63, .7));
+  filter: drop-shadow(0 0 1.2px rgba(49, 119, 224, .7));
 }
 
 /* Map labels */
@@ -9011,19 +9008,19 @@ html[dir="rtl"] .desktopNav a {
 }
 
 .exportMapLabelHub {
-  border: 1px solid rgba(224, 49, 63, .7);
+  border: 1px solid rgba(49, 119, 224, .7);
 
   color: #fff;
 
-  background: rgba(15, 17, 20, .82);
+  background: rgba(17, 33, 67, .82);
 
   backdrop-filter: blur(8px);
 
-  box-shadow: 0 0 0 4px rgba(224, 49, 63, .12);
+  box-shadow: 0 0 0 4px rgba(49, 119, 224, .12);
 }
 
 .exportMapLabelActive {
-  color: #0b0d10;
+  color: #0f1e3c;
 
   background: #fff;
 
@@ -9060,7 +9057,7 @@ html[dir="rtl"] .desktopNav a {
 
   border-radius: 999px;
 
-  background: rgba(15, 17, 20, .7);
+  background: rgba(17, 33, 67, .7);
 
   backdrop-filter: blur(12px);
 
@@ -9113,13 +9110,13 @@ html[dir="rtl"] .desktopNav a {
 .legendHub {
   background: #fff;
 
-  box-shadow: 0 0 0 2px var(--red);
+  box-shadow: 0 0 0 2px var(--accent);
 }
 
 .legendMarket {
-  background: #e0313f;
+  background: #3177e0;
 
-  box-shadow: 0 0 8px rgba(224, 49, 63, .8);
+  box-shadow: 0 0 8px rgba(49, 119, 224, .8);
 }
 
 .legendRoute {
@@ -9129,7 +9126,7 @@ html[dir="rtl"] .desktopNav a {
 
   border-radius: 2px;
 
-  background: linear-gradient(90deg, rgba(224, 49, 63, .3), #e0313f);
+  background: linear-gradient(90deg, rgba(49, 119, 224, .3), #3177e0);
 }
 
 .exportMapControls {
@@ -9286,14 +9283,14 @@ button.exportStep:hover {
 }
 
 .exportStep.active {
-  border-color: rgba(224, 49, 63, .6);
+  border-color: rgba(49, 119, 224, .6);
 
   background:
-    radial-gradient(circle at 0% 0%, rgba(224, 49, 63, .28), transparent 60%),
+    radial-gradient(circle at 0% 0%, rgba(49, 119, 224, .28), transparent 60%),
     linear-gradient(165deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .02));
 
   box-shadow:
-    0 18px 40px -18px rgba(224, 49, 63, .55),
+    0 18px 40px -18px rgba(49, 119, 224, .55),
     inset 0 1px 0 rgba(255, 255, 255, .08);
 
   transform: translateY(-4px);
@@ -9328,7 +9325,7 @@ button.exportStep:hover {
 
   color: #fff;
 
-  background: var(--red);
+  background: var(--accent);
 }
 
 .exportStepIndex svg {
@@ -9384,7 +9381,7 @@ button.exportStep:hover {
 
   border-radius: inherit;
 
-  background: linear-gradient(90deg, #b51522, #ff4d5a);
+  background: linear-gradient(90deg, #1655b4, #6198eb);
 
   transform: scaleX(0);
 
@@ -9548,7 +9545,7 @@ html[dir="rtl"] .exportStepProgress span {
 }
 
 .contactLocationsHeader .eyebrow {
-  color: var(--red);
+  color: var(--accent);
 }
 
 .contactLocationsHeader h2 {
@@ -9666,7 +9663,7 @@ html[dir="rtl"] .exportStepProgress span {
 
   height: 18px;
 
-  color: var(--red);
+  color: var(--accent);
 }
 
 .contactChannel > span:not([aria-hidden]) {
@@ -9702,13 +9699,13 @@ html[dir="rtl"] .exportStepProgress span {
 }
 
 .contactChannel > span[aria-hidden] {
-  color: var(--red);
+  color: var(--accent);
 }
 
 .contactChannelPrimary {
-  border-color: var(--red);
+  border-color: var(--accent);
 
-  background: var(--red);
+  background: var(--accent);
 }
 
 .contactChannelPrimary > svg {
@@ -9720,9 +9717,9 @@ html[dir="rtl"] .exportStepProgress span {
 }
 
 .contactChannelPrimary:hover {
-  border-color: var(--red-dark);
+  border-color: var(--accent-dark);
 
-  background: var(--red-dark);
+  background: var(--accent-dark);
 }
 
 #quote-form {
@@ -9764,7 +9761,7 @@ html[dir="rtl"] .exportStepProgress span {
 
   border: 1px solid rgba(255, 255, 255, .12);
 
-  background: #1d2125;
+  background: #182e5b;
 }
 
 .contactMap iframe {
@@ -9804,7 +9801,7 @@ html[dir="rtl"] .exportStepProgress span {
 
   height: 14px;
 
-  color: var(--red);
+  color: var(--accent);
 }
 
 .contactAddressCard address {
@@ -9868,15 +9865,15 @@ html[dir="rtl"] .exportStepProgress span {
 }
 
 .contactTextLink > span {
-  color: var(--red);
+  color: var(--accent);
 }
 
 .contactChannelOutline {
-  border-color: var(--red);
+  border-color: var(--accent);
 }
 
 .contactChannelOutline > svg {
-  color: var(--red);
+  color: var(--accent);
 }
 
 @media (max-width: 1000px) {
@@ -10004,7 +10001,7 @@ h3 {
 
   margin-top: 2px;
 
-  color: var(--red);
+  color: var(--accent);
 }
 
 .facilityAddress div {
@@ -10042,7 +10039,7 @@ h3 {
 }
 
 .facilityAddress a > span {
-  color: var(--red);
+  color: var(--accent);
 }
 
 @media (max-width: 900px) {
@@ -10086,8 +10083,8 @@ h3 {
   --line-dark: rgba(255, 255, 255, 0.14);
 
   --shadow-soft:
-    0 1px 2px rgba(16, 18, 20, 0.04),
-    0 18px 40px -24px rgba(16, 18, 20, 0.22);
+    0 1px 2px rgba(17, 34, 68, 0.04),
+    0 18px 40px -24px rgba(17, 34, 68, 0.22);
 }
 
 /* Controls */
@@ -10140,7 +10137,7 @@ h3 {
 
 .heroVisual,
 .productDetailVisual {
-  box-shadow: 0 30px 60px -36px rgba(11, 13, 16, 0.55);
+  box-shadow: 0 30px 60px -36px rgba(15, 30, 60, 0.55);
 }
 
 .contactMap iframe {
@@ -10308,11 +10305,11 @@ h3 {
 
   align-items: center;
 
-  border: 1px solid var(--red);
+  border: 1px solid var(--accent);
 
   color: #fff;
 
-  background: var(--red);
+  background: var(--accent);
 
   cursor: pointer;
 
@@ -10335,9 +10332,9 @@ h3 {
 }
 
 .headerQuote:hover {
-  border-color: var(--red-dark);
+  border-color: var(--accent-dark);
 
-  background: var(--red-dark);
+  background: var(--accent-dark);
 
   transform: translateY(-1px);
 }
@@ -10361,7 +10358,7 @@ h3 {
 
   color: #fff;
 
-  background: var(--red);
+  background: var(--accent);
 
   cursor: pointer;
 
@@ -10423,9 +10420,9 @@ h3 {
 }
 
 .footerQuoteLink:hover {
-  border-color: var(--red);
+  border-color: var(--accent);
 
-  color: var(--red);
+  color: var(--accent);
 }
 
 
@@ -10493,7 +10490,7 @@ button.contactChannel {
 
   inset: 0;
 
-  background: rgba(11, 13, 16, 0.62);
+  background: rgba(15, 30, 60, 0.62);
 
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -10537,14 +10534,14 @@ button.contactChannel {
   color: #fff;
 
   background:
-    radial-gradient(120% 70% at 0% 0%, rgba(213, 29, 44, 0.28), transparent 60%),
+    radial-gradient(120% 70% at 0% 0%, rgba(29, 103, 213, 0.28), transparent 60%),
     var(--dark);
 }
 
 .quoteModalAside .eyebrow {
   margin: 0 0 22px;
 
-  color: var(--red);
+  color: var(--accent);
 }
 
 .quoteModalAside h2 {
@@ -10608,7 +10605,7 @@ button.contactChannel {
 
   margin-top: 1px;
 
-  color: var(--red);
+  color: var(--accent);
 }
 
 .quoteModalContacts a {
@@ -10616,7 +10613,7 @@ button.contactChannel {
 }
 
 .quoteModalContacts a:hover {
-  color: var(--red);
+  color: var(--accent);
 }
 
 .quoteModalForm {
@@ -10671,9 +10668,9 @@ button.contactChannel {
 }
 
 .quoteModalClose:hover {
-  border-color: var(--red);
+  border-color: var(--accent);
 
-  color: var(--red);
+  color: var(--accent);
 
   transform: rotate(90deg);
 }
@@ -10705,9 +10702,9 @@ button.contactChannel {
 .formField input:focus,
 .formField select:focus,
 .formField textarea:focus {
-  border-color: var(--red);
+  border-color: var(--accent);
 
-  box-shadow: 0 0 0 4px rgba(213, 29, 44, 0.12);
+  box-shadow: 0 0 0 4px rgba(29, 103, 213, 0.12);
 }
 
 .formField textarea {
@@ -10845,7 +10842,7 @@ button.contactChannel {
 
   place-items: center;
 
-  border: 1px solid rgba(16, 18, 20, 0.08);
+  border: 1px solid rgba(17, 34, 68, 0.08);
 
   border-radius: var(--radius-pill);
 
@@ -10856,8 +10853,8 @@ button.contactChannel {
   background: #fff;
 
   box-shadow:
-    0 2px 6px rgba(16, 18, 20, 0.08),
-    0 14px 30px -12px rgba(16, 18, 20, 0.35);
+    0 2px 6px rgba(17, 34, 68, 0.08),
+    0 14px 30px -12px rgba(17, 34, 68, 0.35);
 
   transition:
     transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -10894,7 +10891,7 @@ button.contactChannel {
   transform: translateY(-3px) scale(1.06);
 
   box-shadow:
-    0 2px 6px rgba(16, 18, 20, 0.1),
+    0 2px 6px rgba(17, 34, 68, 0.1),
     0 18px 36px -12px var(--bubble-color);
 }
 
@@ -10920,7 +10917,7 @@ button.contactChannel {
 
   background: var(--bubble-color);
 
-  box-shadow: 0 10px 24px -10px rgba(16, 18, 20, 0.45);
+  box-shadow: 0 10px 24px -10px rgba(17, 34, 68, 0.45);
 
   font-size: 13px;
 
@@ -11000,25 +10997,25 @@ button.contactChannel {
 @media (max-width: 640px) {
 
   .floatingContact {
-    inset-inline-end: 14px;
+    inset-inline-end: 12px;
 
-    bottom: 16px;
+    bottom: 14px;
   }
 
   .floatingContact ul {
-    gap: 10px;
+    gap: 8px;
   }
 
   .floatingContactItem a {
-    width: 48px;
+    width: 42px;
 
-    height: 48px;
+    height: 42px;
   }
 
   .floatingContactIcon {
-    width: 22px;
+    width: 19px;
 
-    height: 22px;
+    height: 19px;
   }
 
   /* No hover on touch screens */
@@ -11035,4 +11032,30 @@ button.contactChannel {
     animation: none;
   }
 
+}
+
+
+/* =====================================================
+   BRAND – lighter blue accent on navy surfaces for contrast
+===================================================== */
+
+.dark,
+.quoteModalAside,
+.mobileMenu,
+.productDetailCta,
+.heroVisual,
+.productPreview,
+.productDetailVisual,
+.facilityMedia {
+  --accent: var(--accent-light);
+}
+
+/* Solid blue buttons keep the deeper blue so white text stays readable */
+.dark .contactChannelPrimary,
+.dark .button.primary,
+.productDetailCta .productDetailCtaButton,
+.mobileMenu .mobileMenuQuote {
+  background: #1d67d5;
+
+  border-color: #1d67d5;
 }

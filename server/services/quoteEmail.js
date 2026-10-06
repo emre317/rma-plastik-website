@@ -65,13 +65,13 @@ export function buildQuoteEmail(quote) {
     .map(([label, value, href], index) => {
       const safe = escapeHtml(value);
       const content = href
-        ? `<a href="${escapeHtml(href)}" style="color:#d51d2c;text-decoration:none;">${safe}</a>`
+        ? `<a href="${escapeHtml(href)}" style="color:#1d67d5;text-decoration:none;">${safe}</a>`
         : safe;
 
       return `
         <tr>
-          <td style="padding:12px 16px;width:38%;font-size:13px;color:#6d6f70;border-top:${index ? '1px solid #ecece8' : '0'};vertical-align:top;">${label}</td>
-          <td style="padding:12px 16px;font-size:14px;color:#101214;font-weight:600;border-top:${index ? '1px solid #ecece8' : '0'};vertical-align:top;">${content}</td>
+          <td style="padding:12px 16px;width:38%;font-size:13px;color:#5d6980;border-top:${index ? '1px solid #e2e7f2' : '0'};vertical-align:top;">${label}</td>
+          <td style="padding:12px 16px;font-size:14px;color:#112244;font-weight:600;border-top:${index ? '1px solid #e2e7f2' : '0'};vertical-align:top;">${content}</td>
         </tr>`;
     })
     .join('');
@@ -85,31 +85,31 @@ export function buildQuoteEmail(quote) {
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${escapeHtml(subject)}</title>
 </head>
-<body style="margin:0;padding:0;background:#f5f5f3;font-family:Arial,Helvetica,sans-serif;color:#101214;">
+<body style="margin:0;padding:0;background:#f0f3f8;font-family:Arial,Helvetica,sans-serif;color:#112244;">
   <div style="display:none;max-height:0;overflow:hidden;opacity:0;">${escapeHtml(quote.name)} (${escapeHtml(quote.company)}) web sitesinden teklif talebi gönderdi.</div>
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f5f3;padding:32px 12px;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f0f3f8;padding:32px 12px;">
     <tr>
       <td align="center">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #e3e3df;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #dadfe8;">
 
           <tr>
-            <td style="background:#0b0d10;padding:28px 32px;">
+            <td style="background:#0f1e3c;padding:28px 32px;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td style="font-size:20px;font-weight:700;color:#ffffff;letter-spacing:-0.01em;">RMA <span style="color:#d51d2c;">Plastik</span></td>
-                  <td align="right" style="font-size:11px;font-weight:700;color:#9a9c9e;letter-spacing:0.08em;text-transform:uppercase;">${reference}</td>
+                  <td style="font-size:20px;font-weight:700;color:#ffffff;letter-spacing:-0.01em;">RMA <span style="color:#1d67d5;">Plastik</span></td>
+                  <td align="right" style="font-size:11px;font-weight:700;color:#8c97ac;letter-spacing:0.08em;text-transform:uppercase;">${reference}</td>
                 </tr>
               </table>
-              <p style="margin:22px 0 6px;font-size:11px;font-weight:700;color:#d51d2c;letter-spacing:0.08em;text-transform:uppercase;">Yeni teklif talebi</p>
+              <p style="margin:22px 0 6px;font-size:11px;font-weight:700;color:#1d67d5;letter-spacing:0.08em;text-transform:uppercase;">Yeni teklif talebi</p>
               <h1 style="margin:0;font-size:24px;line-height:1.3;color:#ffffff;font-weight:600;">${escapeHtml(quote.company)}</h1>
-              <p style="margin:6px 0 0;font-size:13px;color:#b5b7b9;">${createdAt}</p>
+              <p style="margin:6px 0 0;font-size:13px;color:#abb3c3;">${createdAt}</p>
             </td>
           </tr>
 
           <tr>
             <td style="padding:28px 32px 8px;">
-              <p style="margin:0 0 14px;font-size:11px;font-weight:700;color:#6d6f70;letter-spacing:0.08em;text-transform:uppercase;">Talep bilgileri</p>
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #ecece8;border-radius:12px;border-collapse:separate;">
+              <p style="margin:0 0 14px;font-size:11px;font-weight:700;color:#5d6980;letter-spacing:0.08em;text-transform:uppercase;">Talep bilgileri</p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e2e7f2;border-radius:12px;border-collapse:separate;">
                 ${rowsHtml}
               </table>
             </td>
@@ -117,8 +117,8 @@ export function buildQuoteEmail(quote) {
 
           <tr>
             <td style="padding:20px 32px 8px;">
-              <p style="margin:0 0 14px;font-size:11px;font-weight:700;color:#6d6f70;letter-spacing:0.08em;text-transform:uppercase;">Proje detayları</p>
-              <div style="padding:16px 18px;background:#f5f5f3;border-radius:12px;border-left:3px solid #d51d2c;font-size:14px;line-height:1.65;color:#101214;">${messageHtml}</div>
+              <p style="margin:0 0 14px;font-size:11px;font-weight:700;color:#5d6980;letter-spacing:0.08em;text-transform:uppercase;">Proje detayları</p>
+              <div style="padding:16px 18px;background:#f0f3f8;border-radius:12px;border-left:3px solid #1d67d5;font-size:14px;line-height:1.65;color:#112244;">${messageHtml}</div>
             </td>
           </tr>
 
@@ -126,12 +126,12 @@ export function buildQuoteEmail(quote) {
             <td style="padding:24px 32px 32px;">
               <table role="presentation" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td style="background:#d51d2c;border-radius:10px;">
+                  <td style="background:#1d67d5;border-radius:10px;">
                     <a href="mailto:${escapeHtml(quote.email)}?subject=${encodeURIComponent(`RMA Plastik teklif talebiniz (${reference})`)}" style="display:inline-block;padding:13px 22px;font-size:13px;font-weight:700;color:#ffffff;text-decoration:none;">Müşteriye yanıt ver</a>
                   </td>
                   ${link ? `<td style="width:10px;"></td>
-                  <td style="border:1px solid #d8d8d4;border-radius:10px;">
-                    <a href="${escapeHtml(link)}" style="display:inline-block;padding:12px 20px;font-size:13px;font-weight:700;color:#101214;text-decoration:none;">Yönetim panelinde aç</a>
+                  <td style="border:1px solid #ccd3e0;border-radius:10px;">
+                    <a href="${escapeHtml(link)}" style="display:inline-block;padding:12px 20px;font-size:13px;font-weight:700;color:#112244;text-decoration:none;">Yönetim panelinde aç</a>
                   </td>` : ''}
                 </tr>
               </table>
@@ -139,7 +139,7 @@ export function buildQuoteEmail(quote) {
           </tr>
 
           <tr>
-            <td style="padding:18px 32px;background:#fafaf8;border-top:1px solid #ecece8;font-size:12px;line-height:1.6;color:#8a8c8d;">
+            <td style="padding:18px 32px;background:#f7f8fb;border-top:1px solid #e2e7f2;font-size:12px;line-height:1.6;color:#79859e;">
               Bu e-posta web sitesindeki teklif formundan otomatik olarak gönderilmiştir. Yanıtla dediğinizde e-posta doğrudan müşteriye (${escapeHtml(quote.email)}) gider.
             </td>
           </tr>
