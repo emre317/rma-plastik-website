@@ -213,6 +213,9 @@ const en = {
   },
 
   productExplorer: {
+    rotateHint: 'Scroll or drag to rotate',
+    prev: 'Previous product group',
+    next: 'Next product group',
     index: '04 / PRODUCTS',
     eyebrow: 'Product portfolio',
     title: 'Solutions for',

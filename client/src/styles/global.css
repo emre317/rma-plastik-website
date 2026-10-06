@@ -14661,3 +14661,575 @@ button.contactChannel {
   }
 
 }
+
+
+/* =====================================================
+   04 / ÜRÜNLER – 3D portfolio gallery
+===================================================== */
+
+.portfolioGallery {
+  position: relative;
+
+  margin-top: 56px;
+
+  padding: 22px 0 26px;
+
+  overflow: hidden;
+
+  border-radius: var(--radius-lg);
+
+  color: #fff;
+
+  background:
+    radial-gradient(70% 60% at 50% 40%, rgba(29, 103, 213, 0.22), transparent 70%),
+    radial-gradient(120% 90% at 50% 120%, rgba(77, 148, 245, 0.18), transparent 60%),
+    var(--dark);
+
+  box-shadow: 0 50px 100px -50px rgba(15, 30, 60, 0.7);
+}
+
+/* soft fade on the sides */
+.portfolioGallery::before,
+.portfolioGallery::after {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+
+  bottom: 0;
+
+  z-index: 2;
+
+  width: 12%;
+
+  pointer-events: none;
+}
+
+.portfolioGallery::before {
+  left: 0;
+
+  background: linear-gradient(90deg, var(--dark), transparent);
+}
+
+.portfolioGallery::after {
+  right: 0;
+
+  background: linear-gradient(270deg, var(--dark), transparent);
+}
+
+.portfolioGalleryTop {
+  position: relative;
+
+  z-index: 3;
+
+  padding: 0 28px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 16px;
+
+  color: rgba(255, 255, 255, 0.55);
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+.portfolioHint {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.portfolioCounter {
+  font-family: var(--font-display);
+
+  color: #fff;
+
+  font-size: 18px;
+
+  letter-spacing: 0;
+}
+
+.portfolioCounter small {
+  color: rgba(255, 255, 255, 0.45);
+
+  font-size: 13px;
+}
+
+/* Carousel */
+
+.carousel3dStage {
+  position: relative;
+
+  height: calc(var(--card-w) * 1.42 + 70px);
+
+  perspective: 1700px;
+
+  perspective-origin: 50% 45%;
+
+  cursor: grab;
+
+  touch-action: pan-y;
+
+  user-select: none;
+
+  outline: none;
+}
+
+.carousel3dStage.dragging {
+  cursor: grabbing;
+}
+
+.carousel3dStage:focus-visible {
+  box-shadow: inset 0 0 0 2px rgba(127, 178, 255, 0.6);
+}
+
+.carousel3dRing {
+  position: absolute;
+
+  inset: 0;
+
+  transform-style: preserve-3d;
+
+  transition: transform 900ms cubic-bezier(0.22, 0.8, 0.2, 1);
+}
+
+.carousel3dCard {
+  position: absolute;
+
+  top: 50%;
+
+  left: 50%;
+
+  width: var(--card-w);
+
+  height: calc(var(--card-w) * 1.42);
+
+  margin-top: calc(var(--card-w) * -0.71);
+
+  margin-left: calc(var(--card-w) * -0.5);
+
+  transition: opacity 500ms ease, filter 500ms ease;
+
+  backface-visibility: hidden;
+}
+
+/* Card */
+
+.portfolioCard {
+  position: relative;
+
+  width: 100%;
+
+  height: 100%;
+
+  display: block;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  border-radius: var(--radius-lg);
+
+  color: #fff;
+
+  background:
+    radial-gradient(90% 60% at 50% 30%, hsl(var(--hue) 60% 38% / 0.9), transparent 70%),
+    linear-gradient(165deg, hsl(var(--hue) 50% 22%), hsl(var(--hue) 55% 9%));
+
+  box-shadow: 0 40px 70px -30px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  transition: border-color 300ms ease, box-shadow 300ms ease;
+
+  -webkit-user-drag: none;
+}
+
+.carousel3dCard.active .portfolioCard {
+  border-color: rgba(127, 178, 255, 0.55);
+
+  box-shadow: 0 50px 90px -30px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(127, 178, 255, 0.25), 0 0 60px -10px rgba(77, 148, 245, 0.45);
+}
+
+.portfolioCardMedia {
+  position: absolute;
+
+  inset: 0 0 34%;
+
+  display: grid;
+
+  place-items: center;
+}
+
+.portfolioCardMedia img {
+  width: 82%;
+
+  height: 82%;
+
+  object-fit: contain;
+
+  filter: drop-shadow(0 26px 30px rgba(0, 0, 0, 0.45));
+
+  pointer-events: none;
+}
+
+/* Drawn tank when no photo has been uploaded */
+.portfolioTank {
+  position: relative;
+
+  width: 52%;
+
+  height: 74%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+}
+
+.portfolioTankCap {
+  width: 42%;
+
+  height: 9%;
+
+  border-radius: 8px 8px 2px 2px;
+
+  background: linear-gradient(90deg, #c9d3e3, #ffffff 45%, #b9c4d6);
+}
+
+.portfolioTankBody {
+  position: relative;
+
+  flex: 1;
+
+  width: 100%;
+
+  border-radius: 22px 22px 14px 14px;
+
+  background: linear-gradient(90deg, #aebbd0 0%, #f4f7fb 38%, #ffffff 50%, #d4dcea 72%, #9fadc4 100%);
+
+  box-shadow: 0 30px 40px -20px rgba(0, 0, 0, 0.6);
+}
+
+.portfolioTankBody span {
+  position: absolute;
+
+  left: 0;
+
+  right: 0;
+
+  height: 2px;
+
+  background: rgba(15, 30, 60, 0.12);
+}
+
+.portfolioTankBody span:nth-child(1) { top: 28%; }
+.portfolioTankBody span:nth-child(2) { top: 52%; }
+.portfolioTankBody span:nth-child(3) { top: 76%; }
+
+.portfolioCardNumber {
+  position: absolute;
+
+  top: 16px;
+
+  inset-inline-start: 18px;
+
+  color: rgba(255, 255, 255, 0.6);
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+}
+
+.portfolioCardBody {
+  position: absolute;
+
+  inset: auto 0 0;
+
+  padding: 64px 20px 20px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+
+  background: linear-gradient(180deg, transparent, rgba(5, 12, 28, 0.88) 45%);
+}
+
+.portfolioCardBody strong {
+  font-family: var(--font-display);
+
+  font-size: clamp(18px, calc(var(--card-w) * 0.075), 24px);
+
+  font-weight: 600;
+
+  line-height: 1.2;
+}
+
+.portfolioCardBody em {
+  color: #a9cbff;
+
+  font-size: 14px;
+
+  font-style: italic;
+}
+
+.portfolioCardBody small {
+  color: rgba(255, 255, 255, 0.6);
+
+  font-size: 12px;
+}
+
+/* Arrows & dots */
+
+.carousel3dArrow {
+  position: absolute;
+
+  top: 50%;
+
+  z-index: 4;
+
+  width: 46px;
+
+  height: 46px;
+
+  display: grid;
+
+  place-items: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+
+  border-radius: 50%;
+
+  color: #fff;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  cursor: pointer;
+
+  transform: translateY(-50%);
+
+  transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.carousel3dArrow:hover {
+  border-color: #fff;
+
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.carousel3dArrow.prev {
+  left: 20px;
+}
+
+.carousel3dArrow.next {
+  right: 20px;
+}
+
+.carousel3dArrow svg {
+  width: 20px;
+
+  height: 20px;
+}
+
+.carousel3dDots {
+  position: relative;
+
+  z-index: 3;
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: 8px;
+}
+
+.carousel3dDots button {
+  width: 8px;
+
+  height: 8px;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: var(--radius-pill);
+
+  background: rgba(255, 255, 255, 0.3);
+
+  cursor: pointer;
+
+  transition: width 300ms ease, background-color 300ms ease;
+}
+
+.carousel3dDots button.active {
+  width: 26px;
+
+  background: var(--accent-light);
+}
+
+/* Active category details */
+
+.portfolioDetail {
+  margin-top: 28px;
+
+  padding: 28px 32px;
+
+  display: grid;
+
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+
+  gap: 32px;
+
+  align-items: center;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius-lg);
+
+  background: #fff;
+}
+
+.portfolioDetail h3 {
+  margin: 8px 0 10px;
+
+  font-size: clamp(22px, 2.2vw, 30px);
+}
+
+.portfolioDetail p {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  line-height: 1.65;
+}
+
+.portfolioDetailSide {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+.portfolioDetailSide dl {
+  margin: 0;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 16px;
+}
+
+.portfolioDetailSide dt {
+  color: var(--text-secondary);
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.06em;
+
+  text-transform: uppercase;
+}
+
+.portfolioDetailSide dd {
+  margin: 4px 0 0;
+
+  font-weight: 600;
+}
+
+.portfolioDetailSide .button {
+  align-self: flex-start;
+}
+
+@media (max-width: 800px) {
+
+  .portfolioGallery {
+    margin-top: 36px;
+  }
+
+  .portfolioHint {
+    display: none;
+  }
+
+  .carousel3dStage {
+    perspective: 1100px;
+  }
+
+  /* Arrows move next to the dots so they never cover the cards */
+  .portfolioGallery {
+    padding-bottom: 18px;
+  }
+
+  .carousel3dStage {
+    height: calc(var(--card-w) * 1.42 + 40px);
+  }
+
+  .carousel3dArrow {
+    top: auto;
+
+    bottom: -48px;
+
+    width: 38px;
+
+    height: 38px;
+
+    transform: none;
+  }
+
+  .carousel3dArrow.prev {
+    left: 16px;
+  }
+
+  .carousel3dArrow.next {
+    right: 16px;
+  }
+
+  .carousel3dDots {
+    min-height: 38px;
+
+    align-items: center;
+  }
+
+  .portfolioTank {
+    height: 62%;
+  }
+
+  .portfolioDetail {
+    padding: 22px 20px;
+
+    grid-template-columns: 1fr;
+
+    gap: 20px;
+  }
+
+  .portfolioDetailSide .button {
+    align-self: stretch;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .carousel3dRing,
+  .carousel3dCard {
+    transition: none;
+  }
+
+}

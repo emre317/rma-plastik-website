@@ -212,6 +212,9 @@ const tr = {
   },
 
   productExplorer: {
+    rotateHint: 'Kaydırın veya sürükleyin',
+    prev: 'Önceki ürün grubu',
+    next: 'Sonraki ürün grubu',
     index: '04 / ÜRÜNLER',
     eyebrow: 'Ürün portföyü',
     title: 'Her uygulama için',
