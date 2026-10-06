@@ -440,12 +440,8 @@ const tr = {
     quantity: 'Adet',
     clear: 'Listeyi temizle',
     products: 'ürün',
-    title: 'Teklif talebi',
-    subtitle: 'Ürünleri listeden seçin, adetleri girin ve bilgilerinizi paylaşın; ekibimiz size en kısa sürede dönüş yapsın.',
-    tabProducts: 'Ürünler',
-    tabDetails: 'Bilgileriniz',
     selectedTitle: 'Seçilen ürünler',
-    emptySelected: 'Henüz ürün seçmediniz. Aşağıdan model ekleyebilir ya da ihtiyacınızı doğrudan formda anlatabilirsiniz.',
+    emptySelected: 'Henüz ürün seçmediniz. “Katalogdan seç” ile model ekleyebilir ya da ihtiyacınızı aşağıda anlatabilirsiniz.',
     browseTitle: 'Katalogdan ürün ekle',
     resultCount: '{{count}} model',
     search: 'Ürün kodu veya hacim ara',
@@ -457,8 +453,8 @@ const tr = {
     addItem: 'Ekle',
     addedItem: 'Eklendi',
     noSelection: 'Ürün seçmeden de devam edebilirsiniz',
-    continue: 'Bilgilere geç',
-    detailsTitle: 'İletişim bilgileriniz',
+    pickFromCatalog: 'Katalogdan seç',
+    done: 'Tamam',
     solarNote: 'Ürünleriniz Mersin’de güneş enerjisiyle üretilir.',
   },
 
@@ -1020,6 +1016,11 @@ const tr = {
   },
 
   contact: {
+    formEyebrow: 'Proje bilgileri',
+    formTitle: 'Teklif',
+    formTitleAccent: 'alın.',
+    formText:
+      'Temel proje bilgilerinizi paylaşın. Teknik detayları, talebinizin ardından RMA ekibiyle birlikte netleştiririz.',
     homeIndex: '08 / İLETİŞİM',
     close: 'Kapat',
     locations: {

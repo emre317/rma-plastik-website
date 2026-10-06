@@ -1,7 +1,7 @@
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Check, ClipboardList, Mail, Minus, Package, Phone, Plus, Search, ShoppingBag, Sun, Trash2, X,
+  Check, Mail, MapPin, Minus, Package, Phone, Plus, Search, ShoppingBag, Sun, Trash2, X,
 } from 'lucide-react';
 
 import Arrow from '../i18n/Arrow';
@@ -70,7 +70,8 @@ export default function QuoteModal() {
   const [query, setQuery] = useState('');
   const [group, setGroup] = useState('all');
   const [limit, setLimit] = useState(PAGE);
-  const [panel, setPanel] = useState('products');
+  const [picker, setPicker] = useState(false);
+  const pickerRef = useRef(false);
   const deferredQuery = useDeferredValue(query);
 
   const q = (key, options) => t(`quoteCart.${key}`, options);
@@ -114,7 +115,7 @@ export default function QuoteModal() {
     setStatus('idle');
     setFeedbackKey('');
     setLimit(PAGE);
-    setPanel('products');
+    setPicker(false);
     track('quote_form_open', { product: product || '(none)' });
 
     if (product) {
@@ -123,6 +124,12 @@ export default function QuoteModal() {
   }, [open, product]);
 
   useEffect(() => setLimit(PAGE), [deferredQuery, group]);
+
+  // Focus the search when the catalogue picker opens
+  useEffect(() => {
+    pickerRef.current = picker;
+    if (picker) setTimeout(() => searchRef.current?.focus(), 80);
+  }, [picker]);
 
   // Scroll lock, Escape to close, focus handling
   useEffect(() => {
@@ -136,6 +143,11 @@ export default function QuoteModal() {
 
     function handleKeyDown(event) {
       if (event.key === 'Escape') {
+        // The catalogue picker closes first
+        if (pickerRef.current) {
+          setPicker(false);
+          return;
+        }
         closeQuote();
         return;
       }
@@ -237,100 +249,186 @@ export default function QuoteModal() {
       <div className="quoteModalBackdrop" onClick={closeQuote} />
 
       <div
-        className="qmDialog"
+        className="qmDialog qmClassic"
         role="dialog"
         data-track-area="quote_dialog"
         aria-modal="true"
         aria-labelledby="quote-modal-title"
         ref={dialogRef}
       >
-        <header className="qmHeader">
-          <span className="qmHeaderIcon" aria-hidden="true"><ClipboardList /></span>
-          <div>
-            <h2 id="quote-modal-title">{q('title')}</h2>
-            <p>{q('subtitle')}</p>
-          </div>
-          <button type="button" className="qmClose" onClick={closeQuote} aria-label={t('contact.close')}>
-            <X aria-hidden="true" />
-          </button>
-        </header>
+        <button type="button" className="qmClose" onClick={closeQuote} aria-label={t('contact.close')}>
+          <X aria-hidden="true" />
+        </button>
 
-        <div className="qmTabs" role="tablist">
-          <button type="button" role="tab" aria-selected={panel === 'products'} className={panel === 'products' ? 'active' : ''} onClick={() => setPanel('products')}>
-            <span className="qmStep">1</span>
-            {q('tabProducts')}
-            {cart.length > 0 && <em>{cart.length}</em>}
-          </button>
-          <button type="button" role="tab" aria-selected={panel === 'details'} className={panel === 'details' ? 'active' : ''} onClick={() => setPanel('details')}>
-            <span className="qmStep">2</span>
-            {q('tabDetails')}
-          </button>
-        </div>
+        <aside className="qmAside">
+          <p className="eyebrow">{t('contact.formEyebrow')}</p>
+          <h2 id="quote-modal-title">
+            {t('contact.formTitle')}
+            <span>{t('contact.formTitleAccent')}</span>
+          </h2>
+          <p>{t('contact.formText')}</p>
 
-        <div className={`qmBody show-${panel}`}>
-          {/* Products */}
-          <section className="qmProducts" aria-labelledby="qm-products-title">
-            <div className="qmSelected">
-              <div className="qmSectionHead">
-                <h3 id="qm-products-title">
-                  <ShoppingBag aria-hidden="true" />
-                  {q('selectedTitle')}
-                  <span className="qmCount">{cart.length}</span>
-                </h3>
+          <ul className="qmAsideContacts">
+            <li><Phone aria-hidden="true" /><a href={company.phone.href} dir="ltr">{company.phone.display}</a></li>
+            <li><Mail aria-hidden="true" /><a href={`mailto:${company.email}`} dir="ltr">{company.email}</a></li>
+            <li><MapPin aria-hidden="true" /><span>{company.address.street}<br />{company.address.district}, {company.address.country}</span></li>
+          </ul>
+
+          <p className="qmSolar"><Sun aria-hidden="true" />{q('solarNote')}</p>
+        </aside>
+
+        <form className="qmForm quoteForm" onSubmit={handleSubmit}>
+          {/* Products: picked from the catalogue (or added on product pages) */}
+          <div className="qmSelected">
+            <div className="qmSectionHead">
+              <h3>
+                <ShoppingBag aria-hidden="true" />
+                {q('selectedTitle')}
+                {cart.length > 0 && <span className="qmCount">{cart.length}</span>}
+              </h3>
+              <div className="qmSectionActions">
                 {cart.length > 0 && (
                   <button type="button" className="qmTextButton" onClick={clearCart}>
                     <Trash2 aria-hidden="true" />
                     {q('clear')}
                   </button>
                 )}
+                <button type="button" className="qmPickButton" onClick={() => setPicker(true)}>
+                  <Plus aria-hidden="true" />
+                  {q('pickFromCatalog')}
+                </button>
               </div>
-
-              {cart.length === 0 ? (
-                <p className="qmEmpty">{q('emptySelected')}</p>
-              ) : (
-                <ul className="qmSelectedList">
-                  {cart.map((item) => (
-                    <li key={item.name}>
-                      <span className="qmThumb">
-                        {item.image ? <img src={item.image} alt="" /> : <Package aria-hidden="true" />}
-                      </span>
-                      <span className="qmItemText">
-                        <strong>{item.code || item.name}</strong>
-                        <small>{[item.title, item.capacity].filter(Boolean).join(' · ')}</small>
-                      </span>
-                      <span className="qmQty" aria-label={q('quantity')}>
-                        <button type="button" onClick={() => setCartQuantity(item.name, (item.quantity || 1) - 1)} aria-label="−" disabled={(item.quantity || 1) <= 1}>
-                          <Minus aria-hidden="true" />
-                        </button>
-                        <input
-                          type="number"
-                          min="1"
-                          value={item.quantity || 1}
-                          onChange={(event) => setCartQuantity(item.name, event.target.value)}
-                          aria-label={`${item.code || item.name} – ${q('quantity')}`}
-                        />
-                        <button type="button" onClick={() => setCartQuantity(item.name, (item.quantity || 1) + 1)} aria-label="+">
-                          <Plus aria-hidden="true" />
-                        </button>
-                      </span>
-                      <button type="button" className="qmRemove" onClick={() => removeFromCart(item.name)} aria-label={t('contact.removeProduct')}>
-                        <X aria-hidden="true" />
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
             </div>
 
-            <div className="qmBrowser">
-              <div className="qmSectionHead">
-                <h3>
-                  <Plus aria-hidden="true" />
-                  {q('browseTitle')}
-                </h3>
-                <span className="qmHint">{q('resultCount', { count: results.length })}</span>
-              </div>
+            {cart.length === 0 ? (
+              <p className="qmEmpty">{q('emptySelected')}</p>
+            ) : (
+              <ul className="qmSelectedList">
+                {cart.map((item) => (
+                  <li key={item.name}>
+                    <span className="qmThumb">
+                      {item.image ? <img src={item.image} alt="" /> : <Package aria-hidden="true" />}
+                    </span>
+                    <span className="qmItemText">
+                      <strong>{item.code || item.name}</strong>
+                      <small>{[item.title, item.capacity].filter(Boolean).join(' · ')}</small>
+                    </span>
+                    <span className="qmQty" aria-label={q('quantity')}>
+                      <button type="button" onClick={() => setCartQuantity(item.name, (item.quantity || 1) - 1)} aria-label="−" disabled={(item.quantity || 1) <= 1}>
+                        <Minus aria-hidden="true" />
+                      </button>
+                      <input
+                        type="number"
+                        min="1"
+                        value={item.quantity || 1}
+                        onChange={(event) => setCartQuantity(item.name, event.target.value)}
+                        aria-label={`${item.code || item.name} – ${q('quantity')}`}
+                      />
+                      <button type="button" onClick={() => setCartQuantity(item.name, (item.quantity || 1) + 1)} aria-label="+">
+                        <Plus aria-hidden="true" />
+                      </button>
+                    </span>
+                    <button type="button" className="qmRemove" onClick={() => removeFromCart(item.name)} aria-label={t('contact.removeProduct')}>
+                      <X aria-hidden="true" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
 
+          <div className="formGrid">
+            <label className="formField">
+              <span>{fieldLabel('company', true)}</span>
+              <input type="text" name="company" maxLength={150} value={form.company} onChange={handleChange} required placeholder={t('contact.placeholders.company')} />
+            </label>
+
+            <label className="formField">
+              <span>{fieldLabel('name', true)}</span>
+              <input type="text" name="name" maxLength={120} value={form.name} onChange={handleChange} required placeholder={t('contact.placeholders.name')} />
+            </label>
+
+            <label className="formField">
+              <span>{fieldLabel('email', true)}</span>
+              <input type="email" name="email" dir="ltr" autoComplete="email" value={form.email} onChange={handleChange} required placeholder={t('contact.placeholders.email')} />
+            </label>
+
+            <label className="formField">
+              <span>{fieldLabel('phone')}</span>
+              <input type="tel" name="phone" dir="ltr" maxLength={40} value={form.phone} onChange={handleChange} placeholder={t('contact.placeholders.phone')} />
+            </label>
+
+            <label className="formField">
+              <span>{fieldLabel('country')}</span>
+              <input type="text" name="country" maxLength={80} value={form.country} onChange={handleChange} placeholder={t('contact.placeholders.country')} />
+            </label>
+
+            {cart.length === 0 && (
+              <label className="formField">
+                <span>{fieldLabel('product')}</span>
+                <select name="product" value={form.product} onChange={handleChange}>
+                  <option value="">{t('contact.placeholders.product')}</option>
+                  {!subjectInList && <option value={form.product}>{form.product}</option>}
+                  {productOptions.map((item) => (
+                    <option key={item.id} value={item.value}>{item.label}</option>
+                  ))}
+                  <option value="Custom Requirement">{t('contact.customRequirement')}</option>
+                </select>
+              </label>
+            )}
+
+            {cart.length === 0 && (
+              <label className="formField">
+                <span>{fieldLabel('capacity')}</span>
+                <input type="text" name="capacity" maxLength={80} value={form.capacity} onChange={handleChange} placeholder={t('contact.placeholders.capacity')} />
+              </label>
+            )}
+
+            {cart.length === 0 && (
+              <label className="formField">
+                <span>{fieldLabel('quantity')}</span>
+                <input type="number" min="1" name="quantity" value={form.quantity} onChange={handleChange} placeholder={t('contact.placeholders.quantity')} />
+              </label>
+            )}
+
+            <label className="formField formFieldFull">
+              <span>{fieldLabel('application')}</span>
+              <input type="text" name="application" maxLength={200} value={form.application} onChange={handleChange} placeholder={t('contact.placeholders.application')} />
+            </label>
+
+            <label className="formField formFieldFull">
+              <span>{fieldLabel('message', true)}</span>
+              <textarea name="message" maxLength={5000} value={form.message} onChange={handleChange} required rows="4" placeholder={t('contact.placeholders.message')} />
+            </label>
+          </div>
+
+          {feedbackKey && (
+            <div className={`quoteFeedback ${status}`} role={status === 'error' ? 'alert' : 'status'}>
+              {t(feedbackKey)}
+            </div>
+          )}
+
+          <div className="qmSubmitRow">
+            <button type="submit" disabled={status === 'loading'} className="quoteSubmit">
+              <span>{status === 'loading' ? t('contact.sending') : t('contact.submit')}</span>
+              <Arrow />
+            </button>
+            <p>{t('contact.consent')}</p>
+          </div>
+
+        </form>
+
+        {/* Catalogue picker, opened with "Katalogdan seç" */}
+        <div className={`qmPicker ${picker ? 'open' : ''}`} role="dialog" aria-label={q('browseTitle')} aria-hidden={!picker} inert={!picker}>
+          <div className="qmPickerHead">
+            <h3>{q('browseTitle')}</h3>
+            <span className="qmHint">{q('resultCount', { count: results.length })}</span>
+            <button type="button" className="qmClose static" onClick={() => setPicker(false)} aria-label={q('done')}>
+              <X aria-hidden="true" />
+            </button>
+          </div>
+
+          <div className="qmPickerBody">
               <label className="qmSearch">
                 <Search aria-hidden="true" />
                 <span className="visuallyHidden">{q('search')}</span>
@@ -390,116 +488,15 @@ export default function QuoteModal() {
                   {q('showMore', { count: results.length - limit })}
                 </button>
               )}
-            </div>
+          </div>
 
-            <div className="qmPanelFoot">
-              <span>{cart.length ? q('summary', { count: cart.length, total: totalPieces }) : q('noSelection')}</span>
-              <button type="button" className="qmNext" onClick={() => setPanel('details')}>
-                {q('continue')}
-                <Arrow />
-              </button>
-            </div>
-          </section>
-
-          {/* Contact details */}
-          <form className="qmForm quoteForm" onSubmit={handleSubmit} aria-labelledby="qm-details-title">
-            <div className="qmSectionHead">
-              <h3 id="qm-details-title">{q('detailsTitle')}</h3>
-            </div>
-
-            {cart.length > 0 && (
-              <button type="button" className="qmListSummary" onClick={() => setPanel('products')}>
-                <ShoppingBag aria-hidden="true" />
-                <span>{q('summary', { count: cart.length, total: totalPieces })}</span>
-                <em>{cart.slice(0, 3).map((item) => item.code || item.name).join(', ')}{cart.length > 3 ? '…' : ''}</em>
-              </button>
-            )}
-
-            <div className="formGrid">
-              <label className="formField">
-                <span>{fieldLabel('company', true)}</span>
-                <input type="text" name="company" maxLength={150} value={form.company} onChange={handleChange} required placeholder={t('contact.placeholders.company')} />
-              </label>
-
-              <label className="formField">
-                <span>{fieldLabel('name', true)}</span>
-                <input type="text" name="name" maxLength={120} value={form.name} onChange={handleChange} required placeholder={t('contact.placeholders.name')} />
-              </label>
-
-              <label className="formField">
-                <span>{fieldLabel('email', true)}</span>
-                <input type="email" name="email" dir="ltr" autoComplete="email" value={form.email} onChange={handleChange} required placeholder={t('contact.placeholders.email')} />
-              </label>
-
-              <label className="formField">
-                <span>{fieldLabel('phone')}</span>
-                <input type="tel" name="phone" dir="ltr" maxLength={40} value={form.phone} onChange={handleChange} placeholder={t('contact.placeholders.phone')} />
-              </label>
-
-              <label className="formField">
-                <span>{fieldLabel('country')}</span>
-                <input type="text" name="country" maxLength={80} value={form.country} onChange={handleChange} placeholder={t('contact.placeholders.country')} />
-              </label>
-
-              {cart.length === 0 && (
-                <label className="formField">
-                  <span>{fieldLabel('product')}</span>
-                  <select name="product" value={form.product} onChange={handleChange}>
-                    <option value="">{t('contact.placeholders.product')}</option>
-                    {!subjectInList && <option value={form.product}>{form.product}</option>}
-                    {productOptions.map((item) => (
-                      <option key={item.id} value={item.value}>{item.label}</option>
-                    ))}
-                    <option value="Custom Requirement">{t('contact.customRequirement')}</option>
-                  </select>
-                </label>
-              )}
-
-              {cart.length === 0 && (
-                <label className="formField">
-                  <span>{fieldLabel('capacity')}</span>
-                  <input type="text" name="capacity" maxLength={80} value={form.capacity} onChange={handleChange} placeholder={t('contact.placeholders.capacity')} />
-                </label>
-              )}
-
-              {cart.length === 0 && (
-                <label className="formField">
-                  <span>{fieldLabel('quantity')}</span>
-                  <input type="number" min="1" name="quantity" value={form.quantity} onChange={handleChange} placeholder={t('contact.placeholders.quantity')} />
-                </label>
-              )}
-
-              <label className="formField formFieldFull">
-                <span>{fieldLabel('application')}</span>
-                <input type="text" name="application" maxLength={200} value={form.application} onChange={handleChange} placeholder={t('contact.placeholders.application')} />
-              </label>
-
-              <label className="formField formFieldFull">
-                <span>{fieldLabel('message', true)}</span>
-                <textarea name="message" maxLength={5000} value={form.message} onChange={handleChange} required rows="4" placeholder={t('contact.placeholders.message')} />
-              </label>
-            </div>
-
-            {feedbackKey && (
-              <div className={`quoteFeedback ${status}`} role={status === 'error' ? 'alert' : 'status'}>
-                {t(feedbackKey)}
-              </div>
-            )}
-
-            <div className="qmSubmitRow">
-              <button type="submit" disabled={status === 'loading'} className="quoteSubmit">
-                <span>{status === 'loading' ? t('contact.sending') : t('contact.submit')}</span>
-                <Arrow />
-              </button>
-              <p>{t('contact.consent')}</p>
-            </div>
-
-            <footer className="qmContact">
-              <a href={company.phone.href} dir="ltr"><Phone aria-hidden="true" />{company.phone.display}</a>
-              <a href={`mailto:${company.email}`} dir="ltr"><Mail aria-hidden="true" />{company.email}</a>
-              <span className="qmSolar"><Sun aria-hidden="true" />{q('solarNote')}</span>
-            </footer>
-          </form>
+          <div className="qmPickerFoot">
+            <span>{cart.length ? q('summary', { count: cart.length, total: totalPieces }) : q('noSelection')}</span>
+            <button type="button" className="qmNext" onClick={() => setPicker(false)}>
+              <Check aria-hidden="true" />
+              {q('done')}
+            </button>
+          </div>
         </div>
       </div>
     </div>

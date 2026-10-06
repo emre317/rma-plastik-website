@@ -441,12 +441,8 @@ const en = {
     quantity: 'Quantity',
     clear: 'Clear list',
     products: 'products',
-    title: 'Quote request',
-    subtitle: 'Pick the products, enter the quantities and share your details; our team will get back to you shortly.',
-    tabProducts: 'Products',
-    tabDetails: 'Your details',
     selectedTitle: 'Selected products',
-    emptySelected: 'No products selected yet. Add models below or simply describe your needs in the form.',
+    emptySelected: 'No products selected yet. Add models with “Pick from catalogue” or simply describe your needs below.',
     browseTitle: 'Add from the catalogue',
     resultCount: '{{count}} models',
     search: 'Search by product code or volume',
@@ -458,8 +454,8 @@ const en = {
     addItem: 'Add',
     addedItem: 'Added',
     noSelection: 'You can also continue without selecting a product',
-    continue: 'Continue to details',
-    detailsTitle: 'Your contact details',
+    pickFromCatalog: 'Pick from catalogue',
+    done: 'Done',
     solarNote: 'Your products are made in Mersin with solar energy.',
   },
 
@@ -1022,6 +1018,11 @@ const en = {
   },
 
   contact: {
+    formEyebrow: 'Project information',
+    formTitle: 'Get a',
+    formTitleAccent: 'quote.',
+    formText:
+      'Share the key details of your project. Technical specifics can be clarified with the RMA team after you submit.',
     homeIndex: '08 / CONTACT',
     close: 'Close',
     locations: {
