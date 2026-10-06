@@ -429,7 +429,7 @@ const tr = {
   },
 
   global: {
-    index: '08 / GLOBAL',
+    index: '06 / GLOBAL',
     eyebrow: 'İhracat ağı',
     title: 'Türkiye’de üretildi.',
     titleAccent: 'Dünyaya ulaştırıldı.',
@@ -697,7 +697,7 @@ const tr = {
   },
 
   contact: {
-    homeIndex: '09 / İLETİŞİM',
+    homeIndex: '07 / İLETİŞİM',
     close: 'Kapat',
     locations: {
       phone: 'Telefon',

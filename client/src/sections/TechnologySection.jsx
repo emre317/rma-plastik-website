@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import Arrow from '../components/i18n/Arrow';
+import { LocalizedLink } from '../components/i18n/LocalizedLink';
 
 export default function TechnologySection() {
   const { t } = useTranslation();
@@ -93,10 +94,10 @@ export default function TechnologySection() {
             {footer[1]}
           </p>
 
-          <a href="#engineering">
+          <LocalizedLink to="/engineering">
             {t('technology.explore')}
             <Arrow />
-          </a>
+          </LocalizedLink>
 
         </div>
 

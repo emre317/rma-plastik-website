@@ -3,8 +3,6 @@ import StatsSection from '../../sections/StatsSection';
 import TechnologySection from '../../sections/TechnologySection';
 import ProductExplorerSection from '../../sections/ProductExplorerSection';
 import IndustriesSection from '../../sections/IndustriesSection';
-import EngineeringSection from '../../sections/EngineeringSection';
-import QualitySection from '../../sections/QualitySection';
 import GlobalPresenceSection from '../../sections/GlobalPresenceSection';
 import ContactSection from '../../sections/ContactSection';
 import { useTranslation } from 'react-i18next';
@@ -22,8 +20,6 @@ export default function Home() {
       <TechnologySection />
       <ProductExplorerSection />
       <IndustriesSection />
-      <EngineeringSection />
-      <QualitySection />
       <GlobalPresenceSection />
       <ContactSection index={t('contact.homeIndex')} />
     </main>

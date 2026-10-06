@@ -430,7 +430,7 @@ const ar = {
   },
 
   global: {
-    index: '08 / عالمياً',
+    index: '06 / عالمياً',
     eyebrow: 'شبكة التصدير',
     title: 'صُنع في تركيا.',
     titleAccent: 'يصل إلى العالم.',
@@ -698,7 +698,7 @@ const ar = {
   },
 
   contact: {
-    homeIndex: '09 / التواصل',
+    homeIndex: '07 / التواصل',
     close: 'إغلاق',
     locations: {
       phone: 'الهاتف',

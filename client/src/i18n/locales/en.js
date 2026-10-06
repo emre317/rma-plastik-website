@@ -430,7 +430,7 @@ const en = {
   },
 
   global: {
-    index: '08 / GLOBAL',
+    index: '06 / GLOBAL',
     eyebrow: 'Export network',
     title: 'Manufactured in Türkiye.',
     titleAccent: 'Delivered worldwide.',
@@ -699,7 +699,7 @@ const en = {
   },
 
   contact: {
-    homeIndex: '09 / CONTACT',
+    homeIndex: '07 / CONTACT',
     close: 'Close',
     locations: {
       phone: 'Phone',
