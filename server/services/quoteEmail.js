@@ -87,6 +87,29 @@ export function buildQuoteEmail(quote) {
 
   // Photo of the selected catalogue model (needs CLIENT_URL for an absolute link)
   const imageUrl = quote.productImage && siteOrigin() ? `${siteOrigin()}${quote.productImage}` : '';
+  const itemsHtml = (quote.items || []).length
+    ? `
+          <tr>
+            <td style="padding:28px 32px 0;">
+              <p style="margin:0 0 14px;font-size:11px;font-weight:700;color:#5d6980;letter-spacing:0.08em;text-transform:uppercase;">Teklif sepeti (${quote.items.length} ürün)</p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e2e7f2;border-radius:12px;border-collapse:separate;">
+                ${quote.items
+                  .map((item, index) => {
+                    const src = item.image && siteOrigin() ? `${siteOrigin()}${item.image}` : '';
+                    const border = index ? 'border-top:1px solid #e2e7f2;' : '';
+                    return `
+                <tr>
+                  <td style="padding:12px;width:64px;${border}vertical-align:top;">${src ? `<img src="${escapeHtml(src)}" alt="" width="56" style="display:block;width:56px;border-radius:8px;background:#f2f2f2;">` : ''}</td>
+                  <td style="padding:12px 12px 12px 0;${border}font-size:13px;color:#112244;vertical-align:top;"><strong style="font-size:14px;">${escapeHtml(item.name)}</strong><br><span style="color:#5d6980;">${escapeHtml(item.details)}</span></td>
+                  <td align="right" style="padding:12px 16px;${border}font-size:15px;font-weight:700;color:#1d67d5;white-space:nowrap;vertical-align:top;">× ${escapeHtml(item.quantity)}</td>
+                </tr>`;
+                  })
+                  .join('')}
+              </table>
+            </td>
+          </tr>`
+    : '';
+
   const imageHtml = imageUrl
     ? `
           <tr>
@@ -125,7 +148,7 @@ export function buildQuoteEmail(quote) {
             </td>
           </tr>
 
-${imageHtml}
+${imageHtml}${itemsHtml}
           <tr>
             <td style="padding:28px 32px 8px;">
               <p style="margin:0 0 14px;font-size:11px;font-weight:700;color:#5d6980;letter-spacing:0.08em;text-transform:uppercase;">Talep bilgileri</p>
@@ -177,6 +200,9 @@ ${imageHtml}
     '',
     ...rows.map(([label, value]) => `${label}: ${value}`),
     '',
+    ...((quote.items || []).length
+      ? ['Teklif sepeti:', ...quote.items.map((item) => `- ${item.name} × ${item.quantity}${item.details ? ` (${item.details})` : ''}`), '']
+      : []),
     'Proje detayları:',
     quote.message,
     '',

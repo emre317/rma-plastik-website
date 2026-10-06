@@ -8,12 +8,15 @@ import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
 import useLanguage from '../../hooks/useLanguage';
 import formatNumber from '../../utils/formatNumber';
-import families, { familyText, groups } from '../../data/productTables';
+import families, { familyText, groups, modelPath } from '../../data/productTables';
+import useModelQuote from '../../hooks/useModelQuote';
+import AddToCartButton from '../../components/quote/AddToCartButton';
 
 const normalise = (text) => String(text).toLocaleLowerCase('tr').replace(/\s+/g, '');
 
 export default function ProductTables() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const quoteFor = useModelQuote();
   const { code: lang } = useLanguage();
   const { openQuote } = useQuote();
 
@@ -162,33 +165,20 @@ export default function ProductTables() {
                               <tr key={`${row.code}-${index}`}>
                                 {family.columns.map((key) =>
                                   key === 'code' ? (
-                                    <th key={key} scope="row">{row.code}</th>
+                                    <th key={key} scope="row">
+                                      <LocalizedLink to={modelPath(family, row)}>{row.code}</LocalizedLink>
+                                    </th>
                                   ) : (
                                     <td key={key}>{formatNumber(row[key], lang)}</td>
                                   )
                                 )}
                                 <td>
-                                  <button type="button" className="ptRowQuote" onClick={() =>
-                                      openQuote({
-                                        name: `${familyText(family, 'title', 'tr', i18n.getFixedT('tr'))} – ${row.code}`,
-                                        title,
-                                        code: row.code,
-                                        image: family.image || '',
-                                        capacity: typeof row.volume === 'number' ? `${formatNumber(row.volume, lang)} L` : '',
-                                        specs: family.columns
-                                          .filter((key) => key !== 'code' && key !== 'volume' && row[key] !== undefined)
-                                          .map((key) => ({ label: p(`columns.${key}`), value: formatNumber(row[key], lang) })),
-                                        summary: [
-                                          familyText(family, 'title', 'tr', i18n.getFixedT('tr')),
-                                          row.code,
-                                          ...family.columns
-                                            .filter((key) => key !== 'code' && row[key] !== undefined)
-                                            .map((key) => `${i18n.getFixedT('tr')(`productTables.columns.${key}`)}: ${formatNumber(row[key], 'tr')}`),
-                                        ],
-                                      })
-                                    }>
-                                    {p('quote')}
-                                  </button>
+                                  <span className="ptRowActions">
+                                    <button type="button" className="ptRowQuote" onClick={() => openQuote(quoteFor(family, row))}>
+                                      {p('quote')}
+                                    </button>
+                                    <AddToCartButton product={quoteFor(family, row)} compact />
+                                  </span>
                                 </td>
                               </tr>
                             ))}

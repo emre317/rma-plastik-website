@@ -9,6 +9,7 @@ import { StaticRouter } from 'react-router-dom';
 import i18n from './i18n';
 import App from './App';
 import products from './data/products';
+import { modelPaths } from './data/productTables';
 import { postsForLanguage } from './data/posts';
 import { SUPPORTED_LANGUAGES } from './i18n/languages';
 import { SeoCollectorContext, renderHeadTags } from './seo/Seo';
@@ -25,6 +26,7 @@ export function getPublicPaths(lang) {
     ...products.map((product) => `/products/${product.slug}`),
     '/water-tanks',
     '/product-tables',
+    ...modelPaths(),
     '/custom-molding',
     '/industries',
     '/contact',

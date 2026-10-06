@@ -310,6 +310,38 @@ const en = {
     },
   },
 
+  quoteCart: {
+    button: 'Quote cart',
+    summary: '{{count}} models · {{total}} units',
+    add: 'Add to quote cart',
+    addShort: 'Add to cart',
+    added: 'In cart',
+    removeHint: 'Remove from cart',
+    itemsTitle: 'Products in this request ({{count}})',
+    quantity: 'Quantity',
+    clear: 'Empty cart',
+    empty: 'Your quote cart is empty. Add models from the product tables or the Water Tanks page.',
+    products: 'products',
+    notice: 'You have {{count}} models in your quote cart – request a quote for all of them',
+    addAnother: 'Add to cart and choose another product',
+  },
+
+  productModel: {
+    eyebrow: 'Model',
+    specsTitle: 'Technical dimensions',
+    usesTitle: 'Uses',
+    similar: 'Other models in this family',
+    allModels: 'See all models',
+    quote: 'Request a quote',
+    standardTitle: 'Standard on our tanks',
+    description: '{{code}} – {{family}}. {{specs}}. Polyethylene product by RMA Plastik; see dimensions and request a quote.',
+    notFoundTitle: 'Model not found',
+    notFoundText: 'This model may no longer be listed. Browse the current models in the product tables.',
+    backToTables: 'Back to product tables',
+    source: 'Dimensions are taken from the RMA Plastik product catalogue.',
+    customSize: 'Need a different size? Contact us for custom production.',
+  },
+
   waterTanks: {
     meta: ['Water Tanks', 'Model finder'],
     eyebrow: 'Polyethylene water tanks',

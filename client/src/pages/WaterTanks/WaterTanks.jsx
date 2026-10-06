@@ -8,7 +8,9 @@ import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
 import useLanguage from '../../hooks/useLanguage';
 import formatNumber from '../../utils/formatNumber';
-import { familyText, waterTanks, WATER_USES } from '../../data/productTables';
+import { modelPath, waterTanks, WATER_USES } from '../../data/productTables';
+import useModelQuote from '../../hooks/useModelQuote';
+import AddToCartButton from '../../components/quote/AddToCartButton';
 
 // Every distinct volume is a stop on the volume slider
 const VOLUME_STEPS = waterTanks.length ? [...new Set(waterTanks.map((tank) => tank.volume))].sort((a, b) => a - b) : [0];
@@ -61,7 +63,8 @@ const SORTERS = {
 };
 
 export default function WaterTanks() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const quoteForModel = useModelQuote();
   const { code: lang } = useLanguage();
   const { openQuote } = useQuote();
 
@@ -120,36 +123,8 @@ export default function WaterTanks() {
     tank.layer === 'double' ? w('double') : w('single'),
   ];
 
-  // Model shown in the quote form (image, family and measurements);
-  // `summary` is the same in Turkish for the sales team
-  const specsFor = (tank, tf) => [
-    {
-      label: tf('waterTanks.orientation'),
-      value: [tf(`waterTanks.${tank.orientation}`), tf(`waterTanks.${tank.layer}`)].join(' · '),
-    },
-    ...['diameter', 'height', 'length', 'cap', 'outlet']
-      .filter((key) => tank[key])
-      .map((key) => ({ label: tf(`productTables.columns.${key}`), value: String(tank[key]) })),
-  ];
-
-  const quoteFor = (tank) => {
-    const tr = i18n.getFixedT('tr');
-
-    return {
-      name: `${tank.code} – ${num(tank.volume)} L`,
-      title: familyText(tank.familyData, 'title', lang, t),
-      code: tank.code,
-      image: tank.image,
-      capacity: `${num(tank.volume)} L`,
-      specs: specsFor(tank, t),
-      summary: [
-        familyText(tank.familyData, 'title', 'tr', tr),
-        tank.code,
-        `${tr('productTables.columns.volume')}: ${formatNumber(tank.volume, 'tr')}`,
-        ...specsFor(tank, tr).map((spec) => `${spec.label}: ${spec.value}`),
-      ],
-    };
-  };
+  // Model shown in the quote form / cart (image, family and measurements)
+  const quoteFor = (tank) => quoteForModel(tank.familyData, tank);
 
   const choice = (name, value, label, hint) => (
     <button
@@ -434,18 +409,20 @@ export default function WaterTanks() {
                 <ul className="wtCards">
                   {results.map((tank) => (
                     <li key={tank.code} className="wtCard">
-                      <div className="wtCardMedia">
+                      <LocalizedLink to={modelPath(tank.familyData, tank)} className="wtCardMedia">
                         <img src={tank.image} alt={`${tank.code} – ${num(tank.volume)} L`} loading="lazy" decoding="async" />
                         <span className="wtCardBadges">
                           {badges(tank).map((badge) => (
                             <span key={badge}>{badge}</span>
                           ))}
                         </span>
-                      </div>
+                      </LocalizedLink>
 
                       <div className="wtCardBody">
                         <div className="wtCardTitle">
-                          <h3>{tank.code}</h3>
+                          <h3>
+                            <LocalizedLink to={modelPath(tank.familyData, tank)}>{tank.code}</LocalizedLink>
+                          </h3>
                           <strong>
                             {num(tank.volume)}
                             <small> L</small>
@@ -485,10 +462,13 @@ export default function WaterTanks() {
                           ))}
                         </ul>
 
-                        <button type="button" className="wtQuote" onClick={() => openQuote(quoteFor(tank))}>
-                          {w('quote')}
-                          <Arrow />
-                        </button>
+                        <div className="wtCardActions">
+                          <button type="button" className="wtQuote" onClick={() => openQuote(quoteFor(tank))}>
+                            {w('quote')}
+                            <Arrow />
+                          </button>
+                          <AddToCartButton product={quoteFor(tank)} compact />
+                        </div>
                       </div>
                     </li>
                   ))}
@@ -510,7 +490,9 @@ export default function WaterTanks() {
                     <tbody>
                       {results.map((tank) => (
                         <tr key={tank.code}>
-                          <th scope="row">{tank.code}</th>
+                          <th scope="row">
+                            <LocalizedLink to={modelPath(tank.familyData, tank)}>{tank.code}</LocalizedLink>
+                          </th>
                           <td>{num(tank.volume)}</td>
                           <td>{tank.diameter}</td>
                           <td>{tank.height}</td>
@@ -519,9 +501,12 @@ export default function WaterTanks() {
                           <td>{tank.outlet ?? '–'}</td>
                           <td>{badges(tank).join(' · ')}</td>
                           <td>
-                            <button type="button" className="ptRowQuote" onClick={() => openQuote(quoteFor(tank))}>
-                              {w('quote')}
-                            </button>
+                            <span className="ptRowActions">
+                              <button type="button" className="ptRowQuote" onClick={() => openQuote(quoteFor(tank))}>
+                                {w('quote')}
+                              </button>
+                              <AddToCartButton product={quoteFor(tank)} compact />
+                            </span>
                           </td>
                         </tr>
                       ))}

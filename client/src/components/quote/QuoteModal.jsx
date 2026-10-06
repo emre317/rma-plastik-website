@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Mail, MapPin, Package, Phone, X } from 'lucide-react';
+import { Mail, MapPin, Minus, Package, Phone, Plus, ShoppingBag, X } from 'lucide-react';
 
 import Arrow from '../i18n/Arrow';
 import company from '../../data/company';
@@ -21,6 +21,17 @@ const initialForm = {
   application: '',
   message: '',
 };
+
+/* Selected model as one line for the sales team (e.g. "Dikey Tanklar · RD 100 · Çap (cm): 48");
+   callers may pass a Turkish `summary` so the team reads it the same in every site language */
+export function summaryOf(details) {
+  if (!details) return '';
+
+  return (details.summary || [details.title, details.code, ...(details.specs || []).map((spec) => `${spec.label}: ${spec.value}`)])
+    .filter(Boolean)
+    .join(' · ')
+    .slice(0, 600);
+}
 
 function errorMessageKey(error) {
   if (error?.status === 0) {
@@ -45,7 +56,11 @@ function errorMessageKey(error) {
 export default function QuoteModal() {
   const { t, i18n } = useTranslation();
   const localizedProducts = useProducts();
-  const { open, product, details, closeQuote, clearProduct } = useQuote();
+  const {
+    open, product, details, mode, closeQuote, clearProduct,
+    cart, addToCart, removeFromCart, setCartQuantity, clearCart, openCart,
+  } = useQuote();
+  const cartMode = mode === 'cart';
 
   const dialogRef = useRef(null);
   const firstFieldRef = useRef(null);
@@ -84,14 +99,17 @@ export default function QuoteModal() {
     }));
   }
 
-  // Selected model as one line for the sales team (e.g. "Dikey Tanklar · RD 100 · Çap (cm): 48");
-  // callers may pass a Turkish `summary` so the team reads it the same in every site language
-  const productDetails = details
-    ? (details.summary || [details.title, details.code, ...(details.specs || []).map((spec) => `${spec.label}: ${spec.value}`)])
-        .filter(Boolean)
-        .join(' · ')
-        .slice(0, 600)
-    : '';
+  const productDetails = summaryOf(details);
+
+  // "Add another product": keep this model in the cart and let the visitor pick more
+  function moveToCart() {
+    if (details) {
+      addToCart(details, form.quantity || 1);
+    }
+    clearProduct();
+    setForm((current) => ({ ...current, product: '', capacity: '', quantity: '' }));
+    closeQuote();
+  }
 
   const productInList =
     !form.product ||
@@ -159,11 +177,32 @@ export default function QuoteModal() {
     setStatus('loading');
     setFeedbackKey('');
 
+    if (cartMode && cart.length === 0) {
+      setStatus('error');
+      setFeedbackKey('quoteCart.empty');
+      return;
+    }
+
+    const cartFields = cartMode
+      ? {
+          product: `${cart.length} ${t('quoteCart.products')}: ${cart.map((item) => item.code || item.name).join(', ')}`.slice(0, 150),
+          capacity: '',
+          quantity: '',
+          items: cart.map((item) => ({
+            name: item.name,
+            details: summaryOf(item),
+            image: item.image || '',
+            quantity: item.quantity || 1,
+          })),
+        }
+      : {};
+
     try {
       await submitQuote({
         ...form,
-        productDetails: details && form.product === details.name ? productDetails : '',
-        productImage: details && form.product === details.name ? details.image || '' : '',
+        ...cartFields,
+        productDetails: !cartMode && details && form.product === details.name ? productDetails : '',
+        productImage: !cartMode && details && form.product === details.name ? details.image || '' : '',
         language: i18n.resolvedLanguage,
       });
 
@@ -179,6 +218,7 @@ export default function QuoteModal() {
       });
       setForm(initialForm);
       clearProduct();
+      if (cartMode) clearCart();
     } catch (error) {
       setStatus('error');
       setFeedbackKey(errorMessageKey(error));
@@ -261,7 +301,68 @@ export default function QuoteModal() {
           onSubmit={handleSubmit}
         >
 
-          {details && form.product === details.name && (
+          {cartMode && (
+            <div className="quoteCartList">
+              <div className="quoteCartHead">
+                <span className="quoteProductLabel">
+                  <ShoppingBag aria-hidden="true" />
+                  {t('quoteCart.itemsTitle', { count: cart.length })}
+                </span>
+                {cart.length > 0 && (
+                  <button type="button" className="quoteCartClear" onClick={clearCart}>{t('quoteCart.clear')}</button>
+                )}
+              </div>
+
+              {cart.length === 0 && status !== 'success' && <p className="quoteCartEmpty">{t('quoteCart.empty')}</p>}
+
+              <ul>
+                {cart.map((item) => (
+                  <li key={item.name} className="quoteCartItem">
+                    <span className="quoteProductImage small">
+                      {item.image ? <img src={item.image} alt="" /> : <Package aria-hidden="true" />}
+                    </span>
+
+                    <span className="quoteCartItemText">
+                      <strong>
+                        {item.code || item.name}
+                        {item.capacity && <em>{item.capacity}</em>}
+                      </strong>
+                      {item.title && <small>{item.title}</small>}
+                    </span>
+
+                    <span className="quoteQty" aria-label={t('quoteCart.quantity')}>
+                      <button type="button" onClick={() => setCartQuantity(item.name, (item.quantity || 1) - 1)} aria-label="−" disabled={(item.quantity || 1) <= 1}>
+                        <Minus aria-hidden="true" />
+                      </button>
+                      <input
+                        type="number"
+                        min="1"
+                        value={item.quantity || 1}
+                        onChange={(event) => setCartQuantity(item.name, event.target.value)}
+                        aria-label={`${item.code || item.name} – ${t('quoteCart.quantity')}`}
+                      />
+                      <button type="button" onClick={() => setCartQuantity(item.name, (item.quantity || 1) + 1)} aria-label="+">
+                        <Plus aria-hidden="true" />
+                      </button>
+                    </span>
+
+                    <button type="button" className="quoteProductRemove inline" onClick={() => removeFromCart(item.name)} aria-label={t('contact.removeProduct')}>
+                      <X aria-hidden="true" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {!cartMode && cart.length > 0 && (
+            <button type="button" className="quoteCartNotice" onClick={openCart}>
+              <ShoppingBag aria-hidden="true" />
+              {t('quoteCart.notice', { count: cart.length })}
+            </button>
+          )}
+
+          {!cartMode && details && form.product === details.name && (
             <div className="quoteProduct">
               <span className="quoteProductImage">
                 {details.image ? (
@@ -288,6 +389,13 @@ export default function QuoteModal() {
                       </div>
                     ))}
                   </dl>
+                )}
+
+                {details.code && (
+                  <button type="button" className="quoteMoreProducts" onClick={moveToCart}>
+                    <Plus aria-hidden="true" />
+                    {t('quoteCart.addAnother')}
+                  </button>
                 )}
               </div>
 
@@ -371,6 +479,7 @@ export default function QuoteModal() {
               />
             </label>
 
+            {!cartMode && (
             <label className="formField">
               <span>{fieldLabel('product')}</span>
               <select
@@ -400,6 +509,9 @@ export default function QuoteModal() {
               </select>
             </label>
 
+            )}
+
+            {!cartMode && (
             <label className="formField">
               <span>{fieldLabel('capacity')}</span>
               <input
@@ -412,6 +524,9 @@ export default function QuoteModal() {
               />
             </label>
 
+            )}
+
+            {!cartMode && (
             <label className="formField">
               <span>{fieldLabel('quantity')}</span>
               <input
@@ -423,6 +538,7 @@ export default function QuoteModal() {
                 placeholder={t('contact.placeholders.quantity')}
               />
             </label>
+            )}
 
             <label className="formField formFieldFull">
               <span>{fieldLabel('application')}</span>

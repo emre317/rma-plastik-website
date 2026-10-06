@@ -42,6 +42,14 @@ Panel adresi: `https://ALAN-ADI/admin` (giriş: `npm run create-admin` ile oluş
 - **Su deposu seçici:** işaretlenen ailelerin modelleri Su Depoları sayfasında filtrelenir (tip, yapı ve kullanım
   alanları buradan seçilir). Hacim ve Yükseklik sütunları dolu olmalıdır.
 - Bir ürün ailesini sitede gizlemek için “Yayında / Gizli” düğmesini kullanın; silmek geri alınamaz.
+- **Excel ile toplu güncelleme:** “Excel’e aktar” tüm modelleri tek dosyada indirir (Modeller sayfası).
+  Dosyayı düzenleyip “Excel’den içe aktar” ile yükleyin; önce hangi ailede kaç modelin eklendiği/silindiği/değiştiği
+  gösterilir, “Uygula” deyince kaydedilir. Dosyada olmayan aileler değişmez, model görselleri ürün koduna göre korunur.
+  Dosyada panelde olmayan bir aile kimliği ve “Aile adı (TR)” varsa yeni aile **gizli** olarak eklenir.
+- **Model sayfaları:** her model için otomatik bir sayfa oluşur (ör. `/tr/product-tables/vertical-tanks/rd-5000`).
+  Adres ürün kodundan üretilir; yayındaki bir modelin kodunu değiştirmek adresini de değiştirir.
+- **Teklif sepeti:** ziyaretçiler birden fazla modeli sepete ekleyip adetleriyle tek talep gönderebilir; talep
+  detayında ve bildirim e-postasında “Teklif sepeti” listesi görünür.
 
 ### Blog yazıları
 - **Taslak** sitede görünmez; **Yayına al** dedikten sonra “Yayınla” ile siteye çıkar.

@@ -288,6 +288,25 @@ export default function AdminQuoteDetail() {
             </strong>
           </div>
 
+          {quote.items?.length > 0 && (
+            <div className="adminQuoteItems">
+              <span>Quote cart ({quote.items.length})</span>
+
+              <ul>
+                {quote.items.map((item, index) => (
+                  <li key={`${item.name}-${index}`}>
+                    {item.image ? <img src={item.image} alt="" loading="lazy" /> : <span className="cmsThumbEmpty" aria-hidden="true" />}
+                    <span>
+                      <strong>{item.name}</strong>
+                      {item.details && <small>{item.details}</small>}
+                    </span>
+                    <em>× {item.quantity}</em>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           {(quote.productDetails || quote.productImage) && (
             <div className="adminQuoteProduct">
               <span>Product details</span>

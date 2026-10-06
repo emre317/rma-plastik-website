@@ -92,10 +92,23 @@ export async function createQuoteRequest(req, res) {
     }
 
     // Only site images (e.g. /images/products/rd-200.webp) are kept
-    const productImage = cleanString(body.productImage);
-    optional.productImage = /^\/(images|uploads)\/[\w./-]{1,280}$/.test(productImage) && !productImage.includes('..')
-      ? productImage
-      : '';
+    const siteImage = (value) => {
+      const image = cleanString(value);
+      return /^\/(images|uploads)\/[\w./-]{1,280}$/.test(image) && !image.includes('..') ? image : '';
+    };
+
+    optional.productImage = siteImage(body.productImage);
+
+    // Quote cart: up to 30 models with quantities
+    optional.items = (Array.isArray(body.items) ? body.items : [])
+      .slice(0, 30)
+      .map((item) => ({
+        name: cleanString(item?.name).slice(0, 150),
+        details: cleanString(item?.details).slice(0, 600),
+        image: siteImage(item?.image),
+        quantity: Math.min(99999, Math.max(1, Number.parseInt(item?.quantity, 10) || 1)),
+      }))
+      .filter((item) => item.name);
 
     let quantity = null;
 

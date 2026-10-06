@@ -10,6 +10,7 @@ import Products from '../pages/Products/Products';
 import ProductDetail from '../pages/ProductDetail/ProductDetail';
 import WaterTanks from '../pages/WaterTanks/WaterTanks';
 import ProductTables from '../pages/ProductTables/ProductTables';
+import ProductModel from '../pages/ProductModel/ProductModel';
 import CustomMolding from '../pages/CustomMolding/CustomMolding';
 import Industries from '../pages/Industries/Industries';
 import IndustryDetail from '../pages/IndustryDetail/IndustryDetail';
@@ -53,6 +54,7 @@ export default function AppRoutes() {
 
         <Route path="water-tanks" element={<WaterTanks />} />
         <Route path="product-tables" element={<ProductTables />} />
+        <Route path="product-tables/:familyId/:modelSlug" element={<ProductModel />} />
         <Route path="custom-molding" element={<CustomMolding />} />
 
         <Route path="industries" element={<Industries />} />

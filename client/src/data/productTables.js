@@ -11,9 +11,63 @@ import builtInFamilies, { COLUMN_KEYS, GROUPS, WATER_USES } from './productTable
             waterTank: { orientation, layer, uses } | null, i18n? }
 */
 
-const families = Array.isArray(content.productFamilies) && content.productFamilies.length
+const sourceFamilies = Array.isArray(content.productFamilies) && content.productFamilies.length
   ? content.productFamilies
   : builtInFamilies;
+
+/* "RD 10000 B" -> "rd-10000-b", "ŞD 500" -> "sd-500" */
+export function modelSlug(code) {
+  return String(code)
+    .toLocaleLowerCase('tr')
+    .replace(/ı/g, 'i').replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's').replace(/ö/g, 'o').replace(/ç/g, 'c')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'model';
+}
+
+// Every row gets a slug that is unique within its family (model page address)
+const families = sourceFamilies.map((family) => {
+  const seen = {};
+
+  return {
+    ...family,
+    rows: family.rows.map((row) => {
+      const base = modelSlug(row.code);
+      seen[base] = (seen[base] || 0) + 1;
+      return { ...row, slug: seen[base] > 1 ? `${base}-${seen[base]}` : base };
+    }),
+  };
+});
+
+/* Model page: /product-tables/<family id>/<model slug> */
+export const modelPath = (family, row) => `/product-tables/${family.id}/${row.slug}`;
+
+export const modelPaths = () => families.flatMap((family) => family.rows.map((row) => modelPath(family, row)));
+
+export function findModel(familyId, slug) {
+  const family = families.find((item) => item.id === familyId);
+  const row = family?.rows.find((item) => item.slug === slug);
+  return family && row ? { family, row } : null;
+}
+
+/* Up to `count` models of the same family, closest in volume (or in table order) */
+export function similarModels(family, row, count = 4) {
+  const index = family.rows.indexOf(row);
+
+  return family.rows
+    .filter((item) => item !== row)
+    .map((item, i) => ({
+      item,
+      distance:
+        typeof row.volume === 'number' && typeof item.volume === 'number'
+          ? Math.abs(item.volume - row.volume)
+          : Math.abs(family.rows.indexOf(item) - index),
+      i,
+    }))
+    .sort((a, b) => a.distance - b.distance || a.i - b.i)
+    .slice(0, count)
+    .map(({ item }) => item);
+}
 
 export const groups = GROUPS.filter((group) => families.some((family) => family.group === group));
 

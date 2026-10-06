@@ -67,6 +67,22 @@ const quoteRequestSchema = new mongoose.Schema(
       maxlength: 600,
     },
 
+    // Quote cart: several catalogue models with quantities
+    items: {
+      type: [
+        new mongoose.Schema(
+          {
+            name: { type: String, trim: true, maxlength: 150, required: true },
+            details: { type: String, trim: true, default: '', maxlength: 600 },
+            image: { type: String, trim: true, default: '', maxlength: 300 },
+            quantity: { type: Number, min: 1, max: 99999, default: 1 },
+          },
+          { _id: false }
+        ),
+      ],
+      default: [],
+    },
+
     // Site-relative image of the selected model (/images/...)
     productImage: {
       type: String,

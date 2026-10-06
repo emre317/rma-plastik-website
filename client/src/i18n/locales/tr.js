@@ -309,6 +309,38 @@ const tr = {
     },
   },
 
+  quoteCart: {
+    button: 'Teklif sepeti',
+    summary: '{{count}} model · {{total}} adet',
+    add: 'Teklif sepetine ekle',
+    addShort: 'Sepete ekle',
+    added: 'Sepette',
+    removeHint: 'Sepetten çıkar',
+    itemsTitle: 'Teklif istenen ürünler ({{count}})',
+    quantity: 'Adet',
+    clear: 'Sepeti boşalt',
+    empty: 'Teklif sepetiniz boş. Ürün tablolarından veya Su Depoları sayfasından model ekleyin.',
+    products: 'ürün',
+    notice: 'Teklif sepetinizde {{count}} model var – hepsi için teklif isteyin',
+    addAnother: 'Sepete ekle ve başka ürün seç',
+  },
+
+  productModel: {
+    eyebrow: 'Model',
+    specsTitle: 'Teknik ölçüler',
+    usesTitle: 'Kullanım alanları',
+    similar: 'Aynı ailedeki diğer modeller',
+    allModels: 'Tüm modelleri gör',
+    quote: 'Teklif iste',
+    standardTitle: 'Tanklarımızda standart',
+    description: '{{code}} – {{family}}. {{specs}}. RMA Plastik polietilen ürün; ölçüler ve teklif için inceleyin.',
+    notFoundTitle: 'Model bulunamadı',
+    notFoundText: 'Bu model artık listede olmayabilir. Ürün tablolarındaki güncel modellere göz atın.',
+    backToTables: 'Ürün tablolarına dön',
+    source: 'Ölçüler RMA Plastik ürün kataloğundan alınmıştır.',
+    customSize: 'Farklı ölçü mü lazım? Projeye özel üretim için bize ulaşın.',
+  },
+
   waterTanks: {
     meta: ['Su Depoları', 'Model seçici'],
     eyebrow: 'Polietilen su depoları',

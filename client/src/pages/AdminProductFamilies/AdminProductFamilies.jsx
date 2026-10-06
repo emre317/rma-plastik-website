@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import tr from '../../i18n/locales/tr';
 import useAdminApi from '../../hooks/useAdminApi';
 import usePageTitle from '../../hooks/usePageTitle';
-import { deleteFamily, importFamilies, listFamilies, updateFamily } from '../../services/adminContentApi';
+import { createFamily, deleteFamily, importFamilies, listFamilies, updateFamily } from '../../services/adminContentApi';
+import { exportFamilies, readFamiliesFile } from './familyExcel';
 
 const groupLabel = (key) => tr.productTables.groups[key] || key;
 
@@ -18,6 +19,9 @@ export default function AdminProductFamilies() {
   const [importing, setImporting] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
+  const [excelBusy, setExcelBusy] = useState('');
+  const [preview, setPreview] = useState(null);
+  const fileInput = useRef(null);
 
   async function load() {
     try {
@@ -77,6 +81,72 @@ export default function AdminProductFamilies() {
 
   const totalRows = families.reduce((sum, family) => sum + family.rows.length, 0);
 
+  async function downloadExcel() {
+    try {
+      setExcelBusy('export');
+      setError('');
+      const count = await exportFamilies(families);
+      setNotice(`${count} model Excel dosyasına aktarıldı.`);
+    } catch (err) {
+      setError(`Excel dosyası oluşturulamadı: ${err.message}`);
+    } finally {
+      setExcelBusy('');
+    }
+  }
+
+  async function readExcel(event) {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+
+    try {
+      setExcelBusy('read');
+      setError('');
+      setNotice('');
+      setPreview(await readFamiliesFile(file, families));
+    } catch (err) {
+      setError(`Dosya okunamadı: ${err.message}`);
+    } finally {
+      setExcelBusy('');
+    }
+  }
+
+  async function applyExcel() {
+    const steps = preview.plan.filter((item) => !item.skip && !item.unchanged);
+    let done = 0;
+
+    try {
+      setExcelBusy('apply');
+      setError('');
+
+      for (const item of steps) {
+        if (item.existing) {
+          await call(updateFamily, item.existing._id, { ...item.existing, columns: item.columns, rows: item.rows });
+        } else {
+          await call(createFamily, {
+            familyId: item.familyId,
+            group: 'other',
+            order: 1000,
+            published: false,
+            columns: item.columns,
+            rows: item.rows,
+            i18n: { tr: { title: item.title, text: '' }, en: {}, ar: {} },
+          });
+        }
+        done += 1;
+      }
+
+      setPreview(null);
+      setNotice(`${done} ürün ailesi Excel’den güncellendi. Yeni aileler “Gizli” olarak eklendi; kontrol edip yayına alın. Sitede görünmesi için “Yayınla”ya basın.`);
+      await load();
+    } catch (err) {
+      setError(`${done}/${steps.length} aile güncellendi, sonra hata oluştu: ${err.message}`);
+      await load();
+    } finally {
+      setExcelBusy('');
+    }
+  }
+
   return (
     <section className="adminContent">
 
@@ -98,6 +168,86 @@ export default function AdminProductFamilies() {
 
       {error && <div className="adminInlineError">{error}</div>}
       {notice && <div className="cmsMessage success">{notice}</div>}
+
+      {families.length > 0 && (
+        <div className="cmsExcelBar">
+          <div>
+            <strong>Excel ile toplu güncelleme</strong>
+            <small>Tüm modelleri indirin, Excel’de düzenleyin ve geri yükleyin. Önce değişiklikleri önizlersiniz.</small>
+          </div>
+          <div className="cmsRowActions">
+            <button type="button" className="cmsButton" onClick={downloadExcel} disabled={Boolean(excelBusy)}>
+              {excelBusy === 'export' ? 'Hazırlanıyor…' : 'Excel’e aktar'}
+            </button>
+            <button type="button" className="cmsButton cmsButtonPrimary" onClick={() => fileInput.current?.click()} disabled={Boolean(excelBusy)}>
+              {excelBusy === 'read' ? 'Okunuyor…' : 'Excel’den içe aktar'}
+            </button>
+            <input ref={fileInput} type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden onChange={readExcel} />
+          </div>
+        </div>
+      )}
+
+      {preview && (
+        <div className="cmsExcelPreview">
+          <h2>İçe aktarma önizlemesi</h2>
+
+          {preview.errors.length > 0 && (
+            <ul className="cmsExcelErrors">
+              {preview.errors.slice(0, 12).map((message) => (
+                <li key={message}>{message}</li>
+              ))}
+              {preview.errors.length > 12 && <li>… ve {preview.errors.length - 12} uyarı daha</li>}
+            </ul>
+          )}
+
+          {preview.plan.length > 0 && (
+            <div className="cmsRowsTableWrap">
+              <table className="cmsRowsTable">
+                <thead>
+                  <tr>
+                    <th>Ürün ailesi</th>
+                    <th>Durum</th>
+                    <th>Model (önce → sonra)</th>
+                    <th>Eklenen</th>
+                    <th>Silinen</th>
+                    <th>Değişen</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {preview.plan.filter((item) => !item.unchanged).map((item) => (
+                    <tr key={item.familyId} className={item.skip ? 'cmsMuted' : ''}>
+                      <td><strong>{item.title || item.familyId}</strong> <small className="cmsMuted">{item.familyId}</small></td>
+                      <td>{item.skip ? 'Atlanacak' : item.existing ? 'Güncellenecek' : 'Yeni aile (gizli)'}</td>
+                      <td>{item.stats.before} → {item.stats.after}</td>
+                      <td className={item.stats.added ? 'cmsPlus' : ''}>{item.stats.added || '–'}</td>
+                      <td className={item.stats.removed ? 'cmsMinus' : ''}>{item.stats.removed || '–'}</td>
+                      <td>{item.stats.changed || '–'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {preview.plan.some((item) => item.unchanged) && (
+            <p className="cmsMuted">{preview.plan.filter((item) => item.unchanged).length} ürün ailesinde değişiklik yok.</p>
+          )}
+
+          <p className="cmsHint">Dosyada olmayan aileler değişmez. Modellere ait görseller ürün koduna göre korunur.</p>
+
+          <div className="cmsRowActions">
+            <button
+              type="button"
+              className="cmsButton cmsButtonPrimary"
+              onClick={applyExcel}
+              disabled={Boolean(excelBusy) || preview.plan.every((item) => item.skip || item.unchanged)}
+            >
+              {excelBusy === 'apply' ? 'Uygulanıyor…' : 'Uygula'}
+            </button>
+            <button type="button" className="cmsButton" onClick={() => setPreview(null)} disabled={excelBusy === 'apply'}>Vazgeç</button>
+          </div>
+        </div>
+      )}
 
       {loading ? (
         <div className="adminLoading">Yükleniyor…</div>
