@@ -4,7 +4,6 @@ import TechnologySection from '../../sections/TechnologySection';
 import ProductExplorerSection from '../../sections/ProductExplorerSection';
 import IndustriesSection from '../../sections/IndustriesSection';
 import EngineeringSection from '../../sections/EngineeringSection';
-import FacilitiesSection from '../../sections/FacilitiesSection';
 import QualitySection from '../../sections/QualitySection';
 import GlobalPresenceSection from '../../sections/GlobalPresenceSection';
 import ContactSection from '../../sections/ContactSection';
@@ -24,7 +23,6 @@ export default function Home() {
       <ProductExplorerSection />
       <IndustriesSection />
       <EngineeringSection />
-      <FacilitiesSection />
       <QualitySection />
       <GlobalPresenceSection />
       <ContactSection index={t('contact.homeIndex')} />

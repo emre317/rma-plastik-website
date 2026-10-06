@@ -400,7 +400,7 @@ const en = {
   },
 
   quality: {
-    index: '08 / QUALITY',
+    index: '07 / QUALITY',
     eyebrow: 'Built into the process',
     title: 'Quality is not',
     titleAccent: 'an extra step.',
@@ -430,7 +430,7 @@ const en = {
   },
 
   global: {
-    index: '09 / GLOBAL',
+    index: '08 / GLOBAL',
     eyebrow: 'Export network',
     title: 'Manufactured in Türkiye.',
     titleAccent: 'Delivered worldwide.',
@@ -699,7 +699,7 @@ const en = {
   },
 
   contact: {
-    homeIndex: '10 / CONTACT',
+    homeIndex: '09 / CONTACT',
     close: 'Close',
     locations: {
       phone: 'Phone',

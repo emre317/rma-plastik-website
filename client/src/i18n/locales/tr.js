@@ -399,7 +399,7 @@ const tr = {
   },
 
   quality: {
-    index: '08 / KALİTE',
+    index: '07 / KALİTE',
     eyebrow: 'Sürecin bir parçası',
     title: 'Kalite',
     titleAccent: 'ek bir adım değildir.',
@@ -429,7 +429,7 @@ const tr = {
   },
 
   global: {
-    index: '09 / GLOBAL',
+    index: '08 / GLOBAL',
     eyebrow: 'İhracat ağı',
     title: 'Türkiye’de üretildi.',
     titleAccent: 'Dünyaya ulaştırıldı.',
@@ -697,7 +697,7 @@ const tr = {
   },
 
   contact: {
-    homeIndex: '10 / İLETİŞİM',
+    homeIndex: '09 / İLETİŞİM',
     close: 'Kapat',
     locations: {
       phone: 'Telefon',

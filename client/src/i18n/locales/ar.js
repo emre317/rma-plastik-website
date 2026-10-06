@@ -400,7 +400,7 @@ const ar = {
   },
 
   quality: {
-    index: '08 / الجودة',
+    index: '07 / الجودة',
     eyebrow: 'جزء من العملية',
     title: 'الجودة ليست',
     titleAccent: 'خطوة إضافية.',
@@ -430,7 +430,7 @@ const ar = {
   },
 
   global: {
-    index: '09 / عالمياً',
+    index: '08 / عالمياً',
     eyebrow: 'شبكة التصدير',
     title: 'صُنع في تركيا.',
     titleAccent: 'يصل إلى العالم.',
@@ -698,7 +698,7 @@ const ar = {
   },
 
   contact: {
-    homeIndex: '10 / التواصل',
+    homeIndex: '09 / التواصل',
     close: 'إغلاق',
     locations: {
       phone: 'الهاتف',
