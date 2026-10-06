@@ -281,6 +281,10 @@ const en = {
   },
 
   industries: {
+    countLabel: 'Industries',
+    more: 'Learn more',
+    pause: 'Pause',
+    play: 'Play',
     index: '05 / INDUSTRIES',
     eyebrow: 'Application sectors',
     title: 'Designed for',

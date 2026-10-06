@@ -15235,335 +15235,632 @@ button.contactChannel {
 }
 
 
+
+
 /* =====================================================
-   05 / SEKTÖRLER – moving industry band
+   05 / SEKTÖRLER – dark industry showcase
 ===================================================== */
 
-.industriesBandSection {
-  overflow: hidden;
-}
+.industriesShowcase {
+  --accent: var(--accent-light);
 
-.industriesMarquee {
   position: relative;
 
-  margin-top: 56px;
+  padding: 130px 0 0;
 
   overflow: hidden;
 
-  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  color: #fff;
+
+  background:
+    radial-gradient(50% 60% at 85% 10%, rgba(29, 103, 213, 0.28), transparent 70%),
+    radial-gradient(45% 50% at 0% 90%, rgba(77, 148, 245, 0.16), transparent 70%),
+    var(--dark);
 }
 
-.industriesMarqueeTrack {
-  width: max-content;
+/* fine dotted texture */
+.industriesShowcase::before {
+  content: "";
 
-  display: flex;
+  position: absolute;
 
-  animation: industriesFlow calc(var(--count, 7) * 7s) linear infinite;
+  inset: 0;
+
+  pointer-events: none;
+
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+
+  background-size: 22px 22px;
+
+  mask-image: linear-gradient(180deg, #000, transparent 70%);
+  -webkit-mask-image: linear-gradient(180deg, #000, transparent 70%);
 }
 
-.industriesMarquee:hover .industriesMarqueeTrack,
-.industriesMarquee:focus-within .industriesMarqueeTrack {
-  animation-play-state: paused;
+.industriesShowcaseHeader {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns: minmax(0, 1.5fr) minmax(300px, 0.8fr);
+
+  gap: 64px;
+
+  align-items: end;
 }
 
-.industriesMarqueeGroup {
+.industriesShowcaseIntro .eyebrow {
+  margin-top: 10px;
+
+  color: var(--accent-light);
+}
+
+.industriesShowcaseIntro h2 {
+  margin: 22px 0 22px;
+
+  color: #fff;
+
+  font-size: clamp(36px, 4.4vw, 64px);
+
+  line-height: 1.06;
+
+  letter-spacing: -0.035em;
+}
+
+.industriesShowcaseIntro h2 span {
+  display: block;
+
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.industriesShowcaseIntro > p {
+  max-width: 600px;
+
   margin: 0;
 
-  padding: 8px 0 24px;
+  color: rgba(255, 255, 255, 0.68);
 
-  display: flex;
+  font-size: clamp(16px, 1.25vw, 18px);
 
-  gap: 18px;
-
-  padding-inline-end: 18px;
-
-  list-style: none;
+  line-height: 1.7;
 }
 
-.industryBandCard {
-  width: 300px;
-
-  min-height: 230px;
-
+.industriesShowcaseMeta {
   padding: 24px;
 
+  display: grid;
+
+  grid-template-columns: auto 1fr;
+
+  gap: 18px 22px;
+
+  align-items: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  border-radius: var(--radius-lg);
+
+  background: rgba(255, 255, 255, 0.04);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.industriesCount {
   display: flex;
 
   flex-direction: column;
 
-  gap: 12px;
+  padding-inline-end: 22px;
 
-  border: 1px solid var(--line);
-
-  border-radius: var(--radius-lg);
-
-  background: #fff;
-
-  box-shadow: var(--shadow-soft);
-
-  transition: transform 260ms ease, border-color 260ms ease, box-shadow 260ms ease;
+  border-inline-end: 1px solid rgba(255, 255, 255, 0.14);
 }
 
-.industryBandCard:hover {
-  border-color: rgba(29, 103, 213, 0.45);
+.industriesCount strong {
+  font-family: var(--font-display);
 
-  box-shadow: 0 30px 60px -30px rgba(15, 30, 60, 0.35);
+  font-size: 54px;
 
-  transform: translateY(-6px);
+  font-weight: 600;
+
+  line-height: 1;
+
+  letter-spacing: -0.04em;
+
+  background: linear-gradient(180deg, #fff, #7fb2ff);
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  color: transparent;
 }
 
-.industryBandTop {
-  margin-bottom: auto;
+.industriesCount span {
+  margin-top: 6px;
 
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-}
-
-.industryBandIcon {
-  width: 52px;
-
-  height: 52px;
-
-  display: grid;
-
-  place-items: center;
-
-  border-radius: var(--radius-md);
-
-  color: var(--accent);
-
-  background: linear-gradient(135deg, rgba(29, 103, 213, 0.14), rgba(29, 103, 213, 0.04));
-
-  transition: background-color 260ms ease, color 260ms ease;
-}
-
-.industryBandCard:hover .industryBandIcon {
-  color: #fff;
-
-  background: var(--accent);
-}
-
-.industryBandIcon svg {
-  width: 24px;
-
-  height: 24px;
-}
-
-.industryBandCard .industryIndex {
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.6);
 
   font-size: 12px;
 
   font-weight: 700;
 
   letter-spacing: 0.08em;
+
+  text-transform: uppercase;
 }
 
-.industryBandCard h3 {
-  margin: 18px 0 0;
-
-  font-size: 22px;
-
-  line-height: 1.2;
-}
-
-.industryBandCard p {
-  margin: 0;
-
-  color: var(--text-secondary);
-
-  font-size: 14px;
-
-  line-height: 1.6;
-}
-
-/* Large outlined names running the other way */
-
-.industriesNames {
-  margin-top: 26px;
-
-  overflow: hidden;
-
-  user-select: none;
-}
-
-.industriesNamesTrack {
-  width: max-content;
-
+.industriesMetaCta {
   display: flex;
 
-  animation: industriesFlowReverse calc(var(--count, 7) * 9s) linear infinite;
+  flex-direction: column;
+
+  gap: 12px;
 }
 
-.industriesNamesGroup {
-  display: flex;
+.industriesMetaCta > span {
+  color: rgba(255, 255, 255, 0.85);
 
-  align-items: center;
+  font-size: 15px;
+
+  font-weight: 600;
+
+  line-height: 1.4;
 }
 
-.industriesNamesGroup span {
+.industriesMetaCta .button {
+  min-height: 48px;
+
+  align-self: flex-start;
+
+  border-color: #1d67d5;
+
+  background: #1d67d5;
+}
+
+.industriesMetaCta .button:hover {
+  border-color: #1655b4;
+
+  background: #1655b4;
+}
+
+.industriesPause {
+  grid-column: 1 / -1;
+
+  justify-self: start;
+
+  min-height: 34px;
+
+  padding: 0 12px;
+
   display: inline-flex;
 
   align-items: center;
 
-  font-family: var(--font-display);
+  gap: 8px;
 
-  font-size: clamp(44px, 7vw, 110px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 
-  font-weight: 700;
+  border-radius: var(--radius-pill);
 
-  line-height: 1.05;
+  color: rgba(255, 255, 255, 0.75);
 
-  letter-spacing: -0.03em;
+  background: transparent;
 
-  white-space: nowrap;
+  cursor: pointer;
 
-  color: transparent;
+  font: inherit;
 
-  -webkit-text-stroke: 1.5px rgba(17, 34, 68, 0.22);
+  font-size: 12px;
+
+  font-weight: 600;
+
+  transition: border-color 180ms ease, color 180ms ease;
 }
 
-.industriesNamesGroup span::after {
-  content: "";
+.industriesPause:hover {
+  border-color: #fff;
 
-  width: 0.22em;
-
-  height: 0.22em;
-
-  margin: 0 0.45em;
-
-  border-radius: 50%;
-
-  background: var(--accent);
-
-  opacity: 0.55;
+  color: #fff;
 }
 
-/* Static call to action under the band */
+.industriesPause svg {
+  width: 14px;
 
-.industriesCta {
-  margin-top: 36px;
+  height: 14px;
+}
 
-  padding: 26px 30px;
+/* Moving row of cards */
+
+.industriesRow {
+  position: relative;
+
+  margin-top: 64px;
+
+  padding: 14px 0 34px;
+
+  overflow: hidden;
+
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+
+.industriesRowTrack {
+  width: max-content;
 
   display: flex;
 
-  flex-wrap: wrap;
+  animation: industriesShowFlow calc(var(--count, 7) * 8s) linear infinite;
+}
+
+.industriesRow:hover .industriesRowTrack,
+.industriesRow:focus-within .industriesRowTrack,
+.industriesShowcase.paused .industriesRowTrack,
+.industriesShowcase.paused .industriesTickerTrack {
+  animation-play-state: paused;
+}
+
+.industriesRowGroup {
+  margin: 0;
+
+  padding: 0;
+
+  padding-inline-end: 20px;
+
+  display: flex;
+
+  gap: 20px;
+
+  list-style: none;
+}
+
+.industryShowCard {
+  position: relative;
+
+  width: 330px;
+
+  min-height: 380px;
+
+  padding: 26px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  border-radius: var(--radius-lg);
+
+  background:
+    radial-gradient(90% 70% at 100% 0%, hsl(var(--hue) 70% 50% / 0.22), transparent 65%),
+    linear-gradient(165deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015));
+
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  transition: transform 400ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 300ms ease, box-shadow 300ms ease;
+}
+
+.industryShowCard:hover {
+  border-color: hsl(var(--hue) 80% 65% / 0.55);
+
+  box-shadow: 0 40px 80px -40px hsl(var(--hue) 80% 50% / 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  transform: translateY(-8px);
+}
+
+.industryShowWatermark {
+  position: absolute;
+
+  right: -26px;
+
+  bottom: -26px;
+
+  width: 190px;
+
+  height: 190px;
+
+  color: hsl(var(--hue) 80% 70%);
+
+  opacity: 0.07;
+
+  stroke-width: 1.2;
+
+  transition: opacity 400ms ease, transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+[dir="rtl"] .industryShowWatermark {
+  right: auto;
+
+  left: -26px;
+}
+
+.industryShowCard:hover .industryShowWatermark {
+  opacity: 0.14;
+
+  transform: scale(1.08) rotate(-6deg);
+}
+
+.industryShowTop {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+}
+
+.industryShowIcon {
+  width: 56px;
+
+  height: 56px;
+
+  display: grid;
+
+  place-items: center;
+
+  border: 1px solid hsl(var(--hue) 80% 70% / 0.35);
+
+  border-radius: 50%;
+
+  color: hsl(var(--hue) 85% 75%);
+
+  background: hsl(var(--hue) 70% 50% / 0.14);
+
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+.industryShowCard:hover .industryShowIcon {
+  color: #fff;
+
+  background: hsl(var(--hue) 70% 50% / 0.55);
+}
+
+.industryShowIcon svg {
+  width: 24px;
+
+  height: 24px;
+}
+
+.industryShowIndex {
+  color: rgba(255, 255, 255, 0.75);
+
+  font-family: var(--font-display);
+
+  font-size: 15px;
+
+  font-weight: 600;
+}
+
+.industryShowIndex small {
+  color: rgba(255, 255, 255, 0.35);
+
+  font-size: 12px;
+}
+
+.industryShowBody {
+  position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.industryShowBody h3 {
+  margin: 0;
+
+  color: #fff;
+
+  font-size: 26px;
+
+  line-height: 1.15;
+
+  letter-spacing: -0.02em;
+}
+
+.industryShowBody p {
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.62);
+
+  font-size: 14px;
+
+  line-height: 1.65;
+}
+
+.industryShowLink {
+  margin-top: 8px;
+
+  padding-top: 14px;
+
+  display: inline-flex;
 
   align-items: center;
 
   justify-content: space-between;
 
-  gap: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 
-  border-radius: var(--radius-lg);
+  color: hsl(var(--hue) 85% 78%);
 
-  color: #fff;
+  font-size: 13px;
 
-  background:
-    radial-gradient(120% 140% at 0% 0%, rgba(77, 148, 245, 0.35), transparent 55%),
-    var(--accent);
+  font-weight: 600;
 }
 
-.industriesCta .industryCtaEyebrow {
-  color: rgba(255, 255, 255, 0.75);
-}
-
-.industriesCta h3 {
-  margin: 6px 0 0;
-
-  font-size: clamp(22px, 2.2vw, 30px);
-
+.industryShowLink:hover {
   color: #fff;
 }
 
-.industriesCta .button.primary {
-  border-color: #fff;
+/* Fine name ticker */
 
-  color: var(--accent-dark);
+.industriesTicker {
+  overflow: hidden;
 
-  background: #fff;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  background: rgba(0, 0, 0, 0.18);
 }
 
-.industriesCta .button.primary:hover {
-  color: #fff;
+.industriesTickerTrack {
+  width: max-content;
 
-  background: var(--dark);
+  display: flex;
 
-  border-color: var(--dark);
+  animation: industriesTicker calc(var(--count, 7) * 6s) linear infinite;
 }
 
-@keyframes industriesFlow {
+.industriesTickerGroup {
+  display: flex;
+}
+
+.industriesTickerGroup span {
+  padding: 16px 0;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  color: rgba(255, 255, 255, 0.5);
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.16em;
+
+  text-transform: uppercase;
+
+  white-space: nowrap;
+}
+
+.industriesTickerGroup span::after {
+  content: "";
+
+  width: 5px;
+
+  height: 5px;
+
+  margin: 0 26px;
+
+  transform: rotate(45deg);
+
+  background: var(--accent-light);
+
+  opacity: 0.6;
+}
+
+@keyframes industriesShowFlow {
   to { transform: translateX(-50%); }
 }
 
-@keyframes industriesFlowReverse {
-  from { transform: translateX(-50%); }
+@keyframes industriesTicker {
+  from { transform: translateX(-25%); }
   to { transform: translateX(0); }
 }
 
-[dir="rtl"] .industriesMarqueeTrack {
-  animation-name: industriesFlowRtl;
+[dir="rtl"] .industriesRowTrack {
+  animation-name: industriesShowFlowRtl;
 }
 
-[dir="rtl"] .industriesNamesTrack {
-  animation-name: industriesFlowReverseRtl;
+[dir="rtl"] .industriesTickerTrack {
+  animation-name: industriesTickerRtl;
 }
 
-@keyframes industriesFlowRtl {
+@keyframes industriesShowFlowRtl {
   to { transform: translateX(50%); }
 }
 
-@keyframes industriesFlowReverseRtl {
-  from { transform: translateX(50%); }
+@keyframes industriesTickerRtl {
+  from { transform: translateX(25%); }
   to { transform: translateX(0); }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 1000px) {
 
-  .industriesMarquee {
-    margin-top: 36px;
-  }
+  .industriesShowcaseHeader {
+    grid-template-columns: 1fr;
 
-  .industryBandCard {
-    width: 250px;
-
-    min-height: 210px;
-
-    padding: 20px;
-  }
-
-  .industriesCta {
-    padding: 22px 20px;
-  }
-
-  .industriesCta .button {
-    width: 100%;
+    gap: 32px;
   }
 
 }
 
-/* Reduced motion: no movement, the cards become a scrollable row */
+@media (max-width: 640px) {
+
+  .industriesShowcase {
+    padding-top: 80px;
+  }
+
+  .industriesShowcaseMeta {
+    padding: 20px;
+
+    grid-template-columns: 1fr;
+  }
+
+  .industriesCount {
+    flex-direction: row;
+
+    align-items: baseline;
+
+    gap: 10px;
+
+    padding: 0 0 16px;
+
+    border-inline-end: 0;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .industriesCount strong {
+    font-size: 40px;
+  }
+
+  .industriesMetaCta .button {
+    align-self: stretch;
+  }
+
+  .industriesRow {
+    margin-top: 40px;
+  }
+
+  .industryShowCard {
+    width: 270px;
+
+    min-height: 340px;
+
+    padding: 22px;
+  }
+
+  .industryShowBody h3 {
+    font-size: 22px;
+  }
+
+}
+
 @media (prefers-reduced-motion: reduce) {
 
-  .industriesMarqueeTrack,
-  .industriesNamesTrack {
+  .industriesRowTrack,
+  .industriesTickerTrack {
     animation: none;
   }
 
-  .industriesMarquee {
+  .industriesRow {
     overflow-x: auto;
 
     mask-image: none;
     -webkit-mask-image: none;
   }
 
-  .industriesMarqueeGroup[aria-hidden="true"],
-  .industriesNamesGroup + .industriesNamesGroup {
+  .industriesRowGroup[aria-hidden="true"] {
+    display: none;
+  }
+
+  .industriesPause {
     display: none;
   }
 

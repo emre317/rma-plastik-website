@@ -281,6 +281,10 @@ const ar = {
   },
 
   industries: {
+    countLabel: 'قطاعات',
+    more: 'مزيد من المعلومات',
+    pause: 'إيقاف الحركة',
+    play: 'تشغيل الحركة',
     index: '05 / القطاعات',
     eyebrow: 'قطاعات التطبيق',
     title: 'مصمَّمة',

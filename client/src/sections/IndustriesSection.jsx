@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Building2,
   Car,
   FlaskConical,
+  Pause,
+  Play,
   Shirt,
   Ship,
   Sprout,
@@ -12,32 +15,42 @@ import {
 import { LocalizedLink } from '../components/i18n/LocalizedLink';
 import Arrow from '../components/i18n/Arrow';
 
-// Icons follow the order of industries.items (chemicals, food, agriculture, automotive, textile, infrastructure, marine)
-const ICONS = [FlaskConical, UtensilsCrossed, Sprout, Car, Shirt, Building2, Ship];
+// Icon + colour tone follow the order of industries.items
+// (chemicals, food, agriculture, automotive, textile, infrastructure, marine)
+const LOOKS = [
+  { icon: FlaskConical, hue: 200 },
+  { icon: UtensilsCrossed, hue: 28 },
+  { icon: Sprout, hue: 145 },
+  { icon: Car, hue: 222 },
+  { icon: Shirt, hue: 262 },
+  { icon: Building2, hue: 210 },
+  { icon: Ship, hue: 190 },
+];
 
 /*
-  Industries as a moving band: cards flow across the full page width,
-  a large outlined name strip runs the other way underneath.
-  The band pauses on hover/focus; with "reduced motion" it becomes a
-  normal horizontally scrollable row.
+  Industries: dark showcase with a slowly moving row of industry cards
+  and a fine name ticker. A pause button stops all movement (also paused
+  on hover/focus); with "reduced motion" the row is a scrollable list.
 */
 export default function IndustriesSection() {
   const { t } = useTranslation();
+  const [paused, setPaused] = useState(false);
 
   const industries = t('industries.items', { returnObjects: true });
   const list = Array.isArray(industries) ? industries : [];
 
   return (
-    <section className="industriesSection muted industriesBandSection" id="industries">
+    <section
+      className={`industriesShowcase ${paused ? 'paused' : ''}`}
+      id="industries"
+      style={{ '--count': list.length }}
+    >
       <div className="container">
-
-        <div className="industriesHeader">
-          <div>
-            <span className="sectionIndex">{t('industries.index')}</span>
+        <div className="industriesShowcaseHeader">
+          <div className="industriesShowcaseIntro">
+            <span className="sectionIndex light">{t('industries.index')}</span>
             <p className="eyebrow">{t('industries.eyebrow')}</p>
-          </div>
 
-          <div>
             <h2>
               {t('industries.title')}
               <span>{t('industries.titleAccent')}</span>
@@ -45,28 +58,69 @@ export default function IndustriesSection() {
 
             <p>{t('industries.description')}</p>
           </div>
-        </div>
 
+          <aside className="industriesShowcaseMeta">
+            <div className="industriesCount">
+              <strong>{String(list.length).padStart(2, '0')}</strong>
+              <span>{t('industries.countLabel')}</span>
+            </div>
+
+            <div className="industriesMetaCta">
+              <span>{t('industries.ctaTitle')}</span>
+
+              <LocalizedLink to="/contact" className="button primary">
+                <span>{t('industries.ctaLink')}</span>
+                <Arrow className="buttonArrow" />
+              </LocalizedLink>
+            </div>
+
+            <button
+              type="button"
+              className="industriesPause"
+              onClick={() => setPaused((value) => !value)}
+              aria-pressed={paused}
+            >
+              {paused ? <Play aria-hidden="true" /> : <Pause aria-hidden="true" />}
+              <span>{paused ? t('industries.play') : t('industries.pause')}</span>
+            </button>
+          </aside>
+        </div>
       </div>
 
-      <div className="industriesMarquee" style={{ '--count': list.length }}>
-        <div className="industriesMarqueeTrack">
+      <div className="industriesRow">
+        <div className="industriesRowTrack">
           {[0, 1].map((copy) => (
-            <ul key={copy} className="industriesMarqueeGroup" aria-hidden={copy === 1 ? 'true' : undefined}>
+            <ul key={copy} className="industriesRowGroup" aria-hidden={copy === 1 ? 'true' : undefined}>
               {list.map((industry, index) => {
-                const Icon = ICONS[index % ICONS.length];
+                const { icon: Icon, hue } = LOOKS[index % LOOKS.length];
 
                 return (
-                  <li key={industry.title} className="industryBandCard">
-                    <div className="industryBandTop">
-                      <span className="industryBandIcon" aria-hidden="true">
+                  <li key={industry.title} className="industryShowCard" style={{ '--hue': hue }}>
+                    <Icon className="industryShowWatermark" aria-hidden="true" />
+
+                    <div className="industryShowTop">
+                      <span className="industryShowIcon" aria-hidden="true">
                         <Icon />
                       </span>
-                      <span className="industryIndex">{String(index + 1).padStart(2, '0')}</span>
+                      <span className="industryShowIndex">
+                        {String(index + 1).padStart(2, '0')}
+                        <small> / {String(list.length).padStart(2, '0')}</small>
+                      </span>
                     </div>
 
-                    <h3>{industry.title}</h3>
-                    <p>{industry.description}</p>
+                    <div className="industryShowBody">
+                      <h3>{industry.title}</h3>
+                      <p>{industry.description}</p>
+
+                      <LocalizedLink
+                        to="/industries"
+                        className="industryShowLink"
+                        tabIndex={copy === 1 ? -1 : undefined}
+                      >
+                        {t('industries.more')}
+                        <Arrow />
+                      </LocalizedLink>
+                    </div>
                   </li>
                 );
               })}
@@ -75,29 +129,15 @@ export default function IndustriesSection() {
         </div>
       </div>
 
-      <div className="industriesNames" aria-hidden="true">
-        <div className="industriesNamesTrack">
-          {[0, 1].map((copy) => (
-            <span key={copy} className="industriesNamesGroup">
+      <div className="industriesTicker" aria-hidden="true">
+        <div className="industriesTickerTrack">
+          {[0, 1, 2, 3].map((copy) => (
+            <span key={copy} className="industriesTickerGroup">
               {list.map((industry) => (
                 <span key={industry.title}>{industry.title}</span>
               ))}
             </span>
           ))}
-        </div>
-      </div>
-
-      <div className="container">
-        <div className="industriesCta">
-          <div>
-            <span className="industryCtaEyebrow">{t('industries.ctaEyebrow')}</span>
-            <h3>{t('industries.ctaTitle')}</h3>
-          </div>
-
-          <LocalizedLink to="/contact" className="button primary">
-            <span>{t('industries.ctaLink')}</span>
-            <Arrow className="buttonArrow" />
-          </LocalizedLink>
         </div>
       </div>
     </section>

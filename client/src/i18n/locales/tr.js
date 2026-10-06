@@ -280,6 +280,10 @@ const tr = {
   },
 
   industries: {
+    countLabel: 'Sektör',
+    more: 'Detaylı bilgi',
+    pause: 'Akışı durdur',
+    play: 'Akışı başlat',
     index: '05 / SEKTÖRLER',
     eyebrow: 'Uygulama alanları',
     title: 'Gerçek sektörler',
