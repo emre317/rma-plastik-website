@@ -1,5 +1,6 @@
 import HeroSection from '../../sections/HeroSection';
 import StatsSection from '../../sections/StatsSection';
+import MachineParkSection from '../../sections/MachineParkSection';
 import ProductExplorerSection from '../../sections/ProductExplorerSection';
 import IndustriesSection from '../../sections/IndustriesSection';
 import CustomMoldingSection from '../../sections/CustomMoldingSection';
@@ -17,6 +18,7 @@ export default function Home() {
       <Seo description={t('meta.descriptions.home')} />
       <HeroSection />
       <StatsSection />
+      <MachineParkSection />
       <ProductExplorerSection />
       <IndustriesSection />
       <CustomMoldingSection />

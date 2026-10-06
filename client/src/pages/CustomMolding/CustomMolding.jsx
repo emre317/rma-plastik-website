@@ -21,7 +21,8 @@ export default function CustomMolding() {
   const meta = list('meta');
   const services = list('services');
   const steps = list('steps');
-  const machines = list('machines');
+  const machinery = t('machinePark.items', { returnObjects: true });
+  const machines = Array.isArray(machinery) ? machinery : [];
   const projects = list('projects');
 
   return (
@@ -119,13 +120,13 @@ export default function CustomMolding() {
         <div className="container">
           <div className="cmSectionHead cmSectionHeadSplit">
             <div>
-              <p className="eyebrow">{text('machinesLabel')}</p>
+              <p className="eyebrow">{t('machinePark.eyebrow')}</p>
               <h2>
-                {text('machinesTitle')}
-                <span>{text('machinesTitleAccent')}</span>
+                {t('machinePark.title')}
+                <span>{t('machinePark.titleAccent')}</span>
               </h2>
             </div>
-            <p className="cmLead">{text('machinesText')}</p>
+            <p className="cmLead">{t('machinePark.text')}</p>
           </div>
 
           <ul className="cmMachines">

@@ -26,6 +26,7 @@ const SECTION_LABELS = {
   footer: 'Footer',
   hero: 'Ana sayfa – Giriş',
   stats: 'Ana sayfa – Rakamlar',
+  machinePark: 'Ana sayfa – Makina parkuru',
   productExplorer: 'Ana sayfa – Ürün gezgini',
   industries: 'Ana sayfa – Sektörler',
   customMolding: 'Ana sayfa – Özel Üretim',

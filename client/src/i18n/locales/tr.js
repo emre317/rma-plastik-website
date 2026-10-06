@@ -174,11 +174,75 @@ const tr = {
     ],
   },
 
+  machinePark: {
+    index: '03 / MAKİNA PARKURU',
+    eyebrow: 'Makina parkuru',
+    title: 'Yüksek kapasite',
+    titleAccent: 'üretim.',
+    text: 'Tam donanımlı makina parkurumuz ile hammadde işlenmesi, boyanmasından, geri dönüşüme, ürün tasarlanmasından, kalıp üretimine ve rotomolding, şişirme ve enjeksiyon teknolojileri ile plastik üretimine kadar üretimin tüm aşamalarında hizmet sağlamaktayız.',
+    highlights: [
+      {
+        value: '7,5 m',
+        label: 'Tek parça (monoblok) ürün uzunluğu',
+      },
+      {
+        value: '1.200 kg',
+        label: 'Tek parça ürün ağırlığı',
+      },
+      {
+        value: '40.000 L',
+        label: 'Rotasyonla üretim hacmi',
+      },
+    ],
+    selectLabel: 'Makina seçin',
+    countLabel: 'adet',
+    workshop: 'Tam donanımlı',
+    link: 'Özel üretim hizmetlerimiz',
+    items: [
+      {
+        count: '6',
+        name: 'Rotasyon makinası',
+        spec: '100 – 40.000 L · 50 cm – 7 m',
+        text: 'Monoblok plastik parçaların üretimi.',
+      },
+      {
+        count: '2',
+        name: 'Enjeksiyon makinası',
+        spec: '1,5 kg / 600 ton · 300 gr / 150 ton',
+        text: 'Küçük plastik parçaların üretimi.',
+      },
+      {
+        count: '1',
+        name: 'Şişirme makinası',
+        spec: '2 m yükseklik · 2.500 L’ye kadar',
+        text: 'Büyük hacimli ürünlerde seri üretim.',
+      },
+      {
+        count: '2',
+        name: 'Ekstrüder makinası',
+        spec: 'Boyama · fitil · granül · profil',
+        text: 'Hammadde boyaması, fitil üretimi, granül yapma ve profil çekme.',
+      },
+      {
+        count: '2',
+        name: 'Grinder makinası',
+        spec: '400 kg/sa · 350 kg/sa',
+        text: 'Plastik malzemelerin kırılması ve geri dönüştürülmesi.',
+      },
+      {
+        count: '',
+        name: 'Metal atölyesi',
+        spec: '10 kaynak makinası · 200 ton hidrolik pres',
+        text: 'Torna, bükme, kesme, freze, sütun matkap, hızar ve boya ünitesiyle tam kapasiteli atölye.',
+      },
+    ],
+  },
+
   productExplorer: {
     rotateHint: 'Kaydırın veya sürükleyin',
     prev: 'Önceki ürün grubu',
     next: 'Sonraki ürün grubu',
-    index: '03 / ÜRÜNLER',
+    index: '04 / ÜRÜNLER',
     eyebrow: 'Ürün portföyü',
     title: 'Her uygulama için',
     titleAccent: 'doğru çözüm.',
@@ -247,7 +311,7 @@ const tr = {
     more: 'Detaylı bilgi',
     pause: 'Akışı durdur',
     play: 'Akışı başlat',
-    index: '04 / SEKTÖRLER',
+    index: '05 / SEKTÖRLER',
     eyebrow: 'Uygulama alanları',
     title: 'Gerçek sektörler',
     titleAccent: 'için tasarlandı.',
@@ -296,7 +360,7 @@ const tr = {
   },
 
   customMolding: {
-    index: '05 / ÖZEL ÜRETİM',
+    index: '06 / ÖZEL ÜRETİM',
     eyebrow: 'Custom Molding',
     title: 'Fikir ve projelerinizi',
     titleAccent: 'hayata geçiriyoruz.',
@@ -320,7 +384,7 @@ const tr = {
   },
 
   global: {
-    index: '06 / GLOBAL',
+    index: '07 / GLOBAL',
     eyebrow: 'İhracat ağı',
     title: 'Türkiye’de üretildi.',
     titleAccent: 'Dünyaya ulaştırıldı.',
@@ -415,48 +479,6 @@ const tr = {
         'Kalıp imalatı',
         'İlk numunenin üretilmesi ve gerektiğinde düzeltmeler',
         'Ürünlerin seri üretimi',
-      ],
-      machinesLabel: 'Makina parkuru',
-      machinesTitle: 'Yüksek kapasite',
-      machinesTitleAccent: 'üretim.',
-      machinesText: 'Tam donanımlı makina parkurumuz ile hammadde işlenmesi, boyanmasından, geri dönüşüme, ürün tasarlanmasından, kalıp üretimine ve rotomolding, şişirme ve enjeksiyon teknolojileri ile plastik üretimine kadar üretimin tüm aşamalarında hizmet sağlamaktayız.',
-      machines: [
-        {
-          count: '6',
-          name: 'Rotasyon makinası',
-          spec: '100 – 40.000 L · 50 cm – 7 m',
-          text: 'Monoblok plastik parçaların üretimi.',
-        },
-        {
-          count: '2',
-          name: 'Enjeksiyon makinası',
-          spec: '1,5 kg / 600 ton · 300 gr / 150 ton',
-          text: 'Küçük plastik parçaların üretimi.',
-        },
-        {
-          count: '1',
-          name: 'Şişirme makinası',
-          spec: '2 m yükseklik · 2.500 L’ye kadar',
-          text: 'Büyük hacimli ürünlerde seri üretim.',
-        },
-        {
-          count: '2',
-          name: 'Ekstrüder makinası',
-          spec: 'Boyama · fitil · granül · profil',
-          text: 'Hammadde boyaması, fitil üretimi, granül yapma ve profil çekme.',
-        },
-        {
-          count: '2',
-          name: 'Grinder makinası',
-          spec: '400 kg/sa · 350 kg/sa',
-          text: 'Plastik malzemelerin kırılması ve geri dönüştürülmesi.',
-        },
-        {
-          count: '',
-          name: 'Metal atölyesi',
-          spec: '10 kaynak makinası · 200 ton hidrolik pres',
-          text: 'Torna, bükme, kesme, freze, sütun matkap, hızar ve boya ünitesiyle tam kapasiteli atölye.',
-        },
       ],
       referencesLabel: 'Referans projeler',
       referencesTitle: 'Özel üretim',
@@ -675,7 +697,7 @@ const tr = {
   },
 
   contact: {
-    homeIndex: '07 / İLETİŞİM',
+    homeIndex: '08 / İLETİŞİM',
     close: 'Kapat',
     locations: {
       phone: 'Telefon',

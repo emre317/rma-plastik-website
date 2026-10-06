@@ -15116,3 +15116,652 @@ button.contactChannel {
 
   text-transform: none;
 }
+
+/* =====================================================
+   03 / MAKİNA PARKURU – machinery fleet (home)
+===================================================== */
+
+.machinePark {
+  position: relative;
+
+  padding: 140px 0;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(45% 60% at 85% 10%, rgba(77, 148, 245, 0.2), transparent 65%),
+    radial-gradient(40% 50% at 0% 100%, rgba(29, 103, 213, 0.18), transparent 65%),
+    var(--dark);
+
+  color: #fff;
+}
+
+.machinePark::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+
+  background-size: 26px 26px;
+
+  mask-image: linear-gradient(180deg, #000, transparent 55%);
+
+  pointer-events: none;
+}
+
+.machinePark .container {
+  position: relative;
+}
+
+.machineParkHeader {
+  margin-bottom: 64px;
+
+  display: grid;
+
+  grid-template-columns: 1.15fr 0.85fr;
+
+  gap: 64px;
+
+  align-items: end;
+}
+
+.machineParkHeader .sectionIndex {
+  display: block;
+
+  margin-bottom: 14px;
+}
+
+.machineParkHeader .eyebrow {
+  color: var(--accent-light);
+}
+
+.machineParkHeader h2 {
+  margin: 18px 0 0;
+
+  font-size: clamp(42px, 5vw, 72px);
+
+  font-weight: 600;
+
+  line-height: 1.06;
+
+  letter-spacing: -0.025em;
+}
+
+.machineParkHeader h2 span {
+  display: block;
+
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.machineParkText {
+  max-width: 620px;
+
+  margin: 26px 0 0;
+
+  color: rgba(255, 255, 255, 0.66);
+
+  font-size: 17px;
+
+  line-height: 1.7;
+}
+
+.machineParkHighlights {
+  margin: 0;
+
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  border-radius: var(--radius-lg);
+
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.machineParkHighlights div {
+  padding: 26px 22px;
+}
+
+.machineParkHighlights div + div {
+  border-inline-start: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.machineParkHighlights dt {
+  font-family: var(--font-display);
+
+  font-size: clamp(26px, 2.4vw, 36px);
+
+  font-weight: 700;
+
+  line-height: 1;
+
+  letter-spacing: -0.02em;
+
+  white-space: nowrap;
+
+  background: linear-gradient(180deg, #fff, var(--accent-light));
+
+  -webkit-background-clip: text;
+
+  background-clip: text;
+
+  color: transparent;
+}
+
+.machineParkHighlights dd {
+  margin: 10px 0 0;
+
+  color: rgba(255, 255, 255, 0.55);
+
+  font-size: 12px;
+
+  line-height: 1.45;
+}
+
+/* List + panel */
+
+.machineParkBody {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 24px;
+
+  align-items: stretch;
+}
+
+.machineParkList {
+  margin: 0;
+
+  padding: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  list-style: none;
+}
+
+.machineParkItem {
+  width: 100%;
+
+  padding: 16px 20px;
+
+  display: grid;
+
+  grid-template-columns: 30px 44px 1fr auto;
+
+  gap: 14px;
+
+  align-items: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: var(--radius-md);
+
+  background: rgba(255, 255, 255, 0.03);
+
+  color: rgba(255, 255, 255, 0.8);
+
+  font: inherit;
+
+  text-align: start;
+
+  cursor: pointer;
+
+  transition: border-color 250ms ease, background 250ms ease, color 250ms ease, transform 300ms ease;
+}
+
+.machineParkItem:hover,
+.machineParkItem:focus-visible,
+.machineParkList li.active .machineParkItem {
+  border-color: rgba(77, 148, 245, 0.55);
+
+  background: linear-gradient(90deg, rgba(77, 148, 245, 0.18), rgba(255, 255, 255, 0.03));
+
+  color: #fff;
+}
+
+[dir="rtl"] .machineParkItem:hover,
+[dir="rtl"] .machineParkItem:focus-visible,
+[dir="rtl"] .machineParkList li.active .machineParkItem {
+  background: linear-gradient(270deg, rgba(77, 148, 245, 0.18), rgba(255, 255, 255, 0.03));
+}
+
+.machineParkList li.active .machineParkItem {
+  transform: translateX(calc(6px * var(--dir-x)));
+}
+
+.machineParkItemIndex {
+  color: rgba(255, 255, 255, 0.4);
+
+  font-family: var(--font-display);
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+}
+
+.machineParkItemIcon {
+  width: 44px;
+
+  height: 44px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: var(--radius-sm);
+
+  background: rgba(77, 148, 245, 0.14);
+
+  color: var(--accent-light);
+
+  transition: background 250ms ease, color 250ms ease;
+}
+
+.machineParkList li.active .machineParkItemIcon {
+  background: linear-gradient(145deg, var(--accent-light), var(--accent));
+
+  color: #fff;
+}
+
+.machineParkItemIcon svg {
+  width: 20px;
+
+  height: 20px;
+}
+
+.machineParkItem strong {
+  font-family: var(--font-display);
+
+  font-size: 17px;
+
+  font-weight: 600;
+}
+
+.machineParkItemCount {
+  padding: 5px 10px;
+
+  border-radius: var(--radius-pill);
+
+  background: rgba(255, 255, 255, 0.07);
+
+  color: rgba(255, 255, 255, 0.75);
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+.machineParkItemDetails {
+  display: none;
+}
+
+.machineParkSpec {
+  padding: 7px 14px;
+
+  display: inline-block;
+
+  border: 1px solid rgba(77, 148, 245, 0.35);
+
+  border-radius: var(--radius-pill);
+
+  background: rgba(77, 148, 245, 0.12);
+
+  color: #cfe1ff;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  font-variant-numeric: tabular-nums;
+}
+
+.machineParkPanel {
+  position: relative;
+
+  padding: 36px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  border-radius: var(--radius-lg);
+
+  background:
+    radial-gradient(70% 60% at 50% 22%, rgba(77, 148, 245, 0.22), transparent 70%),
+    linear-gradient(165deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015));
+
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 50px 90px -60px rgba(0, 0, 0, 0.8);
+}
+
+.machineParkVisual {
+  position: relative;
+
+  height: 220px;
+
+  margin-bottom: 28px;
+
+  display: grid;
+
+  place-items: center;
+}
+
+.machineParkRing {
+  position: absolute;
+
+  border: 1px dashed rgba(77, 148, 245, 0.35);
+
+  border-radius: 50%;
+
+  animation: machineParkSpin 28s linear infinite;
+}
+
+.machineParkRing.one {
+  width: 200px;
+
+  height: 200px;
+}
+
+.machineParkRing.two {
+  width: 140px;
+
+  height: 140px;
+
+  border-style: solid;
+
+  border-color: rgba(255, 255, 255, 0.1);
+
+  animation-direction: reverse;
+
+  animation-duration: 18s;
+}
+
+.machineParkRing.one::after {
+  content: "";
+
+  position: absolute;
+
+  top: -5px;
+
+  left: 50%;
+
+  width: 10px;
+
+  height: 10px;
+
+  border-radius: 50%;
+
+  background: var(--accent-light);
+
+  box-shadow: 0 0 18px var(--accent-light);
+}
+
+.machineParkVisualIcon {
+  width: 96px;
+
+  height: 96px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: linear-gradient(145deg, var(--accent-light), var(--accent));
+
+  box-shadow: 0 0 0 10px rgba(77, 148, 245, 0.12), 0 30px 60px -20px rgba(29, 103, 213, 0.9);
+
+  animation: machineParkPop 450ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.machineParkVisualIcon svg {
+  width: 40px;
+
+  height: 40px;
+
+  color: #fff;
+}
+
+.machineParkPanelText {
+  animation: machineParkFade 450ms ease;
+}
+
+.machineParkPanelIndex {
+  color: var(--accent-light);
+
+  font-family: var(--font-display);
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+}
+
+.machineParkPanelIndex small {
+  color: rgba(255, 255, 255, 0.4);
+
+  font-size: inherit;
+}
+
+.machineParkPanel h3 {
+  margin: 10px 0 16px;
+
+  display: flex;
+
+  align-items: baseline;
+
+  gap: 14px;
+
+  font-size: clamp(26px, 2.4vw, 34px);
+
+  font-weight: 600;
+
+  letter-spacing: -0.02em;
+}
+
+.machineParkPanelCount {
+  font-size: 1.6em;
+
+  font-weight: 700;
+
+  line-height: 1;
+
+  background: linear-gradient(180deg, #fff, var(--accent-light));
+
+  -webkit-background-clip: text;
+
+  background-clip: text;
+
+  color: transparent;
+}
+
+.machineParkPanel p {
+  margin: 16px 0 0;
+
+  color: rgba(255, 255, 255, 0.7);
+
+  font-size: 16px;
+
+  line-height: 1.65;
+}
+
+.machineParkLink {
+  margin-top: auto;
+
+  padding-top: 28px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+  color: #fff;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.04em;
+
+  text-decoration: none;
+
+  text-transform: uppercase;
+}
+
+.machineParkPanelText + .machineParkLink {
+  margin-top: 32px;
+}
+
+.machineParkLink span {
+  color: var(--accent-light);
+
+  transition: transform 300ms ease;
+}
+
+.machineParkLink:hover span {
+  transform: translate(calc(4px * var(--dir-x)), -4px);
+}
+
+@keyframes machineParkSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes machineParkPop {
+  from {
+    opacity: 0;
+
+    transform: scale(0.7);
+  }
+}
+
+@keyframes machineParkFade {
+  from {
+    opacity: 0;
+
+    transform: translateY(8px);
+  }
+}
+
+@media (max-width: 1000px) {
+  .machineParkHeader {
+    grid-template-columns: 1fr;
+
+    gap: 36px;
+  }
+
+  .machineParkBody {
+    grid-template-columns: 1fr;
+  }
+
+  /* Phones/tablets: every machine shows its details in the list */
+  .machineParkPanel {
+    display: none;
+  }
+
+  .machineParkItemDetails {
+    padding: 0 20px 18px;
+
+    display: block;
+  }
+
+  .machineParkList li {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    border-radius: var(--radius-md);
+
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .machineParkList .machineParkItem,
+  .machineParkList li.active .machineParkItem {
+    border-color: transparent;
+
+    background: none;
+
+    transform: none;
+
+    cursor: default;
+  }
+
+  .machineParkItemDetails p {
+    margin: 12px 0 0;
+
+    color: rgba(255, 255, 255, 0.68);
+
+    font-size: 14px;
+
+    line-height: 1.6;
+  }
+}
+
+@media (max-width: 700px) {
+  .machinePark {
+    padding: 90px 0;
+  }
+
+  .machineParkHighlights {
+    grid-template-columns: 1fr;
+  }
+
+  .machineParkHighlights div + div {
+    border-inline-start: 0;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .machineParkItem {
+    grid-template-columns: 44px 1fr;
+
+    padding: 16px;
+  }
+
+  .machineParkItemIndex {
+    display: none;
+  }
+
+  .machineParkItemCount {
+    grid-column: 2;
+
+    justify-self: start;
+  }
+
+  .machineParkItemDetails {
+    padding: 0 16px 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .machineParkRing,
+  .machineParkVisualIcon,
+  .machineParkPanelText {
+    animation: none;
+  }
+
+  .machineParkItem {
+    transition: none;
+  }
+}

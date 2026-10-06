@@ -175,11 +175,75 @@ const en = {
     ],
   },
 
+  machinePark: {
+    index: '03 / MACHINERY',
+    eyebrow: 'Machinery fleet',
+    title: 'High capacity',
+    titleAccent: 'production.',
+    text: 'With our fully equipped machinery fleet, we provide services at every stage of production, from raw material processing, painting and recycling to product design, mold production and plastic manufacturing using rotational molding, blow molding and injection technologies.',
+    highlights: [
+      {
+        value: '7.5 m',
+        label: 'Single-piece (monoblock) product length',
+      },
+      {
+        value: '1,200 kg',
+        label: 'Single-piece product weight',
+      },
+      {
+        value: '40,000 L',
+        label: 'Rotational molding volume',
+      },
+    ],
+    selectLabel: 'Select a machine',
+    countLabel: 'units',
+    workshop: 'Fully equipped',
+    link: 'Our custom molding services',
+    items: [
+      {
+        count: '6',
+        name: 'Rotomolding machines',
+        spec: '100 – 40,000 L · 50 cm – 7 m',
+        text: 'Monoblock plastic components.',
+      },
+      {
+        count: '2',
+        name: 'Injection molding machines',
+        spec: '1.5 kg / 600 t · 300 g / 150 t',
+        text: 'Small plastic components.',
+      },
+      {
+        count: '1',
+        name: 'Blow molding machine',
+        spec: '2 m height · up to 2,500 L',
+        text: 'Mass production of large products.',
+      },
+      {
+        count: '2',
+        name: 'Extruder machines',
+        spec: 'Coloring · filament · granule · profile',
+        text: 'Raw material coloring, filament production, granule formation and profile extrusion.',
+      },
+      {
+        count: '2',
+        name: 'Grinder machines',
+        spec: '400 kg/h · 350 kg/h',
+        text: 'Crushing and recycling of plastic materials.',
+      },
+      {
+        count: '',
+        name: 'Metal workshop',
+        spec: '10 welding machines · 200 t hydraulic press',
+        text: 'Fully equipped with lathes, bending, cutting, milling, column drilling, band saws and a paint unit.',
+      },
+    ],
+  },
+
   productExplorer: {
     rotateHint: 'Scroll or drag to rotate',
     prev: 'Previous product group',
     next: 'Next product group',
-    index: '03 / PRODUCTS',
+    index: '04 / PRODUCTS',
     eyebrow: 'Product portfolio',
     title: 'Solutions for',
     titleAccent: 'every application.',
@@ -248,7 +312,7 @@ const en = {
     more: 'Learn more',
     pause: 'Pause',
     play: 'Play',
-    index: '04 / INDUSTRIES',
+    index: '05 / INDUSTRIES',
     eyebrow: 'Application sectors',
     title: 'Designed for',
     titleAccent: 'real industries.',
@@ -297,7 +361,7 @@ const en = {
   },
 
   customMolding: {
-    index: '05 / CUSTOM MOLDING',
+    index: '06 / CUSTOM MOLDING',
     eyebrow: 'Custom Molding',
     title: 'We bring your ideas',
     titleAccent: 'and projects to life.',
@@ -321,7 +385,7 @@ const en = {
   },
 
   global: {
-    index: '06 / GLOBAL',
+    index: '07 / GLOBAL',
     eyebrow: 'Export network',
     title: 'Manufactured in Türkiye.',
     titleAccent: 'Delivered worldwide.',
@@ -416,48 +480,6 @@ const en = {
         'Mold manufacturing',
         'Initial samples with potential adjustments',
         'Serial production of the products',
-      ],
-      machinesLabel: 'Machinery fleet',
-      machinesTitle: 'High capacity',
-      machinesTitleAccent: 'production.',
-      machinesText: 'With our fully equipped machinery fleet, we provide services at every stage of production, from raw material processing, painting and recycling to product design, mold production and plastic manufacturing using rotational molding, blow molding and injection technologies.',
-      machines: [
-        {
-          count: '6',
-          name: 'Rotomolding machines',
-          spec: '100 – 40,000 L · 50 cm – 7 m',
-          text: 'Monoblock plastic components.',
-        },
-        {
-          count: '2',
-          name: 'Injection molding machines',
-          spec: '1.5 kg / 600 t · 300 g / 150 t',
-          text: 'Small plastic components.',
-        },
-        {
-          count: '1',
-          name: 'Blow molding machine',
-          spec: '2 m height · up to 2,500 L',
-          text: 'Mass production of large products.',
-        },
-        {
-          count: '2',
-          name: 'Extruder machines',
-          spec: 'Coloring · filament · granule · profile',
-          text: 'Raw material coloring, filament production, granule formation and profile extrusion.',
-        },
-        {
-          count: '2',
-          name: 'Grinder machines',
-          spec: '400 kg/h · 350 kg/h',
-          text: 'Crushing and recycling of plastic materials.',
-        },
-        {
-          count: '',
-          name: 'Metal workshop',
-          spec: '10 welding machines · 200 t hydraulic press',
-          text: 'Fully equipped with lathes, bending, cutting, milling, column drilling, band saws and a paint unit.',
-        },
       ],
       referencesLabel: 'Reference projects',
       referencesTitle: 'Custom molding',
@@ -677,7 +699,7 @@ const en = {
   },
 
   contact: {
-    homeIndex: '07 / CONTACT',
+    homeIndex: '08 / CONTACT',
     close: 'Close',
     locations: {
       phone: 'Phone',
