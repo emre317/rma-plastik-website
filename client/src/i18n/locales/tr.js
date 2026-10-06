@@ -215,7 +215,7 @@ const tr = {
     rotateHint: 'Kaydırın veya sürükleyin',
     prev: 'Önceki ürün grubu',
     next: 'Sonraki ürün grubu',
-    index: '04 / ÜRÜNLER',
+    index: '03 / ÜRÜNLER',
     eyebrow: 'Ürün portföyü',
     title: 'Her uygulama için',
     titleAccent: 'doğru çözüm.',
@@ -284,7 +284,7 @@ const tr = {
     more: 'Detaylı bilgi',
     pause: 'Akışı durdur',
     play: 'Akışı başlat',
-    index: '05 / SEKTÖRLER',
+    index: '04 / SEKTÖRLER',
     eyebrow: 'Uygulama alanları',
     title: 'Gerçek sektörler',
     titleAccent: 'için tasarlandı.',
@@ -333,7 +333,7 @@ const tr = {
   },
 
   engineering: {
-    index: '06 / MÜHENDİSLİK',
+    index: '05 / MÜHENDİSLİK',
     eyebrow: 'Özel üretim',
     title: 'Her çözüm',
     titleAccent: 'katalogda bulunmaz.',
@@ -429,7 +429,7 @@ const tr = {
   },
 
   global: {
-    index: '06 / GLOBAL',
+    index: '05 / GLOBAL',
     eyebrow: 'İhracat ağı',
     title: 'Türkiye’de üretildi.',
     titleAccent: 'Dünyaya ulaştırıldı.',
@@ -697,7 +697,7 @@ const tr = {
   },
 
   contact: {
-    homeIndex: '07 / İLETİŞİM',
+    homeIndex: '06 / İLETİŞİM',
     close: 'Kapat',
     locations: {
       phone: 'Telefon',

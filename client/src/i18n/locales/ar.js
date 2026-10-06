@@ -216,7 +216,7 @@ const ar = {
     rotateHint: 'مرّر أو اسحب للتدوير',
     prev: 'مجموعة المنتجات السابقة',
     next: 'مجموعة المنتجات التالية',
-    index: '04 / المنتجات',
+    index: '03 / المنتجات',
     eyebrow: 'محفظة المنتجات',
     title: 'حلول',
     titleAccent: 'لكل تطبيق.',
@@ -285,7 +285,7 @@ const ar = {
     more: 'مزيد من المعلومات',
     pause: 'إيقاف الحركة',
     play: 'تشغيل الحركة',
-    index: '05 / القطاعات',
+    index: '04 / القطاعات',
     eyebrow: 'قطاعات التطبيق',
     title: 'مصمَّمة',
     titleAccent: 'لقطاعات حقيقية.',
@@ -334,7 +334,7 @@ const ar = {
   },
 
   engineering: {
-    index: '06 / الهندسة',
+    index: '05 / الهندسة',
     eyebrow: 'تصنيع مخصص',
     title: 'ليس كل حل',
     titleAccent: 'موجوداً في الكتالوج.',
@@ -430,7 +430,7 @@ const ar = {
   },
 
   global: {
-    index: '06 / عالمياً',
+    index: '05 / عالمياً',
     eyebrow: 'شبكة التصدير',
     title: 'صُنع في تركيا.',
     titleAccent: 'يصل إلى العالم.',
@@ -698,7 +698,7 @@ const ar = {
   },
 
   contact: {
-    homeIndex: '07 / التواصل',
+    homeIndex: '06 / التواصل',
     close: 'إغلاق',
     locations: {
       phone: 'الهاتف',

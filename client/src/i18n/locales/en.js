@@ -216,7 +216,7 @@ const en = {
     rotateHint: 'Scroll or drag to rotate',
     prev: 'Previous product group',
     next: 'Next product group',
-    index: '04 / PRODUCTS',
+    index: '03 / PRODUCTS',
     eyebrow: 'Product portfolio',
     title: 'Solutions for',
     titleAccent: 'every application.',
@@ -285,7 +285,7 @@ const en = {
     more: 'Learn more',
     pause: 'Pause',
     play: 'Play',
-    index: '05 / INDUSTRIES',
+    index: '04 / INDUSTRIES',
     eyebrow: 'Application sectors',
     title: 'Designed for',
     titleAccent: 'real industries.',
@@ -334,7 +334,7 @@ const en = {
   },
 
   engineering: {
-    index: '06 / ENGINEERING',
+    index: '05 / ENGINEERING',
     eyebrow: 'Custom manufacturing',
     title: 'Not every solution',
     titleAccent: 'comes from a catalogue.',
@@ -430,7 +430,7 @@ const en = {
   },
 
   global: {
-    index: '06 / GLOBAL',
+    index: '05 / GLOBAL',
     eyebrow: 'Export network',
     title: 'Manufactured in Türkiye.',
     titleAccent: 'Delivered worldwide.',
@@ -699,7 +699,7 @@ const en = {
   },
 
   contact: {
-    homeIndex: '07 / CONTACT',
+    homeIndex: '06 / CONTACT',
     close: 'Close',
     locations: {
       phone: 'Phone',
