@@ -1,7 +1,7 @@
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { SlidersHorizontal, Table2 } from 'lucide-react';
+import { SlidersHorizontal, Table2, Wand2 } from 'lucide-react';
 
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
@@ -93,6 +93,15 @@ export default function Products() {
             <span className="productsToolText">
               <strong>{t('meta.titles.waterTanks')}</strong>
               <span>{t('waterTanks.intro')}</span>
+            </span>
+            <Arrow className="productsToolArrow" />
+          </LocalizedLink>
+
+          <LocalizedLink to="/tank-finder" className="productsTool">
+            <span className="productsToolIcon" aria-hidden="true"><Wand2 /></span>
+            <span className="productsToolText">
+              <strong>{t('meta.titles.tankFinder')}</strong>
+              <span>{t('finder.ctaText')}</span>
             </span>
             <Arrow className="productsToolArrow" />
           </LocalizedLink>

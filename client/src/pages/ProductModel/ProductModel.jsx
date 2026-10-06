@@ -8,6 +8,7 @@ import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
 import AddToCartButton from '../../components/quote/AddToCartButton';
+import CompareButton from '../../components/compare/CompareButton';
 import useLanguage from '../../hooks/useLanguage';
 import useModelQuote from '../../hooks/useModelQuote';
 import formatNumber from '../../utils/formatNumber';
@@ -145,6 +146,7 @@ export default function ProductModel() {
                   <Arrow className="buttonArrow" />
                 </button>
                 <AddToCartButton product={product} />
+                <CompareButton family={family} row={row} />
               </div>
 
               <p className="modelSource">{t('productModel.source')}</p>

@@ -19322,3 +19322,1413 @@ button.contactChannel {
 
   font-weight: 700;
 }
+
+/* =====================================================
+   COMPARISON
+===================================================== */
+
+.productsToolsGrid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.compareToggle {
+  padding: 12px 18px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius-pill);
+
+  background: #fff;
+
+  color: var(--text);
+
+  font: inherit;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+
+.compareToggle svg {
+  width: 16px;
+
+  height: 16px;
+}
+
+.compareToggle:hover {
+  border-color: var(--dark);
+}
+
+.compareToggle.on {
+  border-color: var(--dark);
+
+  background: var(--dark);
+
+  color: #fff;
+}
+
+.compareToggle.compact {
+  padding: 6px 10px;
+
+  gap: 5px;
+
+  font-size: 12px;
+}
+
+.compareToggle.compact svg {
+  width: 13px;
+
+  height: 13px;
+}
+
+.wtCardSide {
+  display: inline-flex;
+
+  flex-wrap: wrap;
+
+  gap: 6px;
+}
+
+.compareTray {
+  position: fixed;
+
+  left: 50%;
+
+  bottom: 18px;
+
+  z-index: 61;
+
+  width: min(920px, calc(100% - 32px));
+
+  padding: 10px 12px 10px 18px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  border-radius: var(--radius-lg);
+
+  background: var(--dark);
+
+  box-shadow: 0 24px 50px -16px rgba(15, 30, 60, 0.65);
+
+  color: #fff;
+
+  transform: translateX(-50%);
+
+  animation: compareTrayIn 350ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.compareTrayLabel {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+.compareTrayLabel svg {
+  width: 18px;
+
+  height: 18px;
+
+  color: var(--accent-light);
+}
+
+.compareTray ul {
+  margin: 0;
+
+  padding: 0;
+
+  display: flex;
+
+  flex: 1;
+
+  gap: 8px;
+
+  overflow-x: auto;
+
+  list-style: none;
+
+  scrollbar-width: none;
+}
+
+.compareTray li {
+  padding: 4px 6px 4px 4px;
+
+  display: flex;
+
+  flex-shrink: 0;
+
+  align-items: center;
+
+  gap: 8px;
+
+  border-radius: var(--radius-pill);
+
+  background: rgba(255, 255, 255, 0.1);
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+.compareTrayImage {
+  width: 30px;
+
+  height: 30px;
+
+  overflow: hidden;
+
+  border-radius: 50%;
+
+  background: #f2f2f2;
+}
+
+.compareTrayImage img {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: contain;
+}
+
+.compareTray li button {
+  width: 20px;
+
+  height: 20px;
+
+  padding: 0;
+
+  display: grid;
+
+  place-items: center;
+
+  border: 0;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.15);
+
+  color: #fff;
+
+  cursor: pointer;
+}
+
+.compareTray li button svg {
+  width: 12px;
+
+  height: 12px;
+}
+
+.compareTrayNotice {
+  color: #ffd27a;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+.compareTrayActions {
+  display: flex;
+
+  flex-shrink: 0;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.compareTrayClear {
+  padding: 0;
+
+  border: 0;
+
+  background: none;
+
+  color: rgba(255, 255, 255, 0.7);
+
+  font: inherit;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  text-decoration: underline;
+
+  cursor: pointer;
+}
+
+.compareTray .button {
+  padding-block: 10px;
+}
+
+.compareTray .button.disabled {
+  opacity: 0.5;
+
+  pointer-events: none;
+}
+
+.hasCompareTray .quoteCartFab {
+  bottom: 96px;
+}
+
+@keyframes compareTrayIn {
+  from {
+    opacity: 0;
+
+    transform: translate(-50%, 20px);
+  }
+}
+
+.compareHero,
+.finderHero {
+  padding: 130px 0 40px;
+
+  background:
+    radial-gradient(50% 80% at 85% 0%, rgba(29, 103, 213, 0.12), transparent 70%),
+    var(--background);
+}
+
+.compareHero .eyebrow,
+.finderHero .eyebrow {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  color: var(--accent);
+}
+
+.compareHero .eyebrow svg,
+.finderHero .eyebrow svg {
+  width: 16px;
+
+  height: 16px;
+}
+
+.compareHero h1,
+.finderHero h1 {
+  margin: 14px 0 0;
+
+  font-size: clamp(38px, 4.6vw, 64px);
+
+  font-weight: 600;
+
+  letter-spacing: -0.025em;
+
+  line-height: 1.08;
+}
+
+.finderHero h1 span {
+  display: block;
+
+  color: var(--accent);
+}
+
+.compareHero p:not(.eyebrow),
+.finderHero p:not(.eyebrow) {
+  max-width: 640px;
+
+  margin: 18px 0 0;
+
+  color: var(--text-secondary);
+
+  font-size: 17px;
+
+  line-height: 1.6;
+}
+
+.compareBody {
+  padding: 30px 0 120px;
+}
+
+.compareToolbar {
+  margin-bottom: 16px;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.compareTableWrap {
+  overflow-x: auto;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius-lg);
+
+  background: #fff;
+
+  box-shadow: var(--shadow-soft);
+}
+
+.compareTable {
+  width: 100%;
+
+  min-width: calc(180px + var(--cols) * 200px);
+
+  border-collapse: collapse;
+
+  table-layout: fixed;
+
+  font-variant-numeric: tabular-nums;
+}
+
+.compareTable th,
+.compareTable td {
+  padding: 14px 16px;
+
+  border-bottom: 1px solid var(--line);
+
+  text-align: start;
+
+  vertical-align: middle;
+}
+
+.compareTable col:first-child,
+.compareTable tbody th,
+.compareTable thead th:first-child,
+.compareTable tfoot th {
+  width: 180px;
+}
+
+.compareTable tbody th {
+  position: sticky;
+
+  inset-inline-start: 0;
+
+  z-index: 1;
+
+  background: #fff;
+
+  color: var(--text-secondary);
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.04em;
+
+  text-transform: uppercase;
+}
+
+.compareTable tbody td {
+  font-size: 16px;
+
+  font-weight: 600;
+}
+
+.compareTable tbody tr.differs td,
+.compareTable tbody tr.differs th {
+  background: rgba(29, 103, 213, 0.05);
+}
+
+.compareTable tbody tr.differs th::after {
+  content: "≠";
+
+  margin-inline-start: 6px;
+
+  color: var(--accent);
+}
+
+.compareTable td.max {
+  color: var(--accent-dark);
+}
+
+.compareTable td small {
+  display: block;
+
+  margin-top: 2px;
+
+  color: var(--accent);
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.06em;
+
+  text-transform: uppercase;
+}
+
+.compareTable td.min small {
+  color: var(--text-secondary);
+}
+
+.compareModel {
+  position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.compareModelImage {
+  aspect-ratio: 4 / 3;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: var(--radius-md);
+
+  background: #f2f2f2;
+}
+
+.compareModelImage img {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: contain;
+}
+
+.compareModelCode {
+  color: var(--text);
+
+  font-family: var(--font-display);
+
+  font-size: 18px;
+
+  font-weight: 700;
+
+  text-decoration: none;
+}
+
+.compareModel strong {
+  color: var(--accent);
+
+  font-family: var(--font-display);
+
+  font-size: 22px;
+}
+
+.compareRemove {
+  position: absolute;
+
+  top: 6px;
+
+  inset-inline-end: 6px;
+
+  z-index: 1;
+
+  width: 26px;
+
+  height: 26px;
+
+  display: grid;
+
+  place-items: center;
+
+  border: 1px solid var(--line);
+
+  border-radius: 50%;
+
+  background: #fff;
+
+  color: var(--text-secondary);
+
+  cursor: pointer;
+}
+
+.compareRemove svg {
+  width: 13px;
+
+  height: 13px;
+}
+
+.compareActions {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  gap: 8px;
+}
+
+.compareActions .button {
+  padding-block: 10px;
+}
+
+.compareSame {
+  padding: 30px !important;
+
+  color: var(--text-secondary);
+
+  text-align: center !important;
+}
+
+[dir="rtl"] .compareTable td {
+  direction: ltr;
+
+  unicode-bidi: isolate;
+
+  text-align: right;
+}
+
+/* =====================================================
+   TANK FINDER
+===================================================== */
+
+.wtHeroIntro {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+.wtFinderCta {
+  width: fit-content;
+
+  padding: 10px 18px 10px 10px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  border-radius: var(--radius-pill);
+
+  background: rgba(255, 255, 255, 0.08);
+
+  color: #fff;
+
+  text-decoration: none;
+
+  transition: background 200ms ease;
+}
+
+.wtFinderCta:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.wtFinderCtaIcon {
+  width: 40px;
+
+  height: 40px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: var(--accent);
+}
+
+.wtFinderCtaIcon svg {
+  width: 18px;
+
+  height: 18px;
+}
+
+.wtFinderCta strong {
+  display: block;
+
+  font-size: 14px;
+}
+
+.wtFinderCta small {
+  color: rgba(255, 255, 255, 0.65);
+
+  font-size: 12px;
+}
+
+.wtFinderCta > span:last-child {
+  color: var(--accent-light);
+}
+
+.finderBody {
+  padding: 30px 0 120px;
+}
+
+.finderLayout {
+  display: grid;
+
+  grid-template-columns: 230px 1fr;
+
+  gap: 28px;
+
+  align-items: start;
+}
+
+.finderSteps {
+  position: sticky;
+
+  top: 100px;
+
+  margin: 0;
+
+  padding: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+
+  list-style: none;
+}
+
+.finderSteps button {
+  width: 100%;
+
+  padding: 12px 14px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  border: 0;
+
+  border-radius: var(--radius-sm);
+
+  background: none;
+
+  color: var(--text-secondary);
+
+  font: inherit;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  text-align: start;
+
+  cursor: default;
+}
+
+.finderSteps li.done button {
+  color: var(--text);
+
+  cursor: pointer;
+}
+
+.finderSteps li.done button:hover {
+  background: #fff;
+}
+
+.finderSteps li.active button {
+  background: #fff;
+
+  box-shadow: var(--shadow-soft);
+
+  color: var(--text);
+}
+
+.finderSteps button > span {
+  width: 30px;
+
+  height: 30px;
+
+  display: grid;
+
+  flex-shrink: 0;
+
+  place-items: center;
+
+  border: 1px solid var(--line);
+
+  border-radius: 50%;
+
+  background: #fff;
+
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+.finderSteps li.active button > span {
+  border-color: var(--accent);
+
+  background: var(--accent);
+
+  color: #fff;
+}
+
+.finderSteps li.done button > span {
+  border-color: #1f9d55;
+
+  background: #1f9d55;
+
+  color: #fff;
+}
+
+.finderSteps svg {
+  width: 15px;
+
+  height: 15px;
+}
+
+.finderPanel {
+  padding: clamp(22px, 3vw, 36px);
+
+  border: 1px solid rgba(17, 34, 68, 0.08);
+
+  border-radius: var(--radius-lg);
+
+  background: #fff;
+
+  box-shadow: var(--shadow-soft);
+
+  animation: wtCardIn 350ms ease both;
+}
+
+.finderPanel > h2 {
+  margin: 0 0 22px;
+
+  font-size: clamp(24px, 2.4vw, 32px);
+
+  font-weight: 600;
+
+  letter-spacing: -0.02em;
+}
+
+.finderOptions {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+
+  gap: 12px;
+}
+
+.finderOption {
+  padding: 22px 18px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  gap: 6px;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius-md);
+
+  background: #fff;
+
+  color: var(--text);
+
+  font: inherit;
+
+  text-align: start;
+
+  cursor: pointer;
+
+  transition: border-color 200ms ease, box-shadow 200ms ease, transform 300ms ease;
+}
+
+.finderOption:hover {
+  border-color: rgba(29, 103, 213, 0.5);
+
+  transform: translateY(-3px);
+}
+
+.finderOption.active {
+  border-color: var(--accent);
+
+  box-shadow: inset 0 0 0 1px var(--accent), 0 20px 40px -26px rgba(29, 103, 213, 0.7);
+}
+
+.finderOptionIcon {
+  width: 46px;
+
+  height: 46px;
+
+  margin-bottom: 8px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: rgba(29, 103, 213, 0.1);
+
+  color: var(--accent);
+}
+
+.finderOption.active .finderOptionIcon {
+  background: var(--accent);
+
+  color: #fff;
+}
+
+.finderOptionIcon svg {
+  width: 22px;
+
+  height: 22px;
+}
+
+.finderOption strong {
+  font-family: var(--font-display);
+
+  font-size: 18px;
+}
+
+.finderOption small {
+  color: var(--text-secondary);
+
+  font-size: 13px;
+
+  line-height: 1.4;
+}
+
+.finderNote {
+  margin: 20px 0 0;
+
+  padding: 12px 14px;
+
+  display: flex;
+
+  gap: 10px;
+
+  border-radius: var(--radius-sm);
+
+  background: var(--background);
+
+  color: var(--text-secondary);
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+.finderNote svg {
+  width: 16px;
+
+  height: 16px;
+
+  flex-shrink: 0;
+
+  margin-top: 1px;
+
+  color: var(--accent);
+}
+
+.finderNote a {
+  color: var(--accent);
+
+  font-weight: 700;
+}
+
+.finderNote.warn {
+  background: #fff6e5;
+
+  color: #8a5a00;
+}
+
+.finderVolume {
+  max-width: 360px;
+
+  padding: 6px 18px 6px 6px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  border: 2px solid var(--accent);
+
+  border-radius: var(--radius-md);
+}
+
+.finderVolume input {
+  width: 100%;
+
+  padding: 10px 12px;
+
+  border: 0;
+
+  font-family: var(--font-display);
+
+  font-size: 34px;
+
+  font-weight: 700;
+
+  outline: none;
+
+  -moz-appearance: textfield;
+}
+
+.finderVolume input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.finderVolume span {
+  color: var(--text-secondary);
+
+  font-size: 16px;
+
+  font-weight: 700;
+}
+
+.finderPresets {
+  margin-top: 16px;
+}
+
+.finderLimits {
+  margin-top: 22px;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 14px;
+}
+
+.finderLimits label > span:first-child {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: var(--text-secondary);
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.04em;
+
+  text-transform: uppercase;
+}
+
+.finderLimitField {
+  display: flex;
+
+  align-items: center;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius-sm);
+}
+
+.finderLimitField input {
+  width: 100%;
+
+  padding: 12px;
+
+  border: 0;
+
+  border-radius: var(--radius-sm);
+
+  font: inherit;
+
+  font-size: 16px;
+}
+
+.finderLimitField em {
+  padding: 0 12px;
+
+  color: var(--text-secondary);
+
+  font-style: normal;
+
+  font-weight: 700;
+}
+
+.finderNav {
+  margin-top: 28px;
+
+  padding-top: 20px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  border-top: 1px solid var(--line);
+}
+
+.finderNav .button:disabled {
+  opacity: 0.45;
+
+  cursor: not-allowed;
+}
+
+.finderBack {
+  padding: 0;
+
+  border: 0;
+
+  background: none;
+
+  font: inherit;
+
+  cursor: pointer;
+}
+
+.finderSummary {
+  margin-bottom: 22px;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
+}
+
+.finderSummary button {
+  padding: 7px 12px;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius-pill);
+
+  background: var(--background);
+
+  color: var(--text);
+
+  font: inherit;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.finderSummary button:hover {
+  border-color: var(--accent);
+}
+
+.finderSummary .finderRestart {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  border-style: dashed;
+
+  background: #fff;
+
+  color: var(--accent);
+}
+
+.finderRestart svg {
+  width: 13px;
+
+  height: 13px;
+}
+
+.finderResults {
+  margin: 0;
+
+  padding: 0;
+
+  display: grid;
+
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+
+  gap: 16px;
+
+  list-style: none;
+}
+
+.finderResult {
+  position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius-lg);
+
+  background: #fff;
+}
+
+.finderResult.best {
+  border-color: var(--accent);
+
+  box-shadow: inset 0 0 0 1px var(--accent), 0 30px 60px -36px rgba(29, 103, 213, 0.7);
+}
+
+.finderBadge {
+  position: absolute;
+
+  top: 12px;
+
+  inset-inline-start: 12px;
+
+  z-index: 1;
+
+  padding: 5px 10px;
+
+  border-radius: var(--radius-pill);
+
+  background: var(--accent);
+
+  color: #fff;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.04em;
+
+  text-transform: uppercase;
+}
+
+.finderResultImage {
+  position: relative;
+
+  aspect-ratio: 4 / 3;
+
+  padding: 18px;
+
+  display: grid;
+
+  place-items: center;
+
+  background: #f2f2f2;
+}
+
+.finderResultImage img {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: contain;
+}
+
+.finderQty {
+  position: absolute;
+
+  right: 12px;
+
+  bottom: 12px;
+
+  padding: 4px 10px;
+
+  border-radius: var(--radius-pill);
+
+  background: var(--dark);
+
+  color: #fff;
+
+  font-size: 14px;
+
+  font-weight: 800;
+}
+
+.finderResultBody {
+  padding: 18px;
+
+  display: flex;
+
+  flex: 1;
+
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.finderResultFamily {
+  color: var(--text-secondary);
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+.finderResultBody h3 {
+  margin: 0;
+
+  font-size: 20px;
+}
+
+.finderResultBody h3 a {
+  color: inherit;
+
+  text-decoration: none;
+}
+
+.finderResultVolume {
+  color: var(--accent);
+
+  font-family: var(--font-display);
+
+  font-size: 24px;
+}
+
+.finderResultVolume small {
+  color: var(--text-secondary);
+
+  font-size: 13px;
+}
+
+.finderReasons {
+  margin: 0;
+
+  padding: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+
+  list-style: none;
+}
+
+.finderReasons li {
+  padding-inline-start: 18px;
+
+  position: relative;
+
+  font-size: 13px;
+}
+
+.finderReasons li::before {
+  content: "✓";
+
+  position: absolute;
+
+  inset-inline-start: 0;
+
+  color: #1f9d55;
+
+  font-weight: 800;
+}
+
+.finderReasons li.warn::before {
+  content: "!";
+
+  color: #c47a00;
+}
+
+.finderResultActions {
+  margin-top: auto;
+
+  padding-top: 12px;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  gap: 6px;
+
+  border-top: 1px solid var(--line);
+}
+
+.finderResultActions .button {
+  padding: 9px 14px;
+
+  font-size: 13px;
+}
+
+.finderCompareAll {
+  margin-top: 18px;
+}
+
+@media (max-width: 1000px) {
+  .productsToolsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .finderLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .finderSteps {
+    position: static;
+
+    flex-direction: row;
+
+    overflow-x: auto;
+  }
+
+  .finderSteps li {
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .compareTray {
+    padding: 10px;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+  }
+
+  .compareTrayLabel {
+    width: 100%;
+  }
+
+  .compareTrayActions {
+    width: 100%;
+
+    justify-content: space-between;
+  }
+
+  .hasCompareTray .quoteCartFab {
+    bottom: 150px;
+  }
+
+  .finderLimits {
+    grid-template-columns: 1fr;
+  }
+
+  .finderSteps button {
+    padding: 8px 10px;
+
+    font-size: 13px;
+  }
+
+  .compareTable {
+    min-width: calc(120px + var(--cols) * 160px);
+  }
+
+  .compareTable tbody th,
+  .compareTable thead th:first-child,
+  .compareTable tfoot th {
+    width: 120px;
+  }
+}

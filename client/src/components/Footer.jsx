@@ -36,10 +36,10 @@ const linkColumns = [
     links: [
       { key: 'industrialTanks', path: '/products?category=industrial-tanks' },
       { key: 'chemicalTanks', path: '/products?category=chemical-tanks' },
-      { key: 'waterTanks', path: '/products?category=water-tanks' },
+      { key: 'waterTanks', path: '/water-tanks' },
       { key: 'agricultural', path: '/products?category=agriculture' },
       { key: 'custom', path: '/products?category=custom' },
-      { key: 'waterTanks', path: '/water-tanks' },
+      { key: 'tankFinder', path: '/tank-finder' },
       { key: 'productTables', path: '/product-tables' },
     ],
   },

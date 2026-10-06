@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Check, LayoutGrid, RotateCcw, Search, SlidersHorizontal, Table2 } from 'lucide-react';
+import { Check, LayoutGrid, RotateCcw, Search, SlidersHorizontal, Table2, Wand2 } from 'lucide-react';
 
 import Seo from '../../seo/Seo';
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
@@ -11,6 +11,7 @@ import formatNumber from '../../utils/formatNumber';
 import { modelPath, waterTanks, WATER_USES } from '../../data/productTables';
 import useModelQuote from '../../hooks/useModelQuote';
 import AddToCartButton from '../../components/quote/AddToCartButton';
+import CompareButton from '../../components/compare/CompareButton';
 
 // Every distinct volume is a stop on the volume slider
 const VOLUME_STEPS = waterTanks.length ? [...new Set(waterTanks.map((tank) => tank.volume))].sort((a, b) => a - b) : [0];
@@ -165,7 +166,17 @@ export default function WaterTanks() {
           </div>
 
           <div className="wtHeroBottom">
-            <p>{w('intro')}</p>
+            <div className="wtHeroIntro">
+              <p>{w('intro')}</p>
+              <LocalizedLink to="/tank-finder" className="wtFinderCta">
+                <span className="wtFinderCtaIcon" aria-hidden="true"><Wand2 /></span>
+                <span>
+                  <strong>{t('finder.cta')}</strong>
+                  <small>{t('finder.ctaText')}</small>
+                </span>
+                <Arrow />
+              </LocalizedLink>
+            </div>
 
             <dl className="wtHeroStats">
               <div>
@@ -467,7 +478,10 @@ export default function WaterTanks() {
                             {w('quote')}
                             <Arrow />
                           </button>
-                          <AddToCartButton product={quoteFor(tank)} compact />
+                          <span className="wtCardSide">
+                            <CompareButton family={tank.familyData} row={tank} compact />
+                            <AddToCartButton product={quoteFor(tank)} compact />
+                          </span>
                         </div>
                       </div>
                     </li>
@@ -506,6 +520,7 @@ export default function WaterTanks() {
                                 {w('quote')}
                               </button>
                               <AddToCartButton product={quoteFor(tank)} compact />
+                              <CompareButton family={tank.familyData} row={tank} compact />
                             </span>
                           </td>
                         </tr>

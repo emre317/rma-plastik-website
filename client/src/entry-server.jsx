@@ -25,6 +25,7 @@ export function getPublicPaths(lang) {
     '/products',
     ...products.map((product) => `/products/${product.slug}`),
     '/water-tanks',
+    '/tank-finder',
     '/product-tables',
     ...modelPaths(),
     '/custom-molding',

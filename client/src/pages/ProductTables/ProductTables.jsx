@@ -11,6 +11,7 @@ import formatNumber from '../../utils/formatNumber';
 import families, { familyText, groups, modelPath } from '../../data/productTables';
 import useModelQuote from '../../hooks/useModelQuote';
 import AddToCartButton from '../../components/quote/AddToCartButton';
+import CompareButton from '../../components/compare/CompareButton';
 
 const normalise = (text) => String(text).toLocaleLowerCase('tr').replace(/\s+/g, '');
 
@@ -178,6 +179,7 @@ export default function ProductTables() {
                                       {p('quote')}
                                     </button>
                                     <AddToCartButton product={quoteFor(family, row)} compact />
+                                    <CompareButton family={family} row={row} compact />
                                   </span>
                                 </td>
                               </tr>
