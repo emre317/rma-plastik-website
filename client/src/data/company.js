@@ -20,7 +20,7 @@ const company = {
   },
   // WhatsApp number in international format, digits only (e.g. '905321234567').
   // Leave empty to hide the WhatsApp bubble.
-  whatsapp: '',
+  whatsapp: '905366700969',
   address,
   maps: {
     // Interactive map embed (no API key needed)
