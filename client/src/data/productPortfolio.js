@@ -39,6 +39,15 @@ const portfolio = GROUPS.map((group) => {
   };
 }).filter((group) => group.custom || group.models > 0);
 
+/* Early generic product slugs (blog links, old URLs) -> product group */
+export const LEGACY_PRODUCT_GROUPS = {
+  'industrial-storage-tank': 'vertical',
+  'chemical-storage-tank': 'silo',
+  'water-storage-tank': 'vertical',
+  'agricultural-tank': 'vertical',
+  'custom-engineered-product': 'custom',
+};
+
 export const totals = {
   families: families.length,
   models: families.reduce((sum, family) => sum + family.rows.length, 0),

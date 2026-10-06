@@ -8,8 +8,6 @@ import {
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import products from '../../data/products';
-
 const QuoteContext = createContext(null);
 
 const CART_KEY = 'rma_quote_cart';
@@ -33,16 +31,17 @@ function writeCart(items) {
 }
 
 /*
-  Shared state for the "Request a quote" dialog and the quote cart.
+  Shared state for the "Request a quote" dialog and its product list (cart).
 
-  openQuote(productQuoteName?) or openQuote({ name, title, code, image, capacity, specs, summary })
-    opens the dialog for one product.
-  addToCart(product) / openCart() collect several catalogue models and request
-    one quote for all of them (quantities per model).
-  Old links such as /contact?product=<slug> still open it with that product.
+  openQuote()                     opens the dialog (products can be picked inside it)
+  openQuote('Topic')              opens it with a subject, e.g. a product group or an industry
+  openQuote(model, { quantity })  adds a catalogue model ({ name, title, code, image, capacity,
+                                  specs, summary }) to the list and opens the dialog
+  addToCart / removeFromCart / setCartQuantity manage the list from any page.
+  Old links such as /contact?product=<slug> still open the dialog.
 */
 export function QuoteProvider({ children }) {
-  const [state, setState] = useState({ open: false, product: '', details: null, mode: 'single' });
+  const [state, setState] = useState({ open: false, product: '' });
   const [cart, setCart] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -59,27 +58,6 @@ export function QuoteProvider({ children }) {
     });
   }, []);
 
-  const openQuote = useCallback((product = '') => {
-    if (product && typeof product === 'object') {
-      setState({ open: true, product: product.name || '', details: product, mode: 'single' });
-      return;
-    }
-
-    setState({ open: true, product: typeof product === 'string' ? product : '', details: null, mode: 'single' });
-  }, []);
-
-  const openCart = useCallback(() => {
-    setState({ open: true, product: '', details: null, mode: 'cart' });
-  }, []);
-
-  const closeQuote = useCallback(() => {
-    setState((current) => ({ ...current, open: false }));
-  }, []);
-
-  const clearProduct = useCallback(() => {
-    setState((current) => ({ ...current, product: '', details: null }));
-  }, []);
-
   const addToCart = useCallback(
     (product, quantity = 1) =>
       updateCart((items) =>
@@ -89,6 +67,28 @@ export function QuoteProvider({ children }) {
       ),
     [updateCart]
   );
+
+  const openQuote = useCallback((product = '', options = {}) => {
+    if (product && typeof product === 'object' && product.name) {
+      addToCart(product, options.quantity);
+      setState({ open: true, product: '' });
+      return;
+    }
+
+    setState({ open: true, product: typeof product === 'string' ? product : '' });
+  }, [addToCart]);
+
+  const openCart = useCallback(() => {
+    setState((current) => ({ ...current, open: true }));
+  }, []);
+
+  const closeQuote = useCallback(() => {
+    setState((current) => ({ ...current, open: false }));
+  }, []);
+
+  const clearProduct = useCallback(() => {
+    setState((current) => ({ ...current, product: '' }));
+  }, []);
 
   const removeFromCart = useCallback(
     (name) => updateCart((items) => items.filter((item) => item.name !== name)),
@@ -116,9 +116,7 @@ export function QuoteProvider({ children }) {
       return;
     }
 
-    const product = products.find((item) => item.slug === productSlug);
-
-    openQuote(product ? product.quoteName : '');
+    openQuote();
 
     const next = new URLSearchParams(searchParams);
     next.delete('product');

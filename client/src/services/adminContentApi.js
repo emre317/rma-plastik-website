@@ -2,13 +2,6 @@ import { ApiError, request } from './http';
 
 const API_BASE_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
 
-/* Products */
-export const listProducts = (token) => request('/admin/products', { token, fallbackMessage: 'Ürünler yüklenemedi.' });
-export const getProduct = (id, token) => request(`/admin/products/${encodeURIComponent(id)}`, { token, fallbackMessage: 'Ürün yüklenemedi.' });
-export const createProduct = (body, token) => request('/admin/products', { method: 'POST', body, token, fallbackMessage: 'Ürün kaydedilemedi.' });
-export const updateProduct = (id, body, token) => request(`/admin/products/${encodeURIComponent(id)}`, { method: 'PUT', body, token, fallbackMessage: 'Ürün kaydedilemedi.' });
-export const deleteProduct = (id, token) => request(`/admin/products/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Ürün silinemedi.' });
-
 /* Texts */
 export const listTexts = (token) => request('/admin/texts', { token, fallbackMessage: 'Metinler yüklenemedi.' });
 export const saveTexts = (items, token) => request('/admin/texts', { method: 'PUT', body: { items }, token, fallbackMessage: 'Metinler kaydedilemedi.' });

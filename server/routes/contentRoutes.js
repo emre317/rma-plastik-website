@@ -1,15 +1,10 @@
 import express from 'express';
 
 import {
-  createProduct,
-  deleteProduct,
-  getProduct,
   getPublicContent,
   getSettings,
-  listProducts,
   listTexts,
   saveTexts,
-  updateProduct,
   updateSettings,
 } from '../controllers/contentController.js';
 import {
@@ -45,12 +40,6 @@ publicContentRouter.get('/', getPublicContent);
 export const adminContentRouter = express.Router();
 
 adminContentRouter.use(requireAdmin);
-
-adminContentRouter.get('/products', listProducts);
-adminContentRouter.post('/products', createProduct);
-adminContentRouter.get('/products/:id', getProduct);
-adminContentRouter.put('/products/:id', updateProduct);
-adminContentRouter.delete('/products/:id', deleteProduct);
 
 adminContentRouter.get('/product-families', listFamilies);
 adminContentRouter.post('/product-families', createFamily);

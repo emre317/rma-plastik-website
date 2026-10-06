@@ -1,10 +1,6 @@
 import mongoose from 'mongoose';
 
-import Product, {
-  CONTENT_LANGUAGES,
-  PRODUCT_CATEGORIES,
-  PRODUCT_TEXT_FIELDS,
-} from '../models/Product.js';
+import { CONTENT_LANGUAGES } from '../config/languages.js';
 import SiteText from '../models/SiteText.js';
 import { publicPosts, publicVideos } from './mediaController.js';
 import { publicFamilies } from './productFamilyController.js';
@@ -34,7 +30,7 @@ function handleError(res, error, label) {
   }
 
   if (error?.code === 11000) {
-    return fail(res, 409, 'Bu adres (slug) başka bir üründe kullanılıyor.');
+    return fail(res, 409, 'Bu adres (slug) başka bir kayıtta kullanılıyor.');
   }
 
   console.error(`${label}:`, error);
@@ -42,27 +38,6 @@ function handleError(res, error, label) {
 }
 
 /* ---------- Public snapshot used by the site build ---------- */
-
-function toPublicProduct(doc) {
-  return {
-    slug: doc.slug,
-    category: doc.category,
-    quoteName: doc.quoteName,
-    featured: doc.featured,
-    order: doc.order,
-    image: doc.image || '',
-    i18n: Object.fromEntries(
-      CONTENT_LANGUAGES.map((lang) => [
-        lang,
-        Object.fromEntries(
-          Object.keys(PRODUCT_TEXT_FIELDS).map((field) => [field, doc.i18n?.[lang]?.[field] || ''])
-        ),
-      ])
-    ),
-    // Commerce fields (price, stock…) stay in the database until the shop is enabled,
-    // so they never end up in the public site bundle.
-  };
-}
 
 function toPublicSettings(settings) {
   const value = (field) => settings?.[field] || '';
@@ -91,8 +66,7 @@ function toPublicSettings(settings) {
 
 export async function getPublicContent(req, res) {
   try {
-    const [products, texts, settings, posts, videos, productFamilies] = await Promise.all([
-      Product.find({ published: true }).sort({ order: 1, createdAt: 1 }),
+    const [texts, settings, posts, videos, productFamilies] = await Promise.all([
       SiteText.find(),
       SiteSettings.findOne({ singleton: 'site' }),
       publicPosts(),
@@ -113,7 +87,6 @@ export async function getPublicContent(req, res) {
     return res.json({
       version: 1,
       generatedAt: new Date().toISOString(),
-      products: products.map(toPublicProduct),
       texts: textMap,
       settings: toPublicSettings(settings),
       posts,
@@ -122,108 +95,6 @@ export async function getPublicContent(req, res) {
     });
   } catch (error) {
     return handleError(res, error, 'Public content error');
-  }
-}
-
-/* ---------- Products (admin) ---------- */
-
-function productPayload(body = {}) {
-  const payload = {
-    slug: str(body.slug, 120).toLowerCase(),
-    category: PRODUCT_CATEGORIES.includes(body.category) ? body.category : undefined,
-    quoteName: str(body.quoteName, 150),
-    order: Number.isFinite(Number(body.order)) ? Number(body.order) : 0,
-    featured: Boolean(body.featured),
-    published: body.published === undefined ? true : Boolean(body.published),
-    image: str(body.image, 300),
-    i18n: {},
-    commerce: {
-      sku: str(body.commerce?.sku, 80),
-      price: body.commerce?.price === '' || body.commerce?.price == null ? null : Number(body.commerce.price),
-      currency: ['TRY', 'USD', 'EUR'].includes(body.commerce?.currency) ? body.commerce.currency : 'TRY',
-      stock: body.commerce?.stock === '' || body.commerce?.stock == null ? null : Number(body.commerce.stock),
-      purchasable: Boolean(body.commerce?.purchasable),
-    },
-  };
-
-  if (payload.image && !payload.image.startsWith('/uploads/')) {
-    payload.image = '';
-  }
-
-  CONTENT_LANGUAGES.forEach((lang) => {
-    payload.i18n[lang] = Object.fromEntries(
-      Object.entries(PRODUCT_TEXT_FIELDS).map(([field, max]) => [field, str(body.i18n?.[lang]?.[field], max)])
-    );
-  });
-
-  return payload;
-}
-
-export async function listProducts(req, res) {
-  try {
-    const products = await Product.find().sort({ order: 1, createdAt: 1 });
-    return res.json({ success: true, data: products });
-  } catch (error) {
-    return handleError(res, error, 'List products error');
-  }
-}
-
-export async function getProduct(req, res) {
-  try {
-    if (!mongoose.isValidObjectId(req.params.id)) return fail(res, 404, 'Ürün bulunamadı.');
-    const product = await Product.findById(req.params.id);
-    if (!product) return fail(res, 404, 'Ürün bulunamadı.');
-    return res.json({ success: true, data: product });
-  } catch (error) {
-    return handleError(res, error, 'Get product error');
-  }
-}
-
-export async function createProduct(req, res) {
-  try {
-    const payload = productPayload(req.body);
-
-    if (!payload.i18n.tr.name) return fail(res, 400, 'Türkçe ürün adı zorunludur.');
-
-    const product = await Product.create(payload);
-    await markContentChanged();
-    return res.status(201).json({ success: true, data: product });
-  } catch (error) {
-    return handleError(res, error, 'Create product error');
-  }
-}
-
-export async function updateProduct(req, res) {
-  try {
-    if (!mongoose.isValidObjectId(req.params.id)) return fail(res, 404, 'Ürün bulunamadı.');
-
-    const payload = productPayload(req.body);
-
-    if (!payload.i18n.tr.name) return fail(res, 400, 'Türkçe ürün adı zorunludur.');
-
-    const product = await Product.findByIdAndUpdate(req.params.id, payload, {
-      returnDocument: 'after',
-      runValidators: true,
-    });
-
-    if (!product) return fail(res, 404, 'Ürün bulunamadı.');
-
-    await markContentChanged();
-    return res.json({ success: true, data: product });
-  } catch (error) {
-    return handleError(res, error, 'Update product error');
-  }
-}
-
-export async function deleteProduct(req, res) {
-  try {
-    if (!mongoose.isValidObjectId(req.params.id)) return fail(res, 404, 'Ürün bulunamadı.');
-    const product = await Product.findByIdAndDelete(req.params.id);
-    if (!product) return fail(res, 404, 'Ürün bulunamadı.');
-    await markContentChanged();
-    return res.json({ success: true });
-  } catch (error) {
-    return handleError(res, error, 'Delete product error');
   }
 }
 

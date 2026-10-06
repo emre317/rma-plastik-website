@@ -6,7 +6,7 @@
 const posts = [
   {
     slug: 'rotasyonel-kaliplama-nedir',
-    relatedProducts: ['industrial-storage-tank', 'custom-engineered-product'],
+    relatedProducts: ['vertical', 'custom'],
     tr: {
       title: 'Rotasyonel kalıplama nedir? Avantajları ve kullanım alanları',
       excerpt: 'Büyük, içi boş ve tek parça polietilen ürünlerin nasıl üretildiğini; rotasyonel kalıplamanın avantajlarını ve sınırlarını sade bir dille anlatıyoruz.',
@@ -51,7 +51,7 @@ Rotasyonel kalıplamanın uygunluğu; ürünün boyutuna, adedine, kullanım ko�
   },
   {
     slug: 'lldpe-mi-hdpe-mi-polietilen-tank-malzemesi',
-    relatedProducts: ['chemical-storage-tank', 'water-storage-tank'],
+    relatedProducts: ['silo', 'vertical'],
     tr: {
       title: 'LLDPE mi HDPE mi? Polietilen tank malzemesi nasıl seçilir?',
       excerpt: 'Polietilen tanklarda en sık karşılaşılan iki malzeme olan LLDPE ve HDPE arasındaki temel farklar ve seçim yaparken dikkat edilmesi gerekenler.',
@@ -98,7 +98,7 @@ Güneş ışığı altında kullanılacak tanklarda **UV katkılı** hammadde te
   },
   {
     slug: 'kimyasal-depolama-tanki-secimi',
-    relatedProducts: ['chemical-storage-tank', 'industrial-storage-tank'],
+    relatedProducts: ['silo', 'vertical'],
     tr: {
       title: 'Kimyasal depolama tankı seçerken dikkat edilmesi gereken 7 nokta',
       excerpt: 'Kimyasal uyumdan bağlantı elemanlarına, havalandırmadan sızıntı önlemeye kadar güvenli bir kimyasal depolama için kontrol listesi.',
@@ -139,7 +139,7 @@ Bu bilgilerle hazırlanan bir talep, size uygun tankın daha hızlı ve doğru b
   },
   {
     slug: 'adblue-tanki-secimi',
-    relatedProducts: ['industrial-storage-tank', 'chemical-storage-tank'],
+    relatedProducts: ['vertical', 'silo'],
     tr: {
       title: 'AdBlue depolama: tank seçimi ve saklama koşulları',
       excerpt: 'AdBlue’nun kalitesini korumak için hangi malzemeler kullanılmalı, hangilerinden kaçınılmalı ve saklama koşulları neler?',

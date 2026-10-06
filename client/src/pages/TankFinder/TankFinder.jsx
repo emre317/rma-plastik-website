@@ -322,7 +322,7 @@ export default function TankFinder() {
                                 <button
                                   type="button"
                                   className="button primary"
-                                  onClick={() => openQuote({ ...product, capacity: quantity > 1 ? `${quantity} × ${product.capacity}` : product.capacity })}
+                                  onClick={() => openQuote(product, { quantity })}
                                 >
                                   <span>{t('productModel.quote')}</span>
                                   <Arrow className="buttonArrow" />

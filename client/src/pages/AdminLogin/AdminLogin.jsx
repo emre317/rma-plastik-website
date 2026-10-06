@@ -8,9 +8,10 @@ import {
 } from '../../services/adminAuth';
 import usePageTitle from '../../hooks/usePageTitle';
 import useAdminDocumentLanguage from '../../hooks/useAdminDocumentLanguage';
+import BrandLogo from '../../components/BrandLogo';
 
 export default function AdminLogin() {
-  usePageTitle('Admin Login');
+  usePageTitle('Yönetici girişi');
   useAdminDocumentLanguage();
 
   const navigate = useNavigate();
@@ -65,23 +66,23 @@ export default function AdminLogin() {
       <div className="adminLoginPanel">
 
         <div className="adminLoginBrand">
-          <span>RMA</span>
-          <small>ADMIN</small>
+          <BrandLogo alt="RMA Plastik" />
+          <small>Yönetim paneli</small>
         </div>
 
         <div className="adminLoginContent">
 
           <span className="eyebrow">
-            MANAGEMENT SYSTEM
+            Yönetim paneli
           </span>
 
           <h1>
-            Welcome
-            <span>back.</span>
+            Tekrar
+            <span>hoş geldiniz.</span>
           </h1>
 
           <p>
-            Sign in to manage quote requests and website operations.
+            Teklif taleplerini, ürün tablolarını ve site içeriğini yönetmek için giriş yapın.
           </p>
 
           <form
@@ -89,7 +90,7 @@ export default function AdminLogin() {
             onSubmit={handleSubmit}
           >
             <label>
-              <span>Email</span>
+              <span>E-posta</span>
 
               <input
                 type="email"
@@ -102,7 +103,7 @@ export default function AdminLogin() {
             </label>
 
             <label>
-              <span>Password</span>
+              <span>Şifre</span>
 
               <input
                 type="password"
@@ -126,8 +127,8 @@ export default function AdminLogin() {
             >
               <span>
                 {status === 'loading'
-                  ? 'Signing in...'
-                  : 'Sign In'}
+                  ? 'Giriş yapılıyor…'
+                  : 'Giriş yap'}
               </span>
 
               <span>↗</span>

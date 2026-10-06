@@ -5,6 +5,7 @@ import PageHeader from '../../components/ui/PageHeader';
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
+import { SustainabilityBand } from '../../components/ui/EcoMarks';
 import { galleryImages, machineIcons, projectImages, serviceIcons } from '../../data/customMolding';
 
 const pad = (n) => String(n).padStart(2, '0');
@@ -155,6 +156,8 @@ export default function CustomMolding() {
           </ul>
         </div>
       </section>
+
+      <SustainabilityBand types={['noWaste', 'solar', 'recycle']} />
 
       {/* References */}
       <section className="cmReferences" id="references">

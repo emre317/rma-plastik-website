@@ -4,7 +4,7 @@ import { GitCompareArrows } from 'lucide-react';
 import { compareKey, useCompare } from './CompareContext';
 
 /* "Compare" toggle for one model */
-export default function CompareButton({ family, row, compact = false }) {
+export default function CompareButton({ family, row, compact = false, iconOnly = false }) {
   const { t } = useTranslation();
   const { toggleCompare, isCompared } = useCompare();
 
@@ -14,13 +14,13 @@ export default function CompareButton({ family, row, compact = false }) {
   return (
     <button
       type="button"
-      className={`compareToggle ${on ? 'on' : ''} ${compact ? 'compact' : ''}`}
+      className={`compareToggle ${on ? 'on' : ''} ${compact ? 'compact' : ''} ${iconOnly ? 'iconOnly' : ''}`}
       aria-pressed={on}
       title={on ? t('compare.remove') : t('compare.add')}
       onClick={() => toggleCompare(key)}
     >
       <GitCompareArrows aria-hidden="true" />
-      <span>{on ? t('compare.added') : t('compare.short')}</span>
+      <span className={iconOnly ? 'visuallyHidden' : undefined}>{on ? t('compare.added') : t('compare.short')}</span>
     </button>
   );
 }

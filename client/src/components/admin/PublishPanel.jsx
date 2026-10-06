@@ -59,8 +59,9 @@ export default function PublishPanel() {
     (!state.publishedAt || new Date(state.contentChangedAt) > new Date(state.publishedAt));
 
   return (
-    <div className={`publishPanel ${pending ? 'pending' : ''}`}>
+    <div className={`publishPanel ${pending ? 'pending' : ''} ${running ? 'running' : ''} ${state?.status === 'failed' ? 'failed' : ''}`}>
       <span className="publishPanelLabel">
+        <i className="publishDot" aria-hidden="true" />
         {running
           ? 'Site güncelleniyor…'
           : pending
@@ -69,6 +70,7 @@ export default function PublishPanel() {
       </span>
 
       <small>Son yayın: {formatTime(state?.publishedAt)}</small>
+      {pending && !running && <small className="publishPanelHint">Kaydettiğiniz değişiklikler yayınlanınca sitede görünür.</small>}
 
       {state?.status === 'failed' && (
         <>
@@ -88,7 +90,7 @@ export default function PublishPanel() {
       {error && <small className="publishPanelError">{error}</small>}
 
       <button type="button" onClick={publish} disabled={running}>
-        {running ? 'Yayınlanıyor…' : 'Yayınla'}
+        {running ? 'Yayınlanıyor…' : pending ? 'Değişiklikleri yayınla' : 'Yeniden yayınla'}
       </button>
     </div>
   );

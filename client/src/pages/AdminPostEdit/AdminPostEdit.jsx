@@ -2,14 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import tr from '../../i18n/locales/tr';
-import builtInProducts from '../../data/products.builtin';
+import portfolio, { LEGACY_PRODUCT_GROUPS } from '../../data/productPortfolio';
 import useAdminApi from '../../hooks/useAdminApi';
 import usePageTitle from '../../hooks/usePageTitle';
 import { renderMarkdown } from '../../components/content/markdown';
 import {
   createPost,
   getPost,
-  listProducts,
   updatePost,
   uploadPostImage,
 } from '../../services/adminContentApi';
@@ -72,7 +71,6 @@ export default function AdminPostEdit() {
   const [form, setForm] = useState(emptyPost);
   const [lang, setLang] = useState('tr');
   const [preview, setPreview] = useState(false);
-  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -80,17 +78,6 @@ export default function AdminPostEdit() {
   const [originalSlug, setOriginalSlug] = useState('');
 
   useEffect(() => {
-    // Product list for "related products": database first, built-in catalogue as fallback
-    call(listProducts)
-      .then(({ data }) =>
-        setProducts(
-          data?.length
-            ? data.map((product) => ({ slug: product.slug, name: product.i18n?.tr?.name || product.slug }))
-            : builtInProducts.map((product) => ({ slug: product.slug, name: tr.catalog[product.slug]?.name || product.slug }))
-        )
-      )
-      .catch(() => {});
-
     if (isNew) return;
 
     (async () => {
@@ -100,6 +87,8 @@ export default function AdminPostEdit() {
           ...emptyPost,
           ...data,
           publishedAt: toLocalInput(data.publishedAt),
+          // Older posts stored generic product slugs: map them to product groups
+          relatedProducts: [...new Set((data.relatedProducts || []).map((item) => LEGACY_PRODUCT_GROUPS[item] || item))],
           i18n: Object.fromEntries(LANGUAGES.map(({ code }) => [code, { ...emptyText(), ...data.i18n?.[code] }])),
         });
         setOriginalSlug(data.slug);
@@ -361,12 +350,12 @@ export default function AdminPostEdit() {
             </div>
 
             <div className="cmsCard">
-              <h2>İlgili ürünler</h2>
-              <p className="cmsHint">Yazının sonunda bağlantı olarak gösterilir; ilk seçilen ürün teklif formunda seçili gelir.</p>
-              {products.map((product) => (
-                <label key={product.slug} className="cmsCheck">
-                  <input type="checkbox" checked={form.relatedProducts.includes(product.slug)} onChange={() => toggleProduct(product.slug)} />
-                  <span>{product.name}</span>
+              <h2>İlgili ürün grupları</h2>
+              <p className="cmsHint">Yazının sonunda görselli bağlantı olarak gösterilir; ilk seçilen grup teklif formunda konu olarak gelir.</p>
+              {portfolio.map((group) => (
+                <label key={group.id} className="cmsCheck">
+                  <input type="checkbox" checked={form.relatedProducts.includes(group.id)} onChange={() => toggleProduct(group.id)} />
+                  <span>{tr.productExplorer.items[group.id]?.title || group.id}</span>
                 </label>
               ))}
             </div>

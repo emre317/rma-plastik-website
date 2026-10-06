@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 import ProductFamily, { COLUMN_KEYS, GROUPS, WATER_USES } from '../models/ProductFamily.js';
-import { CONTENT_LANGUAGES } from '../models/Product.js';
+import { CONTENT_LANGUAGES } from '../config/languages.js';
 import { markContentChanged } from '../models/SiteSettings.js';
 
 /*

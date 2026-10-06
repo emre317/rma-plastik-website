@@ -28,7 +28,7 @@ const postSchema = new mongoose.Schema(
     coverImage: { type: String, trim: true, default: '', maxlength: 300 },
     // YouTube video shown under the article (optional)
     youtubeId: { type: String, trim: true, default: '', match: /^$|^[A-Za-z0-9_-]{11}$/ },
-    // Product slugs linked at the end of the article
+    // Product group ids (data/productPortfolio.js) linked at the end of the article
     relatedProducts: [{ type: String, trim: true, maxlength: 120 }],
     i18n: {
       tr: { type: textSchema, default: () => ({}) },

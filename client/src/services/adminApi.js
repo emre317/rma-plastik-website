@@ -4,14 +4,14 @@ export function adminLogin(payload) {
   return request('/auth/login', {
     method: 'POST',
     body: payload,
-    fallbackMessage: 'Login failed.',
+    fallbackMessage: 'Giriş yapılamadı.',
   });
 }
 
 export function getQuoteStats(token) {
   return request('/quote/stats', {
     token,
-    fallbackMessage: 'Statistics could not be loaded.',
+    fallbackMessage: 'İstatistikler yüklenemedi.',
   });
 }
 
@@ -39,14 +39,14 @@ export function getQuotes(
 
   return request(`/quote?${params.toString()}`, {
     token,
-    fallbackMessage: 'Quotes could not be loaded.',
+    fallbackMessage: 'Teklif talepleri yüklenemedi.',
   });
 }
 
 export function getQuoteById(id, token) {
   return request(`/quote/${encodeURIComponent(id)}`, {
     token,
-    fallbackMessage: 'Quote could not be loaded.',
+    fallbackMessage: 'Teklif talebi yüklenemedi.',
   });
 }
 
@@ -55,13 +55,13 @@ export function updateQuoteStatus(id, status, token) {
     method: 'PATCH',
     body: { status },
     token,
-    fallbackMessage: 'Status could not be updated.',
+    fallbackMessage: 'Durum güncellenemedi.',
   });
 }
 
 export function getUnreadQuoteCount(token) {
   return request('/quote/unread-count', {
     token,
-    fallbackMessage: 'Unread count could not be loaded.',
+    fallbackMessage: 'Okunmamış sayısı alınamadı.',
   });
 }

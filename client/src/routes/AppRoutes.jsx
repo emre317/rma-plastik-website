@@ -29,8 +29,6 @@ const AdminLogin = lazy(() => import('../pages/AdminLogin/AdminLogin'));
 const AdminDashboard = lazy(() => import('../pages/AdminDashboard/AdminDashboard'));
 const AdminQuotes = lazy(() => import('../pages/AdminQuotes/AdminQuotes'));
 const AdminQuoteDetail = lazy(() => import('../pages/AdminQuoteDetail/AdminQuoteDetail'));
-const AdminProducts = lazy(() => import('../pages/AdminProducts/AdminProducts'));
-const AdminProductEdit = lazy(() => import('../pages/AdminProductEdit/AdminProductEdit'));
 const AdminProductFamilies = lazy(() => import('../pages/AdminProductFamilies/AdminProductFamilies'));
 const AdminProductFamilyEdit = lazy(() => import('../pages/AdminProductFamilyEdit/AdminProductFamilyEdit'));
 const AdminTexts = lazy(() => import('../pages/AdminTexts/AdminTexts'));
@@ -88,8 +86,6 @@ export default function AppRoutes() {
             path="/admin/quotes/:id"
             element={<AdminQuoteDetail />}
           />
-          <Route path="/admin/products" element={<AdminProducts />} />
-          <Route path="/admin/products/:id" element={<AdminProductEdit />} />
           <Route path="/admin/product-families" element={<AdminProductFamilies />} />
           <Route path="/admin/product-families/:id" element={<AdminProductFamilyEdit />} />
           <Route path="/admin/texts" element={<AdminTexts />} />

@@ -1,6 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Check, LayoutGrid, RotateCcw, Search, SlidersHorizontal, Table2 } from 'lucide-react';
+import {
+  Beaker, Check, Droplets, FlaskConical, LayoutGrid, MoveHorizontal, MoveVertical, RotateCcw,
+  Search, SlidersHorizontal, Table2, UtensilsCrossed, Wand2, X,
+} from 'lucide-react';
 
 import Seo from '../../seo/Seo';
 import PageHeader from '../../components/ui/PageHeader';
@@ -14,10 +17,10 @@ import useModelQuote from '../../hooks/useModelQuote';
 import AddToCartButton from '../../components/quote/AddToCartButton';
 import CompareButton from '../../components/compare/CompareButton';
 import FinderCta from '../../components/ui/FinderCta';
-import { EcoBadge } from '../../components/ui/EcoMarks';
 
 // Every distinct volume is a stop on the volume slider
 const VOLUME_STEPS = waterTanks.length ? [...new Set(waterTanks.map((tank) => tank.volume))].sort((a, b) => a - b) : [0];
+const LAST = VOLUME_STEPS.length - 1;
 const MAX_HEIGHT = Math.max(0, ...waterTanks.map((tank) => tank.height));
 const MIN_HEIGHT = Math.min(MAX_HEIGHT, ...waterTanks.map((tank) => tank.height));
 const MAX_DIAMETER = Math.max(0, ...waterTanks.map((tank) => tank.diameter));
@@ -26,6 +29,8 @@ const OUTLETS = [...new Set(waterTanks.map((tank) => tank.outlet).filter(Boolean
 const USES = WATER_USES.filter((use) => waterTanks.some((tank) => tank.uses.includes(use)));
 const TYPE_COUNT = new Set(waterTanks.map((tank) => `${tank.orientation}-${tank.layer}`)).size;
 const percent = (value, min, max) => (max > min ? ((value - min) / (max - min)) * 100 : 100);
+
+const USE_ICONS = { water: Droplets, food: UtensilsCrossed, chemical: FlaskConical, acid: Beaker };
 
 const PRESETS = [
   [0, 1000],
@@ -37,7 +42,7 @@ const PRESETS = [
 const snapIndex = (volume, mode) => {
   if (mode === 'min') {
     const index = VOLUME_STEPS.findIndex((step) => step >= volume);
-    return index === -1 ? VOLUME_STEPS.length - 1 : index;
+    return index === -1 ? LAST : index;
   }
 
   let index = 0;
@@ -49,11 +54,11 @@ const snapIndex = (volume, mode) => {
 
 const initialFilters = {
   query: '',
+  use: 'all',
   orientation: 'all',
   layer: 'all',
-  uses: [],
   minIndex: 0,
-  maxIndex: VOLUME_STEPS.length - 1,
+  maxIndex: LAST,
   maxHeight: MAX_HEIGHT,
   maxDiameter: MAX_DIAMETER,
   outlet: 'all',
@@ -65,6 +70,23 @@ const SORTERS = {
   heightAsc: (a, b) => a.height - b.height,
   diameterAsc: (a, b) => a.diameter - b.diameter,
 };
+
+const normalise = (value) => String(value).toLocaleLowerCase('tr').replace(/\s+/g, '');
+
+/* Does a tank pass the filters? `skip` leaves one filter out (facet counts) */
+function matches(tank, filters, skip) {
+  const query = normalise(filters.query);
+
+  if (skip !== 'query' && query && !normalise(tank.code).includes(query)) return false;
+  if (skip !== 'use' && filters.use !== 'all' && !tank.uses.includes(filters.use)) return false;
+  if (skip !== 'orientation' && filters.orientation !== 'all' && tank.orientation !== filters.orientation) return false;
+  if (skip !== 'layer' && filters.layer !== 'all' && tank.layer !== filters.layer) return false;
+  if (skip !== 'volume' && (tank.volume < VOLUME_STEPS[filters.minIndex] || tank.volume > VOLUME_STEPS[filters.maxIndex])) return false;
+  if (skip !== 'maxHeight' && tank.height > filters.maxHeight) return false;
+  if (skip !== 'maxDiameter' && tank.diameter > filters.maxDiameter) return false;
+  if (skip !== 'outlet' && filters.outlet !== 'all' && tank.outlet !== filters.outlet) return false;
+  return true;
+}
 
 export default function WaterTanks() {
   const { t } = useTranslation();
@@ -82,64 +104,150 @@ export default function WaterTanks() {
   const num = (value) => formatNumber(value, lang);
 
   const update = (patch) => setFilters((current) => ({ ...current, ...patch }));
+  const reset = () => setFilters(initialFilters);
 
-  const toggleUse = (use) =>
-    update({
-      uses: filters.uses.includes(use) ? filters.uses.filter((item) => item !== use) : [...filters.uses, use],
-    });
+  // Lock page scroll while the filter sheet is open on phones
+  useEffect(() => {
+    if (!filtersOpen) return undefined;
 
-  const results = useMemo(() => {
-    const query = filters.query.trim().toLocaleLowerCase('tr').replace(/\s+/g, '');
-    const minVolume = VOLUME_STEPS[filters.minIndex];
-    const maxVolume = VOLUME_STEPS[filters.maxIndex];
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (event) => event.key === 'Escape' && setFiltersOpen(false);
+    window.addEventListener('keydown', onKey);
 
-    return waterTanks
-      .filter((tank) => {
-        if (query && !tank.code.toLocaleLowerCase('tr').replace(/\s+/g, '').includes(query)) return false;
-        if (filters.orientation !== 'all' && tank.orientation !== filters.orientation) return false;
-        if (filters.layer !== 'all' && tank.layer !== filters.layer) return false;
-        if (filters.uses.some((use) => !tank.uses.includes(use))) return false;
-        if (tank.volume < minVolume || tank.volume > maxVolume) return false;
-        if (tank.height > filters.maxHeight) return false;
-        if (tank.diameter > filters.maxDiameter) return false;
-        if (filters.outlet !== 'all' && tank.outlet !== filters.outlet) return false;
-        return true;
-      })
-      .sort(SORTERS[sort]);
-  }, [filters, sort]);
+    return () => {
+      document.body.style.overflow = previous;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [filtersOpen]);
+
+  const results = useMemo(
+    () => waterTanks.filter((tank) => matches(tank, filters)).sort(SORTERS[sort]),
+    [filters, sort]
+  );
+
+  // How many models an option would show, given the other filters
+  const facet = (skip, test) => waterTanks.filter((tank) => matches(tank, filters, skip) && test(tank)).length;
 
   const activePreset = PRESETS.findIndex(
     ([min, max]) => filters.minIndex === snapIndex(min, 'min') && filters.maxIndex === snapIndex(max, 'max')
   );
 
-  const changed = JSON.stringify(filters) !== JSON.stringify(initialFilters);
-
   const features = t('waterTanks.features', { returnObjects: true });
 
   const rangeStyle = {
-    '--from': `${percent(filters.minIndex, 0, VOLUME_STEPS.length - 1)}%`,
-    '--to': `${VOLUME_STEPS.length > 1 ? percent(filters.maxIndex, 0, VOLUME_STEPS.length - 1) : 100}%`,
+    '--from': `${percent(filters.minIndex, 0, LAST)}%`,
+    '--to': `${LAST > 0 ? percent(filters.maxIndex, 0, LAST) : 100}%`,
   };
 
-  const badges = (tank) => [
-    w(tank.orientation),
-    tank.layer === 'double' ? w('double') : w('single'),
-  ];
-
-  // Model shown in the quote form / cart (image, family and measurements)
+  // Model shown in the quote form / list (image, family and measurements)
   const quoteFor = (tank) => quoteForModel(tank.familyData, tank);
+  const typeLabel = (tank) => `${w(tank.orientation)} · ${tank.layer === 'double' ? w('double') : w('single')}`;
 
-  const choice = (name, value, label, hint) => (
-    <button
-      type="button"
-      className={`wtChoice ${filters[name] === value ? 'active' : ''}`}
-      aria-pressed={filters[name] === value}
-      onClick={() => update({ [name]: value })}
-    >
-      <span>{label}</span>
-      {hint && <small>{hint}</small>}
-    </button>
-  );
+  // Active filters as removable chips
+  const active = [
+    filters.query && { key: 'query', label: `${w('search')}: ${filters.query}`, clear: { query: '' } },
+    filters.use !== 'all' && { key: 'use', label: w(`uses.${filters.use}`), clear: { use: 'all' } },
+    filters.orientation !== 'all' && { key: 'orientation', label: w(filters.orientation), clear: { orientation: 'all' } },
+    filters.layer !== 'all' && { key: 'layer', label: w(filters.layer), clear: { layer: 'all' } },
+    (filters.minIndex > 0 || filters.maxIndex < LAST) && {
+      key: 'volume',
+      label: `${num(VOLUME_STEPS[filters.minIndex])} – ${num(VOLUME_STEPS[filters.maxIndex])} L`,
+      clear: { minIndex: 0, maxIndex: LAST },
+    },
+    filters.maxHeight < MAX_HEIGHT && { key: 'maxHeight', label: `${col('height')} ≤ ${filters.maxHeight}`, clear: { maxHeight: MAX_HEIGHT } },
+    filters.maxDiameter < MAX_DIAMETER && { key: 'maxDiameter', label: `${col('diameter')} ≤ ${filters.maxDiameter}`, clear: { maxDiameter: MAX_DIAMETER } },
+    filters.outlet !== 'all' && { key: 'outlet', label: `${col('outlet')}: ${filters.outlet}`, clear: { outlet: 'all' } },
+  ].filter(Boolean);
+
+  const option = (name, value, label, count, hint) => {
+    const selected = filters[name] === value;
+
+    return (
+      <button
+        type="button"
+        className={`wtOption ${selected ? 'active' : ''}`}
+        aria-pressed={selected}
+        disabled={!selected && count === 0}
+        onClick={() => update({ [name]: value })}
+      >
+        <span className="wtOptionText">
+          <span>{label}</span>
+          {hint && <small>{hint}</small>}
+        </span>
+        <span className="wtOptionCount">{count}</span>
+      </button>
+    );
+  };
+
+  const cards = results.map((tank) => (
+    <li key={tank.code} className="wtCard">
+      <LocalizedLink to={modelPath(tank.familyData, tank)} className="wtCardMedia">
+        <img src={tank.image} alt={`${tank.code} – ${num(tank.volume)} L`} loading="lazy" decoding="async" />
+        <span className="wtCardType">{typeLabel(tank)}</span>
+      </LocalizedLink>
+
+      <div className="wtCardBody">
+        <div className="wtCardTitle">
+          <h3>
+            <LocalizedLink to={modelPath(tank.familyData, tank)}>{tank.code}</LocalizedLink>
+          </h3>
+          <strong>
+            {num(tank.volume)}
+            <small> L</small>
+          </strong>
+        </div>
+
+        <ul className="wtDims">
+          <li title={col('diameter')}>
+            <span>Ø</span>
+            {tank.diameter}
+          </li>
+          <li title={col('height')}>
+            <MoveVertical aria-hidden="true" />
+            {tank.height}
+          </li>
+          {tank.length && (
+            <li title={col('length')}>
+              <MoveHorizontal aria-hidden="true" />
+              {tank.length}
+            </li>
+          )}
+          <li className="wtDimsUnit">cm</li>
+        </ul>
+
+        <ul className="wtUses" aria-label={w('use')}>
+          {tank.uses.map((use) => (
+            <li key={use}>{w(`uses.${use}`)}</li>
+          ))}
+        </ul>
+
+        <div className="wtCardActions">
+          <button type="button" className="wtQuote" onClick={() => openQuote(quoteFor(tank))}>
+            {w('quote')}
+            <Arrow />
+          </button>
+          <AddToCartButton product={quoteFor(tank)} compact iconOnly />
+          <CompareButton family={tank.familyData} row={tank} compact iconOnly />
+        </div>
+      </div>
+    </li>
+  ));
+
+  // A help card after the sixth model
+  if (cards.length > 6) {
+    cards.splice(6, 0, (
+      <li key="help" className="wtHelpCard">
+        <span className="wtHelpIcon" aria-hidden="true"><Wand2 /></span>
+        <h3>{w('helpTitle')}</h3>
+        <p>{w('helpText')}</p>
+        <LocalizedLink to="/tank-finder" className="wtHelpLink">
+          {t('finder.cta')}
+          <Arrow />
+        </LocalizedLink>
+      </li>
+    ));
+  }
 
   return (
     <main className="internalPage wtPage">
@@ -169,188 +277,251 @@ export default function WaterTanks() {
         ]}
         facts={[
           { value: waterTanks.length, label: w('statModels') },
-          { value: `${num(VOLUME_STEPS[0])} – ${num(VOLUME_STEPS[VOLUME_STEPS.length - 1])} L`, label: w('statRange') },
+          { value: `${num(VOLUME_STEPS[0])} – ${num(VOLUME_STEPS[LAST])} L`, label: w('statRange') },
           { value: TYPE_COUNT, label: w('statTypes') },
         ]}
       />
+
+      {/* Step 1: what will be stored */}
+      <section className="wtUseBar" aria-labelledby="wt-use-title">
+        <div className="container">
+          <h2 id="wt-use-title">{w('useQuestion')}</h2>
+          <div className="wtUseTiles" role="group">
+            {[ 'all', ...USES ].map((use) => {
+              const Icon = USE_ICONS[use] || LayoutGrid;
+              const selected = filters.use === use;
+              const count = use === 'all' ? facet('use', () => true) : facet('use', (tank) => tank.uses.includes(use));
+
+              return (
+                <button
+                  key={use}
+                  type="button"
+                  className={`wtUseTile ${selected ? 'active' : ''}`}
+                  aria-pressed={selected}
+                  onClick={() => update({ use })}
+                >
+                  <span className="wtUseIcon" aria-hidden="true"><Icon /></span>
+                  <span className="wtUseText">
+                    <strong>{use === 'all' ? w('allUses') : w(`uses.${use}`)}</strong>
+                    <small>{w('modelCount', { count })}</small>
+                  </span>
+                  {selected && <Check className="wtUseCheck" aria-hidden="true" />}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
       <section className="wtFinder">
         <div className="container">
           <div className="wtLayout">
 
-            {/* Filters */}
+            {/* Filters (a sheet on phones) */}
+            <div className={`wtSheetBackdrop ${filtersOpen ? 'open' : ''}`} onClick={() => setFiltersOpen(false)} aria-hidden="true" />
+
             <aside className={`wtFilters ${filtersOpen ? 'open' : ''}`} aria-label={w('filters')}>
               <div className="wtFiltersHead">
                 <h2>
                   <SlidersHorizontal aria-hidden="true" />
                   {w('filters')}
+                  {active.length > 0 && <span className="wtBadge">{active.length}</span>}
                 </h2>
-                {changed && (
-                  <button type="button" className="wtReset" onClick={() => setFilters(initialFilters)}>
+                {active.length > 0 && (
+                  <button type="button" className="wtReset" onClick={reset}>
                     <RotateCcw aria-hidden="true" />
-                    {w('reset')}
+                    {w('resetShort')}
                   </button>
                 )}
+                <button type="button" className="wtSheetClose" onClick={() => setFiltersOpen(false)} aria-label={w('hideFilters')}>
+                  <X aria-hidden="true" />
+                </button>
               </div>
 
-              <label className="wtSearch">
-                <span className="wtFilterLabel">{w('search')}</span>
-                <span className="wtSearchField">
-                  <Search aria-hidden="true" />
-                  <input
-                    type="search"
-                    value={filters.query}
-                    placeholder={w('searchPlaceholder')}
-                    onChange={(event) => update({ query: event.target.value })}
-                  />
-                </span>
-              </label>
+              <div className="wtFiltersBody">
+                <label className="wtSearch">
+                  <span className="wtFilterLabel">{w('search')}</span>
+                  <span className="wtSearchField">
+                    <Search aria-hidden="true" />
+                    <input
+                      type="search"
+                      value={filters.query}
+                      placeholder={w('searchPlaceholder')}
+                      onChange={(event) => update({ query: event.target.value })}
+                    />
+                  </span>
+                </label>
 
-              <fieldset className="wtGroup">
-                <legend className="wtFilterLabel">{w('orientation')}</legend>
-                <div className="wtChoices three">
-                  {choice('orientation', 'all', w('all'))}
-                  {choice('orientation', 'vertical', w('vertical'))}
-                  {choice('orientation', 'horizontal', w('horizontal'))}
-                </div>
-              </fieldset>
+                <fieldset className="wtGroup">
+                  <legend className="wtFilterLabel">{w('orientation')}</legend>
+                  <div className="wtSegment">
+                    {['all', 'vertical', 'horizontal'].map((value) => {
+                      const count = facet('orientation', (tank) => value === 'all' || tank.orientation === value);
+                      const selected = filters.orientation === value;
 
-              <fieldset className="wtGroup">
-                <legend className="wtFilterLabel">{w('layer')}</legend>
-                <div className="wtChoices stack">
-                  {choice('layer', 'all', w('all'))}
-                  {choice('layer', 'single', w('single'), w('singleHint'))}
-                  {choice('layer', 'double', w('double'), w('doubleHint'))}
-                </div>
-              </fieldset>
+                      return (
+                        <button
+                          key={value}
+                          type="button"
+                          className={selected ? 'active' : ''}
+                          aria-pressed={selected}
+                          disabled={!selected && count === 0}
+                          onClick={() => update({ orientation: value })}
+                        >
+                          {w(value)}
+                          <small>{count}</small>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </fieldset>
 
-              <fieldset className="wtGroup">
-                <legend className="wtFilterLabel">{w('use')}</legend>
-                <div className="wtChips">
-                  {USES.map((use) => {
-                    const on = filters.uses.includes(use);
-                    return (
-                      <button key={use} type="button" className={`wtChip ${on ? 'active' : ''}`} aria-pressed={on} onClick={() => toggleUse(use)}>
-                        {on && <Check aria-hidden="true" />}
-                        {w(`uses.${use}`)}
+                <fieldset className="wtGroup">
+                  <legend className="wtFilterLabel">{w('layer')}</legend>
+                  <div className="wtOptions">
+                    {option('layer', 'all', w('all'), facet('layer', () => true))}
+                    {option('layer', 'single', w('single'), facet('layer', (tank) => tank.layer === 'single'), w('singleHint'))}
+                    {option('layer', 'double', w('double'), facet('layer', (tank) => tank.layer === 'double'), w('doubleHint'))}
+                  </div>
+                </fieldset>
+
+                <fieldset className="wtGroup">
+                  <legend className="wtFilterLabel">{w('volume')}</legend>
+
+                  <div className="wtRangeValues">
+                    <span>
+                      <small>{w('min')}</small>
+                      <strong>{num(VOLUME_STEPS[filters.minIndex])} L</strong>
+                    </span>
+                    <span>
+                      <small>{w('max')}</small>
+                      <strong>{num(VOLUME_STEPS[filters.maxIndex])} L</strong>
+                    </span>
+                  </div>
+
+                  <div className="wtRange" style={rangeStyle}>
+                    <input
+                      type="range"
+                      min="0"
+                      max={LAST}
+                      value={filters.minIndex}
+                      aria-label={`${w('volume')} – ${w('min')}`}
+                      onChange={(event) => update({ minIndex: Math.min(Number(event.target.value), filters.maxIndex) })}
+                    />
+                    <input
+                      type="range"
+                      min="0"
+                      max={LAST}
+                      value={filters.maxIndex}
+                      aria-label={`${w('volume')} – ${w('max')}`}
+                      onChange={(event) => update({ maxIndex: Math.max(Number(event.target.value), filters.minIndex) })}
+                    />
+                  </div>
+
+                  <div className="wtPresets">
+                    {PRESETS.map(([min, max], index) => (
+                      <button
+                        key={min}
+                        type="button"
+                        className={activePreset === index ? 'active' : ''}
+                        aria-pressed={activePreset === index}
+                        onClick={() =>
+                          activePreset === index
+                            ? update({ minIndex: 0, maxIndex: LAST })
+                            : update({ minIndex: snapIndex(min, 'min'), maxIndex: snapIndex(max, 'max') })
+                        }
+                      >
+                        {max === Infinity ? `${num(min)}+` : min === 0 ? `≤ ${num(max)}` : `${num(min)} – ${num(max)}`}
                       </button>
-                    );
-                  })}
-                </div>
-              </fieldset>
+                    ))}
+                  </div>
+                </fieldset>
 
-              <fieldset className="wtGroup">
-                <legend className="wtFilterLabel">{w('volume')}</legend>
+                <fieldset className="wtGroup">
+                  <legend className="wtFilterLabel">{w('spaceTitle')}</legend>
+                  <p className="wtGroupHint">{w('spaceHint')}</p>
 
-                <div className="wtRangeValues">
-                  <strong>{num(VOLUME_STEPS[filters.minIndex])}</strong>
-                  <span>—</span>
-                  <strong>{num(VOLUME_STEPS[filters.maxIndex])}</strong>
-                </div>
+                  <label className="wtSliderField">
+                    <span>
+                      {w('maxHeight')}
+                      <em>{filters.maxHeight >= MAX_HEIGHT ? w('noLimit') : `≤ ${filters.maxHeight} cm`}</em>
+                    </span>
+                    <input
+                      className="wtSlider"
+                      type="range"
+                      min={MIN_HEIGHT}
+                      max={MAX_HEIGHT}
+                      step="1"
+                      value={filters.maxHeight}
+                      style={{ '--fill': `${percent(filters.maxHeight, MIN_HEIGHT, MAX_HEIGHT)}%` }}
+                      onChange={(event) => update({ maxHeight: Number(event.target.value) })}
+                    />
+                  </label>
 
-                <div className="wtRange" style={rangeStyle}>
-                  <input
-                    type="range"
-                    min="0"
-                    max={VOLUME_STEPS.length - 1}
-                    value={filters.minIndex}
-                    aria-label={`${w('volume')} min`}
-                    onChange={(event) => update({ minIndex: Math.min(Number(event.target.value), filters.maxIndex) })}
-                  />
-                  <input
-                    type="range"
-                    min="0"
-                    max={VOLUME_STEPS.length - 1}
-                    value={filters.maxIndex}
-                    aria-label={`${w('volume')} max`}
-                    onChange={(event) => update({ maxIndex: Math.max(Number(event.target.value), filters.minIndex) })}
-                  />
-                </div>
+                  <label className="wtSliderField">
+                    <span>
+                      {w('maxDiameter')}
+                      <em>{filters.maxDiameter >= MAX_DIAMETER ? w('noLimit') : `≤ ${filters.maxDiameter} cm`}</em>
+                    </span>
+                    <input
+                      className="wtSlider"
+                      type="range"
+                      min={MIN_DIAMETER}
+                      max={MAX_DIAMETER}
+                      step="1"
+                      value={filters.maxDiameter}
+                      style={{ '--fill': `${percent(filters.maxDiameter, MIN_DIAMETER, MAX_DIAMETER)}%` }}
+                      onChange={(event) => update({ maxDiameter: Number(event.target.value) })}
+                    />
+                  </label>
+                </fieldset>
 
-                <span className="wtFilterLabel wtSubLabel">{w('presets')}</span>
-                <div className="wtChips">
-                  {PRESETS.map(([min, max], index) => (
-                    <button
-                      key={min}
-                      type="button"
-                      className={`wtChip ${activePreset === index ? 'active' : ''}`}
-                      aria-pressed={activePreset === index}
-                      onClick={() =>
-                        activePreset === index
-                          ? update({ minIndex: 0, maxIndex: VOLUME_STEPS.length - 1 })
-                          : update({ minIndex: snapIndex(min, 'min'), maxIndex: snapIndex(max, 'max') })
-                      }
-                    >
-                      {max === Infinity ? `${num(min)}+` : min === 0 ? `≤ ${num(max)}` : `${num(min)} – ${num(max)}`}
-                    </button>
-                  ))}
-                </div>
-              </fieldset>
+                <fieldset className="wtGroup">
+                  <legend className="wtFilterLabel">{w('outlet')}</legend>
+                  <div className="wtPresets">
+                    {['all', ...OUTLETS].map((outlet) => {
+                      const selected = filters.outlet === outlet;
+                      const count = facet('outlet', (tank) => outlet === 'all' || tank.outlet === outlet);
 
-              <fieldset className="wtGroup">
-                <legend className="wtFilterLabel">
-                  {w('maxHeight')}
-                  <em>{filters.maxHeight >= MAX_HEIGHT ? w('noLimit') : `${filters.maxHeight} cm`}</em>
-                </legend>
-                <input
-                  className="wtSlider"
-                  type="range"
-                  min={MIN_HEIGHT}
-                  max={MAX_HEIGHT}
-                  step="1"
-                  value={filters.maxHeight}
-                  style={{ '--fill': `${percent(filters.maxHeight, MIN_HEIGHT, MAX_HEIGHT)}%` }}
-                  aria-label={w('maxHeight')}
-                  onChange={(event) => update({ maxHeight: Number(event.target.value) })}
-                />
-              </fieldset>
+                      return (
+                        <button
+                          key={outlet}
+                          type="button"
+                          className={selected ? 'active' : ''}
+                          aria-pressed={selected}
+                          disabled={!selected && count === 0}
+                          onClick={() => update({ outlet })}
+                        >
+                          <span dir="ltr">{outlet === 'all' ? w('all') : outlet}</span>
+                          <small>{count}</small>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </fieldset>
+              </div>
 
-              <fieldset className="wtGroup">
-                <legend className="wtFilterLabel">
-                  {w('maxDiameter')}
-                  <em>{filters.maxDiameter >= MAX_DIAMETER ? w('noLimit') : `${filters.maxDiameter} cm`}</em>
-                </legend>
-                <input
-                  className="wtSlider"
-                  type="range"
-                  min={MIN_DIAMETER}
-                  max={MAX_DIAMETER}
-                  step="1"
-                  value={filters.maxDiameter}
-                  style={{ '--fill': `${percent(filters.maxDiameter, MIN_DIAMETER, MAX_DIAMETER)}%` }}
-                  aria-label={w('maxDiameter')}
-                  onChange={(event) => update({ maxDiameter: Number(event.target.value) })}
-                />
-              </fieldset>
-
-              <fieldset className="wtGroup">
-                <legend className="wtFilterLabel">{w('outlet')}</legend>
-                <div className="wtChips">
-                  {['all', ...OUTLETS].map((outlet) => (
-                    <button
-                      key={outlet}
-                      type="button"
-                      className={`wtChip ${filters.outlet === outlet ? 'active' : ''}`}
-                      aria-pressed={filters.outlet === outlet}
-                      onClick={() => update({ outlet })}
-                    >
-                      {outlet === 'all' ? w('all') : outlet}
-                    </button>
-                  ))}
-                </div>
-              </fieldset>
+              <div className="wtSheetFoot">
+                <button type="button" className="wtReset" onClick={reset} disabled={active.length === 0}>
+                  {w('resetShort')}
+                </button>
+                <button type="button" className="button primary" onClick={() => setFiltersOpen(false)}>
+                  <span>{w('showResults', { count: results.length })}</span>
+                </button>
+              </div>
             </aside>
 
             {/* Results */}
             <div className="wtResults">
               <div className="wtToolbar">
-                <button type="button" className="wtFilterToggle" aria-expanded={filtersOpen} onClick={() => setFiltersOpen((open) => !open)}>
+                <button type="button" className="wtFilterToggle" aria-expanded={filtersOpen} onClick={() => setFiltersOpen(true)}>
                   <SlidersHorizontal aria-hidden="true" />
-                  {filtersOpen ? w('hideFilters') : w('showFilters')}
+                  {w('filters')}
+                  {active.length > 0 && <span className="wtBadge">{active.length}</span>}
                 </button>
 
                 <p className="wtCount" aria-live="polite">
-                  {w('results', { count: results.length })}
+                  <strong>{results.length}</strong> {w('resultsOf', { total: waterTanks.length })}
                 </p>
 
                 <label className="wtSort">
@@ -365,105 +536,49 @@ export default function WaterTanks() {
                 </label>
 
                 <div className="wtView" role="group">
-                  <button type="button" aria-pressed={view === 'cards'} className={view === 'cards' ? 'active' : ''} onClick={() => setView('cards')}>
+                  <button type="button" aria-pressed={view === 'cards'} className={view === 'cards' ? 'active' : ''} onClick={() => setView('cards')} title={w('cards')}>
                     <LayoutGrid aria-hidden="true" />
                     <span>{w('cards')}</span>
                   </button>
-                  <button type="button" aria-pressed={view === 'table'} className={view === 'table' ? 'active' : ''} onClick={() => setView('table')}>
+                  <button type="button" aria-pressed={view === 'table'} className={view === 'table' ? 'active' : ''} onClick={() => setView('table')} title={w('table')}>
                     <Table2 aria-hidden="true" />
                     <span>{w('table')}</span>
                   </button>
                 </div>
               </div>
 
+              {active.length > 0 && (
+                <div className="wtActive">
+                  {active.map((item) => (
+                    <button key={item.key} type="button" onClick={() => update(item.clear)}>
+                      {item.label}
+                      <X aria-hidden="true" />
+                    </button>
+                  ))}
+                  <button type="button" className="wtActiveClear" onClick={reset}>
+                    {w('reset')}
+                  </button>
+                </div>
+              )}
+
               {results.length === 0 && (
                 <div className="wtEmpty">
+                  <span className="wtHelpIcon" aria-hidden="true"><Search /></span>
                   <h3>{w('noResults')}</h3>
                   <p>{w('noResultsHint')}</p>
                   <div>
-                    <button type="button" className="button primary" onClick={() => setFilters(initialFilters)}>
+                    <button type="button" className="button primary" onClick={reset}>
                       <span>{w('reset')}</span>
                     </button>
-                    <LocalizedLink to="/contact" className="wtTextLink">
+                    <button type="button" className="wtTextLink" onClick={() => openQuote(t('contact.customRequirement'))}>
                       {w('contact')}
                       <Arrow />
-                    </LocalizedLink>
+                    </button>
                   </div>
                 </div>
               )}
 
-              {results.length > 0 && view === 'cards' && (
-                <ul className="wtCards">
-                  {results.map((tank) => (
-                    <li key={tank.code} className="wtCard">
-                      <LocalizedLink to={modelPath(tank.familyData, tank)} className="wtCardMedia">
-                        <img src={tank.image} alt={`${tank.code} – ${num(tank.volume)} L`} loading="lazy" decoding="async" />
-                        <span className="wtCardBadges">
-                          {badges(tank).map((badge) => (
-                            <span key={badge}>{badge}</span>
-                          ))}
-                        </span>
-                      </LocalizedLink>
-
-                      <div className="wtCardBody">
-                        <div className="wtCardTitle">
-                          <h3>
-                            <LocalizedLink to={modelPath(tank.familyData, tank)}>{tank.code}</LocalizedLink>
-                          </h3>
-                          <strong>
-                            {num(tank.volume)}
-                            <small> L</small>
-                          </strong>
-                        </div>
-
-                        <dl className="wtSpecs">
-                          <div>
-                            <dt>{col('diameter')}</dt>
-                            <dd>{tank.diameter}</dd>
-                          </div>
-                          <div>
-                            <dt>{col('height')}</dt>
-                            <dd>{tank.height}</dd>
-                          </div>
-                          {tank.length && (
-                            <div>
-                              <dt>{col('length')}</dt>
-                              <dd>{tank.length}</dd>
-                            </div>
-                          )}
-                          <div>
-                            <dt>{col('cap')}</dt>
-                            <dd>{tank.cap}</dd>
-                          </div>
-                          {tank.outlet && (
-                            <div>
-                              <dt>{col('outlet')}</dt>
-                              <dd>{tank.outlet}</dd>
-                            </div>
-                          )}
-                        </dl>
-
-                        <ul className="wtUses">
-                          {tank.uses.map((use) => (
-                            <li key={use}>{w(`uses.${use}`)}</li>
-                          ))}
-                        </ul>
-
-                        <div className="wtCardActions">
-                          <button type="button" className="wtQuote" onClick={() => openQuote(quoteFor(tank))}>
-                            {w('quote')}
-                            <Arrow />
-                          </button>
-                          <span className="wtCardSide">
-                            <CompareButton family={tank.familyData} row={tank} compact />
-                            <AddToCartButton product={quoteFor(tank)} compact />
-                          </span>
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              {results.length > 0 && view === 'cards' && <ul className="wtCards">{cards}</ul>}
 
               {results.length > 0 && view === 'table' && (
                 <div className="ptTableWrap">
@@ -489,7 +604,7 @@ export default function WaterTanks() {
                           <td>{tank.length ?? '–'}</td>
                           <td>{tank.cap}</td>
                           <td>{tank.outlet ?? '–'}</td>
-                          <td>{badges(tank).join(' · ')}</td>
+                          <td>{typeLabel(tank)}</td>
                           <td>
                             <span className="ptRowActions">
                               <button type="button" className="ptRowQuote" onClick={() => openQuote(quoteFor(tank))}>
@@ -527,18 +642,14 @@ export default function WaterTanks() {
             </div>
 
             <div className="wtStandardLinks">
-              <div className="wtEco">
-                <EcoBadge type="recycle" tone="glass" />
-                <EcoBadge type="solar" tone="glass" />
-              </div>
               <LocalizedLink to="/product-tables" className="button primary">
                 <span>{w('allTables')}</span>
                 <Arrow className="buttonArrow" />
               </LocalizedLink>
-              <LocalizedLink to="/contact" className="wtTextLink">
+              <button type="button" className="wtTextLink" onClick={() => openQuote(t('contact.customRequirement'))}>
                 {w('contact')}
                 <Arrow />
-              </LocalizedLink>
+              </button>
             </div>
           </div>
         </div>

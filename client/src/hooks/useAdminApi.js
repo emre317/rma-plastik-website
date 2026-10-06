@@ -7,7 +7,7 @@ import { clearAdminSession, getAdminToken, isAuthError } from '../services/admin
   Runs an admin API call with the stored token; an expired session sends the
   user back to the login page instead of showing a broken screen.
     const call = useAdminApi();
-    const data = await call(listProducts);
+    const data = await call(listPosts);
 */
 export default function useAdminApi() {
   const navigate = useNavigate();

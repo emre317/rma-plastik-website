@@ -14,8 +14,8 @@ const LANGS = [
   { code: 'ar', label: 'العربية', dir: 'rtl' },
 ];
 
-// Products have their own editor; these sections are not page copy
-const EXCLUDED = ['catalog', 'language'];
+// Not page copy
+const EXCLUDED = ['language'];
 
 const SECTION_LABELS = {
   meta: 'SEO – sayfa başlıkları ve açıklamaları',

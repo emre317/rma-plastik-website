@@ -1,5 +1,5 @@
 /*
-  Downloads the published content snapshot (products, texts, settings) from the API
+  Downloads the published content snapshot (product tables, texts, settings, posts, videos) from the API
   into src/data/content.live.json so the build bakes it into every page.
 
   - CONTENT_API_URL set (admin "Publish", or `npm run content:pull`): the download
@@ -30,7 +30,7 @@ try {
 
   const data = await response.json();
 
-  if (data?.version !== 1 || !Array.isArray(data.products)) {
+  if (data?.version !== 1 || typeof data.texts !== 'object') {
     throw new Error('Unexpected response');
   }
 
@@ -47,11 +47,6 @@ try {
     });
   });
 
-  // No products in the database yet: keep the built-in catalogue
-  if (data.products.length === 0) {
-    data.products = null;
-  }
-
   // No product tables in the database yet: keep the built-in brochure tables
   if (!Array.isArray(data.productFamilies) || data.productFamilies.length === 0) {
     data.productFamilies = null;
@@ -59,7 +54,7 @@ try {
 
   fs.writeFileSync(target, `${JSON.stringify(data, null, 2)}\n`);
 
-  console.log(`Content: ${data.products?.length ?? 'built-in'} products, saved to src/data/content.live.json`);
+  console.log(`Content: ${data.productFamilies?.length ?? 'built-in'} product tables, saved to src/data/content.live.json`);
 } catch (error) {
   console.error(`Content: could not load ${url} (${error.message})`);
   process.exit(1);

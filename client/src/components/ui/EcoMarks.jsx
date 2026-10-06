@@ -1,5 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { CarFront, Recycle, ShieldCheck, Sun } from 'lucide-react';
+import { CarFront, Leaf, Recycle, ShieldCheck, Sun } from 'lucide-react';
+
+import { LocalizedLink } from '../i18n/LocalizedLink';
+import Arrow from '../i18n/Arrow';
 
 /*
   Quiet sustainability cues used across the site. Only facts from the
@@ -28,31 +31,46 @@ export function EcoBadge({ type, tone = 'light', withText = false }) {
   );
 }
 
-/* Row of cues (footer) */
-export function EcoStrip({ types = ['solar', 'noWaste', 'recycle', 'ev'] }) {
+/*
+  Responsible-production band (home page, custom molding page): a short
+  statement with the brochure facts and a link to the company page section.
+*/
+export function SustainabilityBand({ types = ['solar', 'noWaste', 'ev', 'recycle'] }) {
   const { t } = useTranslation();
 
   return (
-    <div className="ecoStrip">
-      <span className="ecoStripTitle">
-        <i aria-hidden="true" />
-        {t('eco.title')}
-      </span>
+    <section className="ecoBand" aria-labelledby="eco-band-title">
+      <div className="container">
+        <div className="ecoBandPanel">
+          <div className="ecoBandIntro">
+            <span className="ecoBandEyebrow">
+              <Leaf aria-hidden="true" />
+              {t('eco.title')}
+            </span>
+            <h2 id="eco-band-title">
+              {t('pages.company.eco.title')}
+              <span>{t('pages.company.eco.titleAccent')}</span>
+            </h2>
+            <LocalizedLink to="/company#sustainability" className="ecoBandLink">
+              {t('eco.more')}
+              <Arrow />
+            </LocalizedLink>
+          </div>
 
-      <ul>
-        {types.map((type) => {
-          const Icon = MARKS[type];
-          return (
-            <li key={type}>
-              <span className="ecoStripIcon" aria-hidden="true"><Icon /></span>
-              <span>
-                <strong>{t(`eco.${type}`)}</strong>
-                <small>{t(`eco.${type}Text`)}</small>
-              </span>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+          <ul className="ecoBandList">
+            {types.map((type) => {
+              const Icon = MARKS[type];
+              return (
+                <li key={type}>
+                  <span className="ecoBandIcon" aria-hidden="true"><Icon /></span>
+                  <strong>{t(`eco.${type}`)}</strong>
+                  <small>{t(`eco.${type}Text`)}</small>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
+    </section>
   );
 }

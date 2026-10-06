@@ -8,7 +8,7 @@ import Arrow from '../../components/i18n/Arrow';
 import YouTubeEmbed from '../../components/content/YouTubeEmbed';
 import { useQuote } from '../../components/quote/QuoteContext';
 import posts, { postLanguages } from '../../data/posts';
-import useProducts from '../../hooks/useProducts';
+import portfolio, { LEGACY_PRODUCT_GROUPS } from '../../data/productPortfolio';
 import NotFound from '../NotFound/NotFound';
 import { formatPostDate } from '../Blog/Blog';
 
@@ -16,7 +16,6 @@ export default function BlogPost() {
   const { t } = useTranslation();
   const { lang, slug } = useParams();
   const { openQuote } = useQuote();
-  const products = useProducts();
 
   const post = posts.find((item) => item.slug === slug);
   const languages = post ? postLanguages(post) : [];
@@ -27,7 +26,9 @@ export default function BlogPost() {
   }
 
   const text = post.i18n[lang];
-  const related = products.filter((product) => post.relatedProducts?.includes(product.slug));
+  // Related product groups (older posts stored generic product slugs)
+  const relatedIds = [...new Set((post.relatedProducts || []).map((id) => LEGACY_PRODUCT_GROUPS[id] || id))];
+  const related = relatedIds.map((id) => portfolio.find((group) => group.id === id)).filter(Boolean);
   const image = post.coverImage ? absoluteUrl(post.coverImage) : OG_IMAGE;
   const url = absoluteUrl(`/${lang}/blog/${post.slug}`);
 
@@ -104,11 +105,14 @@ export default function BlogPost() {
             <aside className="blogRelated">
               <h2>{t('blog.relatedProducts')}</h2>
               <div className="blogRelatedList">
-                {related.map((product) => (
-                  <LocalizedLink key={product.slug} to={`/products/${product.slug}`} className="blogRelatedItem">
+                {related.map((group) => (
+                  <LocalizedLink key={group.id} to={group.link} className="blogRelatedItem">
+                    <span className="blogRelatedThumb" aria-hidden="true">
+                      <img src={group.image} alt="" loading="lazy" />
+                    </span>
                     <span>
-                      <strong>{product.name}</strong>
-                      <small>{product.capacity}</small>
+                      <strong>{t(`productExplorer.items.${group.id}.title`)}</strong>
+                      <small>{t(`productExplorer.items.${group.id}.application`)}</small>
                     </span>
                     <Arrow />
                   </LocalizedLink>
@@ -122,7 +126,7 @@ export default function BlogPost() {
               <h2>{t('blog.ctaTitle')}</h2>
               <p>{t('blog.ctaText')}</p>
             </div>
-            <button type="button" className="button primary" onClick={() => openQuote(related[0]?.quoteName || '')}>
+            <button type="button" className="button primary" onClick={() => openQuote(related[0] ? t(`productExplorer.items.${related[0].id}.title`) : '')}>
               <span>{t('common.requestQuote')}</span>
               <Arrow className="buttonArrow" />
             </button>

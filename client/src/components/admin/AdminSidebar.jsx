@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'react';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
-  NavLink,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+  ExternalLink, FileText, Inbox, LayoutDashboard, LogOut, Menu, PlayCircle, Settings, Table2, Type, X,
+} from 'lucide-react';
 
-import {
-  getUnreadQuoteCount,
-} from '../../services/adminApi';
+import { getUnreadQuoteCount } from '../../services/adminApi';
 import PublishPanel from './PublishPanel';
-
+import BrandLogo from '../BrandLogo';
 import {
   QUOTES_CHANGED_EVENT,
   clearAdminSession,
@@ -17,6 +14,36 @@ import {
   getAdminUser,
   isAuthError,
 } from '../../services/adminAuth';
+
+const NAV = [
+  {
+    group: 'Genel',
+    items: [
+      { to: '/admin', label: 'Özet', icon: LayoutDashboard, end: true },
+      { to: '/admin/quotes', label: 'Teklif talepleri', icon: Inbox, badge: true },
+    ],
+  },
+  {
+    group: 'Katalog',
+    items: [
+      { to: '/admin/product-families', label: 'Ürün tabloları', icon: Table2, hint: 'Ürün ve su deposu modelleri' },
+    ],
+  },
+  {
+    group: 'İçerik',
+    items: [
+      { to: '/admin/posts', label: 'Blog yazıları', icon: FileText },
+      { to: '/admin/videos', label: 'Videolar', icon: PlayCircle },
+      { to: '/admin/texts', label: 'Sayfa metinleri', icon: Type },
+    ],
+  },
+  {
+    group: 'Ayarlar',
+    items: [
+      { to: '/admin/settings', label: 'Site ayarları', icon: Settings, hint: 'Telefon, e-posta, adres' },
+    ],
+  },
+];
 
 export default function AdminSidebar() {
   const navigate = useNavigate();
@@ -26,174 +53,105 @@ export default function AdminSidebar() {
   const admin = getAdminUser();
 
   const [unread, setUnread] = useState(0);
+  const [open, setOpen] = useState(false);
+
+  // Phones: the menu closes after navigation
+  useEffect(() => setOpen(false), [pathname]);
 
   // Re-fetch on navigation so opening a request updates the badge
   useEffect(() => {
-    if (!token) {
-      return undefined;
-    }
+    if (!token) return undefined;
 
     let cancelled = false;
 
     async function loadUnreadCount() {
       try {
-        const response =
-          await getUnreadQuoteCount(token);
-
-        if (!cancelled) {
-          setUnread(
-            response.data?.unread || 0
-          );
-        }
+        const response = await getUnreadQuoteCount(token);
+        if (!cancelled) setUnread(response.data?.unread || 0);
       } catch (error) {
         if (!cancelled && isAuthError(error)) {
           clearAdminSession();
           navigate('/admin/login', { replace: true });
         }
-        // Other errors: sidebar should not break
+        // Other errors: the sidebar should not break
       }
     }
 
     loadUnreadCount();
-
-    window.addEventListener(
-      QUOTES_CHANGED_EVENT,
-      loadUnreadCount
-    );
+    window.addEventListener(QUOTES_CHANGED_EVENT, loadUnreadCount);
 
     return () => {
       cancelled = true;
-
-      window.removeEventListener(
-        QUOTES_CHANGED_EVENT,
-        loadUnreadCount
-      );
+      window.removeEventListener(QUOTES_CHANGED_EVENT, loadUnreadCount);
     };
   }, [token, pathname, navigate]);
 
   function logout() {
     clearAdminSession();
-
     navigate('/admin/login', { replace: true });
   }
 
-  return (
-    <aside className="adminSidebar">
+  const initial = (admin?.name || admin?.email || 'A').trim().charAt(0).toLocaleUpperCase('tr');
 
-      <div className="adminLogo">
-        <span>RMA</span>
-        <small>ADMIN</small>
+  return (
+    <>
+      <div className="adTopbar">
+        <BrandLogo variant="light" alt="RMA Plastik" />
+        <button type="button" className="adMenuButton" onClick={() => setOpen(true)} aria-label="Menüyü aç">
+          <Menu aria-hidden="true" />
+          {unread > 0 && <span className="adDot" aria-hidden="true" />}
+        </button>
       </div>
 
-      <nav>
+      <div className={`adSidebarBackdrop ${open ? 'open' : ''}`} onClick={() => setOpen(false)} aria-hidden="true" />
 
-        <NavLink
-          to="/admin"
-          end
-          className={({ isActive }) =>
-            isActive ? 'active' : ''
-          }
-        >
-          Özet
-        </NavLink>
+      <aside className={`adminSidebar adSidebar ${open ? 'open' : ''}`}>
+        <div className="adBrand">
+          <BrandLogo variant="light" alt="RMA Plastik" />
+          <span>Yönetim paneli</span>
+          <button type="button" className="adSidebarClose" onClick={() => setOpen(false)} aria-label="Menüyü kapat">
+            <X aria-hidden="true" />
+          </button>
+        </div>
 
-        <NavLink
-          to="/admin/quotes"
-          className={({ isActive }) =>
-            isActive ? 'active' : ''
-          }
-        >
-          <span>
-            Teklif talepleri
+        <nav className="adNav" aria-label="Yönetim menüsü">
+          {NAV.map((section) => (
+            <div key={section.group} className="adNavGroup">
+              <span className="adNavLabel">{section.group}</span>
+              {section.items.map((item) => (
+                <NavLink key={item.to} to={item.to} end={item.end} className={({ isActive }) => (isActive ? 'active' : '')}>
+                  <item.icon aria-hidden="true" />
+                  <span className="adNavText">
+                    {item.label}
+                    {item.hint && <small>{item.hint}</small>}
+                  </span>
+                  {item.badge && unread > 0 && (
+                    <span className="adNavBadge" aria-label={`${unread} okunmamış`}>{unread}</span>
+                  )}
+                </NavLink>
+              ))}
+            </div>
+          ))}
+
+          <a href="/" target="_blank" rel="noreferrer" className="adNavExternal">
+            <ExternalLink aria-hidden="true" />
+            <span className="adNavText">Siteyi görüntüle</span>
+          </a>
+        </nav>
+
+        <PublishPanel />
+
+        <div className="adUser">
+          <span className="adAvatar" aria-hidden="true">{initial}</span>
+          <span className="adUserText">
+            <strong>{admin?.name || 'Yönetici'}</strong>
+            {admin?.email && <small>{admin.email}</small>}
           </span>
-
-          {unread > 0 && (
-            <span
-              className="adminSidebarBadge"
-              aria-label={`${unread} unread`}
-            >
-              {unread}
-            </span>
-          )}
-        </NavLink>
-
-        <span className="adminNavGroup">İçerik</span>
-
-        <NavLink
-          to="/admin/products"
-          className={({ isActive }) =>
-            isActive ? 'active' : ''
-          }
-        >
-          Ürünler
-        </NavLink>
-
-        <NavLink
-          to="/admin/product-families"
-          className={({ isActive }) =>
-            isActive ? 'active' : ''
-          }
-        >
-          Ürün tabloları
-        </NavLink>
-
-        <NavLink
-          to="/admin/posts"
-          className={({ isActive }) =>
-            isActive ? 'active' : ''
-          }
-        >
-          Blog yazıları
-        </NavLink>
-
-        <NavLink
-          to="/admin/videos"
-          className={({ isActive }) =>
-            isActive ? 'active' : ''
-          }
-        >
-          Videolar
-        </NavLink>
-
-        <NavLink
-          to="/admin/texts"
-          className={({ isActive }) =>
-            isActive ? 'active' : ''
-          }
-        >
-          Sayfa metinleri
-        </NavLink>
-
-        <NavLink
-          to="/admin/settings"
-          className={({ isActive }) =>
-            isActive ? 'active' : ''
-          }
-        >
-          Site ayarları
-        </NavLink>
-
-        <NavLink to="/" target="_blank" rel="noreferrer">
-          Siteyi görüntüle ↗
-        </NavLink>
-
-      </nav>
-
-      <PublishPanel />
-
-      {admin?.email && (
-        <span className="adminSidebarUser">
-          {admin.email}
-        </span>
-      )}
-
-      <button
-        type="button"
-        onClick={logout}
-      >
-        Çıkış yap
-      </button>
-
-    </aside>
+          <button type="button" onClick={logout} aria-label="Çıkış yap" title="Çıkış yap">
+            <LogOut aria-hidden="true" />
+          </button>
+        </div>
+      </aside>
+    </>
   );
 }

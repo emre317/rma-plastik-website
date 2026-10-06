@@ -1,353 +1,214 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-
-import { getQuoteStats } from '../../services/adminApi';
+import { Link } from 'react-router-dom';
 import {
-  clearAdminSession,
-  getAdminToken,
-  isAuthError,
-} from '../../services/adminAuth';
+  ArrowUpRight, BellRing, CheckCircle2, Clock3, FilePlus2, FileSpreadsheet, FileText, Inbox,
+  PlayCircle, Rocket, Save, Table2, Upload,
+} from 'lucide-react';
+
+import { getQuoteStats, getQuotes } from '../../services/adminApi';
+import { listFamilies, listPosts, listVideos } from '../../services/adminContentApi';
+import useAdminApi from '../../hooks/useAdminApi';
 import usePageTitle from '../../hooks/usePageTitle';
+import builtInFamilies from '../../data/productTables.builtin';
+import { QUOTE_STATUSES, statusLabel, statusTone, timeAgo } from '../../components/admin/quoteStatus';
 
+const today = new Intl.DateTimeFormat('tr-TR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
+
+/* Admin home: request pipeline, latest requests, content overview, quick actions */
 export default function AdminDashboard() {
-  usePageTitle('Admin Dashboard');
+  usePageTitle('Özet');
 
-  const navigate = useNavigate();
-
-  const token = getAdminToken();
+  const call = useAdminApi();
 
   const [stats, setStats] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [recent, setRecent] = useState([]);
+  const [content, setContent] = useState(null);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (!token) {
-      navigate('/admin/login', {
-        replace: true,
-      });
+    let cancelled = false;
 
-      return;
-    }
-
-    async function loadStats() {
+    (async () => {
       try {
-        setLoading(true);
-        setError('');
+        const [statsResponse, quotesResponse] = await Promise.all([
+          call(getQuoteStats),
+          call((token) => getQuotes(token, { page: 1, limit: 6 })),
+        ]);
 
-        const data = await getQuoteStats(token);
-
-        setStats(data.data);
+        if (cancelled) return;
+        setStats(statsResponse.data);
+        setRecent(Array.isArray(quotesResponse.data) ? quotesResponse.data : []);
       } catch (err) {
-        if (isAuthError(err)) {
-          clearAdminSession();
-
-          navigate('/admin/login', {
-            replace: true,
-          });
-
-          return;
-        }
-
-        setError(err.message);
-      } finally {
-        setLoading(false);
+        if (!cancelled) setError(err.message);
       }
-    }
 
-    loadStats();
-  }, [navigate, token]);
+      // Content counts are a bonus: a failure here does not hide the requests
+      const [families, posts, videos] = await Promise.allSettled([call(listFamilies), call(listPosts), call(listVideos)]);
+      if (cancelled) return;
 
-  if (loading) {
-    return (
-      <section className="adminContent">
-        <div className="adminLoading">
-          Loading dashboard...
-        </div>
-      </section>
-    );
-  }
+      const familyList = families.status === 'fulfilled' && families.value.data?.length ? families.value.data : null;
+      const postList = posts.status === 'fulfilled' ? posts.value.data || [] : [];
 
-  if (error) {
-    return (
-      <section className="adminContent">
+      setContent({
+        families: (familyList || builtInFamilies).length,
+        models: (familyList || builtInFamilies).reduce((sum, family) => sum + (family.rows?.length || 0), 0),
+        builtIn: !familyList,
+        posts: postList.length,
+        published: postList.filter((post) => post.status === 'published').length,
+        videos: videos.status === 'fulfilled' ? (videos.value.data || []).length : 0,
+      });
+    })();
 
-        <div className="adminErrorState">
+    return () => {
+      cancelled = true;
+    };
+  }, [call]);
 
-          <span className="adminLabel">
-            ERROR
-          </span>
+  const open = (stats?.new || 0) + (stats?.reviewing || 0);
+  const pipelineTotal = QUOTE_STATUSES.reduce((sum, status) => sum + (stats?.[status.id] || 0), 0);
 
-          <h2>
-            Dashboard could not be loaded.
-          </h2>
-
-          <p>
-            {error}
-          </p>
-
-        </div>
-
-      </section>
-    );
-  }
+  const kpis = [
+    { label: 'Toplam talep', value: stats?.total ?? '–', icon: Inbox, to: '/admin/quotes', hint: 'Siteden gelen tüm talepler' },
+    { label: 'Okunmamış', value: stats?.unread ?? '–', icon: BellRing, to: '/admin/quotes', hint: 'Henüz açılmamış', accent: (stats?.unread || 0) > 0 },
+    { label: 'Bekleyen', value: stats ? open : '–', icon: Clock3, to: '/admin/quotes?status=new', hint: 'Yeni + inceleniyor' },
+    { label: 'Teklif verilen', value: stats?.quoted ?? '–', icon: CheckCircle2, to: '/admin/quotes?status=quoted', hint: 'Teklifi gönderilmiş' },
+  ];
 
   return (
-    <section className="adminContent">
-
-      <div className="adminPageHeader">
-
+    <section className="adminContent adDashboard">
+      <header className="adPageHead">
         <div>
-          <span className="adminLabel">
-            RMA ADMINISTRATION
-          </span>
-
-          <h1>
-            Dashboard
-          </h1>
+          <span className="adEyebrow">{today}</span>
+          <h1>Hoş geldiniz</h1>
+          <p>Teklif taleplerini takip edin, katalog ve içerikleri güncelleyin; değişiklikleri sol menüdeki <strong>Yayınla</strong> ile siteye aktarın.</p>
         </div>
+        <Link to="/admin/quotes" className="cmsButton cmsButtonPrimary">
+          <Inbox aria-hidden="true" />
+          Talepleri aç
+        </Link>
+      </header>
 
-        <span className="adminDate">
-          Quote Management
-        </span>
+      {error && <div className="adminInlineError">{error}</div>}
 
+      <div className="adKpis">
+        {kpis.map((kpi) => (
+          <Link key={kpi.label} to={kpi.to} className={`adKpi ${kpi.accent ? 'accent' : ''}`}>
+            <span className="adKpiIcon" aria-hidden="true"><kpi.icon /></span>
+            <span className="adKpiLabel">{kpi.label}</span>
+            <strong>{kpi.value}</strong>
+            <small>{kpi.hint}</small>
+          </Link>
+        ))}
       </div>
 
+      <div className="adGrid">
+        {/* Pipeline */}
+        <div className="adCard adPipeline">
+          <div className="adCardHead">
+            <h2>Talep süreci</h2>
+            <Link to="/admin/quotes">Tümü <ArrowUpRight aria-hidden="true" /></Link>
+          </div>
 
-      <div className="adminStatsGrid">
+          <div className="adBar" role="img" aria-label="Taleplerin duruma göre dağılımı">
+            {QUOTE_STATUSES.map((status) => {
+              const count = stats?.[status.id] || 0;
+              return count > 0 ? (
+                <span key={status.id} className={`tone-${status.tone}`} style={{ flexGrow: count }} title={`${status.label}: ${count}`} />
+              ) : null;
+            })}
+            {pipelineTotal === 0 && <span className="tone-empty" style={{ flexGrow: 1 }} />}
+          </div>
 
-        <Link
-          to="/admin/quotes"
-          className="adminStatCard"
-        >
-          <span>
-            Total Requests
-          </span>
-
-          <strong>
-            {stats?.total || 0}
-          </strong>
-
-          <small>
-            View all requests ↗
-          </small>
-        </Link>
-
-
-        <Link
-          to="/admin/quotes"
-          className="adminStatCard"
-        >
-          <span>
-            Unread
-          </span>
-
-          <strong>
-            {stats?.unread || 0}
-          </strong>
-
-          <small>
-            Requires attention
-          </small>
-        </Link>
-
-
-        <Link
-          to="/admin/quotes?status=new"
-          className="adminStatCard"
-        >
-          <span>
-            New
-          </span>
-
-          <strong>
-            {stats?.new || 0}
-          </strong>
-
-          <small>
-            Newly received
-          </small>
-        </Link>
-
-
-        <Link
-          to="/admin/quotes?status=reviewing"
-          className="adminStatCard"
-        >
-          <span>
-            Reviewing
-          </span>
-
-          <strong>
-            {stats?.reviewing || 0}
-          </strong>
-
-          <small>
-            Under review
-          </small>
-        </Link>
-
-
-        <Link
-          to="/admin/quotes?status=contacted"
-          className="adminStatCard"
-        >
-          <span>
-            Contacted
-          </span>
-
-          <strong>
-            {stats?.contacted || 0}
-          </strong>
-
-          <small>
-            Customer contacted
-          </small>
-        </Link>
-
-
-        <Link
-          to="/admin/quotes?status=quoted"
-          className="adminStatCard"
-        >
-          <span>
-            Quoted
-          </span>
-
-          <strong>
-            {stats?.quoted || 0}
-          </strong>
-
-          <small>
-            Offer submitted
-          </small>
-        </Link>
-
-
-        <Link
-          to="/admin/quotes?status=closed"
-          className="adminStatCard"
-        >
-          <span>
-            Closed
-          </span>
-
-          <strong>
-            {stats?.closed || 0}
-          </strong>
-
-          <small>
-            Completed requests
-          </small>
-        </Link>
-
-      </div>
-
-
-      <div className="adminDashboardAction">
-
-        <div>
-          <span>
-            QUOTE REQUESTS
-          </span>
-
-          <h2>
-            Manage incoming
-            <br />
-            customer requests.
-          </h2>
+          <ul className="adStatusList">
+            {QUOTE_STATUSES.map((status, index) => (
+              <li key={status.id}>
+                <Link to={`/admin/quotes?status=${status.id}`}>
+                  <span className={`adStatusDot tone-${status.tone}`} aria-hidden="true" />
+                  <span className="adStatusText">
+                    <strong>{String(index + 1).padStart(2, '0')} · {status.label}</strong>
+                    <small>{status.hint}</small>
+                  </span>
+                  <em>{stats?.[status.id] ?? '–'}</em>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
 
-        <Link to="/admin/quotes">
-          View Requests ↗
+        {/* Latest requests */}
+        <div className="adCard adRecent">
+          <div className="adCardHead">
+            <h2>Son talepler</h2>
+            <Link to="/admin/quotes">Tüm talepler <ArrowUpRight aria-hidden="true" /></Link>
+          </div>
+
+          {recent.length === 0 ? (
+            <p className="adEmpty">Henüz teklif talebi yok. Siteden gelen talepler burada listelenir.</p>
+          ) : (
+            <ul className="adRecentList">
+              {recent.map((quote) => (
+                <li key={quote._id}>
+                  <Link to={`/admin/quotes/${quote._id}`} className={!quote.isRead ? 'unread' : ''}>
+                    <span className="adAvatarSm" aria-hidden="true">{(quote.company || '?').charAt(0).toLocaleUpperCase('tr')}</span>
+                    <span className="adRecentText">
+                      <strong>{quote.company}</strong>
+                      <small>{quote.product || 'Genel talep'}</small>
+                    </span>
+                    <span className={`adPill tone-${statusTone(quote.status)}`}>{statusLabel(quote.status)}</span>
+                    <time dateTime={quote.createdAt}>{timeAgo(quote.createdAt)}</time>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+
+      {/* Content */}
+      <h2 className="adSectionTitle">İçerik ve katalog</h2>
+      <div className="adContentCards">
+        <Link to="/admin/product-families" className="adContentCard">
+          <span className="adKpiIcon" aria-hidden="true"><Table2 /></span>
+          <strong>{content ? `${content.families} aile · ${content.models} model` : '…'}</strong>
+          <span>Ürün tabloları</span>
+          <small>{content?.builtIn ? 'Sitede broşür tabloları gösteriliyor; düzenlemek için içe aktarın.' : 'Ürün Tabloları ve Su Depoları sayfaları buradan beslenir.'}</small>
         </Link>
-
+        <Link to="/admin/posts" className="adContentCard">
+          <span className="adKpiIcon" aria-hidden="true"><FileText /></span>
+          <strong>{content ? `${content.published} yayında · ${content.posts - content.published} taslak` : '…'}</strong>
+          <span>Blog yazıları</span>
+          <small>Türkçe, İngilizce ve Arapça yazılar; SEO önizlemesiyle.</small>
+        </Link>
+        <Link to="/admin/videos" className="adContentCard">
+          <span className="adKpiIcon" aria-hidden="true"><PlayCircle /></span>
+          <strong>{content ? `${content.videos} video` : '…'}</strong>
+          <span>Videolar</span>
+          <small>İlk video ana sayfanın tanıtım filminde oynar.</small>
+        </Link>
       </div>
 
-
-      <div className="adminDashboardInfo">
-
-        <div>
-
-          <span className="adminLabel">
-            REQUEST FLOW
-          </span>
-
-          <h3>
-            Lead management workflow
-          </h3>
-
+      <div className="adGrid">
+        {/* Quick actions */}
+        <div className="adCard">
+          <div className="adCardHead"><h2>Hızlı işlemler</h2></div>
+          <div className="adActions">
+            <Link to="/admin/posts/new"><FilePlus2 aria-hidden="true" />Yeni blog yazısı</Link>
+            <Link to="/admin/product-families/new"><Table2 aria-hidden="true" />Yeni ürün ailesi</Link>
+            <Link to="/admin/product-families"><FileSpreadsheet aria-hidden="true" />Excel ile toplu güncelle</Link>
+            <Link to="/admin/videos"><PlayCircle aria-hidden="true" />Video ekle</Link>
+          </div>
         </div>
 
-        <div className="adminWorkflow">
-
-          <div>
-            <span>01</span>
-
-            <strong>
-              New
-            </strong>
-
-            <p>
-              Customer submits a new website request.
-            </p>
-          </div>
-
-
-          <div>
-            <span>02</span>
-
-            <strong>
-              Reviewing
-            </strong>
-
-            <p>
-              Request and technical requirements are reviewed.
-            </p>
-          </div>
-
-
-          <div>
-            <span>03</span>
-
-            <strong>
-              Contacted
-            </strong>
-
-            <p>
-              RMA team contacts the customer.
-            </p>
-          </div>
-
-
-          <div>
-            <span>04</span>
-
-            <strong>
-              Quoted
-            </strong>
-
-            <p>
-              Commercial offer is prepared and submitted.
-            </p>
-          </div>
-
-
-          <div>
-            <span>05</span>
-
-            <strong>
-              Closed
-            </strong>
-
-            <p>
-              Request process is completed.
-            </p>
-          </div>
-
+        {/* How publishing works */}
+        <div className="adCard adHowTo">
+          <div className="adCardHead"><h2>Değişiklikler siteye nasıl yansır?</h2></div>
+          <ol>
+            <li><span><Save aria-hidden="true" /></span><div><strong>Kaydedin</strong><small>Düzenlediğiniz sayfada Kaydet’e basın.</small></div></li>
+            <li><span><Upload aria-hidden="true" /></span><div><strong>Yayınlayın</strong><small>Sol menüdeki Yayınla butonuna basın.</small></div></li>
+            <li><span><Rocket aria-hidden="true" /></span><div><strong>Site güncellenir</strong><small>Birkaç dakika içinde tüm dillerde yayında olur.</small></div></li>
+          </ol>
         </div>
-
       </div>
-
     </section>
   );
 }

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import { CONTENT_LANGUAGES } from './Product.js';
+import { CONTENT_LANGUAGES } from '../config/languages.js';
 
 /*
   Product table family (e.g. "Dikey Tanklar") managed in the admin panel:

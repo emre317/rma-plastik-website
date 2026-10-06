@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Search } from 'lucide-react';
+import { RotateCcw, Search, X } from 'lucide-react';
 
 import Seo from '../../seo/Seo';
 import PageHeader from '../../components/ui/PageHeader';
@@ -19,6 +19,14 @@ import CatalogLink, { CATALOG_PDF } from '../../components/ui/CatalogLink';
 
 const normalise = (text) => String(text).toLocaleLowerCase('tr').replace(/\s+/g, '');
 
+// Volume filter of the tables (litres)
+const VOLUME_RANGES = {
+  small: [0, 1000],
+  medium: [1001, 5000],
+  large: [5001, 15000],
+  xlarge: [15001, Infinity],
+};
+
 export default function ProductTables() {
   const { t } = useTranslation();
   const quoteFor = useModelQuote();
@@ -27,6 +35,7 @@ export default function ProductTables() {
 
   const [query, setQuery] = useState('');
   const [group, setGroup] = useState('all');
+  const [volume, setVolume] = useState('all');
 
   const p = (key, options) => t(`productTables.${key}`, options);
   const totalModels = families.reduce((sum, family) => sum + family.rows.length, 0);
@@ -34,14 +43,30 @@ export default function ProductTables() {
   const visible = useMemo(() => {
     const q = normalise(query);
 
+    const [min, max] = VOLUME_RANGES[volume] || [];
+
     return families
       .filter((family) => group === 'all' || family.group === group)
       .map((family) => ({
         ...family,
-        rows: q ? family.rows.filter((row) => normalise(row.code).includes(q)) : family.rows,
+        rows: family.rows.filter((row) =>
+          (!q || normalise(row.code).includes(q)) &&
+          (volume === 'all' || (typeof row.volume === 'number' && row.volume >= min && row.volume <= max))
+        ),
       }))
       .filter((family) => family.rows.length > 0);
-  }, [query, group]);
+  }, [query, group, volume]);
+
+  const shownModels = visible.reduce((sum, family) => sum + family.rows.length, 0);
+  const filtered = query || group !== 'all' || volume !== 'all';
+  const groupCount = (id) => families
+    .filter((family) => id === 'all' || family.group === id)
+    .reduce((sum, family) => sum + family.rows.length, 0);
+
+  const jumpTo = (id) => {
+    if (!id) return;
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   return (
     <main className="internalPage ptPage">
@@ -87,6 +112,11 @@ export default function ProductTables() {
             <Search aria-hidden="true" />
             <span className="visuallyHidden">{p('searchLabel')}</span>
             <input type="search" value={query} placeholder={p('searchPlaceholder')} onChange={(event) => setQuery(event.target.value)} />
+            {query && (
+              <button type="button" className="ptSearchClear" onClick={() => setQuery('')} aria-label={t('waterTanks.resetShort')}>
+                <X aria-hidden="true" />
+              </button>
+            )}
           </label>
 
           <div className="ptGroups" role="group">
@@ -99,15 +129,81 @@ export default function ProductTables() {
                 onClick={() => setGroup(id)}
               >
                 {id === 'all' ? t('waterTanks.all') : p(`groups.${id}`)}
+                <small>{groupCount(id)}</small>
               </button>
             ))}
           </div>
+
+          <label className="ptSelect">
+            <span className="visuallyHidden">{t('waterTanks.volume')}</span>
+            <select value={volume} onChange={(event) => setVolume(event.target.value)}>
+              <option value="all">{p('volumeAll')}</option>
+              {Object.entries(VOLUME_RANGES).map(([key, [min, max]]) => (
+                <option key={key} value={key}>
+                  {max === Infinity ? `${formatNumber(min - 1, lang)} L +` : `${formatNumber(min, lang)} – ${formatNumber(max, lang)} L`}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="ptSelect ptJump">
+            <span className="visuallyHidden">{p('jumpLabel')}</span>
+            <select value="" onChange={(event) => jumpTo(event.target.value)}>
+              <option value="">{p('jumpLabel')}</option>
+              {visible.map((family) => (
+                <option key={family.id} value={family.id}>{familyText(family, 'title', lang, t)}</option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        <div className="container ptBarStatus" aria-live="polite">
+          <span>{p('showing', { count: shownModels, total: totalModels })}</span>
+          {filtered && (
+            <button type="button" onClick={() => { setQuery(''); setGroup('all'); setVolume('all'); }}>
+              <RotateCcw aria-hidden="true" />
+              {t('waterTanks.reset')}
+            </button>
+          )}
         </div>
       </div>
 
       <section className="ptBody">
-        <div className="container">
-          {visible.length === 0 && <p className="ptEmpty">{p('noResults')}</p>}
+        <div className="container ptLayout">
+          <nav className="ptToc" aria-label={p('jumpLabel')}>
+            <span className="ptTocTitle">{p('tocTitle')}</span>
+            {groups.map((groupId) => {
+              const list = visible.filter((family) => family.group === groupId);
+              if (list.length === 0) return null;
+
+              return (
+                <div key={groupId} className="ptTocGroup">
+                  <span>{p(`groups.${groupId}`)}</span>
+                  <ul>
+                    {list.map((family) => (
+                      <li key={family.id}>
+                        <a href={`#${family.id}`} onClick={(event) => { event.preventDefault(); jumpTo(family.id); }}>
+                          {familyText(family, 'title', lang, t)}
+                          <small>{family.rows.length}</small>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </nav>
+
+          <div className="ptMain">
+          {visible.length === 0 && (
+            <div className="wtEmpty">
+              <span className="wtHelpIcon" aria-hidden="true"><Search /></span>
+              <h3>{p('noResults')}</h3>
+              <button type="button" className="button primary" onClick={() => { setQuery(''); setGroup('all'); setVolume('all'); }}>
+                <span>{t('waterTanks.reset')}</span>
+              </button>
+            </div>
+          )}
 
           {groups.map((groupId) => {
             const list = visible.filter((family) => family.group === groupId);
@@ -177,8 +273,8 @@ export default function ProductTables() {
                                     <button type="button" className="ptRowQuote" onClick={() => openQuote(quoteFor(family, row))}>
                                       {p('quote')}
                                     </button>
-                                    <AddToCartButton product={quoteFor(family, row)} compact />
-                                    <CompareButton family={family} row={row} compact />
+                                    <AddToCartButton product={quoteFor(family, row)} compact iconOnly />
+                                    <CompareButton family={family} row={row} compact iconOnly />
                                   </span>
                                 </td>
                               </tr>
@@ -198,6 +294,7 @@ export default function ProductTables() {
             <a href={CATALOG_PDF} download className="sourceLink">{t('common.catalog')} (PDF)</a>
             <EcoBadge type="recycle" />
           </p>
+          </div>
         </div>
       </section>
     </main>
