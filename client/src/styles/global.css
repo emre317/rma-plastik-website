@@ -15233,3 +15233,338 @@ button.contactChannel {
   }
 
 }
+
+
+/* =====================================================
+   05 / SEKTÖRLER – moving industry band
+===================================================== */
+
+.industriesBandSection {
+  overflow: hidden;
+}
+
+.industriesMarquee {
+  position: relative;
+
+  margin-top: 56px;
+
+  overflow: hidden;
+
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.industriesMarqueeTrack {
+  width: max-content;
+
+  display: flex;
+
+  animation: industriesFlow calc(var(--count, 7) * 7s) linear infinite;
+}
+
+.industriesMarquee:hover .industriesMarqueeTrack,
+.industriesMarquee:focus-within .industriesMarqueeTrack {
+  animation-play-state: paused;
+}
+
+.industriesMarqueeGroup {
+  margin: 0;
+
+  padding: 8px 0 24px;
+
+  display: flex;
+
+  gap: 18px;
+
+  padding-inline-end: 18px;
+
+  list-style: none;
+}
+
+.industryBandCard {
+  width: 300px;
+
+  min-height: 230px;
+
+  padding: 24px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius-lg);
+
+  background: #fff;
+
+  box-shadow: var(--shadow-soft);
+
+  transition: transform 260ms ease, border-color 260ms ease, box-shadow 260ms ease;
+}
+
+.industryBandCard:hover {
+  border-color: rgba(29, 103, 213, 0.45);
+
+  box-shadow: 0 30px 60px -30px rgba(15, 30, 60, 0.35);
+
+  transform: translateY(-6px);
+}
+
+.industryBandTop {
+  margin-bottom: auto;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+}
+
+.industryBandIcon {
+  width: 52px;
+
+  height: 52px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: var(--radius-md);
+
+  color: var(--accent);
+
+  background: linear-gradient(135deg, rgba(29, 103, 213, 0.14), rgba(29, 103, 213, 0.04));
+
+  transition: background-color 260ms ease, color 260ms ease;
+}
+
+.industryBandCard:hover .industryBandIcon {
+  color: #fff;
+
+  background: var(--accent);
+}
+
+.industryBandIcon svg {
+  width: 24px;
+
+  height: 24px;
+}
+
+.industryBandCard .industryIndex {
+  color: var(--text-secondary);
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.08em;
+}
+
+.industryBandCard h3 {
+  margin: 18px 0 0;
+
+  font-size: 22px;
+
+  line-height: 1.2;
+}
+
+.industryBandCard p {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 14px;
+
+  line-height: 1.6;
+}
+
+/* Large outlined names running the other way */
+
+.industriesNames {
+  margin-top: 26px;
+
+  overflow: hidden;
+
+  user-select: none;
+}
+
+.industriesNamesTrack {
+  width: max-content;
+
+  display: flex;
+
+  animation: industriesFlowReverse calc(var(--count, 7) * 9s) linear infinite;
+}
+
+.industriesNamesGroup {
+  display: flex;
+
+  align-items: center;
+}
+
+.industriesNamesGroup span {
+  display: inline-flex;
+
+  align-items: center;
+
+  font-family: var(--font-display);
+
+  font-size: clamp(44px, 7vw, 110px);
+
+  font-weight: 700;
+
+  line-height: 1.05;
+
+  letter-spacing: -0.03em;
+
+  white-space: nowrap;
+
+  color: transparent;
+
+  -webkit-text-stroke: 1.5px rgba(17, 34, 68, 0.22);
+}
+
+.industriesNamesGroup span::after {
+  content: "";
+
+  width: 0.22em;
+
+  height: 0.22em;
+
+  margin: 0 0.45em;
+
+  border-radius: 50%;
+
+  background: var(--accent);
+
+  opacity: 0.55;
+}
+
+/* Static call to action under the band */
+
+.industriesCta {
+  margin-top: 36px;
+
+  padding: 26px 30px;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  border-radius: var(--radius-lg);
+
+  color: #fff;
+
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(77, 148, 245, 0.35), transparent 55%),
+    var(--accent);
+}
+
+.industriesCta .industryCtaEyebrow {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.industriesCta h3 {
+  margin: 6px 0 0;
+
+  font-size: clamp(22px, 2.2vw, 30px);
+
+  color: #fff;
+}
+
+.industriesCta .button.primary {
+  border-color: #fff;
+
+  color: var(--accent-dark);
+
+  background: #fff;
+}
+
+.industriesCta .button.primary:hover {
+  color: #fff;
+
+  background: var(--dark);
+
+  border-color: var(--dark);
+}
+
+@keyframes industriesFlow {
+  to { transform: translateX(-50%); }
+}
+
+@keyframes industriesFlowReverse {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+[dir="rtl"] .industriesMarqueeTrack {
+  animation-name: industriesFlowRtl;
+}
+
+[dir="rtl"] .industriesNamesTrack {
+  animation-name: industriesFlowReverseRtl;
+}
+
+@keyframes industriesFlowRtl {
+  to { transform: translateX(50%); }
+}
+
+@keyframes industriesFlowReverseRtl {
+  from { transform: translateX(50%); }
+  to { transform: translateX(0); }
+}
+
+@media (max-width: 700px) {
+
+  .industriesMarquee {
+    margin-top: 36px;
+  }
+
+  .industryBandCard {
+    width: 250px;
+
+    min-height: 210px;
+
+    padding: 20px;
+  }
+
+  .industriesCta {
+    padding: 22px 20px;
+  }
+
+  .industriesCta .button {
+    width: 100%;
+  }
+
+}
+
+/* Reduced motion: no movement, the cards become a scrollable row */
+@media (prefers-reduced-motion: reduce) {
+
+  .industriesMarqueeTrack,
+  .industriesNamesTrack {
+    animation: none;
+  }
+
+  .industriesMarquee {
+    overflow-x: auto;
+
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
+  .industriesMarqueeGroup[aria-hidden="true"],
+  .industriesNamesGroup + .industriesNamesGroup {
+    display: none;
+  }
+
+}
