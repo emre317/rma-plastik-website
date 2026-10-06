@@ -9,18 +9,11 @@ import { useQuote } from '../components/quote/QuoteContext';
 import { track } from '../analytics/track';
 import { videoText } from '../data/videos';
 import useLanguage from '../hooks/useLanguage';
+import portfolio from '../data/productPortfolio';
 
 const PLAYER_ORIGIN = 'https://www.youtube-nocookie.com';
 
-// Product groups shown in the moving band (keys of productExplorer.items → catalogue filter)
-const CATEGORY_LINKS = [
-  ['industrial', 'industrial-tanks'],
-  ['chemical', 'chemical-tanks'],
-  ['water', 'water-tanks'],
-  ['agriculture', 'agriculture'],
-  ['material', null],
-  ['custom', 'custom'],
-];
+// Product groups shown in the moving band (same groups as the 04 / Ürünler portfolio)
 
 /*
   Home page opening: the first video (lowest "Sıra" in the admin panel) plays
@@ -198,7 +191,7 @@ export default function HeroVideo({ video }) {
 
   const filmSrc = `${PLAYER_ORIGIN}/embed/${video.youtubeId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
 
-  const band = CATEGORY_LINKS.filter(([key]) => categories?.[key]?.label);
+  const band = portfolio.filter((group) => categories?.[group.id]?.label);
 
   return (
     <section className="heroVideo" id="home">
@@ -349,13 +342,13 @@ export default function HeroVideo({ video }) {
           <div className="heroVideoBandTrack">
             {[0, 1].map((copy) => (
               <ul key={copy} aria-hidden={copy === 1 ? 'true' : undefined}>
-                {band.map(([key, filter]) => (
-                  <li key={key}>
+                {band.map((group) => (
+                  <li key={group.id}>
                     <LocalizedLink
-                      to={filter ? `/products?category=${filter}` : '/products'}
+                      to={group.link}
                       tabIndex={copy === 1 ? -1 : undefined}
                     >
-                      {categories[key].label}
+                      {categories[group.id].label}
                     </LocalizedLink>
                   </li>
                 ))}

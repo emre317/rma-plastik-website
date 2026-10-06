@@ -20732,3 +20732,678 @@ button.contactChannel {
     width: 120px;
   }
 }
+
+/* =====================================================
+   04 / ÜRÜNLER – brochure product groups
+===================================================== */
+
+.portfolioTotals {
+  margin: 28px 0 0;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 34px;
+}
+
+.portfolioTotals dt {
+  color: var(--accent);
+
+  font-family: var(--font-display);
+
+  font-size: 36px;
+
+  font-weight: 700;
+
+  line-height: 1;
+
+  letter-spacing: -0.02em;
+}
+
+.portfolioTotals dd {
+  margin: 6px 0 0;
+
+  color: var(--text-secondary);
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.06em;
+
+  text-transform: uppercase;
+}
+
+/* Photo card: product photo on a light plate, text below */
+.portfolioPhoto {
+  position: absolute;
+
+  inset: 40px 14px 36%;
+
+  display: grid;
+
+  place-items: center;
+
+  overflow: hidden;
+
+  border-radius: calc(var(--radius-lg) - 6px);
+
+  background:
+    radial-gradient(70% 70% at 50% 40%, #fff, #f2f2f2 70%);
+
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4), 0 18px 40px -20px rgba(0, 0, 0, 0.6);
+}
+
+.portfolioPhoto img {
+  width: 88%;
+
+  height: 88%;
+
+  object-fit: contain;
+
+  pointer-events: none;
+
+  transition: transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.carousel3dCard.active .portfolioPhoto img {
+  transform: scale(1.04);
+}
+
+.portfolioCardCount {
+  position: absolute;
+
+  top: 12px;
+
+  inset-inline-end: 14px;
+
+  padding: 3px 9px;
+
+  border-radius: var(--radius-pill);
+
+  background: rgba(255, 255, 255, 0.14);
+
+  color: #fff;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+.portfolioPhotoCard .portfolioCardBody {
+  padding-top: 26px;
+
+  background: linear-gradient(180deg, transparent, rgba(5, 12, 28, 0.6) 30%);
+}
+
+.portfolioPhotoCard .portfolioCardBody em {
+  font-style: normal;
+
+  font-weight: 700;
+}
+
+/* Detail panel */
+.portfolioDetailRich {
+  align-items: start;
+}
+
+.portfolioFamilies {
+  margin-top: 18px;
+}
+
+.portfolioFamilies ul {
+  margin: 10px 0 0;
+
+  padding: 0;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 6px;
+
+  list-style: none;
+}
+
+.portfolioFamilies a {
+  padding: 6px 8px 6px 12px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius-pill);
+
+  color: var(--text);
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  text-decoration: none;
+
+  transition: border-color 200ms ease, color 200ms ease;
+}
+
+.portfolioFamilies a:hover {
+  border-color: var(--accent);
+
+  color: var(--accent);
+}
+
+.portfolioFamilies em {
+  min-width: 22px;
+
+  padding: 1px 6px;
+
+  border-radius: var(--radius-pill);
+
+  background: rgba(29, 103, 213, 0.1);
+
+  color: var(--accent);
+
+  font-size: 11px;
+
+  font-style: normal;
+
+  font-weight: 800;
+
+  text-align: center;
+}
+
+.portfolioDetailRich .portfolioDetailSide dd {
+  font-family: var(--font-display);
+
+  font-size: 22px;
+
+  font-weight: 700;
+}
+
+.portfolioActions {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  gap: 16px;
+}
+
+.portfolioSecondary {
+  padding: 0;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  border: 0;
+
+  background: none;
+
+  color: var(--accent);
+
+  font: inherit;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  text-decoration: none;
+
+  cursor: pointer;
+}
+
+.portfolioSecondary svg {
+  width: 16px;
+
+  height: 16px;
+}
+
+/* Quick links to the product tools */
+.portfolioQuick {
+  margin-top: 16px;
+
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 12px;
+}
+
+.portfolioQuick a {
+  padding: 16px 18px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  border: 1px solid var(--line);
+
+  border-radius: var(--radius-md);
+
+  background: #fff;
+
+  color: var(--text);
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  text-decoration: none;
+
+  transition: border-color 200ms ease, transform 300ms ease;
+}
+
+.portfolioQuick a:hover {
+  border-color: var(--accent);
+
+  transform: translateY(-3px);
+}
+
+.portfolioQuick svg {
+  width: 20px;
+
+  height: 20px;
+
+  flex-shrink: 0;
+
+  color: var(--accent);
+}
+
+.portfolioQuick a span:not([aria-hidden]) {
+  flex: 1;
+}
+
+.portfolioQuick a > span:last-child {
+  color: var(--accent);
+}
+
+@media (max-width: 1000px) {
+  .portfolioQuick {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .portfolioTotals {
+    gap: 22px;
+  }
+
+  .portfolioTotals dt {
+    font-size: 28px;
+  }
+
+  .portfolioPhoto {
+    inset: 34px 10px 38%;
+  }
+}
+
+/* Round-cut photos (custom molding parts): shown as a medallion */
+.portfolioPhoto.round {
+  background: radial-gradient(70% 70% at 50% 40%, hsl(var(--hue) 40% 96%), hsl(var(--hue) 30% 90%));
+}
+
+.portfolioPhoto.round img {
+  width: 74%;
+
+  height: 74%;
+
+  border-radius: 50%;
+
+  box-shadow: 0 18px 36px -16px rgba(15, 30, 60, 0.45), 0 0 0 6px rgba(255, 255, 255, 0.7);
+}
+
+/* =====================================================
+   FINDER CTA – animated "Sihirbazla seçin" button
+===================================================== */
+
+.finderCta {
+  position: relative;
+
+  isolation: isolate;
+
+  width: fit-content;
+
+  padding: 8px 22px 8px 8px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  overflow: hidden;
+
+  border-radius: var(--radius-pill);
+
+  color: #fff;
+
+  text-decoration: none;
+
+  box-shadow:
+    0 18px 40px -18px rgba(29, 103, 213, 0.75),
+    0 0 0 0 rgba(77, 148, 245, 0.45);
+
+  transition: transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 350ms ease;
+
+  animation: finderCtaPulse 3.2s ease-out infinite;
+}
+
+/* Rotating light around the edge */
+.finderCta::before {
+  content: "";
+
+  position: absolute;
+
+  inset: -150% -40%;
+
+  z-index: -2;
+
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg 220deg,
+    rgba(77, 148, 245, 0.2) 250deg,
+    #8fc1ff 300deg,
+    #ffffff 320deg,
+    #4d94f5 340deg,
+    transparent 360deg
+  );
+
+  animation: finderCtaSpin 3.6s linear infinite;
+}
+
+/* Inner surface (leaves a 2px glowing border) */
+.finderCta::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 2px;
+
+  z-index: -1;
+
+  border-radius: inherit;
+
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(77, 148, 245, 0.35), transparent 55%),
+    linear-gradient(135deg, #13306a, var(--dark) 60%);
+}
+
+.finderCta.glass::after {
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(77, 148, 245, 0.45), transparent 55%),
+    linear-gradient(135deg, rgba(29, 103, 213, 0.55), rgba(15, 30, 60, 0.92) 65%);
+}
+
+/* Periodic shine sweeping across */
+.finderCtaShine {
+  position: absolute;
+
+  top: 0;
+
+  bottom: 0;
+
+  left: -60%;
+
+  z-index: 0;
+
+  width: 45%;
+
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+
+  transform: skewX(-18deg);
+
+  animation: finderCtaShine 4.2s ease-in-out infinite;
+
+  pointer-events: none;
+}
+
+.finderCtaIcon {
+  position: relative;
+
+  z-index: 1;
+
+  width: 44px;
+
+  height: 44px;
+
+  display: grid;
+
+  flex-shrink: 0;
+
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: linear-gradient(145deg, #6aa8ff, var(--accent));
+
+  box-shadow: 0 0 0 4px rgba(77, 148, 245, 0.18), 0 10px 22px -8px rgba(29, 103, 213, 0.9);
+}
+
+.finderCtaIcon svg {
+  width: 20px;
+
+  height: 20px;
+
+  transform-origin: 20% 80%;
+
+  animation: finderCtaWand 3.2s ease-in-out infinite;
+}
+
+/* Sparkles */
+.finderCtaIcon .spark {
+  position: absolute;
+
+  width: 6px;
+
+  height: 6px;
+
+  background: #fff;
+
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+
+  opacity: 0;
+
+  animation: finderCtaSpark 2.4s ease-in-out infinite;
+}
+
+.finderCtaIcon .spark.one {
+  top: 2px;
+
+  right: 4px;
+}
+
+.finderCtaIcon .spark.two {
+  top: 14px;
+
+  right: -3px;
+
+  width: 4px;
+
+  height: 4px;
+
+  animation-delay: 0.6s;
+}
+
+.finderCtaIcon .spark.three {
+  top: -3px;
+
+  right: 16px;
+
+  width: 5px;
+
+  height: 5px;
+
+  animation-delay: 1.2s;
+}
+
+.finderCtaText {
+  position: relative;
+
+  z-index: 1;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 1px;
+}
+
+.finderCtaText strong {
+  font-size: 15px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.01em;
+}
+
+.finderCtaText small {
+  color: rgba(255, 255, 255, 0.7);
+
+  font-size: 12px;
+}
+
+.finderCtaArrow {
+  position: relative;
+
+  z-index: 1;
+
+  color: #9fcaff;
+
+  font-size: 18px;
+
+  transition: transform 300ms ease;
+}
+
+.finderCta:hover,
+.finderCta:focus-visible {
+  box-shadow: 0 24px 50px -16px rgba(29, 103, 213, 0.95), 0 0 0 6px rgba(77, 148, 245, 0.18);
+
+  transform: translateY(-3px);
+}
+
+.finderCta:hover::before {
+  animation-duration: 1.6s;
+}
+
+.finderCta:hover .finderCtaArrow {
+  transform: translateX(calc(5px * var(--dir-x)));
+}
+
+.finderCta:focus-visible {
+  outline: 3px solid #9fcaff;
+
+  outline-offset: 3px;
+}
+
+[dir="rtl"] .finderCta {
+  padding: 8px 8px 8px 22px;
+}
+
+@keyframes finderCtaSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes finderCtaShine {
+  0%,
+  55% {
+    left: -60%;
+  }
+
+  80%,
+  100% {
+    left: 130%;
+  }
+}
+
+@keyframes finderCtaPulse {
+  0% {
+    box-shadow: 0 18px 40px -18px rgba(29, 103, 213, 0.75), 0 0 0 0 rgba(77, 148, 245, 0.45);
+  }
+
+  70%,
+  100% {
+    box-shadow: 0 18px 40px -18px rgba(29, 103, 213, 0.75), 0 0 0 14px rgba(77, 148, 245, 0);
+  }
+}
+
+@keyframes finderCtaWand {
+  0%,
+  70%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  78% {
+    transform: rotate(-16deg);
+  }
+
+  86% {
+    transform: rotate(10deg);
+  }
+
+  93% {
+    transform: rotate(-4deg);
+  }
+}
+
+@keyframes finderCtaSpark {
+  0%,
+  100% {
+    opacity: 0;
+
+    transform: scale(0.3) rotate(0deg);
+  }
+
+  40% {
+    opacity: 1;
+
+    transform: scale(1) rotate(45deg);
+  }
+
+  70% {
+    opacity: 0;
+
+    transform: scale(0.5) rotate(90deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .finderCta,
+  .finderCta::before,
+  .finderCtaShine,
+  .finderCtaIcon svg,
+  .finderCtaIcon .spark {
+    animation: none;
+  }
+
+  .finderCta::before {
+    background: linear-gradient(135deg, #8fc1ff, var(--accent));
+  }
+
+  .finderCtaShine,
+  .finderCtaIcon .spark {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .finderCta {
+    max-width: 100%;
+  }
+
+  .finderCtaText small {
+    display: none;
+  }
+}

@@ -1,40 +1,49 @@
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { GitCompareArrows, Table2, Wand2, Waves } from 'lucide-react';
 
 import { LocalizedLink } from '../components/i18n/LocalizedLink';
 import Arrow from '../components/i18n/Arrow';
 import Carousel3D from '../components/ui/Carousel3D';
-import useProducts from '../hooks/useProducts';
+import FinderCta from '../components/ui/FinderCta';
+import { useQuote } from '../components/quote/QuoteContext';
+import useLanguage from '../hooks/useLanguage';
+import formatNumber from '../utils/formatNumber';
+import portfolio, { totals } from '../data/productPortfolio';
+import { familyText } from '../data/productTables';
 
-// Text lives in the locale files under productExplorer.items.<id>
-const productCategories = [
-  { id: 'industrial', catalogCategory: 'industrial-tanks', hue: 214 },
-  { id: 'chemical', catalogCategory: 'chemical-tanks', hue: 196 },
-  { id: 'water', catalogCategory: 'water-tanks', hue: 204 },
-  { id: 'agriculture', catalogCategory: 'agriculture', hue: 170 },
-  { id: 'material', catalogCategory: null, hue: 226 },
-  { id: 'custom', catalogCategory: 'custom', hue: 240 },
-];
-
-const linkFor = (category) => {
-  if (category.id === 'water') return '/water-tanks';
-  return category.catalogCategory ? `/products?category=${category.catalogCategory}` : '/contact';
-};
-
+/*
+  "04 / Ürünler – Ürün portföyü": the brochure's product groups on a 3D ring
+  (real photos, model counts and volume ranges from the product tables),
+  the selected group in detail below, and quick links to the product tools.
+*/
 export default function ProductExplorerSection() {
   const { t } = useTranslation();
-  const products = useProducts();
+  const { code: lang } = useLanguage();
+  const { openQuote } = useQuote();
 
   const [activeIndex, setActiveIndex] = useState(0);
   const onActiveChange = useCallback((index) => setActiveIndex(index), []);
 
-  const text = (id, field) => t(`productExplorer.items.${id}.${field}`);
+  const p = (key, options) => t(`productExplorer.${key}`, options);
+  const text = (id, field) => p(`items.${id}.${field}`);
+  const num = (value) => formatNumber(value, lang);
 
-  // Uploaded product photo of the category (admin panel), if any
-  const photoFor = (category) =>
-    products.find((product) => product.category === category.catalogCategory && product.image)?.image;
+  const range = (group) =>
+    group.minVolume === null
+      ? null
+      : group.minVolume === group.maxVolume
+        ? `${num(group.minVolume)} L`
+        : `${num(group.minVolume)} – ${num(group.maxVolume)} L`;
 
-  const active = productCategories[activeIndex];
+  const active = portfolio[activeIndex] || portfolio[0];
+
+  const quickLinks = [
+    { to: '/water-tanks', icon: Waves, label: t('meta.titles.waterTanks') },
+    { to: '/tank-finder', icon: Wand2, label: t('meta.titles.tankFinder') },
+    { to: '/product-tables', icon: Table2, label: t('meta.titles.productTables') },
+    { to: '/compare', icon: GitCompareArrows, label: t('meta.titles.compare') },
+  ];
 
   return (
     <section className="productExplorerSection portfolioSection" id="products">
@@ -42,101 +51,146 @@ export default function ProductExplorerSection() {
 
         <div className="productExplorerHeader">
           <div>
-            <span className="sectionIndex">{t('productExplorer.index')}</span>
-            <p className="eyebrow">{t('productExplorer.eyebrow')}</p>
+            <span className="sectionIndex">{p('index')}</span>
+            <p className="eyebrow">{p('eyebrow')}</p>
           </div>
 
           <div>
             <h2>
-              {t('productExplorer.title')}
-              <span>{t('productExplorer.titleAccent')}</span>
+              {p('title')}
+              <span>{p('titleAccent')}</span>
             </h2>
 
-            <p className="productIntroText">{t('productExplorer.intro')}</p>
+            <p className="productIntroText">{p('intro')}</p>
+
+            <dl className="portfolioTotals">
+              <div>
+                <dt>{portfolio.length}</dt>
+                <dd>{p('eyebrow')}</dd>
+              </div>
+              <div>
+                <dt>{totals.families}</dt>
+                <dd>{p('statsFamilies')}</dd>
+              </div>
+              <div>
+                <dt>{totals.models}</dt>
+                <dd>{p('statsModels')}</dd>
+              </div>
+            </dl>
           </div>
         </div>
 
         <div className="portfolioGallery">
           <div className="portfolioGalleryTop">
-            <span>{t('productExplorer.previewTop')}</span>
-            <span className="portfolioHint">{t('productExplorer.rotateHint')}</span>
+            <span>{p('previewTop')}</span>
+            <span className="portfolioHint">{p('rotateHint')}</span>
             <span className="portfolioCounter">
               {String(activeIndex + 1).padStart(2, '0')}
-              <small> / {String(productCategories.length).padStart(2, '0')}</small>
+              <small> / {String(portfolio.length).padStart(2, '0')}</small>
             </span>
           </div>
 
           <Carousel3D
-            items={productCategories}
+            items={portfolio}
             onActiveChange={onActiveChange}
             labels={{
-              prev: t('productExplorer.prev'),
-              next: t('productExplorer.next'),
-              hint: t('productExplorer.rotateHint'),
-              goTo: (n) => `${t('productExplorer.selected')} ${n}`,
+              prev: p('prev'),
+              next: p('next'),
+              hint: p('rotateHint'),
+              goTo: (n) => `${p('selected')} ${n}`,
             }}
-            renderCard={(category, { active: isActive, index }) => {
-              const photo = photoFor(category);
+            renderCard={(group, { active: isActive, index }) => (
+              <LocalizedLink
+                to={group.link}
+                className="portfolioCard portfolioPhotoCard"
+                style={{ '--hue': group.hue }}
+                tabIndex={isActive ? 0 : -1}
+                draggable={false}
+              >
+                <span className={`portfolioPhoto ${group.round ? 'round' : ''}`} aria-hidden="true">
+                  <img src={group.image} alt="" loading={index < 3 ? 'eager' : 'lazy'} decoding="async" draggable={false} />
+                </span>
 
-              return (
-                <LocalizedLink
-                  to={linkFor(category)}
-                  className="portfolioCard"
-                  style={{ '--hue': category.hue }}
-                  tabIndex={isActive ? 0 : -1}
-                  draggable={false}
-                >
-                  <span className="portfolioCardMedia" aria-hidden="true">
-                    {photo ? (
-                      <img src={photo} alt="" loading="lazy" decoding="async" draggable={false} />
-                    ) : (
-                      <span className="portfolioTank">
-                        <span className="portfolioTankCap" />
-                        <span className="portfolioTankBody"><span /><span /><span /></span>
-                      </span>
-                    )}
+                <span className="portfolioCardNumber">{String(index + 1).padStart(2, '0')}</span>
+
+                {group.models > 0 && (
+                  <span className="portfolioCardCount">
+                    {group.models} {p('models')}
                   </span>
+                )}
 
-                  <span className="portfolioCardNumber">{String(index + 1).padStart(2, '0')}</span>
-
-                  <span className="portfolioCardBody">
-                    <strong>{text(category.id, 'label')}</strong>
-                    <em>{text(category.id, 'capacity')}</em>
-                    <small>{text(category.id, 'application')}</small>
-                  </span>
-                </LocalizedLink>
-              );
-            }}
+                <span className="portfolioCardBody">
+                  <strong>{text(group.id, 'label')}</strong>
+                  <em>{range(group) || (group.custom ? p('projectBased') : `${group.models} ${p('models')}`)}</em>
+                  <small>{text(group.id, 'application')}</small>
+                </span>
+              </LocalizedLink>
+            )}
           />
         </div>
 
-        <div className="portfolioDetail" aria-live="polite">
-          <div>
-            <span className="productPreviewLabel">{t('productExplorer.selected')}</span>
+        <div className="portfolioDetail portfolioDetailRich" aria-live="polite">
+          <div className="portfolioDetailMain">
+            <span className="productPreviewLabel">{p('selected')}</span>
             <h3>{text(active.id, 'title')}</h3>
             <p>{text(active.id, 'description')}</p>
+
+            {active.members.length > 0 && (
+              <div className="portfolioFamilies">
+                <span className="cmLabel">{p('familiesTitle')}</span>
+                <ul>
+                  {active.members.map((family) => (
+                    <li key={family.id}>
+                      <LocalizedLink to={`/product-tables#${family.id}`}>
+                        {familyText(family, 'title', lang, t)}
+                        <em>{family.rows.length}</em>
+                      </LocalizedLink>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           <div className="portfolioDetailSide">
             <dl>
               <div>
-                <dt>{t('productExplorer.capacity')}</dt>
-                <dd>{text(active.id, 'capacity')}</dd>
+                <dt>{active.custom ? p('application') : p('range')}</dt>
+                <dd>{active.custom ? text(active.id, 'application') : range(active) || '–'}</dd>
               </div>
               <div>
-                <dt>{t('productExplorer.application')}</dt>
-                <dd>{text(active.id, 'application')}</dd>
+                <dt>{active.custom ? p('capacity') : p('modelsLabel')}</dt>
+                <dd>{active.custom ? p('projectBased') : active.models}</dd>
               </div>
             </dl>
 
-            <LocalizedLink to={linkFor(active)} className="button primary">
-              <span>
-                {active.catalogCategory ? t('productExplorer.exploreRange') : t('productExplorer.askRange')}
-              </span>
-              <Arrow className="buttonArrow" />
-            </LocalizedLink>
+            <div className="portfolioActions">
+              <LocalizedLink to={active.link} className="button primary">
+                <span>{active.custom ? p('customLink') : p('explore')}</span>
+                <Arrow className="buttonArrow" />
+              </LocalizedLink>
+
+              {active.finder ? (
+                <FinderCta subtitle={false} />
+              ) : (
+                <button type="button" className="portfolioSecondary" onClick={() => openQuote(text(active.id, 'title'))}>
+                  {p('quote')}
+                  <Arrow />
+                </button>
+              )}
+            </div>
           </div>
         </div>
+
+        <nav className="portfolioQuick" aria-label={p('quickLinks')}>
+          {quickLinks.map(({ to, icon: Icon, label }) => (
+            <LocalizedLink key={to} to={to}>
+              <Icon aria-hidden="true" />
+              <span>{label}</span>
+              <Arrow />
+            </LocalizedLink>
+          ))}
+        </nav>
 
       </div>
     </section>
