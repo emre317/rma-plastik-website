@@ -78,7 +78,7 @@ export function offerPdfUpload(req, res, next) {
     if (error) {
       return res.status(400).json({
         success: false,
-        message: error.code === 'LIMIT_FILE_SIZE' ? 'Teklif PDF’i en fazla 8 MB olabilir.' : 'Teklif PDF’i okunamadı.',
+        message: error.code === 'LIMIT_FILE_SIZE' ? 'Proforma PDF’i en fazla 8 MB olabilir.' : 'Proforma PDF’i okunamadı.',
       });
     }
 

@@ -776,7 +776,7 @@ export async function saveQuoteOffer(req, res) {
     const data = offerPayload(req.body);
 
     if (!data.lines.length) {
-      return res.status(400).json({ success: false, message: 'Teklife en az bir ürün satırı ekleyin.' });
+      return res.status(400).json({ success: false, message: 'Proformaya en az bir ürün satırı ekleyin.' });
     }
 
     const previous = quote.offer;
@@ -796,12 +796,12 @@ export async function saveQuoteOffer(req, res) {
     return res.json({ success: true, data: quote });
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
-      return res.status(400).json({ success: false, message: 'Teklif bilgilerini kontrol edin.' });
+      return res.status(400).json({ success: false, message: 'Proforma bilgilerini kontrol edin.' });
     }
 
     console.error('Save offer error:', error);
 
-    return res.status(500).json({ success: false, message: 'Teklif kaydedilemedi.' });
+    return res.status(500).json({ success: false, message: 'Proforma kaydedilemedi.' });
   }
 }
 
@@ -819,7 +819,7 @@ export async function sendQuoteOffer(req, res) {
     const pdf = req.file?.buffer;
 
     if (!pdf || pdf.subarray(0, 5).toString('latin1') !== '%PDF-') {
-      return res.status(400).json({ success: false, message: 'Teklif PDF’i oluşturulamadı.' });
+      return res.status(400).json({ success: false, message: 'Proforma PDF’i oluşturulamadı.' });
     }
 
     const quote = await QuoteRequest.findById(req.params.id);
@@ -829,7 +829,7 @@ export async function sendQuoteOffer(req, res) {
     }
 
     if (!quote.offer?.lines?.length || !quote.offer.savedAt) {
-      return res.status(400).json({ success: false, message: 'Önce teklifi kaydedin.' });
+      return res.status(400).json({ success: false, message: 'Önce proformayı kaydedin.' });
     }
 
     const settings = await getSiteSettings().catch(() => ({}));
@@ -843,7 +843,7 @@ export async function sendQuoteOffer(req, res) {
     }
 
     quote.notes.push({
-      text: `Teklif ${number} e-postayla gönderildi (${quote.email}). Toplam: ${total}`,
+      text: `Proforma fatura ${number} e-postayla gönderildi (${quote.email}). Toplam: ${total}`,
       author: req.admin?.name || req.admin?.email || '',
     });
 
@@ -853,7 +853,7 @@ export async function sendQuoteOffer(req, res) {
   } catch (error) {
     console.error('Send offer error:', error);
 
-    return res.status(500).json({ success: false, message: 'Teklif e-postası gönderilemedi.' });
+    return res.status(500).json({ success: false, message: 'Proforma e-postası gönderilemedi.' });
   }
 }
 

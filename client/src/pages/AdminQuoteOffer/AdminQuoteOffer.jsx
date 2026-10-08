@@ -69,9 +69,9 @@ function fromSaved(offer) {
   };
 }
 
-/* Offer editor (Teklif hazırla): prices and terms, live A4 preview, PDF and e-mail */
+/* Proforma invoice editor: prices and terms, live A4 preview, PDF and e-mail */
 export default function AdminQuoteOffer() {
-  usePageTitle('Teklif hazırla');
+  usePageTitle('Proforma fatura');
 
   const { id } = useParams();
   const call = useAdminApi();
@@ -160,7 +160,7 @@ export default function AdminQuoteOffer() {
       setQuote(data);
       setOffer(fromSaved(data.offer));
       setDirty(false);
-      setMessage({ type: 'success', text: `Teklif ${offerNumber(data._id, data.offer.revision)} kaydedildi.` });
+      setMessage({ type: 'success', text: `Proforma ${offerNumber(data._id, data.offer.revision)} kaydedildi.` });
       return data;
     } catch (err) {
       setMessage({ type: 'error', text: err.message });
@@ -211,7 +211,7 @@ export default function AdminQuoteOffer() {
       setOffer(fromSaved(data.offer));
       setDirty(false);
       notifyQuotesChanged();
-      setMessage({ type: 'success', text: `Teklif ${data.email} adresine gönderildi. Talep “Teklif verildi” durumuna alındı.` });
+      setMessage({ type: 'success', text: `Proforma fatura ${data.email} adresine gönderildi. Talep “Teklif verildi” durumuna alındı.` });
     } catch (err) {
       setMessage({ type: 'error', text: err.message });
     } finally {
@@ -240,10 +240,10 @@ export default function AdminQuoteOffer() {
 
       <header className="adPageHead">
         <div>
-          <span className="adEyebrow">Teklif</span>
+          <span className="adEyebrow">Proforma fatura</span>
           <h1>{number}</h1>
           <p>
-            {quote.company} için fiyat teklifi. Fiyatları ve koşulları siz girersiniz; sağdaki önizleme PDF’in aynısıdır.
+            {quote.company} için proforma fatura. Fiyatları ve koşulları siz girersiniz; sağdaki önizleme PDF’in aynısıdır.
             {sentInfo && <><br /><strong>{sentInfo}.</strong> Değişiklik yapıp kaydederseniz yeni revizyon (R{(quote.offer.revision || 1) + 1}) oluşur.</>}
           </p>
         </div>
@@ -258,7 +258,7 @@ export default function AdminQuoteOffer() {
             <div className="adCardHead"><h2>Belge</h2></div>
             <div className="adOfferRow">
               <label className="cmsField">
-                <span>Teklif dili</span>
+                <span>Belge dili</span>
                 <select value={offer.language} onChange={(event) => update({ language: event.target.value })}>
                   {LANGS.map((item) => <option key={item.code} value={item.code}>{item.label}</option>)}
                 </select>
@@ -370,7 +370,7 @@ export default function AdminQuoteOffer() {
             <label className="cmsField">
               <span>Genel koşullar</span>
               <textarea rows={4} value={offer.terms} maxLength={3000} onChange={(event) => update({ terms: event.target.value })} />
-              <small>Varsayılan metni ve banka bilgilerini <Link to="/admin/settings">Site ayarları → Teklif belgesi</Link> bölümünden girin.</small>
+              <small>Varsayılan metni ve banka bilgilerini <Link to="/admin/settings">Site ayarları → Proforma fatura</Link> bölümünden girin.</small>
             </label>
           </div>
         </div>
@@ -394,7 +394,7 @@ export default function AdminQuoteOffer() {
           {missingPrice && <p className="adOfferWarn">Fiyatı girilmemiş satır var (0 olarak görünür).</p>}
 
           {confirmSend && (
-            <div className="adOfferConfirm" role="alertdialog" aria-label="Teklifi gönder">
+            <div className="adOfferConfirm" role="alertdialog" aria-label="Proformayı gönder">
               <p>
                 <strong>{number}</strong> PDF olarak <strong>{quote.email}</strong> adresine gönderilecek
                 {dirty ? ' (önce kaydedilecek)' : ''}. Toplam: <strong dir="ltr">{money(totals.total)}</strong>

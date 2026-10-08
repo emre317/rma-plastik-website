@@ -33,13 +33,13 @@ const GROUPS = [
     ],
   },
   {
-    title: 'Teklif belgesi',
-    note: 'Yalnızca panelde hazırlanan teklif PDF’lerinde kullanılır, sitede görünmez.',
+    title: 'Proforma fatura',
+    note: 'Yalnızca panelde hazırlanan proforma fatura PDF’lerinde kullanılır, sitede görünmez.',
     fields: [
-      { key: 'companyLegalName', label: 'Ticari unvan', placeholder: 'Teklifin üstünde görünen tam unvan' },
+      { key: 'companyLegalName', label: 'Ticari unvan', placeholder: 'Proformada satıcı olarak görünen tam unvan' },
       { key: 'taxInfo', label: 'Vergi dairesi / vergi no', placeholder: 'ör. … V.D. – 1234567890' },
       { key: 'offerBankInfo', label: 'Banka bilgileri', placeholder: 'Banka, şube, IBAN (TL / USD / EUR)…', multiline: 4 },
-      { key: 'offerTerms', label: 'Varsayılan genel koşullar', placeholder: 'Her yeni teklife otomatik eklenir; teklifte değiştirilebilir.', multiline: 6 },
+      { key: 'offerTerms', label: 'Varsayılan genel koşullar', placeholder: 'Her yeni proformaya otomatik eklenir; proformada değiştirilebilir.', multiline: 6 },
     ],
   },
 ];

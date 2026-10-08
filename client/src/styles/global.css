@@ -30582,19 +30582,26 @@ html[lang="ar"] .ecoBandEyebrow {
   }
 }
 
-/* The offer document itself: A4 width, fixed sizes so the PDF matches the preview */
+/* The proforma invoice: A4 width, fixed sizes so the PDF matches the preview */
 
 .ofDoc {
+  --of-ink: #0f1e3c;
+  --of-soft: #5d6980;
+  --of-line: #e3e8f0;
+  --of-tint: #f5f7fb;
+  --of-accent: #1d67d5;
+
+  position: relative;
   width: 794px;
   min-height: 1123px;
-  padding: 46px 50px 40px;
+  padding: 0 52px 26px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
   background: #ffffff;
-  color: #112244;
+  color: var(--of-ink);
   font-family: Inter, 'IBM Plex Sans Arabic', Arial, sans-serif;
-  font-size: 12.5px;
+  font-size: 12px;
   line-height: 1.5;
   text-align: start;
 }
@@ -30615,149 +30622,175 @@ html[lang="ar"] .ecoBandEyebrow {
 }
 
 .ofDoc[dir='rtl'] [dir='auto'],
-.ofDoc[dir='rtl'] .ofCompany > *,
-.ofDoc[dir='rtl'] .ofCustomer > * {
+.ofDoc[dir='rtl'] .ofParty > *,
+.ofDoc[dir='rtl'] .ofPrepared > * {
   text-align: right;
 }
 
+/* Thin brand band across the top edge */
+.ofBand {
+  margin: 0 -52px;
+  height: 8px;
+  display: flex;
+  background: var(--of-ink);
+}
+
+.ofBand span {
+  width: 34%;
+  background: var(--of-accent);
+}
+
 .ofHead {
-  padding-bottom: 20px;
+  padding-top: 24px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 24px;
-  border-bottom: 2px solid #112244;
+  gap: 30px;
 }
 
-.ofBrand {
-  display: grid;
-  gap: 10px;
-}
-
-.ofBrand img {
-  width: 150px;
+.ofLogo {
+  width: 168px;
   height: auto;
   display: block;
 }
 
-.ofCompany {
-  display: grid;
-  gap: 1px;
-  color: #3c4a63;
-  font-size: 11px;
-}
-
-.ofCompany strong {
-  color: #112244;
-  font-size: 12.5px;
-}
-
 .ofTitle {
-  min-width: 240px;
   display: grid;
-  gap: 10px;
+  justify-items: end;
+  gap: 14px;
   text-align: end;
 }
 
 .ofTitle h1 {
   margin: 0;
-  color: #1d67d5;
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.1;
-}
-
-.ofTitle dl {
-  margin: 0;
-  display: grid;
-  gap: 3px;
-}
-
-.ofTitle dl div {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  font-size: 11.5px;
-}
-
-.ofTitle dt {
-  color: #5d6980;
-}
-
-.ofTitle dd {
-  margin: 0;
-  min-width: 120px;
-  font-weight: 700;
-}
-
-.ofCustomer {
-  padding: 14px 16px;
-  display: grid;
-  gap: 2px;
-  border-radius: 10px;
-  background: #f4f6fa;
-}
-
-.ofLabel,
-.ofBlock h2 {
-  color: #5d6980;
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+  color: var(--of-ink);
+  font-size: 25px;
+  font-weight: 300;
+  letter-spacing: 0.16em;
+  line-height: 1;
   text-transform: uppercase;
 }
 
-.ofCustomer strong {
-  font-size: 15px;
+.ofDoc[dir='rtl'] .ofTitle h1 {
+  font-weight: 600;
 }
 
-.ofCustomer span:not(.ofLabel) {
+.ofMeta {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 8px 22px;
+  padding: 12px 16px;
+  border: 1px solid var(--of-line);
+  border-radius: 8px;
+}
+
+.ofMeta div {
+  display: grid;
+  gap: 1px;
+  text-align: start;
+}
+
+.ofMeta dt {
+  color: var(--of-soft);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ofMeta dd {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ofLabel {
+  margin: 0;
+  color: var(--of-accent);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Seller / buyer */
+.ofParties {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.ofParty {
+  padding: 14px 18px;
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  border: 1px solid var(--of-line);
+  border-radius: 10px;
   color: #3c4a63;
+  font-size: 11.5px;
 }
 
+.ofParty .ofLabel {
+  margin-bottom: 6px;
+}
+
+.ofParty strong {
+  margin-bottom: 2px;
+  color: var(--of-ink);
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.ofBuyer {
+  border-color: transparent;
+  background: var(--of-tint);
+}
+
+/* Items */
 .ofLines {
   width: 100%;
   border-collapse: collapse;
 }
 
 .ofLines th {
-  padding: 9px 10px;
-  background: #112244;
-  color: #ffffff;
-  font-size: 10.5px;
+  padding: 10px 10px;
+  border-top: 1.5px solid var(--of-ink);
+  border-bottom: 1px solid var(--of-ink);
+  color: var(--of-ink);
+  font-size: 9.5px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   text-align: start;
   text-transform: uppercase;
 }
 
 .ofLines td {
-  padding: 10px;
-  border-bottom: 1px solid #e2e7f0;
+  padding: 10px 10px;
+  border-bottom: 1px solid var(--of-line);
   vertical-align: top;
-}
-
-.ofLines tbody tr:nth-child(even) td {
-  background: #f8f9fc;
 }
 
 .ofLines td strong {
   display: block;
   font-size: 12.5px;
+  font-weight: 600;
 }
 
 .ofLines td small {
   display: block;
-  margin-top: 2px;
-  color: #5d6980;
-  font-size: 11px;
+  margin-top: 3px;
+  color: var(--of-soft);
+  font-size: 10.5px;
   white-space: pre-line;
 }
 
 .ofLines .ofNum {
-  width: 28px;
-  color: #5d6980;
+  width: 30px;
+  color: #9aa5b8;
+  font-variant-numeric: tabular-nums;
 }
 
 .ofLines .ofRight {
@@ -30770,27 +30803,59 @@ html[lang="ar"] .ecoBandEyebrow {
   font-weight: 700;
 }
 
-.ofTotals {
-  display: flex;
-  justify-content: flex-end;
+/* Terms and totals side by side */
+.ofSummary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 290px;
+  gap: 28px;
+  align-items: start;
 }
 
-.ofTotals dl {
-  min-width: 300px;
+.ofTerms {
   margin: 0;
   display: grid;
-  gap: 4px;
+  gap: 0;
 }
 
-.ofTotals dl div {
-  padding: 4px 10px;
+.ofTermsTitle {
+  margin-bottom: 8px;
+}
+
+.ofTerms div {
+  padding: 7px 0;
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 12px;
+  border-bottom: 1px dashed var(--of-line);
+}
+
+.ofTerms div dt {
+  color: var(--of-soft);
+  font-size: 11px;
+}
+
+.ofTerms div dd {
+  margin: 0;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.ofTotals {
+  margin: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.ofTotals div {
+  padding: 7px 4px;
   display: flex;
   justify-content: space-between;
-  gap: 20px;
+  gap: 18px;
+  border-bottom: 1px solid var(--of-line);
 }
 
 .ofTotals dt {
-  color: #5d6980;
+  color: var(--of-soft);
 }
 
 .ofTotals dd {
@@ -30800,26 +30865,36 @@ html[lang="ar"] .ecoBandEyebrow {
 }
 
 .ofTotals .ofGrand {
-  padding: 10px;
+  margin-top: 6px;
+  padding: 13px 16px;
+  align-items: baseline;
+  border: 0;
   border-radius: 8px;
-  background: #1d67d5;
-  color: #ffffff;
-  font-size: 15px;
+  background: var(--of-ink);
 }
 
-.ofTotals .ofGrand dt,
+.ofTotals .ofGrand dt {
+  color: #c5cfe0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ofTotals .ofGrand dt small {
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
 .ofTotals .ofGrand dd {
   color: #ffffff;
+  font-size: 18px;
   font-weight: 700;
 }
 
 .ofBlock {
   display: grid;
   gap: 6px;
-}
-
-.ofBlock h2 {
-  margin: 0;
 }
 
 .ofBlock p {
@@ -30829,47 +30904,66 @@ html[lang="ar"] .ecoBandEyebrow {
 
 .ofSmall p {
   color: #3c4a63;
+  font-size: 10.5px;
+  line-height: 1.6;
+}
+
+.ofBank p {
+  padding: 10px 14px;
+  border-inline-start: 3px solid var(--of-accent);
+  background: var(--of-tint);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Prepared by + stamp / signature */
+.ofSign {
+  margin-top: auto;
+  padding-top: 4px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.ofPrepared {
+  display: grid;
+  gap: 2px;
+  color: var(--of-soft);
   font-size: 11px;
 }
 
-.ofTerms {
-  margin: 0;
+.ofPrepared strong {
+  color: var(--of-ink);
+  font-size: 12.5px;
+}
+
+.ofStamp {
+  width: 230px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  gap: 6px;
+  text-align: center;
 }
 
-.ofTerms div {
-  padding: 10px 12px;
-  border: 1px solid #e2e7f0;
-  border-radius: 8px;
+.ofStamp span {
+  height: 48px;
+  border-bottom: 1px solid var(--of-ink);
 }
 
-.ofTerms dt {
-  color: #5d6980;
-  font-size: 10.5px;
-}
-
-.ofTerms dd {
-  margin: 2px 0 0;
-  font-weight: 600;
+.ofStamp small {
+  color: var(--of-soft);
+  font-size: 10px;
 }
 
 .ofFoot {
-  margin-top: auto;
-  padding-top: 14px;
+  padding-top: 12px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 8px 20px;
-  border-top: 1px solid #e2e7f0;
-  color: #5d6980;
-  font-size: 10.5px;
-}
-
-.ofFoot em {
-  font-style: normal;
-  font-weight: 700;
+  gap: 6px 20px;
+  border-top: 1px solid var(--of-line);
+  color: #8a95a8;
+  font-size: 9.5px;
 }
 
 /* ===== Hero headline intro: words appear one by one, light sweeps over the accent ===== */

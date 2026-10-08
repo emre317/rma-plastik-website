@@ -291,7 +291,7 @@ export default function AdminQuoteDetail() {
           {/* Commercial offer */}
           <div className="adCard adOfferCard">
             <div className="adCardHead">
-              <h2><FileSignature aria-hidden="true" />Fiyat teklifi</h2>
+              <h2><FileSignature aria-hidden="true" />Proforma fatura</h2>
               {quote.offer && <span className="adHint" dir="ltr">{offerNumber(quote._id, quote.offer.revision)}</span>}
             </div>
             {quote.offer ? (
@@ -303,12 +303,12 @@ export default function AdminQuoteDetail() {
                     {quote.offer.sentAt ? `${formatDate(quote.offer.sentAt, true)} tarihinde gönderildi` : `taslak, ${formatDate(quote.offer.savedAt, true)} kaydedildi`}
                   </small>
                 </div>
-                <Link to={`/admin/quotes/${quote._id}/offer`} className="cmsButton">Teklifi aç</Link>
+                <Link to={`/admin/quotes/${quote._id}/offer`} className="cmsButton">Proformayı aç</Link>
               </div>
             ) : (
               <div className="adOfferSummary">
                 <p>İstenen ürünler hazır gelir; fiyat ve koşulları girip PDF indirin ya da müşteriye e-postayla gönderin.</p>
-                <Link to={`/admin/quotes/${quote._id}/offer`} className="cmsButton cmsButtonPrimary">Teklif hazırla</Link>
+                <Link to={`/admin/quotes/${quote._id}/offer`} className="cmsButton cmsButtonPrimary">Proforma hazırla</Link>
               </div>
             )}
           </div>

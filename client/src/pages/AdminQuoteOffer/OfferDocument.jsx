@@ -7,9 +7,10 @@ import {
 } from '../../data/offerText';
 
 /*
-  The offer as an A4 document (794 px wide = 210 mm at 96 dpi). Used for the
-  live preview and, rendered at full size, for the PDF. Elements marked with
-  data-break are safe places to start a new page.
+  The proforma invoice as an A4 document (794 px wide = 210 mm at 96 dpi).
+  Used for the live preview and, rendered at full size, for the PDF.
+  Elements marked with data-break are safe places to start a new page.
+  Only what the sales team entered is shown; empty fields are left out.
 */
 const OfferDocument = forwardRef(function OfferDocument({ quote, offer, company }, ref) {
   const lang = offer.language || 'tr';
@@ -24,40 +25,56 @@ const OfferDocument = forwardRef(function OfferDocument({ quote, offer, company 
     [copy.incoterm, [offer.incoterm, offer.deliveryPlace].filter(Boolean).join(' – ')],
     [copy.deliveryTime, offer.deliveryTime],
     [copy.payment, offer.paymentTerms],
+    [copy.origin, copy.originValue],
   ].filter(([, value]) => value);
 
   const address = [company.street, company.district, company.country].filter(Boolean).join(', ');
 
+  const meta = [
+    [copy.number, offerNumber(quote._id, offer.revision), 'ltr'],
+    [copy.date, today],
+    ...(offer.validUntil ? [[copy.validUntil, formatOfferDate(`${offer.validUntil}T12:00:00+03:00`, lang)]] : []),
+    [copy.reference, quoteReference(quote._id), 'ltr'],
+  ];
+
   return (
     <article ref={ref} className="ofDoc" dir={dir} lang={lang}>
+      <div className="ofBand" aria-hidden="true"><span /></div>
+
       <header className="ofHead" data-break>
-        <div className="ofBrand">
-          <img src={logoPng} alt="RMA Plastik" />
-          <div className="ofCompany">
-            <strong dir="auto">{company.legalName || 'RMA Plastik'}</strong>
-            {address && <span dir="auto">{address}</span>}
-            <span dir="ltr">{[company.phone, company.email].filter(Boolean).join(' · ')}</span>
-            {company.website && <span dir="ltr">{company.website}</span>}
-            {company.taxInfo && <span dir="auto">{company.taxInfo}</span>}
-          </div>
-        </div>
+        <img className="ofLogo" src={logoPng} alt="RMA Plastik" />
 
         <div className="ofTitle">
           <h1>{copy.title}</h1>
-          <dl>
-            <div><dt>{copy.number}</dt><dd dir="ltr">{offerNumber(quote._id, offer.revision)}</dd></div>
-            <div><dt>{copy.date}</dt><dd>{today}</dd></div>
-            {offer.validUntil && <div><dt>{copy.validUntil}</dt><dd>{formatOfferDate(`${offer.validUntil}T12:00:00+03:00`, lang)}</dd></div>}
-            <div><dt>{copy.reference}</dt><dd dir="ltr">{quoteReference(quote._id)}</dd></div>
+          <dl className="ofMeta">
+            {meta.map(([label, value, valueDir]) => (
+              <div key={label}>
+                <dt>{label}</dt>
+                <dd dir={valueDir}>{value}</dd>
+              </div>
+            ))}
           </dl>
         </div>
       </header>
 
-      <section className="ofCustomer" data-break>
-        <span className="ofLabel">{copy.to}</span>
-        <strong dir="auto">{quote.company}</strong>
-        <span dir="auto">{[quote.name, quote.country].filter(Boolean).join(' · ')}</span>
-        <span dir="ltr">{[quote.email, quote.phone].filter(Boolean).join(' · ')}</span>
+      <section className="ofParties" data-break>
+        <div className="ofParty">
+          <span className="ofLabel">{copy.seller}</span>
+          <strong dir="auto">{company.legalName || 'RMA Plastik'}</strong>
+          {address && <span dir="auto">{address}</span>}
+          {company.phone && <span dir="ltr">{company.phone}</span>}
+          <span dir="ltr">{[company.email, company.website].filter(Boolean).join(' · ')}</span>
+          {company.taxInfo && <span dir="auto">{company.taxInfo}</span>}
+        </div>
+
+        <div className="ofParty ofBuyer">
+          <span className="ofLabel">{copy.buyer}</span>
+          <strong dir="auto">{quote.company}</strong>
+          {quote.name && <span dir="auto">{quote.name}</span>}
+          {quote.country && <span dir="auto">{quote.country}</span>}
+          {quote.email && <span dir="ltr">{quote.email}</span>}
+          {quote.phone && <span dir="ltr">{quote.phone}</span>}
+        </div>
       </section>
 
       <table className="ofLines">
@@ -75,7 +92,7 @@ const OfferDocument = forwardRef(function OfferDocument({ quote, offer, company 
           {offer.lines.map((line, index) => (
             // eslint-disable-next-line react/no-array-index-key
             <tr key={index} data-break>
-              <td className="ofNum">{index + 1}</td>
+              <td className="ofNum">{String(index + 1).padStart(2, '0')}</td>
               <td>
                 <strong dir="auto">{line.name || '—'}</strong>
                 {line.details && <small dir="auto">{line.details}</small>}
@@ -89,53 +106,71 @@ const OfferDocument = forwardRef(function OfferDocument({ quote, offer, company 
         </tbody>
       </table>
 
-      <div className="ofTotals" data-break>
-        <dl>
+      <section className="ofSummary" data-break>
+        <dl className="ofTerms">
+          <dt className="ofLabel ofTermsTitle">{copy.conditions}</dt>
+          {terms.map(([label, value]) => (
+            <div key={label}>
+              <dt>{label}</dt>
+              <dd dir="auto">{value}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <dl className="ofTotals">
           {totals.hasVat && (
             <>
               <div><dt>{copy.subtotal}</dt><dd dir="ltr">{money(totals.subtotal)}</dd></div>
-              <div><dt>{copy.vat} (%{offer.vatRate})</dt><dd dir="ltr">{money(totals.vat)}</dd></div>
+              <div><dt>{copy.vat} %{offer.vatRate}</dt><dd dir="ltr">{money(totals.vat)}</dd></div>
             </>
           )}
-          <div className="ofGrand"><dt>{copy.total}</dt><dd dir="ltr">{money(totals.total)}</dd></div>
+          <div className="ofGrand">
+            <dt>{copy.total} <small>({offer.currency})</small></dt>
+            <dd dir="ltr">{money(totals.total)}</dd>
+          </div>
         </dl>
-      </div>
-
-      {terms.length > 0 && (
-        <section className="ofBlock" data-break>
-          <h2>{copy.conditions}</h2>
-          <dl className="ofTerms">
-            {terms.map(([label, value]) => (
-              <div key={label}><dt>{label}</dt><dd dir="auto">{value}</dd></div>
-            ))}
-          </dl>
-        </section>
-      )}
+      </section>
 
       {offer.notes && (
         <section className="ofBlock" data-break>
-          <h2>{copy.notes}</h2>
+          <h2 className="ofLabel">{copy.notes}</h2>
           <p dir="auto">{offer.notes}</p>
         </section>
       )}
 
       {offer.terms && (
         <section className="ofBlock ofSmall" data-break>
-          <h2>{copy.terms}</h2>
+          <h2 className="ofLabel">{copy.terms}</h2>
           <p dir="auto">{offer.terms}</p>
         </section>
       )}
 
       {company.bankInfo && (
-        <section className="ofBlock ofSmall" data-break>
-          <h2>{copy.bank}</h2>
+        <section className="ofBlock ofBank" data-break>
+          <h2 className="ofLabel">{copy.bank}</h2>
           <p dir="ltr">{company.bankInfo}</p>
         </section>
       )}
 
+      <section className="ofSign" data-break>
+        <div className="ofPrepared">
+          {offer.preparedBy && (
+            <>
+              <span className="ofLabel">{copy.preparedBy}</span>
+              <strong><bdi>{offer.preparedBy}</bdi></strong>
+            </>
+          )}
+          <span dir="ltr">{[company.phone, company.email].filter(Boolean).join(' · ')}</span>
+        </div>
+        <div className="ofStamp">
+          <span />
+          <small>{copy.signature}</small>
+        </div>
+      </section>
+
       <footer className="ofFoot" data-break>
-        {offer.preparedBy && <span><em>{copy.preparedBy}:</em> <bdi>{offer.preparedBy}</bdi></span>}
-        <span dir="ltr">{[company.phone, company.email, company.website].filter(Boolean).join(' · ')}</span>
+        <span>{copy.disclaimer}</span>
+        <span dir="ltr">{[company.legalName || 'RMA Plastik', company.website].filter(Boolean).join(' · ')}</span>
       </footer>
     </article>
   );
