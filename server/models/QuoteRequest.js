@@ -6,6 +6,8 @@ export const QUOTE_LANGUAGES = [
   'ar',
 ];
 
+export const OFFER_CURRENCIES = ['TRY', 'USD', 'EUR'];
+
 export const QUOTE_STATUSES = [
   'new',
   'reviewing',
@@ -153,6 +155,47 @@ const quoteRequestSchema = new mongoose.Schema(
 
     followUpAt: {
       type: Date,
+      default: null,
+    },
+
+    // Commercial offer prepared in the admin panel (prices are entered by the sales team)
+    offer: {
+      type: new mongoose.Schema(
+        {
+          revision: { type: Number, default: 1, min: 1 },
+          language: { type: String, enum: QUOTE_LANGUAGES, default: 'tr' },
+          currency: { type: String, enum: OFFER_CURRENCIES, default: 'TRY' },
+          lines: {
+            type: [
+              new mongoose.Schema(
+                {
+                  name: { type: String, trim: true, required: true, maxlength: 200 },
+                  details: { type: String, trim: true, default: '', maxlength: 600 },
+                  quantity: { type: Number, min: 0, max: 1000000, default: 1 },
+                  unit: { type: String, trim: true, default: '', maxlength: 20 },
+                  unitPrice: { type: Number, min: 0, max: 1e10, default: 0 },
+                  discount: { type: Number, min: 0, max: 100, default: 0 },
+                },
+                { _id: false }
+              ),
+            ],
+            default: [],
+          },
+          vatRate: { type: Number, min: 0, max: 100, default: null },
+          incoterm: { type: String, trim: true, default: '', maxlength: 20 },
+          deliveryPlace: { type: String, trim: true, default: '', maxlength: 160 },
+          deliveryTime: { type: String, trim: true, default: '', maxlength: 160 },
+          paymentTerms: { type: String, trim: true, default: '', maxlength: 300 },
+          validUntil: { type: Date, default: null },
+          notes: { type: String, trim: true, default: '', maxlength: 2000 },
+          terms: { type: String, trim: true, default: '', maxlength: 3000 },
+          preparedBy: { type: String, trim: true, default: '', maxlength: 120 },
+          savedAt: { type: Date, default: null },
+          sentAt: { type: Date, default: null },
+          sentTo: { type: String, trim: true, default: '', maxlength: 254 },
+        },
+        { _id: false }
+      ),
       default: null,
     },
 

@@ -30230,3 +30230,756 @@ html[lang="ar"] .ecoBandEyebrow {
     padding-bottom: 16px;
   }
 }
+
+/* ===== Admin: commercial offer (Teklif) ===== */
+
+.adOfferSummary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 18px;
+}
+
+.adOfferSummary > div {
+  display: grid;
+  gap: 2px;
+}
+
+.adOfferSummary strong {
+  font-size: 22px;
+}
+
+.adOfferSummary small,
+.adOfferSummary p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.adOfferSummary p {
+  flex: 1 1 260px;
+}
+
+.adOfferGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.adOfferForm {
+  display: grid;
+  gap: 16px;
+}
+
+.adOfferRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.adOfferRow .adOfferWide {
+  grid-column: span 2;
+}
+
+.adOfferForm .cmsField {
+  margin-bottom: 12px;
+}
+
+.adOfferLines {
+  margin: 0 0 12px;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  list-style: none;
+}
+
+.adOfferLines li {
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+  border: 1px solid rgba(17, 34, 68, 0.1);
+  border-radius: 14px;
+  background: #fbfcfe;
+}
+
+.adOfferLineHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.adOfferLineIndex {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  background: #e8f0fd;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.adOfferLines input {
+  width: 100%;
+  min-width: 0;
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid rgba(17, 34, 68, 0.12);
+  border-radius: 9px;
+  background: #ffffff;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+}
+
+.adOfferLines input:focus {
+  border-color: var(--accent);
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(29, 103, 213, 0.12);
+}
+
+.adOfferLines input.empty {
+  border-color: rgba(183, 121, 31, 0.55);
+  background: #fffaf0;
+}
+
+.adOfferName {
+  flex: 1;
+  font-weight: 600;
+}
+
+.adOfferLineTools {
+  display: flex;
+  gap: 4px;
+}
+
+.adOfferLineTools .adIconButton {
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+}
+
+.adOfferNumbers {
+  display: grid;
+  grid-template-columns: 0.8fr 0.8fr 1.3fr 0.8fr 1.2fr;
+  gap: 8px;
+  align-items: end;
+}
+
+.adOfferNumbers label {
+  display: grid;
+  gap: 3px;
+}
+
+.adOfferNumbers label span,
+.adOfferAmount small {
+  color: var(--text-secondary);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.adOfferAmount {
+  display: grid;
+  gap: 3px;
+  text-align: end;
+}
+
+.adOfferAmount strong {
+  height: 38px;
+  display: grid;
+  align-items: center;
+  font-size: 14.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.adOfferAdd {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.adOfferAdd svg {
+  width: 16px;
+  height: 16px;
+}
+
+.adOfferVat {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.adOfferVat .adQuickDates {
+  margin: 0;
+}
+
+.adChip.active {
+  border-color: var(--dark);
+  background: var(--dark);
+  color: #ffffff;
+}
+
+.adOfferTotals {
+  margin: 14px 0 0;
+  padding-top: 12px;
+  display: grid;
+  gap: 6px;
+  border-top: 1px solid #e8ecf2;
+}
+
+.adOfferTotals div {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.adOfferTotals dt {
+  color: var(--text-secondary);
+}
+
+.adOfferTotals dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.adOfferTotals .grand {
+  font-size: 17px;
+}
+
+.adOfferTotals .grand dt,
+.adOfferTotals .grand dd {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.adOfferPreview {
+  position: sticky;
+  top: 20px;
+  display: grid;
+  gap: 12px;
+}
+
+.adOfferActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.adOfferActions .cmsButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.adOfferActions .cmsButton svg {
+  width: 16px;
+  height: 16px;
+}
+
+.adOfferWarn {
+  margin: 0;
+  color: #b7791f;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: end;
+}
+
+.adOfferConfirm {
+  padding: 14px 16px;
+  display: grid;
+  gap: 10px;
+  border: 1px solid rgba(29, 103, 213, 0.35);
+  border-radius: 14px;
+  background: #f3f7fe;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.adOfferConfirm p {
+  margin: 0;
+}
+
+.adOfferConfirm > div {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.adOfferPaper {
+  overflow: hidden;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 18px 50px rgba(17, 34, 68, 0.14);
+}
+
+.adOfferScale {
+  width: 794px;
+  transform-origin: top left;
+}
+
+[dir='rtl'] .adOfferScale {
+  transform-origin: top right;
+}
+
+.adOfferCapture {
+  position: fixed;
+  top: 0;
+  left: -12000px;
+  width: 794px;
+  pointer-events: none;
+}
+
+/* The PDF copy is only as tall as its content; pages are cut in offerPdf.js */
+.adOfferCapture .ofDoc {
+  min-height: 0;
+}
+
+@media (max-width: 1200px) {
+  .adOfferGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .adOfferPreview {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .adOfferRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .adOfferRow .adOfferWide {
+    grid-column: auto;
+  }
+
+  .adOfferNumbers {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .adOfferAmount {
+    grid-column: span 2;
+  }
+
+  .adOfferActions {
+    justify-content: stretch;
+  }
+
+  .adOfferActions .cmsButton {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* The offer document itself: A4 width, fixed sizes so the PDF matches the preview */
+
+.ofDoc {
+  width: 794px;
+  min-height: 1123px;
+  padding: 46px 50px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: #ffffff;
+  color: #112244;
+  font-family: Inter, 'IBM Plex Sans Arabic', Arial, sans-serif;
+  font-size: 12.5px;
+  line-height: 1.5;
+  text-align: start;
+}
+
+.ofDoc[dir='rtl'] {
+  font-family: 'IBM Plex Sans Arabic', Inter, Arial, sans-serif;
+}
+
+/* Letter spacing splits Arabic letters apart when drawn into the PDF */
+.ofDoc[dir='rtl'],
+.ofDoc[dir='rtl'] * {
+  letter-spacing: 0 !important;
+}
+
+/* Text typed in another script keeps its own direction, aligned like the document */
+.ofDoc[dir='ltr'] [dir='auto'] {
+  text-align: left;
+}
+
+.ofDoc[dir='rtl'] [dir='auto'],
+.ofDoc[dir='rtl'] .ofCompany > *,
+.ofDoc[dir='rtl'] .ofCustomer > * {
+  text-align: right;
+}
+
+.ofHead {
+  padding-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 2px solid #112244;
+}
+
+.ofBrand {
+  display: grid;
+  gap: 10px;
+}
+
+.ofBrand img {
+  width: 150px;
+  height: auto;
+  display: block;
+}
+
+.ofCompany {
+  display: grid;
+  gap: 1px;
+  color: #3c4a63;
+  font-size: 11px;
+}
+
+.ofCompany strong {
+  color: #112244;
+  font-size: 12.5px;
+}
+
+.ofTitle {
+  min-width: 240px;
+  display: grid;
+  gap: 10px;
+  text-align: end;
+}
+
+.ofTitle h1 {
+  margin: 0;
+  color: #1d67d5;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.ofTitle dl {
+  margin: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.ofTitle dl div {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  font-size: 11.5px;
+}
+
+.ofTitle dt {
+  color: #5d6980;
+}
+
+.ofTitle dd {
+  margin: 0;
+  min-width: 120px;
+  font-weight: 700;
+}
+
+.ofCustomer {
+  padding: 14px 16px;
+  display: grid;
+  gap: 2px;
+  border-radius: 10px;
+  background: #f4f6fa;
+}
+
+.ofLabel,
+.ofBlock h2 {
+  color: #5d6980;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ofCustomer strong {
+  font-size: 15px;
+}
+
+.ofCustomer span:not(.ofLabel) {
+  color: #3c4a63;
+}
+
+.ofLines {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ofLines th {
+  padding: 9px 10px;
+  background: #112244;
+  color: #ffffff;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-align: start;
+  text-transform: uppercase;
+}
+
+.ofLines td {
+  padding: 10px;
+  border-bottom: 1px solid #e2e7f0;
+  vertical-align: top;
+}
+
+.ofLines tbody tr:nth-child(even) td {
+  background: #f8f9fc;
+}
+
+.ofLines td strong {
+  display: block;
+  font-size: 12.5px;
+}
+
+.ofLines td small {
+  display: block;
+  margin-top: 2px;
+  color: #5d6980;
+  font-size: 11px;
+  white-space: pre-line;
+}
+
+.ofLines .ofNum {
+  width: 28px;
+  color: #5d6980;
+}
+
+.ofLines .ofRight {
+  text-align: end;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.ofLines .ofAmount {
+  font-weight: 700;
+}
+
+.ofTotals {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.ofTotals dl {
+  min-width: 300px;
+  margin: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.ofTotals dl div {
+  padding: 4px 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.ofTotals dt {
+  color: #5d6980;
+}
+
+.ofTotals dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.ofTotals .ofGrand {
+  padding: 10px;
+  border-radius: 8px;
+  background: #1d67d5;
+  color: #ffffff;
+  font-size: 15px;
+}
+
+.ofTotals .ofGrand dt,
+.ofTotals .ofGrand dd {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.ofBlock {
+  display: grid;
+  gap: 6px;
+}
+
+.ofBlock h2 {
+  margin: 0;
+}
+
+.ofBlock p {
+  margin: 0;
+  white-space: pre-line;
+}
+
+.ofSmall p {
+  color: #3c4a63;
+  font-size: 11px;
+}
+
+.ofTerms {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ofTerms div {
+  padding: 10px 12px;
+  border: 1px solid #e2e7f0;
+  border-radius: 8px;
+}
+
+.ofTerms dt {
+  color: #5d6980;
+  font-size: 10.5px;
+}
+
+.ofTerms dd {
+  margin: 2px 0 0;
+  font-weight: 600;
+}
+
+.ofFoot {
+  margin-top: auto;
+  padding-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 20px;
+  border-top: 1px solid #e2e7f0;
+  color: #5d6980;
+  font-size: 10.5px;
+}
+
+.ofFoot em {
+  font-style: normal;
+  font-weight: 700;
+}
+
+/* ===== Hero headline intro: words appear one by one, light sweeps over the accent ===== */
+
+.heroWords .heroLine {
+  animation: none;
+}
+
+.heroWord {
+  display: inline-block;
+  animation: heroWordIn 0.95s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(0.12s + var(--w, 0) * 0.11s);
+  will-change: opacity, transform, filter;
+}
+
+/* The accent gradient is painted per word (a transformed child cannot use its parent's text clip) */
+.heroWords .heroLineAccent {
+  background: none;
+  color: inherit;
+}
+
+.heroWords .heroLineAccent .heroWord {
+  background: linear-gradient(100deg, #7fb2ff 0%, #4d94f5 40%, #4d94f5 46%, #e6f0ff 50%, #4d94f5 54%, #a9cbff 100%);
+  background-size: 260% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation:
+    heroWordIn 0.95s cubic-bezier(0.2, 0.8, 0.2, 1) both,
+    heroShine 7s cubic-bezier(0.45, 0, 0.2, 1) infinite alternate;
+  animation-delay: calc(0.12s + var(--w, 0) * 0.11s), calc(1.1s + var(--w, 0) * 0.12s);
+}
+
+[dir='rtl'] .heroWords .heroLineAccent .heroWord {
+  background-image: linear-gradient(260deg, #7fb2ff 0%, #4d94f5 40%, #4d94f5 46%, #e6f0ff 50%, #4d94f5 54%, #a9cbff 100%);
+}
+
+/* Light hero (no video): same structure, solid accent colour with a lighter sweep */
+.heroContent h1.heroWords span {
+  display: inline-block;
+  color: inherit;
+}
+
+.heroContent h1.heroWords .heroLine {
+  display: block;
+}
+
+.heroContent .heroWords .heroLineAccent .heroWord {
+  background-image: linear-gradient(100deg, var(--accent) 0%, var(--accent) 44%, #8fbcff 50%, var(--accent) 56%, var(--accent) 100%);
+}
+
+/* Text after the headline follows the last word */
+.heroWords ~ .lead {
+  animation-delay: 0.62s;
+}
+
+.heroVideo .heroVideoContent .actions {
+  animation-delay: 0.74s;
+}
+
+.heroVideo .heroVideoContent .heroVideoTrust {
+  animation-delay: 0.86s;
+}
+
+/* First visit: the intro waits until the logo screen has gone */
+html.booting .heroWords .heroWord,
+.booting .heroContent .eyebrow,
+.booting .heroVideoEyebrow,
+.booting .heroVideoContent .lead,
+.booting .heroVideo .actions,
+.booting .heroVideoTrust,
+.booting .heroVideoPanel {
+  animation-play-state: paused;
+}
+
+@keyframes heroWordIn {
+  from {
+    opacity: 0;
+    filter: blur(14px);
+    transform: translateY(0.32em);
+  }
+
+  60% {
+    filter: blur(0);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+  }
+}
+
+/* A narrow highlight crosses the accent words, then rests */
+@keyframes heroShine {
+  0% {
+    background-position: 100% 0;
+  }
+
+  24%,
+  100% {
+    background-position: 0% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroWord,
+  .heroWords .heroLineAccent .heroWord {
+    animation: none;
+    will-change: auto;
+  }
+}

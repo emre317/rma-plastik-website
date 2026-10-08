@@ -495,3 +495,159 @@ export async function sendQuoteConfirmation(quote, contact = {}) {
     text,
   });
 }
+
+/* ---------- Commercial offer sent to the customer (PDF attached) ---------- */
+
+export async function buildOfferEmail(quote, offer, contact = {}) {
+  // Shared with the admin offer document (kept free of imports)
+  const { offerCopy, offerNumber, offerTotals, formatMoney, formatOfferDate } = await import('../../client/src/data/offerText.js');
+
+  const lang = offer.language || 'tr';
+  const copy = offerCopy(lang);
+  const dir = copy.dir || 'ltr';
+  const align = dir === 'rtl' ? 'right' : 'left';
+  const end = dir === 'rtl' ? 'left' : 'right';
+  const number = offerNumber(quote._id, offer.revision);
+  const reference = quoteReference(quote._id);
+  const totals = offerTotals(offer);
+  const money = (value) => formatMoney(value, offer.currency, lang);
+  const name = String(quote.name || '').slice(0, 80);
+  const email = contact.email || DEFAULT_CONTACT.email;
+  const phoneDisplay = contact.phoneDisplay || DEFAULT_CONTACT.phoneDisplay;
+
+  const cell = (extra = '') => `padding:10px 12px;font-size:13px;border-top:1px solid #e2e7f2;vertical-align:top;${extra}`;
+
+  const linesHtml = offer.lines
+    .map((line, index) => `
+                <tr>
+                  <td style="${cell(`text-align:${align};color:#112244;`)}"><strong>${escapeHtml(line.name)}</strong>${line.details ? `<br><span style="color:#5d6980;font-size:12px;">${escapeHtml(line.details)}</span>` : ''}</td>
+                  <td style="${cell(`text-align:${end};white-space:nowrap;color:#112244;`)}" dir="ltr">${escapeHtml(line.quantity)} ${escapeHtml(line.unit || copy.unit)}</td>
+                  <td style="${cell(`text-align:${end};white-space:nowrap;color:#112244;font-weight:700;`)}" dir="ltr">${escapeHtml(money(totals.lines[index]))}</td>
+                </tr>`)
+    .join('');
+
+  const totalRows = [
+    ...(totals.hasVat ? [[copy.subtotal, money(totals.subtotal)], [`${copy.vat} (%${offer.vatRate})`, money(totals.vat)]] : []),
+    [copy.total, money(totals.total)],
+  ];
+
+  const facts = [
+    [copy.number, number],
+    [copy.reference, reference],
+    [copy.validUntil, formatOfferDate(offer.validUntil, lang)],
+    [copy.incoterm, [offer.incoterm, offer.deliveryPlace].filter(Boolean).join(' – ')],
+    [copy.deliveryTime, offer.deliveryTime],
+    [copy.payment, offer.paymentTerms],
+  ].filter(([, value]) => value);
+
+  const subject = copy.emailSubject(number);
+
+  const html = `<!doctype html>
+<html lang="${lang}" dir="${dir}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${escapeHtml(subject)}</title>
+</head>
+<body style="margin:0;padding:0;background:#f0f3f8;font-family:Arial,Helvetica,sans-serif;color:#112244;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f0f3f8;padding:32px 12px;" dir="${dir}">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:620px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #dadfe8;">
+          <tr>
+            <td style="background:#0f1e3c;padding:26px 32px;text-align:${align};">
+              <div style="font-size:20px;font-weight:700;color:#ffffff;" dir="ltr">RMA <span style="color:#1d67d5;">Plastik</span></div>
+              <p style="margin:20px 0 4px;font-size:12px;font-weight:700;color:#5b9cf5;letter-spacing:0.06em;text-transform:uppercase;">${escapeHtml(copy.title)}</p>
+              <h1 style="margin:0;font-size:22px;color:#ffffff;font-weight:600;" dir="ltr">${escapeHtml(number)}</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:26px 32px 6px;text-align:${align};font-size:15px;line-height:1.7;">
+              <p style="margin:0 0 10px;font-weight:700;">${escapeHtml(copy.emailGreeting(name))}</p>
+              <p style="margin:0;">${escapeHtml(copy.emailIntro(reference))}</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:20px 32px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e2e7f2;border-radius:12px;border-collapse:separate;">
+                <tr>
+                  <td style="padding:10px 12px;font-size:11px;font-weight:700;color:#5d6980;text-transform:uppercase;text-align:${align};">${escapeHtml(copy.item)}</td>
+                  <td style="padding:10px 12px;font-size:11px;font-weight:700;color:#5d6980;text-transform:uppercase;text-align:${end};">${escapeHtml(copy.qty)}</td>
+                  <td style="padding:10px 12px;font-size:11px;font-weight:700;color:#5d6980;text-transform:uppercase;text-align:${end};">${escapeHtml(copy.amount)}</td>
+                </tr>
+                ${linesHtml}
+                ${totalRows
+                  .map(([label, value], index) => `
+                <tr>
+                  <td colspan="2" style="${cell(`text-align:${end};color:#5d6980;${index === totalRows.length - 1 ? 'font-weight:700;color:#112244;' : ''}`)}">${escapeHtml(label)}</td>
+                  <td style="${cell(`text-align:${end};white-space:nowrap;${index === totalRows.length - 1 ? 'font-size:15px;font-weight:700;color:#1d67d5;' : 'color:#112244;'}`)}" dir="ltr">${escapeHtml(value)}</td>
+                </tr>`)
+                  .join('')}
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:18px 32px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                ${facts
+                  .map(([label, value]) => `
+                <tr>
+                  <td style="padding:5px 0;width:40%;font-size:13px;color:#5d6980;text-align:${align};vertical-align:top;">${escapeHtml(label)}</td>
+                  <td style="padding:5px 0;font-size:13px;color:#112244;font-weight:600;text-align:${align};vertical-align:top;">${escapeHtml(value)}</td>
+                </tr>`)
+                  .join('')}
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:20px 32px 28px;text-align:${align};font-size:14px;line-height:1.65;">
+              <p style="margin:0 0 6px;">📎 ${escapeHtml(copy.emailAttachment)}</p>
+              <p style="margin:0;">${escapeHtml(copy.emailReply)}</p>
+              <p style="margin:16px 0 0;color:#5d6980;font-size:13px;">${escapeHtml(offer.preparedBy || 'RMA Plastik')}<br><span dir="ltr">${escapeHtml(phoneDisplay)}</span> · ${escapeHtml(email)}</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+
+  const plain = [
+    copy.emailGreeting(name),
+    '',
+    copy.emailIntro(reference),
+    '',
+    ...offer.lines.map((line, index) => `- ${line.name}: ${line.quantity} ${line.unit || copy.unit} = ${money(totals.lines[index])}`),
+    ...totalRows.map(([label, value]) => `${label}: ${value}`),
+    '',
+    ...facts.map(([label, value]) => `${label}: ${value}`),
+    '',
+    copy.emailAttachment,
+    copy.emailReply,
+    '',
+    `${offer.preparedBy || 'RMA Plastik'} · ${phoneDisplay} · ${email}`,
+  ].join('\n');
+
+  return { subject, html, text: plain, name, number, total: money(totals.total) };
+}
+
+export async function sendOfferEmail(quote, offer, contact = {}, pdf) {
+  const { subject, html, text, name, number, total } = await buildOfferEmail(quote, offer, contact);
+
+  // Copy to the sales team so the sent offer is also in their inbox
+  const sales = (process.env.QUOTE_NOTIFY_TO || '').split(',').map((item) => item.trim()).filter(Boolean);
+  const replyTo = contact.email || sales[0] || undefined;
+
+  await sendMail({
+    to: { name, address: quote.email },
+    ...(sales.length ? { bcc: sales } : {}),
+    ...(replyTo ? { replyTo } : {}),
+    subject,
+    html,
+    text,
+    attachments: [{ filename: `${number}.pdf`, content: pdf, contentType: 'application/pdf' }],
+  });
+
+  return { number, total };
+}

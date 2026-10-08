@@ -32,6 +32,16 @@ const GROUPS = [
       { key: 'youtubeHandle', label: 'YouTube kullanıcı adı', placeholder: '@rmaplastik5113' },
     ],
   },
+  {
+    title: 'Teklif belgesi',
+    note: 'Yalnızca panelde hazırlanan teklif PDF’lerinde kullanılır, sitede görünmez.',
+    fields: [
+      { key: 'companyLegalName', label: 'Ticari unvan', placeholder: 'Teklifin üstünde görünen tam unvan' },
+      { key: 'taxInfo', label: 'Vergi dairesi / vergi no', placeholder: 'ör. … V.D. – 1234567890' },
+      { key: 'offerBankInfo', label: 'Banka bilgileri', placeholder: 'Banka, şube, IBAN (TL / USD / EUR)…', multiline: 4 },
+      { key: 'offerTerms', label: 'Varsayılan genel koşullar', placeholder: 'Her yeni teklife otomatik eklenir; teklifte değiştirilebilir.', multiline: 6 },
+    ],
+  },
 ];
 
 const KEYS = GROUPS.flatMap((group) => group.fields.map((field) => field.key));
@@ -98,17 +108,27 @@ export default function AdminSettings() {
             {GROUPS.map((group) => (
               <div key={group.title} className="cmsCard">
                 <h2>{group.title}</h2>
+                {group.note && <p className="cmsHint">{group.note}</p>}
 
                 {group.fields.map((field) => (
                   <label key={field.key} className="cmsField">
                     <span>{field.label}</span>
-                    <input
-                      type={field.type || 'text'}
-                      dir={['phone', 'phoneDisplay', 'whatsapp', 'email'].includes(field.key) ? 'ltr' : undefined}
-                      value={form[field.key]}
-                      placeholder={field.placeholder}
-                      onChange={(event) => setForm((current) => ({ ...current, [field.key]: event.target.value }))}
-                    />
+                    {field.multiline ? (
+                      <textarea
+                        rows={field.multiline}
+                        value={form[field.key]}
+                        placeholder={field.placeholder}
+                        onChange={(event) => setForm((current) => ({ ...current, [field.key]: event.target.value }))}
+                      />
+                    ) : (
+                      <input
+                        type={field.type || 'text'}
+                        dir={['phone', 'phoneDisplay', 'whatsapp', 'email'].includes(field.key) ? 'ltr' : undefined}
+                        value={form[field.key]}
+                        placeholder={field.placeholder}
+                        onChange={(event) => setForm((current) => ({ ...current, [field.key]: event.target.value }))}
+                      />
+                    )}
                     {field.hint && <small>{field.hint}</small>}
                   </label>
                 ))}

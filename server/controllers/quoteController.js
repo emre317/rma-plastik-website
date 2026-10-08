@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 import QuoteRequest, {
+  OFFER_CURRENCIES,
   QUOTE_LANGUAGES,
   QUOTE_STATUSES,
 } from '../models/QuoteRequest.js';
@@ -9,6 +10,7 @@ import { isMailConfigured } from '../services/mailer.js';
 import {
   isCustomerConfirmationEnabled,
   quoteReference,
+  sendOfferEmail,
   sendQuoteConfirmation,
   sendQuoteNotification,
 } from '../services/quoteEmail.js';
@@ -716,6 +718,142 @@ export async function deleteQuoteNote(req, res) {
       success: false,
       message: 'Note could not be deleted.',
     });
+  }
+}
+
+
+/* ---------- Commercial offer (Teklif) ---------- */
+
+const num = (value, min, max, fallback) => {
+  const number = Number(value);
+  return Number.isFinite(number) ? Math.min(max, Math.max(min, number)) : fallback;
+};
+
+function offerPayload(body = {}) {
+  const lines = (Array.isArray(body.lines) ? body.lines : [])
+    .slice(0, 60)
+    .map((line) => ({
+      name: cleanString(line?.name).slice(0, 200),
+      details: cleanString(line?.details).slice(0, 600),
+      quantity: num(line?.quantity, 0, 1000000, 1),
+      unit: cleanString(line?.unit).slice(0, 20),
+      unitPrice: num(line?.unitPrice, 0, 1e10, 0),
+      discount: num(line?.discount, 0, 100, 0),
+    }))
+    .filter((line) => line.name);
+
+  const vat = body.vatRate === null || body.vatRate === undefined || body.vatRate === '' ? null : num(body.vatRate, 0, 100, null);
+
+  return {
+    language: QUOTE_LANGUAGES.includes(body.language) ? body.language : 'tr',
+    currency: OFFER_CURRENCIES.includes(body.currency) ? body.currency : 'TRY',
+    lines,
+    vatRate: vat,
+    incoterm: cleanString(body.incoterm).slice(0, 20),
+    deliveryPlace: cleanString(body.deliveryPlace).slice(0, 160),
+    deliveryTime: cleanString(body.deliveryTime).slice(0, 160),
+    paymentTerms: cleanString(body.paymentTerms).slice(0, 300),
+    validUntil: parseDay(body.validUntil) || null,
+    notes: cleanString(body.notes).slice(0, 2000),
+    terms: cleanString(body.terms).slice(0, 3000),
+    preparedBy: cleanString(body.preparedBy).slice(0, 120),
+  };
+}
+
+/* Save the offer; editing an offer that was already sent starts a new revision */
+export async function saveQuoteOffer(req, res) {
+  try {
+    if (!isValidId(req.params.id)) {
+      return notFound(res);
+    }
+
+    const quote = await QuoteRequest.findById(req.params.id);
+
+    if (!quote) {
+      return notFound(res);
+    }
+
+    const data = offerPayload(req.body);
+
+    if (!data.lines.length) {
+      return res.status(400).json({ success: false, message: 'Teklife en az bir ürün satırı ekleyin.' });
+    }
+
+    const previous = quote.offer;
+    const revision = previous ? (previous.sentAt ? (previous.revision || 1) + 1 : previous.revision || 1) : 1;
+
+    quote.offer = {
+      ...data,
+      revision,
+      savedAt: new Date(),
+      // Earlier sends stay in the internal notes
+      sentAt: null,
+      sentTo: '',
+    };
+
+    await quote.save();
+
+    return res.json({ success: true, data: quote });
+  } catch (error) {
+    if (error instanceof mongoose.Error.ValidationError) {
+      return res.status(400).json({ success: false, message: 'Teklif bilgilerini kontrol edin.' });
+    }
+
+    console.error('Save offer error:', error);
+
+    return res.status(500).json({ success: false, message: 'Teklif kaydedilemedi.' });
+  }
+}
+
+/* E-mail the saved offer to the customer with the PDF made in the admin panel */
+export async function sendQuoteOffer(req, res) {
+  try {
+    if (!isValidId(req.params.id)) {
+      return notFound(res);
+    }
+
+    if (!isMailConfigured()) {
+      return res.status(400).json({ success: false, message: 'E-posta (SMTP) ayarlı değil; PDF’i indirip kendiniz gönderin.' });
+    }
+
+    const pdf = req.file?.buffer;
+
+    if (!pdf || pdf.subarray(0, 5).toString('latin1') !== '%PDF-') {
+      return res.status(400).json({ success: false, message: 'Teklif PDF’i oluşturulamadı.' });
+    }
+
+    const quote = await QuoteRequest.findById(req.params.id);
+
+    if (!quote) {
+      return notFound(res);
+    }
+
+    if (!quote.offer?.lines?.length || !quote.offer.savedAt) {
+      return res.status(400).json({ success: false, message: 'Önce teklifi kaydedin.' });
+    }
+
+    const settings = await getSiteSettings().catch(() => ({}));
+    const { number, total } = await sendOfferEmail(quote, quote.offer, settings || {}, pdf);
+
+    quote.offer.sentAt = new Date();
+    quote.offer.sentTo = quote.email;
+
+    if (!['quoted', 'closed'].includes(quote.status)) {
+      quote.status = 'quoted';
+    }
+
+    quote.notes.push({
+      text: `Teklif ${number} e-postayla gönderildi (${quote.email}). Toplam: ${total}`,
+      author: req.admin?.name || req.admin?.email || '',
+    });
+
+    await quote.save();
+
+    return res.json({ success: true, data: quote });
+  } catch (error) {
+    console.error('Send offer error:', error);
+
+    return res.status(500).json({ success: false, message: 'Teklif e-postası gönderilemedi.' });
   }
 }
 

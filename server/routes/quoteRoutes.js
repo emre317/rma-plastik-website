@@ -13,6 +13,8 @@ import {
   updateQuoteTracking,
   addQuoteNote,
   deleteQuoteNote,
+  saveQuoteOffer,
+  sendQuoteOffer,
 } from '../controllers/quoteController.js';
 
 import {
@@ -22,6 +24,8 @@ import {
 import {
   quoteSubmitLimiter,
 } from '../middleware/rateLimit.js';
+
+import { offerPdfUpload } from '../middleware/upload.js';
 
 const router = express.Router();
 
@@ -101,6 +105,19 @@ router.delete(
   '/:id/notes/:noteId',
   requireAdmin,
   deleteQuoteNote
+);
+
+router.put(
+  '/:id/offer',
+  requireAdmin,
+  saveQuoteOffer
+);
+
+router.post(
+  '/:id/offer/send',
+  requireAdmin,
+  offerPdfUpload,
+  sendQuoteOffer
 );
 
 export default router;

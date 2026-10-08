@@ -4,6 +4,7 @@ import Arrow from '../components/i18n/Arrow';
 import { useQuote } from '../components/quote/QuoteContext';
 import videos from '../data/videos';
 import HeroVideo from './HeroVideo';
+import HeroTitle from '../components/ui/HeroTitle';
 import { EcoBadge } from '../components/ui/EcoMarks';
 
 export default function HeroSection() {
@@ -40,11 +41,7 @@ export default function HeroSection() {
               {t('hero.eyebrow')}
             </p>
 
-            <h1>
-              {t('hero.titleLine1')}
-              <span>{t('hero.titleAccent')}</span>
-              {t('hero.titleLine2')}
-            </h1>
+            <HeroTitle line1={t('hero.titleLine1')} accent={t('hero.titleAccent')} line2={t('hero.titleLine2')} />
 
             <p className="lead">
               {t('hero.lead')}

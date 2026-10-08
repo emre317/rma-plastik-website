@@ -11,8 +11,10 @@ import { videoText } from '../data/videos';
 import useLanguage from '../hooks/useLanguage';
 import portfolio from '../data/productPortfolio';
 import { EcoBadge } from '../components/ui/EcoMarks';
+import HeroTitle from '../components/ui/HeroTitle';
 
 const PLAYER_ORIGIN = 'https://www.youtube-nocookie.com';
+
 
 // Product groups shown in the moving band (same groups as the 04 / Ürünler portfolio)
 
@@ -240,11 +242,7 @@ export default function HeroVideo({ video }) {
               {t('hero.eyebrow')}
             </p>
 
-            <h1>
-              <span className="heroLine">{t('hero.titleLine1')}</span>
-              <span className="heroLine heroLineAccent">{t('hero.titleAccent')}</span>
-              <span className="heroLine">{t('hero.titleLine2')}</span>
-            </h1>
+            <HeroTitle line1={t('hero.titleLine1')} accent={t('hero.titleAccent')} line2={t('hero.titleLine2')} />
 
             <p className="lead">{t('hero.lead')}</p>
 

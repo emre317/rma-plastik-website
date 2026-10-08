@@ -1,4 +1,4 @@
-import { request } from './http';
+import { ApiError, request } from './http';
 
 export function adminLogin(payload) {
   return request('/auth/login', {
@@ -121,4 +121,40 @@ export function deleteQuoteNote(id, noteId, token) {
     token,
     fallbackMessage: 'Not silinemedi.',
   });
+}
+
+export function saveQuoteOffer(id, offer, token) {
+  return request(`/quote/${encodeURIComponent(id)}/offer`, {
+    method: 'PUT',
+    body: offer,
+    token,
+    fallbackMessage: 'Teklif kaydedilemedi.',
+  });
+}
+
+/* PDF made in the browser, sent as a file (multipart, so not through request()) */
+export async function sendQuoteOffer(id, pdfBlob, filename, token) {
+  const API_BASE_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
+  const form = new FormData();
+  form.append('pdf', pdfBlob, filename);
+
+  let response;
+
+  try {
+    response = await fetch(`${API_BASE_URL}/quote/${encodeURIComponent(id)}/offer/send`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: form,
+    });
+  } catch {
+    throw new ApiError('Sunucuya ulaşılamadı.', 0);
+  }
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new ApiError(data.message || 'Teklif gönderilemedi.', response.status);
+  }
+
+  return data;
 }

@@ -99,7 +99,7 @@ export default function AdminQuotes() {
   }, [call, page, statusFilter, search, assignee, reloadKey]);
 
   useEffect(() => {
-    call(getQuoteAssignees).then((response) => setAssignees(response.data || [])).catch(() => {});
+    call(getQuoteAssignees).then((response) => setAssignees(Array.isArray(response.data) ? response.data : [])).catch(() => {});
   }, [call]);
 
   async function download() {

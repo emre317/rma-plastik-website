@@ -22,6 +22,12 @@ const siteSettingsSchema = new mongoose.Schema(
     instagramHandle: str(80),
     youtubeHandle: str(80),
 
+    // Offer document (admin only, never published on the site)
+    companyLegalName: str(200),
+    taxInfo: str(160),
+    offerBankInfo: str(800),
+    offerTerms: str(3000),
+
     // Publishing bookkeeping
     contentChangedAt: { type: Date, default: null },
     publishedAt: { type: Date, default: null },

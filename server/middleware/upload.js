@@ -67,3 +67,21 @@ export const uploadProductImage = uploadHandler('products');
 export const uploadPostImage = uploadHandler('posts');
 export const uploadProjectImage = uploadHandler('projects');
 export const uploadGalleryImage = uploadHandler('gallery');
+
+/* Offer PDF made in the admin panel, kept in memory only to attach it to the e-mail */
+export function offerPdfUpload(req, res, next) {
+  multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 8 * 1024 * 1024, files: 1 },
+    fileFilter: (request, file, cb) => cb(null, file.mimetype === 'application/pdf'),
+  }).single('pdf')(req, res, (error) => {
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.code === 'LIMIT_FILE_SIZE' ? 'Teklif PDF’i en fazla 8 MB olabilir.' : 'Teklif PDF’i okunamadı.',
+      });
+    }
+
+    return next();
+  });
+}

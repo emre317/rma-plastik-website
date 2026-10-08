@@ -17,7 +17,11 @@ const SETTINGS_FIELDS = [
   'phoneDisplay', 'phone', 'email', 'whatsapp',
   'addressStreet', 'addressDistrict', 'addressCountry',
   'linkedin', 'instagram', 'youtube', 'instagramHandle', 'youtubeHandle',
+  'companyLegalName', 'taxInfo', 'offerBankInfo', 'offerTerms',
 ];
+
+// Longer texts; every other field is at most 300 characters
+const SETTINGS_LIMITS = { companyLegalName: 200, taxInfo: 160, offerBankInfo: 800, offerTerms: 3000 };
 
 function str(value, max = 5000) {
   return typeof value === 'string' ? value.trim().slice(0, max) : '';
@@ -161,7 +165,7 @@ export async function getSettings(req, res) {
 export async function updateSettings(req, res) {
   try {
     const update = Object.fromEntries(
-      SETTINGS_FIELDS.map((field) => [field, str(req.body?.[field], 300)])
+      SETTINGS_FIELDS.map((field) => [field, str(req.body?.[field], SETTINGS_LIMITS[field] || 300)])
     );
 
     update.whatsapp = update.whatsapp.replace(/\D/g, '');

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
-  ArrowLeft, Building2, CalendarClock, Check, Copy, Globe2, Mail, MessageCircle, NotebookPen, Package, Phone, Trash2, User,
+  ArrowLeft, Building2, CalendarClock, Check, Copy, FileSignature, Globe2, Mail, MessageCircle, NotebookPen, Package, Phone, Trash2, User,
 } from 'lucide-react';
 
 import {
@@ -9,6 +9,7 @@ import {
 } from '../../services/adminApi';
 import { notifyQuotesChanged } from '../../services/adminAuth';
 import useAdminApi from '../../hooks/useAdminApi';
+import { formatMoney, offerNumber, offerTotals } from '../../data/offerText';
 import usePageTitle from '../../hooks/usePageTitle';
 import {
   LANGUAGE_LABELS, QUOTE_STATUSES, dayValue, followUpState, formatDate, quoteReference, statusLabel, statusTone, todayValue,
@@ -90,7 +91,7 @@ export default function AdminQuoteDetail() {
 
   // Suggestions for the assignee field (names used before)
   useEffect(() => {
-    call(getQuoteAssignees).then((response) => setAssignees(response.data || [])).catch(() => {});
+    call(getQuoteAssignees).then((response) => setAssignees(Array.isArray(response.data) ? response.data : [])).catch(() => {});
   }, [call]);
 
   async function saveTracking(changes, key) {
@@ -284,6 +285,31 @@ export default function AdminQuoteDetail() {
 
             {quote.application && (
               <p className="adApplication"><span>Uygulama</span>{quote.application}</p>
+            )}
+          </div>
+
+          {/* Commercial offer */}
+          <div className="adCard adOfferCard">
+            <div className="adCardHead">
+              <h2><FileSignature aria-hidden="true" />Fiyat teklifi</h2>
+              {quote.offer && <span className="adHint" dir="ltr">{offerNumber(quote._id, quote.offer.revision)}</span>}
+            </div>
+            {quote.offer ? (
+              <div className="adOfferSummary">
+                <div>
+                  <strong dir="ltr">{formatMoney(offerTotals(quote.offer).total, quote.offer.currency, 'tr')}</strong>
+                  <small>
+                    {quote.offer.lines.length} satır ·{' '}
+                    {quote.offer.sentAt ? `${formatDate(quote.offer.sentAt, true)} tarihinde gönderildi` : `taslak, ${formatDate(quote.offer.savedAt, true)} kaydedildi`}
+                  </small>
+                </div>
+                <Link to={`/admin/quotes/${quote._id}/offer`} className="cmsButton">Teklifi aç</Link>
+              </div>
+            ) : (
+              <div className="adOfferSummary">
+                <p>İstenen ürünler hazır gelir; fiyat ve koşulları girip PDF indirin ya da müşteriye e-postayla gönderin.</p>
+                <Link to={`/admin/quotes/${quote._id}/offer`} className="cmsButton cmsButtonPrimary">Teklif hazırla</Link>
+              </div>
             )}
           </div>
 
