@@ -27692,3 +27692,78 @@ html[lang="ar"] .ecoBandEyebrow {
     padding-top: 72px;
   }
 }
+
+/* =====================================================
+   PAGE TRANSITION – brand screen between pages (1.5 s)
+===================================================== */
+
+.pageLoader {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: grid;
+  place-items: center;
+  background: #f3f5fa;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 400ms ease, visibility 0s linear 400ms;
+}
+
+.pageLoader.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: none;
+}
+
+.pageLoaderInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+}
+
+.pageLoaderInner .brandLogo img {
+  width: 180px;
+  height: auto;
+  animation: bootLogo 1.5s ease both;
+}
+
+.pageLoaderBar {
+  width: 140px;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: rgba(17, 34, 68, 0.1);
+}
+
+.pageLoaderBar i {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--accent);
+  animation: bootBar 1.5s ease-in-out both;
+}
+
+@keyframes bootLogo {
+  0% { opacity: 0; transform: scale(0.92); }
+  30% { opacity: 1; transform: none; }
+  100% { opacity: 1; }
+}
+
+@keyframes bootBar {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pageLoaderInner .brandLogo img,
+  .pageLoaderBar i {
+    animation: none;
+  }
+
+  .pageLoaderBar i {
+    width: 100%;
+  }
+}
