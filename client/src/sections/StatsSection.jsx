@@ -88,19 +88,36 @@ export default function StatsSection() {
       return undefined;
     }
 
+    // Shown once the section's top is on screen, also when it was scrolled past quickly
+    let frame = 0;
+    const done = () => {
+      setInView(true);
+      observer.disconnect();
+      window.removeEventListener('scroll', onScroll);
+    };
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        if (element.getBoundingClientRect().top < window.innerHeight * 0.9) done();
+      });
+    };
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          observer.disconnect();
-        }
+        if (entry.isIntersecting) done();
       },
       { threshold: 0.2 }
     );
 
     observer.observe(element);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(frame);
+    };
   }, []);
 
   return (

@@ -6,6 +6,7 @@ import IndustriesSection from '../../sections/IndustriesSection';
 import CustomMoldingSection from '../../sections/CustomMoldingSection';
 import GlobalPresenceSection from '../../sections/GlobalPresenceSection';
 import ContactSection from '../../sections/ContactSection';
+import FaqSection from '../../components/ui/FaqSection';
 import { SustainabilityBand } from '../../components/ui/EcoMarks';
 import { useTranslation } from 'react-i18next';
 
@@ -25,6 +26,7 @@ export default function Home() {
       <IndustriesSection />
       <CustomMoldingSection />
       <GlobalPresenceSection />
+      <FaqSection />
       <ContactSection index={t('contact.homeIndex')} />
     </main>
   );

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MessageSquare, Plus } from 'lucide-react';
+import { MessageSquare } from 'lucide-react';
 
 import Seo from '../../seo/Seo';
 import PageHeader from '../../components/ui/PageHeader';
@@ -9,26 +9,11 @@ import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
 import useLanguage from '../../hooks/useLanguage';
 import { FAQ_TOPICS, faqsForLanguage } from '../../data/faq';
+import { FaqAccordion } from '../../components/ui/FaqSection';
 
 /* Questions as an accordion; also used on the contact page (limit) */
 export function FaqList({ items, limit }) {
-  const shown = limit ? items.slice(0, limit) : items;
-
-  return (
-    <div className="faqList">
-      {shown.map((item) => (
-        <details key={item.question} className="faqItem">
-          <summary>
-            <span>{item.question}</span>
-            <Plus aria-hidden="true" />
-          </summary>
-          <div className="faqAnswer">
-            {item.answer.split(/\n{2,}/).map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-          </div>
-        </details>
-      ))}
-    </div>
-  );
+  return <FaqAccordion items={limit ? items.slice(0, limit) : items} />;
 }
 
 /* Sık sorulan sorular: questions from the admin panel, grouped by topic */

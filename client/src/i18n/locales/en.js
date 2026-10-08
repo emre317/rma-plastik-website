@@ -498,6 +498,8 @@ const en = {
     ctaText: 'Write to our sales team and we will help you choose the right product.',
     sectionTitle: 'Frequently asked questions',
     seeAll: 'All questions',
+    homeText: 'Answers to the questions we are asked most about our products, ordering and delivery. Can’t find what you need? Contact our sales team.',
+    homeCta: 'Any questions? Get in touch',
   },
 
   gallery: {

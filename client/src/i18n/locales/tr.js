@@ -497,6 +497,8 @@ const tr = {
     ctaText: 'Satış ekibimize yazın; ihtiyacınıza uygun ürünü birlikte belirleyelim.',
     sectionTitle: 'Sık sorulan sorular',
     seeAll: 'Tüm sorular',
+    homeText: 'Ürünlerimiz, sipariş ve teslimat hakkında en çok sorulan soruların cevapları. Aradığınızı bulamazsanız satış ekibimize ulaşın.',
+    homeCta: 'Sorunuz mu var? Bize ulaşın',
   },
 
   gallery: {
