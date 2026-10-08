@@ -26060,7 +26060,8 @@ html[lang="ar"] .ecoBandEyebrow {
 
 .adminContent {
   width: 100%;
-  max-width: 1320px;
+  min-width: 0;
+  max-width: none;
   padding: 36px 44px 72px;
 }
 
@@ -27693,77 +27694,587 @@ html[lang="ar"] .ecoBandEyebrow {
   }
 }
 
-/* =====================================================
-   PAGE TRANSITION – brand screen between pages (1.5 s)
-===================================================== */
+/* Quote dialog – compact submit row and success screen */
 
-.pageLoader {
-  position: fixed;
-  inset: 0;
-  z-index: 3000;
-  display: grid;
-  place-items: center;
-  background: #f3f5fa;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 400ms ease, visibility 0s linear 400ms;
+.qmSubmitRow {
+  margin-top: 22px;
+  padding-top: 18px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-top: 1px solid rgba(17, 34, 68, 0.08);
 }
 
-.pageLoader.show {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transition: none;
+.qmSubmitRow p {
+  max-width: 380px;
 }
 
-.pageLoaderInner {
+.qmSubmit {
+  height: 48px;
+  padding: 0 22px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #ffffff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  box-shadow: 0 12px 24px -14px rgba(29, 103, 213, 0.9);
+  transition: background-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+
+.qmSubmit:hover:not(:disabled) {
+  background: var(--accent-dark);
+  transform: translateY(-1px);
+}
+
+.qmSubmit:disabled {
+  opacity: 0.75;
+  cursor: progress;
+}
+
+.qmSubmit svg {
+  width: 17px;
+  height: 17px;
+}
+
+.qmSpinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: qmSpin 0.7s linear infinite;
+}
+
+@keyframes qmSpin {
+  to { transform: rotate(360deg); }
+}
+
+.qmSuccess {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 26px;
+  justify-content: center;
+  text-align: center;
 }
 
-.pageLoaderInner .brandLogo img {
-  width: 180px;
-  height: auto;
-  animation: bootLogo 1.5s ease both;
+.qmSuccessIcon svg {
+  width: 84px;
+  height: 84px;
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.pageLoaderBar {
-  width: 140px;
-  height: 3px;
-  overflow: hidden;
-  border-radius: 3px;
-  background: rgba(17, 34, 68, 0.1);
+.qmSuccessIcon circle {
+  fill: #e5f5ed;
+  stroke: var(--eco);
+  stroke-dasharray: 152;
+  stroke-dashoffset: 152;
+  animation: qmDraw 600ms ease forwards;
 }
 
-.pageLoaderBar i {
-  display: block;
-  height: 100%;
-  border-radius: 3px;
-  background: var(--accent);
-  animation: bootBar 1.5s ease-in-out both;
+.qmSuccessIcon path {
+  stroke: var(--eco);
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: qmDraw 400ms ease 450ms forwards;
 }
 
-@keyframes bootLogo {
-  0% { opacity: 0; transform: scale(0.92); }
-  30% { opacity: 1; transform: none; }
-  100% { opacity: 1; }
+@keyframes qmDraw {
+  to { stroke-dashoffset: 0; }
 }
 
-@keyframes bootBar {
-  from { width: 0; }
-  to { width: 100%; }
+.qmSuccess h3 {
+  margin: 20px 0 8px;
+  font-size: clamp(24px, 2.4vw, 30px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.qmSuccess > p {
+  margin: 0;
+  max-width: 460px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.qmSuccessSummary {
+  width: 100%;
+  max-width: 460px;
+  margin-top: 24px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border: 1px solid rgba(17, 34, 68, 0.08);
+  border-radius: 16px;
+  background: #f6f8fc;
+  text-align: start;
+}
+
+.qmSuccessSummary > span {
+  color: var(--text-secondary);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.qmSuccessSummary strong {
+  font-size: 16px;
+}
+
+.qmSuccessSummary small {
+  color: var(--text-secondary);
+  font-size: 13.5px;
+}
+
+.qmSuccessSummary ul {
+  margin: 8px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+  list-style: none;
+}
+
+.qmSuccessSummary li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.qmSuccessSummary li img {
+  width: 34px;
+  height: 34px;
+  padding: 3px;
+  border-radius: 8px;
+  background: #ffffff;
+  object-fit: contain;
+}
+
+.qmSuccessSummary li span {
+  flex: 1;
+}
+
+.qmSuccessSummary li em {
+  color: var(--accent);
+  font-style: normal;
+}
+
+.qmNextSteps {
+  width: 100%;
+  max-width: 460px;
+  margin: 18px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  text-align: start;
+}
+
+.qmNextSteps li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  font-size: 13.5px;
+}
+
+.qmNextSteps svg {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  padding: 6px;
+  border-radius: 8px;
+  background: #eef3fc;
+  color: var(--accent);
+}
+
+.qmSuccessActions {
+  margin-top: 26px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+@media (max-width: 560px) {
+  .qmSubmitRow {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .qmSubmit {
+    justify-content: center;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pageLoaderInner .brandLogo img,
-  .pageLoaderBar i {
+  .qmSuccessIcon circle,
+  .qmSuccessIcon path {
     animation: none;
+    stroke-dashoffset: 0;
   }
 
-  .pageLoaderBar i {
-    width: 100%;
+  .qmSpinner {
+    animation: none;
   }
+}
+
+/* =====================================================
+   CONTACT AS BUTTONS (header + CTA panels)
+===================================================== */
+
+.siteHeader .headerContact {
+  height: 42px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(17, 34, 68, 0.16);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--text);
+  font-size: 13.5px;
+  font-weight: 600;
+  transition: border-color 180ms ease, color 180ms ease, background-color 180ms ease;
+}
+
+.siteHeader .headerContact:hover,
+.siteHeader .headerContact.active {
+  border-color: var(--accent);
+  background: #f2f7ff;
+  color: var(--accent);
+}
+
+.siteHeader .headerContact svg {
+  width: 16px;
+  height: 16px;
+  color: var(--accent);
+}
+
+.cmCtaLink {
+  min-height: 52px;
+  padding: 0 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-bottom-width: 1px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.cmCtaLink:hover {
+  border-color: #ffffff;
+  background: #ffffff;
+  color: var(--dark);
+}
+
+.cmCtaLink svg {
+  width: 17px;
+  height: 17px;
+}
+
+.cmCtaActions {
+  align-items: center;
+  gap: 12px;
+}
+
+.wtStandardLinks .wtTextLink,
+.wtEmpty .wtTextLink {
+  min-height: 48px;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(29, 103, 213, 0.35);
+  border-radius: var(--radius-sm);
+  background: #ffffff;
+  color: var(--accent);
+  font-size: 13.5px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.wtStandardLinks .wtTextLink {
+  border-color: rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+.wtStandardLinks .wtTextLink:hover {
+  background: #ffffff;
+  color: var(--dark);
+}
+
+.wtEmpty .wtTextLink:hover {
+  border-color: var(--accent);
+  background: #f2f7ff;
+}
+
+/* =====================================================
+   CARD EFFECTS – scroll reveal + hover depth
+===================================================== */
+
+.rv-ready .rv {
+  opacity: 0;
+  translate: 0 22px;
+  transition:
+    opacity 650ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--rv-delay, 0ms),
+    translate 650ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--rv-delay, 0ms),
+    transform 260ms ease,
+    box-shadow 260ms ease,
+    border-color 260ms ease,
+    background-color 260ms ease;
+}
+
+.rv-ready .rv.rv-in {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.rv-ready .rv.rv-now {
+  transition: transform 260ms ease, box-shadow 260ms ease, border-color 260ms ease, background-color 260ms ease;
+}
+
+/* Hover: lift, deeper shadow and an accent edge */
+.coCard,
+.coFeature,
+.coEcoItem,
+.inSector,
+.productsTool,
+.pmCard:not(.pmCustom),
+.pmSimilarCard,
+.cmService,
+.cmMachine,
+.cmStep,
+.cmProject,
+.cmHomeProject,
+.blogCard,
+.videoCard,
+.ecoBandList li,
+.contactAddressCard {
+  position: relative;
+  transition: transform 260ms ease, box-shadow 260ms ease, border-color 260ms ease, background-color 260ms ease;
+}
+
+.coCard:hover,
+.coEcoItem:hover,
+.inSector:hover,
+.productsTool:hover,
+.pmSimilarCard:hover,
+.cmService:hover,
+.cmMachine:hover,
+.cmStep:hover,
+.cmProject:hover,
+.statsFigure:hover,
+.statsCapability:hover,
+.cmHomeProject:hover,
+.blogCard:hover,
+.videoCard:hover,
+.ecoBandList li:hover {
+  transform: translateY(-4px);
+  border-color: rgba(29, 103, 213, 0.28);
+  box-shadow:
+    0 28px 50px -30px rgba(15, 30, 60, 0.45),
+    0 2px 6px -2px rgba(15, 30, 60, 0.08),
+    inset 0 3px 0 var(--accent);
+}
+
+.coEcoItem:hover,
+.ecoBandList li:hover {
+  border-color: rgba(31, 138, 91, 0.3);
+  box-shadow:
+    0 28px 50px -30px rgba(15, 30, 60, 0.4),
+    inset 0 3px 0 var(--eco);
+}
+
+.coFeature:hover,
+.pmCard:not(.pmCustom):hover {
+  box-shadow: inset 0 3px 0 var(--accent), 0 20px 40px -32px rgba(15, 30, 60, 0.45);
+}
+
+.pfCard:hover,
+.wtCard:hover {
+  transform: translateY(-4px);
+  border-color: rgba(29, 103, 213, 0.25);
+  box-shadow: 0 30px 56px -32px rgba(15, 30, 60, 0.5), 0 2px 6px -2px rgba(15, 30, 60, 0.08);
+}
+
+/* Icons inside cards come alive on hover */
+.coIcon,
+.cmServiceIcon,
+.cmMachineIcon,
+.statsCapabilityIcon,
+.inSectorIcon,
+.productsToolIcon,
+.ecoBandIcon {
+  transition: transform 260ms ease, background-color 260ms ease, color 260ms ease;
+}
+
+.coCard:hover .coIcon,
+.coFeature:hover .coIcon,
+.cmService:hover .cmServiceIcon,
+.cmMachine:hover .cmMachineIcon,
+.statsCapability:hover .statsCapabilityIcon,
+.productsTool:hover .productsToolIcon {
+  transform: scale(1.08) rotate(-4deg);
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.inSector:hover .inSectorIcon {
+  transform: scale(1.08) rotate(-4deg);
+  background: var(--tone);
+  color: #ffffff;
+}
+
+.coEcoItem:hover .coIcon,
+.ecoBandList li:hover .ecoBandIcon {
+  transform: scale(1.08) rotate(-4deg);
+  background: var(--eco);
+  color: #ffffff;
+}
+
+/* Images in product cards get a soft zoom */
+.pmSimilarCard img,
+.blogCard img,
+.cmProject img {
+  transition: transform 500ms ease;
+}
+
+.pmSimilarCard:hover img,
+.blogCard:hover img,
+.cmProject:hover img {
+  transform: scale(1.05);
+}
+
+@media (hover: none) {
+  .coCard:hover,
+  .coEcoItem:hover,
+  .inSector:hover,
+  .productsTool:hover,
+  .pmSimilarCard:hover,
+  .cmService:hover,
+  .cmMachine:hover,
+  .cmStep:hover,
+  .cmProject:hover,
+  .statsFigure:hover,
+  .statsCapability:hover,
+  .cmHomeProject:hover,
+  .blogCard:hover,
+  .videoCard:hover,
+  .ecoBandList li:hover,
+  .pfCard:hover,
+  .wtCard:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rv-ready .rv {
+    opacity: 1;
+    translate: none;
+  }
+}
+
+/* Admin – reference projects */
+
+.adProjectGrid {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+  list-style: none;
+}
+
+.adProjectCard {
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  border: 1px solid rgba(17, 34, 68, 0.07);
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+.adProjectCard.hidden {
+  opacity: 0.6;
+}
+
+.adProjectThumb {
+  width: 76px;
+  height: 76px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #eef1f6;
+}
+
+.adProjectThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.adProjectText {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.adProjectText strong {
+  font-size: 14.5px;
+  line-height: 1.35;
+}
+
+.adProjectText small {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.adProjectText em {
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-style: normal;
+}
+
+.adProjectCard .cmsRowActions {
+  grid-column: 1 / -1;
+  justify-content: flex-end;
+}
+
+.adProjectImage {
+  aspect-ratio: 1;
+  max-width: 260px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.adProjectImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

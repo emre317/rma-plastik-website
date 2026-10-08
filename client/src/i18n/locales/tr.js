@@ -940,24 +940,6 @@ const tr = {
       referencesLabel: 'Referans projeler',
       referencesTitle: 'Özel üretim',
       referencesTitleAccent: 'uygulamaları.',
-      projects: [
-        {
-          client: 'Baibars Mekatronik Havacılık',
-          title: 'Drone tarım ilaçlama deposu',
-        },
-        {
-          client: 'TCI Cabin Interior',
-          title: 'Uçak içi yanmaz çöp kovası',
-        },
-        {
-          client: 'Alstom',
-          title: 'Tren akıllı tuvalet pis ve temiz su tankları',
-        },
-        {
-          client: 'İTÜ Uçak ve Uzay Bilimleri Fakültesi',
-          title: 'Büyükçekmece Gölü üzerinde güneş paneli yüzer iskelesi',
-        },
-      ],
       galleryLabel: 'Ürettiğimiz özel parçalardan örnekler',
       galleryAlt: 'RMA Plastik özel üretim parçası',
       ctaTitle: 'Projenizi bize anlatın.',
@@ -1062,6 +1044,7 @@ const tr = {
       message: 'Proje Detayları',
     },
     placeholders: {
+      countrySelect: 'Ülke seçin',
       company: 'Firma adı',
       name: 'Ad soyad',
       email: 'ad@firma.com',
@@ -1080,6 +1063,13 @@ const tr = {
       'Bu formu göndererek, paylaştığınız bilgilerin talebinize yanıt vermek amacıyla kullanılabileceğini onaylamış olursunuz.',
     submit: 'Teklif Talebini Gönder',
     sending: 'Gönderiliyor...',
+    successTitle: 'Talebiniz bize ulaştı',
+    successText: 'Teşekkür ederiz. Satış ekibimiz talebinizi inceleyip {{email}} adresinden ya da telefonla sizinle iletişime geçecek.',
+    successSummary: 'Talep özeti',
+    successStep1: 'Talebiniz kaydedildi ve satış ekibine iletildi.',
+    successStep2: 'Teknik detayları netleştirmek için sizinle iletişime geçeceğiz.',
+    successStep3: 'Acil durumlar için bizi doğrudan arayabilirsiniz.',
+    successNew: 'Yeni talep oluştur',
     success:
       'Teşekkür ederiz. Talebiniz alındı; ekibimiz inceleyip sizinle iletişime geçecektir.',
     errors: {

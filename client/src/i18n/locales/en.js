@@ -941,24 +941,6 @@ const en = {
       referencesLabel: 'Reference projects',
       referencesTitle: 'Custom molding',
       referencesTitleAccent: 'applications.',
-      projects: [
-        {
-          client: 'Baibars Mechatronics Aviation',
-          title: 'Agricultural spraying drone tank',
-        },
-        {
-          client: 'TCI Cabin Interior',
-          title: 'Fire-resistant aircraft cabin waste bin',
-        },
-        {
-          client: 'Alstom',
-          title: 'Waste and fresh water tanks for smart train toilets',
-        },
-        {
-          client: 'ITU Faculty of Aeronautics and Astronautics',
-          title: 'Floating solar panel pier on Lake Büyükçekmece',
-        },
-      ],
       galleryLabel: 'Examples of custom parts we produce',
       galleryAlt: 'RMA Plastik custom molded part',
       ctaTitle: 'Tell us about your project.',
@@ -1064,6 +1046,7 @@ const en = {
       message: 'Project Details',
     },
     placeholders: {
+      countrySelect: 'Select country',
       company: 'Company name',
       name: 'Full name',
       email: 'name@company.com',
@@ -1082,6 +1065,13 @@ const en = {
       'By submitting this form, you confirm that the provided information may be used to respond to your request.',
     submit: 'Send Quote Request',
     sending: 'Sending...',
+    successTitle: 'We have received your request',
+    successText: 'Thank you. Our sales team will review your request and contact you at {{email}} or by phone.',
+    successSummary: 'Request summary',
+    successStep1: 'Your request is saved and forwarded to our sales team.',
+    successStep2: 'We will contact you to clarify the technical details.',
+    successStep3: 'For urgent matters you can call us directly.',
+    successNew: 'Create a new request',
     success:
       'Thank you. Your request has been received. Our team will review it and get back to you.',
     errors: {

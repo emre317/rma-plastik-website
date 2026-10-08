@@ -4,6 +4,7 @@ import { CONTENT_LANGUAGES } from '../config/languages.js';
 import SiteText from '../models/SiteText.js';
 import { publicPosts, publicVideos } from './mediaController.js';
 import { publicFamilies } from './productFamilyController.js';
+import { publicProjects } from './projectController.js';
 import SiteSettings, {
   getSiteSettings,
   markContentChanged,
@@ -66,12 +67,13 @@ function toPublicSettings(settings) {
 
 export async function getPublicContent(req, res) {
   try {
-    const [texts, settings, posts, videos, productFamilies] = await Promise.all([
+    const [texts, settings, posts, videos, productFamilies, projects] = await Promise.all([
       SiteText.find(),
       SiteSettings.findOne({ singleton: 'site' }),
       publicPosts(),
       publicVideos(),
       publicFamilies(),
+      publicProjects(),
     ]);
 
     const textMap = Object.fromEntries(CONTENT_LANGUAGES.map((lang) => [lang, {}]));
@@ -92,6 +94,7 @@ export async function getPublicContent(req, res) {
       posts,
       videos,
       productFamilies,
+      projects,
     });
   } catch (error) {
     return handleError(res, error, 'Public content error');

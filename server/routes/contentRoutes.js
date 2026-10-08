@@ -16,7 +16,14 @@ import {
   updateFamily,
 } from '../controllers/productFamilyController.js';
 import { requireAdmin } from '../middleware/authMiddleware.js';
-import { uploadPostImage, uploadProductImage } from '../middleware/upload.js';
+import { uploadPostImage, uploadProductImage, uploadProjectImage } from '../middleware/upload.js';
+import {
+  createProject,
+  deleteProject,
+  importDefaultProjects,
+  listProjects,
+  updateProject,
+} from '../controllers/projectController.js';
 import {
   createPost,
   createVideo,
@@ -50,6 +57,13 @@ adminContentRouter.delete('/product-families/:id', deleteFamily);
 
 adminContentRouter.post('/uploads/product-image', uploadProductImage);
 adminContentRouter.post('/uploads/post-image', uploadPostImage);
+adminContentRouter.post('/uploads/project-image', uploadProjectImage);
+
+adminContentRouter.get('/projects', listProjects);
+adminContentRouter.post('/projects', createProject);
+adminContentRouter.post('/projects/import-defaults', importDefaultProjects);
+adminContentRouter.put('/projects/:id', updateProject);
+adminContentRouter.delete('/projects/:id', deleteProject);
 
 adminContentRouter.get('/posts', listPosts);
 adminContentRouter.post('/posts', createPost);

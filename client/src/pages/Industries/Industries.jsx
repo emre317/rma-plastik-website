@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { MessageSquare } from 'lucide-react';
 
 import Seo from '../../seo/Seo';
 import PageHeader from '../../components/ui/PageHeader';
@@ -123,8 +124,8 @@ export default function Industries() {
                 <Arrow className="buttonArrow" />
               </LocalizedLink>
               <LocalizedLink to="/contact" className="cmCtaLink">
+                <MessageSquare aria-hidden="true" />
                 {t('pages.customMolding.ctaContact')}
-                <Arrow />
               </LocalizedLink>
             </div>
           </div>

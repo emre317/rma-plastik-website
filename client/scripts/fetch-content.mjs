@@ -47,6 +47,11 @@ try {
     });
   });
 
+  // No reference projects in the database yet: keep the brochure projects
+  if (!Array.isArray(data.projects) || data.projects.length === 0) {
+    data.projects = null;
+  }
+
   // No product tables in the database yet: keep the built-in brochure tables
   if (!Array.isArray(data.productFamilies) || data.productFamilies.length === 0) {
     data.productFamilies = null;

@@ -14,11 +14,6 @@ export const serviceIcons = [Cog, Wrench, PenTool, Printer, Truck];
 // Same order as pages.customMolding.machines
 export const machineIcons = [RefreshCw, Syringe, Wind, Waves, Recycle, Hammer];
 
-// Same order as pages.customMolding.projects
-export const projectImages = ['drone', 'cabin-bin', 'train-tank', 'floating-pier'].map(
-  (name) => `${IMAGE_ROOT}/${name}.webp`
-);
-
 export const galleryImages = Array.from(
   { length: 16 },
   (_, index) => `${IMAGE_ROOT}/part-${String(index + 1).padStart(2, '0')}.webp`

@@ -2,7 +2,9 @@ import { useTranslation } from 'react-i18next';
 
 import { LocalizedLink } from '../components/i18n/LocalizedLink';
 import Arrow from '../components/i18n/Arrow';
-import { projectImages, serviceIcons } from '../data/customMolding';
+import { serviceIcons } from '../data/customMolding';
+import projects, { projectText } from '../data/projects';
+import useLanguage from '../hooks/useLanguage';
 
 /*
   Home: custom molding teaser – intro with key figures on one side,
@@ -10,9 +12,9 @@ import { projectImages, serviceIcons } from '../data/customMolding';
 */
 export default function CustomMoldingSection() {
   const { t } = useTranslation();
+  const { code: lang } = useLanguage();
 
   const figures = t('customMolding.figures', { returnObjects: true });
-  const projects = t('pages.customMolding.projects', { returnObjects: true });
   const services = t('pages.customMolding.services', { returnObjects: true });
 
   return (
@@ -51,18 +53,17 @@ export default function CustomMoldingSection() {
             <p className="cmLabel">{t('customMolding.referencesLabel')}</p>
 
             <ul className="cmHomeProjects">
-              {Array.isArray(projects) &&
-                projects.map((project, index) => (
-                  <li key={project.client} className="cmHomeProject" style={{ '--i': index }}>
-                    <span className="cmDisc">
-                      <img src={projectImages[index]} alt="" loading="lazy" decoding="async" width="400" height="400" />
-                    </span>
-                    <span className="cmHomeProjectText">
-                      <strong>{project.client}</strong>
-                      <span>{project.title}</span>
-                    </span>
-                  </li>
-                ))}
+              {projects.slice(0, 4).map((project, index) => (
+                <li key={`${projectText(project, 'client', 'tr')}-${index}`} className="cmHomeProject" style={{ '--i': index }}>
+                  <span className="cmDisc">
+                    {project.image && <img src={project.image} alt="" loading="lazy" decoding="async" width="400" height="400" />}
+                  </span>
+                  <span className="cmHomeProjectText">
+                    <strong>{projectText(project, 'client', lang)}</strong>
+                    <span>{projectText(project, 'title', lang)}</span>
+                  </span>
+                </li>
+              ))}
             </ul>
 
             <ul className="cmServiceChips">

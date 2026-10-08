@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ChevronDown, GitCompareArrows, Table2, Wand2, Wrench } from 'lucide-react';
+import { ChevronDown, GitCompareArrows, MessageSquare, Table2, Wand2, Wrench } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -20,7 +20,6 @@ const navItems = [
   { key: 'waterTanks', path: '/water-tanks' },
   { key: 'customMolding', path: '/custom-molding' },
   { key: 'industries', path: '/industries' },
-  { key: 'blog', path: '/blog' },
 ];
 
 const quickLinks = [
@@ -186,8 +185,8 @@ export default function Header() {
               to="/contact"
               className="headerContact"
             >
+              <MessageSquare aria-hidden="true" />
               {t('nav.contact')}
-              <Arrow />
             </LocalizedLink>
 
             <button

@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { MessageSquare } from 'lucide-react';
 
 import Seo from '../../seo/Seo';
 import PageHeader from '../../components/ui/PageHeader';
@@ -6,12 +7,15 @@ import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
 import { SustainabilityBand } from '../../components/ui/EcoMarks';
-import { galleryImages, machineIcons, projectImages, serviceIcons } from '../../data/customMolding';
+import { galleryImages, machineIcons, serviceIcons } from '../../data/customMolding';
+import projects, { projectText } from '../../data/projects';
+import useLanguage from '../../hooks/useLanguage';
 
 const pad = (n) => String(n).padStart(2, '0');
 
 export default function CustomMolding() {
   const { t } = useTranslation();
+  const { code: lang } = useLanguage();
   const { openQuote } = useQuote();
 
   const list = (key) => {
@@ -24,7 +28,6 @@ export default function CustomMolding() {
   const steps = list('steps');
   const machinery = t('machinePark.items', { returnObjects: true });
   const machines = Array.isArray(machinery) ? machinery : [];
-  const projects = list('projects');
   const figureList = t('customMolding.figures', { returnObjects: true });
   const figures = Array.isArray(figureList) ? figureList : [];
 
@@ -45,9 +48,7 @@ export default function CustomMolding() {
         lead={text('intro')}
         mediaTone="glass"
         media={[
-          { src: projectImages[2] },
-          { src: projectImages[0] },
-          { src: projectImages[1] },
+          ...[projects[2], projects[0], projects[1]].filter(Boolean).map((project) => ({ src: project.image })),
         ]}
         actions={(
           <>
@@ -172,13 +173,13 @@ export default function CustomMolding() {
 
           <ul className="cmProjects">
             {projects.map((project, index) => (
-              <li key={project.client} className="cmProject">
+              <li key={`${projectText(project, 'client', 'tr')}-${index}`} className="cmProject">
                 <span className="cmDisc cmDiscLarge">
-                  <img src={projectImages[index]} alt={project.title} loading="lazy" decoding="async" width="400" height="400" />
+                  {project.image && <img src={project.image} alt={projectText(project, 'title', lang)} loading="lazy" decoding="async" width="400" height="400" />}
                 </span>
                 <span className="cmProjectIndex">{pad(index + 1)}</span>
-                <h3>{project.title}</h3>
-                <p>{project.client}</p>
+                <h3>{projectText(project, 'title', lang)}</h3>
+                <p>{projectText(project, 'client', lang)}</p>
               </li>
             ))}
           </ul>
@@ -212,8 +213,8 @@ export default function CustomMolding() {
                 <Arrow className="buttonArrow" />
               </button>
               <LocalizedLink to="/contact" className="cmCtaLink">
+                <MessageSquare aria-hidden="true" />
                 {text('ctaContact')}
-                <Arrow />
               </LocalizedLink>
             </div>
           </div>

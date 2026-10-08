@@ -15,7 +15,7 @@ const TYPES = {
   'image/webp': '.webp',
 };
 
-const FOLDERS = ['products', 'posts'];
+const FOLDERS = ['products', 'posts', 'projects'];
 
 FOLDERS.forEach((folder) => fs.mkdirSync(path.join(UPLOAD_ROOT, folder), { recursive: true }));
 
@@ -65,3 +65,4 @@ function uploadHandler(folder) {
 
 export const uploadProductImage = uploadHandler('products');
 export const uploadPostImage = uploadHandler('posts');
+export const uploadProjectImage = uploadHandler('projects');

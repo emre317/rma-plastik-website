@@ -9,9 +9,11 @@ import { CompareProvider } from '../components/compare/CompareContext';
 import CompareTray from '../components/compare/CompareTray';
 import FloatingContact from '../components/ui/FloatingContact';
 import CookieConsent from '../components/CookieConsent';
-import PageLoader from '../components/ui/PageLoader';
+import useScrollReveal from '../hooks/useScrollReveal';
 
 export default function PublicLayout() {
+  useScrollReveal();
+
   return (
     <QuoteProvider>
       <CompareProvider>
@@ -23,7 +25,6 @@ export default function PublicLayout() {
       <QuoteCartButton />
       <CompareTray />
       <QuoteModal />
-      <PageLoader />
       </CompareProvider>
     </QuoteProvider>
   );

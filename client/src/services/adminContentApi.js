@@ -30,6 +30,7 @@ export const startPublish = (token) => request('/admin/publish', { method: 'POST
 /* Image upload (multipart, so not through request()) */
 export const uploadProductImage = (file, token) => uploadImage('product-image', file, token);
 export const uploadPostImage = (file, token) => uploadImage('post-image', file, token);
+export const uploadProjectImage = (file, token) => uploadImage('project-image', file, token);
 
 async function uploadImage(kind, file, token) {
   const form = new FormData();
@@ -63,3 +64,10 @@ export const createFamily = (body, token) => request('/admin/product-families', 
 export const updateFamily = (id, body, token) => request(`/admin/product-families/${encodeURIComponent(id)}`, { method: 'PUT', body, token, fallbackMessage: 'Ürün ailesi kaydedilemedi.' });
 export const deleteFamily = (id, token) => request(`/admin/product-families/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Ürün ailesi silinemedi.' });
 export const importFamilies = (token) => request('/admin/product-families/import-defaults', { method: 'POST', token, fallbackMessage: 'Broşür tabloları aktarılamadı.' });
+
+/* Reference projects (Referans projeler) */
+export const listProjects = (token) => request('/admin/projects', { token, fallbackMessage: 'Projeler yüklenemedi.' });
+export const createProject = (body, token) => request('/admin/projects', { method: 'POST', body, token, fallbackMessage: 'Proje kaydedilemedi.' });
+export const updateProject = (id, body, token) => request(`/admin/projects/${encodeURIComponent(id)}`, { method: 'PUT', body, token, fallbackMessage: 'Proje kaydedilemedi.' });
+export const deleteProject = (id, token) => request(`/admin/projects/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Proje silinemedi.' });
+export const importProjects = (token) => request('/admin/projects/import-defaults', { method: 'POST', token, fallbackMessage: 'Broşür projeleri aktarılamadı.' });

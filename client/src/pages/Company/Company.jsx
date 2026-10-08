@@ -14,6 +14,7 @@ import {
   Sun,
   UtensilsCrossed,
   Wrench,
+  MessageSquare,
 } from 'lucide-react';
 
 import Seo from '../../seo/Seo';
@@ -197,8 +198,8 @@ export default function Company() {
                 <Arrow className="buttonArrow" />
               </button>
               <LocalizedLink to="/contact" className="cmCtaLink">
+                <MessageSquare aria-hidden="true" />
                 {t('pages.customMolding.ctaContact')}
-                <Arrow />
               </LocalizedLink>
             </div>
           </div>

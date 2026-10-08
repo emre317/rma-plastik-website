@@ -1,13 +1,14 @@
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Check, Mail, MapPin, Minus, Package, Phone, Plus, Search, ShoppingBag, Sun, Trash2, X,
+  Check, Mail, MapPin, Send, Minus, Package, Phone, Plus, Search, ShoppingBag, Sun, Trash2, X,
 } from 'lucide-react';
 
 import Arrow from '../i18n/Arrow';
 import company from '../../data/company';
 import portfolio from '../../data/productPortfolio';
 import useModelQuote from '../../hooks/useModelQuote';
+import { countryNameTr, countryOptions } from '../../data/countries';
 import { submitQuote } from '../../services/api';
 import { useQuote } from './QuoteContext';
 import { track } from '../../analytics/track';
@@ -67,6 +68,7 @@ export default function QuoteModal() {
   const [form, setForm] = useState(initialForm);
   const [status, setStatus] = useState('idle');
   const [feedbackKey, setFeedbackKey] = useState('');
+  const [sent, setSent] = useState(null);
   const [query, setQuery] = useState('');
   const [group, setGroup] = useState('all');
   const [limit, setLimit] = useState(PAGE);
@@ -83,6 +85,8 @@ export default function QuoteModal() {
     value: trT(`productExplorer.items.${item.id}.title`),
     label: t(`productExplorer.items.${item.id}.title`),
   }));
+
+  const countries = useMemo(() => countryOptions(i18n.resolvedLanguage || 'tr'), [i18n.resolvedLanguage]);
 
   const pickerGroups = portfolio.filter((item) => !item.custom && item.models > 0);
 
@@ -113,6 +117,7 @@ export default function QuoteModal() {
     if (!open) return;
 
     setStatus('idle');
+    setSent(null);
     setFeedbackKey('');
     setLimit(PAGE);
     setPicker(false);
@@ -216,12 +221,18 @@ export default function QuoteModal() {
     try {
       await submitQuote({
         ...form,
+        country: form.country ? countryNameTr(form.country) : '',
         ...listFields,
         language: i18n.resolvedLanguage,
       });
 
       setStatus('success');
-      setFeedbackKey('contact.success');
+      setSent({
+        company: form.company,
+        email: form.email,
+        items: cart.map((item) => ({ name: item.code || item.name, quantity: item.quantity || 1, image: item.image })),
+        subject: listFields.product ? '' : form.product,
+      });
 
       // Conversion for GA4 / Google Ads / Meta (configured in GTM)
       track('generate_lead', {
@@ -277,6 +288,47 @@ export default function QuoteModal() {
           <p className="qmSolar"><Sun aria-hidden="true" />{q('solarNote')}</p>
         </aside>
 
+        {status === 'success' && sent ? (
+          <div className="qmForm qmSuccess" role="status">
+            <span className="qmSuccessIcon" aria-hidden="true">
+              <svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24" /><path d="M15 27l7 7 15-16" /></svg>
+            </span>
+            <h3>{t('contact.successTitle')}</h3>
+            <p>{t('contact.successText', { email: sent.email })}</p>
+
+            <div className="qmSuccessSummary">
+              <span>{t('contact.successSummary')}</span>
+              <strong>{sent.company}</strong>
+              {sent.items.length > 0 ? (
+                <ul>
+                  {sent.items.map((item) => (
+                    <li key={item.name}>
+                      {item.image && <img src={item.image} alt="" />}
+                      <span>{item.name}</span>
+                      <em>× {item.quantity}</em>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                sent.subject && <small>{sent.subject === 'Custom Requirement' ? t('contact.customRequirement') : sent.subject}</small>
+              )}
+            </div>
+
+            <ol className="qmNextSteps">
+              <li><Check aria-hidden="true" />{t('contact.successStep1')}</li>
+              <li><Mail aria-hidden="true" />{t('contact.successStep2')}</li>
+              <li><Phone aria-hidden="true" />{t('contact.successStep3')}</li>
+            </ol>
+
+            <div className="qmSuccessActions">
+              <button type="button" className="qmNext" onClick={closeQuote}>{t('contact.close')}</button>
+              <button type="button" className="qmTextButton" onClick={() => { setStatus('idle'); setSent(null); }}>
+                <Plus aria-hidden="true" />
+                {t('contact.successNew')}
+              </button>
+            </div>
+          </div>
+        ) : (
         <form className="qmForm quoteForm" onSubmit={handleSubmit}>
           {/* Products: picked from the catalogue (or added on product pages) */}
           <div className="qmSelected">
@@ -360,7 +412,12 @@ export default function QuoteModal() {
 
             <label className="formField">
               <span>{fieldLabel('country')}</span>
-              <input type="text" name="country" maxLength={80} value={form.country} onChange={handleChange} placeholder={t('contact.placeholders.country')} />
+              <select name="country" value={form.country} onChange={handleChange}>
+                <option value="">{t('contact.placeholders.countrySelect')}</option>
+                {countries.map((item) => (
+                  <option key={item.code} value={item.code}>{item.name}</option>
+                ))}
+              </select>
             </label>
 
             {cart.length === 0 && (
@@ -409,14 +466,15 @@ export default function QuoteModal() {
           )}
 
           <div className="qmSubmitRow">
-            <button type="submit" disabled={status === 'loading'} className="quoteSubmit">
-              <span>{status === 'loading' ? t('contact.sending') : t('contact.submit')}</span>
-              <Arrow />
-            </button>
             <p>{t('contact.consent')}</p>
+            <button type="submit" disabled={status === 'loading'} className="qmSubmit">
+              {status === 'loading' ? <span className="qmSpinner" aria-hidden="true" /> : <Send aria-hidden="true" />}
+              <span>{status === 'loading' ? t('contact.sending') : t('contact.submit')}</span>
+            </button>
           </div>
 
         </form>
+        )}
 
         {/* Catalogue picker, opened with "Katalogdan seç" */}
         <div className={`qmPicker ${picker ? 'open' : ''}`} role="dialog" aria-label={q('browseTitle')} aria-hidden={!picker} inert={!picker}>
