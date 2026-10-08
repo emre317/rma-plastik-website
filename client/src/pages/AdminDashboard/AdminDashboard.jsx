@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  ArrowUpRight, BellRing, CheckCircle2, Clock3, FilePlus2, FileSpreadsheet, FileText, Inbox,
+  ArrowUpRight, BarChart3, BellRing, CalendarClock, CheckCircle2, Clock3, FilePlus2, FileSpreadsheet, FileText, Inbox,
   PlayCircle, Rocket, Save, Table2, Upload,
 } from 'lucide-react';
 
@@ -68,7 +68,7 @@ export default function AdminDashboard() {
   const pipelineTotal = QUOTE_STATUSES.reduce((sum, status) => sum + (stats?.[status.id] || 0), 0);
 
   const kpis = [
-    { label: 'Toplam talep', value: stats?.total ?? '–', icon: Inbox, to: '/admin/quotes', hint: 'Siteden gelen tüm talepler' },
+    { label: 'Takibi gelen', value: stats?.due ?? '–', icon: CalendarClock, to: '/admin/quotes?status=due', hint: 'Takip tarihi bugün veya geçmiş', accent: (stats?.due || 0) > 0 },
     { label: 'Okunmamış', value: stats?.unread ?? '–', icon: BellRing, to: '/admin/quotes', hint: 'Henüz açılmamış', accent: (stats?.unread || 0) > 0 },
     { label: 'Bekleyen', value: stats ? open : '–', icon: Clock3, to: '/admin/quotes?status=new', hint: 'Yeni + inceleniyor' },
     { label: 'Teklif verilen', value: stats?.quoted ?? '–', icon: CheckCircle2, to: '/admin/quotes?status=quoted', hint: 'Teklifi gönderilmiş' },
@@ -82,10 +82,16 @@ export default function AdminDashboard() {
           <h1>Hoş geldiniz</h1>
           <p>Teklif taleplerini takip edin, katalog ve içerikleri güncelleyin; değişiklikleri sol menüdeki <strong>Yayınla</strong> ile siteye aktarın.</p>
         </div>
-        <Link to="/admin/quotes" className="cmsButton cmsButtonPrimary">
-          <Inbox aria-hidden="true" />
-          Talepleri aç
-        </Link>
+        <div className="adHeadActions">
+          <Link to="/admin/quote-reports" className="cmsButton">
+            <BarChart3 aria-hidden="true" />
+            Satış raporu
+          </Link>
+          <Link to="/admin/quotes" className="cmsButton cmsButtonPrimary">
+            <Inbox aria-hidden="true" />
+            Talepleri aç
+          </Link>
+        </div>
       </header>
 
       {error && <div className="adminInlineError">{error}</div>}

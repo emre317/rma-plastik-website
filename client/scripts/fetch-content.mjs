@@ -52,6 +52,10 @@ try {
     data.exportMarkets = null;
   }
 
+  // FAQ and field photos have no built-in fallback
+  data.faqs = Array.isArray(data.faqs) ? data.faqs : [];
+  data.gallery = Array.isArray(data.gallery) ? data.gallery : [];
+
   // No reference projects in the database yet: keep the brochure projects
   if (!Array.isArray(data.projects) || data.projects.length === 0) {
     data.projects = null;

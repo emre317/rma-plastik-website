@@ -4,7 +4,14 @@ import QuoteRequest, {
   QUOTE_LANGUAGES,
   QUOTE_STATUSES,
 } from '../models/QuoteRequest.js';
-import { sendQuoteNotification } from '../services/quoteEmail.js';
+import { getSiteSettings } from '../models/SiteSettings.js';
+import { isMailConfigured } from '../services/mailer.js';
+import {
+  isCustomerConfirmationEnabled,
+  quoteReference,
+  sendQuoteConfirmation,
+  sendQuoteNotification,
+} from '../services/quoteEmail.js';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -152,6 +159,18 @@ export async function createQuoteRequest(req, res) {
       console.error('Quote notification email error:', error);
     });
 
+    // Receipt with the reference number for the customer, in the site language
+    const confirmation = isMailConfigured() && isCustomerConfirmationEnabled();
+
+    if (confirmation) {
+      getSiteSettings()
+        .catch(() => ({}))
+        .then((settings) => sendQuoteConfirmation(quoteRequest, settings || {}))
+        .catch((error) => {
+          console.error('Quote confirmation email error:', error);
+        });
+    }
+
     return res.status(201).json({
       success: true,
 
@@ -159,6 +178,10 @@ export async function createQuoteRequest(req, res) {
         'Quote request received successfully.',
 
       requestId: quoteRequest._id,
+
+      reference: quoteReference(quoteRequest._id),
+
+      confirmation,
     });
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
@@ -183,46 +206,92 @@ export async function createQuoteRequest(req, res) {
   }
 }
 
+// Istanbul has no DST (UTC+3): end of the current day there
+function endOfTodayIstanbul() {
+  const now = new Date(Date.now() + 3 * 3600 * 1000);
+  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 23, 59, 59, 999) - 3 * 3600 * 1000);
+}
+
+// "2026-03-01" -> start (or end) of that day in Istanbul
+function parseDay(value, endOfDay = false) {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+  const date = new Date(`${value}T${endOfDay ? '23:59:59.999' : '00:00:00.000'}+03:00`);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function dueFilter() {
+  return {
+    followUpAt: { $ne: null, $lte: endOfTodayIstanbul() },
+    status: { $ne: 'closed' },
+  };
+}
+
+/* Filters shared by the list, the Excel export and the report */
+function buildFilter(query = {}) {
+  const filter = {};
+  const { status } = query;
+
+  if (typeof status === 'string' && status) {
+    if (!QUOTE_STATUSES.includes(status)) {
+      return { error: 'Invalid status.' };
+    }
+
+    filter.status = status;
+  }
+
+  const assignee = cleanString(query.assignee).slice(0, 80);
+
+  // "-" = unassigned; requests saved before this field existed have no assignee at all
+  if (assignee === '-') filter.assignee = { $in: ['', null] };
+  else if (assignee) filter.assignee = assignee;
+
+  if (query.followUp === 'due') Object.assign(filter, dueFilter(), filter.status ? { status: filter.status } : {});
+
+  const from = parseDay(query.from);
+  const to = parseDay(query.to, true);
+
+  if (from || to) {
+    filter.createdAt = {
+      ...(from ? { $gte: from } : {}),
+      ...(to ? { $lte: to } : {}),
+    };
+  }
+
+  const searchTerm = cleanString(query.search).slice(0, 100);
+
+  if (searchTerm) {
+    const pattern = new RegExp(
+      escapeRegex(searchTerm),
+      'i'
+    );
+
+    filter.$or = [
+      'company',
+      'name',
+      'email',
+      'product',
+      'country',
+      'items.name',
+    ].map((field) => ({
+      [field]: pattern,
+    }));
+  }
+
+  return { filter };
+}
+
 export async function getQuoteRequests(
   req,
   res
 ) {
   try {
-    const {
-      status,
-      search,
-    } = req.query;
+    const { filter, error } = buildFilter(req.query);
 
-    const filter = {};
-
-    if (typeof status === 'string' && status) {
-      if (!QUOTE_STATUSES.includes(status)) {
-        return res.status(400).json({
-          success: false,
-          message: 'Invalid status.',
-        });
-      }
-
-      filter.status = status;
-    }
-
-    const searchTerm = cleanString(search).slice(0, 100);
-
-    if (searchTerm) {
-      const pattern = new RegExp(
-        escapeRegex(searchTerm),
-        'i'
-      );
-
-      filter.$or = [
-        'company',
-        'name',
-        'email',
-        'product',
-        'country',
-      ].map((field) => ({
-        [field]: pattern,
-      }));
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: error,
+      });
     }
 
     const currentPage = parsePositiveInt(
@@ -247,7 +316,8 @@ export async function getQuoteRequests(
           createdAt: -1,
         })
         .skip(skip)
-        .limit(pageLimit),
+        .limit(pageLimit)
+        .select('-notes'),
 
       QuoteRequest.countDocuments(
         filter
@@ -279,6 +349,158 @@ export async function getQuoteRequests(
       success: false,
       message:
         'Quote requests could not be loaded.',
+    });
+  }
+}
+
+const EXPORT_LIMIT = 5000;
+
+/* All requests matching the list filters (newest first) for the Excel file */
+export async function exportQuoteRequests(req, res) {
+  try {
+    const { filter, error } = buildFilter(req.query);
+
+    if (error) {
+      return res.status(400).json({ success: false, message: error });
+    }
+
+    const quotes = await QuoteRequest.find(filter)
+      .sort({ createdAt: -1 })
+      .limit(EXPORT_LIMIT)
+      .lean();
+
+    return res.json({
+      success: true,
+      data: quotes,
+      truncated: quotes.length === EXPORT_LIMIT,
+    });
+  } catch (error) {
+    console.error('Export quotes error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Quote requests could not be exported.',
+    });
+  }
+}
+
+const UNKNOWN = 'Belirtilmemiş';
+
+/* Counts by month, country, product, status and assignee for a date range */
+export async function getQuoteReport(req, res) {
+  try {
+    const { filter, error } = buildFilter({ from: req.query.from, to: req.query.to });
+
+    if (error) {
+      return res.status(400).json({ success: false, message: error });
+    }
+
+    const [result] = await QuoteRequest.aggregate([
+      { $match: filter },
+      {
+        $facet: {
+          total: [{ $count: 'count' }],
+
+          byMonth: [
+            {
+              $group: {
+                _id: { $dateToString: { format: '%Y-%m', date: '$createdAt', timezone: 'Europe/Istanbul' } },
+                count: { $sum: 1 },
+                quoted: { $sum: { $cond: [{ $in: ['$status', ['quoted', 'closed']] }, 1, 0] } },
+              },
+            },
+            { $sort: { _id: 1 } },
+          ],
+
+          byCountry: [
+            { $group: { _id: { $cond: [{ $gt: [{ $strLenCP: { $ifNull: ['$country', ''] } }, 0] }, '$country', UNKNOWN] }, count: { $sum: 1 } } },
+            { $sort: { count: -1, _id: 1 } },
+          ],
+
+          // Cart items; a request without items counts its product / subject once
+          byProduct: [
+            {
+              $project: {
+                lines: {
+                  $cond: [
+                    { $gt: [{ $size: { $ifNull: ['$items', []] } }, 0] },
+                    '$items',
+                    [{
+                      name: { $cond: [{ $gt: [{ $strLenCP: { $ifNull: ['$product', ''] } }, 0] }, '$product', 'Genel talep'] },
+                      quantity: { $ifNull: ['$quantity', 1] },
+                    }],
+                  ],
+                },
+              },
+            },
+            { $unwind: '$lines' },
+            {
+              $group: {
+                _id: '$lines.name',
+                requests: { $sum: 1 },
+                pieces: { $sum: { $ifNull: ['$lines.quantity', 1] } },
+              },
+            },
+            { $sort: { requests: -1, pieces: -1, _id: 1 } },
+          ],
+
+          byStatus: [{ $group: { _id: '$status', count: { $sum: 1 } } }],
+
+          byAssignee: [
+            {
+              $group: {
+                _id: { $cond: [{ $gt: [{ $strLenCP: { $ifNull: ['$assignee', ''] } }, 0] }, '$assignee', ''] },
+                count: { $sum: 1 },
+                open: { $sum: { $cond: [{ $ne: ['$status', 'closed'] }, 1, 0] } },
+              },
+            },
+            { $sort: { count: -1 } },
+          ],
+
+          byLanguage: [{ $group: { _id: '$language', count: { $sum: 1 } } }, { $sort: { count: -1 } }],
+        },
+      },
+    ]);
+
+    const rename = (list, map) => list.map(({ _id, ...rest }) => ({ ...map(_id), ...rest }));
+
+    return res.json({
+      success: true,
+      data: {
+        total: result.total[0]?.count || 0,
+        byMonth: rename(result.byMonth, (month) => ({ month })),
+        byCountry: rename(result.byCountry, (country) => ({ country })),
+        byProduct: rename(result.byProduct, (name) => ({ name })),
+        byStatus: rename(result.byStatus, (status) => ({ status })),
+        byAssignee: rename(result.byAssignee, (assignee) => ({ assignee })),
+        byLanguage: rename(result.byLanguage, (language) => ({ language: language || '' })),
+      },
+    });
+  } catch (error) {
+    console.error('Quote report error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Report could not be loaded.',
+    });
+  }
+}
+
+/* Names already used as assignee (suggestions in the admin) */
+export async function getQuoteAssignees(req, res) {
+  try {
+    const names = await QuoteRequest.distinct('assignee', { assignee: { $ne: '' } });
+
+    return res.json({
+      success: true,
+      data: names.sort((a, b) => a.localeCompare(b, 'tr')),
+    });
+  } catch (error) {
+    console.error('Quote assignees error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Assignees could not be loaded.',
     });
   }
 }
@@ -385,6 +607,119 @@ export async function updateQuoteStatus(
 }
 
 
+/* Assignee and follow-up date (both optional, "" / null clears them) */
+export async function updateQuoteTracking(req, res) {
+  try {
+    if (!isValidId(req.params.id)) {
+      return notFound(res);
+    }
+
+    const body = req.body || {};
+    const update = {};
+
+    if (body.assignee !== undefined) {
+      update.assignee = cleanString(body.assignee).slice(0, 80);
+    }
+
+    if (body.followUpAt !== undefined) {
+      if (body.followUpAt === null || body.followUpAt === '') {
+        update.followUpAt = null;
+      } else {
+        const date = parseDay(body.followUpAt, false) || new Date(body.followUpAt);
+
+        if (Number.isNaN(date.getTime())) {
+          return res.status(400).json({ success: false, message: 'Invalid follow-up date.' });
+        }
+
+        update.followUpAt = date;
+      }
+    }
+
+    const quote = await QuoteRequest.findByIdAndUpdate(req.params.id, update, {
+      returnDocument: 'after',
+      runValidators: true,
+    });
+
+    if (!quote) {
+      return notFound(res);
+    }
+
+    return res.json({ success: true, data: quote });
+  } catch (error) {
+    console.error('Update quote tracking error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Quote request could not be updated.',
+    });
+  }
+}
+
+export async function addQuoteNote(req, res) {
+  try {
+    if (!isValidId(req.params.id)) {
+      return notFound(res);
+    }
+
+    const text = cleanString(req.body?.text);
+
+    if (!text) {
+      return res.status(400).json({ success: false, message: 'Note is empty.' });
+    }
+
+    if (text.length > 2000) {
+      return res.status(400).json({ success: false, message: 'Note must be at most 2000 characters.' });
+    }
+
+    const quote = await QuoteRequest.findByIdAndUpdate(
+      req.params.id,
+      { $push: { notes: { text, author: req.admin?.name || req.admin?.email || '' } } },
+      { returnDocument: 'after', runValidators: true }
+    );
+
+    if (!quote) {
+      return notFound(res);
+    }
+
+    return res.status(201).json({ success: true, data: quote });
+  } catch (error) {
+    console.error('Add quote note error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Note could not be saved.',
+    });
+  }
+}
+
+export async function deleteQuoteNote(req, res) {
+  try {
+    if (!isValidId(req.params.id) || !isValidId(req.params.noteId)) {
+      return notFound(res);
+    }
+
+    const quote = await QuoteRequest.findByIdAndUpdate(
+      req.params.id,
+      { $pull: { notes: { _id: req.params.noteId } } },
+      { returnDocument: 'after' }
+    );
+
+    if (!quote) {
+      return notFound(res);
+    }
+
+    return res.json({ success: true, data: quote });
+  } catch (error) {
+    console.error('Delete quote note error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Note could not be deleted.',
+    });
+  }
+}
+
+
 export async function getQuoteStats(
   req,
   res
@@ -394,6 +729,7 @@ export async function getQuoteStats(
       results,
       unread,
       total,
+      due,
     ] = await Promise.all([
       QuoteRequest.aggregate([
         {
@@ -411,11 +747,14 @@ export async function getQuoteStats(
       }),
 
       QuoteRequest.countDocuments(),
+
+      QuoteRequest.countDocuments(dueFilter()),
     ]);
 
     const stats = {
       total,
       unread,
+      due,
     };
 
     QUOTE_STATUSES.forEach((status) => {

@@ -6,6 +6,7 @@ const tr = {
     tagline: 'Endüstriyel Polietilen Çözümleri',
     description: 'RMA Plastik endüstriyel polietilen çözümleri',
     descriptions: {
+      faq: 'RMA Plastik polietilen tanklar, su depoları ve özel üretim hakkında sık sorulan sorular: teslimat, montaj, sipariş ve daha fazlası.',
       blog: 'Polietilen tanklar, rotasyonel kalıplama, kimyasal ve su depolama hakkında RMA Plastik’ten teknik bilgiler ve rehberler.',
       videos: 'RMA Plastik üretim, ürün ve uygulama videoları: polietilen tanklar ve rotasyonel kalıplama süreçleri.',
       home: 'RMA Plastik, Mersin’de endüstriyel polietilen depolama tankları, kimyasal tanklar, su depoları, tarım tankları ve özel ürünler üretir. Hemen teklif alın.',
@@ -21,6 +22,7 @@ const tr = {
       compare: 'RMA Plastik ürünlerini ölçüleriyle yan yana karşılaştırın.',
     },
     titles: {
+      faq: 'Sık Sorulan Sorular',
       blog: 'Blog',
       videos: 'Videolar',
       company: 'Kurumsal',
@@ -102,6 +104,7 @@ const tr = {
       contact: 'İletişim',
     },
     links: {
+      faq: 'Sık sorulan sorular',
       tankFinder: 'Depo Seçim Sihirbazı',
       productTables: 'Ürün Tabloları',
       customMolding: 'Özel Üretim',
@@ -314,6 +317,7 @@ const tr = {
       bottomDiameter: 'Alt çap (cm)',
       camber: 'Bombe yüksekliği (cm)',
       throat: 'Boğaz yüksekliği (cm)',
+      weight: 'Ağırlık (kg)',
     },
   },
 
@@ -456,6 +460,54 @@ const tr = {
     pickFromCatalog: 'Katalogdan seç',
     done: 'Tamam',
     solarNote: 'Ürünleriniz Mersin’de güneş enerjisiyle üretilir.',
+  },
+
+  datasheet: {
+    title: 'Teknik föy',
+    button: 'Teknik föy (PDF)',
+    buttonMeta: 'Tüm ölçüler tek sayfada',
+    save: 'PDF olarak kaydet',
+    saveHint: 'Yazdırma penceresinde hedef olarak “PDF olarak kaydet”i seçin.',
+    back: 'Model sayfasına dön',
+    issued: 'Tarih',
+    note: 'Ölçüler RMA Plastik ürün kataloğundan alınmıştır. Güncel bilgi ve fiyat teklifi için satış ekibimizle iletişime geçin.',
+    contact: 'Teklif ve bilgi',
+    page: 'Ürün sayfası',
+  },
+
+  faq: {
+    eyebrow: 'SSS',
+    title: 'Sık sorulan',
+    titleAccent: 'sorular',
+    lead: 'Ürünlerimiz, sipariş ve teslimat süreçleri hakkında en çok sorulan sorular ve cevapları.',
+    all: 'Tümü',
+    topics: {
+      delivery: 'Teslimat ve nakliye',
+      installation: 'Montaj ve kurulum',
+      colours: 'Renk seçenekleri',
+      uv: 'UV ve dış ortam dayanımı',
+      warranty: 'Garanti',
+      products: 'Ürünler ve kullanım',
+      order: 'Sipariş ve teklif',
+      general: 'Genel',
+    },
+    emptyTitle: 'Sorunuz mu var?',
+    emptyText: 'Bu sayfa hazırlanıyor. Sorularınızı satış ekibimize doğrudan iletebilirsiniz.',
+    ctaTitle: 'Sorunuzun cevabını bulamadınız mı?',
+    ctaText: 'Satış ekibimize yazın; ihtiyacınıza uygun ürünü birlikte belirleyelim.',
+    sectionTitle: 'Sık sorulan sorular',
+    seeAll: 'Tüm sorular',
+  },
+
+  gallery: {
+    eyebrow: 'Sahadan',
+    title: 'Kullanımdaki',
+    titleAccent: 'ürünlerimiz',
+    lead: 'Müşterilerimizin sahada kullandığı tank ve depolardan fotoğraflar.',
+    open: 'Fotoğrafı büyüt',
+    close: 'Kapat',
+    prev: 'Önceki fotoğraf',
+    next: 'Sonraki fotoğraf',
   },
 
   productModel: {
@@ -1057,6 +1109,8 @@ const tr = {
     sending: 'Gönderiliyor...',
     successTitle: 'Talebiniz bize ulaştı',
     successText: 'Teşekkür ederiz. Satış ekibimiz talebinizi inceleyip {{email}} adresinden ya da telefonla sizinle iletişime geçecek.',
+    successReference: 'Referans no',
+    successMail: 'Talep özetini ve referans numaranızı {{email}} adresine de gönderdik.',
     successSummary: 'Talep özeti',
     successStep1: 'Talebiniz kaydedildi ve satış ekibine iletildi.',
     successStep2: 'Teknik detayları netleştirmek için sizinle iletişime geçeceğiz.',

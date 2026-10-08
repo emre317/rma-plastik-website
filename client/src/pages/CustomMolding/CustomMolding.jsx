@@ -10,6 +10,7 @@ import { SustainabilityBand } from '../../components/ui/EcoMarks';
 import { galleryImages, machineIcons, serviceIcons } from '../../data/customMolding';
 import projects, { projectText } from '../../data/projects';
 import useLanguage from '../../hooks/useLanguage';
+import FieldGallerySection from '../../sections/FieldGallerySection';
 
 const pad = (n) => String(n).padStart(2, '0');
 
@@ -197,6 +198,8 @@ export default function CustomMolding() {
           </ul>
         </div>
       </section>
+
+      <FieldGallerySection />
 
       {/* CTA */}
       <section className="cmCta">

@@ -78,3 +78,16 @@ export const createExportMarket = (body, token) => request('/admin/export-market
 export const updateExportMarket = (id, body, token) => request(`/admin/export-markets/${encodeURIComponent(id)}`, { method: 'PUT', body, token, fallbackMessage: 'Pazar kaydedilemedi.' });
 export const deleteExportMarket = (id, token) => request(`/admin/export-markets/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Pazar silinemedi.' });
 export const importExportMarkets = (token) => request('/admin/export-markets/import-defaults', { method: 'POST', token, fallbackMessage: 'Broşür pazarları aktarılamadı.' });
+
+/* FAQ (Sık sorulan sorular) */
+export const listFaqs = (token) => request('/admin/faqs', { token, fallbackMessage: 'Sorular yüklenemedi.' });
+export const createFaq = (body, token) => request('/admin/faqs', { method: 'POST', body, token, fallbackMessage: 'Soru kaydedilemedi.' });
+export const updateFaq = (id, body, token) => request(`/admin/faqs/${encodeURIComponent(id)}`, { method: 'PUT', body, token, fallbackMessage: 'Soru kaydedilemedi.' });
+export const deleteFaq = (id, token) => request(`/admin/faqs/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Soru silinemedi.' });
+
+/* Field photos (Saha fotoğrafları) */
+export const uploadGalleryImage = (file, token) => uploadImage('gallery-image', file, token);
+export const listGallery = (token) => request('/admin/gallery', { token, fallbackMessage: 'Fotoğraflar yüklenemedi.' });
+export const createGalleryPhoto = (body, token) => request('/admin/gallery', { method: 'POST', body, token, fallbackMessage: 'Fotoğraf kaydedilemedi.' });
+export const updateGalleryPhoto = (id, body, token) => request(`/admin/gallery/${encodeURIComponent(id)}`, { method: 'PUT', body, token, fallbackMessage: 'Fotoğraf kaydedilemedi.' });
+export const deleteGalleryPhoto = (id, token) => request(`/admin/gallery/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Fotoğraf silinemedi.' });

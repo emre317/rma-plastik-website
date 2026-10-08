@@ -7,6 +7,12 @@ import {
   updateQuoteStatus,
   getQuoteStats,
   getUnreadQuoteCount,
+  exportQuoteRequests,
+  getQuoteReport,
+  getQuoteAssignees,
+  updateQuoteTracking,
+  addQuoteNote,
+  deleteQuoteNote,
 } from '../controllers/quoteController.js';
 
 import {
@@ -50,6 +56,24 @@ router.get(
 );
 
 router.get(
+  '/export',
+  requireAdmin,
+  exportQuoteRequests
+);
+
+router.get(
+  '/report',
+  requireAdmin,
+  getQuoteReport
+);
+
+router.get(
+  '/assignees',
+  requireAdmin,
+  getQuoteAssignees
+);
+
+router.get(
   '/:id',
   requireAdmin,
   getQuoteRequestById
@@ -59,6 +83,24 @@ router.patch(
   '/:id/status',
   requireAdmin,
   updateQuoteStatus
+);
+
+router.patch(
+  '/:id',
+  requireAdmin,
+  updateQuoteTracking
+);
+
+router.post(
+  '/:id/notes',
+  requireAdmin,
+  addQuoteNote
+);
+
+router.delete(
+  '/:id/notes/:noteId',
+  requireAdmin,
+  deleteQuoteNote
 );
 
 export default router;

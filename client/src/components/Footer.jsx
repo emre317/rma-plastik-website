@@ -14,6 +14,8 @@ import portfolio from '../data/productPortfolio';
 import { CATALOG_PDF } from './ui/CatalogLink';
 import { useQuote } from './quote/QuoteContext';
 import { openConsentSettings } from '../analytics/consent';
+import useLanguage from '../hooks/useLanguage';
+import { faqsForLanguage } from '../data/faq';
 
 /*
   Layout follows the "footer-4" block: brand column (logo, text, social
@@ -33,6 +35,7 @@ const linkColumns = [
       { key: 'customMolding', path: '/custom-molding' },
       { key: 'blog', path: '/blog' },
       { key: 'videos', path: '/videos' },
+      { key: 'faq', path: '/faq', faq: true },
     ],
   },
   {
@@ -52,6 +55,8 @@ const linkColumns = [
 export default function Footer() {
   const { t } = useTranslation();
   const { openQuote } = useQuote();
+  const { code: lang } = useLanguage();
+  const hasFaq = faqsForLanguage(lang).length > 0;
 
   const socials = [
     {
@@ -133,7 +138,7 @@ export default function Footer() {
               </h3>
 
               <ul>
-                {column.links.map((link) => (
+                {column.links.filter((link) => !link.faq || hasFaq).map((link) => (
                   <li key={link.key}>
                     {link.href ? (
                       <a href={link.href} download>

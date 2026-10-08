@@ -10,6 +10,7 @@ import i18n from './i18n';
 import App from './App';
 import { modelPaths } from './data/productTables';
 import { postsForLanguage } from './data/posts';
+import { faqsForLanguage } from './data/faq';
 import { SUPPORTED_LANGUAGES } from './i18n/languages';
 import { SeoCollectorContext, renderHeadTags } from './seo/Seo';
 import { SITE_URL } from './seo/site';
@@ -29,6 +30,8 @@ export function getPublicPaths(lang) {
     '/custom-molding',
     '/industries',
     '/contact',
+    // Only once questions are published in this language
+    ...(faqsForLanguage(lang).length ? ['/faq'] : []),
     '/blog',
     // Articles only exist in the languages they were written in
     ...postsForLanguage(lang).map((post) => `/blog/${post.slug}`),

@@ -219,7 +219,7 @@ export default function QuoteModal() {
       : {};
 
     try {
-      await submitQuote({
+      const response = await submitQuote({
         ...form,
         country: form.country ? countryNameTr(form.country) : '',
         ...listFields,
@@ -230,6 +230,8 @@ export default function QuoteModal() {
       setSent({
         company: form.company,
         email: form.email,
+        reference: response?.reference || '',
+        confirmation: Boolean(response?.confirmation),
         items: cart.map((item) => ({ name: item.code || item.name, quantity: item.quantity || 1, image: item.image })),
         subject: listFields.product ? '' : form.product,
       });
@@ -295,6 +297,14 @@ export default function QuoteModal() {
             </span>
             <h3>{t('contact.successTitle')}</h3>
             <p>{t('contact.successText', { email: sent.email })}</p>
+
+            {sent.reference && (
+              <p className="qmReference">
+                <span>{t('contact.successReference')}</span>
+                <strong dir="ltr">{sent.reference}</strong>
+              </p>
+            )}
+            {sent.confirmation && <p className="qmMailNote"><Mail aria-hidden="true" />{t('contact.successMail', { email: sent.email })}</p>}
 
             <div className="qmSuccessSummary">
               <span>{t('contact.successSummary')}</span>

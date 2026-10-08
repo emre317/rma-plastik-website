@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Check, ChevronRight, FileDown, Layers, Package, Phone, Recycle, Ruler, Sun } from 'lucide-react';
+import { Check, ChevronRight, FileDown, FileText, Layers, Package, Phone, Recycle, Ruler, Sun } from 'lucide-react';
 
 import Seo from '../../seo/Seo';
 import PageHeader from '../../components/ui/PageHeader';
@@ -221,6 +221,13 @@ export default function ProductModel() {
                     <strong>{company.phone.display}</strong>
                   </span>
                 </a>
+                <LocalizedLink to={`${path}/datasheet?print=1`} target="_blank" rel="noopener" data-track="datasheet">
+                  <FileText aria-hidden="true" />
+                  <span>
+                    <small>{t('datasheet.buttonMeta')}</small>
+                    <strong>{t('datasheet.button')}</strong>
+                  </span>
+                </LocalizedLink>
                 <a href={CATALOG_PDF} download>
                   <FileDown aria-hidden="true" />
                   <span>
@@ -267,6 +274,8 @@ export default function ProductModel() {
             <p className="pmSource">
               {t('productModel.source')}{' '}
               <a href={CATALOG_PDF} download className="sourceLink">{t('common.catalog')} (PDF)</a>
+              {' · '}
+              <LocalizedLink to={`${path}/datasheet?print=1`} target="_blank" rel="noopener" className="sourceLink">{t('datasheet.button')}</LocalizedLink>
             </p>
           </div>
 

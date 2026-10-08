@@ -1,14 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Inbox, Package, RotateCcw, Search } from 'lucide-react';
+import {
+  BarChart3, CalendarClock, ChevronLeft, ChevronRight, Download, Inbox, Package, RotateCcw, Search, UserRound,
+} from 'lucide-react';
 
-import { getQuoteStats, getQuotes } from '../../services/adminApi';
+import { exportQuotes, getQuoteAssignees, getQuoteStats, getQuotes } from '../../services/adminApi';
+import { exportQuotesFile } from './quoteExcel';
 import useAdminApi from '../../hooks/useAdminApi';
 import usePageTitle from '../../hooks/usePageTitle';
-import { QUOTE_STATUSES, formatDate, statusLabel, statusTone, timeAgo } from '../../components/admin/quoteStatus';
+import {
+  QUOTE_STATUSES, followUpState, formatDate, statusLabel, statusTone, timeAgo,
+} from '../../components/admin/quoteStatus';
 
 const PAGE_SIZE = 12;
-const ALLOWED = ['all', ...QUOTE_STATUSES.map((status) => status.id)];
+const ALLOWED = ['all', 'due', ...QUOTE_STATUSES.map((status) => status.id)];
 
 /* Quote requests: status tabs with counts, search, paged list */
 export default function AdminQuotes() {
@@ -21,6 +26,15 @@ export default function AdminQuotes() {
   const statusFilter = ALLOWED.includes(searchParams.get('status')) ? searchParams.get('status') : 'all';
   const page = Math.max(Number.parseInt(searchParams.get('page'), 10) || 1, 1);
   const search = searchParams.get('q') || '';
+  const assignee = searchParams.get('assignee') || '';
+
+  // "due" is a follow-up filter, the others are statuses
+  const filters = {
+    status: statusFilter === 'due' ? undefined : statusFilter,
+    followUp: statusFilter === 'due' ? 'due' : undefined,
+    search,
+    assignee,
+  };
 
   const [searchInput, setSearchInput] = useState(search);
   const [quotes, setQuotes] = useState([]);
@@ -29,14 +43,18 @@ export default function AdminQuotes() {
   const [error, setError] = useState('');
   const [reloadKey, setReloadKey] = useState(0);
   const [pagination, setPagination] = useState({ page: 1, limit: PAGE_SIZE, total: 0, pages: 1 });
+  const [assignees, setAssignees] = useState([]);
+  const [exporting, setExporting] = useState(false);
+  const [exportNote, setExportNote] = useState('');
 
   function updateParams(changes) {
-    const next = { status: statusFilter, page, q: search, ...changes };
+    const next = { status: statusFilter, page, q: search, assignee, ...changes };
     const params = {};
 
     if (next.status && next.status !== 'all') params.status = next.status;
     if (next.page > 1) params.page = String(next.page);
     if (next.q?.trim()) params.q = next.q.trim();
+    if (next.assignee) params.assignee = next.assignee;
 
     setSearchParams(params, { replace: true });
   }
@@ -60,7 +78,7 @@ export default function AdminQuotes() {
         setError('');
 
         const [response, statsResponse] = await Promise.all([
-          call((token) => getQuotes(token, { page, limit: PAGE_SIZE, status: statusFilter, search })),
+          call((token) => getQuotes(token, { page, limit: PAGE_SIZE, ...filters })),
           call(getQuoteStats).catch(() => null),
         ]);
 
@@ -78,20 +96,43 @@ export default function AdminQuotes() {
     return () => {
       cancelled = true;
     };
-  }, [call, page, statusFilter, search, reloadKey]);
+  }, [call, page, statusFilter, search, assignee, reloadKey]);
+
+  useEffect(() => {
+    call(getQuoteAssignees).then((response) => setAssignees(response.data || [])).catch(() => {});
+  }, [call]);
+
+  async function download() {
+    setExporting(true);
+    setExportNote('');
+
+    try {
+      const response = await call(exportQuotes, filters);
+      const count = await exportQuotesFile(response.data || []);
+      setExportNote(response.truncated ? `İlk ${count} talep indirildi (en fazla 5000).` : `${count} talep Excel dosyasına aktarıldı.`);
+    } catch (err) {
+      setExportNote(err.message || 'Dışa aktarılamadı.');
+    } finally {
+      setExporting(false);
+    }
+  }
 
   // A page number past the end (e.g. after filtering) falls back to the last page
   useEffect(() => {
     if (!loading && page > pagination.pages) updateParams({ page: pagination.pages });
   }, [loading, page, pagination.pages]);
 
-  const hasFilters = statusFilter !== 'all' || Boolean(search);
+  const hasFilters = statusFilter !== 'all' || Boolean(search) || Boolean(assignee);
   const clearFilters = () => {
     setSearchInput('');
     setSearchParams({}, { replace: true });
   };
 
-  const tabs = [{ id: 'all', label: 'Tümü', count: stats?.total }, ...QUOTE_STATUSES.map((status) => ({ ...status, count: stats?.[status.id] }))];
+  const tabs = [
+    { id: 'all', label: 'Tümü', count: stats?.total },
+    { id: 'due', label: 'Takibi gelen', count: stats?.due, icon: CalendarClock },
+    ...QUOTE_STATUSES.map((status) => ({ ...status, count: stats?.[status.id] })),
+  ];
 
   return (
     <section className="adminContent adQuotes">
@@ -101,12 +142,18 @@ export default function AdminQuotes() {
           <h1>Teklif talepleri</h1>
           <p>Siteden gelen tüm teklif talepleri. Bir talebi açtığınızda okundu olarak işaretlenir; durumunu değiştirerek süreci takip edin.</p>
         </div>
-        {stats && (
-          <div className="adHeadStat">
-            <strong>{stats.unread}</strong>
-            <span>okunmamış</span>
-          </div>
-        )}
+        <div className="adHeadActions">
+          <Link to="/admin/quote-reports" className="cmsButton">
+            <BarChart3 aria-hidden="true" />
+            Satış raporu
+          </Link>
+          {stats && (
+            <div className="adHeadStat">
+              <strong>{stats.unread}</strong>
+              <span>okunmamış</span>
+            </div>
+          )}
+        </div>
       </header>
 
       <div className="adTabs" role="tablist" aria-label="Duruma göre filtrele">
@@ -120,6 +167,7 @@ export default function AdminQuotes() {
             onClick={() => updateParams({ status: tab.id, page: 1 })}
           >
             {tab.tone && <span className={`adStatusDot tone-${tab.tone}`} aria-hidden="true" />}
+            {tab.icon && <tab.icon className="adTabIcon" aria-hidden="true" />}
             {tab.label}
             {typeof tab.count === 'number' && <em>{tab.count}</em>}
           </button>
@@ -137,7 +185,19 @@ export default function AdminQuotes() {
             aria-label="Teklif taleplerinde ara"
           />
         </label>
+        <label className="adSelect">
+          <UserRound aria-hidden="true" />
+          <select value={assignee} onChange={(event) => updateParams({ assignee: event.target.value, page: 1 })} aria-label="Sorumlu kişiye göre filtrele">
+            <option value="">Tüm sorumlular</option>
+            <option value="-">Atanmamış</option>
+            {assignees.map((name) => <option key={name} value={name}>{name}</option>)}
+          </select>
+        </label>
         <span className="adToolbarCount">{pagination.total} talep</span>
+        <button type="button" className="cmsButton" onClick={download} disabled={exporting || !pagination.total} title="Görünen filtrelerle Excel dosyası indir">
+          <Download aria-hidden="true" />
+          {exporting ? 'Hazırlanıyor…' : 'Excel’e aktar'}
+        </button>
         {hasFilters && (
           <button type="button" className="cmsButton" onClick={clearFilters}>
             <RotateCcw aria-hidden="true" />
@@ -145,6 +205,8 @@ export default function AdminQuotes() {
           </button>
         )}
       </div>
+
+      {exportNote && <p className="adExportNote" role="status">{exportNote}</p>}
 
       {loading && <div className="adSkeletonList" aria-label="Yükleniyor">{[0, 1, 2, 3].map((i) => <span key={i} />)}</div>}
 
@@ -185,6 +247,17 @@ export default function AdminQuotes() {
                       {quote.company}
                     </strong>
                     <small>{[quote.name, quote.country].filter(Boolean).join(' · ')}</small>
+                    {(quote.assignee || followUpState(quote)) && (
+                      <span className="adRowTrack">
+                        {quote.assignee && <span><UserRound aria-hidden="true" />{quote.assignee}</span>}
+                        {followUpState(quote) && (
+                          <span className={`adFollow ${followUpState(quote)}`}>
+                            <CalendarClock aria-hidden="true" />
+                            {formatDate(quote.followUpAt)}
+                          </span>
+                        )}
+                      </span>
+                    )}
                   </span>
                 </span>
                 <span className="adTableProduct" role="cell">

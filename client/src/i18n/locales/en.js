@@ -7,6 +7,7 @@ const en = {
     tagline: 'Industrial Polyethylene Solutions',
     description: 'RMA Plastik industrial polyethylene solutions',
     descriptions: {
+      faq: 'Frequently asked questions about RMA Plastik polyethylene tanks, water tanks and custom moulding: delivery, installation, ordering and more.',
       blog: 'Technical insights and guides from RMA Plastik on polyethylene tanks, rotational moulding, chemical and water storage.',
       videos: 'RMA Plastik production, product and application videos: polyethylene tanks and rotational moulding.',
       home: 'RMA Plastik manufactures industrial polyethylene storage tanks, chemical tanks, water tanks, agricultural tanks and custom products in Mersin. Get a quote.',
@@ -22,6 +23,7 @@ const en = {
       compare: 'Compare RMA Plastik products side by side with their dimensions.',
     },
     titles: {
+      faq: 'Frequently Asked Questions',
       blog: 'Blog',
       videos: 'Videos',
       company: 'Company',
@@ -103,6 +105,7 @@ const en = {
       contact: 'Contact',
     },
     links: {
+      faq: 'FAQ',
       tankFinder: 'Tank Finder',
       productTables: 'Product Tables',
       customMolding: 'Custom Molding',
@@ -315,6 +318,7 @@ const en = {
       bottomDiameter: 'Bottom diameter (cm)',
       camber: 'Camber height (cm)',
       throat: 'Throat height (cm)',
+      weight: 'Weight (kg)',
     },
   },
 
@@ -457,6 +461,54 @@ const en = {
     pickFromCatalog: 'Pick from catalogue',
     done: 'Done',
     solarNote: 'Your products are made in Mersin with solar energy.',
+  },
+
+  datasheet: {
+    title: 'Technical datasheet',
+    button: 'Datasheet (PDF)',
+    buttonMeta: 'All dimensions on one page',
+    save: 'Save as PDF',
+    saveHint: 'In the print dialog, choose “Save as PDF” as the destination.',
+    back: 'Back to the model page',
+    issued: 'Date',
+    note: 'Dimensions are taken from the RMA Plastik product catalogue. Please contact our sales team for up-to-date information and a quotation.',
+    contact: 'Quotes and information',
+    page: 'Product page',
+  },
+
+  faq: {
+    eyebrow: 'FAQ',
+    title: 'Frequently asked',
+    titleAccent: 'questions',
+    lead: 'Answers to the questions we are asked most about our products, ordering and delivery.',
+    all: 'All',
+    topics: {
+      delivery: 'Delivery and shipping',
+      installation: 'Installation',
+      colours: 'Colour options',
+      uv: 'UV and outdoor use',
+      warranty: 'Warranty',
+      products: 'Products and use',
+      order: 'Orders and quotes',
+      general: 'General',
+    },
+    emptyTitle: 'Have a question?',
+    emptyText: 'This page is being prepared. You can send your questions directly to our sales team.',
+    ctaTitle: 'Didn’t find your answer?',
+    ctaText: 'Write to our sales team and we will help you choose the right product.',
+    sectionTitle: 'Frequently asked questions',
+    seeAll: 'All questions',
+  },
+
+  gallery: {
+    eyebrow: 'From the field',
+    title: 'Our products',
+    titleAccent: 'in use',
+    lead: 'Photos of our tanks and containers in use at our customers’ sites.',
+    open: 'Enlarge photo',
+    close: 'Close',
+    prev: 'Previous photo',
+    next: 'Next photo',
   },
 
   productModel: {
@@ -1059,6 +1111,8 @@ const en = {
     sending: 'Sending...',
     successTitle: 'We have received your request',
     successText: 'Thank you. Our sales team will review your request and contact you at {{email}} or by phone.',
+    successReference: 'Reference no.',
+    successMail: 'We have also emailed the summary and your reference number to {{email}}.',
     successSummary: 'Request summary',
     successStep1: 'Your request is saved and forwarded to our sales team.',
     successStep2: 'We will contact you to clarify the technical details.',

@@ -142,6 +142,32 @@ const quoteRequestSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
+    // Sales follow-up (admin only, never shown to the customer)
+    assignee: {
+      type: String,
+      trim: true,
+      default: '',
+      maxlength: 80,
+    },
+
+    followUpAt: {
+      type: Date,
+      default: null,
+    },
+
+    notes: {
+      type: [
+        new mongoose.Schema(
+          {
+            text: { type: String, trim: true, required: true, maxlength: 2000 },
+            author: { type: String, trim: true, default: '', maxlength: 120 },
+          },
+          { timestamps: { createdAt: true, updatedAt: false } }
+        ),
+      ],
+      default: [],
+    },
   },
   {
     timestamps: true,
@@ -158,6 +184,10 @@ quoteRequestSchema.index({
 
 quoteRequestSchema.index({
   isRead: 1,
+});
+
+quoteRequestSchema.index({
+  followUpAt: 1,
 });
 
 const QuoteRequest = mongoose.model(

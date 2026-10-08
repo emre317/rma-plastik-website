@@ -13,7 +13,7 @@ export const GROUPS = ['tanks', 'textile', 'chemical', 'food', 'other'];
 
 export const COLUMN_KEYS = [
   'volume', 'diameter', 'height', 'length', 'width', 'cap', 'outlet', 'wheel', 'conical',
-  'reducer', 'upperLength', 'bottomLength', 'upperDiameter', 'bottomDiameter', 'camber', 'throat',
+  'reducer', 'upperLength', 'bottomLength', 'upperDiameter', 'bottomDiameter', 'camber', 'throat', 'weight',
 ];
 
 export const WATER_USES = ['water', 'food', 'chemical', 'acid'];

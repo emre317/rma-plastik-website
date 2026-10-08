@@ -16,7 +16,13 @@ import {
   updateFamily,
 } from '../controllers/productFamilyController.js';
 import { requireAdmin } from '../middleware/authMiddleware.js';
-import { uploadPostImage, uploadProductImage, uploadProjectImage } from '../middleware/upload.js';
+import {
+  uploadGalleryImage, uploadPostImage, uploadProductImage, uploadProjectImage,
+} from '../middleware/upload.js';
+import { createFaq, deleteFaq, listFaqs, updateFaq } from '../controllers/faqController.js';
+import {
+  createGalleryPhoto, deleteGalleryPhoto, listGallery, updateGalleryPhoto,
+} from '../controllers/galleryController.js';
 import {
   createProject,
   deleteProject,
@@ -65,12 +71,23 @@ adminContentRouter.delete('/product-families/:id', deleteFamily);
 adminContentRouter.post('/uploads/product-image', uploadProductImage);
 adminContentRouter.post('/uploads/post-image', uploadPostImage);
 adminContentRouter.post('/uploads/project-image', uploadProjectImage);
+adminContentRouter.post('/uploads/gallery-image', uploadGalleryImage);
 
 adminContentRouter.get('/projects', listProjects);
 adminContentRouter.post('/projects', createProject);
 adminContentRouter.post('/projects/import-defaults', importDefaultProjects);
 adminContentRouter.put('/projects/:id', updateProject);
 adminContentRouter.delete('/projects/:id', deleteProject);
+
+adminContentRouter.get('/faqs', listFaqs);
+adminContentRouter.post('/faqs', createFaq);
+adminContentRouter.put('/faqs/:id', updateFaq);
+adminContentRouter.delete('/faqs/:id', deleteFaq);
+
+adminContentRouter.get('/gallery', listGallery);
+adminContentRouter.post('/gallery', createGalleryPhoto);
+adminContentRouter.put('/gallery/:id', updateGalleryPhoto);
+adminContentRouter.delete('/gallery/:id', deleteGalleryPhoto);
 
 adminContentRouter.get('/export-markets', listExportMarkets);
 adminContentRouter.post('/export-markets', createExportMarket);
