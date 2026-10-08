@@ -17,6 +17,7 @@ import {
 } from '../../data/offerText';
 import OfferDocument from './OfferDocument';
 import { downloadBlob, makeOfferPdf } from './offerPdf';
+import Dropdown from '../../components/ui/Dropdown';
 
 const LANGS = [
   { code: 'tr', label: 'Türkçe' },
@@ -257,18 +258,24 @@ export default function AdminQuoteOffer() {
           <div className="adCard">
             <div className="adCardHead"><h2>Belge</h2></div>
             <div className="adOfferRow">
-              <label className="cmsField">
+              <div className="cmsField">
                 <span>Belge Dili</span>
-                <select value={offer.language} onChange={(event) => update({ language: event.target.value })}>
-                  {LANGS.map((item) => <option key={item.code} value={item.code}>{item.label}</option>)}
-                </select>
-              </label>
-              <label className="cmsField">
+                <Dropdown
+                  value={offer.language}
+                  onChange={(language) => update({ language })}
+                  label="Belge Dili"
+                  options={LANGS.map((item) => ({ value: item.code, label: item.label }))}
+                />
+              </div>
+              <div className="cmsField">
                 <span>Para Birimi</span>
-                <select value={offer.currency} onChange={(event) => update({ currency: event.target.value })}>
-                  {OFFER_CURRENCIES.map((code) => <option key={code} value={code}>{code}</option>)}
-                </select>
-              </label>
+                <Dropdown
+                  value={offer.currency}
+                  onChange={(currency) => update({ currency })}
+                  label="Para Birimi"
+                  options={OFFER_CURRENCIES.map((code) => ({ value: code, label: code }))}
+                />
+              </div>
               <label className="cmsField">
                 <span>Geçerlilik Tarihi</span>
                 <input type="date" value={offer.validUntil || ''} onChange={(event) => update({ validUntil: event.target.value })} />
@@ -343,13 +350,15 @@ export default function AdminQuoteOffer() {
           <div className="adCard">
             <div className="adCardHead"><h2>Ticari Koşullar</h2><span className="adHint">Boş bırakılanlar belgede görünmez</span></div>
             <div className="adOfferRow">
-              <label className="cmsField">
+              <div className="cmsField">
                 <span>Teslim şekli (Incoterm)</span>
-                <select value={offer.incoterm} onChange={(event) => update({ incoterm: event.target.value })}>
-                  <option value="">—</option>
-                  {INCOTERMS.map((code) => <option key={code} value={code}>{code}</option>)}
-                </select>
-              </label>
+                <Dropdown
+                  value={offer.incoterm}
+                  onChange={(incoterm) => update({ incoterm })}
+                  label="Teslim şekli (Incoterm)"
+                  options={[{ value: '', label: '—' }, ...INCOTERMS.map((code) => ({ value: code, label: code }))]}
+                />
+              </div>
               <label className="cmsField adOfferWide">
                 <span>Teslim Yeri</span>
                 <input value={offer.deliveryPlace} maxLength={160} placeholder="ör. Mersin fabrika / Mersin Limanı" onChange={(event) => update({ deliveryPlace: event.target.value })} />

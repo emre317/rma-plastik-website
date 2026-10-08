@@ -89,8 +89,8 @@ export default function PublishPanel() {
 
       {error && <small className="publishPanelError">{error}</small>}
 
-      <button type="button" onClick={publish} disabled={running}>
-        {running ? 'Yayınlanıyor…' : pending ? 'Değişiklikleri yayınla' : 'Yeniden Yayınla'}
+      <button type="button" onClick={publish} disabled={running} title={pending ? undefined : 'Siteyi yeniden yayınla'}>
+        {running ? 'Yayınlanıyor…' : pending ? 'Değişiklikleri Yayınla' : 'Yayınla'}
       </button>
     </div>
   );

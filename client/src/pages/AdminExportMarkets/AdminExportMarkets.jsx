@@ -8,6 +8,7 @@ import world from '../../data/worldMapCountries.json';
 import {
   createExportMarket, deleteExportMarket, importExportMarkets, listExportMarkets, updateExportMarket,
 } from '../../services/adminContentApi';
+import Dropdown from '../../components/ui/Dropdown';
 
 const LANGS = [
   { code: 'tr', label: 'Türkçe' },
@@ -101,6 +102,11 @@ export default function AdminExportMarkets() {
   async function save(event) {
     event.preventDefault();
 
+    if (!form.code) {
+      setMessage({ type: 'error', text: 'Lütfen bir ülke seçin.' });
+      return;
+    }
+
     try {
       setSaving(true);
       if (form._id) await call(updateExportMarket, form._id, form);
@@ -168,7 +174,7 @@ export default function AdminExportMarkets() {
     <section className="adminContent">
       <header className="adPageHead">
         <div>
-          <span className="adEyebrow">İçerik</span>
+          <span className="adEyebrow">Katalog</span>
           <h1>İhracat Ağı</h1>
           <p>
             Ana sayfadaki ve Kurumsal sayfasındaki dünya haritasında gösterilen ihracat pazarları. Harita pazarları bu sırayla tek tek
@@ -176,7 +182,7 @@ export default function AdminExportMarkets() {
           </p>
         </div>
         {!form && (
-          <button type="button" className="cmsButton cmsButtonPrimary" onClick={() => edit(null)}>+ Pazar ekle</button>
+          <button type="button" className="cmsButton cmsButtonPrimary" onClick={() => edit(null)}>+ Pazar Ekle</button>
         )}
       </header>
 
@@ -186,18 +192,24 @@ export default function AdminExportMarkets() {
         <form className="cmsCard cmsVideoForm" onSubmit={save}>
           <div className="cmsVideoFormGrid">
             <div className="cmsColumn">
-              <label className="cmsField">
+              <div className="cmsField">
                 <span>Ülke *</span>
-                <select value={form.code} onChange={(event) => setForm({ ...form, code: event.target.value })} required>
-                  <option value="">Ülke Seçin</option>
-                  {countries.map((country) => (
-                    <option key={country.code} value={country.code} disabled={taken.has(country.code)}>
-                      {flag(country.code)} {country.name}{taken.has(country.code) ? ' (listede)' : ''}
-                    </option>
-                  ))}
-                </select>
+                <Dropdown
+                  value={form.code}
+                  onChange={(code) => setForm({ ...form, code })}
+                  placeholder="Ülke Seçin"
+                  label="Ülke"
+                  searchable
+                  searchPlaceholder="Ülke ara…"
+                  options={countries.map((country) => ({
+                    value: country.code,
+                    label: `${flag(country.code)} ${country.name}`,
+                    hint: taken.has(country.code) ? 'Listede' : undefined,
+                    disabled: taken.has(country.code),
+                  }))}
+                />
                 <small>Haritada çizilebilen {countries.length} ülke listelenir.</small>
-              </label>
+              </div>
 
               <div className="cmsTabs" role="tablist">
                 {LANGS.map((item) => (
@@ -221,13 +233,16 @@ export default function AdminExportMarkets() {
               </div>
 
               <div className="cmsInline cmsInlineEven">
-                <label className="cmsField">
+                <div className="cmsField">
                   <span>Haritada etiket konumu</span>
-                  <select value={form.labelPosition} onChange={(event) => setForm({ ...form, labelPosition: event.target.value })}>
-                    {POSITIONS.map((position) => <option key={position.id} value={position.id}>{position.label}</option>)}
-                  </select>
+                  <Dropdown
+                    value={form.labelPosition}
+                    onChange={(labelPosition) => setForm({ ...form, labelPosition })}
+                    label="Haritada etiket konumu"
+                    options={POSITIONS.map((position) => ({ value: position.id, label: position.label }))}
+                  />
                   <small>Etiket komşu ülkeyle çakışırsa değiştirin.</small>
-                </label>
+                </div>
 
                 <label className="cmsField">
                   <span>Sıra</span>

@@ -13,6 +13,7 @@ import BrandLogo from './BrandLogo';
 import { useQuote } from './quote/QuoteContext';
 import portfolio from '../data/productPortfolio';
 import CatalogLink from './ui/CatalogLink';
+import FinderCta from './ui/FinderCta';
 
 const navItems = [
   { key: 'company', path: '/company' },
@@ -181,6 +182,8 @@ export default function Header() {
 
             <LanguageSwitcher />
 
+            <FinderCta className="headerFinder" subtitle={false} label={t('nav.finder')} />
+
             <LocalizedLink
               to="/contact"
               className="headerContact"
@@ -242,6 +245,8 @@ export default function Header() {
               </LocalizedNavLink>
             ))}
           </nav>
+
+          <FinderCta tone="glass" className="mobileMenuFinder" />
 
           <button
             type="button"

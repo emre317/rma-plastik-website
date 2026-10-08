@@ -9,8 +9,9 @@ import Arrow from '../i18n/Arrow';
   a periodic shine, twinkling sparkles around the wand and a soft pulse.
   Motion is switched off for visitors who prefer reduced motion.
   tone: 'dark' (on light backgrounds) | 'glass' (on dark backgrounds)
+  label: shorter text, e.g. in the header
 */
-export default function FinderCta({ tone = 'dark', subtitle = true, className = '' }) {
+export default function FinderCta({ tone = 'dark', subtitle = true, className = '', label }) {
   const { t } = useTranslation();
 
   return (
@@ -25,7 +26,7 @@ export default function FinderCta({ tone = 'dark', subtitle = true, className = 
       </span>
 
       <span className="finderCtaText">
-        <strong>{t('finder.cta')}</strong>
+        <strong>{label || t('finder.cta')}</strong>
         {subtitle && <small>{t('finder.ctaText')}</small>}
       </span>
 

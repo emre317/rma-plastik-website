@@ -10,6 +10,7 @@ import useAdminApi from '../../hooks/useAdminApi';
 import usePageTitle from '../../hooks/usePageTitle';
 import { LANGUAGE_LABELS, formatDate, timeAgo } from '../../components/admin/quoteStatus';
 import { exportLeadsFile } from '../AdminQuotes/quoteExcel';
+import Dropdown from '../../components/ui/Dropdown';
 
 const PAGE_SIZE = 20;
 
@@ -118,13 +119,14 @@ export default function AdminLeads() {
             aria-label="Potansiyel müşterilerde ara"
           />
         </label>
-        <label className="adSelect">
-          <MailCheck aria-hidden="true" />
-          <select value={consent} onChange={(event) => { setConsent(event.target.value); setPage(1); }} aria-label="E-posta iznine göre filtrele">
-            <option value="">Tümü</option>
-            <option value="yes">E-posta İzni Verenler</option>
-          </select>
-        </label>
+        <Dropdown
+          className="adDd"
+          icon={MailCheck}
+          value={consent}
+          onChange={(value) => { setConsent(value); setPage(1); }}
+          label="E-posta iznine göre filtrele"
+          options={[{ value: '', label: 'Tümü' }, { value: 'yes', label: 'E-posta İzni Verenler' }]}
+        />
         <span className="adToolbarCount">{pagination.total} kayıt</span>
         <button type="button" className="cmsButton" onClick={download} disabled={exporting || !pagination.total}>
           <Download aria-hidden="true" />

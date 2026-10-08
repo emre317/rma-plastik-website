@@ -45,6 +45,7 @@ const tr = {
   },
 
   nav: {
+    finder: 'Sihirbazla Seçin',
     waterTanks: 'Su Depoları',
     customMolding: 'Özel Üretim',
     blog: 'Blog',

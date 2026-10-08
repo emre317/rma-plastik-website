@@ -15,20 +15,22 @@ import {
   isAuthError,
 } from '../../services/adminAuth';
 
+// Hints are shown as a tooltip, so every row has the same height
 const NAV = [
   {
-    group: 'Genel',
+    group: 'Satış',
     items: [
       { to: '/admin', label: 'Özet', icon: LayoutDashboard, end: true },
       { to: '/admin/quotes', label: 'Teklif Talepleri', icon: Inbox, badge: true },
-      { to: '/admin/quote-reports', label: 'Satış Raporu', icon: BarChart3, hint: 'Ülke, ürün, kanal, kazanma' },
-      { to: '/admin/leads', label: 'Potansiyel Müşteriler', icon: UserPlus, hint: 'Katalog indirenler', badge: 'leads' },
+      { to: '/admin/quote-reports', label: 'Satış Raporu', icon: BarChart3, hint: 'Ülke, ürün, kanal ve kazanma oranı' },
+      { to: '/admin/leads', label: 'Potansiyel Müşteriler', icon: UserPlus, hint: 'Kataloğu indiren ziyaretçiler', badge: 'leads' },
     ],
   },
   {
     group: 'Katalog',
     items: [
       { to: '/admin/product-families', label: 'Ürün Tabloları', icon: Table2, hint: 'Ürün ve su deposu modelleri' },
+      { to: '/admin/export-markets', label: 'İhracat Ağı', icon: Globe2, hint: 'Haritadaki pazarlar' },
     ],
   },
   {
@@ -37,8 +39,7 @@ const NAV = [
       { to: '/admin/posts', label: 'Blog Yazıları', icon: FileText },
       { to: '/admin/projects', label: 'Referans Projeler', icon: Briefcase, hint: 'Özel üretim projeleri' },
       { to: '/admin/gallery', label: 'Saha Fotoğrafları', icon: Camera, hint: 'Kullanımdaki ürünler' },
-      { to: '/admin/faqs', label: 'Sık sorulan sorular', icon: CircleHelp, hint: 'SSS sayfası' },
-      { to: '/admin/export-markets', label: 'İhracat Ağı', icon: Globe2, hint: 'Haritadaki pazarlar' },
+      { to: '/admin/faqs', label: 'Sık Sorulan Sorular', icon: CircleHelp, hint: 'SSS sayfası' },
       { to: '/admin/videos', label: 'Videolar', icon: PlayCircle },
       { to: '/admin/texts', label: 'Sayfa Metinleri', icon: Type },
     ],
@@ -122,6 +123,9 @@ export default function AdminSidebar() {
         <div className="adBrand">
           <BrandLogo variant="light" alt="RMA Plastik" />
           <span>Yönetim Paneli</span>
+          <a href="/" target="_blank" rel="noreferrer" className="adBrandSite" aria-label="Siteyi Görüntüle" title="Siteyi Görüntüle">
+            <ExternalLink aria-hidden="true" />
+          </a>
           <button type="button" className="adSidebarClose" onClick={() => setOpen(false)} aria-label="Menüyü kapat">
             <X aria-hidden="true" />
           </button>
@@ -132,12 +136,9 @@ export default function AdminSidebar() {
             <div key={section.group} className="adNavGroup">
               <span className="adNavLabel">{section.group}</span>
               {section.items.map((item) => (
-                <NavLink key={item.to} to={item.to} end={item.end} className={({ isActive }) => (isActive ? 'active' : '')}>
+                <NavLink key={item.to} to={item.to} end={item.end} title={item.hint} className={({ isActive }) => (isActive ? 'active' : '')}>
                   <item.icon aria-hidden="true" />
-                  <span className="adNavText">
-                    {item.label}
-                    {item.hint && <small>{item.hint}</small>}
-                  </span>
+                  <span className="adNavText">{item.label}</span>
                   {item.badge === true && unread > 0 && (
                     <span className="adNavBadge" aria-label={`${unread} okunmamış`}>{unread}</span>
                   )}
@@ -149,23 +150,21 @@ export default function AdminSidebar() {
             </div>
           ))}
 
-          <a href="/" target="_blank" rel="noreferrer" className="adNavExternal">
-            <ExternalLink aria-hidden="true" />
-            <span className="adNavText">Siteyi Görüntüle</span>
-          </a>
         </nav>
 
-        <PublishPanel />
+        <div className="adSidebarFoot">
+          <PublishPanel />
 
-        <div className="adUser">
-          <span className="adAvatar" aria-hidden="true">{initial}</span>
-          <span className="adUserText">
-            <strong>{admin?.name || 'Yönetici'}</strong>
-            {admin?.email && <small>{admin.email}</small>}
-          </span>
-          <button type="button" onClick={logout} aria-label="Çıkış yap" title="Çıkış yap">
-            <LogOut aria-hidden="true" />
-          </button>
+          <div className="adUser">
+            <span className="adAvatar" aria-hidden="true">{initial}</span>
+            <span className="adUserText">
+              <strong>{admin?.name || 'Yönetici'}</strong>
+              {admin?.email && <small>{admin.email}</small>}
+            </span>
+            <button type="button" onClick={logout} aria-label="Çıkış yap" title="Çıkış yap">
+              <LogOut aria-hidden="true" />
+            </button>
+          </div>
         </div>
       </aside>
     </>

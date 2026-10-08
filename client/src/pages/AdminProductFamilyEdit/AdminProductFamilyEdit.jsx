@@ -11,6 +11,7 @@ import {
   updateFamily,
   uploadProductImage,
 } from '../../services/adminContentApi';
+import Dropdown from '../../components/ui/Dropdown';
 
 const LANGUAGES = [
   { code: 'tr', label: 'Türkçe' },
@@ -320,14 +321,15 @@ export default function AdminProductFamilyEdit() {
                 <span>Sitede Yayında</span>
               </label>
 
-              <label className="cmsField">
+              <div className="cmsField">
                 <span>Grup</span>
-                <select value={form.group} onChange={(event) => set('group', event.target.value)}>
-                  {GROUPS.map((key) => (
-                    <option key={key} value={key}>{groupLabel(key)}</option>
-                  ))}
-                </select>
-              </label>
+                <Dropdown
+                  value={form.group}
+                  onChange={(group) => set('group', group)}
+                  label="Grup"
+                  options={GROUPS.map((key) => ({ value: key, label: groupLabel(key) }))}
+                />
+              </div>
 
               <label className="cmsField">
                 <span>Sıra (küçük olan önce)</span>
@@ -370,21 +372,25 @@ export default function AdminProductFamilyEdit() {
               {form.waterTank.enabled && (
                 <>
                   <div>
-                    <label className="cmsField">
+                    <div className="cmsField">
                       <span>Tip</span>
-                      <select value={form.waterTank.orientation} onChange={(event) => setWater('orientation', event.target.value)}>
-                        <option value="vertical">Dikey</option>
-                        <option value="horizontal">Yatay</option>
-                      </select>
-                    </label>
+                      <Dropdown
+                        value={form.waterTank.orientation}
+                        onChange={(value) => setWater('orientation', value)}
+                        label="Tip"
+                        options={[{ value: 'vertical', label: 'Dikey' }, { value: 'horizontal', label: 'Yatay' }]}
+                      />
+                    </div>
 
-                    <label className="cmsField">
+                    <div className="cmsField">
                       <span>Yapı</span>
-                      <select value={form.waterTank.layer} onChange={(event) => setWater('layer', event.target.value)}>
-                        <option value="single">Tek Katmanlı</option>
-                        <option value="double">Çift Katmanlı</option>
-                      </select>
-                    </label>
+                      <Dropdown
+                        value={form.waterTank.layer}
+                        onChange={(value) => setWater('layer', value)}
+                        label="Yapı"
+                        options={[{ value: 'single', label: 'Tek Katmanlı' }, { value: 'double', label: 'Çift Katmanlı' }]}
+                      />
+                    </div>
                   </div>
 
                   <div className="cmsField">

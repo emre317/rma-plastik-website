@@ -11,6 +11,7 @@ import usePageTitle from '../../hooks/usePageTitle';
 import {
   QUOTE_OUTCOMES, QUOTE_STATUSES, followUpState, formatDate, outcomeLabel, statusLabel, statusTone, timeAgo,
 } from '../../components/admin/quoteStatus';
+import Dropdown from '../../components/ui/Dropdown';
 
 const PAGE_SIZE = 12;
 const ALLOWED = ['all', 'due', ...QUOTE_STATUSES.map((status) => status.id)];
@@ -191,22 +192,30 @@ export default function AdminQuotes() {
             aria-label="Teklif taleplerinde ara"
           />
         </label>
-        <label className="adSelect">
-          <UserRound aria-hidden="true" />
-          <select value={assignee} onChange={(event) => updateParams({ assignee: event.target.value, page: 1 })} aria-label="Sorumlu kişiye göre filtrele">
-            <option value="">Tüm Sorumlular</option>
-            <option value="-">Atanmamış</option>
-            {assignees.map((name) => <option key={name} value={name}>{name}</option>)}
-          </select>
-        </label>
-        <label className="adSelect">
-          <Flag aria-hidden="true" />
-          <select value={outcome} onChange={(event) => updateParams({ outcome: event.target.value, page: 1 })} aria-label="Sonuca göre filtrele">
-            <option value="">Tüm Sonuçlar</option>
-            <option value="open">Sonuçlanmamış</option>
-            {QUOTE_OUTCOMES.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}
-          </select>
-        </label>
+        <Dropdown
+          className="adDd"
+          icon={UserRound}
+          value={assignee}
+          onChange={(value) => updateParams({ assignee: value, page: 1 })}
+          label="Sorumlu kişiye göre filtrele"
+          options={[
+            { value: '', label: 'Tüm Sorumlular' },
+            { value: '-', label: 'Atanmamış' },
+            ...assignees.map((name) => ({ value: name, label: name })),
+          ]}
+        />
+        <Dropdown
+          className="adDd"
+          icon={Flag}
+          value={outcome}
+          onChange={(value) => updateParams({ outcome: value, page: 1 })}
+          label="Sonuca göre filtrele"
+          options={[
+            { value: '', label: 'Tüm Sonuçlar' },
+            { value: 'open', label: 'Sonuçlanmamış' },
+            ...QUOTE_OUTCOMES.map((item) => ({ value: item.id, label: item.label })),
+          ]}
+        />
         {channel && (
           <button type="button" className="adFilterChip" onClick={() => updateParams({ channel: '', page: 1 })} title="Kaynak filtresini kaldır">
             <Megaphone aria-hidden="true" />

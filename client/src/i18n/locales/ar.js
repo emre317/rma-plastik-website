@@ -46,6 +46,7 @@ const ar = {
   },
 
   nav: {
+    finder: 'أداة الاختيار',
     waterTanks: 'خزانات المياه',
     customMolding: 'التصنيع المخصص',
     blog: 'المدونة',

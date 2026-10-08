@@ -6,6 +6,7 @@ import usePageTitle from '../../hooks/usePageTitle';
 import { FAQ_TOPICS } from '../../data/faq';
 import tr from '../../i18n/locales/tr';
 import { createFaq, deleteFaq, listFaqs, updateFaq } from '../../services/adminContentApi';
+import Dropdown from '../../components/ui/Dropdown';
 
 const LANGS = [
   { code: 'tr', label: 'Türkçe', short: 'TR' },
@@ -232,12 +233,15 @@ export default function AdminFaqs() {
       {form && (
         <form className="cmsCard cmsVideoForm" onSubmit={save}>
           <div className="cmsInline cmsInlineEven">
-            <label className="cmsField">
+            <div className="cmsField">
               <span>Konu</span>
-              <select value={form.topic} onChange={(event) => setForm({ ...form, topic: event.target.value })}>
-                {FAQ_TOPICS.map((id) => <option key={id} value={id}>{topicLabel(id)}</option>)}
-              </select>
-            </label>
+              <Dropdown
+                value={form.topic}
+                onChange={(topic) => setForm({ ...form, topic })}
+                label="Konu"
+                options={FAQ_TOPICS.map((id) => ({ value: id, label: topicLabel(id) }))}
+              />
+            </div>
 
             <label className="cmsField">
               <span>Sıra</span>

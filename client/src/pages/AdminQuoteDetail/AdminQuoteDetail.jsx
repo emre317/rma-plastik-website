@@ -14,6 +14,7 @@ import usePageTitle from '../../hooks/usePageTitle';
 import {
   LANGUAGE_LABELS, LOSS_REASONS, QUOTE_OUTCOMES, QUOTE_STATUSES, dayValue, followUpState, formatDate, outcomeLabel, quoteReference, statusLabel, statusTone, todayValue,
 } from '../../components/admin/quoteStatus';
+import Dropdown from '../../components/ui/Dropdown';
 
 const FOLLOW_UP_LABELS = { overdue: 'Takip tarihi geçti', today: 'Takip Bugün', upcoming: 'Takip Planlandı' };
 
@@ -47,6 +48,7 @@ export default function AdminQuoteDetail() {
   const [assignees, setAssignees] = useState([]);
   const [note, setNote] = useState('');
   const [outcomeNote, setOutcomeNote] = useState('');
+  const [suggestOpen, setSuggestOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -194,6 +196,10 @@ export default function AdminQuoteDetail() {
   const totalPieces = items.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
   const notes = [...(quote.notes || [])].reverse();
   const followUp = followUpState(quote);
+  const typed = assignee.trim().toLocaleLowerCase('tr');
+  const suggestions = suggestOpen
+    ? assignees.filter((name) => name !== assignee && name.toLocaleLowerCase('tr').includes(typed)).slice(0, 8)
+    : [];
   const source = quote.attribution;
   const campaign = source && [source.utmCampaign, [source.utmSource, source.utmMedium].filter(Boolean).join(' / ')].filter(Boolean);
   const CLICK_LABELS = { gclid: 'Google Ads tıklaması', fbclid: 'Facebook / Instagram bağlantısı', msclkid: 'Microsoft Ads tıklaması' };
@@ -409,13 +415,16 @@ export default function AdminQuoteDetail() {
             </div>
 
             {quote.outcome === 'lost' && (
-              <label className="cmsField">
+              <div className="cmsField">
                 <span>Kayıp Nedeni</span>
-                <select value={quote.lossReason || ''} onChange={(event) => saveTracking({ lossReason: event.target.value }, 'lossReason')} disabled={Boolean(saving)}>
-                  <option value="">Seçin…</option>
-                  {LOSS_REASONS.map((reason) => <option key={reason.id} value={reason.id}>{reason.label}</option>)}
-                </select>
-              </label>
+                <Dropdown
+                  value={quote.lossReason || ''}
+                  onChange={(lossReason) => saveTracking({ lossReason }, 'lossReason')}
+                  placeholder="Seçin…"
+                  label="Kayıp Nedeni"
+                  options={LOSS_REASONS.map((reason) => ({ value: reason.id, label: reason.label }))}
+                />
+              </div>
             )}
 
             {quote.outcome && (
@@ -445,27 +454,64 @@ export default function AdminQuoteDetail() {
           <div className="adCard adTrackCard">
             <div className="adCardHead"><h2><CalendarClock aria-hidden="true" />Takip</h2></div>
 
-            <label className="cmsField">
-              <span>Sorumlu Kişi</span>
-              <input
-                list="quote-assignees"
-                value={assignee}
-                maxLength={80}
-                placeholder="ör. Ayşe (İhracat)"
-                onChange={(event) => setAssignee(event.target.value)}
-                onBlur={saveAssignee}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter') {
-                    event.preventDefault();
+            <div className="cmsField">
+              <span id="assignee-label">Sorumlu Kişi</span>
+              {/* Free text with suggestions from earlier requests (rounded list instead of the browser's) */}
+              <div className="dd adSuggest">
+                <input
+                  role="combobox"
+                  aria-labelledby="assignee-label"
+                  aria-autocomplete="list"
+                  aria-expanded={suggestions.length > 0}
+                  aria-controls="assignee-suggestions"
+                  value={assignee}
+                  maxLength={80}
+                  placeholder="ör. Ayşe (İhracat)"
+                  autoComplete="off"
+                  onChange={(event) => {
+                    setAssignee(event.target.value);
+                    setSuggestOpen(true);
+                  }}
+                  onFocus={() => setSuggestOpen(true)}
+                  onBlur={() => {
+                    setSuggestOpen(false);
                     saveAssignee();
-                  }
-                }}
-              />
-              <datalist id="quote-assignees">
-                {assignees.map((name) => <option key={name} value={name} />)}
-              </datalist>
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      event.preventDefault();
+                      setSuggestOpen(false);
+                      saveAssignee();
+                    } else if (event.key === 'Escape') {
+                      setSuggestOpen(false);
+                    }
+                  }}
+                />
+                {suggestions.length > 0 && (
+                  <div className="ddPanel">
+                    <ul className="ddList" id="assignee-suggestions" role="listbox" aria-labelledby="assignee-label">
+                      {suggestions.map((name) => (
+                        <li
+                          key={name}
+                          role="option"
+                          aria-selected={false}
+                          className="ddOption"
+                          onMouseDown={(event) => {
+                            event.preventDefault();
+                            setAssignee(name);
+                            setSuggestOpen(false);
+                            if (name !== (quote.assignee || '')) saveTracking({ assignee: name }, 'assignee');
+                          }}
+                        >
+                          <span>{name}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
               <small>{saving === 'assignee' ? 'Kaydediliyor…' : 'Alandan çıkınca kaydedilir.'}</small>
-            </label>
+            </div>
 
             <label className="cmsField">
               <span>Takip Tarihi</span>

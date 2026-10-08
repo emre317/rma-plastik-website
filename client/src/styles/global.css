@@ -32717,3 +32717,291 @@ html.booting .heroBrandName strong {
 .carousel3dDots {
   gap: 0;
 }
+
+/* Header: compact tank finder button (same look as the big one) */
+.headerFinder.finderCta {
+  height: 42px;
+  padding: 4px 16px 4px 4px;
+  gap: 9px;
+  flex: none;
+  box-shadow: 0 10px 24px -14px rgba(29, 103, 213, 0.75);
+}
+
+.headerFinder .finderCtaIcon {
+  width: 34px;
+  height: 34px;
+}
+
+.headerFinder .finderCtaIcon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.headerFinder .finderCtaText strong {
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.headerFinder .finderCtaArrow {
+  display: none;
+}
+
+.headerFinder.finderCta:hover,
+.headerFinder.finderCta:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px -14px rgba(29, 103, 213, 0.95), 0 0 0 4px rgba(77, 148, 245, 0.16);
+}
+
+/* Narrower screens: wand icon only */
+@media (max-width: 1240px) {
+  .headerFinder.finderCta {
+    width: 42px;
+    padding: 4px;
+  }
+
+  .headerFinder .finderCtaText {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
+/* Phones / tablets: the button is in the menu instead */
+@media (max-width: 900px) {
+  .headerFinder.finderCta {
+    display: none;
+  }
+}
+
+.mobileMenuFinder.finderCta {
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+/* Global presence panel: figures centred in their tiles */
+.globalMeta .globalFigures > div {
+  align-items: center;
+  text-align: center;
+}
+
+.globalMeta .globalFigures > div::before {
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+}
+
+[dir='rtl'] .globalMeta .globalFigures > div::before {
+  transform: translateX(50%);
+}
+
+/* ---------- Admin sidebar: tidy, one height per row, footer always visible ---------- */
+
+.adminSidebar.adSidebar {
+  padding: 18px 14px 14px;
+  overflow: hidden;
+}
+
+.adBrand {
+  padding: 2px 8px 16px;
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+
+.adBrand .brandLogo img {
+  width: 92px;
+}
+
+.adBrand > span {
+  width: auto;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+/* Only the menu scrolls; publish panel and user stay at the bottom */
+.adSidebar .adNav {
+  min-height: 0;
+  flex: 1;
+  margin: 10px -6px 0;
+  padding: 0 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+.adSidebar .adNavGroup {
+  gap: 2px;
+}
+
+.adSidebar .adNavGroup + .adNavGroup {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.adSidebar .adNavLabel {
+  padding: 8px 10px 4px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.adSidebar .adNav a {
+  min-height: 38px;
+  padding: 0 10px;
+  gap: 11px;
+  border-radius: 10px;
+  font-size: 13.5px;
+}
+
+.adSidebar .adNav a svg {
+  width: 17px;
+  height: 17px;
+}
+
+.adSidebar .adNavText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.adSidebar .adNavBadge {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  font-size: 11px;
+}
+
+.adSidebar .adNavExternal {
+  margin-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0 0 10px 10px;
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.adSidebarFoot {
+  flex: none;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.adSidebar .publishPanel {
+  margin: 0 0 10px;
+  padding: 12px;
+  gap: 4px;
+  border-radius: 12px;
+}
+
+.adSidebar .publishPanel button {
+  min-height: 36px;
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+.adSidebar .adUser {
+  padding: 4px 4px 0;
+  border-top: 0;
+}
+
+/* Admin dropdowns: same height and corners as the other fields */
+.cmsField .dd .ddTrigger {
+  min-height: 42px;
+  border-color: var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: none;
+  font-weight: 500;
+}
+
+.adToolbar .adDd {
+  flex: none;
+  min-width: 180px;
+}
+
+.adToolbar .adDd .ddTrigger {
+  min-height: 44px;
+  border-color: rgba(17, 34, 68, 0.12);
+  font-weight: 600;
+}
+
+.adSuggest .ddPanel {
+  width: 100%;
+  max-width: none;
+}
+
+.adBrandSite {
+  width: 30px;
+  height: 30px;
+  margin-inline-start: auto;
+  display: grid;
+  place-items: center;
+  flex: none;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.7);
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.adBrandSite:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.adBrandSite svg {
+  width: 15px;
+  height: 15px;
+}
+
+.adSidebar .adNav a {
+  min-height: 36px;
+}
+
+/* Publish: status and button on one row while the site is up to date */
+.adSidebar .publishPanel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 2px;
+  padding: 10px 10px 10px 12px;
+}
+
+.adSidebar .publishPanel > * {
+  grid-column: 1;
+}
+
+.adSidebar .publishPanel .publishPanelHint,
+.adSidebar .publishPanel .publishPanelError,
+.adSidebar .publishPanel .publishPanelLog {
+  grid-column: 1 / -1;
+}
+
+.adSidebar .publishPanel button {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  min-height: 34px;
+  margin: 0;
+  padding: 0 14px;
+}
+
+.adSidebar .publishPanel.pending button,
+.adSidebar .publishPanel.failed button {
+  grid-column: 1 / -1;
+  grid-row: auto;
+  margin-top: 6px;
+}
+
+.adBrandSite + .adSidebarClose {
+  margin-inline-start: 6px;
+}
+
+/* The yellow state already says it; the long hint only crowds the sidebar */
+.adSidebar .publishPanelHint {
+  display: none;
+}

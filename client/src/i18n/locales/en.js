@@ -46,6 +46,7 @@ const en = {
   },
 
   nav: {
+    finder: 'Tank Finder',
     waterTanks: 'Water Tanks',
     customMolding: 'Custom Molding',
     blog: 'Blog',
