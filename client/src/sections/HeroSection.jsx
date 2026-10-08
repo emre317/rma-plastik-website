@@ -5,7 +5,7 @@ import { useQuote } from '../components/quote/QuoteContext';
 import videos from '../data/videos';
 import HeroVideo from './HeroVideo';
 import HeroTitle from '../components/ui/HeroTitle';
-import { EcoBadge } from '../components/ui/EcoMarks';
+import HeroBrand from '../components/ui/HeroBrand';
 
 export default function HeroSection() {
   const { t } = useTranslation();
@@ -22,24 +22,11 @@ export default function HeroSection() {
     <section className="hero" id="home">
       <div className="container heroContainer">
 
-        <div className="heroTop">
-          <span className="heroIndex">{t('hero.index')}</span>
-
-          <span className="heroTopRight">
-            <EcoBadge type="solar" />
-            <span className="heroSince">
-              {t('hero.since')}
-            </span>
-          </span>
-        </div>
-
         <div className="heroGrid">
 
           <div className="heroContent">
 
-            <p className="eyebrow">
-              {t('hero.eyebrow')}
-            </p>
+            <HeroBrand className="light" />
 
             <HeroTitle line1={t('hero.titleLine1')} accent={t('hero.titleAccent')} line2={t('hero.titleLine2')} />
 

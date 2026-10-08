@@ -11,8 +11,8 @@ import { videoText } from '../data/videos';
 import { globalFigures } from '../data/exportMarkets';
 import useLanguage from '../hooks/useLanguage';
 import portfolio from '../data/productPortfolio';
-import { EcoBadge } from '../components/ui/EcoMarks';
 import HeroTitle from '../components/ui/HeroTitle';
+import HeroBrand from '../components/ui/HeroBrand';
 import StatValue from '../components/ui/StatValue';
 
 const PLAYER_ORIGIN = 'https://www.youtube-nocookie.com';
@@ -229,20 +229,9 @@ export default function HeroVideo({ video }) {
       <div className="heroVideoGuides container" aria-hidden="true"><span /><span /><span /></div>
 
       <div className="container heroVideoInner">
-        <div className="heroTop">
-          <span className="heroIndex">{t('hero.index')}</span>
-          <span className="heroTopRight">
-            <EcoBadge type="solar" tone="glass" />
-            <span className="heroSince">{t('hero.since')}</span>
-          </span>
-        </div>
-
         <div className="heroVideoGrid">
           <div className="heroVideoContent">
-            <p className="heroVideoEyebrow">
-              <span aria-hidden="true" />
-              {t('hero.eyebrow')}
-            </p>
+            <HeroBrand />
 
             <HeroTitle line1={t('hero.titleLine1')} accent={t('hero.titleAccent')} line2={t('hero.titleLine2')} />
 

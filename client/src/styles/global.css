@@ -31964,3 +31964,142 @@ section:has(> .sectionDeco) {
     padding: 24px 10px 12px;
   }
 }
+
+/* Home hero: company name above the headline */
+.heroBrand {
+  margin: 0;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 16px;
+
+  color: #fff;
+}
+
+.heroBrandLine {
+  width: 44px;
+
+  height: 2px;
+
+  border-radius: 2px;
+
+  background: linear-gradient(90deg, transparent, #7fb2ff);
+
+  transform-origin: left center;
+
+  animation: heroBrandLine 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.05s both;
+}
+
+[dir='rtl'] .heroBrandLine {
+  background: linear-gradient(270deg, transparent, #7fb2ff);
+
+  transform-origin: right center;
+}
+
+.heroBrandName {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  font-size: clamp(26px, 2.6vw, 38px);
+
+  line-height: 1;
+
+  animation: heroWordIn 0.95s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s both;
+}
+
+.heroBrandName strong {
+  font-weight: 800;
+
+  letter-spacing: 0.06em;
+
+  background: linear-gradient(100deg, #ffffff 0%, #ffffff 42%, #9cc4ff 50%, #ffffff 58%, #ffffff 100%);
+  background-size: 260% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  animation: heroShine 6s cubic-bezier(0.45, 0, 0.2, 1) 1.2s infinite alternate;
+}
+
+.heroBrandDivider {
+  width: 1px;
+
+  height: 0.9em;
+
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.heroBrandName > span:last-child {
+  font-weight: 300;
+
+  letter-spacing: 0.08em;
+
+  color: rgba(255, 255, 255, 0.82);
+}
+
+/* Light hero (no video) */
+.heroBrand.light {
+  margin-bottom: 30px;
+
+  color: var(--navy, #0b1f3a);
+}
+
+.heroBrand.light .heroBrandLine {
+  background: linear-gradient(90deg, transparent, var(--accent));
+}
+
+.heroBrand.light .heroBrandName strong {
+  background-image: linear-gradient(100deg, #0b1f3a 0%, #0b1f3a 42%, #4d94f5 50%, #0b1f3a 58%, #0b1f3a 100%);
+}
+
+.heroBrand.light .heroBrandDivider {
+  background: rgba(11, 31, 58, 0.25);
+}
+
+.heroBrand.light .heroBrandName > span:last-child {
+  color: rgba(11, 31, 58, 0.75);
+}
+
+@keyframes heroBrandLine {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+html.booting .heroBrandLine,
+html.booting .heroBrandName,
+html.booting .heroBrandName strong {
+  animation-play-state: paused;
+}
+
+@media (max-width: 640px) {
+  .heroBrand {
+    gap: 12px;
+  }
+
+  .heroBrandLine {
+    width: 28px;
+  }
+
+  .heroBrandName {
+    gap: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroBrandLine,
+  .heroBrandName,
+  .heroBrandName strong {
+    animation: none;
+  }
+}
