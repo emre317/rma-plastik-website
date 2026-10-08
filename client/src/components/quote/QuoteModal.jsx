@@ -1,7 +1,7 @@
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Check, Mail, MapPin, Send, Minus, Package, Phone, Plus, Search, ShoppingBag, Sun, Trash2, X,
+  Check, Link2, Mail, MapPin, Send, Minus, Package, Phone, Plus, Search, Share2, ShoppingBag, Sun, Trash2, X,
 } from 'lucide-react';
 
 import Arrow from '../i18n/Arrow';
@@ -9,8 +9,10 @@ import Dropdown from '../ui/Dropdown';
 import company from '../../data/company';
 import portfolio from '../../data/productPortfolio';
 import useModelQuote from '../../hooks/useModelQuote';
+import useQuoteShare from '../../hooks/useQuoteShare';
 import { countryNameTr, countryOptions } from '../../data/countries';
 import { submitQuote } from '../../services/api';
+import { visitAttribution } from '../../analytics/attribution';
 import { useQuote } from './QuoteContext';
 import { track } from '../../analytics/track';
 
@@ -59,9 +61,11 @@ export default function QuoteModal() {
   const trT = i18n.getFixedT('tr');
   const quoteForModel = useModelQuote();
   const {
-    open, product, closeQuote, clearProduct,
+    open, product, shared, closeQuote, clearProduct,
     cart, addToCart, removeFromCart, setCartQuantity, clearCart,
   } = useQuote();
+  const { shareUrl } = useQuoteShare();
+  const [shareNote, setShareNote] = useState('');
 
   const dialogRef = useRef(null);
   const searchRef = useRef(null);
@@ -78,6 +82,43 @@ export default function QuoteModal() {
   const deferredQuery = useDeferredValue(query);
 
   const q = (key, options) => t(`quoteCart.${key}`, options);
+
+  // Share the list: the phone's share sheet, otherwise the link is copied
+  async function shareList() {
+    const url = shareUrl(cart);
+    if (!url) return;
+
+    track('quote_list_share', { items: cart.length, method: navigator.share ? 'native' : 'copy' });
+
+    if (navigator.share && window.matchMedia('(pointer: coarse)').matches) {
+      try {
+        await navigator.share({ title: q('shareTitle'), text: q('shareText'), url });
+        return;
+      } catch (error) {
+        if (error?.name === 'AbortError') return;
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(url);
+      setShareNote(q('shareCopied'));
+    } catch {
+      window.prompt(q('shareCopyPrompt'), url);
+    }
+
+    setTimeout(() => setShareNote(''), 2600);
+  }
+
+  function emailList() {
+    const url = shareUrl(cart);
+    if (!url) return;
+
+    const lines = cart.map((item) => `• ${[item.code || item.name, item.title, item.capacity].filter(Boolean).join(' · ')} × ${item.quantity || 1}`);
+    const body = [q('shareText'), '', ...lines, '', url].join('\n');
+
+    track('quote_list_share', { items: cart.length, method: 'email' });
+    window.location.href = `mailto:?subject=${encodeURIComponent(q('shareTitle'))}&body=${encodeURIComponent(body)}`;
+  }
 
   // Product groups for the subject field; the Turkish title is sent so the
   // sales team always sees the same name whatever the site language
@@ -225,6 +266,7 @@ export default function QuoteModal() {
         country: form.country ? countryNameTr(form.country) : '',
         ...listFields,
         language: i18n.resolvedLanguage,
+        attribution: visitAttribution(),
       });
 
       setStatus('success');
@@ -363,6 +405,10 @@ export default function QuoteModal() {
               </div>
             </div>
 
+            {shared > 0 && (
+              <p className="qmSharedNote" role="status"><Link2 aria-hidden="true" />{q('sharedOpened', { count: shared })}</p>
+            )}
+
             {cart.length === 0 ? (
               <p className="qmEmpty">{q('emptySelected')}</p>
             ) : (
@@ -397,6 +443,21 @@ export default function QuoteModal() {
                   </li>
                 ))}
               </ul>
+            )}
+
+            {cart.length > 0 && (
+              <div className="qmShare">
+                <span>{q('shareLabel')}</span>
+                <button type="button" className="qmTextButton" onClick={shareList}>
+                  <Share2 aria-hidden="true" />
+                  {q('share')}
+                </button>
+                <button type="button" className="qmTextButton" onClick={emailList}>
+                  <Mail aria-hidden="true" />
+                  {q('shareEmail')}
+                </button>
+                {shareNote && <span className="qmShareNote" role="status"><Check aria-hidden="true" />{shareNote}</span>}
+              </div>
             )}
           </div>
 

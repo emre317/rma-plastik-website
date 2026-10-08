@@ -136,7 +136,8 @@ export default function LanguageSwitcher({ className = '', placement = 'bottom' 
         aria-haspopup="menu"
         aria-expanded={open}
         aria-controls={menuId}
-        aria-label={t('language.change', { language: current.label })}
+        // The visible code comes first so voice control ("click TR") matches the button
+        aria-label={`${current.short} – ${t('language.change', { language: current.label })}`}
         onClick={() => setOpen((value) => !value)}
         onKeyDown={handleButtonKeyDown}
       >

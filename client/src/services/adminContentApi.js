@@ -1,4 +1,5 @@
 import { ApiError, request } from './http';
+import optimizeImage from './optimizeImage';
 
 const API_BASE_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
 
@@ -34,7 +35,7 @@ export const uploadProjectImage = (file, token) => uploadImage('project-image', 
 
 async function uploadImage(kind, file, token) {
   const form = new FormData();
-  form.append('image', file);
+  form.append('image', await optimizeImage(file));
 
   let response;
 

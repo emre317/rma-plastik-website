@@ -1,10 +1,13 @@
 import mongoose from 'mongoose';
 
 import QuoteRequest, {
+  LOSS_REASONS,
   OFFER_CURRENCIES,
   QUOTE_LANGUAGES,
+  QUOTE_OUTCOMES,
   QUOTE_STATUSES,
 } from '../models/QuoteRequest.js';
+import { CHANNELS, cleanAttribution } from '../services/attribution.js';
 import { getSiteSettings } from '../models/SiteSettings.js';
 import { isMailConfigured } from '../services/mailer.js';
 import {
@@ -154,6 +157,7 @@ export async function createQuoteRequest(req, res) {
         quantity,
         message,
         language,
+        attribution: cleanAttribution(body.attribution),
       });
 
     // Email the sales team; a mail failure must not fail the request
@@ -240,6 +244,15 @@ function buildFilter(query = {}) {
 
     filter.status = status;
   }
+
+  if (query.outcome === 'open') filter.outcome = { $in: ['', null] };
+  else if (QUOTE_OUTCOMES.includes(query.outcome)) filter.outcome = query.outcome;
+
+  const channel = cleanString(query.channel).slice(0, 40);
+
+  // Requests saved before the source was recorded count as "Doğrudan"
+  if (channel === CHANNELS.direct) filter['attribution.channel'] = { $in: [CHANNELS.direct, '', null] };
+  else if (channel) filter['attribution.channel'] = channel;
 
   const assignee = cleanString(query.assignee).slice(0, 80);
 
@@ -460,11 +473,94 @@ export async function getQuoteReport(req, res) {
           ],
 
           byLanguage: [{ $group: { _id: '$language', count: { $sum: 1 } } }, { $sort: { count: -1 } }],
+
+          byOutcome: [{ $group: { _id: { $ifNull: ['$outcome', ''] }, count: { $sum: 1 } } }],
+
+          byLossReason: [
+            { $match: { outcome: 'lost' } },
+            { $group: { _id: { $ifNull: ['$lossReason', ''] }, count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+          ],
+
+          // Requests saved before the source was recorded count as "Doğrudan"
+          byChannel: [
+            {
+              $group: {
+                _id: { $cond: [{ $gt: [{ $strLenCP: { $ifNull: ['$attribution.channel', ''] } }, 0] }, '$attribution.channel', CHANNELS.direct] },
+                count: { $sum: 1 },
+                quoted: { $sum: { $cond: [{ $in: ['$status', ['quoted', 'closed']] }, 1, 0] } },
+                won: { $sum: { $cond: [{ $eq: ['$outcome', 'won'] }, 1, 0] } },
+              },
+            },
+            { $sort: { count: -1, _id: 1 } },
+          ],
+
+          byCampaign: [
+            { $match: { 'attribution.utmCampaign': { $nin: ['', null] } } },
+            {
+              $group: {
+                _id: { campaign: '$attribution.utmCampaign', source: { $ifNull: ['$attribution.utmSource', ''] } },
+                count: { $sum: 1 },
+                won: { $sum: { $cond: [{ $eq: ['$outcome', 'won'] }, 1, 0] } },
+              },
+            },
+            { $sort: { count: -1 } },
+            { $limit: 50 },
+          ],
+
+          byLanding: [
+            { $match: { 'attribution.landingPage': { $nin: ['', null] } } },
+            { $group: { _id: '$attribution.landingPage', count: { $sum: 1 } } },
+            { $sort: { count: -1, _id: 1 } },
+            { $limit: 50 },
+          ],
+
+          // Proforma lines: the amounts are added up below
+          offers: [
+            { $match: { 'offer.lines.0': { $exists: true } } },
+            { $project: { _id: 0, outcome: 1, 'offer.currency': 1, 'offer.lines': 1, 'offer.vatRate': 1, 'offer.sentAt': 1 } },
+          ],
         },
       },
     ]);
 
     const rename = (list, map) => list.map(({ _id, ...rest }) => ({ ...map(_id), ...rest }));
+
+    // Offered / won amounts per currency, without VAT (VAT rates differ between offers)
+    const { offerTotals } = await import('../../client/src/data/offerText.js');
+    const money = new Map();
+
+    for (const { outcome, offer } of result.offers) {
+      const currency = offer.currency || 'TRY';
+      const row = money.get(currency) || { currency, offers: 0, sent: 0, offered: 0, won: 0, wonValue: 0, lost: 0, lostValue: 0 };
+      const value = offerTotals(offer).subtotal;
+
+      row.offers += 1;
+      row.offered += value;
+      if (offer.sentAt) row.sent += 1;
+      if (outcome === 'won') {
+        row.won += 1;
+        row.wonValue += value;
+      } else if (outcome === 'lost') {
+        row.lost += 1;
+        row.lostValue += value;
+      }
+
+      money.set(currency, row);
+    }
+
+    const round = (value) => Math.round(value * 100) / 100;
+    const byCurrency = [...money.values()]
+      .map((row) => ({
+        ...row,
+        offered: round(row.offered),
+        wonValue: round(row.wonValue),
+        lostValue: round(row.lostValue),
+        average: round(row.offered / row.offers),
+      }))
+      .sort((a, b) => b.offers - a.offers);
+
+    const outcomeCount = (id) => result.byOutcome.find((row) => (row._id || '') === id)?.count || 0;
 
     return res.json({
       success: true,
@@ -476,6 +572,12 @@ export async function getQuoteReport(req, res) {
         byStatus: rename(result.byStatus, (status) => ({ status })),
         byAssignee: rename(result.byAssignee, (assignee) => ({ assignee })),
         byLanguage: rename(result.byLanguage, (language) => ({ language: language || '' })),
+        outcomes: { won: outcomeCount('won'), lost: outcomeCount('lost') },
+        byLossReason: rename(result.byLossReason, (reason) => ({ reason: reason || 'other' })),
+        byChannel: rename(result.byChannel, (channel) => ({ channel })),
+        byCampaign: rename(result.byCampaign, ({ campaign, source }) => ({ campaign, source })),
+        byLanding: rename(result.byLanding, (page) => ({ page })),
+        byCurrency,
       },
     });
   } catch (error) {
@@ -576,9 +678,10 @@ export async function updateQuoteStatus(
       await QuoteRequest.findByIdAndUpdate(
         req.params.id,
 
-        {
-          status,
-        },
+        // Re-opening a closed request removes its won / lost result
+        status === 'closed'
+          ? { status }
+          : { status, outcome: '', lossReason: '', outcomeNote: '', outcomeAt: null },
 
         {
           returnDocument: 'after',
@@ -635,6 +738,35 @@ export async function updateQuoteTracking(req, res) {
 
         update.followUpAt = date;
       }
+    }
+
+    // Won / lost closes the request; "" re-opens the result (the status stays as it is)
+    if (body.outcome !== undefined) {
+      const outcome = body.outcome === null ? '' : body.outcome;
+
+      if (outcome && !QUOTE_OUTCOMES.includes(outcome)) {
+        return res.status(400).json({ success: false, message: 'Invalid outcome.' });
+      }
+
+      update.outcome = outcome;
+      update.outcomeAt = outcome ? new Date() : null;
+      if (outcome) update.status = 'closed';
+      if (outcome !== 'lost') update.lossReason = '';
+      if (!outcome) update.outcomeNote = '';
+    }
+
+    if (body.lossReason !== undefined) {
+      const reason = body.lossReason || '';
+
+      if (reason && !LOSS_REASONS.includes(reason)) {
+        return res.status(400).json({ success: false, message: 'Invalid loss reason.' });
+      }
+
+      if (update.outcome === undefined || update.outcome === 'lost') update.lossReason = reason;
+    }
+
+    if (body.outcomeNote !== undefined) {
+      update.outcomeNote = cleanString(body.outcomeNote).slice(0, 500);
     }
 
     const quote = await QuoteRequest.findByIdAndUpdate(req.params.id, update, {

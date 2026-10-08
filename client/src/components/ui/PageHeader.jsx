@@ -45,7 +45,6 @@ export default function PageHeader({
         <span className="phOrb one" />
         <span className="phOrb two" />
         <span className="phBeam" />
-        <span className="phRings" />
       </div>
 
       <div className="container pageHeaderInner">

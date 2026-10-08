@@ -31,6 +31,7 @@ const AdminLogin = lazy(() => import('../pages/AdminLogin/AdminLogin'));
 const AdminDashboard = lazy(() => import('../pages/AdminDashboard/AdminDashboard'));
 const AdminQuotes = lazy(() => import('../pages/AdminQuotes/AdminQuotes'));
 const AdminQuoteReports = lazy(() => import('../pages/AdminQuoteReports/AdminQuoteReports'));
+const AdminLeads = lazy(() => import('../pages/AdminLeads/AdminLeads'));
 const AdminQuoteOffer = lazy(() => import('../pages/AdminQuoteOffer/AdminQuoteOffer'));
 const AdminQuoteDetail = lazy(() => import('../pages/AdminQuoteDetail/AdminQuoteDetail'));
 const AdminProductFamilies = lazy(() => import('../pages/AdminProductFamilies/AdminProductFamilies'));
@@ -93,6 +94,7 @@ export default function AppRoutes() {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/quotes" element={<AdminQuotes />} />
           <Route path="/admin/quote-reports" element={<AdminQuoteReports />} />
+          <Route path="/admin/leads" element={<AdminLeads />} />
           <Route path="/admin/quotes/:id/offer" element={<AdminQuoteOffer />} />
           <Route
             path="/admin/quotes/:id"

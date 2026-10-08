@@ -8,6 +8,9 @@ import {
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
+import useQuoteShare, { SHARE_PARAM } from '../../hooks/useQuoteShare';
+import { track } from '../../analytics/track';
+
 const QuoteContext = createContext(null);
 
 const CART_KEY = 'rma_quote_cart';
@@ -39,9 +42,10 @@ function writeCart(items) {
                                   specs, summary }) to the list and opens the dialog
   addToCart / removeFromCart / setCartQuantity manage the list from any page.
   Old links such as /contact?product=<slug> still open the dialog.
+  A shared list link (?list=…, hooks/useQuoteShare.js) adds its models to the list and opens it.
 */
 export function QuoteProvider({ children }) {
-  const [state, setState] = useState({ open: false, product: '' });
+  const [state, setState] = useState({ open: false, product: '', shared: 0 });
   const [cart, setCart] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -83,7 +87,7 @@ export function QuoteProvider({ children }) {
   }, []);
 
   const closeQuote = useCallback(() => {
-    setState((current) => ({ ...current, open: false }));
+    setState((current) => ({ ...current, open: false, shared: 0 }));
   }, []);
 
   const clearProduct = useCallback(() => {
@@ -108,6 +112,34 @@ export function QuoteProvider({ children }) {
   const clearCart = useCallback(() => updateCart(() => []), [updateCart]);
 
   const inCart = useCallback((name) => cart.some((item) => item.name === name), [cart]);
+
+  const { readShared } = useQuoteShare();
+  const sharedList = searchParams.get(SHARE_PARAM);
+
+  // Shared list link: models are added (quantities from the link) and the dialog opens
+  useEffect(() => {
+    if (!sharedList) return;
+
+    const shared = readShared(sharedList);
+
+    if (shared.length) {
+      updateCart((items) => {
+        const next = [...items];
+        shared.forEach(({ product, quantity }) => {
+          const index = next.findIndex((item) => item.name === product.name);
+          if (index >= 0) next[index] = { ...next[index], quantity };
+          else next.push({ ...product, quantity });
+        });
+        return next;
+      });
+      setState({ open: true, product: '', shared: shared.length });
+      track('quote_list_shared_open', { items: shared.length });
+    }
+
+    const next = new URLSearchParams(searchParams);
+    next.delete(SHARE_PARAM);
+    setSearchParams(next, { replace: true });
+  }, [sharedList, searchParams, setSearchParams, readShared, updateCart]);
 
   const productSlug = searchParams.get('product');
 

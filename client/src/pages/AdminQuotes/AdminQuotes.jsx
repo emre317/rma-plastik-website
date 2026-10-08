@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import {
-  BarChart3, CalendarClock, ChevronLeft, ChevronRight, Download, Inbox, Package, RotateCcw, Search, UserRound,
+  BarChart3, CalendarClock, ChevronLeft, ChevronRight, Download, Flag, Inbox, Megaphone, Package, RotateCcw, Search, UserRound, X,
 } from 'lucide-react';
 
 import { exportQuotes, getQuoteAssignees, getQuoteStats, getQuotes } from '../../services/adminApi';
@@ -9,7 +9,7 @@ import { exportQuotesFile } from './quoteExcel';
 import useAdminApi from '../../hooks/useAdminApi';
 import usePageTitle from '../../hooks/usePageTitle';
 import {
-  QUOTE_STATUSES, followUpState, formatDate, statusLabel, statusTone, timeAgo,
+  QUOTE_OUTCOMES, QUOTE_STATUSES, followUpState, formatDate, outcomeLabel, statusLabel, statusTone, timeAgo,
 } from '../../components/admin/quoteStatus';
 
 const PAGE_SIZE = 12;
@@ -27,6 +27,8 @@ export default function AdminQuotes() {
   const page = Math.max(Number.parseInt(searchParams.get('page'), 10) || 1, 1);
   const search = searchParams.get('q') || '';
   const assignee = searchParams.get('assignee') || '';
+  const outcome = ['open', 'won', 'lost'].includes(searchParams.get('outcome')) ? searchParams.get('outcome') : '';
+  const channel = searchParams.get('channel') || '';
 
   // "due" is a follow-up filter, the others are statuses
   const filters = {
@@ -34,6 +36,8 @@ export default function AdminQuotes() {
     followUp: statusFilter === 'due' ? 'due' : undefined,
     search,
     assignee,
+    outcome,
+    channel,
   };
 
   const [searchInput, setSearchInput] = useState(search);
@@ -48,13 +52,15 @@ export default function AdminQuotes() {
   const [exportNote, setExportNote] = useState('');
 
   function updateParams(changes) {
-    const next = { status: statusFilter, page, q: search, assignee, ...changes };
+    const next = { status: statusFilter, page, q: search, assignee, outcome, channel, ...changes };
     const params = {};
 
     if (next.status && next.status !== 'all') params.status = next.status;
     if (next.page > 1) params.page = String(next.page);
     if (next.q?.trim()) params.q = next.q.trim();
     if (next.assignee) params.assignee = next.assignee;
+    if (next.outcome) params.outcome = next.outcome;
+    if (next.channel) params.channel = next.channel;
 
     setSearchParams(params, { replace: true });
   }
@@ -96,7 +102,7 @@ export default function AdminQuotes() {
     return () => {
       cancelled = true;
     };
-  }, [call, page, statusFilter, search, assignee, reloadKey]);
+  }, [call, page, statusFilter, search, assignee, outcome, channel, reloadKey]);
 
   useEffect(() => {
     call(getQuoteAssignees).then((response) => setAssignees(Array.isArray(response.data) ? response.data : [])).catch(() => {});
@@ -122,7 +128,7 @@ export default function AdminQuotes() {
     if (!loading && page > pagination.pages) updateParams({ page: pagination.pages });
   }, [loading, page, pagination.pages]);
 
-  const hasFilters = statusFilter !== 'all' || Boolean(search) || Boolean(assignee);
+  const hasFilters = statusFilter !== 'all' || Boolean(search) || Boolean(assignee) || Boolean(outcome) || Boolean(channel);
   const clearFilters = () => {
     setSearchInput('');
     setSearchParams({}, { replace: true });
@@ -193,6 +199,21 @@ export default function AdminQuotes() {
             {assignees.map((name) => <option key={name} value={name}>{name}</option>)}
           </select>
         </label>
+        <label className="adSelect">
+          <Flag aria-hidden="true" />
+          <select value={outcome} onChange={(event) => updateParams({ outcome: event.target.value, page: 1 })} aria-label="Sonuca göre filtrele">
+            <option value="">Tüm Sonuçlar</option>
+            <option value="open">Sonuçlanmamış</option>
+            {QUOTE_OUTCOMES.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}
+          </select>
+        </label>
+        {channel && (
+          <button type="button" className="adFilterChip" onClick={() => updateParams({ channel: '', page: 1 })} title="Kaynak filtresini kaldır">
+            <Megaphone aria-hidden="true" />
+            {channel}
+            <X aria-hidden="true" />
+          </button>
+        )}
         <span className="adToolbarCount">{pagination.total} talep</span>
         <button type="button" className="cmsButton" onClick={download} disabled={exporting || !pagination.total} title="Görünen filtrelerle Excel dosyası indir">
           <Download aria-hidden="true" />
@@ -267,7 +288,11 @@ export default function AdminQuotes() {
                   <span>{quote.product || 'Genel Talep'}</span>
                 </span>
                 <span role="cell">
-                  <span className={`adPill tone-${statusTone(quote.status)}`}>{statusLabel(quote.status)}</span>
+                  {quote.outcome ? (
+                    <span className={`adPill tone-${quote.outcome === 'won' ? 'green' : 'red'}`}>{outcomeLabel(quote.outcome)}</span>
+                  ) : (
+                    <span className={`adPill tone-${statusTone(quote.status)}`}>{statusLabel(quote.status)}</span>
+                  )}
                 </span>
                 <span className="adTableDate" role="cell" title={formatDate(quote.createdAt, true)}>
                   {timeAgo(quote.createdAt)}

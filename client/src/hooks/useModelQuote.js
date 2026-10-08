@@ -7,7 +7,8 @@ import { familyText } from '../data/productTables';
 
 /*
   (family, row) -> product object for the quote form / quote cart:
-  { name, title, code, image, capacity, specs (site language), summary (Turkish, for the sales team) }
+  { name, title, code, image, capacity, specs (site language), summary (Turkish, for the sales team),
+    ref ("family id|model code", used by shared list links) }
 */
 export default function useModelQuote() {
   const { t, i18n } = useTranslation();
@@ -33,6 +34,7 @@ export default function useModelQuote() {
 
       return {
         name: `${trTitle} – ${row.code}`,
+        ref: `${family.id}|${row.code}`,
         title: familyText(family, 'title', lang, t),
         code: row.code,
         image: row.image || family.image || '',

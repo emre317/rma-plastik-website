@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import mongoose from 'mongoose';
 
 import quoteRoutes from './routes/quoteRoutes.js';
+import leadRoutes from './routes/leadRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import { adminContentRouter, publicContentRouter } from './routes/contentRoutes.js';
 import { UPLOAD_ROOT } from './middleware/upload.js';
@@ -92,6 +93,8 @@ app.use(
   '/api/quote',
   quoteRoutes
 );
+
+app.use('/api/leads', leadRoutes);
 
 app.use('/api/content', publicContentRouter);
 

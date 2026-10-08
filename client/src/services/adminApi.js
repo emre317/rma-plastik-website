@@ -15,7 +15,7 @@ export function getQuoteStats(token) {
   });
 }
 
-function quoteParams({ status, search, assignee, followUp, from, to } = {}) {
+function quoteParams({ status, search, assignee, followUp, from, to, outcome, channel } = {}) {
   const params = new URLSearchParams();
 
   if (status && status !== 'all') {
@@ -28,6 +28,8 @@ function quoteParams({ status, search, assignee, followUp, from, to } = {}) {
 
   if (assignee) params.set('assignee', assignee);
   if (followUp) params.set('followUp', followUp);
+  if (outcome) params.set('outcome', outcome);
+  if (channel) params.set('channel', channel);
   if (from) params.set('from', from);
   if (to) params.set('to', to);
 
@@ -157,4 +159,54 @@ export async function sendQuoteOffer(id, pdfBlob, filename, token) {
   }
 
   return data;
+}
+
+/* Catalogue downloads (potential customers) */
+
+function leadParams({ search, consent } = {}) {
+  const params = new URLSearchParams();
+  if (search?.trim()) params.set('search', search.trim());
+  if (consent) params.set('consent', consent);
+  return params;
+}
+
+export function getLeads({ page = 1, limit = 20, ...filters } = {}, token) {
+  const params = leadParams(filters);
+  params.set('page', String(page));
+  params.set('limit', String(limit));
+
+  return request(`/leads?${params.toString()}`, {
+    token,
+    fallbackMessage: 'Potansiyel müşteriler yüklenemedi.',
+  });
+}
+
+export function exportLeads(filters, token) {
+  return request(`/leads/export?${leadParams(filters).toString()}`, {
+    token,
+    fallbackMessage: 'Liste dışa aktarılamadı.',
+  });
+}
+
+export function getUnreadLeadCount(token) {
+  return request('/leads/unread-count', {
+    token,
+    fallbackMessage: 'Yeni kayıt sayısı alınamadı.',
+  });
+}
+
+export function markLeadsRead(token) {
+  return request('/leads/read', {
+    method: 'POST',
+    token,
+    fallbackMessage: 'Kayıtlar güncellenemedi.',
+  });
+}
+
+export function deleteLead(id, token) {
+  return request(`/leads/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+    token,
+    fallbackMessage: 'Kayıt silinemedi.',
+  });
 }

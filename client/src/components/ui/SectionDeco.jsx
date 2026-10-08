@@ -1,7 +1,7 @@
 /*
-  Decorative background layer for a section: two slowly drifting light orbs,
-  a fading dot grid and a thin blueprint ring. "dark" for navy sections,
-  "light" for white ones. Purely visual; it sits behind the content.
+  Decorative background layer for a section: two slowly drifting light orbs
+  and a fading dot grid (`ring` = which corner the grid sits in: start / end).
+  "dark" for navy sections, "light" for white ones. Purely visual; it sits behind the content.
 */
 export default function SectionDeco({ tone = 'dark', ring = 'end' }) {
   return (
@@ -9,7 +9,6 @@ export default function SectionDeco({ tone = 'dark', ring = 'end' }) {
       <span className="sdOrb a" />
       <span className="sdOrb b" />
       <span className="sdGrid" />
-      <span className="sdRing" />
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import Header from '../components/Header';
@@ -10,10 +11,15 @@ import CompareTray from '../components/compare/CompareTray';
 import FloatingContact from '../components/ui/FloatingContact';
 import CookieConsent from '../components/CookieConsent';
 import CursorTrail from '../components/ui/CursorTrail';
+import CatalogGate from '../components/catalog/CatalogGate';
 import useScrollReveal from '../hooks/useScrollReveal';
+import { captureVisit } from '../analytics/attribution';
 
 export default function PublicLayout() {
   useScrollReveal();
+
+  // Remember where this visit came from (sent only with a form)
+  useEffect(() => captureVisit(), []);
 
   return (
     <QuoteProvider>
@@ -27,6 +33,7 @@ export default function PublicLayout() {
       <CompareTray />
       <QuoteModal />
       <CursorTrail />
+      <CatalogGate />
       </CompareProvider>
     </QuoteProvider>
   );

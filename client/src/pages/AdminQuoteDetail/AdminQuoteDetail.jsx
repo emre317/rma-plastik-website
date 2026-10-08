@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
-  ArrowLeft, Building2, CalendarClock, Check, Copy, FileSignature, Globe2, Mail, MessageCircle, NotebookPen, Package, Phone, Trash2, User,
+  ArrowLeft, Building2, CalendarClock, Check, Copy, FileSignature, Flag, Globe2, Mail, Megaphone, MessageCircle, NotebookPen, Package, Phone, Trash2, User,
 } from 'lucide-react';
 
 import {
@@ -12,7 +12,7 @@ import useAdminApi from '../../hooks/useAdminApi';
 import { formatMoney, offerNumber, offerTotals } from '../../data/offerText';
 import usePageTitle from '../../hooks/usePageTitle';
 import {
-  LANGUAGE_LABELS, QUOTE_STATUSES, dayValue, followUpState, formatDate, quoteReference, statusLabel, statusTone, todayValue,
+  LANGUAGE_LABELS, LOSS_REASONS, QUOTE_OUTCOMES, QUOTE_STATUSES, dayValue, followUpState, formatDate, outcomeLabel, quoteReference, statusLabel, statusTone, todayValue,
 } from '../../components/admin/quoteStatus';
 
 const FOLLOW_UP_LABELS = { overdue: 'Takip tarihi geçti', today: 'Takip Bugün', upcoming: 'Takip Planlandı' };
@@ -46,6 +46,7 @@ export default function AdminQuoteDetail() {
   const [assignee, setAssignee] = useState('');
   const [assignees, setAssignees] = useState([]);
   const [note, setNote] = useState('');
+  const [outcomeNote, setOutcomeNote] = useState('');
 
   useEffect(() => {
     let cancelled = false;
@@ -58,6 +59,7 @@ export default function AdminQuoteDetail() {
         if (cancelled) return;
         setQuote(response.data);
         setAssignee(response.data?.assignee || '');
+        setOutcomeNote(response.data?.outcomeNote || '');
         // Opening a request marks it as read on the server
         notifyQuotesChanged();
       } catch (err) {
@@ -81,6 +83,7 @@ export default function AdminQuoteDetail() {
     try {
       const response = await call(updateQuoteStatus, id, status);
       setQuote(response.data);
+      setOutcomeNote(response.data?.outcomeNote || '');
       notifyQuotesChanged();
     } catch (err) {
       setError(err.message || 'Durum güncellenemedi.');
@@ -102,11 +105,23 @@ export default function AdminQuoteDetail() {
       const response = await call(updateQuoteTracking, id, changes);
       setQuote(response.data);
       setAssignee(response.data?.assignee || '');
+      setOutcomeNote(response.data?.outcomeNote || '');
+      if (changes.outcome !== undefined) notifyQuotesChanged();
     } catch (err) {
       setError(err.message || 'Takip bilgisi kaydedilemedi.');
     } finally {
       setSaving('');
     }
+  }
+
+  function chooseOutcome(outcome) {
+    if (outcome === (quote.outcome || '')) return;
+    if (outcome === '' && !window.confirm('Sonuç kaldırılsın mı? Talebin durumu değişmez.')) return;
+    saveTracking({ outcome }, 'outcome');
+  }
+
+  function saveOutcomeNote() {
+    if (outcomeNote.trim() !== (quote.outcomeNote || '')) saveTracking({ outcomeNote: outcomeNote.trim() }, 'outcomeNote');
   }
 
   function saveAssignee() {
@@ -179,6 +194,9 @@ export default function AdminQuoteDetail() {
   const totalPieces = items.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
   const notes = [...(quote.notes || [])].reverse();
   const followUp = followUpState(quote);
+  const source = quote.attribution;
+  const campaign = source && [source.utmCampaign, [source.utmSource, source.utmMedium].filter(Boolean).join(' / ')].filter(Boolean);
+  const CLICK_LABELS = { gclid: 'Google Ads tıklaması', fbclid: 'Facebook / Instagram bağlantısı', msclkid: 'Microsoft Ads tıklaması' };
 
   return (
     <section className="adminContent adQuoteDetail">
@@ -188,6 +206,7 @@ export default function AdminQuoteDetail() {
         <div>
           <span className="adDetailTags">
             <span className={`adPill tone-${statusTone(quote.status)}`}>{statusLabel(quote.status)}</span>
+            {quote.outcome && <span className={`adPill tone-${quote.outcome === 'won' ? 'green' : 'red'}`}>{outcomeLabel(quote.outcome)}</span>}
             <span className="adRef">{quoteReference(quote._id)}</span>
             {followUp && <span className={`adFollowPill ${followUp}`}><CalendarClock aria-hidden="true" />{FOLLOW_UP_LABELS[followUp]} · {formatDate(quote.followUpAt)}</span>}
           </span>
@@ -368,6 +387,61 @@ export default function AdminQuoteDetail() {
         </div>
 
         <aside className="adDetailSide">
+          <div className={`adCard adOutcomeCard ${quote.outcome || ''}`}>
+            <div className="adCardHead">
+              <h2><Flag aria-hidden="true" />Sonuç</h2>
+              {quote.outcomeAt && <span className="adHint">{formatDate(quote.outcomeAt)}</span>}
+            </div>
+
+            <div className="adSegment adOutcomeSwitch" role="group" aria-label="Talebin sonucu">
+              {[{ id: '', label: 'Açık' }, ...QUOTE_OUTCOMES].map((item) => (
+                <button
+                  key={item.id || 'open'}
+                  type="button"
+                  className={`${(quote.outcome || '') === item.id ? 'active' : ''} ${item.id}`}
+                  aria-pressed={(quote.outcome || '') === item.id}
+                  disabled={Boolean(saving)}
+                  onClick={() => chooseOutcome(item.id)}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+
+            {quote.outcome === 'lost' && (
+              <label className="cmsField">
+                <span>Kayıp Nedeni</span>
+                <select value={quote.lossReason || ''} onChange={(event) => saveTracking({ lossReason: event.target.value }, 'lossReason')} disabled={Boolean(saving)}>
+                  <option value="">Seçin…</option>
+                  {LOSS_REASONS.map((reason) => <option key={reason.id} value={reason.id}>{reason.label}</option>)}
+                </select>
+              </label>
+            )}
+
+            {quote.outcome && (
+              <label className="cmsField">
+                <span>{quote.outcome === 'won' ? 'Sipariş Notu' : 'Açıklama'}</span>
+                <textarea
+                  rows={2}
+                  maxLength={500}
+                  value={outcomeNote}
+                  placeholder={quote.outcome === 'won' ? 'ör. 3 adet RD 5000, sipariş no 2026/114' : 'ör. Rakip %8 daha ucuz verdi'}
+                  onChange={(event) => setOutcomeNote(event.target.value)}
+                  onBlur={saveOutcomeNote}
+                />
+                <small>{saving === 'outcomeNote' ? 'Kaydediliyor…' : 'Alandan çıkınca kaydedilir.'}</small>
+              </label>
+            )}
+
+            <small className="cmsHint">
+              {saving === 'outcome' || saving === 'lossReason'
+                ? 'Kaydediliyor…'
+                : quote.outcome
+                  ? 'Satış raporunda kazanma oranı ve kayıp nedenlerine yansır.'
+                  : 'Kazanıldı veya Kaybedildi seçildiğinde talep kapanır.'}
+            </small>
+          </div>
+
           <div className="adCard adTrackCard">
             <div className="adCardHead"><h2><CalendarClock aria-hidden="true" />Takip</h2></div>
 
@@ -434,6 +508,24 @@ export default function AdminQuoteDetail() {
               <li><Phone aria-hidden="true" /><span><small>Telefon</small>{quote.phone ? <a href={`tel:${quote.phone.replace(/\s/g, '')}`} dir="ltr">{quote.phone}</a> : <strong>—</strong>}</span></li>
               <li><Globe2 aria-hidden="true" /><span><small>Ülke</small><strong>{quote.country || '—'}</strong></span></li>
             </ul>
+          </div>
+
+          <div className="adCard">
+            <div className="adCardHead"><h2><Megaphone aria-hidden="true" />Talebin Kaynağı</h2></div>
+            {source ? (
+              <dl className="adFacts compact adSourceFacts">
+                <div><dt>Kanal</dt><dd><span className="adChannel">{source.channel || 'Doğrudan'}</span></dd></div>
+                {campaign?.length > 0 && <div><dt>Kampanya</dt><dd>{campaign.join(' · ')}</dd></div>}
+                {source.utmTerm && <div><dt>Anahtar Kelime</dt><dd>{source.utmTerm}</dd></div>}
+                {source.clickId && <div><dt>Reklam</dt><dd>{CLICK_LABELS[source.clickId]}</dd></div>}
+                {source.referrer && <div><dt>Geldiği Site</dt><dd dir="ltr">{source.referrer}</dd></div>}
+                {source.landingPage && <div><dt>İlk Sayfa</dt><dd><a href={source.landingPage} target="_blank" rel="noreferrer" dir="ltr">{source.landingPage}</a></dd></div>}
+                {source.submitPage && source.submitPage !== source.landingPage && <div><dt>Form Sayfası</dt><dd><a href={source.submitPage} target="_blank" rel="noreferrer" dir="ltr">{source.submitPage}</a></dd></div>}
+                {source.firstSeenAt && <div><dt>İlk Ziyaret</dt><dd>{formatDate(source.firstSeenAt, true)}</dd></div>}
+              </dl>
+            ) : (
+              <p className="adNotesEmpty">Bu talep, kaynak bilgisi kaydedilmeye başlanmadan önce geldi.</p>
+            )}
           </div>
 
           <div className="adCard">

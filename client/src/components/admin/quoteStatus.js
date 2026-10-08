@@ -7,6 +7,28 @@ export const QUOTE_STATUSES = [
   { id: 'closed', label: 'Kapandı', hint: 'Süreç tamamlandı.', tone: 'gray' },
 ];
 
+/* Won / lost result of a closed request (server: models/QuoteRequest.js) */
+export const QUOTE_OUTCOMES = [
+  { id: 'won', label: 'Kazanıldı', tone: 'green' },
+  { id: 'lost', label: 'Kaybedildi', tone: 'red' },
+];
+
+export const LOSS_REASONS = [
+  { id: 'price', label: 'Fiyat' },
+  { id: 'leadTime', label: 'Teslim Süresi' },
+  { id: 'competitor', label: 'Rakibi Tercih Etti' },
+  { id: 'noResponse', label: 'Yanıt Vermedi' },
+  { id: 'specs', label: 'Ürün / Teknik Uymadı' },
+  { id: 'postponed', label: 'Proje Ertelendi / İptal' },
+  { id: 'other', label: 'Diğer' },
+];
+
+export const outcomeLabel = (id) => QUOTE_OUTCOMES.find((item) => item.id === id)?.label || '';
+export const lossReasonLabel = (id) => LOSS_REASONS.find((item) => item.id === id)?.label || '';
+
+/* Marketing channels (server: services/attribution.js) */
+export const DIRECT_CHANNEL = 'Doğrudan';
+
 export const statusLabel = (id) => QUOTE_STATUSES.find((status) => status.id === id)?.label || id;
 export const statusTone = (id) => QUOTE_STATUSES.find((status) => status.id === id)?.tone || 'gray';
 

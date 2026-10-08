@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import attributionSchema from './attributionSchema.js';
+
 export const QUOTE_LANGUAGES = [
   'tr',
   'en',
@@ -7,6 +9,11 @@ export const QUOTE_LANGUAGES = [
 ];
 
 export const OFFER_CURRENCIES = ['TRY', 'USD', 'EUR'];
+
+// Result of a closed request; lost requests keep the main reason
+export const QUOTE_OUTCOMES = ['won', 'lost'];
+
+export const LOSS_REASONS = ['price', 'leadTime', 'competitor', 'noResponse', 'specs', 'postponed', 'other'];
 
 export const QUOTE_STATUSES = [
   'new',
@@ -158,6 +165,37 @@ const quoteRequestSchema = new mongoose.Schema(
       default: null,
     },
 
+    // Won / lost (set together with the "closed" status)
+    outcome: {
+      type: String,
+      enum: [...QUOTE_OUTCOMES, ''],
+      default: '',
+    },
+
+    lossReason: {
+      type: String,
+      enum: [...LOSS_REASONS, ''],
+      default: '',
+    },
+
+    outcomeNote: {
+      type: String,
+      trim: true,
+      default: '',
+      maxlength: 500,
+    },
+
+    outcomeAt: {
+      type: Date,
+      default: null,
+    },
+
+    // Where the visitor came from (first page of the visit, campaign tags)
+    attribution: {
+      type: attributionSchema,
+      default: null,
+    },
+
     // Commercial offer prepared in the admin panel (prices are entered by the sales team)
     offer: {
       type: new mongoose.Schema(
@@ -231,6 +269,10 @@ quoteRequestSchema.index({
 
 quoteRequestSchema.index({
   followUpAt: 1,
+});
+
+quoteRequestSchema.index({
+  email: 1,
 });
 
 const QuoteRequest = mongoose.model(

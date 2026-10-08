@@ -1,11 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Download, Globe2, Package, UserRound } from 'lucide-react';
+import {
+  ArrowLeft, Banknote, Download, Flag, Globe2, LogIn, Megaphone, Package, Target, UserRound,
+} from 'lucide-react';
 
 import { getQuoteReport } from '../../services/adminApi';
 import useAdminApi from '../../hooks/useAdminApi';
 import usePageTitle from '../../hooks/usePageTitle';
-import { LANGUAGE_LABELS, QUOTE_STATUSES, todayValue } from '../../components/admin/quoteStatus';
+import { LANGUAGE_LABELS, QUOTE_STATUSES, lossReasonLabel, todayValue } from '../../components/admin/quoteStatus';
+import { formatMoney } from '../../data/offerText';
 import { exportReportFile } from '../AdminQuotes/quoteExcel';
 
 const nf = new Intl.NumberFormat('tr-TR');
@@ -151,6 +154,9 @@ export default function AdminQuoteReports() {
   const maxMonth = Math.max(1, ...months.map((row) => row.count));
   const ticks = [maxMonth, Math.round(maxMonth / 2), 0].filter((tick, index, all) => all.indexOf(tick) === index);
   const statusCount = (id) => report?.byStatus.find((row) => row.status === id)?.count || 0;
+  const won = report?.outcomes?.won || 0;
+  const lost = report?.outcomes?.lost || 0;
+  const decided = won + lost;
 
   const rangeLabel = range === 'custom'
     ? [custom.from || 'başlangıç', custom.to || 'bugün'].join(' – ')
@@ -160,7 +166,7 @@ export default function AdminQuoteReports() {
     setExporting(true);
 
     try {
-      await exportReportFile({ ...report, byMonth: months, quotedTotal }, { rangeLabel, monthLabel: (month) => monthLabel(month, 'long') });
+      await exportReportFile({ ...report, byMonth: months, quotedTotal, won, lost }, { rangeLabel, monthLabel: (month) => monthLabel(month, 'long') });
     } catch (err) {
       setError(err.message || 'Rapor indirilemedi.');
     } finally {
@@ -176,7 +182,7 @@ export default function AdminQuoteReports() {
         <div>
           <span className="adEyebrow">Satış</span>
           <h1>Satış Raporu</h1>
-          <p>Siteden gelen teklif taleplerinin aya, ülkeye, ürüne ve sorumluya göre dağılımı. Tarihler talebin geldiği güne göredir.</p>
+          <p>Siteden gelen teklif taleplerinin aya, ülkeye, ürüne, kanala ve sorumluya göre dağılımı; kazanma oranı ve proforma tutarları. Tarihler talebin geldiği güne göredir.</p>
         </div>
         <button type="button" className="cmsButton" onClick={download} disabled={!report || exporting || !report.total}>
           <Download aria-hidden="true" />
@@ -226,6 +232,67 @@ export default function AdminQuoteReports() {
               <strong className="adRepKpiText" title={topProduct?.name}>{topProduct?.name || '—'}</strong>
               <small>{topProduct ? `${nf.format(topProduct.requests)} talep · ${nf.format(topProduct.pieces)} adet` : 'Ürün seçilen talep yok'}</small>
             </div>
+          </div>
+
+          <div className="adRepKpis">
+            <div className="adRepKpi accent">
+              <span>Kazanma Oranı</span>
+              <strong>{decided ? pf.format(won / decided) : '—'}</strong>
+              <small>{decided ? `Sonuçlanan ${nf.format(decided)} talepten` : 'Henüz sonuçlanan talep yok'}</small>
+            </div>
+            <div className="adRepKpi">
+              <span>Kazanılan</span>
+              <strong>{nf.format(won)}</strong>
+              <small><Link to="/admin/quotes?outcome=won">Talepleri gör</Link></small>
+            </div>
+            <div className="adRepKpi">
+              <span>Kaybedilen</span>
+              <strong>{nf.format(lost)}</strong>
+              <small>{report.byLossReason[0] ? `En sık neden: ${lossReasonLabel(report.byLossReason[0].reason)}` : <Link to="/admin/quotes?outcome=lost">Talepleri gör</Link>}</small>
+            </div>
+            <div className="adRepKpi">
+              <span>Sonuçlanmamış</span>
+              <strong>{nf.format(Math.max(0, report.total - decided))}</strong>
+              <small><Link to="/admin/quotes?outcome=open">Açık talepleri gör</Link></small>
+            </div>
+          </div>
+
+          {/* Proforma amounts per currency */}
+          <div className="adCard">
+            <div className="adCardHead">
+              <h2><Banknote aria-hidden="true" />Proforma Tutarları</h2>
+              <span className="adHint">KDV hariç · para birimine göre</span>
+            </div>
+            {report.byCurrency.length ? (
+              <div className="adMoneyTable" role="table" aria-label="Proforma tutarları">
+                <div className="adMoneyRow head" role="row">
+                  <span role="columnheader">Para Birimi</span>
+                  <span role="columnheader">Proforma</span>
+                  <span role="columnheader">Teklif Edilen</span>
+                  <span role="columnheader">Ortalama</span>
+                  <span role="columnheader">Kazanılan</span>
+                  <span role="columnheader">Kaybedilen</span>
+                </div>
+                {report.byCurrency.map((row) => (
+                  <div key={row.currency} className="adMoneyRow" role="row">
+                    <span role="cell"><strong>{row.currency}</strong></span>
+                    <span role="cell">{nf.format(row.offers)}<small>{nf.format(row.sent)} gönderildi</small></span>
+                    <span role="cell" dir="ltr">{formatMoney(row.offered, row.currency, 'tr')}</span>
+                    <span role="cell" dir="ltr">{formatMoney(row.average, row.currency, 'tr')}</span>
+                    <span role="cell" className="won">
+                      <span dir="ltr">{formatMoney(row.wonValue, row.currency, 'tr')}</span>
+                      <small>{nf.format(row.won)} proforma{row.offered ? ` · tutarın ${pf.format(row.wonValue / row.offered)}’i` : ''}</small>
+                    </span>
+                    <span role="cell" className="lost">
+                      <span dir="ltr">{formatMoney(row.lostValue, row.currency, 'tr')}</span>
+                      <small>{nf.format(row.lost)} proforma</small>
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="adEmpty">Bu dönemde fiyatlı proforma yok. Proformalar talebin detayından hazırlanır.</p>
+            )}
           </div>
 
           {/* Requests per month (single series) */}
@@ -321,6 +388,59 @@ export default function AdminQuoteReports() {
                   );
                 })}
               </ul>
+            </div>
+
+            <div className="adCard">
+              <div className="adCardHead">
+                <h2><Megaphone aria-hidden="true" />Kanallar</h2>
+                <span className="adHint">Talep · kazanılan</span>
+              </div>
+              <RankList
+                rows={report.byChannel}
+                label={(row) => row.channel}
+                value={(row) => row.count}
+                suffix={(row) => `${nf.format(row.won)} kazanıldı`}
+                link={(row) => `/admin/quotes?channel=${encodeURIComponent(row.channel)}`}
+              />
+              <p className="adReportNote">Kanal, ziyaretçinin siteye ilk geldiği yerdir (Google araması, reklam, sosyal medya, e-posta…). Kaynak bilgisi bu özellik eklendikten sonraki taleplerde kaydedilir; önceki talepler “Doğrudan” sayılır.</p>
+            </div>
+
+            <div className="adCard">
+              <div className="adCardHead">
+                <h2><Flag aria-hidden="true" />Kayıp Nedenleri</h2>
+                <span className="adHint">Kaybedilen talep</span>
+              </div>
+              <RankList
+                rows={report.byLossReason}
+                label={(row) => lossReasonLabel(row.reason) || 'Belirtilmemiş'}
+                value={(row) => row.count}
+                suffix={(row) => pf.format(row.count / Math.max(1, lost))}
+              />
+            </div>
+
+            <div className="adCard">
+              <div className="adCardHead">
+                <h2><Target aria-hidden="true" />Kampanyalar</h2>
+                <span className="adHint">utm_campaign · talep</span>
+              </div>
+              {report.byCampaign.length ? (
+                <RankList
+                  rows={report.byCampaign}
+                  label={(row) => (row.source ? `${row.campaign} (${row.source})` : row.campaign)}
+                  value={(row) => row.count}
+                  suffix={(row) => `${nf.format(row.won)} kazanıldı`}
+                />
+              ) : (
+                <p className="adEmpty">Kampanya etiketli talep yok. Reklam ve e-posta bağlantılarına utm_campaign eklendiğinde burada görünür.</p>
+              )}
+            </div>
+
+            <div className="adCard">
+              <div className="adCardHead">
+                <h2><LogIn aria-hidden="true" />Giriş Sayfaları</h2>
+                <span className="adHint">Ziyaretin ilk sayfası · talep</span>
+              </div>
+              <RankList rows={report.byLanding} label={(row) => row.page} value={(row) => row.count} />
             </div>
 
             <div className="adCard">

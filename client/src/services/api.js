@@ -7,3 +7,11 @@ export function submitQuote(payload) {
     fallbackMessage: 'Quote request could not be submitted.',
   });
 }
+
+export function submitCatalogLead(payload) {
+  return request('/leads/catalog', {
+    method: 'POST',
+    body: payload,
+    fallbackMessage: 'Request could not be completed.',
+  });
+}

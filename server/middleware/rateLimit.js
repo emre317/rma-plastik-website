@@ -27,3 +27,13 @@ export const quoteSubmitLimiter = rateLimit({
     'Too many requests. Please try again later or contact us by email.'
   ),
 });
+
+export const leadSubmitLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  limit: 20,
+  standardHeaders: 'draft-8',
+  legacyHeaders: false,
+  message: limitMessage(
+    'Too many requests. Please try again later.'
+  ),
+});

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
-  BarChart3, Briefcase, Camera, CircleHelp, ExternalLink, Globe2, FileText, Inbox, LayoutDashboard, LogOut, Menu, PlayCircle, Settings, Table2, Type, X,
+  BarChart3, Briefcase, Camera, CircleHelp, ExternalLink, Globe2, FileText, Inbox, LayoutDashboard, LogOut, Menu, PlayCircle, Settings, Table2, Type, UserPlus, X,
 } from 'lucide-react';
 
-import { getUnreadQuoteCount } from '../../services/adminApi';
+import { getUnreadLeadCount, getUnreadQuoteCount } from '../../services/adminApi';
 import PublishPanel from './PublishPanel';
 import BrandLogo from '../BrandLogo';
 import {
@@ -21,7 +21,8 @@ const NAV = [
     items: [
       { to: '/admin', label: 'Özet', icon: LayoutDashboard, end: true },
       { to: '/admin/quotes', label: 'Teklif Talepleri', icon: Inbox, badge: true },
-      { to: '/admin/quote-reports', label: 'Satış Raporu', icon: BarChart3, hint: 'Ülke, ürün, ay' },
+      { to: '/admin/quote-reports', label: 'Satış Raporu', icon: BarChart3, hint: 'Ülke, ürün, kanal, kazanma' },
+      { to: '/admin/leads', label: 'Potansiyel Müşteriler', icon: UserPlus, hint: 'Katalog indirenler', badge: 'leads' },
     ],
   },
   {
@@ -58,6 +59,7 @@ export default function AdminSidebar() {
   const admin = getAdminUser();
 
   const [unread, setUnread] = useState(0);
+  const [newLeads, setNewLeads] = useState(0);
   const [open, setOpen] = useState(false);
 
   // Phones: the menu closes after navigation
@@ -71,8 +73,14 @@ export default function AdminSidebar() {
 
     async function loadUnreadCount() {
       try {
-        const response = await getUnreadQuoteCount(token);
-        if (!cancelled) setUnread(response.data?.unread || 0);
+        const [response, leads] = await Promise.all([
+          getUnreadQuoteCount(token),
+          getUnreadLeadCount(token).catch(() => null),
+        ]);
+        if (!cancelled) {
+          setUnread(response.data?.unread || 0);
+          setNewLeads(leads?.data?.unread || 0);
+        }
       } catch (error) {
         if (!cancelled && isAuthError(error)) {
           clearAdminSession();
@@ -130,8 +138,11 @@ export default function AdminSidebar() {
                     {item.label}
                     {item.hint && <small>{item.hint}</small>}
                   </span>
-                  {item.badge && unread > 0 && (
+                  {item.badge === true && unread > 0 && (
                     <span className="adNavBadge" aria-label={`${unread} okunmamış`}>{unread}</span>
+                  )}
+                  {item.badge === 'leads' && newLeads > 0 && (
+                    <span className="adNavBadge" aria-label={`${newLeads} yeni`}>{newLeads}</span>
                   )}
                 </NavLink>
               ))}

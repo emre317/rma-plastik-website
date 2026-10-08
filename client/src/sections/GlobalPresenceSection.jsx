@@ -38,6 +38,31 @@ export default function GlobalPresenceSection({ index }) {
   const [step, setStep] = useState(0);
   const [cycle, setCycle] = useState(0);
   const [hoverKey, setHoverKey] = useState(null);
+  // The map (heavy to draw) is loaded only when the visitor scrolls close to it
+  const [near, setNear] = useState(false);
+
+  useEffect(() => {
+    const element = sectionRef.current;
+
+    if (!element || typeof IntersectionObserver === 'undefined') {
+      setNear(true);
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setNear(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '600px 0px' }
+    );
+
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, []);
 
   // Run only while the section is on screen
   useEffect(() => {
@@ -198,6 +223,9 @@ export default function GlobalPresenceSection({ index }) {
         </div>
 
         <figure className="exportMapPanel" aria-label={t('global.mapLabel', { markets: marketList, interpolation: { escapeValue: false } })}>
+          {!near ? (
+            <div className="exportMapPlaceholder" style={{ aspectRatio: `${exportMap.width} / ${exportMap.height}` }} />
+          ) : (
           <Suspense
             fallback={
               <div
@@ -220,6 +248,7 @@ export default function GlobalPresenceSection({ index }) {
             onHoverChange={setHoverKey}
           />
           </Suspense>
+          )}
         </figure>
 
         <div className="exportStepsHeader">
