@@ -169,7 +169,7 @@ export default function AdminVideos() {
 
               <label className="cmsCheck">
                 <input type="checkbox" checked={form.published} onChange={(event) => setForm({ ...form, published: event.target.checked })} />
-                <span>Sitede göster</span>
+                <span>Sitede Göster</span>
               </label>
             </div>
 

@@ -10,7 +10,7 @@ import { exportFamilies, readFamiliesFile } from './familyExcel';
 const groupLabel = (key) => tr.productTables.groups[key] || key;
 
 export default function AdminProductFamilies() {
-  usePageTitle('Ürün tabloları');
+  usePageTitle('Ürün Tabloları');
 
   const call = useAdminApi();
 
@@ -153,7 +153,7 @@ export default function AdminProductFamilies() {
       <div className="adminPageHeader">
         <div>
           <span className="adminLabel">İÇERİK YÖNETİMİ</span>
-          <h1>Ürün tabloları</h1>
+          <h1>Ürün Tabloları</h1>
         </div>
 
         <Link to="/admin/product-families/new" className="cmsButton cmsButtonPrimary">
@@ -205,7 +205,7 @@ export default function AdminProductFamilies() {
               <table className="cmsRowsTable">
                 <thead>
                   <tr>
-                    <th>Ürün ailesi</th>
+                    <th>Ürün Ailesi</th>
                     <th>Durum</th>
                     <th>Model (önce → sonra)</th>
                     <th>Eklenen</th>
@@ -268,7 +268,7 @@ export default function AdminProductFamilies() {
           <div className="cmsTable">
             <div className="cmsTableHead cmsFamilyRow">
               <span>Sıra</span>
-              <span>Ürün ailesi</span>
+              <span>Ürün Ailesi</span>
               <span>Grup</span>
               <span>Model</span>
               <span>Durum</span>

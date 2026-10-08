@@ -428,7 +428,7 @@ export async function getQuoteReport(req, res) {
                     { $gt: [{ $size: { $ifNull: ['$items', []] } }, 0] },
                     '$items',
                     [{
-                      name: { $cond: [{ $gt: [{ $strLenCP: { $ifNull: ['$product', ''] } }, 0] }, '$product', 'Genel talep'] },
+                      name: { $cond: [{ $gt: [{ $strLenCP: { $ifNull: ['$product', ''] } }, 0] }, '$product', 'Genel Talep'] },
                       quantity: { $ifNull: ['$quantity', 1] },
                     }],
                   ],

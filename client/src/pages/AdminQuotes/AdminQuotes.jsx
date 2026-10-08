@@ -17,7 +17,7 @@ const ALLOWED = ['all', 'due', ...QUOTE_STATUSES.map((status) => status.id)];
 
 /* Quote requests: status tabs with counts, search, paged list */
 export default function AdminQuotes() {
-  usePageTitle('Teklif talepleri');
+  usePageTitle('Teklif Talepleri');
 
   const call = useAdminApi();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -130,7 +130,7 @@ export default function AdminQuotes() {
 
   const tabs = [
     { id: 'all', label: 'Tümü', count: stats?.total },
-    { id: 'due', label: 'Takibi gelen', count: stats?.due, icon: CalendarClock },
+    { id: 'due', label: 'Takibi Gelen', count: stats?.due, icon: CalendarClock },
     ...QUOTE_STATUSES.map((status) => ({ ...status, count: stats?.[status.id] })),
   ];
 
@@ -139,13 +139,13 @@ export default function AdminQuotes() {
       <header className="adPageHead">
         <div>
           <span className="adEyebrow">Satış</span>
-          <h1>Teklif talepleri</h1>
+          <h1>Teklif Talepleri</h1>
           <p>Siteden gelen tüm teklif talepleri. Bir talebi açtığınızda okundu olarak işaretlenir; durumunu değiştirerek süreci takip edin.</p>
         </div>
         <div className="adHeadActions">
           <Link to="/admin/quote-reports" className="cmsButton">
             <BarChart3 aria-hidden="true" />
-            Satış raporu
+            Satış Raporu
           </Link>
           {stats && (
             <div className="adHeadStat">
@@ -188,7 +188,7 @@ export default function AdminQuotes() {
         <label className="adSelect">
           <UserRound aria-hidden="true" />
           <select value={assignee} onChange={(event) => updateParams({ assignee: event.target.value, page: 1 })} aria-label="Sorumlu kişiye göre filtrele">
-            <option value="">Tüm sorumlular</option>
+            <option value="">Tüm Sorumlular</option>
             <option value="-">Atanmamış</option>
             {assignees.map((name) => <option key={name} value={name}>{name}</option>)}
           </select>
@@ -201,7 +201,7 @@ export default function AdminQuotes() {
         {hasFilters && (
           <button type="button" className="cmsButton" onClick={clearFilters}>
             <RotateCcw aria-hidden="true" />
-            Filtreleri temizle
+            Filtreleri Temizle
           </button>
         )}
       </div>
@@ -212,9 +212,9 @@ export default function AdminQuotes() {
 
       {!loading && error && (
         <div className="adState error">
-          <h2>Talepler yüklenemedi</h2>
+          <h2>Talepler Yüklenemedi</h2>
           <p>{error}</p>
-          <button type="button" className="cmsButton cmsButtonPrimary" onClick={() => setReloadKey((key) => key + 1)}>Tekrar dene</button>
+          <button type="button" className="cmsButton cmsButtonPrimary" onClick={() => setReloadKey((key) => key + 1)}>Tekrar Dene</button>
         </div>
       )}
 
@@ -223,7 +223,7 @@ export default function AdminQuotes() {
           <span className="adStateIcon" aria-hidden="true"><Inbox /></span>
           <h2>{hasFilters ? 'Bu filtrelere uyan talep yok' : 'Henüz teklif talebi yok'}</h2>
           <p>{hasFilters ? 'Aramayı veya durum filtresini değiştirin.' : 'Siteden gelen talepler burada listelenir; ayrıca e-posta ile bildirilir.'}</p>
-          {hasFilters && <button type="button" className="cmsButton" onClick={clearFilters}>Filtreleri temizle</button>}
+          {hasFilters && <button type="button" className="cmsButton" onClick={clearFilters}>Filtreleri Temizle</button>}
         </div>
       )}
 
@@ -264,7 +264,7 @@ export default function AdminQuotes() {
                   {quote.items?.length > 0 && (
                     <span className="adItemCount"><Package aria-hidden="true" />{quote.items.length}</span>
                   )}
-                  <span>{quote.product || 'Genel talep'}</span>
+                  <span>{quote.product || 'Genel Talep'}</span>
                 </span>
                 <span role="cell">
                   <span className={`adPill tone-${statusTone(quote.status)}`}>{statusLabel(quote.status)}</span>

@@ -44,7 +44,7 @@ const empty = (order) => ({
 
 /* Export markets on the home page map and the company page (İhracat ağı) */
 export default function AdminExportMarkets() {
-  usePageTitle('İhracat ağı');
+  usePageTitle('İhracat Ağı');
 
   const call = useAdminApi();
 
@@ -169,7 +169,7 @@ export default function AdminExportMarkets() {
       <header className="adPageHead">
         <div>
           <span className="adEyebrow">İçerik</span>
-          <h1>İhracat ağı</h1>
+          <h1>İhracat Ağı</h1>
           <p>
             Ana sayfadaki ve Kurumsal sayfasındaki dünya haritasında gösterilen ihracat pazarları. Harita pazarları bu sırayla tek tek
             vurgular; “Başlıca ihracat pazarı” sayısı ve tanıtım metnindeki ülke listesi otomatik güncellenir.
@@ -189,7 +189,7 @@ export default function AdminExportMarkets() {
               <label className="cmsField">
                 <span>Ülke *</span>
                 <select value={form.code} onChange={(event) => setForm({ ...form, code: event.target.value })} required>
-                  <option value="">Ülke seçin</option>
+                  <option value="">Ülke Seçin</option>
                   {countries.map((country) => (
                     <option key={country.code} value={country.code} disabled={taken.has(country.code)}>
                       {flag(country.code)} {country.name}{taken.has(country.code) ? ' (listede)' : ''}
@@ -209,8 +209,8 @@ export default function AdminExportMarkets() {
 
               <div className="cmsInline cmsInlineEven">
                 <label className="cmsField">
-                  <span>Görünen ad</span>
-                  <input dir={activeLanguage.dir} value={form.i18n[lang].name} maxLength={80} placeholder={form.code ? displayName(form.code, lang) : 'Ülke adı'} onChange={(event) => setText('name', event.target.value)} />
+                  <span>Görünen Ad</span>
+                  <input dir={activeLanguage.dir} value={form.i18n[lang].name} maxLength={80} placeholder={form.code ? displayName(form.code, lang) : 'Ülke Adı'} onChange={(event) => setText('name', event.target.value)} />
                   <small>Boş bırakılırsa ülkenin bu dildeki adı kullanılır.</small>
                 </label>
 
@@ -237,7 +237,7 @@ export default function AdminExportMarkets() {
 
               <label className="cmsCheck">
                 <input type="checkbox" checked={form.published} onChange={(event) => setForm({ ...form, published: event.target.checked })} />
-                <span>Sitede göster</span>
+                <span>Sitede Göster</span>
               </label>
             </div>
 

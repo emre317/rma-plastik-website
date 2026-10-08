@@ -32,11 +32,11 @@ const emptyPost = {
 };
 
 const TOOLBAR = [
-  { label: 'H2', title: 'Ara başlık', before: '\n## ', after: '\n', placeholder: 'Ara başlık' },
-  { label: 'H3', title: 'Alt başlık', before: '\n### ', after: '\n', placeholder: 'Alt başlık' },
+  { label: 'H2', title: 'Ara Başlık', before: '\n## ', after: '\n', placeholder: 'Ara başlık' },
+  { label: 'H3', title: 'Alt Başlık', before: '\n### ', after: '\n', placeholder: 'Alt başlık' },
   { label: 'B', title: 'Kalın', before: '**', after: '**', placeholder: 'kalın metin' },
   { label: '•', title: 'Liste', before: '\n- ', after: '', placeholder: 'madde' },
-  { label: '1.', title: 'Numaralı liste', before: '\n1. ', after: '', placeholder: 'madde' },
+  { label: '1.', title: 'Numaralı Liste', before: '\n1. ', after: '', placeholder: 'madde' },
   { label: '❝', title: 'Alıntı / not', before: '\n> ', after: '\n', placeholder: 'not' },
   { label: 'Link', title: 'Bağlantı', before: '[', after: '](https://)', placeholder: 'bağlantı metni' },
 ];
@@ -66,7 +66,7 @@ export default function AdminPostEdit() {
   const call = useAdminApi();
   const bodyRef = useRef(null);
 
-  usePageTitle(isNew ? 'Yeni yazı' : 'Yazıyı düzenle');
+  usePageTitle(isNew ? 'Yeni yazı' : 'Yazıyı Düzenle');
 
   const [form, setForm] = useState(emptyPost);
   const [lang, setLang] = useState('tr');
@@ -326,13 +326,13 @@ export default function AdminPostEdit() {
             </div>
 
             <div className="cmsCard">
-              <h2>Kapak görseli</h2>
+              <h2>Kapak Görseli</h2>
               <div className="cmsImage cmsImageCover">
-                {form.coverImage ? <img src={form.coverImage} alt="" /> : <span>Kapak yok</span>}
+                {form.coverImage ? <img src={form.coverImage} alt="" /> : <span>Kapak Yok</span>}
               </div>
               <div className="cmsRowActions">
                 <label className="cmsButton">
-                  {uploading ? 'Yükleniyor…' : form.coverImage ? 'Değiştir' : 'Kapak yükle'}
+                  {uploading ? 'Yükleniyor…' : form.coverImage ? 'Değiştir' : 'Kapak Yükle'}
                   <input type="file" accept="image/jpeg,image/png,image/webp" hidden onChange={(event) => upload(event, 'cover')} disabled={uploading} />
                 </label>
                 {form.coverImage && <button type="button" className="cmsButton cmsButtonDanger" onClick={() => set('coverImage', '')}>Kaldır</button>}
@@ -341,7 +341,7 @@ export default function AdminPostEdit() {
             </div>
 
             <div className="cmsCard">
-              <h2>YouTube videosu</h2>
+              <h2>YouTube Videosu</h2>
               <label className="cmsField">
                 <span>Video bağlantısı (isteğe bağlı)</span>
                 <input value={form.youtubeId} placeholder="https://youtu.be/…" onChange={(event) => set('youtubeId', event.target.value)} />
@@ -367,7 +367,7 @@ export default function AdminPostEdit() {
             Taslak olarak kaydet
           </button>
           <button type="button" className="cmsButton cmsButtonPrimary" disabled={saving} onClick={() => save('published')}>
-            {saving ? 'Kaydediliyor…' : form.status === 'published' ? 'Kaydet' : 'Yayına al'}
+            {saving ? 'Kaydediliyor…' : form.status === 'published' ? 'Kaydet' : 'Yayına Al'}
           </button>
         </div>
       </form>

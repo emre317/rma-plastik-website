@@ -15,7 +15,7 @@ import {
   LANGUAGE_LABELS, QUOTE_STATUSES, dayValue, followUpState, formatDate, quoteReference, statusLabel, statusTone, todayValue,
 } from '../../components/admin/quoteStatus';
 
-const FOLLOW_UP_LABELS = { overdue: 'Takip tarihi geçti', today: 'Takip bugün', upcoming: 'Takip planlandı' };
+const FOLLOW_UP_LABELS = { overdue: 'Takip tarihi geçti', today: 'Takip Bugün', upcoming: 'Takip Planlandı' };
 
 // "2026-03-14" + n days
 function addDays(days) {
@@ -33,7 +33,7 @@ const QUICK_DATES = [
 
 /* One quote request: status steps, contact actions, products and message */
 export default function AdminQuoteDetail() {
-  usePageTitle('Teklif talebi');
+  usePageTitle('Teklif Talebi');
 
   const { id } = useParams();
   const call = useAdminApi();
@@ -163,9 +163,9 @@ export default function AdminQuoteDetail() {
   if (!quote) {
     return (
       <section className="adminContent">
-        <Link to="/admin/quotes" className="adBack"><ArrowLeft aria-hidden="true" />Teklif talepleri</Link>
+        <Link to="/admin/quotes" className="adBack"><ArrowLeft aria-hidden="true" />Teklif Talepleri</Link>
         <div className="adState error">
-          <h2>Talep yüklenemedi</h2>
+          <h2>Talep Yüklenemedi</h2>
           <p>{error}</p>
         </div>
       </section>
@@ -182,7 +182,7 @@ export default function AdminQuoteDetail() {
 
   return (
     <section className="adminContent adQuoteDetail">
-      <Link to="/admin/quotes" className="adBack"><ArrowLeft aria-hidden="true" />Teklif talepleri</Link>
+      <Link to="/admin/quotes" className="adBack"><ArrowLeft aria-hidden="true" />Teklif Talepleri</Link>
 
       <header className="adDetailHead">
         <div>
@@ -198,7 +198,7 @@ export default function AdminQuoteDetail() {
         <div className="adContactActions">
           <a className="cmsButton cmsButtonPrimary" href={`mailto:${quote.email}?subject=${subject}`}>
             <Mail aria-hidden="true" />
-            E-posta yaz
+            E-posta Yaz
           </a>
           {quote.phone && (
             <a className="cmsButton" href={`tel:${quote.phone.replace(/\s/g, '')}`}>
@@ -243,7 +243,7 @@ export default function AdminQuoteDetail() {
           {/* Products */}
           <div className="adCard">
             <div className="adCardHead">
-              <h2><Package aria-hidden="true" />İstenen ürünler</h2>
+              <h2><Package aria-hidden="true" />İstenen Ürünler</h2>
               {items.length > 0 && <span className="adHint">{items.length} model · {totalPieces} adet</span>}
             </div>
 
@@ -277,8 +277,8 @@ export default function AdminQuoteDetail() {
               </ul>
             ) : (
               <dl className="adFacts">
-                <div><dt>Ürün / konu</dt><dd>{quote.product || 'Genel talep'}</dd></div>
-                <div><dt>İstenen kapasite</dt><dd>{quote.capacity || '—'}</dd></div>
+                <div><dt>Ürün / konu</dt><dd>{quote.product || 'Genel Talep'}</dd></div>
+                <div><dt>İstenen Kapasite</dt><dd>{quote.capacity || '—'}</dd></div>
                 <div><dt>Adet</dt><dd>{quote.quantity || '—'}</dd></div>
               </dl>
             )}
@@ -291,7 +291,7 @@ export default function AdminQuoteDetail() {
           {/* Commercial offer */}
           <div className="adCard adOfferCard">
             <div className="adCardHead">
-              <h2><FileSignature aria-hidden="true" />Proforma fatura</h2>
+              <h2><FileSignature aria-hidden="true" />Proforma Fatura</h2>
               {quote.offer && <span className="adHint" dir="ltr">{offerNumber(quote._id, quote.offer.revision)}</span>}
             </div>
             {quote.offer ? (
@@ -303,26 +303,26 @@ export default function AdminQuoteDetail() {
                     {quote.offer.sentAt ? `${formatDate(quote.offer.sentAt, true)} tarihinde gönderildi` : `taslak, ${formatDate(quote.offer.savedAt, true)} kaydedildi`}
                   </small>
                 </div>
-                <Link to={`/admin/quotes/${quote._id}/offer`} className="cmsButton">Proformayı aç</Link>
+                <Link to={`/admin/quotes/${quote._id}/offer`} className="cmsButton">Proformayı Aç</Link>
               </div>
             ) : (
               <div className="adOfferSummary">
                 <p>İstenen ürünler hazır gelir; fiyat ve koşulları girip PDF indirin ya da müşteriye e-postayla gönderin.</p>
-                <Link to={`/admin/quotes/${quote._id}/offer`} className="cmsButton cmsButtonPrimary">Proforma hazırla</Link>
+                <Link to={`/admin/quotes/${quote._id}/offer`} className="cmsButton cmsButtonPrimary">Proforma Hazırla</Link>
               </div>
             )}
           </div>
 
           {/* Message */}
           <div className="adCard">
-            <div className="adCardHead"><h2>Proje detayları</h2></div>
+            <div className="adCardHead"><h2>Proje Detayları</h2></div>
             <p className="adMessage">{quote.message || '—'}</p>
           </div>
 
           {/* Internal notes */}
           <div className="adCard">
             <div className="adCardHead">
-              <h2><NotebookPen aria-hidden="true" />İç notlar</h2>
+              <h2><NotebookPen aria-hidden="true" />İç Notlar</h2>
               <span className="adHint">Müşteri görmez</span>
             </div>
 
@@ -341,7 +341,7 @@ export default function AdminQuoteDetail() {
               <div className="adNoteActions">
                 <small>Ctrl + Enter ile kaydedin</small>
                 <button type="submit" className="cmsButton cmsButtonPrimary" disabled={!note.trim() || saving === 'note'}>
-                  {saving === 'note' ? 'Kaydediliyor…' : 'Not ekle'}
+                  {saving === 'note' ? 'Kaydediliyor…' : 'Not Ekle'}
                 </button>
               </div>
             </form>
@@ -372,7 +372,7 @@ export default function AdminQuoteDetail() {
             <div className="adCardHead"><h2><CalendarClock aria-hidden="true" />Takip</h2></div>
 
             <label className="cmsField">
-              <span>Sorumlu kişi</span>
+              <span>Sorumlu Kişi</span>
               <input
                 list="quote-assignees"
                 value={assignee}
@@ -394,7 +394,7 @@ export default function AdminQuoteDetail() {
             </label>
 
             <label className="cmsField">
-              <span>Takip tarihi</span>
+              <span>Takip Tarihi</span>
               <input
                 type="date"
                 value={dayValue(quote.followUpAt)}
@@ -437,13 +437,13 @@ export default function AdminQuoteDetail() {
           </div>
 
           <div className="adCard">
-            <div className="adCardHead"><h2>Kayıt bilgileri</h2></div>
+            <div className="adCardHead"><h2>Kayıt Bilgileri</h2></div>
             <dl className="adFacts compact">
               <div><dt>Referans</dt><dd>{quoteReference(quote._id)}</dd></div>
-              <div><dt>Site dili</dt><dd>{LANGUAGE_LABELS[quote.language] || quote.language || '—'}</dd></div>
+              <div><dt>Site Dili</dt><dd>{LANGUAGE_LABELS[quote.language] || quote.language || '—'}</dd></div>
               <div><dt>Kaynak</dt><dd>{quote.source === 'website' ? 'Web sitesi' : quote.source || '—'}</dd></div>
               <div><dt>Oluşturuldu</dt><dd>{formatDate(quote.createdAt, true)}</dd></div>
-              <div><dt>Son güncelleme</dt><dd>{formatDate(quote.updatedAt, true)}</dd></div>
+              <div><dt>Son Güncelleme</dt><dd>{formatDate(quote.updatedAt, true)}</dd></div>
             </dl>
           </div>
         </aside>

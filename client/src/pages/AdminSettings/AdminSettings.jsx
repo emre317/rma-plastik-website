@@ -23,22 +23,22 @@ const GROUPS = [
     ],
   },
   {
-    title: 'Sosyal medya',
+    title: 'Sosyal Medya',
     fields: [
-      { key: 'linkedin', label: 'LinkedIn adresi', placeholder: 'https://www.linkedin.com/company/…', type: 'url' },
-      { key: 'instagram', label: 'Instagram adresi', placeholder: 'https://www.instagram.com/…', type: 'url' },
+      { key: 'linkedin', label: 'LinkedIn Adresi', placeholder: 'https://www.linkedin.com/company/…', type: 'url' },
+      { key: 'instagram', label: 'Instagram Adresi', placeholder: 'https://www.instagram.com/…', type: 'url' },
       { key: 'instagramHandle', label: 'Instagram kullanıcı adı', placeholder: '@rmaplastik' },
-      { key: 'youtube', label: 'YouTube adresi', placeholder: 'https://www.youtube.com/@…', type: 'url' },
+      { key: 'youtube', label: 'YouTube Adresi', placeholder: 'https://www.youtube.com/@…', type: 'url' },
       { key: 'youtubeHandle', label: 'YouTube kullanıcı adı', placeholder: '@rmaplastik5113' },
     ],
   },
   {
-    title: 'Proforma fatura',
+    title: 'Proforma Fatura',
     note: 'Yalnızca panelde hazırlanan proforma fatura PDF’lerinde kullanılır, sitede görünmez.',
     fields: [
-      { key: 'companyLegalName', label: 'Ticari unvan', placeholder: 'Proformada satıcı olarak görünen tam unvan' },
+      { key: 'companyLegalName', label: 'Ticari Unvan', placeholder: 'Proformada satıcı olarak görünen tam unvan' },
       { key: 'taxInfo', label: 'Vergi dairesi / vergi no', placeholder: 'ör. … V.D. – 1234567890' },
-      { key: 'offerBankInfo', label: 'Banka bilgileri', placeholder: 'Banka, şube, IBAN (TL / USD / EUR)…', multiline: 4 },
+      { key: 'offerBankInfo', label: 'Banka Bilgileri', placeholder: 'Banka, şube, IBAN (TL / USD / EUR)…', multiline: 4 },
       { key: 'offerTerms', label: 'Varsayılan genel koşullar', placeholder: 'Her yeni proformaya otomatik eklenir; proformada değiştirilebilir.', multiline: 6 },
     ],
   },
@@ -47,7 +47,7 @@ const GROUPS = [
 const KEYS = GROUPS.flatMap((group) => group.fields.map((field) => field.key));
 
 export default function AdminSettings() {
-  usePageTitle('Site ayarları');
+  usePageTitle('Site Ayarları');
 
   const call = useAdminApi();
 
@@ -91,7 +91,7 @@ export default function AdminSettings() {
       <div className="adminPageHeader">
         <div>
           <span className="adminLabel">İÇERİK YÖNETİMİ</span>
-          <h1>Site ayarları</h1>
+          <h1>Site Ayarları</h1>
         </div>
       </div>
 

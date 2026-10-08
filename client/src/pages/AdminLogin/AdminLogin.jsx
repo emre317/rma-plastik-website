@@ -11,7 +11,7 @@ import useAdminDocumentLanguage from '../../hooks/useAdminDocumentLanguage';
 import BrandLogo from '../../components/BrandLogo';
 
 export default function AdminLogin() {
-  usePageTitle('Yönetici girişi');
+  usePageTitle('Yönetici Girişi');
   useAdminDocumentLanguage();
 
   const navigate = useNavigate();
@@ -67,13 +67,13 @@ export default function AdminLogin() {
 
         <div className="adminLoginBrand">
           <BrandLogo alt="RMA Plastik" />
-          <small>Yönetim paneli</small>
+          <small>Yönetim Paneli</small>
         </div>
 
         <div className="adminLoginContent">
 
           <span className="eyebrow">
-            Yönetim paneli
+            Yönetim Paneli
           </span>
 
           <h1>
@@ -128,7 +128,7 @@ export default function AdminLogin() {
               <span>
                 {status === 'loading'
                   ? 'Giriş yapılıyor…'
-                  : 'Giriş yap'}
+                  : 'Giriş Yap'}
               </span>
 
               <span>↗</span>

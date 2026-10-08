@@ -35,8 +35,8 @@ const RANGES = [
   { id: '3m', label: 'Son 3 ay', from: () => shiftMonths(3) },
   { id: '6m', label: 'Son 6 ay', from: () => shiftMonths(6) },
   { id: '12m', label: 'Son 12 ay', from: () => shiftMonths(12) },
-  { id: 'ytd', label: 'Bu yıl', from: () => `${year}-01-01` },
-  { id: 'last', label: 'Geçen yıl', from: () => `${year - 1}-01-01`, to: () => `${year - 1}-12-31` },
+  { id: 'ytd', label: 'Bu Yıl', from: () => `${year}-01-01` },
+  { id: 'last', label: 'Geçen Yıl', from: () => `${year - 1}-01-01`, to: () => `${year - 1}-12-31` },
   { id: 'all', label: 'Tümü', from: () => '' },
 ];
 
@@ -96,7 +96,7 @@ function RankList({ rows, label, value, suffix, link, limit = 10 }) {
 
 /* Sales report: requests by month, country, product, status and assignee */
 export default function AdminQuoteReports() {
-  usePageTitle('Satış raporu');
+  usePageTitle('Satış Raporu');
 
   const call = useAdminApi();
 
@@ -147,7 +147,7 @@ export default function AdminQuoteReports() {
 
   const quotedTotal = report ? report.byMonth.reduce((sum, row) => sum + row.quoted, 0) : 0;
   const countries = report ? report.byCountry.filter((row) => row.country !== 'Belirtilmemiş').length : 0;
-  const topProduct = report?.byProduct.find((row) => row.name !== 'Genel talep');
+  const topProduct = report?.byProduct.find((row) => row.name !== 'Genel Talep');
   const maxMonth = Math.max(1, ...months.map((row) => row.count));
   const ticks = [maxMonth, Math.round(maxMonth / 2), 0].filter((tick, index, all) => all.indexOf(tick) === index);
   const statusCount = (id) => report?.byStatus.find((row) => row.status === id)?.count || 0;
@@ -170,12 +170,12 @@ export default function AdminQuoteReports() {
 
   return (
     <section className="adminContent adReport">
-      <Link to="/admin/quotes" className="adBack"><ArrowLeft aria-hidden="true" />Teklif talepleri</Link>
+      <Link to="/admin/quotes" className="adBack"><ArrowLeft aria-hidden="true" />Teklif Talepleri</Link>
 
       <header className="adPageHead">
         <div>
           <span className="adEyebrow">Satış</span>
-          <h1>Satış raporu</h1>
+          <h1>Satış Raporu</h1>
           <p>Siteden gelen teklif taleplerinin aya, ülkeye, ürüne ve sorumluya göre dağılımı. Tarihler talebin geldiği güne göredir.</p>
         </div>
         <button type="button" className="cmsButton" onClick={download} disabled={!report || exporting || !report.total}>
@@ -207,7 +207,7 @@ export default function AdminQuoteReports() {
         <div className={`adReportBody ${loading ? 'loading' : ''}`}>
           <div className="adRepKpis">
             <div className="adRepKpi">
-              <span>Toplam talep</span>
+              <span>Toplam Talep</span>
               <strong>{nf.format(report.total)}</strong>
               <small>{rangeLabel}</small>
             </div>
@@ -279,7 +279,7 @@ export default function AdminQuoteReports() {
             <div className="adCard">
               <div className="adCardHead">
                 <h2><Globe2 aria-hidden="true" />Ülkeler</h2>
-                <span className="adHint">Talep sayısı</span>
+                <span className="adHint">Talep Sayısı</span>
               </div>
               <RankList
                 rows={report.byCountry}
@@ -300,7 +300,7 @@ export default function AdminQuoteReports() {
                 label={(row) => row.name}
                 value={(row) => row.requests}
                 suffix={(row) => `${nf.format(row.pieces)} adet`}
-                link={(row) => (row.name === 'Genel talep' ? null : `/admin/quotes?q=${encodeURIComponent(row.name)}`)}
+                link={(row) => (row.name === 'Genel Talep' ? null : `/admin/quotes?q=${encodeURIComponent(row.name)}`)}
               />
             </div>
 

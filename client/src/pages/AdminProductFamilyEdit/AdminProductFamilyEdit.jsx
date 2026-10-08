@@ -297,7 +297,7 @@ export default function AdminProductFamilyEdit() {
             </label>
 
             <div className="cmsField">
-              <span>Tablo sütunları</span>
+              <span>Tablo Sütunları</span>
               <div className="cmsColumnPicker">
                 <span className="cmsColumnChip fixed">{columnLabel('code')}</span>
                 {COLUMN_KEYS.map((key) => (
@@ -317,7 +317,7 @@ export default function AdminProductFamilyEdit() {
 
               <label className="cmsCheck">
                 <input type="checkbox" checked={form.published} onChange={(event) => set('published', event.target.checked)} />
-                <span>Sitede yayında</span>
+                <span>Sitede Yayında</span>
               </label>
 
               <label className="cmsField">
@@ -345,12 +345,12 @@ export default function AdminProductFamilyEdit() {
               <h2>Görsel</h2>
 
               <div className="cmsImage">
-                {form.image ? <img src={form.image} alt="" /> : <span>Görsel yok</span>}
+                {form.image ? <img src={form.image} alt="" /> : <span>Görsel Yok</span>}
               </div>
 
               <div className="cmsRowActions">
                 <label className="cmsButton">
-                  {uploading === 'family' ? 'Yükleniyor…' : form.image ? 'Değiştir' : 'Görsel yükle'}
+                  {uploading === 'family' ? 'Yükleniyor…' : form.image ? 'Değiştir' : 'Görsel Yükle'}
                   <input type="file" accept="image/jpeg,image/png,image/webp" hidden onChange={handleFamilyImage} disabled={Boolean(uploading)} />
                 </label>
                 {form.image && (
@@ -381,14 +381,14 @@ export default function AdminProductFamilyEdit() {
                     <label className="cmsField">
                       <span>Yapı</span>
                       <select value={form.waterTank.layer} onChange={(event) => setWater('layer', event.target.value)}>
-                        <option value="single">Tek katmanlı</option>
-                        <option value="double">Çift katmanlı</option>
+                        <option value="single">Tek Katmanlı</option>
+                        <option value="double">Çift Katmanlı</option>
                       </select>
                     </label>
                   </div>
 
                   <div className="cmsField">
-                    <span>Kullanım alanları</span>
+                    <span>Kullanım Alanları</span>
                     <div className="cmsColumnPicker">
                       {WATER_USES.map((use) => (
                         <label key={use} className={`cmsColumnChip ${form.waterTank.uses.includes(use) ? 'on' : ''}`}>
@@ -444,7 +444,7 @@ export default function AdminProductFamilyEdit() {
                   onChange={(event) => setPasteText(event.target.value)}
                 />
                 <div className="cmsRowActions">
-                  <button type="button" className="cmsButton cmsButtonPrimary" onClick={() => applyPaste('append')}>Sona ekle</button>
+                  <button type="button" className="cmsButton cmsButtonPrimary" onClick={() => applyPaste('append')}>Sona Ekle</button>
                   <button type="button" className="cmsButton cmsButtonDanger" onClick={() => applyPaste('replace')}>Tabloyu bununla değiştir</button>
                 </div>
               </div>

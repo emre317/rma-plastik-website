@@ -7,7 +7,7 @@ import { COLUMN_KEYS } from '../../data/productTables.builtin';
   Libraries are loaded only when the buttons are used.
 */
 
-const FAMILY_ID = 'Aile kimliği';
+const FAMILY_ID = 'Aile Kimliği';
 const FAMILY_TITLE = 'Aile adı (TR)';
 const CODE = tr.productTables.columns.code;
 
@@ -20,7 +20,7 @@ const HEADER_FIELDS = new Map([
   [normalise(FAMILY_ID), 'familyId'],
   ['familyid', 'familyId'],
   [normalise(FAMILY_TITLE), 'familyTitle'],
-  [normalise('Aile adı'), 'familyTitle'],
+  [normalise('Aile Adı'), 'familyTitle'],
   [normalise(CODE), 'code'],
   ['code', 'code'],
   ...COLUMN_KEYS.flatMap((key) => [[normalise(label(key)), key], [key.toLowerCase(), key]]),
@@ -71,7 +71,7 @@ export async function exportFamilies(families) {
       columns: [{ width: 22 }, { width: 30 }, { width: 14 }, ...COLUMN_KEYS.map(() => ({ width: 14 }))],
       stickyRowsCount: 1,
     },
-    { sheet: 'Nasıl kullanılır', data: help, columns: [{ width: 120 }] },
+    { sheet: 'Nasıl Kullanılır', data: help, columns: [{ width: 120 }] },
   ]).toFile(`rma-urun-tablolari-${date}.xlsx`);
 
   return rows.length;

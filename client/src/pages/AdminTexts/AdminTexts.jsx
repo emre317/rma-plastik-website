@@ -20,9 +20,9 @@ const EXCLUDED = ['language'];
 const SECTION_LABELS = {
   meta: 'SEO – sayfa başlıkları ve açıklamaları',
   nav: 'Menü',
-  common: 'Genel ifadeler',
-  cookies: 'Çerez bandı',
-  floatingContact: 'İletişim balonları',
+  common: 'Genel İfadeler',
+  cookies: 'Çerez Bandı',
+  floatingContact: 'İletişim Balonları',
   footer: 'Footer',
   hero: 'Ana sayfa – Giriş',
   stats: 'Ana sayfa – Rakamlar',
@@ -32,7 +32,7 @@ const SECTION_LABELS = {
   customMolding: 'Ana sayfa – Özel Üretim',
   global: 'Ana sayfa – İhracat',
   pages: 'İç sayfalar (Kurumsal, Özel Üretim, Sektörler…)',
-  productsPage: 'Ürünler sayfası',
+  productsPage: 'Ürünler Sayfası',
   waterTanks: 'Su depoları sayfası',
   productTables: 'Ürün tabloları sayfası',
   contact: 'İletişim ve teklif formu',
@@ -56,7 +56,7 @@ function humanize(key) {
 }
 
 export default function AdminTexts() {
-  usePageTitle('Sayfa metinleri');
+  usePageTitle('Sayfa Metinleri');
 
   const call = useAdminApi();
 
@@ -156,7 +156,7 @@ export default function AdminTexts() {
       <div className="adminPageHeader">
         <div>
           <span className="adminLabel">İÇERİK YÖNETİMİ</span>
-          <h1>Sayfa metinleri</h1>
+          <h1>Sayfa Metinleri</h1>
         </div>
 
         <span>{Object.keys(saved).length} metin özelleştirildi</span>
@@ -206,7 +206,7 @@ export default function AdminTexts() {
                   <div className="cmsTextItemHead">
                     <code>{query ? key : humanize(key)}</code>
                     {customised && (
-                      <button type="button" className="cmsLink" onClick={() => reset(key)}>Varsayılana dön</button>
+                      <button type="button" className="cmsLink" onClick={() => reset(key)}>Varsayılana Dön</button>
                     )}
                   </div>
 

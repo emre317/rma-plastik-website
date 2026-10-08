@@ -17,7 +17,7 @@ const emptyTexts = () => Object.fromEntries(LANGS.map(({ code }) => [code, { cap
 
 /* Field photos on the Özel Üretim page (Saha fotoğrafları) */
 export default function AdminGallery() {
-  usePageTitle('Saha fotoğrafları');
+  usePageTitle('Saha Fotoğrafları');
 
   const call = useAdminApi();
   const fileRef = useRef(null);
@@ -161,7 +161,7 @@ export default function AdminGallery() {
       <header className="adPageHead">
         <div>
           <span className="adEyebrow">İçerik</span>
-          <h1>Saha fotoğrafları</h1>
+          <h1>Saha Fotoğrafları</h1>
           <p>
             Sahada kurulu tank ve depoların gerçek fotoğrafları. Özel Üretim sayfasında referans projelerin altında “Kullanımdaki ürünlerimiz”
             bölümünde gösterilir; fotoğraf yokken bölüm görünmez.
@@ -207,7 +207,7 @@ export default function AdminGallery() {
 
                 <label className="cmsCheck">
                   <input type="checkbox" checked={form.published} onChange={(event) => setForm({ ...form, published: event.target.checked })} />
-                  <span>Sitede göster</span>
+                  <span>Sitede Göster</span>
                 </label>
               </div>
             </div>

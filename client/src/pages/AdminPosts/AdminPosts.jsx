@@ -17,7 +17,7 @@ function statusOf(post) {
 }
 
 export default function AdminPosts() {
-  usePageTitle('Blog yazıları');
+  usePageTitle('Blog Yazıları');
 
   const call = useAdminApi();
   const [posts, setPosts] = useState([]);
@@ -53,7 +53,7 @@ export default function AdminPosts() {
       <div className="adminPageHeader">
         <div>
           <span className="adminLabel">İÇERİK YÖNETİMİ</span>
-          <h1>Blog yazıları</h1>
+          <h1>Blog Yazıları</h1>
         </div>
         <Link to="/admin/posts/new" className="cmsButton cmsButtonPrimary">+ Yeni yazı</Link>
       </div>

@@ -68,10 +68,10 @@ export default function AdminDashboard() {
   const pipelineTotal = QUOTE_STATUSES.reduce((sum, status) => sum + (stats?.[status.id] || 0), 0);
 
   const kpis = [
-    { label: 'Takibi gelen', value: stats?.due ?? '–', icon: CalendarClock, to: '/admin/quotes?status=due', hint: 'Takip tarihi bugün veya geçmiş', accent: (stats?.due || 0) > 0 },
+    { label: 'Takibi Gelen', value: stats?.due ?? '–', icon: CalendarClock, to: '/admin/quotes?status=due', hint: 'Takip tarihi bugün veya geçmiş', accent: (stats?.due || 0) > 0 },
     { label: 'Okunmamış', value: stats?.unread ?? '–', icon: BellRing, to: '/admin/quotes', hint: 'Henüz açılmamış', accent: (stats?.unread || 0) > 0 },
     { label: 'Bekleyen', value: stats ? open : '–', icon: Clock3, to: '/admin/quotes?status=new', hint: 'Yeni + inceleniyor' },
-    { label: 'Teklif verilen', value: stats?.quoted ?? '–', icon: CheckCircle2, to: '/admin/quotes?status=quoted', hint: 'Teklifi gönderilmiş' },
+    { label: 'Teklif Verilen', value: stats?.quoted ?? '–', icon: CheckCircle2, to: '/admin/quotes?status=quoted', hint: 'Teklifi gönderilmiş' },
   ];
 
   return (
@@ -79,17 +79,17 @@ export default function AdminDashboard() {
       <header className="adPageHead">
         <div>
           <span className="adEyebrow">{today}</span>
-          <h1>Hoş geldiniz</h1>
+          <h1>Hoş Geldiniz</h1>
           <p>Teklif taleplerini takip edin, katalog ve içerikleri güncelleyin; değişiklikleri sol menüdeki <strong>Yayınla</strong> ile siteye aktarın.</p>
         </div>
         <div className="adHeadActions">
           <Link to="/admin/quote-reports" className="cmsButton">
             <BarChart3 aria-hidden="true" />
-            Satış raporu
+            Satış Raporu
           </Link>
           <Link to="/admin/quotes" className="cmsButton cmsButtonPrimary">
             <Inbox aria-hidden="true" />
-            Talepleri aç
+            Talepleri Aç
           </Link>
         </div>
       </header>
@@ -111,7 +111,7 @@ export default function AdminDashboard() {
         {/* Pipeline */}
         <div className="adCard adPipeline">
           <div className="adCardHead">
-            <h2>Talep süreci</h2>
+            <h2>Talep Süreci</h2>
             <Link to="/admin/quotes">Tümü <ArrowUpRight aria-hidden="true" /></Link>
           </div>
 
@@ -144,8 +144,8 @@ export default function AdminDashboard() {
         {/* Latest requests */}
         <div className="adCard adRecent">
           <div className="adCardHead">
-            <h2>Son talepler</h2>
-            <Link to="/admin/quotes">Tüm talepler <ArrowUpRight aria-hidden="true" /></Link>
+            <h2>Son Talepler</h2>
+            <Link to="/admin/quotes">Tüm Talepler <ArrowUpRight aria-hidden="true" /></Link>
           </div>
 
           {recent.length === 0 ? (
@@ -158,7 +158,7 @@ export default function AdminDashboard() {
                     <span className="adAvatarSm" aria-hidden="true">{(quote.company || '?').charAt(0).toLocaleUpperCase('tr')}</span>
                     <span className="adRecentText">
                       <strong>{quote.company}</strong>
-                      <small>{quote.product || 'Genel talep'}</small>
+                      <small>{quote.product || 'Genel Talep'}</small>
                     </span>
                     <span className={`adPill tone-${statusTone(quote.status)}`}>{statusLabel(quote.status)}</span>
                     <time dateTime={quote.createdAt}>{timeAgo(quote.createdAt)}</time>
@@ -176,13 +176,13 @@ export default function AdminDashboard() {
         <Link to="/admin/product-families" className="adContentCard">
           <span className="adKpiIcon" aria-hidden="true"><Table2 /></span>
           <strong>{content ? `${content.families} aile · ${content.models} model` : '…'}</strong>
-          <span>Ürün tabloları</span>
+          <span>Ürün Tabloları</span>
           <small>{content?.builtIn ? 'Sitede broşür tabloları gösteriliyor; düzenlemek için içe aktarın.' : 'Ürün Tabloları ve Su Depoları sayfaları buradan beslenir.'}</small>
         </Link>
         <Link to="/admin/posts" className="adContentCard">
           <span className="adKpiIcon" aria-hidden="true"><FileText /></span>
           <strong>{content ? `${content.published} yayında · ${content.posts - content.published} taslak` : '…'}</strong>
-          <span>Blog yazıları</span>
+          <span>Blog Yazıları</span>
           <small>Türkçe, İngilizce ve Arapça yazılar; SEO önizlemesiyle.</small>
         </Link>
         <Link to="/admin/videos" className="adContentCard">
@@ -196,12 +196,12 @@ export default function AdminDashboard() {
       <div className="adGrid">
         {/* Quick actions */}
         <div className="adCard">
-          <div className="adCardHead"><h2>Hızlı işlemler</h2></div>
+          <div className="adCardHead"><h2>Hızlı İşlemler</h2></div>
           <div className="adActions">
             <Link to="/admin/posts/new"><FilePlus2 aria-hidden="true" />Yeni blog yazısı</Link>
             <Link to="/admin/product-families/new"><Table2 aria-hidden="true" />Yeni ürün ailesi</Link>
             <Link to="/admin/product-families"><FileSpreadsheet aria-hidden="true" />Excel ile toplu güncelle</Link>
-            <Link to="/admin/videos"><PlayCircle aria-hidden="true" />Video ekle</Link>
+            <Link to="/admin/videos"><PlayCircle aria-hidden="true" />Video Ekle</Link>
           </div>
         </div>
 

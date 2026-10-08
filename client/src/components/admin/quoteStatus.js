@@ -2,8 +2,8 @@
 export const QUOTE_STATUSES = [
   { id: 'new', label: 'Yeni', hint: 'Talep siteden yeni geldi.', tone: 'blue' },
   { id: 'reviewing', label: 'İnceleniyor', hint: 'Talep ve teknik ihtiyaçlar inceleniyor.', tone: 'amber' },
-  { id: 'contacted', label: 'İletişime geçildi', hint: 'Müşteriyle görüşüldü.', tone: 'violet' },
-  { id: 'quoted', label: 'Teklif verildi', hint: 'Ticari teklif hazırlanıp gönderildi.', tone: 'green' },
+  { id: 'contacted', label: 'İletişime Geçildi', hint: 'Müşteriyle görüşüldü.', tone: 'violet' },
+  { id: 'quoted', label: 'Teklif Verildi', hint: 'Ticari teklif hazırlanıp gönderildi.', tone: 'green' },
   { id: 'closed', label: 'Kapandı', hint: 'Süreç tamamlandı.', tone: 'gray' },
 ];
 

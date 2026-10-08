@@ -66,7 +66,7 @@ export default function PublishPanel() {
           ? 'Site güncelleniyor…'
           : pending
             ? 'Yayınlanmamış değişiklikler var'
-            : 'Site güncel'}
+            : 'Site Güncel'}
       </span>
 
       <small>Son yayın: {formatTime(state?.publishedAt)}</small>
@@ -80,7 +80,7 @@ export default function PublishPanel() {
 
           {state.log && (
             <details className="publishPanelLog">
-              <summary>Ayrıntıları göster</summary>
+              <summary>Ayrıntıları Göster</summary>
               <pre>{state.log.slice(-2500)}</pre>
             </details>
           )}
@@ -90,7 +90,7 @@ export default function PublishPanel() {
       {error && <small className="publishPanelError">{error}</small>}
 
       <button type="button" onClick={publish} disabled={running}>
-        {running ? 'Yayınlanıyor…' : pending ? 'Değişiklikleri yayınla' : 'Yeniden yayınla'}
+        {running ? 'Yayınlanıyor…' : pending ? 'Değişiklikleri yayınla' : 'Yeniden Yayınla'}
       </button>
     </div>
   );

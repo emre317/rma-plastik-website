@@ -59,7 +59,7 @@ function quoteRow(quote) {
     text(quote.email),
     text(quote.phone),
     text(quote.country),
-    text(quote.product) || 'Genel talep',
+    text(quote.product) || 'Genel Talep',
     longText(items.map((item) => `${item.name} × ${item.quantity || 1}`).join('\n')),
     pieces ? { value: Number(pieces), type: Number } : null,
     text(quote.capacity),

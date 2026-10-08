@@ -23,7 +23,7 @@ const empty = (order = 0) => ({
 
 /* Custom molding reference projects (Özel Üretim page and home page) */
 export default function AdminProjects() {
-  usePageTitle('Referans projeler');
+  usePageTitle('Referans Projeler');
 
   const call = useAdminApi();
   const fileRef = useRef(null);
@@ -134,7 +134,7 @@ export default function AdminProjects() {
       <header className="adPageHead">
         <div>
           <span className="adEyebrow">İçerik</span>
-          <h1>Referans projeler</h1>
+          <h1>Referans Projeler</h1>
           <p>Özel Üretim sayfasında ve ana sayfada gösterilen müşteri projeleri. Ana sayfada sıradaki ilk dört proje görünür.</p>
         </div>
         {!form && (
@@ -176,19 +176,19 @@ export default function AdminProjects() {
 
                 <label className="cmsCheck">
                   <input type="checkbox" checked={form.published} onChange={(event) => setForm({ ...form, published: event.target.checked })} />
-                  <span>Sitede göster</span>
+                  <span>Sitede Göster</span>
                 </label>
               </div>
             </div>
 
             <div className="cmsColumn">
               <div className="cmsImage adProjectImage">
-                {form.image ? <img src={form.image} alt="" /> : <span>Görsel yok</span>}
+                {form.image ? <img src={form.image} alt="" /> : <span>Görsel Yok</span>}
               </div>
               <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" hidden onChange={upload} />
               <div className="cmsRowActions">
                 <button type="button" className="cmsButton" onClick={() => fileRef.current?.click()} disabled={uploading}>
-                  {uploading ? 'Yükleniyor…' : form.image ? 'Görseli değiştir' : 'Görsel yükle'}
+                  {uploading ? 'Yükleniyor…' : form.image ? 'Görseli değiştir' : 'Görsel Yükle'}
                 </button>
                 {form.image && <button type="button" className="cmsButton cmsButtonDanger" onClick={() => setForm({ ...form, image: '' })}>Kaldır</button>}
               </div>

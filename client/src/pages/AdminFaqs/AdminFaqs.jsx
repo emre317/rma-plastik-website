@@ -310,7 +310,7 @@ export default function AdminFaqs() {
                     <small>{topicLabel(faq.topic)}</small>
                     <strong>{faq.i18n?.tr?.question}</strong>
                     <span className="adFaqMeta">
-                      <em className={`adFaqState ${state}`}>{state === 'live' ? 'Sitede' : state === 'hidden' ? 'Gizli' : 'Cevap bekliyor'}</em>
+                      <em className={`adFaqState ${state}`}>{state === 'live' ? 'Sitede' : state === 'hidden' ? 'Gizli' : 'Cevap Bekliyor'}</em>
                       {LANGS.map((item) => (
                         <span key={item.code} className={`adLangBadge ${answered(faq, item.code) ? 'ok' : ''}`} title={answered(faq, item.code) ? `${item.label}: hazır` : `${item.label}: eksik`}>
                           {item.short}
@@ -323,7 +323,7 @@ export default function AdminFaqs() {
                     <button type="button" className="adIconButton" onClick={() => move(index, 1)} disabled={saving || index === faqs.length - 1} aria-label="Aşağı taşı"><ArrowDown aria-hidden="true" /></button>
                   </span>
                   <span className="cmsRowActions">
-                    <button type="button" className="cmsButton" onClick={() => edit(faq)}>{ready ? 'Düzenle' : 'Cevap yaz'}</button>
+                    <button type="button" className="cmsButton" onClick={() => edit(faq)}>{ready ? 'Düzenle' : 'Cevap Yaz'}</button>
                     <button type="button" className="cmsButton cmsButtonDanger" onClick={() => remove(faq)}>Sil</button>
                   </span>
                 </li>

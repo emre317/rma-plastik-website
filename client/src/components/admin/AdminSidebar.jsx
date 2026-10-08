@@ -20,32 +20,32 @@ const NAV = [
     group: 'Genel',
     items: [
       { to: '/admin', label: 'Özet', icon: LayoutDashboard, end: true },
-      { to: '/admin/quotes', label: 'Teklif talepleri', icon: Inbox, badge: true },
-      { to: '/admin/quote-reports', label: 'Satış raporu', icon: BarChart3, hint: 'Ülke, ürün, ay' },
+      { to: '/admin/quotes', label: 'Teklif Talepleri', icon: Inbox, badge: true },
+      { to: '/admin/quote-reports', label: 'Satış Raporu', icon: BarChart3, hint: 'Ülke, ürün, ay' },
     ],
   },
   {
     group: 'Katalog',
     items: [
-      { to: '/admin/product-families', label: 'Ürün tabloları', icon: Table2, hint: 'Ürün ve su deposu modelleri' },
+      { to: '/admin/product-families', label: 'Ürün Tabloları', icon: Table2, hint: 'Ürün ve su deposu modelleri' },
     ],
   },
   {
     group: 'İçerik',
     items: [
-      { to: '/admin/posts', label: 'Blog yazıları', icon: FileText },
-      { to: '/admin/projects', label: 'Referans projeler', icon: Briefcase, hint: 'Özel üretim projeleri' },
-      { to: '/admin/gallery', label: 'Saha fotoğrafları', icon: Camera, hint: 'Kullanımdaki ürünler' },
+      { to: '/admin/posts', label: 'Blog Yazıları', icon: FileText },
+      { to: '/admin/projects', label: 'Referans Projeler', icon: Briefcase, hint: 'Özel üretim projeleri' },
+      { to: '/admin/gallery', label: 'Saha Fotoğrafları', icon: Camera, hint: 'Kullanımdaki ürünler' },
       { to: '/admin/faqs', label: 'Sık sorulan sorular', icon: CircleHelp, hint: 'SSS sayfası' },
-      { to: '/admin/export-markets', label: 'İhracat ağı', icon: Globe2, hint: 'Haritadaki pazarlar' },
+      { to: '/admin/export-markets', label: 'İhracat Ağı', icon: Globe2, hint: 'Haritadaki pazarlar' },
       { to: '/admin/videos', label: 'Videolar', icon: PlayCircle },
-      { to: '/admin/texts', label: 'Sayfa metinleri', icon: Type },
+      { to: '/admin/texts', label: 'Sayfa Metinleri', icon: Type },
     ],
   },
   {
     group: 'Ayarlar',
     items: [
-      { to: '/admin/settings', label: 'Site ayarları', icon: Settings, hint: 'Telefon, e-posta, adres' },
+      { to: '/admin/settings', label: 'Site Ayarları', icon: Settings, hint: 'Telefon, e-posta, adres' },
     ],
   },
 ];
@@ -113,7 +113,7 @@ export default function AdminSidebar() {
       <aside className={`adminSidebar adSidebar ${open ? 'open' : ''}`}>
         <div className="adBrand">
           <BrandLogo variant="light" alt="RMA Plastik" />
-          <span>Yönetim paneli</span>
+          <span>Yönetim Paneli</span>
           <button type="button" className="adSidebarClose" onClick={() => setOpen(false)} aria-label="Menüyü kapat">
             <X aria-hidden="true" />
           </button>
@@ -140,7 +140,7 @@ export default function AdminSidebar() {
 
           <a href="/" target="_blank" rel="noreferrer" className="adNavExternal">
             <ExternalLink aria-hidden="true" />
-            <span className="adNavText">Siteyi görüntüle</span>
+            <span className="adNavText">Siteyi Görüntüle</span>
           </a>
         </nav>
 

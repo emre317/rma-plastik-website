@@ -71,7 +71,7 @@ function fromSaved(offer) {
 
 /* Proforma invoice editor: prices and terms, live A4 preview, PDF and e-mail */
 export default function AdminQuoteOffer() {
-  usePageTitle('Proforma fatura');
+  usePageTitle('Proforma Fatura');
 
   const { id } = useParams();
   const call = useAdminApi();
@@ -222,7 +222,7 @@ export default function AdminQuoteOffer() {
   if (!offer || !quote) {
     return (
       <section className="adminContent">
-        <Link to={`/admin/quotes/${id}`} className="adBack"><ArrowLeft aria-hidden="true" />Talebe dön</Link>
+        <Link to={`/admin/quotes/${id}`} className="adBack"><ArrowLeft aria-hidden="true" />Talebe Dön</Link>
         {message ? <div className={`cmsMessage ${message.type}`}>{message.text}</div> : <div className="adSkeletonList" aria-label="Yükleniyor">{[0, 1, 2].map((i) => <span key={i} />)}</div>}
       </section>
     );
@@ -240,7 +240,7 @@ export default function AdminQuoteOffer() {
 
       <header className="adPageHead">
         <div>
-          <span className="adEyebrow">Proforma fatura</span>
+          <span className="adEyebrow">Proforma Fatura</span>
           <h1>{number}</h1>
           <p>
             {quote.company} için proforma fatura. Fiyatları ve koşulları siz girersiniz; sağdaki önizleme PDF’in aynısıdır.
@@ -258,19 +258,19 @@ export default function AdminQuoteOffer() {
             <div className="adCardHead"><h2>Belge</h2></div>
             <div className="adOfferRow">
               <label className="cmsField">
-                <span>Belge dili</span>
+                <span>Belge Dili</span>
                 <select value={offer.language} onChange={(event) => update({ language: event.target.value })}>
                   {LANGS.map((item) => <option key={item.code} value={item.code}>{item.label}</option>)}
                 </select>
               </label>
               <label className="cmsField">
-                <span>Para birimi</span>
+                <span>Para Birimi</span>
                 <select value={offer.currency} onChange={(event) => update({ currency: event.target.value })}>
                   {OFFER_CURRENCIES.map((code) => <option key={code} value={code}>{code}</option>)}
                 </select>
               </label>
               <label className="cmsField">
-                <span>Geçerlilik tarihi</span>
+                <span>Geçerlilik Tarihi</span>
                 <input type="date" value={offer.validUntil || ''} onChange={(event) => update({ validUntil: event.target.value })} />
               </label>
             </div>
@@ -333,15 +333,15 @@ export default function AdminQuoteOffer() {
             </div>
 
             <dl className="adOfferTotals">
-              {totals.hasVat && <div><dt>Ara toplam</dt><dd dir="ltr">{money(totals.subtotal)}</dd></div>}
+              {totals.hasVat && <div><dt>Ara Toplam</dt><dd dir="ltr">{money(totals.subtotal)}</dd></div>}
               {totals.hasVat && <div><dt>KDV %{offer.vatRate}</dt><dd dir="ltr">{money(totals.vat)}</dd></div>}
-              <div className="grand"><dt>Genel toplam</dt><dd dir="ltr">{money(totals.total)}</dd></div>
+              <div className="grand"><dt>Genel Toplam</dt><dd dir="ltr">{money(totals.total)}</dd></div>
             </dl>
           </div>
 
           {/* Terms */}
           <div className="adCard">
-            <div className="adCardHead"><h2>Ticari koşullar</h2><span className="adHint">Boş bırakılanlar belgede görünmez</span></div>
+            <div className="adCardHead"><h2>Ticari Koşullar</h2><span className="adHint">Boş bırakılanlar belgede görünmez</span></div>
             <div className="adOfferRow">
               <label className="cmsField">
                 <span>Teslim şekli (Incoterm)</span>
@@ -351,16 +351,16 @@ export default function AdminQuoteOffer() {
                 </select>
               </label>
               <label className="cmsField adOfferWide">
-                <span>Teslim yeri</span>
+                <span>Teslim Yeri</span>
                 <input value={offer.deliveryPlace} maxLength={160} placeholder="ör. Mersin fabrika / Mersin Limanı" onChange={(event) => update({ deliveryPlace: event.target.value })} />
               </label>
             </div>
             <label className="cmsField">
-              <span>Teslim süresi</span>
+              <span>Teslim Süresi</span>
               <input value={offer.deliveryTime} maxLength={160} placeholder="ör. Sipariş onayından sonra … iş günü" onChange={(event) => update({ deliveryTime: event.target.value })} />
             </label>
             <label className="cmsField">
-              <span>Ödeme koşulları</span>
+              <span>Ödeme Koşulları</span>
               <input value={offer.paymentTerms} maxLength={300} placeholder="ör. %… peşin, kalanı yüklemeden önce" onChange={(event) => update({ paymentTerms: event.target.value })} />
             </label>
             <label className="cmsField">
@@ -368,7 +368,7 @@ export default function AdminQuoteOffer() {
               <textarea rows={3} value={offer.notes} maxLength={2000} onChange={(event) => update({ notes: event.target.value })} />
             </label>
             <label className="cmsField">
-              <span>Genel koşullar</span>
+              <span>Genel Koşullar</span>
               <textarea rows={4} value={offer.terms} maxLength={3000} onChange={(event) => update({ terms: event.target.value })} />
               <small>Varsayılan metni ve banka bilgilerini <Link to="/admin/settings">Site ayarları → Proforma fatura</Link> bölümünden girin.</small>
             </label>
@@ -383,11 +383,11 @@ export default function AdminQuoteOffer() {
             </button>
             <button type="button" className="cmsButton" onClick={download} disabled={Boolean(busy)}>
               <Download aria-hidden="true" />
-              {busy === 'pdf' ? 'Hazırlanıyor…' : 'PDF indir'}
+              {busy === 'pdf' ? 'Hazırlanıyor…' : 'PDF İndir'}
             </button>
             <button type="button" className="cmsButton cmsButtonPrimary" onClick={() => setConfirmSend(true)} disabled={Boolean(busy)}>
               <Mail aria-hidden="true" />
-              {busy === 'send' ? 'Gönderiliyor…' : 'Müşteriye gönder'}
+              {busy === 'send' ? 'Gönderiliyor…' : 'Müşteriye Gönder'}
             </button>
           </div>
 
