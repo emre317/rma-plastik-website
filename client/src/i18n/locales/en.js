@@ -1093,6 +1093,7 @@ const en = {
     },
     placeholders: {
       countrySelect: 'Select Country',
+      countrySearch: 'Search country…',
       company: 'Company Name',
       name: 'Full Name',
       email: 'name@company.com',

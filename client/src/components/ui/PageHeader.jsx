@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ChevronRight } from 'lucide-react';
 
 import { LocalizedLink } from '../i18n/LocalizedLink';
+import StatValue from './StatValue';
 
 /*
   Shared header of the inner pages: breadcrumb, eyebrow, title, lead,
@@ -40,7 +41,12 @@ export default function PageHeader({
         className,
       ].filter(Boolean).join(' ')}
     >
-      <div className="pageHeaderBg" aria-hidden="true" />
+      <div className="pageHeaderBg" aria-hidden="true">
+        <span className="phOrb one" />
+        <span className="phOrb two" />
+        <span className="phBeam" />
+        <span className="phRings" />
+      </div>
 
       <div className="container pageHeaderInner">
         <nav className="phCrumbs" aria-label={t('nav.breadcrumb')}>
@@ -103,7 +109,7 @@ export default function PageHeader({
           <dl className="phFacts">
             {facts.map((fact) => (
               <div key={fact.label}>
-                <dt>{fact.value}</dt>
+                <dt><StatValue value={fact.value} /></dt>
                 <dd>{fact.label}</dd>
               </div>
             ))}

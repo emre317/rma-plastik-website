@@ -6,6 +6,7 @@ import { LocalizedLink } from '../i18n/LocalizedLink';
 import Arrow from '../i18n/Arrow';
 import useLanguage from '../../hooks/useLanguage';
 import { faqsForLanguage } from '../../data/faq';
+import SectionDeco from './SectionDeco';
 
 /*
   Accordion of questions: one item open at a time, clicking it again closes it
@@ -64,6 +65,7 @@ export default function FaqSection({ limit = 8 }) {
 
   return (
     <section className="faqSection" id="faq">
+      <SectionDeco tone="light" ring="start" />
       <div className="container faqSectionGrid">
         <div className="faqSectionIntro">
           <span className="faqBadge">{t('faq.eyebrow')}</span>

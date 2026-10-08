@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { RotateCcw, Search, X } from 'lucide-react';
+import { Gauge, ListTree, RotateCcw, Search, X } from 'lucide-react';
 
 import Seo from '../../seo/Seo';
 import PageHeader from '../../components/ui/PageHeader';
+import Dropdown from '../../components/ui/Dropdown';
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
@@ -134,27 +135,31 @@ export default function ProductTables() {
             ))}
           </div>
 
-          <label className="ptSelect">
-            <span className="visuallyHidden">{t('waterTanks.volume')}</span>
-            <select value={volume} onChange={(event) => setVolume(event.target.value)}>
-              <option value="all">{p('volumeAll')}</option>
-              {Object.entries(VOLUME_RANGES).map(([key, [min, max]]) => (
-                <option key={key} value={key}>
-                  {max === Infinity ? `${formatNumber(min - 1, lang)} L +` : `${formatNumber(min, lang)} – ${formatNumber(max, lang)} L`}
-                </option>
-              ))}
-            </select>
-          </label>
+          <Dropdown
+            className="ptSelect"
+            value={volume}
+            onChange={setVolume}
+            label={t('waterTanks.volume')}
+            icon={Gauge}
+            options={[
+              { value: 'all', label: p('volumeAll') },
+              ...Object.entries(VOLUME_RANGES).map(([key, [min, max]]) => ({
+                value: key,
+                label: max === Infinity ? `${formatNumber(min - 1, lang)} L +` : `${formatNumber(min, lang)} – ${formatNumber(max, lang)} L`,
+              })),
+            ]}
+          />
 
-          <label className="ptSelect ptJump">
-            <span className="visuallyHidden">{p('jumpLabel')}</span>
-            <select value="" onChange={(event) => jumpTo(event.target.value)}>
-              <option value="">{p('jumpLabel')}</option>
-              {visible.map((family) => (
-                <option key={family.id} value={family.id}>{familyText(family, 'title', lang, t)}</option>
-              ))}
-            </select>
-          </label>
+          <Dropdown
+            className="ptSelect ptJump"
+            value=""
+            onChange={(id) => id && jumpTo(id)}
+            label={p('jumpLabel')}
+            placeholder={p('jumpLabel')}
+            icon={ListTree}
+            align="end"
+            options={visible.map((family) => ({ value: family.id, label: familyText(family, 'title', lang, t) }))}
+          />
         </div>
 
         <div className="container ptBarStatus" aria-live="polite">

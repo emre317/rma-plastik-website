@@ -6,8 +6,10 @@ import { LocalizedLink } from '../components/i18n/LocalizedLink';
 import Arrow from '../components/i18n/Arrow';
 import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion';
 import exportMap from '../data/exportMap';
-import markets, { marketName, marketRegion } from '../data/exportMarkets';
+import markets, { globalFigures, marketName, marketRegion } from '../data/exportMarkets';
+import StatValue from '../components/ui/StatValue';
 import useLanguage from '../hooks/useLanguage';
+import SectionDeco from '../components/ui/SectionDeco';
 
 // The interactive map (and its animation library) loads separately, below the fold
 const ExportMap = lazy(() => import('../components/ui/ExportMapWorld'));
@@ -127,11 +129,8 @@ export default function GlobalPresenceSection({ index }) {
     // Older browsers: comma-separated list
   }
 
-  // The first figure is the number of markets, kept in step with the list
-  const figureList = t('global.figures', { returnObjects: true });
-  const figures = (Array.isArray(figureList) ? figureList : []).map((figure, index) =>
-    index === 0 ? { ...figure, value: String(markets.length) } : figure
-  );
+  // Market and continent counts follow the market list
+  const figures = globalFigures(t('global.figures', { returnObjects: true }));
 
   const stepState = (index) => {
     if (hoverKey) {
@@ -154,6 +153,7 @@ export default function GlobalPresenceSection({ index }) {
 
   return (
     <section className="globalSection dark" id="global" ref={sectionRef}>
+      <SectionDeco tone="dark" ring="start" />
       <div className="container">
 
         <div className="globalHeader globalHeaderShowcase">
@@ -183,7 +183,7 @@ export default function GlobalPresenceSection({ index }) {
             <dl className="globalFigures">
               {figures.map((figure) => (
                 <div key={figure.label}>
-                  <dt>{figure.value}</dt>
+                  <dt><StatValue value={figure.value} /></dt>
                   <dd>{figure.label}</dd>
                 </div>
               ))}

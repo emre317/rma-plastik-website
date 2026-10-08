@@ -8,10 +8,12 @@ import { LocalizedLink } from '../components/i18n/LocalizedLink';
 import { useQuote } from '../components/quote/QuoteContext';
 import { track } from '../analytics/track';
 import { videoText } from '../data/videos';
+import { globalFigures } from '../data/exportMarkets';
 import useLanguage from '../hooks/useLanguage';
 import portfolio from '../data/productPortfolio';
 import { EcoBadge } from '../components/ui/EcoMarks';
 import HeroTitle from '../components/ui/HeroTitle';
+import StatValue from '../components/ui/StatValue';
 
 const PLAYER_ORIGIN = 'https://www.youtube-nocookie.com';
 
@@ -47,7 +49,7 @@ export default function HeroVideo({ video }) {
 
   const title = videoText(video, lang, 'title');
   const stats = t('stats.items', { returnObjects: true });
-  const figures = t('global.figures', { returnObjects: true });
+  const figures = globalFigures(t('global.figures', { returnObjects: true }));
   const categories = t('productExplorer.items', { returnObjects: true });
 
   // Start the background player after the page has loaded
@@ -290,7 +292,7 @@ export default function HeroVideo({ video }) {
               <dl className="heroVideoStats">
                 {stats.slice(0, 4).map((item) => (
                   <div key={item.label}>
-                    <dt>{item.value}</dt>
+                    <dt><StatValue value={item.value} /></dt>
                     <dd>{item.label}</dd>
                   </div>
                 ))}

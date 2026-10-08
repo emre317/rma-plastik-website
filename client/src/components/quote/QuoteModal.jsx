@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 
 import Arrow from '../i18n/Arrow';
+import Dropdown from '../ui/Dropdown';
 import company from '../../data/company';
 import portfolio from '../../data/productPortfolio';
 import useModelQuote from '../../hooks/useModelQuote';
@@ -420,28 +421,37 @@ export default function QuoteModal() {
               <input type="tel" name="phone" dir="ltr" maxLength={40} value={form.phone} onChange={handleChange} placeholder={t('contact.placeholders.phone')} />
             </label>
 
-            <label className="formField">
+            <div className="formField">
               <span>{fieldLabel('country')}</span>
-              <select name="country" value={form.country} onChange={handleChange}>
-                <option value="">{t('contact.placeholders.countrySelect')}</option>
-                {countries.map((item) => (
-                  <option key={item.code} value={item.code}>{item.name}</option>
-                ))}
-              </select>
-            </label>
+              <Dropdown
+                name="country"
+                value={form.country}
+                onChange={(value) => handleChange({ target: { name: 'country', value } })}
+                options={countries.map((item) => ({ value: item.code, label: item.name }))}
+                placeholder={t('contact.placeholders.countrySelect')}
+                label={fieldLabel('country')}
+                searchable
+                searchPlaceholder={t('contact.placeholders.countrySearch')}
+              />
+            </div>
 
             {cart.length === 0 && (
-              <label className="formField">
+              <div className="formField">
                 <span>{fieldLabel('product')}</span>
-                <select name="product" value={form.product} onChange={handleChange}>
-                  <option value="">{t('contact.placeholders.product')}</option>
-                  {!subjectInList && <option value={form.product}>{form.product}</option>}
-                  {productOptions.map((item) => (
-                    <option key={item.id} value={item.value}>{item.label}</option>
-                  ))}
-                  <option value="Custom Requirement">{t('contact.customRequirement')}</option>
-                </select>
-              </label>
+                <Dropdown
+                  name="product"
+                  value={form.product}
+                  onChange={(value) => handleChange({ target: { name: 'product', value } })}
+                  options={[
+                    { value: '', label: t('contact.placeholders.product') },
+                    ...(!subjectInList ? [{ value: form.product, label: form.product }] : []),
+                    ...productOptions.map((item) => ({ value: item.value, label: item.label })),
+                    { value: 'Custom Requirement', label: t('contact.customRequirement') },
+                  ]}
+                  placeholder={t('contact.placeholders.product')}
+                  label={fieldLabel('product')}
+                />
+              </div>
             )}
 
             {cart.length === 0 && (

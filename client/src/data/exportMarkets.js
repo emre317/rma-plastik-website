@@ -1,6 +1,7 @@
 import content from '@content';
 
 import builtInMarkets from './exportMarkets.builtin';
+import { countContinents } from './continents';
 
 /*
   Export markets shown in the Global section (map + market list). Markets
@@ -26,5 +27,20 @@ export function marketName(market, lang) {
 }
 
 export const marketRegion = (market, lang) => market.i18n?.[lang]?.region || market.i18n?.tr?.region || '';
+
+/* Continents reached by the export markets (follows the list in the admin panel) */
+export const continentCount = countContinents(markets.map((market) => market.code));
+
+/*
+  Global figures from the locale files ("6 Başlıca ihracat pazarı", "4 Kıta",
+  "Mersin") with the first two counted from the market list.
+*/
+export function globalFigures(figureList) {
+  return (Array.isArray(figureList) ? figureList : []).map((figure, index) => {
+    if (index === 0) return { ...figure, value: String(markets.length) };
+    if (index === 1) return { ...figure, value: String(continentCount) };
+    return figure;
+  });
+}
 
 export default markets;

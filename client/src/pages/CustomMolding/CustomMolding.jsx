@@ -11,6 +11,7 @@ import { galleryImages, machineIcons, serviceIcons } from '../../data/customMold
 import projects, { projectText } from '../../data/projects';
 import useLanguage from '../../hooks/useLanguage';
 import FieldGallerySection from '../../sections/FieldGallerySection';
+import SectionDeco from '../../components/ui/SectionDeco';
 
 const pad = (n) => String(n).padStart(2, '0');
 
@@ -103,6 +104,7 @@ export default function CustomMolding() {
 
       {/* Development process */}
       <section className="cmProcess">
+        <SectionDeco tone="dark" ring="end" />
         <div className="container">
           <div className="cmSectionHead">
             <p className="eyebrow">{text('processLabel')}</p>

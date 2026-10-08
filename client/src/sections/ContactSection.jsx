@@ -9,6 +9,7 @@ import {
 } from '../components/icons/SocialIcons';
 import { useQuote } from '../components/quote/QuoteContext';
 import company from '../data/company';
+import SectionDeco from '../components/ui/SectionDeco';
 
 /*
   Location, address and contact channels. Used on the home page and on
@@ -65,6 +66,7 @@ export default function ContactSection({ index }) {
 
   return (
     <section className="contactLocations dark" id="contact" data-track-area="contact_section">
+      <SectionDeco tone="dark" ring="end" />
       <div className="container">
 
         <div className="contactLocationsHeader">

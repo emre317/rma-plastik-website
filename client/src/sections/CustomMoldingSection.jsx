@@ -5,6 +5,7 @@ import Arrow from '../components/i18n/Arrow';
 import { serviceIcons } from '../data/customMolding';
 import projects, { projectText } from '../data/projects';
 import useLanguage from '../hooks/useLanguage';
+import SectionDeco from '../components/ui/SectionDeco';
 
 /*
   Home: custom molding teaser – intro with key figures on one side,
@@ -19,6 +20,7 @@ export default function CustomMoldingSection() {
 
   return (
     <section className="cmHome" id="custom-molding">
+      <SectionDeco tone="light" ring="end" />
       <div className="container">
         <div className="cmHomeGrid">
 

@@ -1091,6 +1091,7 @@ const tr = {
     },
     placeholders: {
       countrySelect: 'Ülke Seçin',
+      countrySearch: 'Ülke ara…',
       company: 'Firma Adı',
       name: 'Ad Soyad',
       email: 'ad@firma.com',

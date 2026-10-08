@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DraftingCompass, FlaskConical, Globe2, Layers } from 'lucide-react';
+import SectionDeco from '../components/ui/SectionDeco';
 
 /*
   "02 / Kurumsal – Üretim deneyimi", adapted from the "IntegrationShowcase" block:
@@ -122,6 +123,7 @@ export default function StatsSection() {
 
   return (
     <section className={`statsSection statsShowcase ${inView ? 'inView' : ''}`} id="company" ref={sectionRef}>
+      <SectionDeco tone="light" ring="end" />
       <div className="container">
 
         <div className="statsShowcaseHeader">

@@ -11,6 +11,7 @@ import useLanguage from '../hooks/useLanguage';
 import formatNumber from '../utils/formatNumber';
 import portfolio, { totals } from '../data/productPortfolio';
 import { familyText } from '../data/productTables';
+import SectionDeco from '../components/ui/SectionDeco';
 
 /*
   "04 / Ürünler – Ürün portföyü": the brochure's product groups on a 3D ring
@@ -47,6 +48,7 @@ export default function ProductExplorerSection() {
 
   return (
     <section className="productExplorerSection portfolioSection" id="products">
+      <SectionDeco tone="light" ring="start" />
       <div className="container">
 
         <div className="productExplorerHeader">

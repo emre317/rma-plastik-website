@@ -5,6 +5,7 @@ import { Pause, Play } from 'lucide-react';
 import { LocalizedLink } from '../components/i18n/LocalizedLink';
 import Arrow from '../components/i18n/Arrow';
 import INDUSTRIES from '../data/industries';
+import SectionDeco from '../components/ui/SectionDeco';
 
 /*
   Industries: dark showcase with a slowly moving row of industry cards
@@ -24,6 +25,7 @@ export default function IndustriesSection() {
       id="industries"
       style={{ '--count': list.length }}
     >
+      <SectionDeco tone="dark" ring="start" />
       <div className="container">
         <div className="industriesShowcaseHeader">
           <div className="industriesShowcaseIntro">

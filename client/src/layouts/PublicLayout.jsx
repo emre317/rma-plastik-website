@@ -9,6 +9,7 @@ import { CompareProvider } from '../components/compare/CompareContext';
 import CompareTray from '../components/compare/CompareTray';
 import FloatingContact from '../components/ui/FloatingContact';
 import CookieConsent from '../components/CookieConsent';
+import CursorTrail from '../components/ui/CursorTrail';
 import useScrollReveal from '../hooks/useScrollReveal';
 
 export default function PublicLayout() {
@@ -25,6 +26,7 @@ export default function PublicLayout() {
       <QuoteCartButton />
       <CompareTray />
       <QuoteModal />
+      <CursorTrail />
       </CompareProvider>
     </QuoteProvider>
   );

@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Beaker, Check, Droplets, FlaskConical, LayoutGrid, MoveHorizontal, MoveVertical, RotateCcw,
+  ArrowUpDown, Beaker, Check, Droplets, FlaskConical, LayoutGrid, MoveHorizontal, MoveVertical, RotateCcw,
   Search, SlidersHorizontal, Table2, UtensilsCrossed, Wand2, X,
 } from 'lucide-react';
 
 import Seo from '../../seo/Seo';
 import PageHeader from '../../components/ui/PageHeader';
+import Dropdown from '../../components/ui/Dropdown';
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
@@ -524,16 +525,17 @@ export default function WaterTanks() {
                   <strong>{results.length}</strong> {w('resultsOf', { total: waterTanks.length })}
                 </p>
 
-                <label className="wtSort">
+                <div className="wtSort">
                   <span>{w('sort')}</span>
-                  <select value={sort} onChange={(event) => setSort(event.target.value)}>
-                    {Object.keys(SORTERS).map((key) => (
-                      <option key={key} value={key}>
-                        {w(`sortOptions.${key}`)}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                  <Dropdown
+                    value={sort}
+                    onChange={setSort}
+                    options={Object.keys(SORTERS).map((key) => ({ value: key, label: w(`sortOptions.${key}`) }))}
+                    label={w('sort')}
+                    icon={ArrowUpDown}
+                    align="end"
+                  />
+                </div>
 
                 <div className="wtView" role="group">
                   <button type="button" aria-pressed={view === 'cards'} className={view === 'cards' ? 'active' : ''} onClick={() => setView('cards')} title={w('cards')}>

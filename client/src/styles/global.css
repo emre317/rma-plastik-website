@@ -6897,12 +6897,14 @@ html[dir="rtl"] .desktopNav a {
 
 @media (min-width: 640px) {
 
+  /* Tablets: two columns, two rows */
   .footerGrid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .footerBrand {
-    grid-column: span 3;
+  .footerBrand,
+  .footerContact {
+    grid-column: auto;
   }
 
   .footerBottom {
@@ -6915,14 +6917,12 @@ html[dir="rtl"] .desktopNav a {
 
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
 
+  /* Four equal columns: brand, company, products, contact */
   .footerGrid {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-
-  .footerBrand {
-    grid-column: span 2;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 48px;
   }
 
 }
@@ -31075,5 +31075,926 @@ html.booting .heroWords .heroWord,
   .heroWords .heroLineAccent .heroWord {
     animation: none;
     will-change: auto;
+  }
+}
+
+/* ===== Dropdown (replaces the square native <select> on the site) ===== */
+
+.dd {
+  position: relative;
+  min-width: 0;
+}
+
+.ddTrigger {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid rgba(17, 34, 68, 0.14);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(17, 34, 68, 0.04);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: start;
+  transition: border-color 160ms ease, box-shadow 180ms ease, background 160ms ease;
+}
+
+.ddTrigger:hover {
+  border-color: rgba(29, 103, 213, 0.45);
+}
+
+.ddTrigger:focus-visible,
+.dd.open .ddTrigger {
+  border-color: var(--accent);
+  outline: 0;
+  box-shadow: 0 0 0 4px rgba(29, 103, 213, 0.12);
+}
+
+.ddIcon {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  color: var(--accent);
+}
+
+.ddValue {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ddValue.placeholder {
+  color: #8a95a8;
+  font-weight: 500;
+}
+
+.ddChevron {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  color: var(--text-secondary);
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.dd.open .ddChevron {
+  transform: rotate(180deg);
+}
+
+.ddPanel {
+  position: absolute;
+  z-index: 60;
+  top: calc(100% + 8px);
+  inset-inline-start: 0;
+  min-width: 100%;
+  width: max-content;
+  max-width: min(360px, 92vw);
+  padding: 6px;
+  border: 1px solid rgba(17, 34, 68, 0.08);
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 24px 60px rgba(15, 30, 60, 0.18), 0 2px 6px rgba(15, 30, 60, 0.06);
+  transform-origin: top center;
+  animation: ddIn 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.ddPanel.end {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+}
+
+.dd.up .ddPanel {
+  top: auto;
+  bottom: calc(100% + 8px);
+  transform-origin: bottom center;
+}
+
+@keyframes ddIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+}
+
+.ddSearch {
+  margin: 0 0 6px;
+  padding: 0 10px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 10px;
+  background: #f3f6fb;
+}
+
+.ddSearch svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  color: var(--text-secondary);
+}
+
+.ddSearch input {
+  min-width: 0;
+  flex: 1;
+  padding: 0 !important;
+  border: 0 !important;
+  outline: 0;
+  background: none !important;
+  box-shadow: none !important;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+}
+
+.ddList {
+  max-height: 290px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+  scrollbar-width: thin;
+}
+
+.ddOption {
+  min-height: 40px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border-radius: 10px;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.ddOption span {
+  display: grid;
+}
+
+.ddOption small {
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ddOption.active {
+  background: #f1f5fc;
+}
+
+.ddOption.selected {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.ddOption svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  color: var(--accent);
+}
+
+.ddOption[aria-disabled='true'] {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.ddEmpty {
+  padding: 10px 12px;
+  color: var(--text-secondary);
+}
+
+/* Inside the quote form the trigger looks like the other fields */
+.qmForm .formField .ddTrigger {
+  min-height: 46px;
+  border-color: rgba(17, 34, 68, 0.14);
+  background: #f8fafd;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.qmForm .formField .dd.open .ddTrigger {
+  background: #ffffff;
+}
+
+.qmForm .formField .ddPanel {
+  width: 100%;
+  max-width: none;
+}
+
+/* Sort and product table bars */
+.wtSort .dd {
+  min-width: 190px;
+}
+
+.wtSort .ddTrigger,
+.ptSelect .ddTrigger {
+  min-height: 42px;
+  font-size: 13.5px;
+}
+
+.ptSelect {
+  min-width: 200px;
+}
+
+@media (max-width: 640px) {
+  .wtSort .dd,
+  .ptSelect {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .ddPanel {
+    max-width: calc(100vw - 32px);
+  }
+}
+
+/* ===== Cursor trail (desktop mouse only, see CursorTrail.jsx) ===== */
+
+.cursorTrail {
+  position: fixed;
+  z-index: 2500;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cursorRing {
+  position: fixed;
+  z-index: 2501;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid rgba(29, 103, 213, 0.55);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  transition: width 220ms ease, height 220ms ease, opacity 220ms ease, background 220ms ease, border-color 220ms ease;
+  will-change: transform;
+}
+
+.cursorRing.on {
+  opacity: 1;
+}
+
+.cursorRing.link {
+  width: 44px;
+  height: 44px;
+  border-color: rgba(29, 103, 213, 0.35);
+  background: rgba(29, 103, 213, 0.08);
+}
+
+.cursorRing.down {
+  width: 18px;
+  height: 18px;
+  background: rgba(29, 103, 213, 0.18);
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .cursorTrail,
+  .cursorRing {
+    display: none;
+  }
+}
+
+@media print {
+  .cursorTrail,
+  .cursorRing {
+    display: none !important;
+  }
+}
+
+/* =====================================================================
+   DESIGN REFRESH – stat tiles, page headers, section decoration,
+   aligned buttons and cards
+   ===================================================================== */
+
+/* Old section labels above the eyebrow (duplicated it once the numbers went) */
+.sectionIndex {
+  display: none !important;
+}
+
+/* ---------- Stat tiles (machine park, page headers, hero, global) ---------- */
+
+.statValue {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.18em;
+  white-space: nowrap;
+}
+
+.statUnit {
+  font-size: 0.52em;
+  font-weight: 600;
+  letter-spacing: 0;
+  opacity: 0.85;
+}
+
+.machineParkHighlights,
+.phFacts,
+.globalFigures,
+.heroVideoStats {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-auto-flow: row;
+  gap: 12px;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.heroVideoStats {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.machineParkHighlights > div,
+.phFacts > div,
+.globalFigures > div,
+.heroVideoStats > div {
+  position: relative;
+  min-width: 0;
+  padding: 20px 20px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-inline-start: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(77, 148, 245, 0.16), transparent 60%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 22px 44px -30px rgba(0, 0, 0, 0.7);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 260ms ease;
+}
+
+.phFacts > div:first-child {
+  padding-inline-start: 20px;
+  border-inline-start: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Accent bar on top of each tile */
+.machineParkHighlights > div::before,
+.phFacts > div::before,
+.globalFigures > div::before,
+.heroVideoStats > div::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  inset-inline-start: 20px;
+  width: 34px;
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: linear-gradient(90deg, #4d94f5, #a9cbff);
+}
+
+.machineParkHighlights > div:hover,
+.phFacts > div:hover,
+.globalFigures > div:hover,
+.heroVideoStats > div:hover {
+  transform: translateY(-3px);
+  border-color: rgba(125, 175, 255, 0.35);
+}
+
+.machineParkHighlights dt,
+.phFacts dt,
+.globalFigures dt,
+.heroVideoStats dt {
+  margin: 0;
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: clamp(26px, 2.3vw, 34px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.heroVideoStats dt {
+  font-size: clamp(22px, 1.8vw, 28px);
+}
+
+.machineParkHighlights .statUnit,
+.phFacts .statUnit,
+.globalFigures .statUnit,
+.heroVideoStats .statUnit {
+  color: #8fbcff;
+}
+
+.machineParkHighlights dd,
+.phFacts dd,
+.globalFigures dd,
+.heroVideoStats dd {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.phFacts {
+  padding: 0 0 40px;
+  border-top: 0;
+}
+
+@media (max-width: 640px) {
+  .machineParkHighlights,
+  .phFacts,
+  .globalFigures {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .machineParkHighlights > div,
+  .phFacts > div,
+  .globalFigures > div {
+    padding: 16px 16px 14px;
+  }
+}
+
+/* ---------- Page headers ---------- */
+
+.pageHeader {
+  border-end-start-radius: clamp(24px, 4vw, 48px);
+  border-end-end-radius: clamp(24px, 4vw, 48px);
+}
+
+.phOrb,
+.phBeam,
+.phRings {
+  position: absolute;
+  pointer-events: none;
+}
+
+.phOrb {
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.55;
+  animation: phDrift 18s ease-in-out infinite alternate;
+}
+
+.phOrb.one {
+  top: -20%;
+  inset-inline-end: -6%;
+  width: 46vw;
+  max-width: 640px;
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(77, 148, 245, 0.55), transparent 65%);
+}
+
+.phOrb.two {
+  bottom: -35%;
+  inset-inline-start: -10%;
+  width: 38vw;
+  max-width: 520px;
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.32), transparent 65%);
+  animation-duration: 24s;
+  animation-direction: alternate-reverse;
+}
+
+/* A soft diagonal light beam */
+.phBeam {
+  top: -30%;
+  inset-inline-start: 38%;
+  width: 180px;
+  height: 160%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), transparent 70%);
+  transform: rotate(24deg);
+  filter: blur(8px);
+}
+
+/* Blueprint rings behind the title area */
+.phRings {
+  top: 50%;
+  inset-inline-end: -120px;
+  width: 520px;
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 50%;
+  transform: translateY(-50%);
+  box-shadow:
+    0 0 0 60px rgba(255, 255, 255, 0.015),
+    0 0 0 61px rgba(255, 255, 255, 0.05),
+    0 0 0 140px rgba(255, 255, 255, 0.01),
+    0 0 0 141px rgba(255, 255, 255, 0.04);
+}
+
+.pageHeader.withMedia .phRings {
+  inset-inline-end: 18%;
+  opacity: 0.6;
+}
+
+@keyframes phDrift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  to {
+    transform: translate3d(-4%, 6%, 0) scale(1.08);
+  }
+}
+
+/* Breadcrumb in a glass pill */
+.phCrumbs ol {
+  width: fit-content;
+  padding: 7px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* Accent line of the title in the brand gradient */
+.pageHeader h1 span {
+  background: linear-gradient(100deg, #8fbcff 0%, #4d94f5 55%, #a9cbff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[dir='rtl'] .pageHeader h1 span {
+  background-image: linear-gradient(260deg, #8fbcff 0%, #4d94f5 55%, #a9cbff 100%);
+}
+
+/* Product photos: soft glow behind, glass frame */
+.phMedia {
+  position: relative;
+}
+
+.phMedia::before {
+  content: '';
+  position: absolute;
+  inset: 8% 6%;
+  z-index: -1;
+  border-radius: 40px;
+  background: radial-gradient(circle at 50% 50%, rgba(77, 148, 245, 0.45), transparent 70%);
+  filter: blur(40px);
+}
+
+.phMedia figure {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: linear-gradient(160deg, #ffffff, #eef2f8);
+  box-shadow: 0 34px 60px -30px rgba(0, 0, 0, 0.75), inset 0 0 0 6px rgba(255, 255, 255, 0.6);
+}
+
+.phMedia.glass figure {
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 34px 60px -30px rgba(0, 0, 0, 0.75);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phOrb {
+    animation: none;
+  }
+}
+
+/* ---------- Section decoration (SectionDeco) ---------- */
+
+section:has(> .sectionDeco) {
+  position: relative;
+  isolation: isolate;
+}
+
+.sectionDeco {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.sdOrb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  animation: phDrift 22s ease-in-out infinite alternate;
+}
+
+.sdGrid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, currentColor 1px, transparent 1.4px);
+  background-size: 26px 26px;
+}
+
+.sdRing {
+  position: absolute;
+  width: 460px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+.ring-end .sdRing {
+  top: -140px;
+  inset-inline-end: -140px;
+}
+
+.ring-start .sdRing {
+  bottom: -160px;
+  inset-inline-start: -160px;
+}
+
+/* Navy sections */
+.sectionDeco.dark {
+  color: rgba(255, 255, 255, 0.06);
+}
+
+.sectionDeco.dark .sdOrb.a {
+  top: -18%;
+  inset-inline-start: 8%;
+  width: 520px;
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(77, 148, 245, 0.32), transparent 65%);
+}
+
+.sectionDeco.dark .sdOrb.b {
+  bottom: -22%;
+  inset-inline-end: 4%;
+  width: 460px;
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.2), transparent 65%);
+  animation-direction: alternate-reverse;
+  animation-duration: 28s;
+}
+
+.sectionDeco.dark .sdGrid {
+  -webkit-mask-image: radial-gradient(ellipse 60% 55% at 70% 30%, #000 10%, transparent 70%);
+  mask-image: radial-gradient(ellipse 60% 55% at 70% 30%, #000 10%, transparent 70%);
+}
+
+.sectionDeco.dark .sdRing {
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 0 0 50px rgba(255, 255, 255, 0.012), 0 0 0 51px rgba(255, 255, 255, 0.045);
+}
+
+/* Hairline glow on the top edge of navy sections */
+.sectionDeco.dark::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  inset-inline: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(125, 175, 255, 0.55), transparent);
+}
+
+/* White sections */
+.sectionDeco.light {
+  color: rgba(29, 103, 213, 0.13);
+}
+
+.sectionDeco.light .sdOrb.a {
+  top: -12%;
+  inset-inline-end: -6%;
+  width: 420px;
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(77, 148, 245, 0.16), transparent 65%);
+}
+
+.sectionDeco.light .sdOrb.b {
+  bottom: -18%;
+  inset-inline-start: -8%;
+  width: 380px;
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(31, 138, 91, 0.08), transparent 65%);
+  animation-direction: alternate-reverse;
+}
+
+.sectionDeco.light .sdGrid {
+  -webkit-mask-image: radial-gradient(ellipse 34% 40% at 92% 12%, #000 10%, transparent 75%);
+  mask-image: radial-gradient(ellipse 34% 40% at 92% 12%, #000 10%, transparent 75%);
+}
+
+.ring-start.light .sdGrid {
+  -webkit-mask-image: radial-gradient(ellipse 34% 40% at 8% 88%, #000 10%, transparent 75%);
+  mask-image: radial-gradient(ellipse 34% 40% at 8% 88%, #000 10%, transparent 75%);
+}
+
+.sectionDeco.light .sdRing {
+  border: 1px dashed rgba(29, 103, 213, 0.16);
+  box-shadow: 0 0 0 40px rgba(29, 103, 213, 0.02), 0 0 0 41px rgba(29, 103, 213, 0.07);
+}
+
+/* Inner-page white blocks: dotted corner and a soft glow, alternating sides */
+.cmBlock {
+  position: relative;
+  isolation: isolate;
+}
+
+.cmBlock::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 96% 8%, rgba(77, 148, 245, 0.1), transparent 30%),
+    radial-gradient(circle, rgba(29, 103, 213, 0.12) 1px, transparent 1.4px) 0 0 / 26px 26px;
+  -webkit-mask-image: radial-gradient(ellipse 36% 46% at 96% 6%, #000 15%, transparent 75%);
+  mask-image: radial-gradient(ellipse 36% 46% at 96% 6%, #000 15%, transparent 75%);
+}
+
+.cmBlock:nth-of-type(even)::before {
+  background:
+    radial-gradient(circle at 4% 92%, rgba(77, 148, 245, 0.1), transparent 30%),
+    radial-gradient(circle, rgba(29, 103, 213, 0.12) 1px, transparent 1.4px) 0 0 / 26px 26px;
+  -webkit-mask-image: radial-gradient(ellipse 36% 46% at 4% 94%, #000 15%, transparent 75%);
+  mask-image: radial-gradient(ellipse 36% 46% at 4% 94%, #000 15%, transparent 75%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sdOrb {
+    animation: none;
+  }
+}
+
+/* ---------- Buttons: same height in a row, same width in a column ---------- */
+
+.button {
+  min-height: 52px;
+}
+
+/* Text links that sit next to buttons become outline buttons of the same size */
+.wtStandardLinks .wtTextLink,
+.cmCtaActions .cmCtaLink {
+  min-height: 52px;
+  padding: 0 20px 0 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: var(--radius-sm, 12px);
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-transform: none;
+}
+
+/* Stacked actions (side panels): every button as wide as the panel */
+.wtStandardLinks {
+  align-items: stretch;
+  gap: 10px;
+}
+
+.wtStandardLinks > * {
+  width: 100%;
+}
+
+/* Rows of actions: equal height, vertically centred */
+.phActions,
+.cmCtaActions,
+.pmActions,
+.heroVideo .actions,
+.hero .actions,
+.qmSuccessActions {
+  align-items: stretch;
+}
+
+.phActions > *,
+.cmCtaActions > *,
+.heroVideo .actions > *,
+.hero .actions > * {
+  min-height: 52px;
+}
+
+/* ---------- Cards side by side: equal height, actions at the bottom ---------- */
+
+.coCards,
+.coFeatures,
+.coEcoGrid,
+.cmServices,
+.cmMachines,
+.cmProjects,
+.pfGrid,
+.wtGrid,
+.blogGrid,
+.videoGrid,
+.pmSimilarGrid,
+.fgGrid,
+.adProjectGrid {
+  align-items: stretch;
+}
+
+.coCard,
+.coFeature,
+.coEcoItem,
+.cmService,
+.cmMachine,
+.pfCard,
+.wtCard,
+.blogCard,
+.videoCard,
+.pmSimilarCard {
+  height: 100%;
+}
+
+/* Global panel: three equal tiles (the panel itself is already a card) */
+.globalMeta .globalFigures {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.globalMeta .globalFigures div:first-child,
+.globalMeta .globalFigures div:nth-child(3) {
+  grid-column: auto;
+  padding: 20px 16px 16px;
+  border-inline-start: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.globalMeta .globalFigures div:first-child dt {
+  font-size: clamp(26px, 2.3vw, 34px);
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: #ffffff;
+}
+
+/* Accent bar inside the tile, above the figure */
+.machineParkHighlights > div::before,
+.phFacts > div::before,
+.globalFigures > div::before,
+.heroVideoStats > div::before {
+  top: 12px;
+  width: 22px;
+  height: 3px;
+  border-radius: 3px;
+}
+
+.machineParkHighlights > div,
+.phFacts > div,
+.globalFigures > div,
+.heroVideoStats > div {
+  padding-top: 26px;
+}
+
+/* Product photos keep their light grey studio background */
+.phMedia figure {
+  background: #f2f2f2;
+}
+
+@media (max-width: 640px) {
+  .globalMeta .globalFigures {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .globalMeta .globalFigures div:first-child,
+  .globalMeta .globalFigures div:nth-child(3) {
+    padding: 22px 10px 12px;
+  }
+}
+
+/* Every tile in a strip has the same inner spacing, whatever older rules say */
+.globalMeta .globalFigures > div,
+.globalMeta .globalFigures > div:first-child,
+.globalMeta .globalFigures > div:nth-child(3) {
+  padding: 26px 16px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pageHeader .phFacts > div,
+.pageHeader .phFacts > div:first-child {
+  padding: 26px 20px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.machinePark .machineParkHighlights > div {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 640px) {
+  .pageHeader .phFacts > div,
+  .pageHeader .phFacts > div:first-child {
+    padding: 24px 16px 14px;
+  }
+
+  .globalMeta .globalFigures > div,
+  .globalMeta .globalFigures > div:first-child,
+  .globalMeta .globalFigures > div:nth-child(3) {
+    padding: 24px 10px 12px;
   }
 }

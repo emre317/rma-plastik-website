@@ -5,6 +5,8 @@ import { LocalizedLink } from '../components/i18n/LocalizedLink';
 import Arrow from '../components/i18n/Arrow';
 import { machineIcons } from '../data/customMolding';
 import { EcoBadge } from '../components/ui/EcoMarks';
+import StatValue from '../components/ui/StatValue';
+import SectionDeco from '../components/ui/SectionDeco';
 
 // Grinders crush production scrap for reuse (brochure p. 5–6)
 const RECYCLING_MACHINE = 4;
@@ -29,6 +31,7 @@ export default function MachineParkSection({ index }) {
 
   return (
     <section className="machinePark" id="machinery">
+      <SectionDeco tone="dark" ring="end" />
       <div className="container">
 
         <div className="machineParkHeader">
@@ -48,7 +51,7 @@ export default function MachineParkSection({ index }) {
             {Array.isArray(highlights) &&
               highlights.map((item) => (
                 <div key={item.label}>
-                  <dt>{item.value}</dt>
+                  <dt><StatValue value={item.value} /></dt>
                   <dd>{item.label}</dd>
                 </div>
               ))}

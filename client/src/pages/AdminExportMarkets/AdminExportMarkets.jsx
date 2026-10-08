@@ -172,7 +172,7 @@ export default function AdminExportMarkets() {
           <h1>İhracat Ağı</h1>
           <p>
             Ana sayfadaki ve Kurumsal sayfasındaki dünya haritasında gösterilen ihracat pazarları. Harita pazarları bu sırayla tek tek
-            vurgular; “Başlıca ihracat pazarı” sayısı ve tanıtım metnindeki ülke listesi otomatik güncellenir.
+            vurgular; “Başlıca ihracat pazarı” sayısı, kıta sayısı ve tanıtım metnindeki ülke listesi otomatik güncellenir.
           </p>
         </div>
         {!form && (

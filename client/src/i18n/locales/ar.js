@@ -1086,6 +1086,7 @@ const ar = {
     },
     placeholders: {
       countrySelect: 'اختر الدولة',
+      countrySearch: 'ابحث عن الدولة…',
       company: 'اسم الشركة',
       name: 'الاسم الكامل',
       email: 'name@company.com',
