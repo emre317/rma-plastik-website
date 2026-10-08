@@ -33005,3 +33005,449 @@ html.booting .heroBrandName strong {
 .adSidebar .publishPanelHint {
   display: none;
 }
+
+/* ---------- Admin login ---------- */
+
+.algPage {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: minmax(380px, 0.9fr) minmax(0, 1.1fr);
+  background: #f3f5fa;
+  color: var(--text);
+}
+
+.algAside {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 40px clamp(32px, 4vw, 64px);
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  background: linear-gradient(160deg, #13264c 0%, #0f1e3c 55%, #0b1730 100%);
+  color: #ffffff;
+}
+
+.algOrb {
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: phDrift 22s ease-in-out infinite alternate;
+}
+
+.algOrb.one {
+  top: -18%;
+  inset-inline-end: -22%;
+  width: 640px;
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(77, 148, 245, 0.42), transparent 65%);
+}
+
+.algOrb.two {
+  bottom: -26%;
+  inset-inline-start: -20%;
+  width: 520px;
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.2), transparent 65%);
+  animation-direction: alternate-reverse;
+}
+
+.algGrid {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.09) 1px, transparent 1.4px);
+  background-size: 24px 24px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 80% 20%, #000 10%, transparent 75%);
+  mask-image: radial-gradient(ellipse 70% 60% at 80% 20%, #000 10%, transparent 75%);
+}
+
+.algBrand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.algBrand .brandLogo img {
+  width: 128px;
+  height: auto;
+}
+
+.algBrand > span {
+  padding: 5px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.algIntro {
+  margin: auto 0;
+  max-width: 460px;
+}
+
+.algIntro h2 {
+  margin: 0 0 28px;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-display);
+  font-size: clamp(30px, 3vw, 42px);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
+.algIntro h2 span {
+  background: linear-gradient(100deg, #7fb2ff, #b9d6ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.algFeatures {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  list-style: none;
+}
+
+.algFeatures li {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 16px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.algFeatureIcon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  border-radius: 12px;
+  background: rgba(77, 148, 245, 0.18);
+  color: #9cc4ff;
+}
+
+.algFeatureIcon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.algFeatures strong {
+  display: block;
+  font-size: 14.5px;
+  font-weight: 700;
+}
+
+.algFeatures small {
+  display: block;
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.algCopy {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 12px;
+}
+
+/* Form */
+.algMain {
+  padding: 40px 24px;
+  display: grid;
+  place-items: center;
+}
+
+.algCard {
+  width: min(420px, 100%);
+  padding: 40px 36px 32px;
+  border: 1px solid rgba(17, 34, 68, 0.06);
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 30px 70px -30px rgba(15, 30, 60, 0.28), 0 2px 6px rgba(15, 30, 60, 0.04);
+  animation: catalogGateIn 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.algCardBrand {
+  display: none;
+}
+
+.algEyebrow {
+  display: inline-flex;
+  margin-bottom: 10px;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.algCard h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.algCard > p {
+  margin: 10px 0 28px;
+  color: var(--text-secondary);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+.algForm {
+  display: grid;
+  gap: 18px;
+}
+
+.algField {
+  display: grid;
+  gap: 7px;
+}
+
+.algField > span:first-child {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.algInput {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.algInput > svg {
+  position: absolute;
+  inset-inline-start: 14px;
+  width: 17px;
+  height: 17px;
+  color: #8a95a8;
+  pointer-events: none;
+  transition: color 160ms ease;
+}
+
+.algInput input {
+  width: 100%;
+  height: 50px;
+  padding: 0 46px 0 44px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #f8fafd;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+[dir='rtl'] .algInput input {
+  padding: 0 44px 0 46px;
+}
+
+.algInput input::placeholder {
+  color: #9aa4b8;
+}
+
+.algInput input:focus {
+  outline: 0;
+  border-color: var(--accent);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(29, 103, 213, 0.12);
+}
+
+.algInput:focus-within > svg {
+  color: var(--accent);
+}
+
+.algInput input[aria-invalid='true'] {
+  border-color: #e0795a;
+}
+
+.algReveal {
+  position: absolute;
+  inset-inline-end: 6px;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: #66738a;
+  cursor: pointer;
+}
+
+.algReveal:hover {
+  background: #eef2f8;
+  color: var(--text);
+}
+
+.algReveal svg {
+  width: 17px;
+  height: 17px;
+}
+
+.algCaps {
+  color: #b7791f;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.algError {
+  padding: 11px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border: 1px solid rgba(194, 65, 12, 0.2);
+  border-radius: 12px;
+  background: #fdf0ea;
+  color: #9a3412;
+  font-size: 14px;
+  line-height: 1.45;
+  animation: algShake 0.35s ease;
+}
+
+.algError svg {
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  flex: none;
+}
+
+.algSubmit {
+  height: 52px;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  box-shadow: 0 14px 30px -14px rgba(29, 103, 213, 0.8);
+  color: #ffffff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  transition: transform 200ms ease, box-shadow 200ms ease, opacity 200ms ease;
+}
+
+.algSubmit svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 200ms ease;
+}
+
+.algSubmit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 36px -14px rgba(29, 103, 213, 0.95);
+}
+
+.algSubmit:hover:not(:disabled) svg {
+  transform: translateX(calc(3px * var(--dir-x)));
+}
+
+.algSubmit:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 4px rgba(29, 103, 213, 0.25);
+}
+
+.algSubmit:disabled {
+  cursor: wait;
+  opacity: 0.8;
+}
+
+.algSpin {
+  animation: algSpin 0.8s linear infinite;
+}
+
+.algBack {
+  margin-top: 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.algBack:hover {
+  color: var(--accent);
+}
+
+.algBack svg {
+  width: 15px;
+  height: 15px;
+}
+
+@keyframes algSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes algShake {
+  0%, 100% { transform: none; }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+/* Tablets and phones: form only, logo on the card */
+@media (max-width: 900px) {
+  .algPage {
+    grid-template-columns: 1fr;
+    background:
+      radial-gradient(120% 60% at 50% 0%, rgba(29, 103, 213, 0.12), transparent 60%),
+      #f3f5fa;
+  }
+
+  .algAside {
+    display: none;
+  }
+
+  .algMain {
+    padding: 28px 16px;
+  }
+
+  .algCard {
+    padding: 30px 22px 26px;
+  }
+
+  .algCardBrand {
+    margin-bottom: 22px;
+    display: block;
+  }
+
+  .algCardBrand .brandLogo img {
+    width: 120px;
+    height: auto;
+  }
+
+  .algCard h1 {
+    font-size: 26px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .algOrb,
+  .algCard,
+  .algError,
+  .algSpin {
+    animation: none;
+  }
+}
