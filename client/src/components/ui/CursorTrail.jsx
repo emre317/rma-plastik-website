@@ -1,16 +1,15 @@
 import { useEffect, useRef } from 'react';
 
 /*
-  Soft cursor trail for the public site: a short fading blue line follows the
-  mouse and a small ring eases after the pointer. Desktop mouse only; nothing
-  runs on touch screens, with "reduced motion" or while the mouse is still.
+  Soft cursor trail for the public site: a short, light blue line follows the
+  mouse and fades out. Desktop mouse only; nothing runs on touch screens,
+  with "reduced motion" or while the mouse is still.
   Purely decorative (pointer-events: none, hidden from screen readers).
 */
-const POINTS = 22;
+const POINTS = 10;
 
 export default function CursorTrail() {
   const canvasRef = useRef(null);
-  const ringRef = useRef(null);
 
   useEffect(() => {
     const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
@@ -18,7 +17,6 @@ export default function CursorTrail() {
     if (!fine.matches || reduced.matches) return undefined;
 
     const canvas = canvasRef.current;
-    const ring = ringRef.current;
     const context = canvas.getContext('2d');
     const ratio = Math.min(window.devicePixelRatio || 1, 2);
 
@@ -26,11 +24,8 @@ export default function CursorTrail() {
     let height = 0;
     let frame = 0;
     let running = false;
-    let visible = false;
 
     const points = [];
-    const target = { x: -100, y: -100 };
-    const follow = { x: -100, y: -100 };
 
     const resize = () => {
       width = window.innerWidth;
@@ -54,8 +49,8 @@ export default function CursorTrail() {
         const b = points[index];
         const strength = (index / points.length) * Math.min(1, b.life / POINTS);
 
-        context.strokeStyle = `rgba(29, 103, 213, ${0.62 * strength})`;
-        context.lineWidth = 0.8 + 4 * strength;
+        context.strokeStyle = `rgba(143, 188, 255, ${0.5 * strength})`;
+        context.lineWidth = 0.6 + 2.2 * strength;
         context.lineCap = 'round';
         context.beginPath();
         context.moveTo(a.x, a.y);
@@ -63,13 +58,7 @@ export default function CursorTrail() {
         context.stroke();
       }
 
-      // Ring eases towards the pointer
-      follow.x += (target.x - follow.x) * 0.2;
-      follow.y += (target.y - follow.y) * 0.2;
-      ring.style.transform = `translate3d(${follow.x}px, ${follow.y}px, 0) translate(-50%, -50%)`;
-
-      const settled = !points.length && Math.abs(target.x - follow.x) < 0.3 && Math.abs(target.y - follow.y) < 0.3;
-      if (settled) {
+      if (!points.length) {
         running = false;
         return;
       }
@@ -77,66 +66,28 @@ export default function CursorTrail() {
       frame = requestAnimationFrame(draw);
     };
 
-    const start = () => {
-      if (running) return;
-      running = true;
-      frame = requestAnimationFrame(draw);
-    };
-
     const onMove = (event) => {
       if (event.pointerType && event.pointerType !== 'mouse') return;
 
-      target.x = event.clientX;
-      target.y = event.clientY;
-
-      if (!visible) {
-        visible = true;
-        follow.x = target.x;
-        follow.y = target.y;
-        ring.classList.add('on');
-      }
-
-      points.push({ x: target.x, y: target.y, life: POINTS });
+      points.push({ x: event.clientX, y: event.clientY, life: POINTS });
       if (points.length > POINTS) points.shift();
 
-      // Bigger ring over links and buttons
-      const interactive = event.target instanceof Element && event.target.closest('a, button, [role="button"], input, select, textarea, label');
-      ring.classList.toggle('link', Boolean(interactive));
-
-      start();
+      if (!running) {
+        running = true;
+        frame = requestAnimationFrame(draw);
+      }
     };
-
-    const onLeave = () => {
-      visible = false;
-      ring.classList.remove('on');
-      points.length = 0;
-      start();
-    };
-
-    const onDown = () => ring.classList.add('down');
-    const onUp = () => ring.classList.remove('down');
 
     resize();
     window.addEventListener('resize', resize);
     window.addEventListener('pointermove', onMove, { passive: true });
-    window.addEventListener('pointerdown', onDown, { passive: true });
-    window.addEventListener('pointerup', onUp, { passive: true });
-    document.documentElement.addEventListener('mouseleave', onLeave);
 
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener('resize', resize);
       window.removeEventListener('pointermove', onMove);
-      window.removeEventListener('pointerdown', onDown);
-      window.removeEventListener('pointerup', onUp);
-      document.documentElement.removeEventListener('mouseleave', onLeave);
     };
   }, []);
 
-  return (
-    <>
-      <canvas ref={canvasRef} className="cursorTrail" aria-hidden="true" />
-      <span ref={ringRef} className="cursorRing" aria-hidden="true" />
-    </>
-  );
+  return <canvas ref={canvasRef} className="cursorTrail" aria-hidden="true" />;
 }

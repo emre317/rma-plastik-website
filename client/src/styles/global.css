@@ -31329,48 +31329,14 @@ html.booting .heroWords .heroWord,
   pointer-events: none;
 }
 
-.cursorRing {
-  position: fixed;
-  z-index: 2501;
-  top: 0;
-  left: 0;
-  width: 26px;
-  height: 26px;
-  border: 1.5px solid rgba(29, 103, 213, 0.55);
-  border-radius: 50%;
-  opacity: 0;
-  pointer-events: none;
-  transition: width 220ms ease, height 220ms ease, opacity 220ms ease, background 220ms ease, border-color 220ms ease;
-  will-change: transform;
-}
-
-.cursorRing.on {
-  opacity: 1;
-}
-
-.cursorRing.link {
-  width: 44px;
-  height: 44px;
-  border-color: rgba(29, 103, 213, 0.35);
-  background: rgba(29, 103, 213, 0.08);
-}
-
-.cursorRing.down {
-  width: 18px;
-  height: 18px;
-  background: rgba(29, 103, 213, 0.18);
-}
-
 @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
-  .cursorTrail,
-  .cursorRing {
+  .cursorTrail {
     display: none;
   }
 }
 
 @media print {
-  .cursorTrail,
-  .cursorRing {
+  .cursorTrail {
     display: none !important;
   }
 }
