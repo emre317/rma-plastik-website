@@ -6,8 +6,9 @@
 
   Outputs:
     src/assets/maps/export-map.svg  – dotted world map (Global section)
-    src/data/exportMap.js           – size, hub, destinations (with the dots
-                                      of each highlighted country)
+    src/data/exportMap.js           – map size and the Mersin hub
+    src/data/worldMapCountries.json – pin and dots of every country, for the
+                                      markets chosen in the admin panel
 */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -24,17 +25,8 @@ const GRID = 'diagonal';
 // Central distribution hub
 const hub = { key: 'mersin', country: 'TUR', lat: 36.8121, lng: 34.6415, labelPosition: 'right' };
 
-// Export markets, ordered from nearest to farthest.
-// Each country is marked by its capital; `country` is the ISO3 code used
-// to highlight the whole country on the map.
-const destinations = [
-  { key: 'bg', country: 'BGR', lat: 42.6977, lng: 23.3219, labelPosition: 'top' },
-  { key: 'eg', country: 'EGY', lat: 30.0444, lng: 31.2357, labelPosition: 'bottom' },
-  { key: 'nl', country: 'NLD', lat: 52.3676, lng: 4.9041, labelPosition: 'top' },
-  { key: 'uk', country: 'GBR', lat: 51.5074, lng: -0.1278, labelPosition: 'left' },
-  { key: 'us', country: 'USA', lat: 38.9072, lng: -77.0369, labelPosition: 'top' },
-  { key: 'jp', country: 'JPN', lat: 35.6762, lng: 139.6503, labelPosition: 'top' },
-];
+// Export markets are managed in the admin panel (İhracat ağı); their map
+// shapes come from src/data/worldMapCountries.json below.
 
 const DOT_RADIUS = 0.26;
 
@@ -74,7 +66,6 @@ const data = {
   height,
   dotRadius: DOT_RADIUS,
   hub: project(hub),
-  destinations: destinations.map(project),
 };
 
 const svg =
@@ -89,5 +80,74 @@ fs.writeFileSync(
     `const exportMap = ${JSON.stringify(data, null, 2)};\n\nexport default exportMap;\n`
 );
 
-console.log(`Export map: ${width}x${height}, ${data.destinations.length} destinations`);
+console.log(`Export map: ${width}x${height}`);
 
+/* ---------- Every country, for markets managed in the admin panel ---------- */
+
+// Natural Earth ids (dotted-map) -> ISO 3166-1 alpha-2
+const ISO2 = Object.fromEntries('AFG:AF AGO:AO ALB:AL ARE:AE ARG:AR ARM:AM AUS:AU AUT:AT AZE:AZ BDI:BI BEL:BE BEN:BJ BFA:BF BGD:BD BGR:BG BHS:BS BIH:BA BLR:BY BLZ:BZ BMU:BM BOL:BO BRA:BR BRN:BN BTN:BT BWA:BW CAF:CF CAN:CA CHE:CH CHL:CL CHN:CN CIV:CI CMR:CM COD:CD COG:CG COL:CO CRI:CR CUB:CU CYP:CY CZE:CZ DEU:DE DJI:DJ DNK:DK DOM:DO DZA:DZ ECU:EC EGY:EG ERI:ER ESP:ES EST:EE ETH:ET FIN:FI FJI:FJ FLK:FK FRA:FR GAB:GA GBR:GB GEO:GE GHA:GH GIN:GN GMB:GM GNB:GW GNQ:GQ GRC:GR GRL:GL GTM:GT GUF:GF GUY:GY HND:HN HRV:HR HTI:HT HUN:HU IDN:ID IND:IN IRL:IE IRN:IR IRQ:IQ ISL:IS ISR:IL ITA:IT JAM:JM JOR:JO JPN:JP KAZ:KZ KEN:KE KGZ:KG KHM:KH KOR:KR CS-KM:XK KWT:KW LAO:LA LBN:LB LBR:LR LBY:LY LKA:LK LSO:LS LTU:LT LUX:LU LVA:LV MAR:MA MDA:MD MDG:MG MEX:MX MKD:MK MLI:ML MLT:MT MMR:MM MNE:ME MNG:MN MOZ:MZ MRT:MR MWI:MW MYS:MY NAM:NA NCL:NC NER:NE NGA:NG NIC:NI NLD:NL NOR:NO NPL:NP NZL:NZ OMN:OM PAK:PK PAN:PA PER:PE PHL:PH PNG:PG POL:PL PRI:PR PRK:KP PRT:PT PRY:PY QAT:QA ROU:RO RUS:RU RWA:RW ESH:EH SAU:SA SDN:SD SSD:SS SEN:SN SLB:SB SLE:SL SLV:SV SOM:SO SRB:RS SUR:SR SVK:SK SVN:SI SWE:SE SWZ:SZ SYR:SY TCD:TD TGO:TG THA:TH TJK:TJ TKM:TM TLS:TL TTO:TT TUN:TN TUR:TR TWN:TW TZA:TZ UGA:UG UKR:UA URY:UY USA:US UZB:UZ VEN:VE VNM:VN VUT:VU PSE:PS YEM:YE ZAF:ZA ZMB:ZM ZWE:ZW'.split(' ').map((pair) => pair.split(':')));
+
+// Capitals where the centre of the largest land area would be misleading
+const CAPITALS = {
+  US: { lat: 38.9072, lng: -77.0369 },
+  RU: { lat: 55.7558, lng: 37.6173 },
+  CA: { lat: 45.4215, lng: -75.6972 },
+  FR: { lat: 48.8566, lng: 2.3522 },
+  NO: { lat: 59.9139, lng: 10.7522 },
+  CL: { lat: -33.4489, lng: -70.6693 },
+  GB: { lat: 51.5074, lng: -0.1278 },
+  BG: { lat: 42.6977, lng: 23.3219 },
+  EG: { lat: 30.0444, lng: 31.2357 },
+  NL: { lat: 52.3676, lng: 4.9041 },
+  JP: { lat: 35.6762, lng: 139.6503 },
+};
+
+// Centre of a feature's largest ring (by bounding box)
+function featureCentre(geometry) {
+  const polygons = geometry.type === 'Polygon' ? [geometry.coordinates] : geometry.coordinates;
+  let best = null;
+
+  polygons.forEach((polygon) => {
+    const ring = polygon[0];
+    const lngs = ring.map((point) => point[0]);
+    const lats = ring.map((point) => point[1]);
+    const area = (Math.max(...lngs) - Math.min(...lngs)) * (Math.max(...lats) - Math.min(...lats));
+
+    if (!best || area > best.area) {
+      best = { area, lng: (Math.max(...lngs) + Math.min(...lngs)) / 2, lat: (Math.max(...lats) + Math.min(...lats)) / 2 };
+    }
+  });
+
+  return best;
+}
+
+
+const source = fs.readFileSync(path.join(root, 'node_modules/dotted-map/dist/index.mjs'), 'utf8');
+const features = [];
+const featurePattern = /"id": "([A-Z-]+)",\s*"properties": \{[^}]*\},\s*"geometry": (\{[\s\S]*?\n\t\t\t\})\n\t\t\}/g;
+let match;
+
+while ((match = featurePattern.exec(source))) {
+  // Package data (JS literals such as -.5, not strict JSON)
+  features.push({ id: match[1], geometry: Function(`return (${match[2]});`)() });
+}
+
+const countries = {};
+
+features.forEach(({ id, geometry }) => {
+  const code = ISO2[id];
+  if (!code) return;
+
+  const centre = CAPITALS[code] || featureCentre(geometry);
+  const lat = Math.min(Math.max(centre.lat, region.lat.min), region.lat.max);
+  const pin = map.addPin({ lat, lng: centre.lng });
+
+  countries[code] = { x: pin.x, y: round(pin.y), dots: countryPath(id) };
+});
+
+fs.writeFileSync(
+  path.join(root, 'src/data/worldMapCountries.json'),
+  `${JSON.stringify(countries)}\n`
+);
+
+console.log(`World countries: ${Object.keys(countries).length}`);

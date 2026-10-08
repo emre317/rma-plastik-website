@@ -71,3 +71,10 @@ export const createProject = (body, token) => request('/admin/projects', { metho
 export const updateProject = (id, body, token) => request(`/admin/projects/${encodeURIComponent(id)}`, { method: 'PUT', body, token, fallbackMessage: 'Proje kaydedilemedi.' });
 export const deleteProject = (id, token) => request(`/admin/projects/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Proje silinemedi.' });
 export const importProjects = (token) => request('/admin/projects/import-defaults', { method: 'POST', token, fallbackMessage: 'Broşür projeleri aktarılamadı.' });
+
+/* Export markets (İhracat ağı) */
+export const listExportMarkets = (token) => request('/admin/export-markets', { token, fallbackMessage: 'Pazarlar yüklenemedi.' });
+export const createExportMarket = (body, token) => request('/admin/export-markets', { method: 'POST', body, token, fallbackMessage: 'Pazar kaydedilemedi.' });
+export const updateExportMarket = (id, body, token) => request(`/admin/export-markets/${encodeURIComponent(id)}`, { method: 'PUT', body, token, fallbackMessage: 'Pazar kaydedilemedi.' });
+export const deleteExportMarket = (id, token) => request(`/admin/export-markets/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Pazar silinemedi.' });
+export const importExportMarkets = (token) => request('/admin/export-markets/import-defaults', { method: 'POST', token, fallbackMessage: 'Broşür pazarları aktarılamadı.' });

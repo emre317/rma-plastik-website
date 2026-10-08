@@ -134,7 +134,7 @@ const en = {
     soundOn: 'Sound on',
     soundOff: 'Sound off',
     watchOnYoutube: 'Watch on YouTube',
-    index: '01 / RMA PLASTIK',
+    index: 'RMA PLASTIK',
     since: 'In Mersin since 1998',
     eyebrow: 'Rotational moulding expertise',
     titleLine1: 'Durability,',
@@ -158,7 +158,7 @@ const en = {
       { title: 'Engineering support', description: 'A project partner from needs analysis to mould development.' },
       { title: 'From Mersin to the world', description: 'Exports to markets on four continents.' },
     ],
-    index: '02 / COMPANY',
+    index: 'COMPANY',
     eyebrow: 'Manufacturing experience',
     description:
       'RMA combines production expertise, industrial infrastructure and application-focused manufacturing for demanding polyethylene solutions.',
@@ -560,7 +560,7 @@ const en = {
   },
 
   machinePark: {
-    index: '03 / MACHINERY',
+    index: 'MACHINERY',
     eyebrow: 'Machinery fleet',
     title: 'High capacity',
     titleAccent: 'production.',
@@ -627,7 +627,7 @@ const en = {
     rotateHint: 'Scroll or drag to rotate',
     prev: 'Previous product group',
     next: 'Next product group',
-    index: '04 / PRODUCTS',
+    index: 'PRODUCTS',
     eyebrow: 'Product portfolio',
     title: 'Solutions for',
     titleAccent: 'every application.',
@@ -720,7 +720,7 @@ const en = {
     more: 'Learn More',
     pause: 'Pause',
     play: 'Play',
-    index: '05 / INDUSTRIES',
+    index: 'INDUSTRIES',
     eyebrow: 'Application sectors',
     title: 'Designed for',
     titleAccent: 'real industries.',
@@ -769,7 +769,7 @@ const en = {
   },
 
   customMolding: {
-    index: '06 / CUSTOM MOLDING',
+    index: 'CUSTOM MOLDING',
     eyebrow: 'Custom Molding',
     title: 'We bring your ideas',
     titleAccent: 'and projects to life.',
@@ -793,12 +793,12 @@ const en = {
   },
 
   global: {
-    index: '07 / GLOBAL',
+    index: 'GLOBAL',
     eyebrow: 'Export network',
     title: 'Manufactured in Türkiye.',
     titleAccent: 'Delivered worldwide.',
     text:
-      'From our central distribution hub in Mersin, we export to customers all around the world. Our key markets include Bulgaria, Egypt, the Netherlands, the United Kingdom, the United States and Japan.',
+      'From our central distribution hub in Mersin, we export to customers all around the world. Our key markets include {{markets}}.',
     hub: 'Mersin · Central hub',
     hubShort: 'Mersin',
     figures: [
@@ -807,14 +807,6 @@ const en = {
       { value: 'Mersin', label: 'Central distribution hub' },
     ],
     stepsLabel: 'Key export markets',
-    countries: {
-      bg: { name: 'Bulgaria', short: 'BG', region: 'Balkans' },
-      eg: { name: 'Egypt', short: 'EG', region: 'North Africa' },
-      nl: { name: 'Netherlands', short: 'NL', region: 'Western Europe' },
-      uk: { name: 'United Kingdom', short: 'UK', region: 'Western Europe' },
-      us: { name: 'United States', short: 'US', region: 'North America' },
-      jp: { name: 'Japan', short: 'JP', region: 'Far East' },
-    },
     worldwide: { name: 'Worldwide', region: 'Global' },
     legend: {
       hub: 'Central hub · Mersin',
@@ -827,7 +819,7 @@ const en = {
       reset: 'Reset view',
     },
     mapLabel:
-      'World map of export routes from Mersin to customers worldwide, including Bulgaria, Egypt, the Netherlands, the United Kingdom, the United States and Japan',
+      'World map of export routes from Mersin to customers worldwide, including {{markets}}',
     discuss: 'Discuss Your Requirement',
   },
 
@@ -1005,11 +997,11 @@ const en = {
     formTitleAccent: 'quote.',
     formText:
       'Share the key details of your project. Technical specifics can be clarified with the RMA team after you submit.',
-    homeIndex: '08 / CONTACT',
+    homeIndex: 'CONTACT',
     close: 'Close',
     locations: {
       phone: 'Phone',
-      index: '01 / Location',
+      index: 'Location',
       eyebrow: 'Main facility',
       title: 'Our main facility.',
       titleAccent: 'Mersin Nacarlı OSB.',

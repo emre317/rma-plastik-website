@@ -47,6 +47,11 @@ try {
     });
   });
 
+  // No export markets in the database yet: keep the brochure markets
+  if (!Array.isArray(data.exportMarkets) || data.exportMarkets.length === 0) {
+    data.exportMarkets = null;
+  }
+
   // No reference projects in the database yet: keep the brochure projects
   if (!Array.isArray(data.projects) || data.projects.length === 0) {
     data.projects = null;

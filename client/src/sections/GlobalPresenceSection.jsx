@@ -6,14 +6,16 @@ import { LocalizedLink } from '../components/i18n/LocalizedLink';
 import Arrow from '../components/i18n/Arrow';
 import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion';
 import exportMap from '../data/exportMap';
+import markets, { marketName, marketRegion } from '../data/exportMarkets';
+import useLanguage from '../hooks/useLanguage';
 
 // The interactive map (and its animation library) loads separately, below the fold
-const ExportMap = lazy(() => import('../components/ui/ExportMap'));
+const ExportMap = lazy(() => import('../components/ui/ExportMapWorld'));
 
 // Each market (and finally "worldwide") is shown this long
 const STEP_MS = 3000;
 
-const destinations = exportMap.destinations;
+const destinations = markets;
 const WORLDWIDE_STEP = destinations.length;
 
 /*
@@ -24,6 +26,7 @@ const WORLDWIDE_STEP = destinations.length;
 */
 export default function GlobalPresenceSection({ index }) {
   const { t } = useTranslation();
+  const { code: lang } = useLanguage();
   const reduceMotion = usePrefersReducedMotion();
 
   const sectionRef = useRef(null);
@@ -112,8 +115,23 @@ export default function GlobalPresenceSection({ index }) {
     key === hoverKey ||
     destinations.findIndex((d) => d.key === key) <= currentStep;
 
-  const labels = t('global.countries', { returnObjects: true });
-  const figures = t('global.figures', { returnObjects: true });
+  const labels = Object.fromEntries(
+    markets.map((market) => [market.key, { name: marketName(market, lang), region: marketRegion(market, lang) }])
+  );
+
+  // Market names as a sentence list ("A, B ve C") for the intro and the map label
+  let marketList = markets.map((market) => labels[market.key].name).join(', ');
+  try {
+    marketList = new Intl.ListFormat(lang, { style: 'long', type: 'conjunction' }).format(markets.map((market) => labels[market.key].name));
+  } catch {
+    // Older browsers: comma-separated list
+  }
+
+  // The first figure is the number of markets, kept in step with the list
+  const figureList = t('global.figures', { returnObjects: true });
+  const figures = (Array.isArray(figureList) ? figureList : []).map((figure, index) =>
+    index === 0 ? { ...figure, value: String(markets.length) } : figure
+  );
 
   const stepState = (index) => {
     if (hoverKey) {
@@ -157,7 +175,7 @@ export default function GlobalPresenceSection({ index }) {
             </h2>
 
             <p className="globalIntro">
-              {t('global.text')}
+              {t('global.text', { markets: marketList, interpolation: { escapeValue: false } })}
             </p>
           </div>
 
@@ -179,7 +197,7 @@ export default function GlobalPresenceSection({ index }) {
 
         </div>
 
-        <figure className="exportMapPanel" aria-label={t('global.mapLabel')}>
+        <figure className="exportMapPanel" aria-label={t('global.mapLabel', { markets: marketList, interpolation: { escapeValue: false } })}>
           <Suspense
             fallback={
               <div
@@ -189,7 +207,7 @@ export default function GlobalPresenceSection({ index }) {
             }
           >
           <ExportMap
-            data={exportMap}
+            markets={markets}
             labels={labels}
             hubLabel={t('global.hub')}
             hubShortLabel={t('global.hubShort')}

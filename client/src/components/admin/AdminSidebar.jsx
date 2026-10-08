@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
-  Briefcase, ExternalLink, FileText, Inbox, LayoutDashboard, LogOut, Menu, PlayCircle, Settings, Table2, Type, X,
+  Briefcase, ExternalLink, Globe2, FileText, Inbox, LayoutDashboard, LogOut, Menu, PlayCircle, Settings, Table2, Type, X,
 } from 'lucide-react';
 
 import { getUnreadQuoteCount } from '../../services/adminApi';
@@ -34,6 +34,7 @@ const NAV = [
     items: [
       { to: '/admin/posts', label: 'Blog yazıları', icon: FileText },
       { to: '/admin/projects', label: 'Referans projeler', icon: Briefcase, hint: 'Özel üretim projeleri' },
+      { to: '/admin/export-markets', label: 'İhracat ağı', icon: Globe2, hint: 'Haritadaki pazarlar' },
       { to: '/admin/videos', label: 'Videolar', icon: PlayCircle },
       { to: '/admin/texts', label: 'Sayfa metinleri', icon: Type },
     ],

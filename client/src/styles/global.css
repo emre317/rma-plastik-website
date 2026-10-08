@@ -28278,3 +28278,139 @@ html[lang="ar"] .ecoBandEyebrow {
   height: 100%;
   object-fit: cover;
 }
+
+/* Admin – export markets */
+
+.adMarketList {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  list-style: none;
+}
+
+.adMarketList li {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid rgba(17, 34, 68, 0.07);
+  border-radius: 16px;
+  background: #ffffff;
+}
+
+.adMarketList li.hidden {
+  opacity: 0.6;
+}
+
+.adMarketIndex {
+  min-width: 26px;
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.adMarketFlag {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.adMarketText {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.adMarketText strong {
+  font-size: 15px;
+}
+
+.adMarketText small {
+  color: var(--text-secondary);
+  font-size: 12.5px;
+}
+
+.adMarketMove {
+  display: flex;
+  gap: 4px;
+}
+
+.adMarketMove .adIconButton:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.adMarketPreview {
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 200px;
+  border-radius: 16px;
+  background: linear-gradient(160deg, #0f1e3c, #183466);
+  color: #ffffff;
+  text-align: center;
+}
+
+.adMarketPreview .adMarketFlag {
+  font-size: 56px;
+}
+
+.adMarketPreview small {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+@media (max-width: 640px) {
+  .adMarketList li {
+    flex-wrap: wrap;
+  }
+
+  .adMarketList .cmsRowActions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+/* Phones/tablets: contact lives in the mobile menu */
+@media (max-width: 1050px) {
+  .siteHeader .headerContact {
+    display: none;
+  }
+}
+
+/* Admin on phones: nothing wider than the screen */
+@media (max-width: 560px) {
+  .adminContent,
+  .adminContent .cmsCard,
+  .adminContent .cmsColumn {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .adminContent .cmsTabs {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .adminContent .cmsTabs button {
+    flex: none;
+  }
+
+  .adRecentList a {
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+
+  .adRecentText {
+    flex-basis: calc(100% - 48px);
+  }
+
+  .adRecentList .adPill {
+    margin-inline-start: 48px;
+  }
+
+  .adRecentList time {
+    min-width: 0;
+    margin-inline-start: auto;
+  }
+}

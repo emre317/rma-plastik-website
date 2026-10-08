@@ -25,6 +25,13 @@ import {
   updateProject,
 } from '../controllers/projectController.js';
 import {
+  createExportMarket,
+  deleteExportMarket,
+  importDefaultExportMarkets,
+  listExportMarkets,
+  updateExportMarket,
+} from '../controllers/exportMarketController.js';
+import {
   createPost,
   createVideo,
   deletePost,
@@ -64,6 +71,12 @@ adminContentRouter.post('/projects', createProject);
 adminContentRouter.post('/projects/import-defaults', importDefaultProjects);
 adminContentRouter.put('/projects/:id', updateProject);
 adminContentRouter.delete('/projects/:id', deleteProject);
+
+adminContentRouter.get('/export-markets', listExportMarkets);
+adminContentRouter.post('/export-markets', createExportMarket);
+adminContentRouter.post('/export-markets/import-defaults', importDefaultExportMarkets);
+adminContentRouter.put('/export-markets/:id', updateExportMarket);
+adminContentRouter.delete('/export-markets/:id', deleteExportMarket);
 
 adminContentRouter.get('/posts', listPosts);
 adminContentRouter.post('/posts', createPost);

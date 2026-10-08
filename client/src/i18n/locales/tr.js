@@ -133,7 +133,7 @@ const tr = {
     soundOn: 'Sesi aç',
     soundOff: 'Sesi kapat',
     watchOnYoutube: 'YouTube’da izle',
-    index: '01 / RMA PLASTIK',
+    index: 'RMA PLASTIK',
     since: '1998’den beri Mersin’de',
     eyebrow: 'Polietilen · Rotasyonel kalıplama',
     titleLine1: 'Dayanıklılığı',
@@ -157,7 +157,7 @@ const tr = {
       { title: 'Mühendislik desteği', description: 'İhtiyaç analizinden kalıp geliştirmeye kadar proje ortaklığı.' },
       { title: 'Mersin’den dünyaya', description: 'Dört kıtadaki pazarlara ihracat.' },
     ],
-    index: '02 / KURUMSAL',
+    index: 'KURUMSAL',
     eyebrow: 'Üretim deneyimi',
     description:
       'RMA; üretim uzmanlığını, endüstriyel altyapıyı ve uygulama odaklı üretimi zorlu polietilen çözümleri için bir araya getirir.',
@@ -559,7 +559,7 @@ const tr = {
   },
 
   machinePark: {
-    index: '03 / MAKİNA PARKURU',
+    index: 'MAKİNA PARKURU',
     eyebrow: 'Makina parkuru',
     title: 'Yüksek kapasite',
     titleAccent: 'üretim.',
@@ -626,7 +626,7 @@ const tr = {
     rotateHint: 'Kaydırın veya sürükleyin',
     prev: 'Önceki ürün grubu',
     next: 'Sonraki ürün grubu',
-    index: '04 / ÜRÜNLER',
+    index: 'ÜRÜNLER',
     eyebrow: 'Ürün portföyü',
     title: 'Her uygulama için',
     titleAccent: 'doğru çözüm.',
@@ -719,7 +719,7 @@ const tr = {
     more: 'Detaylı Bilgi',
     pause: 'Akışı durdur',
     play: 'Akışı başlat',
-    index: '05 / SEKTÖRLER',
+    index: 'SEKTÖRLER',
     eyebrow: 'Uygulama alanları',
     title: 'Gerçek sektörler',
     titleAccent: 'için tasarlandı.',
@@ -768,7 +768,7 @@ const tr = {
   },
 
   customMolding: {
-    index: '06 / ÖZEL ÜRETİM',
+    index: 'ÖZEL ÜRETİM',
     eyebrow: 'Custom Molding',
     title: 'Fikir ve projelerinizi',
     titleAccent: 'hayata geçiriyoruz.',
@@ -792,12 +792,12 @@ const tr = {
   },
 
   global: {
-    index: '07 / GLOBAL',
+    index: 'GLOBAL',
     eyebrow: 'İhracat ağı',
     title: 'Türkiye’de üretildi.',
     titleAccent: 'Dünyaya ulaştırıldı.',
     text:
-      'Mersin’deki merkez dağıtım noktamızdan dünyanın dört bir yanına ihracat yapıyoruz. Başlıca pazarlarımız arasında Bulgaristan, Mısır, Hollanda, İngiltere, ABD ve Japonya yer alıyor.',
+      'Mersin’deki merkez dağıtım noktamızdan dünyanın dört bir yanına ihracat yapıyoruz. Başlıca pazarlarımız arasında {{markets}} yer alıyor.',
     hub: 'Mersin · Merkez',
     hubShort: 'Mersin',
     figures: [
@@ -806,14 +806,6 @@ const tr = {
       { value: 'Mersin', label: 'Merkez dağıtım noktası' },
     ],
     stepsLabel: 'Başlıca ihracat pazarları',
-    countries: {
-      bg: { name: 'Bulgaristan', short: 'BG', region: 'Balkanlar' },
-      eg: { name: 'Mısır', short: 'EG', region: 'Kuzey Afrika' },
-      nl: { name: 'Hollanda', short: 'NL', region: 'Batı Avrupa' },
-      uk: { name: 'İngiltere', short: 'UK', region: 'Batı Avrupa' },
-      us: { name: 'ABD', short: 'US', region: 'Kuzey Amerika' },
-      jp: { name: 'Japonya', short: 'JP', region: 'Uzak Doğu' },
-    },
     worldwide: { name: 'Dünyanın dört bir yanı', region: 'Küresel' },
     legend: {
       hub: 'Merkez · Mersin',
@@ -826,7 +818,7 @@ const tr = {
       reset: 'Görünümü sıfırla',
     },
     mapLabel:
-      'Mersin’den dünyanın dört bir yanına, başta Bulgaristan, Mısır, Hollanda, İngiltere, ABD ve Japonya olmak üzere ihracat rotalarını gösteren dünya haritası',
+      'Mersin’den dünyanın dört bir yanına, başta {{markets}} olmak üzere ihracat rotalarını gösteren dünya haritası',
     discuss: 'İhtiyacınızı Görüşelim',
   },
 
@@ -1003,11 +995,11 @@ const tr = {
     formTitleAccent: 'alın.',
     formText:
       'Temel proje bilgilerinizi paylaşın. Teknik detayları, talebinizin ardından RMA ekibiyle birlikte netleştiririz.',
-    homeIndex: '08 / İLETİŞİM',
+    homeIndex: 'İLETİŞİM',
     close: 'Kapat',
     locations: {
       phone: 'Telefon',
-      index: '01 / Konum',
+      index: 'Konum',
       eyebrow: 'Merkez tesis',
       title: 'Merkez tesisimiz.',
       titleAccent: 'Mersin Nacarlı OSB.',
