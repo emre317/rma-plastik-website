@@ -35,10 +35,15 @@ export default function useScrollReveal() {
       { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
     );
 
+    // Elements handled by this run. Not stored on the element: after a re-run
+    // (React StrictMode, a language switch reusing the same cards) every card
+    // that is still hidden must be observed again, or it would stay invisible.
+    const seen = new WeakSet();
+
     const scan = () => {
       document.querySelectorAll(REVEAL_SELECTOR).forEach((element) => {
-        if (element.dataset.rv) return;
-        element.dataset.rv = '1';
+        if (seen.has(element) || element.classList.contains('rv-in')) return;
+        seen.add(element);
 
         const rect = element.getBoundingClientRect();
         if (rect.top < window.innerHeight && rect.bottom > 0) {
@@ -68,6 +73,9 @@ export default function useScrollReveal() {
       observer.disconnect();
       mutation.disconnect();
       cancelAnimationFrame(frame);
+
+      // Cards left hidden by this run are shown; the next run hides only what is below the fold
+      document.querySelectorAll('.rv:not(.rv-in)').forEach((element) => element.classList.remove('rv'));
     };
   }, [pathname]);
 }
