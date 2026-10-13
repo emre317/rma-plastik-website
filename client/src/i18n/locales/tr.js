@@ -160,7 +160,30 @@ const tr = {
     },
   },
 
+  materialFeatures: {
+    title: 'Polietilen Hammadde Özellikleri',
+    items: [
+      {
+        title: '%100 Virgin (Saf) Hammadde',
+        text: 'Ürünlerimizin üretiminde %100 saf (virgin), birinci sınıf polietilen ham madde kullanılmaktadır. Üretim sürecinde geri dönüştürülmüş ham madde kullanılmamaktadır.',
+      },
+      {
+        title: 'Kimyasallara Dayanıklı',
+        text: 'Polietilen malzemenin mükemmel kimyasal dayanımı vardır. Sülfürik asit, kostik, tutkal ve benzeri birçok kimyasal ürünün stoklanmasında polietilen malzemeler kullanılmaktadır.',
+      },
+      {
+        title: 'Gıda Kodeksine Uygundur',
+        text: 'Polietilen malzeme, gıda kodeksine uygun olup içerisinde her türlü gıdasal ürün stoklanabilir. Stoklanan üründe tat ve koku değişikliği oluşmaz.',
+      },
+      {
+        title: 'Monobloktur',
+        text: 'Rotasyonel kalıplama yöntemiyle devasa monoblok ürünler üretilebilmektedir. Punta, perçim ve kaynak gibi birleştirme yöntemleri kullanılmaksızın tek parça ürünler üretilmektedir.',
+      },
+    ],
+  },
+
   hero: {
+    kicker: 'Rotasyonel Kalıplama',
     typePrefix: 'Ürettiklerimiz:',
     categoriesLabel: 'Ürün Grupları',
     index: 'RMA PLASTIK',

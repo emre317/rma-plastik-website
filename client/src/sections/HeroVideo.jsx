@@ -8,8 +8,6 @@ import { videoText } from '../data/videos';
 import useLanguage from '../hooks/useLanguage';
 import portfolio from '../data/productPortfolio';
 import HeroTitle from '../components/ui/HeroTitle';
-import HeroBrand from '../components/ui/HeroBrand';
-import HeroTypeLine from '../components/ui/HeroTypeLine';
 import HeroStats from '../components/ui/HeroStats';
 
 const PLAYER_ORIGIN = 'https://www.youtube-nocookie.com';
@@ -179,21 +177,19 @@ export default function HeroVideo({ video }) {
       <div className="container heroVideoInner">
         <div className="heroVideoGrid">
           <div className="heroVideoContent">
-            <HeroBrand />
+            <p className="eyebrow heroKicker">{t('hero.kicker')}</p>
 
             <HeroTitle line1={t('hero.titleLine1')} accent={t('hero.titleAccent')} line2={t('hero.titleLine2')} />
-
-            <HeroTypeLine />
 
             <p className="lead">{t('hero.lead')}</p>
 
             <div className="actions">
-              <a className="button heroExplore" href="#products">
+              <a className="button primary heroExplore" href="#products">
                 <span>{t('hero.exploreProducts')}</span>
                 <Arrow className="buttonArrow" />
               </a>
 
-              <button type="button" className="button primary heroQuoteCta" onClick={() => openQuote()}>
+              <button type="button" className="button heroQuoteCta" onClick={() => openQuote()}>
                 <span>{t('hero.requestSolution')}</span>
                 <Arrow className="buttonArrow" />
               </button>

@@ -31146,47 +31146,6 @@ html.booting .heroVideo .heroStats {
   font-size: clamp(38px, min(4.8vw, 8svh), 70px);
 }
 
-/* Hero actions: the quote request is the red primary; "explore products"
-   is solid white on the video and solid graphite on the light hero */
-.heroExplore {
-  min-height: 60px;
-  padding-inline: 26px 22px;
-  border-color: var(--ink-900);
-  background: var(--ink-900);
-  color: #ffffff;
-  font-size: 15px;
-}
-
-.heroExplore:hover {
-  border-color: var(--ink-700, #2a2f36);
-  background: var(--ink-700, #2a2f36);
-  color: #ffffff;
-  transform: translateY(-2px);
-}
-
-.heroVideo .heroExplore {
-  border-color: #ffffff;
-  background: #ffffff;
-  color: var(--ink-900);
-  box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.6);
-}
-
-.heroVideo .heroExplore:hover {
-  border-color: var(--ink-050);
-  background: var(--ink-050);
-  color: var(--brand-primary);
-}
-
-.heroVideo .heroExplore .buttonArrow {
-  color: var(--brand-primary);
-}
-
-@media (max-width: 640px) {
-  .heroExplore {
-    min-height: 56px;
-  }
-}
-
 /* Quote detail: tank contents and delivery (two columns under the products) */
 .adTankFacts {
   margin-top: 12px;
@@ -31201,4 +31160,405 @@ html.booting .heroVideo .heroStats {
   .adTankFacts {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+
+/* =====================================================
+   POLYETHYLENE PROPERTIES — dark strip under the hero
+   Four columns split by hairlines (as on the Pan's Marine site),
+   graphite with the brand hatch and red line icons
+===================================================== */
+.matFeatures {
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    radial-gradient(60% 120% at 100% 0%, color-mix(in srgb, var(--brand-primary) 16%, transparent), transparent 62%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.022) 0 2px, transparent 2px 14px),
+    var(--ink-900);
+  color: #ffffff;
+}
+
+.matFeaturesList {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  list-style: none;
+}
+
+.matFeaturesList li {
+  position: relative;
+  padding: 52px 32px 60px;
+  border-inline-start: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.matFeaturesList li:first-child {
+  padding-inline-start: 0;
+  border-inline-start: 0;
+}
+
+.matFeaturesList li:last-child {
+  padding-inline-end: 0;
+}
+
+/* A short red rule slides in on hover */
+.matFeaturesList li::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 32px;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-wordmark, var(--brand-primary));
+  transition: width 320ms ease;
+}
+
+.matFeaturesList li:first-child::before {
+  inset-inline-start: 0;
+}
+
+.matFeaturesList li:hover::before {
+  width: 56px;
+}
+
+.matFeaturesIcon {
+  width: 30px;
+  height: 30px;
+  margin-bottom: 52px;
+  display: block;
+  color: var(--rma-red-light);
+}
+
+.matFeaturesIcon svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 1.6;
+}
+
+.matFeaturesList h3 {
+  margin: 0 0 12px;
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.matFeaturesList p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+@media (max-width: 1024px) {
+  .matFeaturesList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .matFeaturesList li {
+    padding: 40px 28px 44px;
+  }
+
+  .matFeaturesList li:nth-child(odd) {
+    padding-inline-start: 0;
+    border-inline-start: 0;
+  }
+
+  .matFeaturesList li:nth-child(even) {
+    padding-inline-end: 0;
+  }
+
+  .matFeaturesList li:nth-child(n + 3) {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .matFeaturesList li:nth-child(odd)::before {
+    inset-inline-start: 0;
+  }
+
+  .matFeaturesIcon {
+    margin-bottom: 32px;
+  }
+}
+
+@media (max-width: 640px) {
+  .matFeaturesList {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .matFeaturesList li,
+  .matFeaturesList li:nth-child(even) {
+    padding: 32px 0 34px;
+    border-inline-start: 0;
+  }
+
+  .matFeaturesList li + li {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .matFeaturesList li::before {
+    inset-inline-start: 0;
+  }
+
+  .matFeaturesIcon {
+    width: 28px;
+    height: 28px;
+    margin-bottom: 20px;
+  }
+
+  .matFeaturesList h3 {
+    font-size: 19px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .matFeaturesList li::before {
+    transition: none;
+  }
+}
+
+/* =====================================================
+   HOME HERO — left-aligned like the design-system mock:
+   red rule eyebrow, white one-line headline, red + white buttons,
+   figures without tiles; footer stripes over the film
+===================================================== */
+.heroKicker {
+  margin: 0 0 4px;
+  color: var(--rma-red-light);
+  font-size: 13px;
+  font-weight: 700;
+  animation: heroRise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.hero .heroKicker {
+  color: var(--brand-primary);
+}
+
+.booting .heroKicker {
+  animation-play-state: paused;
+}
+
+/* Content on the start side, over a darker start-side shade */
+.heroVideoContent {
+  width: min(100%, 1300px);
+  margin-inline: 0;
+  align-items: flex-start;
+  text-align: start;
+}
+
+.heroVideoContent h1,
+.heroVideo .heroWords {
+  align-items: flex-start;
+}
+
+.heroVideoContent .lead {
+  max-width: 640px;
+  margin-inline: 0;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.heroVideo .actions,
+.heroVideo .heroVideoContent .actions {
+  justify-content: flex-start;
+}
+
+.heroVideoGuides {
+  display: none;
+}
+
+.heroVideoShade {
+  background:
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.045) 0 14px, transparent 14px 28px),
+    linear-gradient(90deg, rgba(10, 11, 13, 0.92) 0%, rgba(10, 11, 13, 0.74) 42%, rgba(10, 11, 13, 0.42) 72%, rgba(10, 11, 13, 0.55) 100%),
+    linear-gradient(180deg, rgba(10, 11, 13, 0.6) 0%, rgba(10, 11, 13, 0) 22%, rgba(10, 11, 13, 0) 60%, rgba(10, 11, 13, 0.95) 100%),
+    radial-gradient(42% 60% at 92% 18%, color-mix(in srgb, var(--brand-primary) 26%, transparent), transparent 70%);
+}
+
+[dir="rtl"] .heroVideoShade {
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.045) 0 14px, transparent 14px 28px),
+    linear-gradient(270deg, rgba(10, 11, 13, 0.92) 0%, rgba(10, 11, 13, 0.74) 42%, rgba(10, 11, 13, 0.42) 72%, rgba(10, 11, 13, 0.55) 100%),
+    linear-gradient(180deg, rgba(10, 11, 13, 0.6) 0%, rgba(10, 11, 13, 0) 22%, rgba(10, 11, 13, 0) 60%, rgba(10, 11, 13, 0.95) 100%),
+    radial-gradient(42% 60% at 8% 18%, color-mix(in srgb, var(--brand-primary) 26%, transparent), transparent 70%);
+}
+
+/* Headline: one line on wide screens, all white, extra bold */
+.heroVideo .heroWords,
+.heroVideoContent h1 {
+  margin-block: 18px 22px;
+  display: block;
+  font-size: clamp(36px, 4.4vw, 66px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+
+.heroVideo .heroWords .heroLine {
+  display: inline;
+}
+
+.heroVideo .heroWords span {
+  font-weight: 800;
+}
+
+.heroVideo .heroWords .heroLine + .heroLine::before {
+  content: " ";
+}
+
+.heroVideo .heroWords .heroLineAccent .heroWord,
+[dir="rtl"] .heroVideo .heroWords .heroLineAccent .heroWord {
+  background: none;
+  color: #ffffff;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  animation: heroWordIn 0.95s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(0.12s + var(--w, 0) * 0.11s);
+}
+
+/* Bigger buttons: red product range, white quote request */
+.hero .actions .button,
+.heroVideo .actions .button {
+  min-height: 64px;
+  padding-inline: 30px 26px;
+  gap: 28px;
+  font-size: 16.5px;
+}
+
+.heroQuoteCta {
+  border-color: var(--ink-900);
+  background: var(--ink-900);
+  color: #ffffff;
+}
+
+.heroQuoteCta:hover {
+  border-color: var(--ink-700);
+  background: var(--ink-700);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.heroVideo .heroQuoteCta {
+  border-color: #ffffff;
+  background: #ffffff;
+  color: var(--ink-900);
+  box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.6);
+}
+
+.heroVideo .heroQuoteCta:hover {
+  border-color: var(--ink-050);
+  background: var(--ink-050);
+  color: var(--brand-primary);
+}
+
+.heroVideo .heroQuoteCta .buttonArrow {
+  color: var(--brand-primary);
+}
+
+/* Figures: no tiles and no red rule, start-aligned under one hairline */
+.heroStats,
+.heroVideo .heroStats,
+.hero .heroStats {
+  max-width: 980px;
+  margin: 44px 0 0;
+  padding-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px 56px;
+  border-top: 1px solid var(--line);
+}
+
+.heroVideo .heroStats {
+  margin-inline: 0;
+  border-top-color: rgba(255, 255, 255, 0.14);
+}
+
+.heroStats > div,
+.heroVideo .heroStats > div {
+  max-width: 230px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.heroStats > div::before {
+  display: none;
+}
+
+.heroStats dt,
+[dir="rtl"] .heroStats dt {
+  justify-content: flex-start;
+  font-size: clamp(34px, 3.4vw, 50px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.heroStats dt span {
+  font-size: 0.46em;
+}
+
+.heroVideo .heroStats dt span {
+  color: var(--rma-red-light);
+}
+
+.heroStats dd {
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.heroVideo .heroStats dd {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+[dir="rtl"] .heroStats dd {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+@media (max-width: 900px) {
+  .heroStats,
+  .heroVideo .heroStats,
+  .hero .heroStats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 26px 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .heroVideo .heroWords,
+  .heroVideoContent h1 {
+    font-size: clamp(32px, 9vw, 40px);
+  }
+
+  .hero .actions .button,
+  .heroVideo .actions .button {
+    min-height: 60px;
+    font-size: 16px;
+  }
+
+  .heroStats dt,
+  [dir="rtl"] .heroStats dt {
+    font-size: 32px;
+  }
+
+  .heroStats dd {
+    font-size: 11px;
+  }
+}
+
+/* Footer: pure black, the same stripes, no glow */
+.siteFooter {
+  background:
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0 14px, transparent 14px 28px),
+    #000000;
 }

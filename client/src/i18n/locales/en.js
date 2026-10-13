@@ -161,7 +161,30 @@ const en = {
     },
   },
 
+  materialFeatures: {
+    title: 'Polyethylene Raw Material Properties',
+    items: [
+      {
+        title: '100% Virgin Raw Material',
+        text: 'Our products are made from 100% virgin, first-grade polyethylene raw material. No recycled raw material is used in production.',
+      },
+      {
+        title: 'Chemical Resistant',
+        text: 'Polyethylene has excellent chemical resistance. Polyethylene is used to store sulphuric acid, caustic soda, adhesives and many other chemical products.',
+      },
+      {
+        title: 'Food-Grade Compliant',
+        text: 'Polyethylene complies with the food codex, so all kinds of food products can be stored in it. The stored product\'s taste and smell do not change.',
+      },
+      {
+        title: 'Monoblock',
+        text: 'Rotational moulding makes it possible to produce very large monoblock products. Products are made in a single piece, without joining methods such as spot welding, riveting or welding.',
+      },
+    ],
+  },
+
   hero: {
+    kicker: 'Rotational Moulding',
     typePrefix: 'What we make:',
     categoriesLabel: 'Product Groups',
     index: 'RMA PLASTIK',

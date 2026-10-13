@@ -5,8 +5,6 @@ import { useQuote } from '../components/quote/QuoteContext';
 import videos from '../data/videos';
 import HeroVideo from './HeroVideo';
 import HeroTitle from '../components/ui/HeroTitle';
-import HeroBrand from '../components/ui/HeroBrand';
-import HeroTypeLine from '../components/ui/HeroTypeLine';
 import HeroStats from '../components/ui/HeroStats';
 
 export default function HeroSection() {
@@ -28,11 +26,9 @@ export default function HeroSection() {
 
           <div className="heroContent">
 
-            <HeroBrand className="light" />
+            <p className="eyebrow heroKicker">{t('hero.kicker')}</p>
 
             <HeroTitle line1={t('hero.titleLine1')} accent={t('hero.titleAccent')} line2={t('hero.titleLine2')} />
-
-            <HeroTypeLine />
 
             <p className="lead">
               {t('hero.lead')}
@@ -41,7 +37,7 @@ export default function HeroSection() {
             <div className="actions">
 
               <a
-                className="button heroExplore"
+                className="button primary heroExplore"
                 href="#products"
               >
                 <span>{t('hero.exploreProducts')}</span>
@@ -50,7 +46,7 @@ export default function HeroSection() {
 
               <button
                 type="button"
-                className="button primary heroQuoteCta"
+                className="button heroQuoteCta"
                 onClick={() => openQuote()}
               >
                 <span>{t('hero.requestSolution')}</span>
