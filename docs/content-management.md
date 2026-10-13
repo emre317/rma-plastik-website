@@ -9,7 +9,14 @@ Panel adresi: `https://ALAN-ADI/admin` (giriş: `npm run create-admin` ile oluş
   - **Şifreyi Ben Belirleyeyim:** şifreyi siz belirler ("Şifre Oluştur" ile güçlü bir şifre üretilip panoya kopyalanır) ve kişiye güvenli bir yoldan iletirsiniz.
 - Giriş ekranındaki **Şifremi Unuttum** bağlantısı 1 saat geçerli bir sıfırlama e-postası gönderir. Kullanıcılar sayfasından başka bir kullanıcıya sıfırlama bağlantısı gönderilebilir ya da yeni şifresi doğrudan belirlenebilir.
 - Şifre en az 8 karakter olmalı ve en az bir harf ile bir rakam içermeli. Şifre değişince o hesabın diğer cihazlardaki oturumları kapanır.
-- Pasif yapılan kullanıcı giriş yapamaz. Kimse kendi hesabını silemez veya pasif yapamaz; en az bir aktif yönetici her zaman kalır.
+- **Roller:** Her kullanıcının bir rolü vardır:
+  - **Yönetici:** tüm bölümler, kullanıcılar, site ayarları ve işlem geçmişi.
+  - **Satış:** teklif talepleri, proforma, satış raporu ve potansiyel müşteriler.
+  - **İçerik:** ürün tabloları, blog, projeler, saha fotoğrafları, SSS, ihracat ağı, videolar, sayfa metinleri ve yayınlama.
+  Menü, kullanıcının rolüne göre değişir; sunucu da yetkisiz işlemleri reddeder. Rol değişikliği bir sonraki sayfa açılışında geçerli olur.
+- Pasif yapılan kullanıcı giriş yapamaz. Kimse kendi hesabını silemez, pasif yapamaz veya rolünü değiştiremez; en az bir aktif Yönetici her zaman kalır.
+- Herkes kendi şifresini **Hesabım** sayfasından değiştirebilir (kenar çubuğunda adınıza tıklayın).
+- **İşlem Geçmişi (Ayarlar › İşlem Geçmişi):** Kim, neyi, ne zaman yaptı: talep durumu ve takip değişiklikleri, notlar, proforma kaydetme/gönderme, Excel aktarma, içerik ekleme/güncelleme/silme, yayınlama, kullanıcı işlemleri, girişler ve başarısız giriş denemeleri. Kayıtlar iki yıl saklanır. Her teklif talebinin detayında da o talebin geçmişi görünür.
 - E-postalar için sunucuda SMTP ayarları ve `CLIENT_URL` (bağlantılardaki site adresi) gerekir. SMTP yoksa davet/sıfırlama e-postası gönderilemez; şifreler Kullanıcılar sayfasında belirlenir.
 
 ## Ekranlar

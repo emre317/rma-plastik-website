@@ -4,25 +4,29 @@ import { Routes, Route } from 'react-router-dom';
 import LanguageLayout from '../layouts/LanguageLayout';
 import RootRedirect from '../components/i18n/RootRedirect';
 
-import Home from '../pages/Home/Home';
-import Company from '../pages/Company/Company';
-import Products from '../pages/Products/Products';
-import ProductDetail from '../pages/ProductDetail/ProductDetail';
-import WaterTanks from '../pages/WaterTanks/WaterTanks';
-import ProductTables from '../pages/ProductTables/ProductTables';
-import ProductModel from '../pages/ProductModel/ProductModel';
-import ProductDatasheet from '../pages/ProductDatasheet/ProductDatasheet';
-import Compare from '../pages/Compare/Compare';
-import TankFinder from '../pages/TankFinder/TankFinder';
-import CustomMolding from '../pages/CustomMolding/CustomMolding';
-import Industries from '../pages/Industries/Industries';
-import IndustryDetail from '../pages/IndustryDetail/IndustryDetail';
-import Contact from '../pages/Contact/Contact';
-import Faq from '../pages/Faq/Faq';
-import Blog from '../pages/Blog/Blog';
-import BlogPost from '../pages/BlogPost/BlogPost';
-import Videos from '../pages/Videos/Videos';
-import NotFound from '../pages/NotFound/NotFound';
+import { pages } from './publicPages';
+
+const {
+  Home,
+  Company,
+  Products,
+  ProductDetail,
+  WaterTanks,
+  ProductTables,
+  ProductModel,
+  ProductDatasheet,
+  Compare,
+  TankFinder,
+  CustomMolding,
+  Industries,
+  IndustryDetail,
+  Contact,
+  Faq,
+  Blog,
+  BlogPost,
+  Videos,
+  NotFound,
+} = pages;
 
 // Admin panel is loaded on demand so visitors never download it
 const AdminLayout = lazy(() => import('../layouts/AdminLayout'));
@@ -31,6 +35,9 @@ const AdminLogin = lazy(() => import('../pages/AdminLogin/AdminLogin'));
 const AdminForgotPassword = lazy(() => import('../pages/AdminForgotPassword/AdminForgotPassword'));
 const AdminResetPassword = lazy(() => import('../pages/AdminResetPassword/AdminResetPassword'));
 const AdminUsers = lazy(() => import('../pages/AdminUsers/AdminUsers'));
+const AdminAudit = lazy(() => import('../pages/AdminAudit/AdminAudit'));
+const AdminAccount = lazy(() => import('../pages/AdminAccount/AdminAccount'));
+const RequireArea = lazy(() => import('../components/admin/RequireArea'));
 const AdminDashboard = lazy(() => import('../pages/AdminDashboard/AdminDashboard'));
 const AdminQuotes = lazy(() => import('../pages/AdminQuotes/AdminQuotes'));
 const AdminQuoteReports = lazy(() => import('../pages/AdminQuoteReports/AdminQuoteReports'));
@@ -97,26 +104,25 @@ export default function AppRoutes() {
       <Route element={<ProtectedAdminRoute />}>
         <Route element={<AdminLayout />}>
           <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/quotes" element={<AdminQuotes />} />
-          <Route path="/admin/quote-reports" element={<AdminQuoteReports />} />
-          <Route path="/admin/leads" element={<AdminLeads />} />
-          <Route path="/admin/quotes/:id/offer" element={<AdminQuoteOffer />} />
-          <Route
-            path="/admin/quotes/:id"
-            element={<AdminQuoteDetail />}
-          />
-          <Route path="/admin/product-families" element={<AdminProductFamilies />} />
-          <Route path="/admin/product-families/:id" element={<AdminProductFamilyEdit />} />
-          <Route path="/admin/texts" element={<AdminTexts />} />
-          <Route path="/admin/settings" element={<AdminSettings />} />
-          <Route path="/admin/users" element={<AdminUsers />} />
-          <Route path="/admin/posts" element={<AdminPosts />} />
-          <Route path="/admin/posts/:id" element={<AdminPostEdit />} />
-          <Route path="/admin/videos" element={<AdminVideos />} />
-          <Route path="/admin/projects" element={<AdminProjects />} />
-          <Route path="/admin/export-markets" element={<AdminExportMarkets />} />
-          <Route path="/admin/faqs" element={<AdminFaqs />} />
-          <Route path="/admin/gallery" element={<AdminGallery />} />
+          <Route path="/admin/quotes" element={<RequireArea area="sales"><AdminQuotes /></RequireArea>} />
+          <Route path="/admin/quote-reports" element={<RequireArea area="sales"><AdminQuoteReports /></RequireArea>} />
+          <Route path="/admin/leads" element={<RequireArea area="sales"><AdminLeads /></RequireArea>} />
+          <Route path="/admin/quotes/:id/offer" element={<RequireArea area="sales"><AdminQuoteOffer /></RequireArea>} />
+          <Route path="/admin/quotes/:id" element={<RequireArea area="sales"><AdminQuoteDetail /></RequireArea>} />
+          <Route path="/admin/product-families" element={<RequireArea area="content"><AdminProductFamilies /></RequireArea>} />
+          <Route path="/admin/product-families/:id" element={<RequireArea area="content"><AdminProductFamilyEdit /></RequireArea>} />
+          <Route path="/admin/texts" element={<RequireArea area="content"><AdminTexts /></RequireArea>} />
+          <Route path="/admin/settings" element={<RequireArea area="settings"><AdminSettings /></RequireArea>} />
+          <Route path="/admin/users" element={<RequireArea area="users"><AdminUsers /></RequireArea>} />
+          <Route path="/admin/account" element={<AdminAccount />} />
+          <Route path="/admin/audit" element={<RequireArea area="audit"><AdminAudit /></RequireArea>} />
+          <Route path="/admin/posts" element={<RequireArea area="content"><AdminPosts /></RequireArea>} />
+          <Route path="/admin/posts/:id" element={<RequireArea area="content"><AdminPostEdit /></RequireArea>} />
+          <Route path="/admin/videos" element={<RequireArea area="content"><AdminVideos /></RequireArea>} />
+          <Route path="/admin/projects" element={<RequireArea area="content"><AdminProjects /></RequireArea>} />
+          <Route path="/admin/export-markets" element={<RequireArea area="content"><AdminExportMarkets /></RequireArea>} />
+          <Route path="/admin/faqs" element={<RequireArea area="content"><AdminFaqs /></RequireArea>} />
+          <Route path="/admin/gallery" element={<RequireArea area="content"><AdminGallery /></RequireArea>} />
         </Route>
       </Route>
 

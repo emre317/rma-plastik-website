@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
-  ArrowLeft, Building2, CalendarClock, Check, Copy, FileSignature, Flag, Globe2, Mail, Megaphone, MessageCircle, NotebookPen, Package, Phone, Trash2, User,
+  ArrowLeft, Building2, CalendarClock, Check, Copy, FileSignature, Flag, Globe2, History, Mail, Megaphone, MessageCircle, NotebookPen, Package, Phone, Trash2, User,
 } from 'lucide-react';
 
 import {
-  addQuoteNote, deleteQuoteNote, getQuoteAssignees, getQuoteById, updateQuoteStatus, updateQuoteTracking,
+  addQuoteNote, deleteQuoteNote, getQuoteAssignees, getQuoteById, getQuoteHistory, updateQuoteStatus, updateQuoteTracking,
 } from '../../services/adminApi';
 import { notifyQuotesChanged } from '../../services/adminAuth';
 import useAdminApi from '../../hooks/useAdminApi';
@@ -49,6 +49,7 @@ export default function AdminQuoteDetail() {
   const [note, setNote] = useState('');
   const [outcomeNote, setOutcomeNote] = useState('');
   const [suggestOpen, setSuggestOpen] = useState(false);
+  const [history, setHistory] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -93,6 +94,21 @@ export default function AdminQuoteDetail() {
       setSaving('');
     }
   }
+
+  // Who did what on this request (refreshed after every change)
+  const updatedAt = quote?.updatedAt;
+  useEffect(() => {
+    if (!updatedAt) return undefined;
+
+    // The log entry is written just after the save answers: ask a moment later
+    const timer = setTimeout(() => {
+      call(getQuoteHistory, id)
+        .then((response) => setHistory(Array.isArray(response.data) ? response.data : []))
+        .catch(() => setHistory([]));
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [call, id, updatedAt]);
 
   // Suggestions for the assignee field (names used before)
   useEffect(() => {
@@ -571,6 +587,25 @@ export default function AdminQuoteDetail() {
               </dl>
             ) : (
               <p className="adNotesEmpty">Bu talep, kaynak bilgisi kaydedilmeye başlanmadan önce geldi.</p>
+            )}
+          </div>
+
+          <div className="adCard adHistoryCard">
+            <div className="adCardHead"><h2><History aria-hidden="true" />Geçmiş</h2></div>
+            {history === null ? (
+              <p className="adNotesEmpty">Yükleniyor…</p>
+            ) : history.length ? (
+              <ol className="adHistory">
+                {history.slice(0, 12).map((entry) => (
+                  <li key={entry._id}>
+                    <strong>{entry.action}</strong>
+                    {entry.details && <span>{entry.details}</span>}
+                    <small>{entry.user?.name || entry.user?.email} · {formatDate(entry.at, true)}</small>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <p className="adNotesEmpty">Bu talepte henüz panelden bir işlem yapılmadı.</p>
             )}
           </div>
 

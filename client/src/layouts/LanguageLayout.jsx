@@ -3,7 +3,7 @@ import { Navigate, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import PublicLayout from './PublicLayout';
-import { applyDocumentLanguage } from '../i18n';
+import { applyDocumentLanguage, loadLanguage } from '../i18n';
 import {
   getLanguage,
   getPreferredLanguage,
@@ -29,12 +29,24 @@ export default function LanguageLayout() {
       return;
     }
 
-    if (i18n.language !== lang) {
-      i18n.changeLanguage(lang);
+    storeLanguage(lang);
+
+    if (i18n.language === lang) {
+      applyDocumentLanguage(lang, getLanguage(lang).dir);
+      return;
     }
 
-    applyDocumentLanguage(lang, getLanguage(lang).dir);
-    storeLanguage(lang);
+    // Switch once the language's texts are there (they are usually prefetched already)
+    let cancelled = false;
+    loadLanguage(lang).catch(() => {}).then(() => {
+      if (cancelled) return;
+      i18n.changeLanguage(lang);
+      applyDocumentLanguage(lang, getLanguage(lang).dir);
+    });
+
+    return () => {
+      cancelled = true;
+    };
   }, [lang, valid, i18n]);
 
 

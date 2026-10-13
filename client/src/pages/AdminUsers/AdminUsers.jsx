@@ -1,25 +1,28 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
-  Check, KeyRound, Mail, Power, Send, ShieldCheck, Trash2, UserPlus, Users, Wand2, X,
+  Check, KeyRound, Mail, Power, Send, Trash2, UserPlus, Users, Wand2, X,
 } from 'lucide-react';
 
 import {
-  changeOwnPassword, createAdminUser, deleteAdminUser, listAdminUsers, resetAdminUserPassword, updateAdminUser,
+  createAdminUser, deleteAdminUser, listAdminUsers, resetAdminUserPassword, updateAdminUser,
 } from '../../services/adminApi';
-import { getAdminUser, saveAdminSession } from '../../services/adminAuth';
 import useAdminApi from '../../hooks/useAdminApi';
 import usePageTitle from '../../hooks/usePageTitle';
 import { formatDate, timeAgo } from '../../components/admin/quoteStatus';
 import PasswordField, { generatePassword, passwordOk } from '../../components/admin/PasswordField';
+import Dropdown from '../../components/ui/Dropdown';
+import { ROLES, roleLabel, roleTone } from '../../components/admin/roles';
 
-const emptyForm = { name: '', email: '', method: 'password', password: '' };
+const emptyForm = { name: '', email: '', method: 'password', password: '', role: 'sales' };
+
+const roleOptions = ROLES.map((role) => ({ value: role.id, label: role.label, hint: role.text }));
 
 function initials(name, email) {
   const parts = String(name || email || '?').trim().split(/\s+/);
   return (parts[0][0] + (parts[1]?.[0] || '')).toLocaleUpperCase('tr');
 }
 
-/* Admin users: add (invitation e-mail or a password you choose), reset, deactivate, delete; own password */
+/* Admin users: add (invitation e-mail or a password you choose), role, reset, deactivate, delete */
 export default function AdminUsers() {
   usePageTitle('Kullanıcılar');
 
@@ -35,7 +38,6 @@ export default function AdminUsers() {
   const [saving, setSaving] = useState('');
   const [resetFor, setResetFor] = useState(null);
   const [resetPassword, setResetPassword] = useState('');
-  const [own, setOwn] = useState({ current: '', next: '', repeat: '' });
 
   const load = useCallback(async () => {
     try {
@@ -86,6 +88,7 @@ export default function AdminUsers() {
       const response = await call(createAdminUser, {
         name: form.name,
         email: form.email,
+        role: form.role,
         invite,
         ...(invite ? {} : { password: form.password }),
       });
@@ -103,6 +106,22 @@ export default function AdminUsers() {
                 : `${response.data.name} eklendi. Giriş e-postası ve belirlediğiniz şifreyi kendisine güvenli bir yoldan iletin.`,
             }
       );
+    } catch (err) {
+      setNotice({ type: 'error', text: err.message });
+    } finally {
+      setSaving('');
+    }
+  }
+
+  async function changeRole(user, role) {
+    if (role === user.role) return;
+    setSaving(`role-${user._id}`);
+    setNotice(null);
+
+    try {
+      const response = await call(updateAdminUser, user._id, { role });
+      replaceUser(response.data);
+      setNotice({ type: 'success', text: `${user.name} artık ${roleLabel(role)} rolünde.` });
     } catch (err) {
       setNotice({ type: 'error', text: err.message });
     } finally {
@@ -179,26 +198,6 @@ export default function AdminUsers() {
     }
   }
 
-  async function changeOwn(event) {
-    event.preventDefault();
-    setSaving('own');
-    setNotice(null);
-
-    try {
-      const response = await call(changeOwnPassword, own.current, own.next);
-      // The old session is no longer valid: keep this browser signed in with the new token
-      saveAdminSession(response.token, response.admin);
-      setOwn({ current: '', next: '', repeat: '' });
-      setNotice({ type: 'success', text: 'Şifreniz değiştirildi. Diğer cihazlardaki oturumlarınız kapandı.' });
-    } catch (err) {
-      setNotice({ type: 'error', text: err.message });
-    } finally {
-      setSaving('');
-    }
-  }
-
-  const me = getAdminUser();
-  const ownMismatch = own.repeat && own.next !== own.repeat;
 
   return (
     <section className="adminContent adUsers">
@@ -206,7 +205,7 @@ export default function AdminUsers() {
         <div>
           <span className="adEyebrow">Ayarlar</span>
           <h1>Kullanıcılar</h1>
-          <p>Panele giriş yapabilen kişiler. Her kullanıcı tüm bölümleri yönetebilir. Kimse kendi hesabını silemez veya pasif yapamaz; en az bir aktif yönetici her zaman kalır.</p>
+          <p>Panele giriş yapabilen kişiler ve rolleri. Kimse kendi hesabını silemez, pasif yapamaz veya rolünü değiştiremez; en az bir aktif Yönetici her zaman kalır.</p>
         </div>
         <div className="adHeadActions">
           <button type="button" className="cmsButton cmsButtonPrimary" onClick={() => setAdding((open) => !open)} aria-expanded={adding}>
@@ -244,6 +243,12 @@ export default function AdminUsers() {
               <span>E-posta</span>
               <input type="email" value={form.email} maxLength={254} required placeholder="ayse@rmaplastik.com" autoComplete="off" onChange={(event) => setForm({ ...form, email: event.target.value })} />
             </label>
+          </div>
+
+          <div className="cmsField">
+            <span>Rol</span>
+            <Dropdown value={form.role} onChange={(role) => setForm({ ...form, role })} label="Rol" options={roleOptions} />
+            <small>{ROLES.find((role) => role.id === form.role)?.text}</small>
           </div>
 
           <div className="cmsField">
@@ -317,8 +322,11 @@ export default function AdminUsers() {
                   </div>
 
                   <div className="adUserMeta">
-                    <span className={`adPill tone-${state === 'active' ? 'green' : state === 'pending' ? 'amber' : 'gray'}`}>
-                      {state === 'active' ? 'Aktif' : state === 'pending' ? 'Davet Bekliyor' : 'Pasif'}
+                    <span className="adUserPills">
+                      <span className={`adPill tone-${roleTone(user.role)}`}>{roleLabel(user.role)}</span>
+                      <span className={`adPill tone-${state === 'active' ? 'green' : state === 'pending' ? 'amber' : 'gray'}`}>
+                        {state === 'active' ? 'Aktif' : state === 'pending' ? 'Davet Bekliyor' : 'Pasif'}
+                      </span>
                     </span>
                     <small title={user.lastLoginAt ? formatDate(user.lastLoginAt, true) : undefined}>
                       {user.lastLoginAt ? `Son giriş ${timeAgo(user.lastLoginAt)}` : 'Henüz giriş yapmadı'}
@@ -342,6 +350,14 @@ export default function AdminUsers() {
                     </button>
                     {!user.self && (
                       <>
+                        <Dropdown
+                          className="adRoleDd"
+                          value={user.role}
+                          onChange={(role) => changeRole(user, role)}
+                          label={`${user.name} rolü`}
+                          options={roleOptions}
+                          align="end"
+                        />
                         <button type="button" className="cmsButton" onClick={() => toggleActive(user)} disabled={busy}>
                           <Power aria-hidden="true" />
                           {user.isActive ? 'Pasif Yap' : 'Aktif Et'}
@@ -397,29 +413,6 @@ export default function AdminUsers() {
         )}
       </div>
 
-      <form className="adCard adOwnPassword" onSubmit={changeOwn}>
-        <div className="adCardHead">
-          <h2><ShieldCheck aria-hidden="true" />Şifremi Değiştir</h2>
-          {me?.email && <span className="adHint">{me.email}</span>}
-        </div>
-
-        {/* Lets password managers update the saved password for this account */}
-        <input type="email" name="username" autoComplete="username" value={me?.email || ''} readOnly hidden />
-
-        <div className="adUserFormGrid three">
-          <PasswordField label="Mevcut Şifre" value={own.current} onChange={(current) => setOwn({ ...own, current })} autoComplete="current-password" />
-          <PasswordField label="Yeni Şifre" value={own.next} onChange={(next) => setOwn({ ...own, next })} rules />
-          <PasswordField label="Yeni Şifre (Tekrar)" value={own.repeat} onChange={(repeat) => setOwn({ ...own, repeat })} />
-        </div>
-        {ownMismatch && <small className="algCaps">Şifreler aynı değil.</small>}
-
-        <div className="adUserFormActions">
-          <small className="cmsHint">Şifre değişince diğer cihazlardaki oturumlarınız kapanır.</small>
-          <button type="submit" className="cmsButton cmsButtonPrimary" disabled={saving === 'own' || !own.current || !passwordOk(own.next) || own.next !== own.repeat}>
-            {saving === 'own' ? 'Kaydediliyor…' : 'Şifreyi Değiştir'}
-          </button>
-        </div>
-      </form>
 
     </section>
   );

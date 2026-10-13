@@ -265,3 +265,24 @@ export function resetAdminUserPassword(id, body, token) {
 export function deleteAdminUser(id, token) {
   return request(`/admin/users/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Kullanıcı silinemedi.' });
 }
+
+export function getCurrentAdmin(token) {
+  return request('/auth/me', { token, fallbackMessage: 'Oturum bilgisi alınamadı.' });
+}
+
+/* Activity log (İşlem Geçmişi) */
+
+export function listAudit({ page = 1, limit = 50, user, area, from, to, search } = {}, token) {
+  const params = new URLSearchParams({ page: String(page), limit: String(limit) });
+  if (user) params.set('user', user);
+  if (area) params.set('area', area);
+  if (from) params.set('from', from);
+  if (to) params.set('to', to);
+  if (search?.trim()) params.set('search', search.trim());
+
+  return request(`/admin/audit?${params.toString()}`, { token, fallbackMessage: 'İşlem geçmişi yüklenemedi.' });
+}
+
+export function getQuoteHistory(id, token) {
+  return request(`/quote/${encodeURIComponent(id)}/history`, { token, fallbackMessage: 'Geçmiş yüklenemedi.' });
+}

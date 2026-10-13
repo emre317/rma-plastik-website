@@ -8,6 +8,7 @@ import {
 import { getQuoteStats, getQuotes } from '../../services/adminApi';
 import { listFamilies, listPosts, listVideos } from '../../services/adminContentApi';
 import useAdminApi from '../../hooks/useAdminApi';
+import { useAdminSession } from '../../components/admin/AdminSession';
 import usePageTitle from '../../hooks/usePageTitle';
 import builtInFamilies from '../../data/productTables.builtin';
 import { QUOTE_STATUSES, statusLabel, statusTone, timeAgo } from '../../components/admin/quoteStatus';
@@ -19,6 +20,9 @@ export default function AdminDashboard() {
   usePageTitle('Özet');
 
   const call = useAdminApi();
+  const { can } = useAdminSession();
+  const sales = can('sales');
+  const editor = can('content');
 
   const [stats, setStats] = useState(null);
   const [recent, setRecent] = useState([]);
@@ -29,17 +33,26 @@ export default function AdminDashboard() {
     let cancelled = false;
 
     (async () => {
-      try {
-        const [statsResponse, quotesResponse] = await Promise.all([
-          call(getQuoteStats),
-          call((token) => getQuotes(token, { page: 1, limit: 6 })),
-        ]);
+      // Quote figures only for roles that work with requests
+      setError('');
+      if (!sales) {
+        setStats(null);
+        setRecent([]);
+      }
 
-        if (cancelled) return;
-        setStats(statsResponse.data);
-        setRecent(Array.isArray(quotesResponse.data) ? quotesResponse.data : []);
-      } catch (err) {
-        if (!cancelled) setError(err.message);
+      if (sales) {
+        try {
+          const [statsResponse, quotesResponse] = await Promise.all([
+            call(getQuoteStats),
+            call((token) => getQuotes(token, { page: 1, limit: 6 })),
+          ]);
+
+          if (cancelled) return;
+          setStats(statsResponse.data);
+          setRecent(Array.isArray(quotesResponse.data) ? quotesResponse.data : []);
+        } catch (err) {
+          if (!cancelled) setError(err.message);
+        }
       }
 
       // Content counts are a bonus: a failure here does not hide the requests
@@ -62,7 +75,7 @@ export default function AdminDashboard() {
     return () => {
       cancelled = true;
     };
-  }, [call]);
+  }, [call, sales]);
 
   const open = (stats?.new || 0) + (stats?.reviewing || 0);
   const pipelineTotal = QUOTE_STATUSES.reduce((sum, status) => sum + (stats?.[status.id] || 0), 0);
@@ -80,8 +93,13 @@ export default function AdminDashboard() {
         <div>
           <span className="adEyebrow">{today}</span>
           <h1>Hoş Geldiniz</h1>
-          <p>Teklif taleplerini takip edin, katalog ve içerikleri güncelleyin; değişiklikleri sol menüdeki <strong>Yayınla</strong> ile siteye aktarın.</p>
+          <p>
+            {sales && editor && <>Teklif taleplerini takip edin, katalog ve içerikleri güncelleyin; değişiklikleri sol menüdeki <strong>Yayınla</strong> ile siteye aktarın.</>}
+            {sales && !editor && 'Teklif taleplerini takip edin, proforma hazırlayın ve satış raporunu izleyin.'}
+            {!sales && editor && <>Katalog ve içerikleri güncelleyin; değişiklikleri sol menüdeki <strong>Yayınla</strong> ile siteye aktarın.</>}
+          </p>
         </div>
+        {sales && (
         <div className="adHeadActions">
           <Link to="/admin/quote-reports" className="cmsButton">
             <BarChart3 aria-hidden="true" />
@@ -92,10 +110,13 @@ export default function AdminDashboard() {
             Talepleri Aç
           </Link>
         </div>
+        )}
       </header>
 
       {error && <div className="adminInlineError">{error}</div>}
 
+      {sales && (
+      <>
       <div className="adKpis">
         {kpis.map((kpi) => (
           <Link key={kpi.label} to={kpi.to} className={`adKpi ${kpi.accent ? 'accent' : ''}`}>
@@ -170,6 +191,9 @@ export default function AdminDashboard() {
         </div>
       </div>
 
+      </>
+      )}
+
       {/* Content */}
       <h2 className="adSectionTitle">İçerik ve katalog</h2>
       <div className="adContentCards">
@@ -193,6 +217,7 @@ export default function AdminDashboard() {
         </Link>
       </div>
 
+      {editor && (
       <div className="adGrid">
         {/* Quick actions */}
         <div className="adCard">
@@ -215,6 +240,7 @@ export default function AdminDashboard() {
           </ol>
         </div>
       </div>
+      )}
     </section>
   );
 }

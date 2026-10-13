@@ -1,54 +1,61 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
-  BarChart3, Briefcase, Camera, CircleHelp, ExternalLink, Globe2, FileText, Inbox, LayoutDashboard, LogOut, Menu, PlayCircle, Settings, Table2, Type, UserPlus, Users, X,
+  BarChart3, Briefcase, Camera, CircleHelp, ExternalLink, Globe2, FileText, Inbox, LayoutDashboard, LogOut, Menu, PlayCircle, Settings, Table2, Type, UserPlus, Users, X, History,
 } from 'lucide-react';
 
 import { getUnreadLeadCount, getUnreadQuoteCount } from '../../services/adminApi';
 import PublishPanel from './PublishPanel';
+import { useAdminSession } from './AdminSession';
+import { roleLabel } from './roles';
 import BrandLogo from '../BrandLogo';
 import {
   QUOTES_CHANGED_EVENT,
   clearAdminSession,
   getAdminToken,
-  getAdminUser,
   isAuthError,
 } from '../../services/adminAuth';
 
 // Hints are shown as a tooltip, so every row has the same height
 const NAV = [
   {
-    group: 'Satış',
+    group: '',
     items: [
       { to: '/admin', label: 'Özet', icon: LayoutDashboard, end: true },
-      { to: '/admin/quotes', label: 'Teklif Talepleri', icon: Inbox, badge: true },
-      { to: '/admin/quote-reports', label: 'Satış Raporu', icon: BarChart3, hint: 'Ülke, ürün, kanal ve kazanma oranı' },
-      { to: '/admin/leads', label: 'Potansiyel Müşteriler', icon: UserPlus, hint: 'Kataloğu indiren ziyaretçiler', badge: 'leads' },
+    ],
+  },
+  {
+    group: 'Satış',
+    items: [
+      { to: '/admin/quotes', label: 'Teklif Talepleri', icon: Inbox, badge: true, area: 'sales' },
+      { to: '/admin/quote-reports', label: 'Satış Raporu', icon: BarChart3, hint: 'Ülke, ürün, kanal ve kazanma oranı', area: 'sales' },
+      { to: '/admin/leads', label: 'Potansiyel Müşteriler', icon: UserPlus, hint: 'Kataloğu indiren ziyaretçiler', badge: 'leads', area: 'sales' },
     ],
   },
   {
     group: 'Katalog',
     items: [
-      { to: '/admin/product-families', label: 'Ürün Tabloları', icon: Table2, hint: 'Ürün ve su deposu modelleri' },
-      { to: '/admin/export-markets', label: 'İhracat Ağı', icon: Globe2, hint: 'Haritadaki pazarlar' },
+      { to: '/admin/product-families', label: 'Ürün Tabloları', icon: Table2, hint: 'Ürün ve su deposu modelleri', area: 'content' },
+      { to: '/admin/export-markets', label: 'İhracat Ağı', icon: Globe2, hint: 'Haritadaki pazarlar', area: 'content' },
     ],
   },
   {
     group: 'İçerik',
     items: [
-      { to: '/admin/posts', label: 'Blog Yazıları', icon: FileText },
-      { to: '/admin/projects', label: 'Referans Projeler', icon: Briefcase, hint: 'Özel üretim projeleri' },
-      { to: '/admin/gallery', label: 'Saha Fotoğrafları', icon: Camera, hint: 'Kullanımdaki ürünler' },
-      { to: '/admin/faqs', label: 'Sık Sorulan Sorular', icon: CircleHelp, hint: 'SSS sayfası' },
-      { to: '/admin/videos', label: 'Videolar', icon: PlayCircle },
-      { to: '/admin/texts', label: 'Sayfa Metinleri', icon: Type },
+      { to: '/admin/posts', label: 'Blog Yazıları', icon: FileText, area: 'content' },
+      { to: '/admin/projects', label: 'Referans Projeler', icon: Briefcase, hint: 'Özel üretim projeleri', area: 'content' },
+      { to: '/admin/gallery', label: 'Saha Fotoğrafları', icon: Camera, hint: 'Kullanımdaki ürünler', area: 'content' },
+      { to: '/admin/faqs', label: 'Sık Sorulan Sorular', icon: CircleHelp, hint: 'SSS sayfası', area: 'content' },
+      { to: '/admin/videos', label: 'Videolar', icon: PlayCircle, area: 'content' },
+      { to: '/admin/texts', label: 'Sayfa Metinleri', icon: Type, area: 'content' },
     ],
   },
   {
     group: 'Ayarlar',
     items: [
-      { to: '/admin/settings', label: 'Site Ayarları', icon: Settings, hint: 'Telefon, e-posta, adres' },
-      { to: '/admin/users', label: 'Kullanıcılar', icon: Users, hint: 'Panel hesapları ve şifreler' },
+      { to: '/admin/settings', label: 'Site Ayarları', icon: Settings, hint: 'Telefon, e-posta, adres', area: 'settings' },
+      { to: '/admin/users', label: 'Kullanıcılar', icon: Users, hint: 'Panel hesapları, roller ve şifreler', area: 'users' },
+      { to: '/admin/audit', label: 'İşlem Geçmişi', icon: History, hint: 'Kim, neyi, ne zaman yaptı', area: 'audit' },
     ],
   },
 ];
@@ -58,7 +65,13 @@ export default function AdminSidebar() {
   const { pathname } = useLocation();
 
   const token = getAdminToken();
-  const admin = getAdminUser();
+  const { admin, can } = useAdminSession();
+  const sales = can('sales');
+
+  // Only the menu items this role may open; empty groups disappear
+  const nav = NAV
+    .map((section) => ({ ...section, items: section.items.filter((item) => can(item.area)) }))
+    .filter((section) => section.items.length);
 
   const [unread, setUnread] = useState(0);
   const [newLeads, setNewLeads] = useState(0);
@@ -75,6 +88,9 @@ export default function AdminSidebar() {
 
     async function loadUnreadCount() {
       try {
+        // Unread counts are sales data: other roles do not ask for them
+        if (!sales) return;
+
         const [response, leads] = await Promise.all([
           getUnreadQuoteCount(token),
           getUnreadLeadCount(token).catch(() => null),
@@ -99,7 +115,7 @@ export default function AdminSidebar() {
       cancelled = true;
       window.removeEventListener(QUOTES_CHANGED_EVENT, loadUnreadCount);
     };
-  }, [token, pathname, navigate]);
+  }, [token, pathname, navigate, sales]);
 
   function logout() {
     clearAdminSession();
@@ -133,9 +149,9 @@ export default function AdminSidebar() {
         </div>
 
         <nav className="adNav" aria-label="Yönetim menüsü">
-          {NAV.map((section) => (
-            <div key={section.group} className="adNavGroup">
-              <span className="adNavLabel">{section.group}</span>
+          {nav.map((section) => (
+            <div key={section.group || 'home'} className="adNavGroup">
+              {section.group && <span className="adNavLabel">{section.group}</span>}
               {section.items.map((item) => (
                 <NavLink key={item.to} to={item.to} end={item.end} title={item.hint} className={({ isActive }) => (isActive ? 'active' : '')}>
                   <item.icon aria-hidden="true" />
@@ -154,14 +170,14 @@ export default function AdminSidebar() {
         </nav>
 
         <div className="adSidebarFoot">
-          <PublishPanel />
+          {can('content') && <PublishPanel />}
 
           <div className="adUser">
-            <NavLink to="/admin/users" className="adUserLink" title="Hesabım ve şifre">
+            <NavLink to="/admin/account" className="adUserLink" title="Hesabım ve şifre">
               <span className="adAvatar" aria-hidden="true">{initial}</span>
               <span className="adUserText">
                 <strong>{admin?.name || 'Yönetici'}</strong>
-                {admin?.email && <small>{admin.email}</small>}
+                <small>{roleLabel(admin?.role)}{admin?.email ? ` · ${admin.email}` : ''}</small>
               </span>
             </NavLink>
             <button type="button" onClick={logout} aria-label="Çıkış yap" title="Çıkış yap">

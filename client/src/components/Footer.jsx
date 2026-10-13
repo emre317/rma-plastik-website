@@ -202,7 +202,8 @@ export default function Footer() {
 
         <div className="footerBottom">
 
-          <p>
+          {/* The year can differ from the prerendered page around New Year */}
+          <p suppressHydrationWarning>
             © {new Date().getFullYear()} RMA Plastik. {t('footer.rights')}
           </p>
 

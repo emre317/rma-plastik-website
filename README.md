@@ -39,6 +39,10 @@ In production, set `VITE_API_URL` for the client build and `CLIENT_URL` (comma-s
 
 `npm run build` (client) builds the app, prerenders every public page in TR/EN/AR to
 static HTML (`dist/<lang>/<path>/index.html`) and writes `sitemap.xml` and `robots.txt`.
+The browser hydrates that HTML instead of drawing the page again. Public pages are
+code-split (`src/routes/publicPages.js`) and English/Arabic texts load only when needed
+(Turkish is always included), so a visitor downloads little more than the page they open;
+the other pages are fetched in the background once the first one is ready.
 Page `<head>` tags come from `src/seo/Seo.jsx`; measurement goes through Google Tag Manager
 (`VITE_GTM_ID`) with Consent Mode v2 and a cookie banner. See
 [docs/analytics-seo-setup.md](docs/analytics-seo-setup.md) for GTM, GA4, Google Ads,

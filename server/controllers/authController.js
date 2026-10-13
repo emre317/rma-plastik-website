@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import AdminUser from '../models/AdminUser.js';
+import { logAudit } from '../services/audit.js';
 import {
   RESET_HOURS, canSendAccountMail, hashToken, issueResetToken, sendResetEmail,
 } from '../services/accountEmail.js';
@@ -64,6 +65,14 @@ export async function adminLogin(
       });
 
     if (!admin || !admin.isActive) {
+      logAudit(req, {
+        area: 'auth',
+        action: 'Başarısız giriş denemesi',
+        targetType: 'session',
+        user: admin || { name: '', email: email.toLowerCase().trim().slice(0, 254) },
+        details: admin ? 'Pasif hesap' : 'Kayıtlı olmayan e-posta',
+      });
+
       return res.status(401).json({
         success: false,
         message:
@@ -75,6 +84,8 @@ export async function adminLogin(
       await admin.comparePassword(password);
 
     if (!passwordMatches) {
+      logAudit(req, { area: 'auth', action: 'Başarısız giriş denemesi', targetType: 'session', user: admin, details: 'Hatalı şifre' });
+
       return res.status(401).json({
         success: false,
         message:
@@ -86,6 +97,7 @@ export async function adminLogin(
 
     // Not critical: a failed write must not block the login
     AdminUser.updateOne({ _id: admin._id }, { lastLoginAt: new Date() }).catch(() => {});
+    logAudit(req, { area: 'auth', action: 'Giriş yaptı', targetType: 'session', user: admin });
 
     return res.json({
       success: true,
@@ -200,9 +212,19 @@ export async function resetPassword(req, res) {
     admin.password = password;
     admin.resetTokenHash = null;
     admin.resetTokenExpires = null;
+    const wasInvite = admin.invitePending;
     admin.invitePending = false;
     admin.lastLoginAt = new Date();
     await admin.save();
+
+    logAudit(req, {
+      area: 'auth',
+      action: wasInvite ? 'Daveti kabul edip şifresini belirledi' : 'Şifresini e-posta bağlantısıyla sıfırladı',
+      targetType: 'user',
+      targetId: admin._id,
+      targetLabel: admin.name,
+      user: admin,
+    });
 
     return res.json({ success: true, token: createToken(admin), admin: publicAdmin(admin) });
   } catch (error) {
@@ -234,6 +256,8 @@ export async function changeOwnPassword(req, res) {
 
     admin.password = newPassword;
     await admin.save();
+
+    logAudit(req, { area: 'auth', action: 'Şifresini değiştirdi', targetType: 'user', targetId: admin._id, targetLabel: admin.name, user: admin });
 
     // A fresh token for this browser; older sessions are no longer accepted
     return res.json({ success: true, token: createToken(admin), admin: publicAdmin(admin) });

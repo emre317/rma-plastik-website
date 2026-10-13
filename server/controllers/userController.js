@@ -1,15 +1,16 @@
 import crypto from 'node:crypto';
 import mongoose from 'mongoose';
 
-import AdminUser from '../models/AdminUser.js';
+import AdminUser, { ADMIN_ROLES } from '../models/AdminUser.js';
 import { passwordProblem } from './authController.js';
 import {
   INVITE_HOURS, RESET_HOURS, canSendAccountMail, issueResetToken, sendInviteEmail, sendResetEmail,
 } from '../services/accountEmail.js';
 
 /*
-  Admin users (Kullanıcılar). Every user is a full admin. Nobody can deactivate
-  or delete their own account, and the last active account always stays.
+  Admin users (Kullanıcılar), each with a role (models/AdminUser.js). Nobody can
+  deactivate, delete or change the role of their own account, and at least
+  one active account with the admin role always stays.
 */
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -23,6 +24,7 @@ function row(user, selfId) {
     _id: user._id,
     name: user.name,
     email: user.email,
+    role: user.role || 'admin',
     isActive: user.isActive,
     invitePending: Boolean(user.invitePending),
     lastLoginAt: user.lastLoginAt || null,
@@ -31,9 +33,14 @@ function row(user, selfId) {
   };
 }
 
-async function otherActiveCount(id) {
-  return AdminUser.countDocuments({ _id: { $ne: id }, isActive: true });
+// Other active accounts with the admin role
+async function otherActiveAdmins(id) {
+  return AdminUser.countDocuments({ _id: { $ne: id }, isActive: true, role: 'admin' });
 }
+
+const isActiveAdmin = (user) => user.isActive && (user.role || 'admin') === 'admin';
+
+const LAST_ADMIN = 'En az bir aktif Yönetici kalmalı.';
 
 export async function listUsers(req, res) {
   try {
@@ -57,6 +64,7 @@ export async function createUser(req, res) {
     const name = clean(body.name, 80);
     const email = clean(body.email, 254).toLowerCase();
     const invite = body.invite === true;
+    const role = ADMIN_ROLES.includes(body.role) ? body.role : 'sales';
 
     if (!name) return res.status(400).json({ success: false, message: 'Ad soyad yazın.' });
     if (!EMAIL_PATTERN.test(email)) return res.status(400).json({ success: false, message: 'Geçerli bir e-posta adresi yazın.' });
@@ -79,7 +87,7 @@ export async function createUser(req, res) {
       if (problem) return res.status(400).json({ success: false, message: problem });
     }
 
-    const user = new AdminUser({ name, email, password, invitePending: invite });
+    const user = new AdminUser({ name, email, password, role, invitePending: invite });
     const token = invite ? issueResetToken(user, INVITE_HOURS) : null;
     await user.save();
 
@@ -107,7 +115,7 @@ export async function createUser(req, res) {
   }
 }
 
-/* { name } and / or { isActive } */
+/* { name }, { role } and / or { isActive } */
 export async function updateUser(req, res) {
   try {
     if (!mongoose.isValidObjectId(req.params.id)) return notFound(res);
@@ -123,6 +131,22 @@ export async function updateUser(req, res) {
       user.name = name;
     }
 
+    if (body.role !== undefined) {
+      if (!ADMIN_ROLES.includes(body.role)) {
+        return res.status(400).json({ success: false, message: 'Geçersiz rol.' });
+      }
+
+      if (String(user._id) === String(req.admin._id) && body.role !== user.role) {
+        return res.status(400).json({ success: false, message: 'Kendi rolünüzü değiştiremezsiniz.' });
+      }
+
+      if (body.role !== 'admin' && isActiveAdmin(user) && (await otherActiveAdmins(user._id)) === 0) {
+        return res.status(400).json({ success: false, message: LAST_ADMIN });
+      }
+
+      user.role = body.role;
+    }
+
     if (body.isActive !== undefined) {
       const isActive = body.isActive === true;
 
@@ -130,8 +154,8 @@ export async function updateUser(req, res) {
         return res.status(400).json({ success: false, message: 'Kendi hesabınızı pasif yapamazsınız.' });
       }
 
-      if (!isActive && user.isActive && (await otherActiveCount(user._id)) === 0) {
-        return res.status(400).json({ success: false, message: 'En az bir aktif yönetici kalmalı.' });
+      if (!isActive && isActiveAdmin(user) && (await otherActiveAdmins(user._id)) === 0) {
+        return res.status(400).json({ success: false, message: LAST_ADMIN });
       }
 
       user.isActive = isActive;
@@ -206,8 +230,8 @@ export async function deleteUser(req, res) {
     const user = await AdminUser.findById(req.params.id);
     if (!user) return notFound(res);
 
-    if (user.isActive && (await otherActiveCount(user._id)) === 0) {
-      return res.status(400).json({ success: false, message: 'En az bir aktif yönetici kalmalı.' });
+    if (isActiveAdmin(user) && (await otherActiveAdmins(user._id)) === 0) {
+      return res.status(400).json({ success: false, message: LAST_ADMIN });
     }
 
     await user.deleteOne();

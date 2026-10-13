@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import AdminUser from '../models/AdminUser.js';
+import AdminUser, { roleCan } from '../models/AdminUser.js';
 
 export async function requireAdmin(
   req,
@@ -56,4 +56,18 @@ export async function requireAdmin(
       message: 'Invalid or expired token.',
     });
   }
+}
+
+/* Use after requireAdmin: the user's role must include one of the areas */
+export function requirePermission(...areas) {
+  return (req, res, next) => {
+    if (areas.some((area) => roleCan(req.admin?.role, area))) {
+      return next();
+    }
+
+    return res.status(403).json({
+      success: false,
+      message: 'Bu işlem için yetkiniz yok. Gerekirse bir yöneticiden rolünüzü değiştirmesini isteyin.',
+    });
+  };
 }

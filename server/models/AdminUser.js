@@ -1,6 +1,23 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
+/*
+  Roles (client: components/admin/roles.js)
+    admin    everything, incl. users, site settings and the activity log
+    sales    quote requests, proformas, sales report, potential customers
+    content  products, blog, projects, photos, FAQ, export network, videos, texts, publishing
+  Every role can read the content lists and change its own password.
+*/
+export const ADMIN_ROLES = ['admin', 'sales', 'content'];
+
+export const ROLE_AREAS = {
+  admin: ['sales', 'content', 'settings', 'users', 'audit'],
+  sales: ['sales'],
+  content: ['content'],
+};
+
+export const roleCan = (role, area) => (ROLE_AREAS[role] || []).includes(area);
+
 const adminUserSchema = new mongoose.Schema(
   {
     name: {
@@ -25,7 +42,7 @@ const adminUserSchema = new mongoose.Schema(
 
     role: {
       type: String,
-      enum: ['admin'],
+      enum: ADMIN_ROLES,
       default: 'admin',
     },
 

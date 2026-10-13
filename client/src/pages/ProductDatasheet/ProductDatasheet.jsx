@@ -104,7 +104,8 @@ export default function ProductDatasheet() {
           <BrandLogo className="dsLogo" />
           <div className="dsHeadMeta">
             <strong>{d('title')}</strong>
-            <span>{d('issued')}: {issued}</span>
+            {/* Today's date: differs from the prerendered page, which is fine */}
+            <span suppressHydrationWarning>{d('issued')}: {issued}</span>
           </div>
         </header>
 

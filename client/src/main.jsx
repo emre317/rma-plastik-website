@@ -15,16 +15,31 @@ import '@fontsource/ibm-plex-sans-arabic/500.css';
 import '@fontsource/ibm-plex-sans-arabic/600.css';
 import '@fontsource/ibm-plex-sans-arabic/700.css';
 
-import './i18n';
+import i18n, { initialLanguage, loadLanguage } from './i18n';
 import App from './App';
 import './styles/global.css';
 
-ReactDOM.createRoot(
-  document.getElementById('root')
-).render(
+const root = document.getElementById('root');
+
+const app = (
   <React.StrictMode>
     <BrowserRouter>
       <App />
     </BrowserRouter>
   </React.StrictMode>
 );
+
+// Prerendered pages are hydrated (the HTML is reused, not drawn again);
+// the app shell ("/", admin, unknown URLs) is rendered from scratch
+// The page's language texts must be there before the first render (same text as the HTML)
+loadLanguage(initialLanguage)
+  // Re-applies the language now that its texts exist (resolvedLanguage, used for links)
+  .then(() => i18n.changeLanguage(initialLanguage))
+  .catch(() => {})
+  .then(() => {
+    if (root.hasChildNodes()) {
+      ReactDOM.hydrateRoot(root, app);
+    } else {
+      ReactDOM.createRoot(root).render(app);
+    }
+  });
