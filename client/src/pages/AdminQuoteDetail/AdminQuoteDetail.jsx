@@ -396,8 +396,17 @@ export default function AdminQuoteDetail() {
             ) : (
               <dl className="adFacts">
                 <div><dt>Ürün / konu</dt><dd>{quote.product || 'Genel Talep'}</dd></div>
-                <div><dt>İstenen Kapasite</dt><dd>{quote.capacity || '—'}</dd></div>
+                <div><dt>Kapasite / Ürün Kodu</dt><dd>{quote.capacity || '—'}</dd></div>
                 <div><dt>Adet</dt><dd>{quote.quantity || '—'}</dd></div>
+              </dl>
+            )}
+
+            {(quote.storedProduct || quote.density || quote.temperature || quote.deliveryCity) && (
+              <dl className="adFacts adTankFacts">
+                {quote.storedProduct && <div><dt>Stoklanacak Ürün</dt><dd>{quote.storedProduct}</dd></div>}
+                {quote.density && <div><dt>Özgül Ağırlık / Yoğunluk</dt><dd>{quote.density}</dd></div>}
+                {quote.temperature && <div><dt>Sıcaklık / Maks. Tepkime Sıcaklığı</dt><dd>{quote.temperature}</dd></div>}
+                {quote.deliveryCity && <div><dt>Teslimat Şehri / Adresi</dt><dd>{quote.deliveryCity}</dd></div>}
               </dl>
             )}
 

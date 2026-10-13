@@ -25,7 +25,10 @@ const initialForm = {
   product: '',
   capacity: '',
   quantity: '',
-  application: '',
+  storedProduct: '',
+  density: '',
+  temperature: '',
+  deliveryCity: '',
   message: '',
 };
 
@@ -478,23 +481,9 @@ export default function QuoteModal() {
             </label>
 
             <label className="formField">
-              <span>{fieldLabel('phone')}</span>
-              <input type="tel" name="phone" dir="ltr" maxLength={40} value={form.phone} onChange={handleChange} placeholder={t('contact.placeholders.phone')} />
+              <span>{fieldLabel('phone', true)}</span>
+              <input type="tel" name="phone" dir="ltr" autoComplete="tel" maxLength={40} pattern="^[^0-9]*([0-9][^0-9]*){7,}$" title={t('contact.phoneInvalid')} value={form.phone} onChange={handleChange} required placeholder={t('contact.placeholders.phone')} />
             </label>
-
-            <div className="formField">
-              <span>{fieldLabel('country')}</span>
-              <Dropdown
-                name="country"
-                value={form.country}
-                onChange={(value) => handleChange({ target: { name: 'country', value } })}
-                options={countries.map((item) => ({ value: item.code, label: item.name }))}
-                placeholder={t('contact.placeholders.countrySelect')}
-                label={fieldLabel('country')}
-                searchable
-                searchPlaceholder={t('contact.placeholders.countrySearch')}
-              />
-            </div>
 
             {cart.length === 0 && (
               <div className="formField">
@@ -522,6 +511,12 @@ export default function QuoteModal() {
               </label>
             )}
 
+            {/* Tank contents: what will be stored, its density and temperatures */}
+            <label className={`formField ${cart.length ? 'formFieldFull' : ''}`}>
+              <span>{fieldLabel('storedProduct')}</span>
+              <input type="text" name="storedProduct" maxLength={200} value={form.storedProduct} onChange={handleChange} placeholder={t('contact.placeholders.storedProduct')} />
+            </label>
+
             {cart.length === 0 && (
               <label className="formField">
                 <span>{fieldLabel('quantity')}</span>
@@ -529,9 +524,33 @@ export default function QuoteModal() {
               </label>
             )}
 
-            <label className="formField formFieldFull">
-              <span>{fieldLabel('application')}</span>
-              <input type="text" name="application" maxLength={200} value={form.application} onChange={handleChange} placeholder={t('contact.placeholders.application')} />
+            <label className="formField">
+              <span>{fieldLabel('density')}</span>
+              <input type="text" name="density" maxLength={80} value={form.density} onChange={handleChange} placeholder={t('contact.placeholders.density')} />
+            </label>
+
+            <label className="formField">
+              <span>{fieldLabel('temperature')}</span>
+              <input type="text" name="temperature" maxLength={160} value={form.temperature} onChange={handleChange} placeholder={t('contact.placeholders.temperature')} />
+            </label>
+
+            <div className="formField">
+              <span>{fieldLabel('country')}</span>
+              <Dropdown
+                name="country"
+                value={form.country}
+                onChange={(value) => handleChange({ target: { name: 'country', value } })}
+                options={countries.map((item) => ({ value: item.code, label: item.name }))}
+                placeholder={t('contact.placeholders.countrySelect')}
+                label={fieldLabel('country')}
+                searchable
+                searchPlaceholder={t('contact.placeholders.countrySearch')}
+              />
+            </div>
+
+            <label className="formField">
+              <span>{fieldLabel('deliveryCity')}</span>
+              <input type="text" name="deliveryCity" maxLength={200} autoComplete="address-level2" value={form.deliveryCity} onChange={handleChange} placeholder={t('contact.placeholders.deliveryCity')} />
             </label>
 
             <label className="formField formFieldFull">

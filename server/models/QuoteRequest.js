@@ -120,6 +120,35 @@ const quoteRequestSchema = new mongoose.Schema(
       maxlength: 200,
     },
 
+    // Tank contents: what is stored, its density and temperatures
+    storedProduct: {
+      type: String,
+      trim: true,
+      default: '',
+      maxlength: 200,
+    },
+
+    density: {
+      type: String,
+      trim: true,
+      default: '',
+      maxlength: 80,
+    },
+
+    temperature: {
+      type: String,
+      trim: true,
+      default: '',
+      maxlength: 160,
+    },
+
+    deliveryCity: {
+      type: String,
+      trim: true,
+      default: '',
+      maxlength: 200,
+    },
+
     message: {
       type: String,
       required: true,

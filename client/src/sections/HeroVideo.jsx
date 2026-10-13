@@ -188,12 +188,12 @@ export default function HeroVideo({ video }) {
             <p className="lead">{t('hero.lead')}</p>
 
             <div className="actions">
-              <a className="button primary" href="#products">
+              <a className="button heroExplore" href="#products">
                 <span>{t('hero.exploreProducts')}</span>
                 <Arrow className="buttonArrow" />
               </a>
 
-              <button type="button" className="button ghost heroVideoGhost" onClick={() => openQuote()}>
+              <button type="button" className="button primary heroQuoteCta" onClick={() => openQuote()}>
                 <span>{t('hero.requestSolution')}</span>
                 <Arrow className="buttonArrow" />
               </button>

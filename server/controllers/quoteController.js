@@ -27,6 +27,10 @@ const OPTIONAL_FIELD_LIMITS = {
   productDetails: 600,
   capacity: 80,
   application: 200,
+  storedProduct: 200,
+  density: 80,
+  temperature: 160,
+  deliveryCity: 200,
 };
 
 function cleanString(value) {
@@ -75,6 +79,17 @@ export async function createQuoteRequest(req, res) {
         success: false,
         message:
           'Please complete all required fields.',
+      });
+    }
+
+    // Phone is required: at least 7 digits (country code and spaces allowed)
+    const phone = cleanString(body.phone);
+
+    if (phone.replace(/\D/g, '').length < 7) {
+      return res.status(400).json({
+        success: false,
+        message:
+          'Please enter a valid phone number.',
       });
     }
 
