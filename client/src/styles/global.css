@@ -30896,10 +30896,24 @@ body {
   text-transform: capitalize;
 }
 
+.adTargetList,
+.adTargetShares {
+  display: grid;
+  gap: 4px;
+}
+
 .adTargetShare {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.adTargetShare em {
+  min-width: 34px;
+  color: var(--text-secondary);
+  font-size: 11.5px;
+  font-style: normal;
+  font-weight: 700;
 }
 
 .adTargetShare .adTargetBar {
@@ -30926,8 +30940,14 @@ body {
 }
 
 .adTargetForm {
+  display: grid;
+  gap: 8px;
+}
+
+.adTargetAmount {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 8px;
 }
 
@@ -30946,4 +30966,93 @@ body {
 
 .adTargetForm .adDd {
   width: 96px;
+}
+
+.adTargetDealsLabel {
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+/* Sales targets: company / person switch and the per-person overview */
+.adTargetTools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.adTargetOwner {
+  min-width: 190px;
+}
+
+.adTargetStripRow + .adTargetStripRow {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(17, 34, 68, 0.07);
+}
+
+.adTargetPeople {
+  margin: 0 0 16px;
+  display: grid;
+  gap: 8px;
+}
+
+.adTargetPeople ul {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 10px;
+  list-style: none;
+}
+
+.adTargetPerson {
+  width: 100%;
+  padding: 12px 14px;
+  display: grid;
+  gap: 8px;
+  border: 1px solid rgba(17, 34, 68, 0.08);
+  border-radius: 14px;
+  background: #ffffff;
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.adTargetPerson:hover {
+  border-color: rgba(29, 103, 213, 0.35);
+  background: #f8fbff;
+}
+
+.adTargetPerson strong {
+  font-size: 14px;
+}
+
+.adTargetPersonText {
+  display: none;
+}
+
+.adTargetPerson .adTargetShare {
+  flex-wrap: wrap;
+}
+
+.adTargetPerson .adTargetPersonText {
+  width: 100%;
+  display: block;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.adTargetOwnerNote {
+  margin: 0 0 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-secondary);
+  font-size: 13px;
 }

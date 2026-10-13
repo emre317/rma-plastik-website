@@ -63,12 +63,14 @@ function trackingDetails(req) {
 const targetLabel = (req) => {
   const [year, month] = String(req.params.month || '').split('-').map(Number);
   if (!year || !month) return '';
-  return `${new Intl.DateTimeFormat('tr-TR', { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(Date.UTC(year, month - 1, 1)))} hedefi`;
+  const owner = String(req.body?.owner || req.query?.owner || '').trim();
+  return `${new Intl.DateTimeFormat('tr-TR', { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(Date.UTC(year, month - 1, 1)))} hedefi${owner ? ` · ${owner}` : ' · şirket'}`;
 };
 const targetDetails = (req) => {
-  const amount = Number(req.body?.amount) || 0;
+  const nf = new Intl.NumberFormat('tr-TR');
+  const amounts = Array.isArray(req.body?.amounts) ? req.body.amounts : [];
   const deals = Number(req.body?.deals) || 0;
-  return [amount ? `${new Intl.NumberFormat('tr-TR').format(amount)} ${req.body?.currency || ''}` : '', deals ? `${deals} talep` : ''].filter(Boolean).join(' · ');
+  return [...amounts.map((item) => `${nf.format(Number(item?.amount) || 0)} ${item?.currency || ''}`), deals ? `${deals} talep` : ''].filter(Boolean).join(' · ');
 };
 
 const quoteAudit = (action, details) => audit({ area: 'sales', type: 'quote', action, lookup: QuoteRequest, details });

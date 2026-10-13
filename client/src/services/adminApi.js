@@ -303,10 +303,12 @@ export function getRecentQuotes(since, token) {
 }
 
 /* Monthly sales targets ("2026-10") with what was won in each month */
-export function getSalesTargets({ from, to } = {}, token) {
+export function getSalesTargets({ from, to, owner } = {}, token) {
   const params = new URLSearchParams();
   if (from) params.set('from', from);
   if (to) params.set('to', to);
+  // Empty owner = the company target; a name = that person's target
+  if (owner) params.set('owner', owner);
   return request(`/quote/targets?${params.toString()}`, { token, fallbackMessage: 'Satış hedefleri yüklenemedi.' });
 }
 
@@ -314,6 +316,7 @@ export function saveSalesTarget(month, target, token) {
   return request(`/quote/targets/${encodeURIComponent(month)}`, { method: 'PUT', body: target, token, fallbackMessage: 'Hedef kaydedilemedi.' });
 }
 
-export function deleteSalesTarget(month, token) {
-  return request(`/quote/targets/${encodeURIComponent(month)}`, { method: 'DELETE', token, fallbackMessage: 'Hedef silinemedi.' });
+export function deleteSalesTarget(month, owner, token) {
+  const query = owner ? `?${new URLSearchParams({ owner }).toString()}` : '';
+  return request(`/quote/targets/${encodeURIComponent(month)}${query}`, { method: 'DELETE', token, fallbackMessage: 'Hedef silinemedi.' });
 }
