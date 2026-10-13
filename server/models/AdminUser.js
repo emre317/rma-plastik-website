@@ -33,6 +33,36 @@ const adminUserSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+
+    lastLoginAt: {
+      type: Date,
+      default: null,
+    },
+
+    // Sessions (JWTs) issued before this moment are no longer accepted
+    passwordChangedAt: {
+      type: Date,
+      default: null,
+    },
+
+    // Password reset / invitation link: only the SHA-256 of the token is stored
+    resetTokenHash: {
+      type: String,
+      default: null,
+      select: false,
+    },
+
+    resetTokenExpires: {
+      type: Date,
+      default: null,
+      select: false,
+    },
+
+    // Set when the account was created by invitation and no password was chosen yet
+    invitePending: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
@@ -50,6 +80,11 @@ adminUserSchema.pre('save', async function () {
     this.password,
     salt
   );
+
+  // Existing sessions end when an existing account changes its password
+  if (!this.isNew) {
+    this.passwordChangedAt = new Date();
+  }
 });
 
 adminUserSchema.methods.comparePassword =

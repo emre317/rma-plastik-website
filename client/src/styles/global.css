@@ -33451,3 +33451,493 @@ html.booting .heroBrandName strong {
     animation: none;
   }
 }
+
+/* ---------- Sign-in pages: forgotten / new password ---------- */
+
+.algFieldHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.algLink {
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.algLink:hover {
+  text-decoration: underline;
+}
+
+.algCard > p strong {
+  color: var(--text);
+}
+
+.algNote {
+  margin: -12px 0 22px !important;
+  font-size: 13px !important;
+}
+
+.algDoneIcon {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 18px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: #e5f5ed;
+  color: #1f8a5b;
+}
+
+.algDoneIcon.warn {
+  background: #fdf0ea;
+  color: #c2410c;
+}
+
+.algDoneIcon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.algSecondary {
+  width: 100%;
+  height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #ffffff;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+}
+
+.algSecondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+a.algSubmit {
+  text-decoration: none;
+}
+
+.algChecking {
+  margin: 8px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-secondary);
+}
+
+.algChecking svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Password checklist (sign-in pages and panel) */
+.pwRules {
+  margin: 2px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  list-style: none;
+}
+
+.pwRules li {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #8a95a8;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.pwRules li svg {
+  width: 13px;
+  height: 13px;
+  opacity: 0.4;
+}
+
+.pwRules li.ok {
+  color: #1f8a5b;
+}
+
+.pwRules li.ok svg {
+  opacity: 1;
+}
+
+/* Password field inside the panel (same control as on the sign-in page, panel size) */
+.pwField > span:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.pwField .algInput input {
+  height: 44px;
+  padding: 0 44px 0 40px;
+  border-radius: var(--radius-sm);
+  background: #ffffff;
+  font-size: 14px;
+}
+
+.pwField .algInput > svg {
+  inset-inline-start: 13px;
+  width: 16px;
+  height: 16px;
+}
+
+.pwField .algReveal {
+  width: 34px;
+  height: 34px;
+  inset-inline-end: 5px;
+}
+
+/* ---------- Admin: users ---------- */
+
+.adTextButton {
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.adTextButton:hover {
+  text-decoration: underline;
+}
+
+.adTextButton svg {
+  width: 14px;
+  height: 14px;
+}
+
+.adInfo,
+.adNotice {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.adInfo {
+  border: 1px solid rgba(183, 121, 31, 0.25);
+  background: #fdf6e7;
+  color: #7a4f10;
+}
+
+.adNotice.success,
+.adNotice.info {
+  border: 1px solid rgba(31, 138, 91, 0.25);
+  background: #e9f7f0;
+  color: #165f40;
+}
+
+.adNotice.info {
+  border-color: rgba(29, 103, 213, 0.25);
+  background: #eaf1fd;
+  color: #164a99;
+}
+
+.adNotice.error {
+  border: 1px solid rgba(194, 65, 12, 0.25);
+  background: #fdf0ea;
+  color: #9a3412;
+}
+
+.adInfo > svg,
+.adNotice > svg {
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  flex: none;
+}
+
+.adNotice > span {
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+
+.adNotice .adIconButton {
+  width: 28px;
+  height: 28px;
+  margin: -4px -4px -4px 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+}
+
+.adUserForm,
+.adOwnPassword {
+  display: grid;
+  gap: 16px;
+}
+
+.adUserForm .adCardHead,
+.adOwnPassword .adCardHead {
+  margin-bottom: 0;
+}
+
+.adUserFormGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.adUserFormGrid.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+}
+
+.adUserForm .cmsField,
+.adOwnPassword .cmsField,
+.adUserReset .cmsField {
+  margin: 0;
+}
+
+.adMethod {
+  width: fit-content;
+  max-width: 100%;
+}
+
+.adMethod button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.adMethod button svg {
+  width: 15px;
+  height: 15px;
+}
+
+.adMethod button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.adUserFormActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.adUserFormActions .cmsHint {
+  margin: 0 auto 0 0;
+}
+
+.adUsers > .adCard + .adCard,
+.adUsers > form + .adCard {
+  margin-top: 16px;
+}
+
+.adUserList {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  list-style: none;
+}
+
+.adUserRow {
+  padding: 14px 4px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px 18px;
+  border-bottom: 1px solid rgba(17, 34, 68, 0.06);
+}
+
+.adUserRow:last-child {
+  border-bottom: 0;
+}
+
+.adUserRow.inactive .adUserMain {
+  opacity: 0.55;
+}
+
+.adUserMain {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.adUserIdentity {
+  min-width: 0;
+  display: grid;
+}
+
+.adUserIdentity strong {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14.5px;
+}
+
+.adUserIdentity a {
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.adSelfTag {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #e8f0fd;
+  color: var(--accent);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.adUserMeta {
+  min-width: 0;
+  display: grid;
+  justify-items: start;
+  gap: 4px;
+}
+
+.adUserMeta small {
+  color: var(--text-secondary);
+  font-size: 12.5px;
+}
+
+.adUserActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.adUserActions .cmsButton {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.adUserActions .cmsButton svg {
+  width: 15px;
+  height: 15px;
+}
+
+.adIconButton.danger:hover {
+  border-color: rgba(194, 65, 12, 0.35);
+  background: #fdf0ea;
+  color: #c2410c;
+}
+
+.adUserReset {
+  grid-column: 1 / -1;
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+  border-radius: 14px;
+  background: #f6f8fc;
+}
+
+.adUserResetOption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.adUserResetOption > div:first-child {
+  display: grid;
+  gap: 2px;
+}
+
+.adUserResetOption small {
+  color: var(--text-secondary);
+  font-size: 12.5px;
+}
+
+.adUserResetOption + .adUserResetOption {
+  padding-top: 12px;
+  border-top: 1px dashed rgba(17, 34, 68, 0.12);
+}
+
+.adUserResetField {
+  min-width: min(360px, 100%);
+  flex: 1;
+}
+
+.adUserResetOption .cmsButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.adUserResetOption .cmsButton svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* Sidebar: the user block opens Kullanıcılar */
+.adUserLink {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 10px;
+  color: inherit;
+}
+
+.adUserLink:hover .adUserText strong,
+.adUserLink.active .adUserText strong {
+  color: #9cc4ff;
+}
+
+@media (max-width: 900px) {
+  .adUserRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .adUserActions {
+    justify-content: flex-start;
+  }
+
+  .adUserFormGrid,
+  .adUserFormGrid.three {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.adUserActions .adIconButton {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+}
+
+/* Save button level with the password input (label above, checklist below) */
+.adUserResetOption.withField {
+  align-items: flex-start;
+}
+
+.adUserResetOption.withField > .cmsButton {
+  min-height: 44px;
+  margin-top: 25px;
+}

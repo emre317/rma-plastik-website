@@ -2,6 +2,16 @@
 
 Panel adresi: `https://ALAN-ADI/admin` (giriş: `npm run create-admin` ile oluşturulan hesap).
 
+## Kullanıcılar ve şifreler
+
+- İlk hesap sunucuda `npm run create-admin` ile açılır. Diğer kullanıcılar panelde **Ayarlar › Kullanıcılar › Kullanıcı Ekle** ile eklenir:
+  - **Davet E-postası Gönder:** kişiye 72 saat geçerli bir bağlantı gider, şifresini kendisi belirler.
+  - **Şifreyi Ben Belirleyeyim:** şifreyi siz belirler ("Şifre Oluştur" ile güçlü bir şifre üretilip panoya kopyalanır) ve kişiye güvenli bir yoldan iletirsiniz.
+- Giriş ekranındaki **Şifremi Unuttum** bağlantısı 1 saat geçerli bir sıfırlama e-postası gönderir. Kullanıcılar sayfasından başka bir kullanıcıya sıfırlama bağlantısı gönderilebilir ya da yeni şifresi doğrudan belirlenebilir.
+- Şifre en az 8 karakter olmalı ve en az bir harf ile bir rakam içermeli. Şifre değişince o hesabın diğer cihazlardaki oturumları kapanır.
+- Pasif yapılan kullanıcı giriş yapamaz. Kimse kendi hesabını silemez veya pasif yapamaz; en az bir aktif yönetici her zaman kalır.
+- E-postalar için sunucuda SMTP ayarları ve `CLIENT_URL` (bağlantılardaki site adresi) gerekir. SMTP yoksa davet/sıfırlama e-postası gönderilemez; şifreler Kullanıcılar sayfasında belirlenir.
+
 ## Ekranlar
 
 | Menü | Ne yapılır |

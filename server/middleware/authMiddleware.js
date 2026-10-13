@@ -39,6 +39,14 @@ export async function requireAdmin(
       });
     }
 
+    // Password changed after this session started (1 s tolerance for the new token)
+    if (admin.passwordChangedAt && decoded.iat * 1000 < admin.passwordChangedAt.getTime() - 1000) {
+      return res.status(401).json({
+        success: false,
+        message: 'Session expired after a password change.',
+      });
+    }
+
     req.admin = admin;
 
     next();

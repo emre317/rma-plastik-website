@@ -210,3 +210,58 @@ export function deleteLead(id, token) {
     fallbackMessage: 'Kayıt silinemedi.',
   });
 }
+
+/* Password reset (public) and own password */
+
+export function requestPasswordReset(email) {
+  return request('/auth/forgot-password', {
+    method: 'POST',
+    body: { email },
+    fallbackMessage: 'İstek gönderilemedi.',
+  });
+}
+
+export function checkResetToken(token) {
+  return request(`/auth/reset-password?token=${encodeURIComponent(token)}`, {
+    fallbackMessage: 'Bağlantı kontrol edilemedi.',
+  });
+}
+
+export function resetPassword(token, password) {
+  return request('/auth/reset-password', {
+    method: 'POST',
+    body: { token, password },
+    fallbackMessage: 'Şifre kaydedilemedi.',
+  });
+}
+
+export function changeOwnPassword(currentPassword, newPassword, token) {
+  return request('/auth/password', {
+    method: 'PUT',
+    body: { currentPassword, newPassword },
+    token,
+    fallbackMessage: 'Şifre değiştirilemedi.',
+  });
+}
+
+/* Admin users (Kullanıcılar) */
+
+export function listAdminUsers(token) {
+  return request('/admin/users', { token, fallbackMessage: 'Kullanıcılar yüklenemedi.' });
+}
+
+export function createAdminUser(body, token) {
+  return request('/admin/users', { method: 'POST', body, token, fallbackMessage: 'Kullanıcı eklenemedi.' });
+}
+
+export function updateAdminUser(id, body, token) {
+  return request(`/admin/users/${encodeURIComponent(id)}`, { method: 'PATCH', body, token, fallbackMessage: 'Kullanıcı güncellenemedi.' });
+}
+
+export function resetAdminUserPassword(id, body, token) {
+  return request(`/admin/users/${encodeURIComponent(id)}/password`, { method: 'POST', body, token, fallbackMessage: 'Şifre sıfırlanamadı.' });
+}
+
+export function deleteAdminUser(id, token) {
+  return request(`/admin/users/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Kullanıcı silinemedi.' });
+}

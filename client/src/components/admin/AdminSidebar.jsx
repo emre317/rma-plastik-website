@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
-  BarChart3, Briefcase, Camera, CircleHelp, ExternalLink, Globe2, FileText, Inbox, LayoutDashboard, LogOut, Menu, PlayCircle, Settings, Table2, Type, UserPlus, X,
+  BarChart3, Briefcase, Camera, CircleHelp, ExternalLink, Globe2, FileText, Inbox, LayoutDashboard, LogOut, Menu, PlayCircle, Settings, Table2, Type, UserPlus, Users, X,
 } from 'lucide-react';
 
 import { getUnreadLeadCount, getUnreadQuoteCount } from '../../services/adminApi';
@@ -48,6 +48,7 @@ const NAV = [
     group: 'Ayarlar',
     items: [
       { to: '/admin/settings', label: 'Site Ayarları', icon: Settings, hint: 'Telefon, e-posta, adres' },
+      { to: '/admin/users', label: 'Kullanıcılar', icon: Users, hint: 'Panel hesapları ve şifreler' },
     ],
   },
 ];
@@ -156,11 +157,13 @@ export default function AdminSidebar() {
           <PublishPanel />
 
           <div className="adUser">
-            <span className="adAvatar" aria-hidden="true">{initial}</span>
-            <span className="adUserText">
-              <strong>{admin?.name || 'Yönetici'}</strong>
-              {admin?.email && <small>{admin.email}</small>}
-            </span>
+            <NavLink to="/admin/users" className="adUserLink" title="Hesabım ve şifre">
+              <span className="adAvatar" aria-hidden="true">{initial}</span>
+              <span className="adUserText">
+                <strong>{admin?.name || 'Yönetici'}</strong>
+                {admin?.email && <small>{admin.email}</small>}
+              </span>
+            </NavLink>
             <button type="button" onClick={logout} aria-label="Çıkış yap" title="Çıkış yap">
               <LogOut aria-hidden="true" />
             </button>

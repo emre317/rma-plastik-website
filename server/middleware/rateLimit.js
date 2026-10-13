@@ -37,3 +37,13 @@ export const leadSubmitLimiter = rateLimit({
     'Too many requests. Please try again later.'
   ),
 });
+
+export const passwordResetLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  standardHeaders: 'draft-8',
+  legacyHeaders: false,
+  message: limitMessage(
+    'Çok fazla deneme yapıldı. Lütfen 15 dakika sonra tekrar deneyin.'
+  ),
+});

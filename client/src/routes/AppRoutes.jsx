@@ -28,6 +28,9 @@ import NotFound from '../pages/NotFound/NotFound';
 const AdminLayout = lazy(() => import('../layouts/AdminLayout'));
 const ProtectedAdminRoute = lazy(() => import('../components/ProtectedAdminRoute'));
 const AdminLogin = lazy(() => import('../pages/AdminLogin/AdminLogin'));
+const AdminForgotPassword = lazy(() => import('../pages/AdminForgotPassword/AdminForgotPassword'));
+const AdminResetPassword = lazy(() => import('../pages/AdminResetPassword/AdminResetPassword'));
+const AdminUsers = lazy(() => import('../pages/AdminUsers/AdminUsers'));
 const AdminDashboard = lazy(() => import('../pages/AdminDashboard/AdminDashboard'));
 const AdminQuotes = lazy(() => import('../pages/AdminQuotes/AdminQuotes'));
 const AdminQuoteReports = lazy(() => import('../pages/AdminQuoteReports/AdminQuoteReports'));
@@ -88,6 +91,8 @@ export default function AppRoutes() {
 
       {/* Admin panel (English only, not language-prefixed) */}
       <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="/admin/forgot-password" element={<AdminForgotPassword />} />
+      <Route path="/admin/reset-password" element={<AdminResetPassword />} />
 
       <Route element={<ProtectedAdminRoute />}>
         <Route element={<AdminLayout />}>
@@ -104,6 +109,7 @@ export default function AppRoutes() {
           <Route path="/admin/product-families/:id" element={<AdminProductFamilyEdit />} />
           <Route path="/admin/texts" element={<AdminTexts />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
+          <Route path="/admin/users" element={<AdminUsers />} />
           <Route path="/admin/posts" element={<AdminPosts />} />
           <Route path="/admin/posts/:id" element={<AdminPostEdit />} />
           <Route path="/admin/videos" element={<AdminVideos />} />

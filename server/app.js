@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 
 import quoteRoutes from './routes/quoteRoutes.js';
 import leadRoutes from './routes/leadRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import { adminContentRouter, publicContentRouter } from './routes/contentRoutes.js';
 import { UPLOAD_ROOT } from './middleware/upload.js';
@@ -97,6 +98,8 @@ app.use(
 app.use('/api/leads', leadRoutes);
 
 app.use('/api/content', publicContentRouter);
+
+app.use('/api/admin/users', userRoutes);
 
 app.use('/api/admin', adminContentRouter);
 
