@@ -16,6 +16,7 @@ import company from '../../data/company';
 import useLanguage from '../../hooks/useLanguage';
 import useModelQuote from '../../hooks/useModelQuote';
 import formatNumber from '../../utils/formatNumber';
+import { ZoomableImage } from '../../components/ui/ImageLightbox';
 import { familyText, findModel, modelPath, similarModels } from '../../data/productTables';
 
 // Up to four headline values shown as large tiles, in this order of preference
@@ -146,7 +147,7 @@ export default function ProductModel() {
             {/* Visual */}
             <div className="pmMediaCol">
               <figure className="pmMedia">
-                {image ? <img src={image} alt={`${row.code} – ${title}`} /> : <Package aria-hidden="true" />}
+                {image ? <ZoomableImage className="pmZoom" src={image} alt={`${row.code} – ${title}`} caption={`${row.code} – ${title}`} /> : <Package aria-hidden="true" />}
                 <figcaption>
                   <span className="pmMediaTag">{title}</span>
                   <span className="pmMediaCode">{row.code}</span>

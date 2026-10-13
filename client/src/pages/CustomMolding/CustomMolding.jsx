@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MessageSquare } from 'lucide-react';
 
@@ -12,6 +13,7 @@ import projects, { projectText } from '../../data/projects';
 import useLanguage from '../../hooks/useLanguage';
 import FieldGallerySection from '../../sections/FieldGallerySection';
 import SectionDeco from '../../components/ui/SectionDeco';
+import ImageLightbox from '../../components/ui/ImageLightbox';
 
 const pad = (n) => String(n).padStart(2, '0');
 
@@ -19,6 +21,7 @@ export default function CustomMolding() {
   const { t } = useTranslation();
   const { code: lang } = useLanguage();
   const { openQuote } = useQuote();
+  const [viewer, setViewer] = useState(-1);
 
   const list = (key) => {
     const value = t(`pages.customMolding.${key}`, { returnObjects: true });
@@ -32,6 +35,19 @@ export default function CustomMolding() {
   const machines = Array.isArray(machinery) ? machinery : [];
   const figureList = t('customMolding.figures', { returnObjects: true });
   const figures = Array.isArray(figureList) ? figureList : [];
+
+  // Reference and gallery photos open in one full-screen viewer
+  const projectSlides = projects.filter((project) => project.image).map((project) => ({
+    src: project.image,
+    alt: projectText(project, 'title', lang),
+    title: projectText(project, 'title', lang),
+    description: projectText(project, 'client', lang),
+  }));
+  const slides = [
+    ...projectSlides,
+    ...galleryImages.map((src, index) => ({ src, alt: `${text('galleryAlt')} ${index + 1}` })),
+  ];
+  const openSlide = (src) => setViewer(slides.findIndex((slide) => slide.src === src));
 
   return (
     <main className="internalPage cmPage">
@@ -177,9 +193,13 @@ export default function CustomMolding() {
           <ul className="cmProjects">
             {projects.map((project, index) => (
               <li key={`${projectText(project, 'client', 'tr')}-${index}`} className="cmProject">
-                <span className="cmDisc cmDiscLarge">
-                  {project.image && <img src={project.image} alt={projectText(project, 'title', lang)} loading="lazy" decoding="async" width="400" height="400" />}
-                </span>
+                {project.image ? (
+                  <button type="button" className="cmDisc cmDiscLarge cmZoom" onClick={() => openSlide(project.image)} aria-label={`${t('lightbox.open')}: ${projectText(project, 'title', lang)}`}>
+                    <img src={project.image} alt={projectText(project, 'title', lang)} loading="lazy" decoding="async" width="400" height="400" />
+                  </button>
+                ) : (
+                  <span className="cmDisc cmDiscLarge" />
+                )}
                 <span className="cmProjectIndex">{pad(index + 1)}</span>
                 <h3>{projectText(project, 'title', lang)}</h3>
                 <p>{projectText(project, 'client', lang)}</p>
@@ -192,13 +212,15 @@ export default function CustomMolding() {
           <ul className="cmGallery">
             {galleryImages.map((src, index) => (
               <li key={src} style={{ '--i': index }}>
-                <span className="cmDisc">
+                <button type="button" className="cmDisc cmZoom" onClick={() => openSlide(src)} aria-label={`${t('lightbox.open')}: ${text('galleryAlt')} ${index + 1}`}>
                   <img src={src} alt={`${text('galleryAlt')} ${index + 1}`} loading="lazy" decoding="async" width="400" height="400" />
-                </span>
+                </button>
               </li>
             ))}
           </ul>
         </div>
+
+        <ImageLightbox slides={slides} index={viewer} onClose={() => setViewer(-1)} />
       </section>
 
       <FieldGallerySection />

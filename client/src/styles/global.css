@@ -1,4 +1,4 @@
-/* Fonts are self-hosted via @fontsource (imported in main.jsx) */
+/* Fonts are self-hosted via @fontsource-variable / @fontsource (imported in main.jsx) */
 
 /* =====================================================
    ROOT
@@ -32,8 +32,8 @@
   --dir-x: 1;
 
   /* Typography: Manrope for headings and figures, Inter for running text */
-  --font-display: "Manrope", "IBM Plex Sans Arabic", "Inter", Arial, sans-serif;
-  --font-body: "Inter", "IBM Plex Sans Arabic", Arial, sans-serif;
+  --font-display: "Manrope Variable", "Manrope", "IBM Plex Sans Arabic", "Inter Variable", Arial, sans-serif;
+  --font-body: "Inter Variable", "Inter", "IBM Plex Sans Arabic", Arial, sans-serif;
 }
 
 html[dir="rtl"] {
@@ -3824,7 +3824,7 @@ textarea:focus-visible {
 }
 
 .languageSwitcherOption[lang="ar"] .languageSwitcherLabel {
-  font-family: "IBM Plex Sans Arabic", "Inter", Arial, sans-serif;
+  font-family: "IBM Plex Sans Arabic", "Inter Variable", "Inter", Arial, sans-serif;
 
   letter-spacing: 0;
 }
@@ -3879,7 +3879,7 @@ textarea:focus-visible {
 ===================================================== */
 
 html[lang="ar"] {
-  font-family: "IBM Plex Sans Arabic", "Inter", Arial, sans-serif;
+  font-family: "IBM Plex Sans Arabic", "Inter Variable", "Inter", Arial, sans-serif;
 }
 
 /*
@@ -25674,8 +25674,7 @@ html[lang="ar"] .ecoBandEyebrow {
   line-height: 1.35;
 }
 
-.fgCaption small,
-.fgViewer figcaption small {
+.fgCaption small {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -25683,113 +25682,9 @@ html[lang="ar"] .ecoBandEyebrow {
   opacity: 0.85;
 }
 
-.fgCaption small svg,
-.fgViewer figcaption small svg {
+.fgCaption small svg {
   width: 13px;
   height: 13px;
-}
-
-.fgViewer {
-  position: fixed;
-  z-index: 1200;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 64px 72px;
-}
-
-.fgBackdrop {
-  position: absolute;
-  inset: 0;
-  border: 0;
-  background: rgba(8, 14, 28, 0.92);
-  cursor: zoom-out;
-}
-
-.fgViewer figure {
-  position: relative;
-  max-width: min(1200px, 100%);
-  max-height: 100%;
-  margin: 0;
-  display: grid;
-  gap: 12px;
-}
-
-.fgViewer figure img {
-  max-width: 100%;
-  max-height: calc(100vh - 180px);
-  display: block;
-  margin: 0 auto;
-  border-radius: 12px;
-  object-fit: contain;
-}
-
-.fgViewer figcaption {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  color: #ffffff;
-}
-
-.fgViewer figcaption span {
-  display: grid;
-  gap: 2px;
-}
-
-.fgViewer figcaption em {
-  font-size: 13px;
-  font-style: normal;
-  opacity: 0.7;
-  white-space: nowrap;
-}
-
-.fgClose,
-.fgNav {
-  position: absolute;
-  width: 48px;
-  height: 48px;
-  display: grid;
-  place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
-  cursor: pointer;
-  transition: background 160ms ease;
-}
-
-.fgClose:hover,
-.fgNav:hover {
-  background: rgba(255, 255, 255, 0.18);
-}
-
-.fgClose svg,
-.fgNav svg {
-  width: 22px;
-  height: 22px;
-}
-
-.fgClose {
-  top: 14px;
-  inset-inline-end: 14px;
-}
-
-.fgNav {
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.fgNav.prev {
-  inset-inline-start: 12px;
-}
-
-.fgNav.next {
-  inset-inline-end: 12px;
-}
-
-[dir='rtl'] .fgNav svg {
-  transform: scaleX(-1);
 }
 
 @media (max-width: 640px) {
@@ -25808,16 +25703,6 @@ html[lang="ar"] .ecoBandEyebrow {
 
   .fgCaption strong {
     font-size: 13px;
-  }
-
-  .fgViewer {
-    padding: 64px 12px 84px;
-  }
-
-  .fgNav {
-    top: auto;
-    bottom: 18px;
-    transform: none;
   }
 }
 
@@ -26563,14 +26448,14 @@ html[lang="ar"] .ecoBandEyebrow {
   gap: 20px;
   background: #ffffff;
   color: var(--of-ink);
-  font-family: Inter, 'IBM Plex Sans Arabic', Arial, sans-serif;
+  font-family: 'Inter Variable', Inter, 'IBM Plex Sans Arabic', Arial, sans-serif;
   font-size: 12px;
   line-height: 1.5;
   text-align: start;
 }
 
 .ofDoc[dir='rtl'] {
-  font-family: 'IBM Plex Sans Arabic', Inter, Arial, sans-serif;
+  font-family: 'IBM Plex Sans Arabic', 'Inter Variable', Inter, Arial, sans-serif;
 }
 
 /* Letter spacing splits Arabic letters apart when drawn into the PDF */
@@ -30164,4 +30049,268 @@ html.booting .heroTypeLine {
   .heroTypeLine {
     animation: none;
   }
+}
+
+/* =====================================================
+   DESIGN LAYER — type, data tables, photos
+   (variable fonts: Inter Variable with optical sizes, Manrope Variable)
+===================================================== */
+
+body {
+  font-optical-sizing: auto;
+
+  font-kerning: normal;
+}
+
+::selection {
+  background: rgba(29, 103, 213, 0.18);
+
+  color: inherit;
+}
+
+/* Keyboard focus is always visible; components with their own ring keep it */
+:where(a, button, [role="button"], summary):where(:focus-visible) {
+  outline: 2px solid var(--accent);
+
+  outline-offset: 3px;
+}
+
+/* Figures line up in columns */
+.pmTable,
+.stat strong,
+.globalFigures dt,
+.heroVisualBottom strong,
+.ofTotals {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Product model specs */
+.pmTable tr {
+  transition: background 160ms ease;
+}
+
+.pmTable tr:hover {
+  background: rgba(29, 103, 213, 0.06);
+}
+
+.pmTable tr:last-child th,
+.pmTable tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Model tables: slim scrollbar, code column stays in view on narrow screens */
+.ptTableWrap,
+.compareTableWrap {
+  scrollbar-width: thin;
+
+  scrollbar-color: rgba(17, 34, 68, 0.25) transparent;
+}
+
+@media (max-width: 900px) {
+  .ptTable tbody tr {
+    background: #fff;
+  }
+
+  .ptTable tbody tr:nth-child(even) {
+    background: color-mix(in srgb, var(--background) 60%, #fff);
+  }
+
+  .ptTable tbody tr:hover {
+    background: color-mix(in srgb, #1d67d5 7%, #fff);
+  }
+
+  .ptTable tbody th {
+    position: sticky;
+
+    inset-inline-start: 0;
+
+    z-index: 1;
+
+    background: inherit;
+
+    box-shadow: inset -1px 0 0 var(--line);
+  }
+
+  [dir="rtl"] .ptTable tbody th {
+    box-shadow: inset 1px 0 0 var(--line);
+  }
+
+  .ptTable thead th:first-child {
+    inset-inline-start: 0;
+
+    z-index: 2;
+  }
+}
+
+/* Photos that open full screen */
+.zoomable,
+.cmZoom {
+  position: relative;
+
+  width: 100%;
+
+  padding: 0;
+
+  border: 0;
+
+  background: none;
+
+  color: inherit;
+
+  font: inherit;
+
+  cursor: zoom-in;
+}
+
+.zoomable {
+  height: 100%;
+
+  display: block;
+}
+
+.zoomable > img {
+  width: 100%;
+
+  height: 100%;
+}
+
+.zoomableHint {
+  position: absolute;
+
+  inset-block-end: 16px;
+
+  inset-inline-end: 16px;
+
+  width: 40px;
+
+  height: 40px;
+
+  display: grid;
+
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.92);
+
+  color: var(--dark);
+
+  box-shadow: 0 10px 24px -12px rgba(15, 30, 60, 0.55);
+
+  opacity: 0;
+
+  transform: translateY(6px);
+
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.zoomableHint svg {
+  width: 18px;
+
+  height: 18px;
+}
+
+.zoomable:hover .zoomableHint,
+.zoomable:focus-visible .zoomableHint {
+  opacity: 1;
+
+  transform: none;
+}
+
+.zoomable:focus-visible {
+  outline-offset: -3px;
+}
+
+@media (hover: none) {
+  .zoomableHint {
+    opacity: 1;
+
+    transform: none;
+  }
+}
+
+/* Lightbox (yet-another-react-lightbox) in the site colours */
+.rmaLightbox {
+  --yarl__color_backdrop: rgba(8, 14, 28, 0.94);
+
+  --yarl__button_filter: none;
+
+  --yarl__slide_title_color: #fff;
+
+  --yarl__slide_title_font_size: 16px;
+
+  --yarl__slide_title_font_weight: 600;
+
+  --yarl__slide_description_color: rgba(255, 255, 255, 0.78);
+
+  --yarl__slide_captions_container_background: linear-gradient(to top, rgba(8, 14, 28, 0.85), rgba(8, 14, 28, 0));
+
+  --yarl__counter_filter: none;
+
+  font-family: var(--font-body);
+}
+
+.rmaLightbox .yarl__slide_title {
+  font-family: var(--font-display);
+
+  letter-spacing: -0.01em;
+}
+
+.rmaLightbox .yarl__slide_image {
+  border-radius: 12px;
+}
+
+.rmaLightbox .yarl__button {
+  width: 46px;
+
+  height: 46px;
+
+  margin: 8px;
+
+  padding: 0;
+
+  display: grid;
+
+  place-items: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.16);
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  transition: background 160ms ease;
+}
+
+.rmaLightbox .yarl__button:hover,
+.rmaLightbox .yarl__button:focus-visible {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.rmaLightbox .yarl__button:disabled {
+  opacity: 0.35;
+}
+
+.rmaLightbox .yarl__icon {
+  width: 22px;
+
+  height: 22px;
+}
+
+.rmaLightbox .yarl__counter {
+  margin: 8px;
+
+  padding: 6px 12px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.1);
+
+  direction: ltr;
+
+  font-size: 13px;
+
+  font-variant-numeric: tabular-nums;
+
+  unicode-bidi: isolate;
 }

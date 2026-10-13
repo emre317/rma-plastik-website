@@ -93,6 +93,20 @@ const en = {
     directLink: 'Download the catalogue anyway.',
   },
 
+  lightbox: {
+    title: 'Photo Viewer',
+    open: 'Enlarge',
+    previous: 'Previous',
+    next: 'Next',
+    close: 'Close',
+    zoomIn: 'Zoom In',
+    zoomOut: 'Zoom Out',
+    slide: 'Photo',
+    loading: 'Loading',
+    error: 'The photo could not be loaded',
+    counter: '{index} / {total}',
+  },
+
   cookies: {
     title: 'Your cookie preferences',
     text: 'We use essential cookies to make this site work. With your permission we also use analytics and marketing cookies to measure visits and evaluate our advertising. You can change your choice at any time via “Cookie settings” at the bottom of the page.',
@@ -537,9 +551,6 @@ const en = {
     titleAccent: 'in use',
     lead: 'Photos of our tanks and containers in use at our customers’ sites.',
     open: 'Enlarge Photo',
-    close: 'Close',
-    prev: 'Previous Photo',
-    next: 'Next Photo',
   },
 
   productModel: {

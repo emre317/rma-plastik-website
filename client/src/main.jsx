@@ -3,13 +3,10 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
 // Self-hosted fonts: no third-party requests, unicode-range subsets load on demand
-import '@fontsource/inter/400.css';
-import '@fontsource/inter/500.css';
-import '@fontsource/inter/600.css';
-import '@fontsource/inter/700.css';
-import '@fontsource/manrope/500.css';
-import '@fontsource/manrope/600.css';
-import '@fontsource/manrope/700.css';
+// Variable fonts: every weight in one file; Inter also adjusts its letter shapes
+// to the text size (optical size axis), tighter for headlines, opener for small text
+import '@fontsource-variable/inter/opsz.css';
+import '@fontsource-variable/manrope';
 import '@fontsource/ibm-plex-sans-arabic/400.css';
 import '@fontsource/ibm-plex-sans-arabic/500.css';
 import '@fontsource/ibm-plex-sans-arabic/600.css';

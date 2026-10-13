@@ -92,6 +92,20 @@ const tr = {
     directLink: 'Kataloğu yine de indirin.',
   },
 
+  lightbox: {
+    title: 'Fotoğraf Görüntüleyici',
+    open: 'Büyüt',
+    previous: 'Önceki',
+    next: 'Sonraki',
+    close: 'Kapat',
+    zoomIn: 'Yakınlaştır',
+    zoomOut: 'Uzaklaştır',
+    slide: 'Fotoğraf',
+    loading: 'Yükleniyor',
+    error: 'Fotoğraf yüklenemedi',
+    counter: '{index} / {total}',
+  },
+
   cookies: {
     title: 'Çerez Tercihleriniz',
     text: 'Sitenin çalışması için zorunlu çerezler kullanıyoruz. İzin verirseniz ziyaret istatistiklerini ölçmek ve reklamlarımızın etkisini değerlendirmek için analiz ve pazarlama çerezleri de kullanırız. Tercihinizi istediğiniz zaman sayfanın altındaki “Çerez tercihleri” bağlantısından değiştirebilirsiniz.',
@@ -536,9 +550,6 @@ const tr = {
     titleAccent: 'ürünlerimiz',
     lead: 'Müşterilerimizin sahada kullandığı tank ve depolardan fotoğraflar.',
     open: 'Fotoğrafı Büyüt',
-    close: 'Kapat',
-    prev: 'Önceki Fotoğraf',
-    next: 'Sonraki Fotoğraf',
   },
 
   productModel: {
