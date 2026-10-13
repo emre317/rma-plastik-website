@@ -258,7 +258,7 @@ export default function ProductModel() {
               <tbody>
                 <tr>
                   <th scope="row">{t('productModel.codeLabel')}</th>
-                  <td>{row.code}</td>
+                  <td className="pmNum">{row.code}</td>
                 </tr>
                 <tr>
                   <th scope="row">{t('productModel.familyLabel')}</th>
@@ -267,7 +267,7 @@ export default function ProductModel() {
                 {specs.map((spec) => (
                   <tr key={spec.key}>
                     <th scope="row">{spec.label}</th>
-                    <td>{spec.value}</td>
+                    <td className={spec.key === 'type' ? undefined : 'pmNum'}>{spec.value}</td>
                   </tr>
                 ))}
                 <tr>

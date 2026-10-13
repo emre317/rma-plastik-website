@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
 // Self-hosted fonts: no third-party requests, unicode-range subsets load on demand
-// Variable fonts: every weight in one file; Inter also adjusts its letter shapes
-// to the text size (optical size axis), tighter for headlines, opener for small text
-import '@fontsource-variable/inter/opsz.css';
+// Corporate design system: Manrope (headings), Source Sans 3 (text),
+// IBM Plex Mono (capacities, dimensions, product codes)
 import '@fontsource-variable/manrope';
+import '@fontsource-variable/source-sans-3';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '@fontsource/ibm-plex-mono/600.css';
 import '@fontsource/ibm-plex-sans-arabic/400.css';
 import '@fontsource/ibm-plex-sans-arabic/500.css';
 import '@fontsource/ibm-plex-sans-arabic/600.css';
