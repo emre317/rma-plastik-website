@@ -556,6 +556,7 @@ const tr = {
     eyebrow: 'Model',
     specsTitle: 'Teknik Ölçüler',
     usesTitle: 'Kullanım Alanları',
+    industriesTitle: 'Kullanıldığı Sektörler',
     similar: 'Aynı ailedeki diğer modeller',
     allModels: 'Tüm modelleri gör',
     quote: 'Teklif İste',

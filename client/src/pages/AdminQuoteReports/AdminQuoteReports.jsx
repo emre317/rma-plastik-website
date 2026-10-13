@@ -10,6 +10,7 @@ import usePageTitle from '../../hooks/usePageTitle';
 import { LANGUAGE_LABELS, QUOTE_STATUSES, lossReasonLabel, todayValue } from '../../components/admin/quoteStatus';
 import { formatMoney } from '../../data/offerText';
 import { exportReportFile } from '../AdminQuotes/quoteExcel';
+import SalesTargets from '../../components/admin/SalesTargets';
 
 const nf = new Intl.NumberFormat('tr-TR');
 const pf = new Intl.NumberFormat('tr-TR', { style: 'percent', maximumFractionDigits: 0 });
@@ -189,6 +190,8 @@ export default function AdminQuoteReports() {
           {exporting ? 'Hazırlanıyor…' : 'Excel’e aktar'}
         </button>
       </header>
+
+      <SalesTargets />
 
       <div className="adReportFilters">
         <div className="adSegment" role="group" aria-label="Dönem">

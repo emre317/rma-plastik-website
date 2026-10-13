@@ -557,6 +557,7 @@ const ar = {
     eyebrow: 'الطراز',
     specsTitle: 'المقاسات الفنية',
     usesTitle: 'مجالات الاستخدام',
+    industriesTitle: 'القطاعات التي يُستخدم فيها',
     similar: 'طرازات أخرى من العائلة نفسها',
     allModels: 'عرض جميع الطرازات',
     quote: 'اطلب عرض سعر',

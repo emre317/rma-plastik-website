@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
-  ArrowLeft, Building2, CalendarClock, Check, Copy, FileSignature, Flag, Globe2, History, Mail, Megaphone, MessageCircle, NotebookPen, Package, Phone, Trash2, User,
+  AlertTriangle, ArrowLeft, ArrowRight, Building2, CalendarClock, Check, Copy, Contact, FileSignature, Flag, Globe2, History, Mail, Megaphone, MessageCircle, NotebookPen, Package, Phone, Trash2, User,
 } from 'lucide-react';
 
 import {
-  addQuoteNote, deleteQuoteNote, getQuoteAssignees, getQuoteById, getQuoteHistory, updateQuoteStatus, updateQuoteTracking,
+  addQuoteNote, deleteQuoteNote, getCustomer, getQuoteAssignees, getQuoteById, getQuoteHistory, updateQuoteStatus, updateQuoteTracking,
 } from '../../services/adminApi';
 import { notifyQuotesChanged } from '../../services/adminAuth';
 import useAdminApi from '../../hooks/useAdminApi';
@@ -32,6 +32,66 @@ const QUICK_DATES = [
   { label: '2 hafta', days: 14 },
 ];
 
+/* Other requests from the same customer, inside the customer card */
+function CustomerSummary({ data, quote }) {
+  if (data === null) return <p className="adNotesEmpty">Müşteri geçmişi yükleniyor…</p>;
+  if (!data) return null;
+
+  const others = data.quotes.filter((item) => item._id !== quote._id);
+  const openOthers = others.filter((item) => !item.outcome && item.status !== 'closed');
+  const link = `/admin/customer?${new URLSearchParams({ email: quote.email, company: quote.company, from: quote._id }).toString()}`;
+  const { summary, lead } = data;
+
+  return (
+    <div className="adCustSummary">
+      {openOthers.length > 0 && (
+        <p className="adCustWarn">
+          <AlertTriangle aria-hidden="true" />
+          <span>
+            Bu müşterinin açık {openOthers.length > 1 ? `${openOthers.length} talebi` : 'bir talebi'} daha var:{' '}
+            <Link to={`/admin/quotes/${openOthers[0]._id}`}>{quoteReference(openOthers[0]._id)}</Link>
+            {' '}({formatDate(openOthers[0].createdAt)}{openOthers[0].assignee ? `, sorumlu: ${openOthers[0].assignee}` : ''})
+          </span>
+        </p>
+      )}
+
+      {others.length ? (
+        <>
+          <dl className="adCustStats">
+            <div><dt>Talep</dt><dd>{summary.total}</dd></div>
+            <div><dt>Kazanılan</dt><dd>{summary.won}</dd></div>
+            <div><dt>Kaybedilen</dt><dd>{summary.lost}</dd></div>
+          </dl>
+          <ul className="adCustMini">
+            {others.slice(0, 3).map((item) => (
+              <li key={item._id}>
+                <Link to={`/admin/quotes/${item._id}`}>
+                  <span>
+                    <strong>{item.items?.length ? item.items.map((row) => row.name).join(', ') : item.product || 'Genel Talep'}</strong>
+                    <small>{formatDate(item.createdAt)}{item.match === 'company' ? ` · ${item.name}` : ''}</small>
+                  </span>
+                  <span className={`adPill tone-${item.outcome ? (item.outcome === 'won' ? 'green' : 'red') : statusTone(item.status)}`}>
+                    {item.outcome ? outcomeLabel(item.outcome) : statusLabel(item.status)}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p className="adNotesEmpty">Bu müşteriden gelen ilk talep.</p>
+      )}
+
+      {lead && <p className="adCustLead">Kataloğu {lead.downloads || 1} kez indirdi (ilk: {formatDate(lead.createdAt)}).</p>}
+
+      <Link to={link} className="cmsButton adCustOpen">
+        Müşteri Kartını Aç
+        <ArrowRight aria-hidden="true" />
+      </Link>
+    </div>
+  );
+}
+
 /* One quote request: status steps, contact actions, products and message */
 export default function AdminQuoteDetail() {
   usePageTitle('Teklif Talebi');
@@ -50,6 +110,7 @@ export default function AdminQuoteDetail() {
   const [outcomeNote, setOutcomeNote] = useState('');
   const [suggestOpen, setSuggestOpen] = useState(false);
   const [history, setHistory] = useState(null);
+  const [customer, setCustomer] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -109,6 +170,21 @@ export default function AdminQuoteDetail() {
 
     return () => clearTimeout(timer);
   }, [call, id, updatedAt]);
+
+  // Customer card: other requests from this address or company
+  const quoteEmail = quote?.email;
+  const quoteCompany = quote?.company;
+  useEffect(() => {
+    if (!quoteEmail) return undefined;
+    let cancelled = false;
+    setCustomer(null);
+    call(getCustomer, { email: quoteEmail, company: quoteCompany })
+      .then((response) => { if (!cancelled) setCustomer(response.data); })
+      .catch(() => { if (!cancelled) setCustomer(false); });
+    return () => {
+      cancelled = true;
+    };
+  }, [call, quoteEmail, quoteCompany]);
 
   // Suggestions for the assignee field (names used before)
   useEffect(() => {
@@ -555,8 +631,8 @@ export default function AdminQuoteDetail() {
             </small>
           </div>
 
-          <div className="adCard">
-            <div className="adCardHead"><h2>Müşteri</h2></div>
+          <div className="adCard adCustomerCard">
+            <div className="adCardHead"><h2><Contact aria-hidden="true" />Müşteri Kartı</h2></div>
             <ul className="adContactList">
               <li><Building2 aria-hidden="true" /><span><small>Firma</small><strong>{quote.company}</strong></span></li>
               <li><User aria-hidden="true" /><span><small>Yetkili</small><strong>{quote.name}</strong></span></li>
@@ -570,6 +646,7 @@ export default function AdminQuoteDetail() {
               <li><Phone aria-hidden="true" /><span><small>Telefon</small>{quote.phone ? <a href={`tel:${quote.phone.replace(/\s/g, '')}`} dir="ltr">{quote.phone}</a> : <strong>—</strong>}</span></li>
               <li><Globe2 aria-hidden="true" /><span><small>Ülke</small><strong>{quote.country || '—'}</strong></span></li>
             </ul>
+            <CustomerSummary data={customer} quote={quote} />
           </div>
 
           <div className="adCard">

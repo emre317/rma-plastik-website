@@ -30,6 +30,8 @@ import { offerPdfUpload } from '../middleware/upload.js';
 import QuoteRequest from '../models/QuoteRequest.js';
 import { audit } from '../services/audit.js';
 import { getTargetHistory } from '../controllers/auditController.js';
+import { getCustomer, getRecentQuotes } from '../controllers/customerController.js';
+import { deleteTarget, getTargets, saveTarget } from '../controllers/targetController.js';
 
 const router = express.Router();
 
@@ -57,6 +59,18 @@ function trackingDetails(req) {
   return parts.join(' · ');
 }
 
+// "2026-10" -> "Ekim 2026 hedefi"
+const targetLabel = (req) => {
+  const [year, month] = String(req.params.month || '').split('-').map(Number);
+  if (!year || !month) return '';
+  return `${new Intl.DateTimeFormat('tr-TR', { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(Date.UTC(year, month - 1, 1)))} hedefi`;
+};
+const targetDetails = (req) => {
+  const amount = Number(req.body?.amount) || 0;
+  const deals = Number(req.body?.deals) || 0;
+  return [amount ? `${new Intl.NumberFormat('tr-TR').format(amount)} ${req.body?.currency || ''}` : '', deals ? `${deals} talep` : ''].filter(Boolean).join(' · ');
+};
+
 const quoteAudit = (action, details) => audit({ area: 'sales', type: 'quote', action, lookup: QuoteRequest, details });
 
 /* PUBLIC */
@@ -77,6 +91,12 @@ router.get(
 );
 router.get('/report', requireAdmin, sales, getQuoteReport);
 router.get('/assignees', requireAdmin, sales, getQuoteAssignees);
+router.get('/customer', requireAdmin, sales, getCustomer);
+router.get('/recent', requireAdmin, sales, getRecentQuotes);
+// Targets: everyone in sales sees them, only admins set them
+router.get('/targets', requireAdmin, sales, getTargets);
+router.put('/targets/:month', requireAdmin, requirePermission('settings'), audit({ area: 'sales', type: 'target', action: 'Satış hedefini kaydetti', label: targetLabel, details: targetDetails }), saveTarget);
+router.delete('/targets/:month', requireAdmin, requirePermission('settings'), audit({ area: 'sales', type: 'target', action: 'Satış hedefini sildi', label: targetLabel }), deleteTarget);
 router.get('/:id/history', requireAdmin, sales, (req, res) => getTargetHistory(req, res, 'quote'));
 router.get('/:id', requireAdmin, sales, getQuoteRequestById);
 

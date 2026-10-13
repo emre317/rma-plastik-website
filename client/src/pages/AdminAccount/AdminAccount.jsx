@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Check, ShieldCheck, UserRound, X } from 'lucide-react';
+import { BellRing, Check, ShieldCheck, UserRound, X } from 'lucide-react';
 
 import { changeOwnPassword } from '../../services/adminApi';
 import { saveAdminSession } from '../../services/adminAuth';
@@ -8,13 +8,82 @@ import usePageTitle from '../../hooks/usePageTitle';
 import { useAdminSession } from '../../components/admin/AdminSession';
 import { ROLES, roleLabel, roleTone } from '../../components/admin/roles';
 import PasswordField, { passwordOk } from '../../components/admin/PasswordField';
+import {
+  ALERT_TEST_EVENT, desktopSupported, getAlertSettings, saveAlertSettings,
+} from '../../components/admin/QuoteAlerts';
+
+/* New request alerts in this browser (sound, desktop notification) */
+function AlertSettings() {
+  const [settings, setSettings] = useState(getAlertSettings);
+  const [permission, setPermission] = useState(() => (desktopSupported() ? Notification.permission : 'unsupported'));
+
+  const change = (changes) => {
+    const next = { ...settings, ...changes };
+    setSettings(next);
+    saveAlertSettings(next);
+  };
+
+  async function allow() {
+    try {
+      setPermission(await Notification.requestPermission());
+    } catch {
+      setPermission(Notification.permission);
+    }
+  }
+
+  const desktopNote = {
+    granted: 'Panel arka plandayken yeni talepler masaüstü bildirimi olarak gelir.',
+    default: 'Masaüstü bildirimi için tarayıcı izni gerekiyor.',
+    denied: 'Bu tarayıcıda bildirimler engellenmiş. Adres çubuğundaki kilit simgesinden izin verebilirsiniz.',
+    unsupported: 'Bu tarayıcı masaüstü bildirimlerini desteklemiyor.',
+  }[permission];
+
+  return (
+    <div className="adCard adAlertCard">
+      <div className="adCardHead"><h2><BellRing aria-hidden="true" />Yeni Talep Bildirimleri</h2></div>
+      <p className="cmsHint">Panel açıkken yeni teklif talepleri yaklaşık dakikada bir kontrol edilir ve köşede bir uyarı çıkar. Bu ayarlar yalnızca bu tarayıcı için geçerlidir.</p>
+
+      <ul className="adAlertOptions">
+        <li>
+          <span>
+            <strong>Sesli Uyarı</strong>
+            <small>Yeni talep gelince kısa bir ses çalar.</small>
+          </span>
+          <button type="button" role="switch" aria-checked={settings.sound} className={`adSwitch ${settings.sound ? 'on' : ''}`} onClick={() => change({ sound: !settings.sound })}>
+            <span className="visuallyHidden">Sesli uyarı</span>
+          </button>
+        </li>
+        <li>
+          <span>
+            <strong>Masaüstü Bildirimi</strong>
+            <small>{desktopNote}</small>
+          </span>
+          {permission === 'default' ? (
+            <button type="button" className="cmsButton" onClick={allow}>İzin Ver</button>
+          ) : (
+            <button type="button" role="switch" aria-checked={settings.desktop && permission === 'granted'} className={`adSwitch ${settings.desktop && permission === 'granted' ? 'on' : ''}`} onClick={() => change({ desktop: !settings.desktop })} disabled={permission !== 'granted'}>
+              <span className="visuallyHidden">Masaüstü bildirimi</span>
+            </button>
+          )}
+        </li>
+      </ul>
+
+      <div className="adUserFormActions">
+        <button type="button" className="cmsButton" onClick={() => window.dispatchEvent(new Event(ALERT_TEST_EVENT))}>
+          <BellRing aria-hidden="true" />
+          Bildirimi Dene
+        </button>
+      </div>
+    </div>
+  );
+}
 
 /* The signed-in user's own account: role and password (open to every role) */
 export default function AdminAccount() {
   usePageTitle('Hesabım');
 
   const call = useAdminApi();
-  const { admin } = useAdminSession();
+  const { admin, can } = useAdminSession();
 
   const [own, setOwn] = useState({ current: '', next: '', repeat: '' });
   const [saving, setSaving] = useState(false);
@@ -71,6 +140,8 @@ export default function AdminAccount() {
         </dl>
         {role && <p className="cmsHint">{role.text}</p>}
       </div>
+
+      {can('sales') && <AlertSettings />}
 
       <form className="adCard adOwnPassword" onSubmit={changeOwn}>
         <div className="adCardHead"><h2><ShieldCheck aria-hidden="true" />Şifremi Değiştir</h2></div>

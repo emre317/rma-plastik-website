@@ -557,6 +557,7 @@ const en = {
     eyebrow: 'Model',
     specsTitle: 'Technical Dimensions',
     usesTitle: 'Uses',
+    industriesTitle: 'Industries',
     similar: 'Other models in this family',
     allModels: 'See all models',
     quote: 'Request a Quote',

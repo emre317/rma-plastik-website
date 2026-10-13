@@ -10,6 +10,7 @@ import { listFamilies, listPosts, listVideos } from '../../services/adminContent
 import useAdminApi from '../../hooks/useAdminApi';
 import { useAdminSession } from '../../components/admin/AdminSession';
 import usePageTitle from '../../hooks/usePageTitle';
+import { SalesTargetStrip } from '../../components/admin/SalesTargets';
 import builtInFamilies from '../../data/productTables.builtin';
 import { QUOTE_STATUSES, statusLabel, statusTone, timeAgo } from '../../components/admin/quoteStatus';
 
@@ -129,6 +130,8 @@ export default function AdminDashboard() {
           </Link>
         ))}
       </div>
+
+      <SalesTargetStrip />
 
       <div className="adGrid">
         {/* Pipeline */}

@@ -17,6 +17,7 @@ import useLanguage from '../../hooks/useLanguage';
 import useModelQuote from '../../hooks/useModelQuote';
 import formatNumber from '../../utils/formatNumber';
 import { ZoomableImage } from '../../components/ui/ImageLightbox';
+import { industriesForFamily } from '../../data/industries';
 import { familyText, findModel, modelPath, similarModels } from '../../data/productTables';
 
 // Up to four headline values shown as large tiles, in this order of preference
@@ -84,6 +85,9 @@ export default function ProductModel() {
   const features = t('waterTanks.features', { returnObjects: true });
   const showFeatures = family.group === 'tanks' && Array.isArray(features);
   const uses = family.waterTank?.uses || [];
+  const sectors = industriesForFamily(family.id);
+  const industryList = t('industries.items', { returnObjects: true });
+  const industryTitles = Array.isArray(industryList) ? industryList : [];
   const path = modelPath(family, row);
 
   // Size chips show the volume; the code is added where volumes repeat in the family
@@ -281,6 +285,26 @@ export default function ProductModel() {
           </div>
 
           <div className="pmSide">
+            {sectors.length > 0 && (
+              <div className="pmCard">
+                <h2>{t('productModel.industriesTitle')}</h2>
+                <ul className="pmSectors">
+                  {sectors.map((sector) => {
+                    const Icon = sector.icon;
+                    return (
+                      <li key={sector.slug}>
+                        <LocalizedLink to={`/industries#${sector.slug}`} style={{ '--hue': sector.hue }}>
+                          <span className="pmSectorIcon" aria-hidden="true"><Icon /></span>
+                          <span>{industryTitles[sector.index]?.title}</span>
+                          <Arrow />
+                        </LocalizedLink>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
+
             {uses.length > 0 && (
               <div className="pmCard">
                 <h2>{t('productModel.usesTitle')}</h2>

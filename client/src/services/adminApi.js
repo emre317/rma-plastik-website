@@ -286,3 +286,34 @@ export function listAudit({ page = 1, limit = 50, user, area, from, to, search }
 export function getQuoteHistory(id, token) {
   return request(`/quote/${encodeURIComponent(id)}/history`, { token, fallbackMessage: 'Geçmiş yüklenemedi.' });
 }
+
+/* Customer card: every request from an e-mail address / company */
+export function getCustomer({ email = '', company = '' }, token) {
+  const params = new URLSearchParams();
+  if (email) params.set('email', email);
+  if (company) params.set('company', company);
+  return request(`/quote/customer?${params.toString()}`, { token, fallbackMessage: 'Müşteri bilgileri yüklenemedi.' });
+}
+
+/* New requests after a moment (panel notifications) */
+export function getRecentQuotes(since, token) {
+  const params = new URLSearchParams();
+  if (since) params.set('since', since);
+  return request(`/quote/recent?${params.toString()}`, { token, fallbackMessage: 'Yeni talepler alınamadı.' });
+}
+
+/* Monthly sales targets ("2026-10") with what was won in each month */
+export function getSalesTargets({ from, to } = {}, token) {
+  const params = new URLSearchParams();
+  if (from) params.set('from', from);
+  if (to) params.set('to', to);
+  return request(`/quote/targets?${params.toString()}`, { token, fallbackMessage: 'Satış hedefleri yüklenemedi.' });
+}
+
+export function saveSalesTarget(month, target, token) {
+  return request(`/quote/targets/${encodeURIComponent(month)}`, { method: 'PUT', body: target, token, fallbackMessage: 'Hedef kaydedilemedi.' });
+}
+
+export function deleteSalesTarget(month, token) {
+  return request(`/quote/targets/${encodeURIComponent(month)}`, { method: 'DELETE', token, fallbackMessage: 'Hedef silinemedi.' });
+}

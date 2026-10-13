@@ -1,5 +1,7 @@
 import { Building2, Car, FlaskConical, Shirt, Ship, Sprout, UtensilsCrossed } from 'lucide-react';
 
+import portfolio from './productPortfolio';
+
 /*
   Industries, in the order of industries.items in the locale files
   (chemicals, food, agriculture, automotive, textile, infrastructure, marine).
@@ -15,5 +17,16 @@ const industries = [
   { slug: 'infrastructure', icon: Building2, hue: 210, groups: ['barriers', 'vertical'] },
   { slug: 'marine', icon: Ship, hue: 190, groups: ['custom'] },
 ];
+
+/*
+  Industries that use a product table family (through its portfolio group),
+  with their index in industries.items, e.g. for "Used in" on model pages.
+*/
+export function industriesForFamily(familyId) {
+  const groups = portfolio.filter((group) => group.families.includes(familyId)).map((group) => group.id);
+  return industries
+    .map((industry, index) => ({ ...industry, index }))
+    .filter((industry) => industry.groups.some((id) => groups.includes(id)));
+}
 
 export default industries;
