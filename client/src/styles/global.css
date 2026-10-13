@@ -30314,3 +30314,8 @@ body {
 
   unicode-bidi: isolate;
 }
+
+/* Admin dashboard: signed-in user's name in the welcome line */
+.adWelcomeName {
+  color: var(--accent);
+}

@@ -20,7 +20,9 @@ export default function AdminDashboard() {
   usePageTitle('Özet');
 
   const call = useAdminApi();
-  const { can } = useAdminSession();
+  const { admin, can } = useAdminSession();
+  // First name of whoever is signed in ("Hoş Geldiniz, Ayşe")
+  const firstName = String(admin?.name || '').trim().split(/\s+/)[0];
   const sales = can('sales');
   const editor = can('content');
 
@@ -92,7 +94,7 @@ export default function AdminDashboard() {
       <header className="adPageHead">
         <div>
           <span className="adEyebrow">{today}</span>
-          <h1>Hoş Geldiniz</h1>
+          <h1>Hoş Geldiniz{firstName && <>, <span className="adWelcomeName">{firstName}</span></>}</h1>
           <p>
             {sales && editor && <>Teklif taleplerini takip edin, katalog ve içerikleri güncelleyin; değişiklikleri sol menüdeki <strong>Yayınla</strong> ile siteye aktarın.</>}
             {sales && !editor && 'Teklif taleplerini takip edin, proforma hazırlayın ve satış raporunu izleyin.'}
