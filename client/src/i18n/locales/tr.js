@@ -147,6 +147,7 @@ const tr = {
   },
 
   hero: {
+    typePrefix: 'Ürettiklerimiz:',
     watchFilm: 'Tanıtım Filmini İzle',
     pause: 'Durdur',
     play: 'Oynat',

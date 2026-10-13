@@ -6,6 +6,7 @@ import videos from '../data/videos';
 import HeroVideo from './HeroVideo';
 import HeroTitle from '../components/ui/HeroTitle';
 import HeroBrand from '../components/ui/HeroBrand';
+import HeroTypeLine from '../components/ui/HeroTypeLine';
 
 export default function HeroSection() {
   const { t } = useTranslation();
@@ -29,6 +30,8 @@ export default function HeroSection() {
             <HeroBrand className="light" />
 
             <HeroTitle line1={t('hero.titleLine1')} accent={t('hero.titleAccent')} line2={t('hero.titleLine2')} />
+
+            <HeroTypeLine />
 
             <p className="lead">
               {t('hero.lead')}

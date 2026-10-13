@@ -30095,3 +30095,73 @@ a.algSubmit {
 .pageLoading {
   min-height: 70vh;
 }
+
+/* ---------- Typewriter (components/ui/TypewriterText.jsx) ---------- */
+
+.typewriter {
+  white-space: nowrap;
+}
+
+.typewriterCursor {
+  display: inline-block;
+  margin-inline-start: 2px;
+  font-weight: 400;
+  animation: typewriterBlink 1s steps(1) infinite;
+}
+
+@keyframes typewriterBlink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Home hero: product groups typed under the headline */
+.heroTypeLine {
+  margin: -6px 0 22px;
+  min-height: 1.5em;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  font-family: var(--font-display);
+  font-size: clamp(18px, 1.6vw, 22px);
+  font-weight: 600;
+  line-height: 1.4;
+  animation: heroRise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s both;
+}
+
+.heroTypePrefix {
+  color: rgba(255, 255, 255, 0.62);
+  font-weight: 500;
+}
+
+.heroTypeWords {
+  color: #8fbcff;
+}
+
+.heroTypeWords .typewriterCursor {
+  color: #ffffff;
+}
+
+/* Light hero (no video) */
+.hero .heroTypePrefix {
+  color: var(--text-secondary);
+}
+
+.hero .heroTypeWords {
+  color: var(--accent);
+}
+
+.hero .heroTypeWords .typewriterCursor {
+  color: var(--text);
+}
+
+html.booting .heroTypeLine {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroTypeLine {
+    animation: none;
+  }
+}

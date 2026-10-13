@@ -148,6 +148,7 @@ const en = {
   },
 
   hero: {
+    typePrefix: 'What we make:',
     watchFilm: 'Watch the Company Film',
     pause: 'Pause',
     play: 'Play',

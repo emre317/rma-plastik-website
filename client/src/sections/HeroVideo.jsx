@@ -13,6 +13,7 @@ import useLanguage from '../hooks/useLanguage';
 import portfolio from '../data/productPortfolio';
 import HeroTitle from '../components/ui/HeroTitle';
 import HeroBrand from '../components/ui/HeroBrand';
+import HeroTypeLine from '../components/ui/HeroTypeLine';
 import StatValue from '../components/ui/StatValue';
 
 const PLAYER_ORIGIN = 'https://www.youtube-nocookie.com';
@@ -234,6 +235,8 @@ export default function HeroVideo({ video }) {
             <HeroBrand />
 
             <HeroTitle line1={t('hero.titleLine1')} accent={t('hero.titleAccent')} line2={t('hero.titleLine2')} />
+
+            <HeroTypeLine />
 
             <p className="lead">{t('hero.lead')}</p>
 

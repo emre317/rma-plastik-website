@@ -148,6 +148,7 @@ const ar = {
   },
 
   hero: {
+    typePrefix: 'ما نصنعه:',
     watchFilm: 'شاهد الفيلم التعريفي',
     pause: 'إيقاف مؤقت',
     play: 'تشغيل',
