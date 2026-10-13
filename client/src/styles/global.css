@@ -31417,7 +31417,8 @@ html.booting .heroVideo .heroStats {
   animation-delay: calc(0.12s + var(--w, 0) * 0.11s);
 }
 
-/* Bigger buttons: red product range, white quote request */
+/* Bigger buttons: red quote request, "explore products" white on the film
+   (graphite on the light hero) */
 .hero .actions .button,
 .heroVideo .actions .button {
   min-height: 64px;
@@ -31426,34 +31427,43 @@ html.booting .heroVideo .heroStats {
   font-size: 16.5px;
 }
 
-.heroQuoteCta {
+.heroExplore {
   border-color: var(--ink-900);
   background: var(--ink-900);
   color: #ffffff;
 }
 
-.heroQuoteCta:hover {
+.heroExplore:hover {
   border-color: var(--ink-700);
   background: var(--ink-700);
   color: #ffffff;
   transform: translateY(-2px);
 }
 
-.heroVideo .heroQuoteCta {
+.heroVideo .heroExplore {
   border-color: #ffffff;
   background: #ffffff;
   color: var(--ink-900);
   box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.6);
 }
 
-.heroVideo .heroQuoteCta:hover {
+.heroVideo .heroExplore:hover {
   border-color: var(--ink-050);
   background: var(--ink-050);
   color: var(--brand-primary);
 }
 
-.heroVideo .heroQuoteCta .buttonArrow {
+.heroVideo .heroExplore .buttonArrow {
   color: var(--brand-primary);
+}
+
+/* The film hides at once whenever it is not playing (YouTube's own icons) */
+.heroVideoFrame {
+  transition: none;
+}
+
+.heroVideoFrame.visible {
+  transition: opacity 1.2s ease;
 }
 
 /* Figures: no tiles and no red rule, start-aligned under one hairline */
@@ -31556,9 +31566,7 @@ html.booting .heroVideo .heroStats {
   }
 }
 
-/* Footer: pure black, the same stripes, no glow */
+/* Footer: plain black, no stripes or glow */
 .siteFooter {
-  background:
-    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0 14px, transparent 14px 28px),
-    #000000;
+  background: #000000;
 }

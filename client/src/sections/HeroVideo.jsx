@@ -33,6 +33,10 @@ export default function HeroVideo({ video }) {
 
   const mediaRef = useRef(null);
   const frameRef = useRef(null);
+  const duration = useRef(0);
+  const reveal = useRef(null);
+  const lastState = useRef(null);
+  const looped = useRef(0);
 
   const [load, setLoad] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -108,15 +112,35 @@ export default function HeroVideo({ video }) {
         return;
       }
 
-      const state = data?.info?.playerState ?? (data?.event === 'onStateChange' ? data.info : undefined);
+      const info = data?.info && typeof data.info === 'object' ? data.info : {};
 
-      if (state === undefined) return;
+      if (info.duration > 0) duration.current = info.duration;
 
-      // Shown only while it really plays: YouTube draws its own buttons when
-      // the film pauses, buffers or ends, and the poster covers those moments
-      setPlaying(state === 1);
+      // Loop by hand, just before the end: the film never reaches YouTube's
+      // end screen and its replay / play icons (the "playlist" loop would
+      // also add previous / next buttons)
+      if (info.currentTime > 0 && duration.current > 2 && info.currentTime > duration.current - 0.7 && Date.now() - looped.current > 2000) {
+        looped.current = Date.now();
+        command('seekTo', [0, true]);
+      }
 
-      // Loop by hand (the "playlist" loop adds previous / next buttons)
+      const state = info.playerState ?? (data?.event === 'onStateChange' ? data.info : undefined);
+
+      if (state === undefined || state === lastState.current) return;
+
+      lastState.current = state;
+      clearTimeout(reveal.current);
+
+      if (state === 1) {
+        // Shown a moment after it really plays, once YouTube's start-up
+        // overlays have gone
+        reveal.current = setTimeout(() => setPlaying(true), 700);
+      } else {
+        // Paused, buffering, cued or ended: YouTube draws its own buttons
+        // in the middle, so the poster takes over at once
+        setPlaying(false);
+      }
+
       if (state === 0) {
         command('seekTo', [0, true]);
         command('playVideo');
@@ -125,7 +149,10 @@ export default function HeroVideo({ video }) {
 
     window.addEventListener('message', onMessage);
 
-    return () => window.removeEventListener('message', onMessage);
+    return () => {
+      clearTimeout(reveal.current);
+      window.removeEventListener('message', onMessage);
+    };
   }, [load]);
 
   function command(func, args = []) {
@@ -184,12 +211,12 @@ export default function HeroVideo({ video }) {
             <p className="lead">{t('hero.lead')}</p>
 
             <div className="actions">
-              <a className="button primary heroExplore" href="#products">
+              <a className="button heroExplore" href="#products">
                 <span>{t('hero.exploreProducts')}</span>
                 <Arrow className="buttonArrow" />
               </a>
 
-              <button type="button" className="button heroQuoteCta" onClick={() => openQuote()}>
+              <button type="button" className="button primary heroQuoteCta" onClick={() => openQuote()}>
                 <span>{t('hero.requestSolution')}</span>
                 <Arrow className="buttonArrow" />
               </button>

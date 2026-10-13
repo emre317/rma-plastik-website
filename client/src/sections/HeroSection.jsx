@@ -37,7 +37,7 @@ export default function HeroSection() {
             <div className="actions">
 
               <a
-                className="button primary heroExplore"
+                className="button heroExplore"
                 href="#products"
               >
                 <span>{t('hero.exploreProducts')}</span>
@@ -46,7 +46,7 @@ export default function HeroSection() {
 
               <button
                 type="button"
-                className="button heroQuoteCta"
+                className="button primary heroQuoteCta"
                 onClick={() => openQuote()}
               >
                 <span>{t('hero.requestSolution')}</span>
