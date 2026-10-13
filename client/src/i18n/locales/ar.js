@@ -163,15 +163,7 @@ const ar = {
 
   hero: {
     typePrefix: 'ما نصنعه:',
-    watchFilm: 'شاهد الفيلم التعريفي',
-    pause: 'إيقاف مؤقت',
-    play: 'تشغيل',
-    close: 'إغلاق',
     categoriesLabel: 'مجموعات المنتجات',
-    videoLabel: 'فيلم تعريفي',
-    soundOn: 'تشغيل الصوت',
-    soundOff: 'كتم الصوت',
-    watchOnYoutube: 'شاهد على يوتيوب',
     index: 'RMA PLASTIK',
     since: 'في مرسين منذ 1998',
     eyebrow: 'خبرة في القولبة الدورانية',

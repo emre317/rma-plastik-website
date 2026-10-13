@@ -162,15 +162,7 @@ const tr = {
 
   hero: {
     typePrefix: 'Ürettiklerimiz:',
-    watchFilm: 'Tanıtım Filmini İzle',
-    pause: 'Durdur',
-    play: 'Oynat',
-    close: 'Kapat',
     categoriesLabel: 'Ürün Grupları',
-    videoLabel: 'Tanıtım Filmi',
-    soundOn: 'Sesi Aç',
-    soundOff: 'Sesi Kapat',
-    watchOnYoutube: 'YouTube’da izle',
     index: 'RMA PLASTIK',
     since: '1998’den beri Mersin’de',
     eyebrow: 'Polietilen · Rotasyonel kalıplama',

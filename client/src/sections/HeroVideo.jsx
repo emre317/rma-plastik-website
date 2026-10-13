@@ -1,20 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { Globe2, MapPin, Pause, Play, Volume2, VolumeX, X } from 'lucide-react';
 
 import Arrow from '../components/i18n/Arrow';
 import { LocalizedLink } from '../components/i18n/LocalizedLink';
 import { useQuote } from '../components/quote/QuoteContext';
-import { track } from '../analytics/track';
 import { videoText } from '../data/videos';
-import { globalFigures } from '../data/exportMarkets';
 import useLanguage from '../hooks/useLanguage';
 import portfolio from '../data/productPortfolio';
 import HeroTitle from '../components/ui/HeroTitle';
 import HeroBrand from '../components/ui/HeroBrand';
 import HeroTypeLine from '../components/ui/HeroTypeLine';
-import StatValue from '../components/ui/StatValue';
 
 const PLAYER_ORIGIN = 'https://www.youtube-nocookie.com';
 
@@ -28,8 +23,8 @@ const PLAYER_ORIGIN = 'https://www.youtube-nocookie.com';
   - The YouTube poster shows immediately (fast first paint, good LCP); the
     player loads after the page and fades in only once it is really playing,
     so a blocked or failed video never shows an error screen.
-  - Browsers only allow muted autoplay; "Tanıtım filmini izle" opens the film
-    with sound in a lightbox, the sound button unmutes the background.
+  - Browsers only allow muted autoplay: the background film stays muted and
+    has no controls (the films are on the Videolar page).
   - No autoplay for "reduced motion" or data-saver visitors (poster only).
 */
 export default function HeroVideo({ video }) {
@@ -42,15 +37,10 @@ export default function HeroVideo({ video }) {
 
   const [load, setLoad] = useState(false);
   const [playing, setPlaying] = useState(false);
-  const [paused, setPaused] = useState(false);
-  const [muted, setMuted] = useState(true);
-  const [film, setFilm] = useState(false);
   const [poster, setPoster] = useState(`https://i.ytimg.com/vi/${video.youtubeId}/maxresdefault.jpg`);
   const [size, setSize] = useState(null);
 
   const title = videoText(video, lang, 'title');
-  const stats = t('stats.items', { returnObjects: true });
-  const figures = globalFigures(t('global.figures', { returnObjects: true }));
   const categories = t('productExplorer.items', { returnObjects: true });
 
   // Start the background player after the page has loaded
@@ -131,71 +121,15 @@ export default function HeroVideo({ video }) {
     return () => window.removeEventListener('message', onMessage);
   }, [load]);
 
-  // Lightbox: Escape closes, page does not scroll behind it
-  useEffect(() => {
-    if (!film) {
-      return undefined;
-    }
-
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    const onKey = (event) => event.key === 'Escape' && closeFilm();
-    window.addEventListener('keydown', onKey);
-
-    return () => {
-      document.body.style.overflow = previous;
-      window.removeEventListener('keydown', onKey);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [film]);
-
-  function command(func, args = []) {
-    frameRef.current?.contentWindow?.postMessage(JSON.stringify({ event: 'command', func, args }), PLAYER_ORIGIN);
-  }
-
   function handleFrameLoad() {
     // Ask the player to report its state changes
     frameRef.current?.contentWindow?.postMessage(JSON.stringify({ event: 'listening', id: 'rma-hero', channel: 'widget' }), PLAYER_ORIGIN);
-  }
-
-  function toggleSound() {
-    if (muted) {
-      command('unMute');
-      command('setVolume', [100]);
-      track('video_play', { video_id: video.youtubeId, video_title: title, placement: 'home_hero_sound_on' });
-    } else {
-      command('mute');
-    }
-
-    setMuted((value) => !value);
-  }
-
-  function togglePause() {
-    command(paused ? 'playVideo' : 'pauseVideo');
-    setPaused((value) => !value);
-  }
-
-  function openFilm() {
-    command('pauseVideo');
-    setFilm(true);
-    track('video_play', { video_id: video.youtubeId, video_title: title, placement: 'home_hero_film' });
-  }
-
-  function closeFilm() {
-    setFilm(false);
-
-    if (!paused) {
-      command('playVideo');
-    }
   }
 
   const backgroundSrc =
     `${PLAYER_ORIGIN}/embed/${video.youtubeId}` +
     `?autoplay=1&mute=1&loop=1&playlist=${video.youtubeId}&controls=0&disablekb=1` +
     '&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&fs=0&enablejsapi=1';
-
-  const filmSrc = `${PLAYER_ORIGIN}/embed/${video.youtubeId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
 
   const band = portfolio.filter((group) => categories?.[group.id]?.label);
 
@@ -251,85 +185,7 @@ export default function HeroVideo({ video }) {
                 <Arrow className="buttonArrow" />
               </button>
             </div>
-
-            {Array.isArray(figures) && figures.length >= 3 && (
-              <ul className="heroVideoTrust">
-                <li>
-                  <Globe2 aria-hidden="true" />
-                  <span><strong>{figures[1].value}</strong> {figures[1].label}</span>
-                </li>
-                <li>
-                  <MapPin aria-hidden="true" />
-                  <span><strong>{figures[2].value}</strong> · {figures[2].label}</span>
-                </li>
-              </ul>
-            )}
           </div>
-
-          <aside className="heroVideoPanel">
-            <button type="button" className="heroFilmCard" onClick={openFilm}>
-              <span className="heroFilmThumb">
-                <img src={poster} alt="" loading="lazy" decoding="async" />
-                <span className="heroFilmPlay" aria-hidden="true"><Play /></span>
-              </span>
-
-              <span className="heroFilmText">
-                <small>{t('hero.videoLabel')}</small>
-                <strong>{t('hero.watchFilm')}</strong>
-                {title && <span>{title}</span>}
-              </span>
-            </button>
-
-            {Array.isArray(stats) && (
-              <dl className="heroVideoStats">
-                {stats.slice(0, 4).map((item) => (
-                  <div key={item.label}>
-                    <dt><StatValue value={item.value} /></dt>
-                    <dd>{item.label}</dd>
-                  </div>
-                ))}
-              </dl>
-            )}
-          </aside>
-        </div>
-
-        <div className="heroVideoBottom">
-          <span className="heroVideoLabel">
-            <span className="heroVideoDot" aria-hidden="true" />
-            {t('hero.videoLabel')}
-            {title && <span className="heroVideoTitle">· {title}</span>}
-          </span>
-
-          {load && (
-            <div className="heroVideoControls">
-              <button
-                type="button"
-                className="heroVideoIconButton"
-                onClick={togglePause}
-                disabled={!playing}
-                aria-label={paused ? t('hero.play') : t('hero.pause')}
-                title={paused ? t('hero.play') : t('hero.pause')}
-              >
-                {paused ? <Play aria-hidden="true" /> : <Pause aria-hidden="true" />}
-              </button>
-
-              <button
-                type="button"
-                className="heroVideoSound"
-                onClick={toggleSound}
-                aria-pressed={!muted}
-                disabled={!playing}
-              >
-                {muted ? <VolumeX aria-hidden="true" /> : <Volume2 aria-hidden="true" />}
-                <span>{muted ? t('hero.soundOn') : t('hero.soundOff')}</span>
-              </button>
-            </div>
-          )}
-
-          <a className="heroVideoScroll" href="#products">
-            <span className="heroVideoMouse" aria-hidden="true"><span /></span>
-            {t('hero.scroll')}
-          </a>
         </div>
       </div>
 
@@ -352,37 +208,6 @@ export default function HeroVideo({ video }) {
             ))}
           </div>
         </nav>
-      )}
-
-      {/* Rendered at <body> level so it covers the fixed header and contact bubbles */}
-      {film && createPortal(
-        <div className="heroFilm" role="dialog" aria-modal="true" aria-label={title || t('hero.videoLabel')}>
-          <div className="heroFilmBackdrop" onClick={closeFilm} />
-
-          <div className="heroFilmDialog">
-            <button type="button" className="heroFilmClose" onClick={closeFilm} aria-label={t('hero.close')} autoFocus>
-              <X aria-hidden="true" />
-            </button>
-
-            <div className="heroFilmPlayer">
-              <iframe
-                src={filmSrc}
-                title={title || 'RMA Plastik'}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-
-            <div className="heroFilmFooter">
-              <strong>{title}</strong>
-              <a href={`https://www.youtube.com/watch?v=${video.youtubeId}`} target="_blank" rel="noreferrer">
-                {t('hero.watchOnYoutube')}
-                <Arrow />
-              </a>
-            </div>
-          </div>
-        </div>,
-        document.body
       )}
     </section>
   );

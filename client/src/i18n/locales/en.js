@@ -163,15 +163,7 @@ const en = {
 
   hero: {
     typePrefix: 'What we make:',
-    watchFilm: 'Watch the Company Film',
-    pause: 'Pause',
-    play: 'Play',
-    close: 'Close',
     categoriesLabel: 'Product Groups',
-    videoLabel: 'Company Film',
-    soundOn: 'Sound On',
-    soundOff: 'Sound Off',
-    watchOnYoutube: 'Watch on YouTube',
     index: 'RMA PLASTIK',
     since: 'In Mersin since 1998',
     eyebrow: 'Rotational moulding expertise',
