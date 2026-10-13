@@ -30462,7 +30462,105 @@ body {
   font-size: 13px;
 }
 
-/* Home hero: introduction only (film card, figures and video bar removed) */
+/* Home hero: introduction only, centred on the film */
 .heroVideoGrid {
   grid-template-columns: minmax(0, 1fr);
+}
+
+.heroVideoContent {
+  width: min(100%, 920px);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.heroVideoContent h1 {
+  align-items: center;
+}
+
+.heroVideoContent .lead {
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+.heroVideo .actions {
+  margin-top: 0;
+  justify-content: center;
+}
+
+/* The brand line drawn on both sides of "RMA | Plastik" */
+.heroVideo .heroBrand::after {
+  content: "";
+  width: 44px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(270deg, transparent, #7fb2ff);
+  transform-origin: right center;
+  animation: heroBrandLine 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.05s both;
+}
+
+html.booting .heroVideo .heroBrand::after {
+  animation-play-state: paused;
+}
+
+/* Label and typed words meet in the middle, so the line does not jump while typing */
+.heroVideo .heroTypeLine {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: 10px;
+}
+
+.heroVideo .heroTypePrefix {
+  justify-self: end;
+  text-align: end;
+}
+
+.heroVideo .heroTypeWords {
+  justify-self: start;
+  text-align: start;
+}
+
+/* Even darkening for centred text (was darker on the left) */
+.heroVideoShade {
+  background:
+    radial-gradient(70% 60% at 50% 48%, rgba(8, 18, 40, 0.5), rgba(8, 18, 40, 0.18) 75%),
+    linear-gradient(180deg, rgba(8, 18, 40, 0.72) 0%, rgba(8, 18, 40, 0.28) 24%, rgba(8, 18, 40, 0.3) 62%, rgba(8, 18, 40, 0.95) 100%),
+    radial-gradient(55% 45% at 50% 60%, rgba(29, 103, 213, 0.22), transparent 70%);
+}
+
+/* The film fades in slowly but hides at once (YouTube's buttons never show) */
+.heroVideoFrame {
+  transition: opacity 0.2s ease;
+}
+
+.heroVideoFrame.visible {
+  transition: opacity 1.4s ease;
+}
+
+@media (max-width: 640px) {
+  .heroVideo .heroTypeLine {
+    min-height: 3em;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 2px;
+  }
+
+  .heroVideo .heroTypePrefix,
+  .heroVideo .heroTypeWords {
+    justify-self: center;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroVideo .heroBrand::after {
+    animation: none;
+  }
+}
+
+/* The middle guide line would run through the centred text */
+.heroVideoGuides span:nth-child(2) {
+  visibility: hidden;
 }

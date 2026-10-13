@@ -111,8 +111,16 @@ export default function HeroVideo({ video }) {
 
       const state = data?.info?.playerState ?? (data?.event === 'onStateChange' ? data.info : undefined);
 
-      if (state === 1) {
-        setPlaying(true);
+      if (state === undefined) return;
+
+      // Shown only while it really plays: YouTube draws its own buttons when
+      // the film pauses, buffers or ends, and the poster covers those moments
+      setPlaying(state === 1);
+
+      // Loop by hand (the "playlist" loop adds previous / next buttons)
+      if (state === 0) {
+        command('seekTo', [0, true]);
+        command('playVideo');
       }
     }
 
@@ -121,6 +129,10 @@ export default function HeroVideo({ video }) {
     return () => window.removeEventListener('message', onMessage);
   }, [load]);
 
+  function command(func, args = []) {
+    frameRef.current?.contentWindow?.postMessage(JSON.stringify({ event: 'command', func, args }), PLAYER_ORIGIN);
+  }
+
   function handleFrameLoad() {
     // Ask the player to report its state changes
     frameRef.current?.contentWindow?.postMessage(JSON.stringify({ event: 'listening', id: 'rma-hero', channel: 'widget' }), PLAYER_ORIGIN);
@@ -128,7 +140,7 @@ export default function HeroVideo({ video }) {
 
   const backgroundSrc =
     `${PLAYER_ORIGIN}/embed/${video.youtubeId}` +
-    `?autoplay=1&mute=1&loop=1&playlist=${video.youtubeId}&controls=0&disablekb=1` +
+    '?autoplay=1&mute=1&controls=0&disablekb=1' +
     '&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&fs=0&enablejsapi=1';
 
   const band = portfolio.filter((group) => categories?.[group.id]?.label);
