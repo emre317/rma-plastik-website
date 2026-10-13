@@ -167,17 +167,24 @@ const en = {
     index: 'RMA PLASTIK',
     since: 'In Mersin since 1998',
     eyebrow: 'Rotational moulding expertise',
-    titleLine1: 'Durability,',
-    titleAccent: 'moulded in one piece',
-    titleLine2: 'of polyethylene.',
+    titleLine1: 'Strong production in polyethylene.',
+    titleAccent: 'Unlimited solutions.',
+    titleLine2: '',
     lead:
-      'Seamless bodies, forms designed for long service life. From our plant in Mersin to the world: polyethylene tanks and custom products for water, chemicals and industrial liquids.',
-    exploreProducts: 'Explore Products',
+      'RMA Plastik uses rotational moulding to produce durable, one-piece polyethylene tanks and industrial products. From water and chemical tanks to silos, and from textile trolleys to custom-designed products, it offers solutions for the needs of many industries.',
+    exploreProducts: 'Explore Our Products',
     requestSolution: 'Get a Quote',
     visualTop: ['Industrial', 'Polyethylene'],
     productionRange: 'Production Range',
     productionRangeValue: '100 — 40,000 L',
     scroll: 'Scroll to explore',
+    // Figures under the buttons (given by RMA Plastik)
+    stats: [
+      { value: '42,000', unit: 'L', label: 'Maximum capacity in one-piece production' },
+      { value: '500', unit: '+', label: 'Product Variety' },
+      { value: '30', unit: 'years', label: 'Production Experience' },
+      { value: '100%', unit: '', label: 'Pure polyethylene raw material' },
+    ],
   },
 
   stats: {

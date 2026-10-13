@@ -44,21 +44,21 @@ const escapeHtml = (value) =>
 function layout({ title, intro, button, link, note }) {
   const html = `<!doctype html>
 <html lang="tr">
-  <body style="margin:0;padding:0;background:#f3f5fa;font-family:Arial,Helvetica,sans-serif;color:#112244;">
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f5fa;padding:32px 12px;">
+  <body style="margin:0;padding:0;background:#f7f9fa;font-family:Arial,Helvetica,sans-serif;color:#101317;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f7f9fa;padding:32px 12px;">
       <tr>
         <td align="center">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#ffffff;border-radius:16px;overflow:hidden;">
-            <tr><td style="background:#0f1e3c;padding:22px 28px;color:#ffffff;font-size:16px;font-weight:bold;">RMA Plastik · Yönetim Paneli</td></tr>
+            <tr><td style="background:#101317;border-bottom:4px solid #e4173a;padding:22px 28px;color:#ffffff;font-size:16px;font-weight:bold;">RMA Plastik · Yönetim Paneli</td></tr>
             <tr>
               <td style="padding:28px;">
                 <h1 style="margin:0 0 12px;font-size:21px;line-height:1.3;">${escapeHtml(title)}</h1>
-                <p style="margin:0 0 22px;font-size:15px;line-height:1.6;color:#3d4a63;">${intro}</p>
+                <p style="margin:0 0 22px;font-size:15px;line-height:1.6;color:#414a56;">${intro}</p>
                 <p style="margin:0 0 22px;">
-                  <a href="${escapeHtml(link)}" style="display:inline-block;padding:13px 22px;border-radius:12px;background:#1d67d5;color:#ffffff;font-size:15px;font-weight:bold;text-decoration:none;">${escapeHtml(button)}</a>
+                  <a href="${escapeHtml(link)}" style="display:inline-block;padding:13px 22px;border-radius:12px;background:#e4173a;color:#ffffff;font-size:15px;font-weight:bold;text-decoration:none;">${escapeHtml(button)}</a>
                 </p>
-                <p style="margin:0 0 6px;font-size:13px;line-height:1.6;color:#5d6980;">${escapeHtml(note)}</p>
-                <p style="margin:0;font-size:12px;line-height:1.6;color:#8a95a8;word-break:break-all;">${escapeHtml(link)}</p>
+                <p style="margin:0 0 6px;font-size:13px;line-height:1.6;color:#5c6673;">${escapeHtml(note)}</p>
+                <p style="margin:0;font-size:12px;line-height:1.6;color:#818b98;word-break:break-all;">${escapeHtml(link)}</p>
               </td>
             </tr>
           </table>

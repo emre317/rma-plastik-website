@@ -19,6 +19,8 @@
   --rma-blue: #1b75bb;
   --rma-blue-dark: #12578c;
   --rma-blue-light: #39a3de;
+  /* Brand red lifted for text and glows on graphite (readable on #101317) */
+  --rma-red-light: #ff4560;
 
   /* Globe tiles: categorical use only (product families, charts) */
   --globe-orange: #f58220;
@@ -77,7 +79,7 @@
   /* Accent on light surfaces = brand red; on dark surfaces = light brand blue */
   --accent: var(--brand-primary);
   --accent-dark: var(--brand-primary-hover);
-  --accent-light: var(--rma-blue-light);
+  --accent-light: var(--rma-red-light);
 
   --text: var(--ink-900);
   --text-body: var(--ink-700);
@@ -30629,19 +30631,9 @@ html.booting .heroVideo .heroBrand::after {
    RMA PLASTIK DESIGN SYSTEM — brand layer
    Red = primary action and eyebrows, red→magenta sweep = the one decorative
    gesture, blue = links, focus and information, graphite neutrals.
-   The admin panel keeps blue as its main colour (red reads as "danger"
-   next to delete buttons there).
+   Surfaces are graphite and white with red accents; blue stays only for
+   links and keyboard focus. The admin panel uses the same brand red.
 ===================================================== */
-
-.adminPage,
-.algPage {
-  --accent: var(--rma-blue);
-  --accent-dark: var(--rma-blue-dark);
-  --accent-light: var(--rma-blue-light);
-  --brand-primary: var(--rma-blue);
-  --brand-primary-hover: var(--rma-blue-dark);
-  --brand-primary-active: var(--rma-blue-dark);
-}
 
 /* Primary buttons are brand red on every surface, light or dark */
 .button.primary,
@@ -30726,15 +30718,13 @@ html.booting .heroVideo .heroBrand::after {
 }
 
 /* Links inside running text are blue */
-p a:not([class]),
-li a:not([class]),
+main p a:not([class]),
 .blogContent a:not([class]) {
   color: var(--brand-secondary);
   text-underline-offset: 3px;
 }
 
-p a:not([class]):hover,
-li a:not([class]):hover,
+main p a:not([class]):hover,
 .blogContent a:not([class]):hover {
   color: var(--rma-blue-dark);
   text-decoration: underline;
@@ -30774,4 +30764,384 @@ li a:not([class]):hover,
 .pmMediaCode,
 .ptTable tbody th {
   font-weight: 600;
+}
+
+
+/* =====================================================
+   BLACK & RED SURFACES, DARK FOOTER, LARGER QUOTE BUTTONS
+===================================================== */
+
+/* Diagonal 3% hatch of the design system on dark page headers */
+.pageHeaderBg::after {
+  background-image:
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0 14px, transparent 14px 28px);
+  background-size: auto;
+}
+
+/* Quote strip: the wordmark sweep, white buttons on it */
+.cmCtaPanel {
+  background:
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0 14px, transparent 14px 28px),
+    var(--gradient-wordmark);
+  box-shadow: var(--shadow-brand);
+}
+
+.cmCtaPanel h2,
+.cmCtaPanel p {
+  color: #ffffff;
+}
+
+.cmCtaPanel .button.primary {
+  border-color: #ffffff;
+  background: #ffffff;
+  color: var(--ink-900);
+  box-shadow: 0 10px 24px -12px rgba(16, 19, 23, 0.5);
+}
+
+.cmCtaPanel .button.primary:hover {
+  border-color: var(--ink-100);
+  background: var(--ink-100);
+}
+
+.cmCtaPanel .cmCtaLink {
+  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+/* Footer: graphite with the hatch and one soft red glow */
+.siteFooter {
+  --text: #ffffff;
+  --text-secondary: var(--ink-300);
+  --line: rgba(255, 255, 255, 0.12);
+  --background: rgba(255, 255, 255, 0.05);
+  --accent: var(--accent-light);
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-top: 0;
+  color: var(--ink-300);
+  background:
+    radial-gradient(40% 70% at 100% 0%, rgba(228, 23, 58, 0.22), transparent 70%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0 14px, transparent 14px 28px),
+    var(--ink-900);
+}
+
+.siteFooter::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--gradient-wordmark);
+}
+
+.siteFooter .footerIconButton {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+}
+
+.siteFooter .footerIconButton:hover {
+  border-color: var(--brand-primary);
+  background: var(--brand-primary);
+}
+
+.siteFooter .footerQuoteLink {
+  border-color: var(--brand-primary);
+  background: var(--brand-primary);
+  color: #ffffff;
+}
+
+.siteFooter .footerQuoteLink:hover {
+  border-color: var(--brand-primary-hover);
+  background: var(--brand-primary-hover);
+  color: #ffffff;
+}
+
+.siteFooter .footerColumn a:hover {
+  color: #ffffff;
+}
+
+.siteFooter .languageSwitcherButton {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+}
+
+/* Quote buttons: larger everywhere */
+.headerQuote {
+  height: 48px;
+  padding: 0 24px;
+  font-size: 15px;
+}
+
+.button.primary {
+  min-height: 60px;
+  padding-inline: 26px 22px;
+  font-size: 15px;
+}
+
+.pmQuote {
+  min-height: 62px;
+  padding-inline: 28px 24px;
+  font-size: 16px;
+}
+
+.ptRowQuote {
+  min-height: 38px;
+  padding: 8px 18px;
+  border-color: var(--brand-primary);
+  background: var(--brand-primary);
+  color: #ffffff;
+  font-size: 14px;
+  opacity: 1;
+}
+
+.ptRowQuote:hover {
+  border-color: var(--brand-primary-hover);
+  background: var(--brand-primary-hover);
+  color: #ffffff;
+}
+
+.wtQuote {
+  min-height: 46px;
+  font-size: 15px;
+}
+
+.pmStickyBar .button {
+  min-height: 52px;
+  font-size: 15px;
+}
+
+.mobileMenuQuote {
+  min-height: 60px;
+  font-size: 16px;
+}
+
+@media (max-width: 640px) {
+  .button.primary {
+    min-height: 56px;
+  }
+}
+
+/* Buttons inside the spec tables keep the button font, not the mono figures */
+.ptTable td:last-child,
+.ptRowQuote {
+  font-family: var(--font-display);
+  letter-spacing: 0;
+}
+
+/* =====================================================
+   HOME HERO FIGURES, CONTACT BUBBLES, FOOTER TEXT
+===================================================== */
+
+/* The new headline is longer: a little smaller, two lines */
+.heroWords {
+  font-size: clamp(40px, min(5.2vw, 8.5svh), 76px);
+}
+
+.heroStats {
+  width: 100%;
+  margin: 40px 0 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.heroStats > div {
+  position: relative;
+  padding: 18px 18px 16px;
+  border: 1px solid var(--ink-150);
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  box-shadow: var(--shadow-xs);
+  text-align: start;
+}
+
+.heroStats > div::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background: var(--gradient-wordmark);
+}
+
+.heroStats dt {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: clamp(26px, 2.4vw, 34px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+[dir="rtl"] .heroStats dt {
+  justify-content: flex-end;
+}
+
+.heroStats dt span {
+  color: var(--accent);
+  font-size: 0.55em;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.heroStats dd {
+  margin: 8px 0 0;
+  color: var(--text-secondary);
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* On the video: glass tiles on graphite, white figures */
+.heroVideo .heroStats {
+  max-width: 980px;
+  margin-inline: auto;
+  animation: heroRise 1s 0.58s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.heroVideo .heroStats > div {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(16, 19, 23, 0.55);
+  box-shadow: none;
+  backdrop-filter: blur(6px);
+}
+
+.heroVideo .heroStats dt {
+  color: #ffffff;
+}
+
+.heroVideo .heroStats dd {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+html.booting .heroVideo .heroStats {
+  animation-play-state: paused;
+}
+
+@media (max-width: 900px) {
+  .heroStats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 380px) {
+  .heroStats dt {
+    font-size: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroVideo .heroStats {
+    animation: none;
+  }
+}
+
+/* Contact bubbles: bigger, solid colours, white ring for contrast on any background */
+.floatingContactItem a {
+  width: 64px;
+  height: 64px;
+  border: 2px solid #ffffff;
+  background: var(--bubble-color);
+  color: #ffffff;
+  box-shadow:
+    0 4px 10px rgba(16, 19, 23, 0.18),
+    0 16px 32px -12px color-mix(in srgb, var(--bubble-color) 70%, transparent);
+}
+
+.floatingContactIcon {
+  width: 28px;
+  height: 28px;
+}
+
+.floatingContactFill {
+  display: none;
+}
+
+.floatingContactItem:hover a,
+.floatingContactItem a:focus-visible {
+  color: #ffffff;
+  background: color-mix(in srgb, var(--bubble-color) 86%, #000);
+}
+
+@media (max-width: 640px) {
+  .floatingContactItem a {
+    width: 56px;
+    height: 56px;
+  }
+
+  .floatingContactIcon {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+/* Footer text in white */
+.siteFooter {
+  --text-secondary: rgba(255, 255, 255, 0.82);
+  color: #ffffff;
+}
+
+.siteFooter .footerColumn h3,
+.siteFooter .footerColumn a,
+.siteFooter .footerColumn li,
+.siteFooter .footerBrand p,
+.siteFooter .footerBottom p,
+.siteFooter .footerCookieLink,
+.siteFooter .footerAddress {
+  color: #ffffff;
+}
+
+.siteFooter .footerColumn a {
+  opacity: 0.86;
+  transition: opacity 160ms ease;
+}
+
+.siteFooter .footerColumn a:hover {
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.siteFooter .footerIcon {
+  color: var(--rma-red-light);
+}
+
+/* Hero with figures: fits one screen on laptops */
+.heroVideo .heroWords,
+.heroVideoContent h1 {
+  margin-block: 14px 18px;
+  font-size: clamp(38px, min(4.6vw, 7.4svh), 68px);
+}
+
+.heroVideo .heroTypeLine {
+  margin-bottom: 16px;
+}
+
+.heroVideoContent .lead {
+  margin-bottom: 26px;
+}
+
+.heroVideo .heroStats {
+  margin-top: 30px;
+}
+
+.heroVideo .heroStats > div {
+  padding: 14px 16px 13px;
+}
+
+/* Light hero (no video): figures 2 × 2 beside the tank card */
+.hero .heroStats {
+  max-width: 560px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.heroContent h1.heroWords {
+  font-size: clamp(38px, min(4.8vw, 8svh), 70px);
 }

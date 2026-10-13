@@ -166,17 +166,24 @@ const tr = {
     index: 'RMA PLASTIK',
     since: '1998’den beri Mersin’de',
     eyebrow: 'Polietilen · Rotasyonel kalıplama',
-    titleLine1: 'Dayanıklılığı',
-    titleAccent: 'tek parça',
-    titleLine2: 'üretiyoruz.',
+    titleLine1: 'Polietilende Güçlü Üretim.',
+    titleAccent: 'Sınırsız Çözüm.',
+    titleLine2: '',
     lead:
-      'Ek yeri olmayan gövdeler, uzun ömürlü kullanım için tasarlanan formlar. Mersin’deki tesisimizden dünyaya; su, kimyasal ve endüstriyel sıvılar için polietilen tanklar ve özel ürünler.',
-    exploreProducts: 'Ürünleri İncele',
-    requestSolution: 'Teklif Al',
+      'RMA Plastik, rotasyon kalıplama teknolojisiyle dayanıklı, tek parça polietilen tanklar ve endüstriyel ürünler üretir. Su ve kimyasal tanklarından silolara, tekstil arabalarından özel tasarım ürünlere kadar farklı sektörlerin ihtiyaçlarına yönelik çözümler sunar.',
+    exploreProducts: 'Ürünlerimizi Keşfedin',
+    requestSolution: 'Teklif Alın',
     visualTop: ['Endüstriyel', 'Polietilen'],
     productionRange: 'Üretim Aralığı',
     productionRangeValue: '100 — 40.000 L',
     scroll: 'Keşfetmek için kaydırın',
+    // Figures under the buttons (given by RMA Plastik)
+    stats: [
+      { value: '42.000', unit: 'L', label: 'Tek parça üretimde maksimum kapasite' },
+      { value: '500', unit: '+', label: 'Ürün Çeşidi' },
+      { value: '30', unit: 'yıl', label: 'Üretim Tecrübesi' },
+      { value: '%100', unit: '', label: 'Saf polietilen hammadde' },
+    ],
   },
 
   stats: {

@@ -10,6 +10,7 @@ import portfolio from '../data/productPortfolio';
 import HeroTitle from '../components/ui/HeroTitle';
 import HeroBrand from '../components/ui/HeroBrand';
 import HeroTypeLine from '../components/ui/HeroTypeLine';
+import HeroStats from '../components/ui/HeroStats';
 
 const PLAYER_ORIGIN = 'https://www.youtube-nocookie.com';
 
@@ -197,6 +198,8 @@ export default function HeroVideo({ video }) {
                 <Arrow className="buttonArrow" />
               </button>
             </div>
+
+            <HeroStats />
           </div>
         </div>
       </div>

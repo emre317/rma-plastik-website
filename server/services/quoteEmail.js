@@ -72,13 +72,13 @@ export function buildQuoteEmail(quote) {
     .map(([label, value, href], index) => {
       const safe = escapeHtml(value);
       const content = href
-        ? `<a href="${escapeHtml(href)}" style="color:#1d67d5;text-decoration:none;">${safe}</a>`
+        ? `<a href="${escapeHtml(href)}" style="color:#e4173a;text-decoration:none;">${safe}</a>`
         : safe;
 
       return `
         <tr>
-          <td style="padding:12px 16px;width:38%;font-size:13px;color:#5d6980;border-top:${index ? '1px solid #e2e7f2' : '0'};vertical-align:top;">${label}</td>
-          <td style="padding:12px 16px;font-size:14px;color:#112244;font-weight:600;border-top:${index ? '1px solid #e2e7f2' : '0'};vertical-align:top;">${content}</td>
+          <td style="padding:12px 16px;width:38%;font-size:13px;color:#5c6673;border-top:${index ? '1px solid #e4e8ed' : '0'};vertical-align:top;">${label}</td>
+          <td style="padding:12px 16px;font-size:14px;color:#101317;font-weight:600;border-top:${index ? '1px solid #e4e8ed' : '0'};vertical-align:top;">${content}</td>
         </tr>`;
     })
     .join('');
@@ -91,17 +91,17 @@ export function buildQuoteEmail(quote) {
     ? `
           <tr>
             <td style="padding:28px 32px 0;">
-              <p style="margin:0 0 14px;font-size:11px;font-weight:700;color:#5d6980;letter-spacing:0.08em;text-transform:uppercase;">Teklif sepeti (${quote.items.length} ürün)</p>
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e2e7f2;border-radius:12px;border-collapse:separate;">
+              <p style="margin:0 0 14px;font-size:11px;font-weight:700;color:#5c6673;letter-spacing:0.08em;text-transform:uppercase;">Teklif sepeti (${quote.items.length} ürün)</p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e4e8ed;border-radius:12px;border-collapse:separate;">
                 ${quote.items
                   .map((item, index) => {
                     const src = item.image && siteOrigin() ? `${siteOrigin()}${item.image}` : '';
-                    const border = index ? 'border-top:1px solid #e2e7f2;' : '';
+                    const border = index ? 'border-top:1px solid #e4e8ed;' : '';
                     return `
                 <tr>
                   <td style="padding:12px;width:64px;${border}vertical-align:top;">${src ? `<img src="${escapeHtml(src)}" alt="" width="56" style="display:block;width:56px;border-radius:8px;background:#f2f2f2;">` : ''}</td>
-                  <td style="padding:12px 12px 12px 0;${border}font-size:13px;color:#112244;vertical-align:top;"><strong style="font-size:14px;">${escapeHtml(item.name)}</strong><br><span style="color:#5d6980;">${escapeHtml(item.details)}</span></td>
-                  <td align="right" style="padding:12px 16px;${border}font-size:15px;font-weight:700;color:#1d67d5;white-space:nowrap;vertical-align:top;">× ${escapeHtml(item.quantity)}</td>
+                  <td style="padding:12px 12px 12px 0;${border}font-size:13px;color:#101317;vertical-align:top;"><strong style="font-size:14px;">${escapeHtml(item.name)}</strong><br><span style="color:#5c6673;">${escapeHtml(item.details || "")}</span></td>
+                  <td align="right" style="padding:12px 16px;${border}font-size:15px;font-weight:700;color:#e4173a;white-space:nowrap;vertical-align:top;">× ${escapeHtml(item.quantity)}</td>
                 </tr>`;
                   })
                   .join('')}
@@ -114,7 +114,7 @@ export function buildQuoteEmail(quote) {
     ? `
           <tr>
             <td style="padding:28px 32px 0;">
-              <p style="margin:0 0 14px;font-size:11px;font-weight:700;color:#5d6980;letter-spacing:0.08em;text-transform:uppercase;">Seçilen ürün</p>
+              <p style="margin:0 0 14px;font-size:11px;font-weight:700;color:#5c6673;letter-spacing:0.08em;text-transform:uppercase;">Seçilen ürün</p>
               <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(quote.product)}" width="180" style="display:block;width:180px;max-width:100%;border-radius:12px;background:#f2f2f2;">
             </td>
           </tr>`
@@ -127,32 +127,32 @@ export function buildQuoteEmail(quote) {
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${escapeHtml(subject)}</title>
 </head>
-<body style="margin:0;padding:0;background:#f0f3f8;font-family:Arial,Helvetica,sans-serif;color:#112244;">
+<body style="margin:0;padding:0;background:#f7f9fa;font-family:Arial,Helvetica,sans-serif;color:#101317;">
   <div style="display:none;max-height:0;overflow:hidden;opacity:0;">${escapeHtml(quote.name)} (${escapeHtml(quote.company)}) web sitesinden teklif talebi gönderdi.</div>
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f0f3f8;padding:32px 12px;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f7f9fa;padding:32px 12px;">
     <tr>
       <td align="center">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #dadfe8;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #d5dae0;">
 
           <tr>
-            <td style="background:#0f1e3c;padding:28px 32px;">
+            <td style="background:#101317;border-bottom:4px solid #e4173a;padding:28px 32px;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td style="font-size:20px;font-weight:700;color:#ffffff;letter-spacing:-0.01em;">RMA <span style="color:#1d67d5;">Plastik</span></td>
-                  <td align="right" style="font-size:11px;font-weight:700;color:#8c97ac;letter-spacing:0.08em;text-transform:uppercase;">${reference}</td>
+                  <td style="font-size:20px;font-weight:700;color:#ffffff;letter-spacing:-0.01em;">RMA <span style="color:#e4173a;">Plastik</span></td>
+                  <td align="right" style="font-size:11px;font-weight:700;color:#818b98;letter-spacing:0.08em;text-transform:uppercase;">${reference}</td>
                 </tr>
               </table>
-              <p style="margin:22px 0 6px;font-size:11px;font-weight:700;color:#1d67d5;letter-spacing:0.08em;text-transform:uppercase;">Yeni teklif talebi</p>
+              <p style="margin:22px 0 6px;font-size:11px;font-weight:700;color:#e4173a;letter-spacing:0.08em;text-transform:uppercase;">Yeni teklif talebi</p>
               <h1 style="margin:0;font-size:24px;line-height:1.3;color:#ffffff;font-weight:600;">${escapeHtml(quote.company)}</h1>
-              <p style="margin:6px 0 0;font-size:13px;color:#abb3c3;">${createdAt}</p>
+              <p style="margin:6px 0 0;font-size:13px;color:#afb7c1;">${createdAt}</p>
             </td>
           </tr>
 
 ${imageHtml}${itemsHtml}
           <tr>
             <td style="padding:28px 32px 8px;">
-              <p style="margin:0 0 14px;font-size:11px;font-weight:700;color:#5d6980;letter-spacing:0.08em;text-transform:uppercase;">Talep bilgileri</p>
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e2e7f2;border-radius:12px;border-collapse:separate;">
+              <p style="margin:0 0 14px;font-size:11px;font-weight:700;color:#5c6673;letter-spacing:0.08em;text-transform:uppercase;">Talep bilgileri</p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e4e8ed;border-radius:12px;border-collapse:separate;">
                 ${rowsHtml}
               </table>
             </td>
@@ -160,8 +160,8 @@ ${imageHtml}${itemsHtml}
 
           <tr>
             <td style="padding:20px 32px 8px;">
-              <p style="margin:0 0 14px;font-size:11px;font-weight:700;color:#5d6980;letter-spacing:0.08em;text-transform:uppercase;">Proje detayları</p>
-              <div style="padding:16px 18px;background:#f0f3f8;border-radius:12px;border-left:3px solid #1d67d5;font-size:14px;line-height:1.65;color:#112244;">${messageHtml}</div>
+              <p style="margin:0 0 14px;font-size:11px;font-weight:700;color:#5c6673;letter-spacing:0.08em;text-transform:uppercase;">Proje detayları</p>
+              <div style="padding:16px 18px;background:#f7f9fa;border-radius:12px;border-left:3px solid #e4173a;font-size:14px;line-height:1.65;color:#101317;">${messageHtml}</div>
             </td>
           </tr>
 
@@ -169,12 +169,12 @@ ${imageHtml}${itemsHtml}
             <td style="padding:24px 32px 32px;">
               <table role="presentation" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td style="background:#1d67d5;border-radius:10px;">
+                  <td style="background:#e4173a;border-radius:10px;">
                     <a href="mailto:${escapeHtml(quote.email)}?subject=${encodeURIComponent(`RMA Plastik teklif talebiniz (${reference})`)}" style="display:inline-block;padding:13px 22px;font-size:13px;font-weight:700;color:#ffffff;text-decoration:none;">Müşteriye yanıt ver</a>
                   </td>
                   ${link ? `<td style="width:10px;"></td>
-                  <td style="border:1px solid #ccd3e0;border-radius:10px;">
-                    <a href="${escapeHtml(link)}" style="display:inline-block;padding:12px 20px;font-size:13px;font-weight:700;color:#112244;text-decoration:none;">Yönetim panelinde aç</a>
+                  <td style="border:1px solid #d5dae0;border-radius:10px;">
+                    <a href="${escapeHtml(link)}" style="display:inline-block;padding:12px 20px;font-size:13px;font-weight:700;color:#101317;text-decoration:none;">Yönetim panelinde aç</a>
                   </td>` : ''}
                 </tr>
               </table>
@@ -182,7 +182,7 @@ ${imageHtml}${itemsHtml}
           </tr>
 
           <tr>
-            <td style="padding:18px 32px;background:#f7f8fb;border-top:1px solid #e2e7f2;font-size:12px;line-height:1.6;color:#79859e;">
+            <td style="padding:18px 32px;background:#f7f9fa;border-top:1px solid #e4e8ed;font-size:12px;line-height:1.6;color:#818b98;">
               Bu e-posta web sitesindeki teklif formundan otomatik olarak gönderilmiştir. Yanıtla dediğinizde e-posta doğrudan müşteriye (${escapeHtml(quote.email)}) gider.
             </td>
           </tr>
@@ -350,23 +350,23 @@ export function buildCustomerConfirmation(quote, contact = {}) {
   const rowsHtml = rows
     .map(([label, value], index) => `
                 <tr>
-                  <td style="${cell}width:40%;color:#5d6980;font-size:13px;border-top:${index ? '1px solid #e2e7f2' : '0'};">${escapeHtml(label)}</td>
-                  <td style="${cell}color:#112244;font-weight:600;border-top:${index ? '1px solid #e2e7f2' : '0'};">${escapeHtml(value)}</td>
+                  <td style="${cell}width:40%;color:#5c6673;font-size:13px;border-top:${index ? '1px solid #e4e8ed' : '0'};">${escapeHtml(label)}</td>
+                  <td style="${cell}color:#101317;font-weight:600;border-top:${index ? '1px solid #e4e8ed' : '0'};">${escapeHtml(value)}</td>
                 </tr>`)
     .join('');
 
   const itemsHtml = items.length
     ? `
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:14px;border:1px solid #e2e7f2;border-radius:12px;border-collapse:separate;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:14px;border:1px solid #e4e8ed;border-radius:12px;border-collapse:separate;">
                 ${items
                   .map((item, index) => {
                     const src = item.image && origin ? `${origin}${item.image}` : '';
-                    const border = index ? 'border-top:1px solid #e2e7f2;' : '';
+                    const border = index ? 'border-top:1px solid #e4e8ed;' : '';
                     return `
                 <tr>
                   <td style="padding:10px 12px;width:52px;${border}vertical-align:top;">${src ? `<img src="${escapeHtml(src)}" alt="" width="44" style="display:block;width:44px;border-radius:8px;background:#f2f2f2;">` : ''}</td>
-                  <td style="padding:10px 4px;${border}font-size:14px;font-weight:600;color:#112244;vertical-align:middle;text-align:${align};">${escapeHtml(item.name)}</td>
-                  <td style="padding:10px 16px;${border}font-size:14px;font-weight:700;color:#1d67d5;white-space:nowrap;vertical-align:middle;text-align:${dir === 'rtl' ? 'left' : 'right'};"><span dir="ltr" style="unicode-bidi:isolate;">× ${escapeHtml(item.quantity || 1)}</span></td>
+                  <td style="padding:10px 4px;${border}font-size:14px;font-weight:600;color:#101317;vertical-align:middle;text-align:${align};">${escapeHtml(item.name)}</td>
+                  <td style="padding:10px 16px;${border}font-size:14px;font-weight:700;color:#e4173a;white-space:nowrap;vertical-align:middle;text-align:${dir === 'rtl' ? 'left' : 'right'};"><span dir="ltr" style="unicode-bidi:isolate;">× ${escapeHtml(item.quantity || 1)}</span></td>
                 </tr>`;
                   })
                   .join('')}
@@ -382,35 +382,35 @@ export function buildCustomerConfirmation(quote, contact = {}) {
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${escapeHtml(subject)}</title>
 </head>
-<body style="margin:0;padding:0;background:#f0f3f8;font-family:Arial,Helvetica,sans-serif;color:#112244;">
+<body style="margin:0;padding:0;background:#f7f9fa;font-family:Arial,Helvetica,sans-serif;color:#101317;">
   <div style="display:none;max-height:0;overflow:hidden;opacity:0;">${escapeHtml(copy.preheader)}</div>
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f0f3f8;padding:32px 12px;" dir="${dir}">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f7f9fa;padding:32px 12px;" dir="${dir}">
     <tr>
       <td align="center">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #dadfe8;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #d5dae0;">
 
           <tr>
-            <td style="background:#0f1e3c;padding:28px 32px;text-align:${align};">
-              <div style="font-size:20px;font-weight:700;color:#ffffff;letter-spacing:-0.01em;" dir="ltr">RMA <span style="color:#1d67d5;">Plastik</span></div>
-              <p style="margin:22px 0 6px;font-size:12px;font-weight:700;color:#5b9cf5;letter-spacing:0.06em;text-transform:uppercase;">${escapeHtml(copy.eyebrow)}</p>
+            <td style="background:#101317;border-bottom:4px solid #e4173a;padding:28px 32px;text-align:${align};">
+              <div style="font-size:20px;font-weight:700;color:#ffffff;letter-spacing:-0.01em;" dir="ltr">RMA <span style="color:#e4173a;">Plastik</span></div>
+              <p style="margin:22px 0 6px;font-size:12px;font-weight:700;color:#ff4560;letter-spacing:0.06em;text-transform:uppercase;">${escapeHtml(copy.eyebrow)}</p>
               <h1 style="margin:0;font-size:22px;line-height:1.35;color:#ffffff;font-weight:600;">${escapeHtml(copy.greeting(name))}</h1>
             </td>
           </tr>
 
           <tr>
             <td style="padding:26px 32px 4px;text-align:${align};">
-              <p style="margin:0;font-size:15px;line-height:1.7;color:#112244;">${escapeHtml(copy.intro)}</p>
+              <p style="margin:0;font-size:15px;line-height:1.7;color:#101317;">${escapeHtml(copy.intro)}</p>
             </td>
           </tr>
 
           <tr>
             <td style="padding:22px 32px 0;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eef4fe;border-radius:12px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fdecef;border-radius:12px;">
                 <tr>
                   <td style="padding:18px 20px;text-align:${align};">
-                    <p style="margin:0 0 4px;font-size:12px;font-weight:700;color:#5d6980;letter-spacing:0.06em;text-transform:uppercase;">${escapeHtml(copy.reference)}</p>
-                    <p style="margin:0;font-size:26px;font-weight:700;color:#1d67d5;letter-spacing:0.04em;" dir="ltr">${reference}</p>
-                    <p style="margin:6px 0 0;font-size:13px;color:#5d6980;">${escapeHtml(copy.referenceHint)}</p>
+                    <p style="margin:0 0 4px;font-size:12px;font-weight:700;color:#5c6673;letter-spacing:0.06em;text-transform:uppercase;">${escapeHtml(copy.reference)}</p>
+                    <p style="margin:0;font-size:26px;font-weight:700;color:#e4173a;letter-spacing:0.04em;" dir="ltr">${reference}</p>
+                    <p style="margin:6px 0 0;font-size:13px;color:#5c6673;">${escapeHtml(copy.referenceHint)}</p>
                   </td>
                 </tr>
               </table>
@@ -419,9 +419,9 @@ export function buildCustomerConfirmation(quote, contact = {}) {
 
           <tr>
             <td style="padding:26px 32px 4px;text-align:${align};">
-              <p style="margin:0 0 12px;font-size:12px;font-weight:700;color:#5d6980;letter-spacing:0.06em;text-transform:uppercase;">${escapeHtml(copy.summary)}</p>
+              <p style="margin:0 0 12px;font-size:12px;font-weight:700;color:#5c6673;letter-spacing:0.06em;text-transform:uppercase;">${escapeHtml(copy.summary)}</p>
               ${itemsHtml}
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e2e7f2;border-radius:12px;border-collapse:separate;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e4e8ed;border-radius:12px;border-collapse:separate;">
                 ${rowsHtml}
               </table>
             </td>
@@ -429,23 +429,23 @@ export function buildCustomerConfirmation(quote, contact = {}) {
 
           <tr>
             <td style="padding:20px 32px 6px;text-align:${align};">
-              <p style="margin:0;font-size:14px;line-height:1.65;color:#112244;">${escapeHtml(copy.reply)}</p>
+              <p style="margin:0;font-size:14px;line-height:1.65;color:#101317;">${escapeHtml(copy.reply)}</p>
             </td>
           </tr>
 
           <tr>
             <td style="padding:18px 32px 30px;text-align:${align};">
-              <p style="margin:0 0 10px;font-size:12px;font-weight:700;color:#5d6980;letter-spacing:0.06em;text-transform:uppercase;">${escapeHtml(copy.contact)}</p>
+              <p style="margin:0 0 10px;font-size:12px;font-weight:700;color:#5c6673;letter-spacing:0.06em;text-transform:uppercase;">${escapeHtml(copy.contact)}</p>
               <p style="margin:0;font-size:14px;line-height:1.9;">
-                <a href="tel:${escapeHtml(phone)}" style="color:#1d67d5;text-decoration:none;font-weight:700;" dir="ltr">${escapeHtml(phoneDisplay)}</a><br>
-                <a href="mailto:${escapeHtml(email)}" style="color:#1d67d5;text-decoration:none;font-weight:700;">${escapeHtml(email)}</a>${origin ? `<br>
-                <a href="${escapeHtml(origin)}" style="color:#1d67d5;text-decoration:none;font-weight:700;">${escapeHtml(site)}</a>` : ''}
+                <a href="tel:${escapeHtml(phone)}" style="color:#e4173a;text-decoration:none;font-weight:700;" dir="ltr">${escapeHtml(phoneDisplay)}</a><br>
+                <a href="mailto:${escapeHtml(email)}" style="color:#e4173a;text-decoration:none;font-weight:700;">${escapeHtml(email)}</a>${origin ? `<br>
+                <a href="${escapeHtml(origin)}" style="color:#e4173a;text-decoration:none;font-weight:700;">${escapeHtml(site)}</a>` : ''}
               </p>
             </td>
           </tr>
 
           <tr>
-            <td style="padding:18px 32px;background:#f7f8fb;border-top:1px solid #e2e7f2;font-size:12px;line-height:1.6;color:#79859e;text-align:${align};">
+            <td style="padding:18px 32px;background:#f7f9fa;border-top:1px solid #e4e8ed;font-size:12px;line-height:1.6;color:#818b98;text-align:${align};">
               ${escapeHtml(copy.footer(site))}
             </td>
           </tr>
@@ -515,14 +515,14 @@ export async function buildOfferEmail(quote, offer, contact = {}) {
   const email = contact.email || DEFAULT_CONTACT.email;
   const phoneDisplay = contact.phoneDisplay || DEFAULT_CONTACT.phoneDisplay;
 
-  const cell = (extra = '') => `padding:10px 12px;font-size:13px;border-top:1px solid #e2e7f2;vertical-align:top;${extra}`;
+  const cell = (extra = '') => `padding:10px 12px;font-size:13px;border-top:1px solid #e4e8ed;vertical-align:top;${extra}`;
 
   const linesHtml = offer.lines
     .map((line, index) => `
                 <tr>
-                  <td style="${cell(`text-align:${align};color:#112244;`)}"><strong>${escapeHtml(line.name)}</strong>${line.details ? `<br><span style="color:#5d6980;font-size:12px;">${escapeHtml(line.details)}</span>` : ''}</td>
-                  <td style="${cell(`text-align:${end};white-space:nowrap;color:#112244;`)}" dir="ltr">${escapeHtml(line.quantity)} ${escapeHtml(line.unit || copy.unit)}</td>
-                  <td style="${cell(`text-align:${end};white-space:nowrap;color:#112244;font-weight:700;`)}" dir="ltr">${escapeHtml(money(totals.lines[index]))}</td>
+                  <td style="${cell(`text-align:${align};color:#101317;`)}"><strong>${escapeHtml(line.name)}</strong>${line.details ? `<br><span style="color:#5c6673;font-size:12px;">${escapeHtml(line.details)}</span>` : ''}</td>
+                  <td style="${cell(`text-align:${end};white-space:nowrap;color:#101317;`)}" dir="ltr">${escapeHtml(line.quantity)} ${escapeHtml(line.unit || copy.unit)}</td>
+                  <td style="${cell(`text-align:${end};white-space:nowrap;color:#101317;font-weight:700;`)}" dir="ltr">${escapeHtml(money(totals.lines[index]))}</td>
                 </tr>`)
     .join('');
 
@@ -549,15 +549,15 @@ export async function buildOfferEmail(quote, offer, contact = {}) {
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${escapeHtml(subject)}</title>
 </head>
-<body style="margin:0;padding:0;background:#f0f3f8;font-family:Arial,Helvetica,sans-serif;color:#112244;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f0f3f8;padding:32px 12px;" dir="${dir}">
+<body style="margin:0;padding:0;background:#f7f9fa;font-family:Arial,Helvetica,sans-serif;color:#101317;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f7f9fa;padding:32px 12px;" dir="${dir}">
     <tr>
       <td align="center">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:620px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #dadfe8;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:620px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #d5dae0;">
           <tr>
-            <td style="background:#0f1e3c;padding:26px 32px;text-align:${align};">
-              <div style="font-size:20px;font-weight:700;color:#ffffff;" dir="ltr">RMA <span style="color:#1d67d5;">Plastik</span></div>
-              <p style="margin:20px 0 4px;font-size:12px;font-weight:700;color:#5b9cf5;letter-spacing:0.06em;text-transform:uppercase;">${escapeHtml(copy.title)}</p>
+            <td style="background:#101317;border-bottom:4px solid #e4173a;padding:26px 32px;text-align:${align};">
+              <div style="font-size:20px;font-weight:700;color:#ffffff;" dir="ltr">RMA <span style="color:#e4173a;">Plastik</span></div>
+              <p style="margin:20px 0 4px;font-size:12px;font-weight:700;color:#ff4560;letter-spacing:0.06em;text-transform:uppercase;">${escapeHtml(copy.title)}</p>
               <h1 style="margin:0;font-size:22px;color:#ffffff;font-weight:600;" dir="ltr">${escapeHtml(number)}</h1>
             </td>
           </tr>
@@ -569,18 +569,18 @@ export async function buildOfferEmail(quote, offer, contact = {}) {
           </tr>
           <tr>
             <td style="padding:20px 32px 0;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e2e7f2;border-radius:12px;border-collapse:separate;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e4e8ed;border-radius:12px;border-collapse:separate;">
                 <tr>
-                  <td style="padding:10px 12px;font-size:11px;font-weight:700;color:#5d6980;text-transform:uppercase;text-align:${align};">${escapeHtml(copy.item)}</td>
-                  <td style="padding:10px 12px;font-size:11px;font-weight:700;color:#5d6980;text-transform:uppercase;text-align:${end};">${escapeHtml(copy.qty)}</td>
-                  <td style="padding:10px 12px;font-size:11px;font-weight:700;color:#5d6980;text-transform:uppercase;text-align:${end};">${escapeHtml(copy.amount)}</td>
+                  <td style="padding:10px 12px;font-size:11px;font-weight:700;color:#5c6673;text-transform:uppercase;text-align:${align};">${escapeHtml(copy.item)}</td>
+                  <td style="padding:10px 12px;font-size:11px;font-weight:700;color:#5c6673;text-transform:uppercase;text-align:${end};">${escapeHtml(copy.qty)}</td>
+                  <td style="padding:10px 12px;font-size:11px;font-weight:700;color:#5c6673;text-transform:uppercase;text-align:${end};">${escapeHtml(copy.amount)}</td>
                 </tr>
                 ${linesHtml}
                 ${totalRows
                   .map(([label, value], index) => `
                 <tr>
-                  <td colspan="2" style="${cell(`text-align:${end};color:#5d6980;${index === totalRows.length - 1 ? 'font-weight:700;color:#112244;' : ''}`)}">${escapeHtml(label)}</td>
-                  <td style="${cell(`text-align:${end};white-space:nowrap;${index === totalRows.length - 1 ? 'font-size:15px;font-weight:700;color:#1d67d5;' : 'color:#112244;'}`)}" dir="ltr">${escapeHtml(value)}</td>
+                  <td colspan="2" style="${cell(`text-align:${end};color:#5c6673;${index === totalRows.length - 1 ? 'font-weight:700;color:#101317;' : ''}`)}">${escapeHtml(label)}</td>
+                  <td style="${cell(`text-align:${end};white-space:nowrap;${index === totalRows.length - 1 ? 'font-size:15px;font-weight:700;color:#e4173a;' : 'color:#101317;'}`)}" dir="ltr">${escapeHtml(value)}</td>
                 </tr>`)
                   .join('')}
               </table>
@@ -592,8 +592,8 @@ export async function buildOfferEmail(quote, offer, contact = {}) {
                 ${facts
                   .map(([label, value]) => `
                 <tr>
-                  <td style="padding:5px 0;width:40%;font-size:13px;color:#5d6980;text-align:${align};vertical-align:top;">${escapeHtml(label)}</td>
-                  <td style="padding:5px 0;font-size:13px;color:#112244;font-weight:600;text-align:${align};vertical-align:top;">${escapeHtml(value)}</td>
+                  <td style="padding:5px 0;width:40%;font-size:13px;color:#5c6673;text-align:${align};vertical-align:top;">${escapeHtml(label)}</td>
+                  <td style="padding:5px 0;font-size:13px;color:#101317;font-weight:600;text-align:${align};vertical-align:top;">${escapeHtml(value)}</td>
                 </tr>`)
                   .join('')}
               </table>
@@ -603,7 +603,7 @@ export async function buildOfferEmail(quote, offer, contact = {}) {
             <td style="padding:20px 32px 28px;text-align:${align};font-size:14px;line-height:1.65;">
               <p style="margin:0 0 6px;">📎 ${escapeHtml(copy.emailAttachment)}</p>
               <p style="margin:0;">${escapeHtml(copy.emailReply)}</p>
-              <p style="margin:16px 0 0;color:#5d6980;font-size:13px;">${escapeHtml(offer.preparedBy || 'RMA Plastik')}<br><span dir="ltr">${escapeHtml(phoneDisplay)}</span> · ${escapeHtml(email)}</p>
+              <p style="margin:16px 0 0;color:#5c6673;font-size:13px;">${escapeHtml(offer.preparedBy || 'RMA Plastik')}<br><span dir="ltr">${escapeHtml(phoneDisplay)}</span> · ${escapeHtml(email)}</p>
             </td>
           </tr>
         </table>

@@ -35,7 +35,8 @@ const QUICK_DATES = [
 /* Other requests from the same customer, inside the customer card */
 function CustomerSummary({ data, quote }) {
   if (data === null) return <p className="adNotesEmpty">Müşteri geçmişi yükleniyor…</p>;
-  if (!data) return null;
+  // A failed or unexpected answer only hides the history, never the page
+  if (!data || !Array.isArray(data.quotes) || !data.summary) return null;
 
   const others = data.quotes.filter((item) => item._id !== quote._id);
   const openOthers = others.filter((item) => !item.outcome && item.status !== 'closed');

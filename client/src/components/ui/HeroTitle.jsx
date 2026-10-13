@@ -25,7 +25,7 @@ export default function HeroTitle({ line1, accent, line2 }) {
     <h1 className="heroWords">
       <span className="heroLine">{words(line1, 0)}</span>
       <span className="heroLine heroLineAccent">{words(accent, first)}</span>
-      <span className="heroLine">{words(line2, first + middle)}</span>
+      {line2 && <span className="heroLine">{words(line2, first + middle)}</span>}
     </h1>
   );
 }

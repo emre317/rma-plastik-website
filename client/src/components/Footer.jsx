@@ -101,7 +101,7 @@ export default function Footer() {
               className="footerLogo"
               aria-label={t('nav.homeLink')}
             >
-              <BrandLogo alt="" />
+              <BrandLogo variant="light" alt="" />
             </LocalizedLink>
 
             <p>

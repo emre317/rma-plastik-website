@@ -6,8 +6,8 @@ import company from '../../data/company';
 
 /*
   Floating quick-contact bubbles (WhatsApp, call, email) fixed to the side
-  of the screen. Adapted from the "social-media" tooltip block: on hover the
-  brand colour fills the bubble from the bottom and a tooltip slides out.
+  of the screen: solid, high-contrast bubbles (WhatsApp green, phone red,
+  e-mail black) with a white ring; a tooltip slides out on hover.
 */
 export default function FloatingContact() {
   const { t } = useTranslation();
@@ -26,14 +26,14 @@ export default function FloatingContact() {
       href: company.phone.href,
       label: t('floatingContact.phone'),
       icon: Phone,
-      color: 'var(--accent)',
+      color: 'var(--brand-primary)',
     },
     {
       key: 'email',
       href: `mailto:${company.email}`,
       label: t('floatingContact.email'),
       icon: Mail,
-      color: 'var(--dark)',
+      color: 'var(--ink-900)',
     },
   ].filter(Boolean);
 

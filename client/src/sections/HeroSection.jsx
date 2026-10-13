@@ -7,6 +7,7 @@ import HeroVideo from './HeroVideo';
 import HeroTitle from '../components/ui/HeroTitle';
 import HeroBrand from '../components/ui/HeroBrand';
 import HeroTypeLine from '../components/ui/HeroTypeLine';
+import HeroStats from '../components/ui/HeroStats';
 
 export default function HeroSection() {
   const { t } = useTranslation();
@@ -57,6 +58,8 @@ export default function HeroSection() {
               </button>
 
             </div>
+
+            <HeroStats />
 
           </div>
 

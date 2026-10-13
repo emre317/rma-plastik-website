@@ -41,7 +41,9 @@ export default function AdminCustomer() {
         setLoading(true);
         setError('');
         const response = await call(getCustomer, { email, company });
-        if (!cancelled) setData(response.data);
+        if (cancelled) return;
+        if (!response.data?.customer || !Array.isArray(response.data.quotes)) throw new Error('Müşteri bilgileri yüklenemedi.');
+        setData(response.data);
       } catch (err) {
         if (!cancelled) setError(err.message);
       } finally {
