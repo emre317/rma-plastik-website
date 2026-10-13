@@ -62,14 +62,17 @@ Set these in `server/.env`:
 
 | Variable | Example |
 | --- | --- |
-| `SMTP_HOST` / `SMTP_PORT` | `smtp.gmail.com` / `465` |
-| `SMTP_USER` | Gmail address that sends the mail |
-| `SMTP_PASS` | Google **App Password** (Google Account → Security → 2-Step Verification → App passwords) |
-| `MAIL_FROM` | optional, e.g. `"RMA Plastik Web" <info@rmaplastik.com>` |
+| `SMTP_HOST` / `SMTP_PORT` | `proxy.uzmanposta.com` / `587` (STARTTLS, enforced); or `465` with `SMTP_SECURE=true` |
+| `SMTP_USER` | `web@rmaplastik.com` (the mailbox that sends the mail) |
+| `SMTP_PASS` | that mailbox's password (only in `server/.env` on the server, never in git) |
+| `MAIL_FROM` | optional; default `"RMA Plastik" <SMTP_USER>`. If set, use the same address and single quotes: `'"RMA Plastik" <web@rmaplastik.com>'` |
 | `QUOTE_NOTIFY_TO` | `emreayranci007@gmail.com` (comma-separated for several) |
 
 Without SMTP settings the request is still saved and a warning is logged; a mail
-error never fails the customer's submission.
+error never fails the customer's submission. The same SMTP account sends the customer
+confirmation, catalogue links, offers, password reset and user invitation e-mails
+(those links also need `CLIENT_URL`). Check the settings on the server with
+`cd server && npm run mail-test` (add an address to also send a test e-mail).
 
 ## Languages (TR / EN / AR)
 

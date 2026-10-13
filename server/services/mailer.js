@@ -18,14 +18,19 @@ export function isMailConfigured() {
 function getTransporter() {
   if (!transporter) {
     const port = Number(process.env.SMTP_PORT) || 465;
+    const secure = process.env.SMTP_SECURE
+      ? process.env.SMTP_SECURE === 'true'
+      : port === 465;
 
     transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port,
-      // Port 465 uses implicit TLS; 587 upgrades with STARTTLS
-      secure: process.env.SMTP_SECURE
-        ? process.env.SMTP_SECURE === 'true'
-        : port === 465,
+      // Port 465 uses implicit TLS; 587 must upgrade with STARTTLS (never plain text)
+      secure,
+      requireTLS: !secure,
+      connectionTimeout: 15000,
+      greetingTimeout: 15000,
+      socketTimeout: 30000,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
@@ -34,6 +39,12 @@ function getTransporter() {
   }
 
   return transporter;
+}
+
+/* Checks the SMTP connection and login without sending anything */
+export async function verifyMail() {
+  if (!isMailConfigured()) throw new Error('SMTP_HOST, SMTP_USER and SMTP_PASS must be set.');
+  return getTransporter().verify();
 }
 
 export async function sendMail(message) {
@@ -45,7 +56,7 @@ export async function sendMail(message) {
   return getTransporter().sendMail({
     from:
       process.env.MAIL_FROM ||
-      `"RMA Plastik Web" <${process.env.SMTP_USER}>`,
+      `"RMA Plastik" <${process.env.SMTP_USER}>`,
     ...message,
   });
 }

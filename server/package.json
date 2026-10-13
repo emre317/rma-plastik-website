@@ -6,7 +6,8 @@
     "dev": "node --watch server.js",
     "start": "node server.js",
     "create-admin": "node scripts/createAdmin.js",
-    "seed-content": "node scripts/seedContent.js"
+    "seed-content": "node scripts/seedContent.js",
+    "mail-test": "node scripts/mailTest.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
