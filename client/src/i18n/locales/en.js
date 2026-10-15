@@ -161,6 +161,12 @@ const en = {
     },
   },
 
+  quoteStrip: {
+    title: 'Tell us the capacity. We will send the price and the lead time.',
+    text: 'We reply to your request within 1 working day.',
+    button: 'Request a Quote',
+  },
+
   materialFeatures: {
     title: 'Polyethylene Raw Material Properties',
     items: [

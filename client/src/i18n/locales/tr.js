@@ -160,6 +160,12 @@ const tr = {
     },
   },
 
+  quoteStrip: {
+    title: 'Kapasiteyi paylaşın, fiyatı ve teslim süresini size iletelim.',
+    text: 'Talebinize 1 iş günü içinde dönüş yapıyoruz.',
+    button: 'Teklif Al',
+  },
+
   materialFeatures: {
     title: 'Polietilen Hammadde Özellikleri',
     items: [

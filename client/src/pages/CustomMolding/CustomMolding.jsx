@@ -1,16 +1,15 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MessageSquare } from 'lucide-react';
 
 import Seo from '../../seo/Seo';
 import PageHeader from '../../components/ui/PageHeader';
-import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
 import { galleryImages, machineIcons, serviceIcons } from '../../data/customMolding';
 import projects, { projectText } from '../../data/projects';
 import useLanguage from '../../hooks/useLanguage';
 import FieldGallerySection from '../../sections/FieldGallerySection';
+import QuoteStrip from '../../components/ui/QuoteStrip';
 import SectionDeco from '../../components/ui/SectionDeco';
 import ImageLightbox from '../../components/ui/ImageLightbox';
 
@@ -223,28 +222,13 @@ export default function CustomMolding() {
 
       <FieldGallerySection />
 
-      {/* CTA */}
-      <section className="cmCta">
-        <div className="container">
-          <div className="cmCtaPanel">
-            <div>
-              <h2>{text('ctaTitle')}</h2>
-              <p>{text('ctaText')}</p>
-            </div>
-
-            <div className="cmCtaActions">
-              <button type="button" className="button primary quoteButton" onClick={() => openQuote()}>
-                <span>{text('ctaQuote')}</span>
-                <Arrow className="buttonArrow" />
-              </button>
-              <LocalizedLink to="/contact" className="cmCtaLink">
-                <MessageSquare aria-hidden="true" />
-                {text('ctaContact')}
-              </LocalizedLink>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Closing quote strip */}
+      <QuoteStrip
+        title={text('ctaTitle')}
+        text={text('ctaText')}
+        buttonLabel={text('ctaQuote')}
+        contactLabel={text('ctaContact')}
+      />
     </main>
   );
 }

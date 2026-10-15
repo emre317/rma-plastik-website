@@ -31596,9 +31596,10 @@ html.booting .heroVideo .heroStats {
   --accent-light: var(--rma-blue-light);
   --eyebrow: var(--rma-blue);
   --icon: var(--rma-blue);
-  --btn-bg: var(--ink-900);
+  --btn-bg: var(--rma-blue);
   --btn-fg: #ffffff;
-  --btn-bg-hover: var(--ink-700);
+  --btn-bg-hover: #145a91;
+  --btn-icon: #ffffff;
 }
 
 .adminPage,
@@ -31621,6 +31622,7 @@ html.booting .heroVideo .heroStats {
   --btn-bg: #ffffff;
   --btn-fg: var(--ink-900);
   --btn-bg-hover: var(--ink-100);
+  --btn-icon: var(--rma-blue);
 }
 
 /* Eyebrows: blue uppercase text after a short solid red rule
@@ -31648,7 +31650,7 @@ html.booting .heroVideo .heroStats {
 .pageHeader .button.ghost .buttonIcon,
 .button.primary:not(.quoteButton) .buttonArrow,
 .button.primary:not(.quoteButton) .buttonIcon {
-  color: var(--icon);
+  color: var(--btn-icon);
 }
 
 /* Quote buttons stay brand red wherever they are */
@@ -31681,7 +31683,7 @@ html.booting .heroVideo .heroStats {
   color: var(--rma-blue-light);
 }
 
-/* Red is for quote requests only: other primary buttons are graphite
+/* Red is for quote requests only: other primary buttons are blue
    on light surfaces and white on dark ones */
 .button.primary:not(.quoteButton) {
   border-color: var(--btn-bg);
@@ -31907,4 +31909,116 @@ main section h2 > span:not([class]) > span {
   background: none;
   color: #ffffff;
   -webkit-text-fill-color: #ffffff;
+}
+
+/* =====================================================
+   QUOTE STRIP — full-width red → magenta band above the footer
+===================================================== */
+.quoteStrip {
+  padding: 46px 0;
+  background: linear-gradient(96deg, var(--rma-red) 0%, #d21f4f 45%, var(--rma-magenta) 100%);
+  color: #ffffff;
+}
+
+[dir="rtl"] .quoteStrip {
+  background: linear-gradient(264deg, var(--rma-red) 0%, #d21f4f 45%, var(--rma-magenta) 100%);
+}
+
+.quoteStripInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px 40px;
+}
+
+.quoteStrip h2 {
+  margin: 0;
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2.1vw, 30px);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.quoteStrip p {
+  margin: 8px 0 0;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 16px;
+}
+
+.quoteStripActions {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.quoteStrip .quoteStripButton {
+  min-height: 58px;
+  padding-inline: 30px 24px;
+  gap: 24px;
+  border: 0;
+  border-radius: var(--radius-sm, 6px);
+  background: #ffffff;
+  color: var(--ink-900);
+  font-size: 16.5px;
+  box-shadow: 0 12px 28px -14px rgba(16, 19, 23, 0.55);
+}
+
+.quoteStrip .quoteStripButton:hover {
+  background: var(--ink-050);
+  color: var(--ink-900);
+  transform: translateY(-2px);
+}
+
+.quoteStrip .quoteStripButton .buttonArrow {
+  color: var(--brand-primary);
+}
+
+.quoteStripLink {
+  min-height: 58px;
+  padding: 0 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius-sm, 6px);
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  transition: background-color 200ms ease;
+}
+
+.quoteStripLink:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.quoteStripLink svg {
+  width: 18px;
+  height: 18px;
+  color: #ffffff;
+}
+
+@media (max-width: 760px) {
+  .quoteStrip {
+    padding: 36px 0;
+  }
+
+  .quoteStripInner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .quoteStripActions,
+  .quoteStrip .quoteStripButton {
+    width: 100%;
+  }
+
+  .quoteStrip .quoteStripButton {
+    justify-content: space-between;
+  }
 }
