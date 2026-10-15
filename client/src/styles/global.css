@@ -32363,3 +32363,124 @@ select:disabled {
     margin-bottom: 36px;
   }
 }
+
+/* =====================================================
+   QUOTE FORM — choice chips, "unknown" shortcut, remember me
+===================================================== */
+.qmChoices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.qmChoices button {
+  min-height: 40px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.qmChoices button:hover {
+  border-color: var(--rma-blue);
+  color: var(--rma-blue);
+}
+
+.qmChoices button.active {
+  border-color: var(--rma-blue);
+  background: var(--rma-blue);
+  color: #ffffff;
+}
+
+.qmChoices button svg {
+  width: 15px;
+  height: 15px;
+  color: #ffffff;
+}
+
+.qmChoices button:focus-visible {
+  outline: 0;
+  box-shadow: var(--ring-focus);
+}
+
+.formField > span.qmLabelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.qmUnknown {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--rma-blue);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.qmUnknown:hover {
+  color: #145a91;
+}
+
+.qmRemember {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.qmRemember input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--rma-blue);
+}
+
+/* Quote detail: needs picked in the form */
+.adNeeds {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.adNeeds > span {
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.adNeeds ul {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+}
+
+.adNeeds li {
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--accent);
+  font-size: 12.5px;
+  font-weight: 700;
+}

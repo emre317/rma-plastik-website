@@ -23,6 +23,19 @@ export const LOSS_REASONS = [
   { id: 'other', label: 'Diğer' },
 ];
 
+// Fixed choices of the quote form (keys are stored with the request)
+export const NEED_LABELS = {
+  fittings: 'Bağlantı Parçaları',
+  color: 'Renk Tercihi',
+  installation: 'Montaj',
+  shipping: 'Nakliye Dahil',
+  urgent: 'Acil Teslim',
+};
+
+export const DESIGN_INPUT_LABELS = { drawing: 'Teknik Çizim', sample: 'Numune', idea: 'Sadece Fikir' };
+
+export const needsText = (needs) => (Array.isArray(needs) ? needs.map((key) => NEED_LABELS[key] || key).join(', ') : '');
+
 export const outcomeLabel = (id) => QUOTE_OUTCOMES.find((item) => item.id === id)?.label || '';
 export const lossReasonLabel = (id) => LOSS_REASONS.find((item) => item.id === id)?.label || '';
 

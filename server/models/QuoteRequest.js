@@ -2,6 +2,9 @@ import mongoose from 'mongoose';
 
 import attributionSchema from './attributionSchema.js';
 
+export const DESIGN_INPUTS = ['drawing', 'sample', 'idea'];
+export const QUOTE_NEEDS = ['fittings', 'color', 'installation', 'shipping', 'urgent'];
+
 export const QUOTE_LANGUAGES = [
   'tr',
   'en',
@@ -149,10 +152,31 @@ const quoteRequestSchema = new mongoose.Schema(
       maxlength: 200,
     },
 
+    // Custom part: description / dimensions and what the customer already has
+    customSpec: {
+      type: String,
+      trim: true,
+      default: '',
+      maxlength: 300,
+    },
+
+    designInput: {
+      type: String,
+      enum: ['', ...DESIGN_INPUTS],
+      default: '',
+    },
+
+    // Follow-up needs picked with one click (fittings, colour, installation…)
+    needs: {
+      type: [{ type: String, enum: QUOTE_NEEDS }],
+      default: [],
+    },
+
+    // Optional since the form asks structured questions (needs, stored product…)
     message: {
       type: String,
-      required: true,
       trim: true,
+      default: '',
       maxlength: 5000,
     },
 

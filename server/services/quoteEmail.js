@@ -44,6 +44,23 @@ function adminUrl(id) {
   return origin ? `${origin}/admin/quotes/${id}` : '';
 }
 
+// Labels of the fixed choices in the quote form (keys are stored)
+export const NEED_LABELS = {
+  fittings: 'Bağlantı Parçaları',
+  color: 'Renk Tercihi',
+  installation: 'Montaj',
+  shipping: 'Nakliye Dahil',
+  urgent: 'Acil Teslim',
+};
+
+export const DESIGN_INPUT_LABELS = {
+  drawing: 'Teknik Çizim',
+  sample: 'Numune',
+  idea: 'Sadece Fikir',
+};
+
+export const needsText = (needs) => (Array.isArray(needs) ? needs.map((key) => NEED_LABELS[key] || key).join(', ') : '');
+
 function quoteRows(quote) {
   return [
     ['Firma', quote.company],
@@ -59,6 +76,9 @@ function quoteRows(quote) {
     ['Özgül Ağırlık / Yoğunluk', quote.density],
     ['Sıcaklık / Maks. Tepkime Sıcaklığı', quote.temperature],
     ['Teslimat Şehri / Adresi', quote.deliveryCity],
+    ['Ürün Tanımı / Ölçüler', quote.customSpec],
+    ['Müşteride Olan', DESIGN_INPUT_LABELS[quote.designInput] || ''],
+    ['İhtiyaçlar', needsText(quote.needs)],
     ['Uygulama', quote.application],
     ['Site Dili', LANGUAGE_NAMES[quote.language] || ''],
   ].filter(([, value]) => value !== '' && value !== null && value !== undefined);
@@ -162,12 +182,13 @@ ${imageHtml}${itemsHtml}
             </td>
           </tr>
 
+${quote.message ? `
           <tr>
             <td style="padding:20px 32px 8px;">
               <p style="margin:0 0 14px;font-size:11px;font-weight:700;color:#5c6673;letter-spacing:0.08em;text-transform:uppercase;">Proje detayları</p>
               <div style="padding:16px 18px;background:#f7f9fa;border-radius:12px;border-left:3px solid #e4173a;font-size:14px;line-height:1.65;color:#101317;">${messageHtml}</div>
             </td>
-          </tr>
+          </tr>` : ''}
 
           <tr>
             <td style="padding:24px 32px 32px;">
@@ -207,8 +228,7 @@ ${imageHtml}${itemsHtml}
     ...((quote.items || []).length
       ? ['Teklif sepeti:', ...quote.items.map((item) => `- ${item.name} × ${item.quantity}${item.details ? ` (${item.details})` : ''}`), '']
       : []),
-    'Proje detayları:',
-    quote.message,
+    ...(quote.message ? ['Proje detayları:', quote.message] : []),
     '',
     link ? `Yönetim paneli: ${link}` : '',
     `Yanıtlamak için: ${quote.email}`,

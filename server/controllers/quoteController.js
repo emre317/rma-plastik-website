@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 
 import QuoteRequest, {
+  DESIGN_INPUTS,
   LOSS_REASONS,
+  QUOTE_NEEDS,
   OFFER_CURRENCIES,
   QUOTE_LANGUAGES,
   QUOTE_OUTCOMES,
@@ -32,6 +34,8 @@ const OPTIONAL_FIELD_LIMITS = {
   density: 80,
   temperature: 160,
   deliveryCity: 200,
+  customSpec: 300,
+  message: 5000,
 };
 
 function cleanString(value) {
@@ -73,9 +77,8 @@ export async function createQuoteRequest(req, res) {
     const company = cleanString(body.company);
     const name = cleanString(body.name);
     const email = cleanString(body.email).toLowerCase();
-    const message = cleanString(body.message);
 
-    if (!company || !name || !email || !message) {
+    if (!company || !name || !email) {
       return res.status(400).json({
         success: false,
         message:
@@ -127,6 +130,10 @@ export async function createQuoteRequest(req, res) {
 
     optional.productImage = siteImage(body.productImage);
 
+    // Picked from fixed lists: unknown values are dropped
+    optional.designInput = DESIGN_INPUTS.includes(body.designInput) ? body.designInput : '';
+    optional.needs = [...new Set((Array.isArray(body.needs) ? body.needs : []).filter((key) => QUOTE_NEEDS.includes(key)))];
+
     // Quote cart: up to 30 models with quantities
     optional.items = (Array.isArray(body.items) ? body.items : [])
       .slice(0, 30)
@@ -171,7 +178,6 @@ export async function createQuoteRequest(req, res) {
         email,
         ...optional,
         quantity,
-        message,
         language,
         attribution: cleanAttribution(body.attribution),
       });

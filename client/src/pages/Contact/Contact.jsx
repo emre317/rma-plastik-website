@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { FileText, Mail, MessageCircle, Phone } from 'lucide-react';
+import { FileText, Mail, Phone } from 'lucide-react';
 
 import ContactSection from '../../sections/ContactSection';
+import { WhatsappIcon } from '../../components/icons/SocialIcons';
 import Seo from '../../seo/Seo';
 import PageHeader from '../../components/ui/PageHeader';
 import Arrow from '../../components/i18n/Arrow';
@@ -19,7 +20,7 @@ function QuickContact() {
     company.whatsapp && {
       key: 'whatsapp',
       href: `https://wa.me/${company.whatsapp}?text=${encodeURIComponent(t('floatingContact.whatsappMessage'))}`,
-      icon: MessageCircle,
+      icon: WhatsappIcon,
       label: 'WhatsApp',
       value: t('contact.locations.whatsappValue'),
       external: true,

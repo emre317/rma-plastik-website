@@ -11,6 +11,10 @@ import portfolio from '../../data/productPortfolio';
 import useModelQuote from '../../hooks/useModelQuote';
 import useQuoteShare from '../../hooks/useQuoteShare';
 import { countryNameTr, countryOptions } from '../../data/countries';
+import {
+  DESIGN_INPUTS, QUOTE_NEEDS, STORED_PRODUCTS, TANK_GROUPS, TR_PROVINCES,
+  dialPrefix, guessCountry, isBarePrefix, storedProduct,
+} from '../../data/quoteForm';
 import { submitQuote } from '../../services/api';
 import { visitAttribution } from '../../analytics/attribution';
 import { useQuote } from './QuoteContext';
@@ -25,12 +29,40 @@ const initialForm = {
   product: '',
   capacity: '',
   quantity: '',
-  storedProduct: '',
+  storedKey: '',
+  storedDetail: '',
   density: '',
   temperature: '',
+  customSpec: '',
+  designInput: '',
+  needs: [],
   deliveryCity: '',
   message: '',
 };
+
+const CONTACT_KEY = 'rma_quote_contact';
+const CONTACT_FIELDS = ['company', 'name', 'email', 'phone', 'country'];
+
+function readContact() {
+  try {
+    const value = JSON.parse(window.localStorage.getItem(CONTACT_KEY) || 'null');
+    return value && typeof value === 'object' ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeContact(value) {
+  try {
+    if (value) window.localStorage.setItem(CONTACT_KEY, JSON.stringify(value));
+    else window.localStorage.removeItem(CONTACT_KEY);
+  } catch {
+    // Private mode: nothing is remembered
+  }
+}
+
+// Family id -> portfolio group id (cart items carry "family|code" in `ref`)
+const FAMILY_GROUP = Object.fromEntries(portfolio.flatMap((group) => group.families.map((family) => [family, group.id])));
 
 const PAGE = 24;
 
@@ -64,9 +96,10 @@ export default function QuoteModal() {
   const trT = i18n.getFixedT('tr');
   const quoteForModel = useModelQuote();
   const {
-    open, product, shared, closeQuote, clearProduct,
+    open, product, shared, hint, closeQuote, clearProduct,
     cart, addToCart, removeFromCart, setCartQuantity, clearCart,
   } = useQuote();
+  const [remember, setRemember] = useState(false);
   const { shareUrl } = useQuoteShare();
   const [shareNote, setShareNote] = useState('');
 
@@ -81,6 +114,7 @@ export default function QuoteModal() {
   const [group, setGroup] = useState('all');
   const [limit, setLimit] = useState(PAGE);
   const [picker, setPicker] = useState(false);
+  const [capacityOther, setCapacityOther] = useState(false);
   const pickerRef = useRef(false);
   const deferredQuery = useDeferredValue(query);
 
@@ -166,12 +200,23 @@ export default function QuoteModal() {
     setFeedbackKey('');
     setLimit(PAGE);
     setPicker(false);
+    setCapacityOther(false);
     track('quote_form_open', { product: product || '(none)' });
 
-    if (product) {
-      setForm((current) => ({ ...current, product }));
-    }
-  }, [open, product]);
+    // Known details first: remembered contact, guessed country (with its phone code), page hints
+    const saved = readContact();
+    setRemember(Boolean(saved));
+
+    setForm((current) => {
+      const next = { ...current };
+      if (saved) CONTACT_FIELDS.forEach((key) => { if (!next[key] && saved[key]) next[key] = String(saved[key]).slice(0, 150); });
+      if (!next.country) next.country = guessCountry(i18n.resolvedLanguage);
+      if (isBarePrefix(next.phone) && dialPrefix(next.country)) next.phone = dialPrefix(next.country);
+      if (product) next.product = product;
+      if (hint?.stored && !next.storedKey && storedProduct(hint.stored)) next.storedKey = hint.stored;
+      return next;
+    });
+  }, [open, product, hint, i18n.resolvedLanguage]);
 
   useEffect(() => setLimit(PAGE), [deferredQuery, group]);
 
@@ -264,8 +309,21 @@ export default function QuoteModal() {
       : {};
 
     try {
+      const stored = storedProduct(form.storedKey);
+      const { storedKey, storedDetail, ...rest } = form;
+      const showProperties = showTank && stored?.properties !== 'hidden';
+
       const response = await submitQuote({
-        ...form,
+        ...rest,
+        phone: isBarePrefix(form.phone) ? '' : form.phone,
+        // Turkish label for the sales team, e.g. "Asit – Sülfürik asit %98"
+        storedProduct: showTank && stored
+          ? [trT(`contact.stored.${storedKey}`), stored.detail ? storedDetail.trim() : ''].filter(Boolean).join(' – ').slice(0, 200)
+          : '',
+        density: showProperties ? form.density : '',
+        temperature: showProperties ? form.temperature : '',
+        customSpec: showCustom ? form.customSpec : '',
+        designInput: showCustom ? form.designInput : '',
         country: form.country ? countryNameTr(form.country) : '',
         ...listFields,
         language: i18n.resolvedLanguage,
@@ -291,6 +349,8 @@ export default function QuoteModal() {
         site_language: i18n.resolvedLanguage,
       });
 
+      writeContact(remember ? Object.fromEntries(CONTACT_FIELDS.map((key) => [key, form[key]])) : null);
+
       setForm(initialForm);
       clearProduct();
       clearCart();
@@ -302,6 +362,56 @@ export default function QuoteModal() {
 
   const fieldLabel = (name, required = false) => `${t(`contact.fields.${name}`)}${required ? ' *' : ''}`;
   const subjectInList = !form.product || form.product === 'Custom Requirement' || productOptions.some((item) => item.value === form.product);
+
+  // Which product groups the request is about: the list, the chosen group or the page hint
+  const chosenGroup = form.product === 'Custom Requirement'
+    ? 'custom'
+    : productOptions.find((item) => item.value === form.product)?.id || (!subjectInList ? hint?.group || '' : '');
+  const groups = cart.length
+    ? [...new Set(cart.map((item) => FAMILY_GROUP[String(item.ref || '').split('|')[0]]).filter(Boolean))]
+    : chosenGroup ? [chosenGroup] : [];
+  // Tank questions when a tank is involved (or nothing is chosen yet); custom parts get their own
+  const showTank = !groups.length || groups.some((id) => TANK_GROUPS.includes(id));
+  const showCustom = groups.includes('custom');
+  const stored = storedProduct(form.storedKey);
+  const showProperties = showTank && stored?.properties !== 'hidden';
+  const propertiesRequired = showTank && stored?.properties === 'required';
+
+  // Catalogue models of the chosen group: picking one puts it on the list
+  const groupModels = !cart.length && chosenGroup && chosenGroup !== 'custom'
+    ? catalogue.filter((entry) => entry.group === chosenGroup).map((entry) => entry.model)
+    : [];
+  const modelPicker = groupModels.length > 0 && !capacityOther;
+
+  function chooseModel(value) {
+    if (value === '__other') {
+      setCapacityOther(true);
+      return;
+    }
+    const model = groupModels.find((item) => item.name === value);
+    if (model) {
+      addToCart(model, Number(form.quantity) || 1);
+      setForm((current) => ({ ...current, capacity: '', quantity: '' }));
+    }
+  }
+
+  function chooseCountry(code) {
+    setForm((current) => ({
+      ...current,
+      country: code,
+      // A phone field with only the old country code gets the new one
+      phone: isBarePrefix(current.phone) ? dialPrefix(code) || current.phone : current.phone,
+      // A province picked for Türkiye does not fit another country
+      deliveryCity: current.country === 'TR' && code !== 'TR' && TR_PROVINCES.includes(current.deliveryCity) ? '' : current.deliveryCity,
+    }));
+  }
+
+  const toggleNeed = (key) => setForm((current) => ({
+    ...current,
+    needs: current.needs.includes(key) ? current.needs.filter((item) => item !== key) : [...current.needs, key],
+  }));
+
+  const markUnknown = (name) => setForm((current) => ({ ...current, [name]: t('contact.unknown') }));
 
   return (
     <div className={`quoteModal qm ${open ? 'open' : ''}`} aria-hidden={!open} inert={!open}>
@@ -467,12 +577,12 @@ export default function QuoteModal() {
           <div className="formGrid">
             <label className="formField">
               <span>{fieldLabel('company', true)}</span>
-              <input type="text" name="company" maxLength={150} value={form.company} onChange={handleChange} required placeholder={t('contact.placeholders.company')} />
+              <input type="text" name="company" maxLength={150} autoComplete="organization" value={form.company} onChange={handleChange} required placeholder={t('contact.placeholders.company')} />
             </label>
 
             <label className="formField">
               <span>{fieldLabel('name', true)}</span>
-              <input type="text" name="name" maxLength={120} value={form.name} onChange={handleChange} required placeholder={t('contact.placeholders.name')} />
+              <input type="text" name="name" maxLength={120} autoComplete="name" value={form.name} onChange={handleChange} required placeholder={t('contact.placeholders.name')} />
             </label>
 
             <label className="formField">
@@ -491,7 +601,10 @@ export default function QuoteModal() {
                 <Dropdown
                   name="product"
                   value={form.product}
-                  onChange={(value) => handleChange({ target: { name: 'product', value } })}
+                  onChange={(value) => {
+                    setCapacityOther(false);
+                    handleChange({ target: { name: 'product', value } });
+                  }}
                   options={[
                     { value: '', label: t('contact.placeholders.product') },
                     ...(!subjectInList ? [{ value: form.product, label: form.product }] : []),
@@ -504,42 +617,130 @@ export default function QuoteModal() {
               </div>
             )}
 
-            {cart.length === 0 && (
-              <label className="formField">
-                <span>{fieldLabel('capacity')}</span>
-                <input type="text" name="capacity" maxLength={80} value={form.capacity} onChange={handleChange} placeholder={t('contact.placeholders.capacity')} />
-              </label>
+            {/* Capacity: the group's catalogue models, or free text */}
+            {cart.length === 0 && !showCustom && (
+              modelPicker ? (
+                <div className="formField">
+                  <span>{fieldLabel('capacityModel')}</span>
+                  <Dropdown
+                    value=""
+                    onChange={chooseModel}
+                    options={[
+                      ...groupModels.map((model) => ({ value: model.name, label: [model.code, model.capacity].filter(Boolean).join(' · ') })),
+                      { value: '__other', label: t('contact.placeholders.capacityOther') },
+                    ]}
+                    placeholder={t('contact.placeholders.capacityModel')}
+                    label={fieldLabel('capacityModel')}
+                    searchable={groupModels.length > 8}
+                    searchPlaceholder={t('contact.placeholders.modelSearch')}
+                  />
+                </div>
+              ) : (
+                <label className="formField">
+                  <span>{fieldLabel('capacity')}</span>
+                  <input type="text" name="capacity" maxLength={80} value={form.capacity} onChange={handleChange} placeholder={t('contact.placeholders.capacity')} />
+                </label>
+              )
             )}
 
-            {/* Tank contents: what will be stored, its density and temperatures */}
-            <label className={`formField ${cart.length ? 'formFieldFull' : ''}`}>
-              <span>{fieldLabel('storedProduct')}</span>
-              <input type="text" name="storedProduct" maxLength={200} value={form.storedProduct} onChange={handleChange} placeholder={t('contact.placeholders.storedProduct')} />
-            </label>
-
-            {cart.length === 0 && (
+            {/* With a model picker the quantity is set on the list after picking */}
+            {cart.length === 0 && !modelPicker && (
               <label className="formField">
                 <span>{fieldLabel('quantity')}</span>
                 <input type="number" min="1" name="quantity" value={form.quantity} onChange={handleChange} placeholder={t('contact.placeholders.quantity')} />
               </label>
             )}
 
-            <label className="formField">
-              <span>{fieldLabel('density')}</span>
-              <input type="text" name="density" maxLength={80} value={form.density} onChange={handleChange} placeholder={t('contact.placeholders.density')} />
-            </label>
+            {/* Custom part: description and what the customer already has */}
+            {showCustom && (
+              <>
+                <label className="formField formFieldFull">
+                  <span>{fieldLabel('customSpec')}</span>
+                  <input type="text" name="customSpec" maxLength={300} value={form.customSpec} onChange={handleChange} placeholder={t('contact.placeholders.customSpec')} />
+                </label>
 
-            <label className="formField">
-              <span>{fieldLabel('temperature')}</span>
-              <input type="text" name="temperature" maxLength={160} value={form.temperature} onChange={handleChange} placeholder={t('contact.placeholders.temperature')} />
-            </label>
+                <div className="formField formFieldFull">
+                  <span id="design-input-label">{fieldLabel('designInput')}</span>
+                  <div className="qmChoices" role="radiogroup" aria-labelledby="design-input-label">
+                    {DESIGN_INPUTS.map((key) => (
+                      <button
+                        key={key}
+                        type="button"
+                        role="radio"
+                        aria-checked={form.designInput === key}
+                        className={form.designInput === key ? 'active' : ''}
+                        onClick={() => setForm((current) => ({ ...current, designInput: current.designInput === key ? '' : key }))}
+                      >
+                        {t(`contact.design.${key}`)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Tank contents: picked from a short list; water needs no further questions */}
+            {showTank && (
+              <div className="formField formFieldFull">
+                <span id="stored-label">{fieldLabel('storedProduct')}</span>
+                <div className="qmChoices" role="radiogroup" aria-labelledby="stored-label">
+                  {STORED_PRODUCTS.map((item) => (
+                    <button
+                      key={item.key}
+                      type="button"
+                      role="radio"
+                      aria-checked={form.storedKey === item.key}
+                      className={form.storedKey === item.key ? 'active' : ''}
+                      onClick={() => setForm((current) => ({ ...current, storedKey: current.storedKey === item.key ? '' : item.key }))}
+                    >
+                      {t(`contact.stored.${item.key}`)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {showTank && stored?.detail && (
+              <label className="formField formFieldFull">
+                <span>{fieldLabel('storedDetail', stored.detailRequired)}</span>
+                <input
+                  type="text"
+                  name="storedDetail"
+                  maxLength={160}
+                  value={form.storedDetail}
+                  onChange={handleChange}
+                  required={stored.detailRequired}
+                  placeholder={t(`contact.placeholders.storedDetail.${form.storedKey}`)}
+                />
+              </label>
+            )}
+
+            {showProperties && (
+              <>
+                <label className="formField">
+                  <span className="qmLabelRow">
+                    {fieldLabel('density', propertiesRequired)}
+                    <button type="button" className="qmUnknown" onClick={() => markUnknown('density')}>{t('contact.unknown')}</button>
+                  </span>
+                  <input type="text" name="density" maxLength={80} value={form.density} onChange={handleChange} required={propertiesRequired} placeholder={t('contact.placeholders.density')} />
+                </label>
+
+                <label className="formField">
+                  <span className="qmLabelRow">
+                    {fieldLabel('temperature', propertiesRequired)}
+                    <button type="button" className="qmUnknown" onClick={() => markUnknown('temperature')}>{t('contact.unknown')}</button>
+                  </span>
+                  <input type="text" name="temperature" maxLength={160} value={form.temperature} onChange={handleChange} required={propertiesRequired} placeholder={t('contact.placeholders.temperature')} />
+                </label>
+              </>
+            )}
 
             <div className="formField">
               <span>{fieldLabel('country')}</span>
               <Dropdown
                 name="country"
                 value={form.country}
-                onChange={(value) => handleChange({ target: { name: 'country', value } })}
+                onChange={chooseCountry}
                 options={countries.map((item) => ({ value: item.code, label: item.name }))}
                 placeholder={t('contact.placeholders.countrySelect')}
                 label={fieldLabel('country')}
@@ -548,14 +749,58 @@ export default function QuoteModal() {
               />
             </div>
 
-            <label className="formField">
-              <span>{fieldLabel('deliveryCity')}</span>
-              <input type="text" name="deliveryCity" maxLength={200} autoComplete="address-level2" value={form.deliveryCity} onChange={handleChange} placeholder={t('contact.placeholders.deliveryCity')} />
-            </label>
+            {/* Delivery: the 81 provinces for Türkiye, free text elsewhere */}
+            {form.country === 'TR' ? (
+              <div className="formField">
+                <span>{fieldLabel('deliveryCity')}</span>
+                <Dropdown
+                  name="deliveryCity"
+                  value={form.deliveryCity}
+                  onChange={(value) => handleChange({ target: { name: 'deliveryCity', value } })}
+                  options={[
+                    ...(form.deliveryCity && !TR_PROVINCES.includes(form.deliveryCity) ? [{ value: form.deliveryCity, label: form.deliveryCity }] : []),
+                    ...TR_PROVINCES.map((city) => ({ value: city, label: city })),
+                  ]}
+                  placeholder={t('contact.placeholders.provinceSelect')}
+                  label={fieldLabel('deliveryCity')}
+                  searchable
+                  searchPlaceholder={t('contact.placeholders.provinceSearch')}
+                />
+              </div>
+            ) : (
+              <label className="formField">
+                <span>{fieldLabel('deliveryCity')}</span>
+                <input type="text" name="deliveryCity" maxLength={200} autoComplete="address-level2" value={form.deliveryCity} onChange={handleChange} placeholder={t('contact.placeholders.deliveryCity')} />
+              </label>
+            )}
+
+            {/* Follow-up needs: one click instead of typing */}
+            <div className="formField formFieldFull">
+              <span id="needs-label">{fieldLabel('needs')}</span>
+              <div className="qmChoices" role="group" aria-labelledby="needs-label">
+                {QUOTE_NEEDS.map((key) => (
+                  <button
+                    key={key}
+                    type="button"
+                    aria-pressed={form.needs.includes(key)}
+                    className={form.needs.includes(key) ? 'active' : ''}
+                    onClick={() => toggleNeed(key)}
+                  >
+                    {form.needs.includes(key) && <Check aria-hidden="true" />}
+                    {t(`contact.needs.${key}`)}
+                  </button>
+                ))}
+              </div>
+            </div>
 
             <label className="formField formFieldFull">
-              <span>{fieldLabel('message', true)}</span>
-              <textarea name="message" maxLength={5000} value={form.message} onChange={handleChange} required rows="4" placeholder={t('contact.placeholders.message')} />
+              <span>{fieldLabel('message')}</span>
+              <textarea name="message" maxLength={5000} value={form.message} onChange={handleChange} rows="3" placeholder={t('contact.placeholders.message')} />
+            </label>
+
+            <label className="qmRemember formFieldFull">
+              <input type="checkbox" checked={remember} onChange={(event) => setRemember(event.target.checked)} />
+              <span>{t('contact.remember')}</span>
             </label>
           </div>
 

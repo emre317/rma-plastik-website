@@ -38,6 +38,7 @@ function writeCart(items) {
 
   openQuote()                     opens the dialog (products can be picked inside it)
   openQuote('Topic')              opens it with a subject, e.g. a product group or an industry
+  openQuote('Topic', { hint })    hint = { group, stored }: portfolio group and stored product to suggest
   openQuote(model, { quantity })  adds a catalogue model ({ name, title, code, image, capacity,
                                   specs, summary }) to the list and opens the dialog
   addToCart / removeFromCart / setCartQuantity manage the list from any page.
@@ -79,7 +80,8 @@ export function QuoteProvider({ children }) {
       return;
     }
 
-    setState({ open: true, product: typeof product === 'string' ? product : '' });
+    // options.hint = { group, stored }: suggestions from the page (e.g. an industry)
+    setState({ open: true, product: typeof product === 'string' ? product : '', hint: options.hint || null });
   }, [addToCart]);
 
   const openCart = useCallback(() => {

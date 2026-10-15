@@ -1,6 +1,5 @@
 import {
-  LANGUAGE_LABELS, lossReasonLabel, outcomeLabel, quoteReference, statusLabel,
-} from '../../components/admin/quoteStatus';
+  LANGUAGE_LABELS, lossReasonLabel, outcomeLabel, quoteReference, statusLabel, DESIGN_INPUT_LABELS, needsText } from '../../components/admin/quoteStatus';
 import { offerTotals } from '../../data/offerText';
 
 /*
@@ -42,6 +41,9 @@ const COLUMNS = [
   ['Yoğunluk', 14],
   ['Sıcaklık', 22],
   ['Teslimat şehri / adresi', 26],
+  ['Ürün tanımı / ölçüler', 30],
+  ['Müşteride olan', 14],
+  ['İhtiyaçlar', 30],
   ['Uygulama', 24],
   ['Mesaj', 60],
   ['Site dili', 11],
@@ -86,6 +88,9 @@ function quoteRow(quote) {
     text(quote.density),
     text(quote.temperature),
     text(quote.deliveryCity),
+    text(quote.customSpec),
+    text(DESIGN_INPUT_LABELS[quote.designInput] || ''),
+    text(needsText(quote.needs)),
     text(quote.application),
     longText(quote.message),
     text(LANGUAGE_LABELS[quote.language] || quote.language),

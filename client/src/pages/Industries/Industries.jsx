@@ -98,7 +98,7 @@ export default function Industries() {
                   <button
                     type="button"
                     className="inQuote"
-                    onClick={() => openQuote(`${industry.title} – ${t('meta.titles.industries')}`)}
+                    onClick={() => openQuote(`${industry.title} – ${t('meta.titles.industries')}`, { hint: { group: look.groups[0], stored: look.stored } })}
                   >
                     {p('quote')}
                     <Arrow />

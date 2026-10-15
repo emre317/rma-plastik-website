@@ -12,7 +12,7 @@ import useAdminApi from '../../hooks/useAdminApi';
 import { formatMoney, offerNumber, offerTotals } from '../../data/offerText';
 import usePageTitle from '../../hooks/usePageTitle';
 import {
-  LANGUAGE_LABELS, LOSS_REASONS, QUOTE_OUTCOMES, QUOTE_STATUSES, dayValue, followUpState, formatDate, outcomeLabel, quoteReference, statusLabel, statusTone, todayValue,
+  LANGUAGE_LABELS, LOSS_REASONS, QUOTE_OUTCOMES, QUOTE_STATUSES, dayValue, followUpState, formatDate, outcomeLabel, quoteReference, statusLabel, statusTone, todayValue, DESIGN_INPUT_LABELS, NEED_LABELS,
 } from '../../components/admin/quoteStatus';
 import Dropdown from '../../components/ui/Dropdown';
 
@@ -395,13 +395,22 @@ export default function AdminQuoteDetail() {
               </dl>
             )}
 
-            {(quote.storedProduct || quote.density || quote.temperature || quote.deliveryCity) && (
+            {(quote.storedProduct || quote.density || quote.temperature || quote.deliveryCity || quote.customSpec || quote.designInput) && (
               <dl className="adFacts adTankFacts">
                 {quote.storedProduct && <div><dt>Stoklanacak Ürün</dt><dd>{quote.storedProduct}</dd></div>}
                 {quote.density && <div><dt>Özgül Ağırlık / Yoğunluk</dt><dd>{quote.density}</dd></div>}
                 {quote.temperature && <div><dt>Sıcaklık / Maks. Tepkime Sıcaklığı</dt><dd>{quote.temperature}</dd></div>}
+                {quote.customSpec && <div><dt>Ürün Tanımı / Ölçüler</dt><dd>{quote.customSpec}</dd></div>}
+                {quote.designInput && <div><dt>Müşteride Olan</dt><dd>{DESIGN_INPUT_LABELS[quote.designInput] || quote.designInput}</dd></div>}
                 {quote.deliveryCity && <div><dt>Teslimat Şehri / Adresi</dt><dd>{quote.deliveryCity}</dd></div>}
               </dl>
+            )}
+
+            {quote.needs?.length > 0 && (
+              <div className="adNeeds">
+                <span>İhtiyaçlar</span>
+                <ul>{quote.needs.map((key) => <li key={key}>{NEED_LABELS[key] || key}</li>)}</ul>
+              </div>
             )}
 
             {quote.application && (
