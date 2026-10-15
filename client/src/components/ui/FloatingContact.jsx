@@ -6,7 +6,7 @@ import company from '../../data/company';
 
 /*
   Floating quick-contact bubbles (WhatsApp, call, email) fixed to the side
-  of the screen: solid, high-contrast bubbles (WhatsApp green, phone red,
+  of the screen: solid, high-contrast bubbles (WhatsApp green, phone blue,
   e-mail black) with a white ring; a tooltip slides out on hover.
 */
 export default function FloatingContact() {
@@ -26,7 +26,7 @@ export default function FloatingContact() {
       href: company.phone.href,
       label: t('floatingContact.phone'),
       icon: Phone,
-      color: 'var(--brand-primary)',
+      color: 'var(--rma-blue)',
     },
     {
       key: 'email',

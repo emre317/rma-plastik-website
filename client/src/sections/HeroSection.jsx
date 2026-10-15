@@ -46,7 +46,7 @@ export default function HeroSection() {
 
               <button
                 type="button"
-                className="button primary heroQuoteCta"
+                className="button primary quoteButton heroQuoteCta"
                 onClick={() => openQuote()}
               >
                 <span>{t('hero.requestSolution')}</span>

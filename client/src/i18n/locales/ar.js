@@ -203,10 +203,10 @@ const ar = {
     scroll: 'مرّر للاستكشاف',
     // Figures under the buttons (given by RMA Plastik)
     stats: [
-      { value: '42,000', unit: 'لتر', label: 'أقصى سعة في الإنتاج بقطعة واحدة' },
+      { value: '37,500', unit: 'لتر', label: 'أقصى سعة في الإنتاج بقطعة واحدة' },
       { value: '500', unit: '+', label: 'تنوّع المنتجات' },
+      { value: '1000', unit: '+', label: 'عميل مؤسسي' },
       { value: '30', unit: 'عامًا', label: 'خبرة في الإنتاج' },
-      { value: '100%', unit: '', label: 'مادة خام من البولي إيثيلين النقي' },
     ],
   },
 

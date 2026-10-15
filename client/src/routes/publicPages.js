@@ -23,7 +23,6 @@ const loaders = {
   Industries: () => import('../pages/Industries/Industries'),
   IndustryDetail: () => import('../pages/IndustryDetail/IndustryDetail'),
   Contact: () => import('../pages/Contact/Contact'),
-  Faq: () => import('../pages/Faq/Faq'),
   Blog: () => import('../pages/Blog/Blog'),
   BlogPost: () => import('../pages/BlogPost/BlogPost'),
   Videos: () => import('../pages/Videos/Videos'),

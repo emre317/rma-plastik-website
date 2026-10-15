@@ -210,7 +210,7 @@ export default function ProductModel() {
               )}
 
               <div className="pmActions">
-                <button type="button" className="button primary pmQuote" onClick={() => openQuote(product)}>
+                <button type="button" className="button primary quoteButton pmQuote" onClick={() => openQuote(product)}>
                   <span>{t('productModel.quote')}</span>
                   <Arrow className="buttonArrow" />
                 </button>
@@ -386,7 +386,7 @@ export default function ProductModel() {
           <strong>{row.code}</strong>
           {product.capacity && <small>{product.capacity}</small>}
         </span>
-        <button type="button" className="button primary" onClick={() => openQuote(product)}>
+        <button type="button" className="button primary quoteButton" onClick={() => openQuote(product)}>
           <span>{t('productModel.quote')}</span>
           <Arrow className="buttonArrow" />
         </button>

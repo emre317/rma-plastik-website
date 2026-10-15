@@ -21,7 +21,6 @@ const {
   Industries,
   IndustryDetail,
   Contact,
-  Faq,
   Blog,
   BlogPost,
   Videos,
@@ -87,7 +86,6 @@ export default function AppRoutes() {
         />
 
         <Route path="contact" element={<Contact />} />
-        <Route path="faq" element={<Faq />} />
 
         <Route path="blog" element={<Blog />} />
         <Route path="blog/:slug" element={<BlogPost />} />

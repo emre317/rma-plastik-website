@@ -203,10 +203,10 @@ const en = {
     scroll: 'Scroll to explore',
     // Figures under the buttons (given by RMA Plastik)
     stats: [
-      { value: '42,000', unit: 'L', label: 'Maximum capacity in one-piece production' },
+      { value: '37,500', unit: 'L', label: 'Maximum capacity in one-piece production' },
       { value: '500', unit: '+', label: 'Product Variety' },
+      { value: '1000', unit: '+', label: 'Corporate Clients' },
       { value: '30', unit: 'years', label: 'Production Experience' },
-      { value: '100%', unit: '', label: 'Pure polyethylene raw material' },
     ],
   },
 

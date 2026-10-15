@@ -194,7 +194,7 @@ export default function Compare() {
                       {items.map(({ key }, index) => (
                         <td key={key}>
                           <div className="compareActions">
-                            <button type="button" className="button primary" onClick={() => openQuote(products[index])}>
+                            <button type="button" className="button primary quoteButton" onClick={() => openQuote(products[index])}>
                               <span>{t('productModel.quote')}</span>
                               <Arrow className="buttonArrow" />
                             </button>

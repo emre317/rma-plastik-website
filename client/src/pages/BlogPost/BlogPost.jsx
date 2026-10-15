@@ -126,7 +126,7 @@ export default function BlogPost() {
               <h2>{t('blog.ctaTitle')}</h2>
               <p>{t('blog.ctaText')}</p>
             </div>
-            <button type="button" className="button primary" onClick={() => openQuote(related[0] ? t(`productExplorer.items.${related[0].id}.title`) : '')}>
+            <button type="button" className="button primary quoteButton" onClick={() => openQuote(related[0] ? t(`productExplorer.items.${related[0].id}.title`) : '')}>
               <span>{t('common.requestQuote')}</span>
               <Arrow className="buttonArrow" />
             </button>

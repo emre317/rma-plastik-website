@@ -321,7 +321,7 @@ export default function TankFinder() {
                               <div className="finderResultActions">
                                 <button
                                   type="button"
-                                  className="button primary"
+                                  className="button primary quoteButton"
                                   onClick={() => openQuote(product, { quantity })}
                                 >
                                   <span>{t('productModel.quote')}</span>

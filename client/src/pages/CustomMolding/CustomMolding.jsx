@@ -7,7 +7,6 @@ import PageHeader from '../../components/ui/PageHeader';
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
-import { SustainabilityBand } from '../../components/ui/EcoMarks';
 import { galleryImages, machineIcons, serviceIcons } from '../../data/customMolding';
 import projects, { projectText } from '../../data/projects';
 import useLanguage from '../../hooks/useLanguage';
@@ -70,7 +69,7 @@ export default function CustomMolding() {
         ]}
         actions={(
           <>
-            <button type="button" className="button primary" onClick={() => openQuote()}>
+            <button type="button" className="button primary quoteButton" onClick={() => openQuote()}>
               <span>{text('ctaQuote')}</span>
               <Arrow className="buttonArrow" />
             </button>
@@ -177,7 +176,6 @@ export default function CustomMolding() {
         </div>
       </section>
 
-      <SustainabilityBand types={['noWaste', 'solar', 'recycle']} />
 
       {/* References */}
       <section className="cmReferences" id="references">
@@ -235,7 +233,7 @@ export default function CustomMolding() {
             </div>
 
             <div className="cmCtaActions">
-              <button type="button" className="button primary" onClick={() => openQuote()}>
+              <button type="button" className="button primary quoteButton" onClick={() => openQuote()}>
                 <span>{text('ctaQuote')}</span>
                 <Arrow className="buttonArrow" />
               </button>

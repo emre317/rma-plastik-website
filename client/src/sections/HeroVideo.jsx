@@ -216,7 +216,7 @@ export default function HeroVideo({ video }) {
                 <Arrow className="buttonArrow" />
               </a>
 
-              <button type="button" className="button primary heroQuoteCta" onClick={() => openQuote()}>
+              <button type="button" className="button primary quoteButton heroQuoteCta" onClick={() => openQuote()}>
                 <span>{t('hero.requestSolution')}</span>
                 <Arrow className="buttonArrow" />
               </button>

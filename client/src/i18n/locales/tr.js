@@ -202,10 +202,10 @@ const tr = {
     scroll: 'Keşfetmek için kaydırın',
     // Figures under the buttons (given by RMA Plastik)
     stats: [
-      { value: '42.000', unit: 'L', label: 'Tek parça üretimde maksimum kapasite' },
+      { value: '37.500', unit: 'L', label: 'Tek parça üretimde maksimum kapasite' },
       { value: '500', unit: '+', label: 'Ürün Çeşidi' },
+      { value: '1000', unit: '+', label: 'Kurumsal Müşteri' },
       { value: '30', unit: 'yıl', label: 'Üretim Tecrübesi' },
-      { value: '%100', unit: '', label: 'Saf polietilen hammadde' },
     ],
   },
 

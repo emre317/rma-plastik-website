@@ -165,7 +165,7 @@ export default function Products() {
             </div>
 
             <div className="cmCtaActions">
-              <button type="button" className="button primary" onClick={() => openQuote()}>
+              <button type="button" className="button primary quoteButton" onClick={() => openQuote()}>
                 <span>{t('common.requestQuote')}</span>
                 <Arrow className="buttonArrow" />
               </button>

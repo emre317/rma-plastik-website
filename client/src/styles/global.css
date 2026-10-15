@@ -4441,7 +4441,7 @@ html[dir="rtl"] .desktopNav a {
 }
 
 .exportMapLabelHub {
-  border: 1px solid color-mix(in srgb, var(--brand-primary) 70%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 70%, transparent);
 
   color: #fff;
 
@@ -4449,7 +4449,7 @@ html[dir="rtl"] .desktopNav a {
 
   backdrop-filter: blur(8px);
 
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-primary) 12%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .exportMapLabelActive {
@@ -4716,14 +4716,14 @@ button.exportStep:hover {
 }
 
 .exportStep.active {
-  border-color: color-mix(in srgb, var(--brand-primary) 60%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 60%, transparent);
 
   background:
     radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--brand-primary) 28%, transparent), transparent 60%),
     linear-gradient(165deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .02));
 
   box-shadow:
-    0 18px 40px -18px color-mix(in srgb, var(--brand-primary) 55%, transparent),
+    0 18px 40px -18px color-mix(in srgb, var(--accent) 55%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, .08);
 
   transform: translateY(-4px);
@@ -5864,7 +5864,7 @@ button.contactChannel {
 .formField textarea:focus {
   border-color: var(--accent);
 
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-primary) 12%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .formField textarea {
@@ -6999,7 +6999,7 @@ button.contactChannel {
 
   outline: 0;
 
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 14%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
 .cmsField input::placeholder,
@@ -7212,7 +7212,7 @@ button.contactChannel {
 .cmsSections button.active {
   color: var(--accent);
 
-  background: color-mix(in srgb, var(--brand-primary) 8%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
 
   font-weight: 600;
 }
@@ -8941,7 +8941,7 @@ button.contactChannel {
 }
 
 .statsFigure:hover {
-  border-color: color-mix(in srgb, var(--brand-primary) 40%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
 .statsFigure dt {
@@ -9025,7 +9025,7 @@ button.contactChannel {
 
   color: var(--accent);
 
-  background: color-mix(in srgb, var(--brand-primary) 9%, transparent);
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
 }
 
 .statsCapabilityIcon svg {
@@ -10586,9 +10586,9 @@ button.contactChannel {
 }
 
 .cmHomeProject:hover {
-  border-color: color-mix(in srgb, var(--brand-primary) 35%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
 
-  box-shadow: 0 30px 50px -36px color-mix(in srgb, var(--brand-primary) 60%, transparent);
+  box-shadow: 0 30px 50px -36px color-mix(in srgb, var(--accent) 60%, transparent);
 
   transform: translateY(-4px);
 }
@@ -10755,7 +10755,7 @@ button.contactChannel {
 }
 
 .cmService:hover {
-  border-color: color-mix(in srgb, var(--brand-primary) 40%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
 
   transform: translateY(-6px);
 }
@@ -10773,7 +10773,7 @@ button.contactChannel {
 
   background: linear-gradient(145deg, var(--accent-light), var(--accent));
 
-  box-shadow: 0 14px 30px -14px color-mix(in srgb, var(--brand-primary) 80%, transparent);
+  box-shadow: 0 14px 30px -14px color-mix(in srgb, var(--accent) 80%, transparent);
 
   color: #fff;
 }
@@ -11060,7 +11060,7 @@ button.contactChannel {
 
   border-radius: var(--radius-sm);
 
-  background: color-mix(in srgb, var(--brand-primary) 10%, transparent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
 
   color: var(--accent);
 }
@@ -11174,7 +11174,7 @@ button.contactChannel {
 }
 
 .cmProject:hover {
-  border-color: color-mix(in srgb, var(--brand-primary) 35%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
 
   transform: translateY(-6px);
 }
@@ -11261,8 +11261,8 @@ button.contactChannel {
 
 .cmGallery .cmDisc:hover {
   box-shadow:
-    0 0 0 2px color-mix(in srgb, var(--brand-primary) 45%, transparent),
-    0 30px 50px -28px color-mix(in srgb, var(--brand-primary) 70%, transparent);
+    0 0 0 2px color-mix(in srgb, var(--accent) 45%, transparent),
+    0 30px 50px -28px color-mix(in srgb, var(--accent) 70%, transparent);
 
   transform: translateY(-4px) scale(1.04);
 }
@@ -11896,7 +11896,7 @@ button.contactChannel {
 
   background: linear-gradient(145deg, var(--accent-light), var(--accent));
 
-  box-shadow: 0 0 0 10px color-mix(in srgb, var(--accent-light) 12%, transparent), 0 30px 60px -20px color-mix(in srgb, var(--brand-primary) 90%, transparent);
+  box-shadow: 0 0 0 10px color-mix(in srgb, var(--accent-light) 12%, transparent), 0 30px 60px -20px color-mix(in srgb, var(--accent) 90%, transparent);
 
   animation: machineParkPop 450ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -12199,7 +12199,7 @@ button.contactChannel {
 
 .productsTool:hover,
 .productsTool:focus-visible {
-  border-color: color-mix(in srgb, var(--brand-primary) 40%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
 
   transform: translateY(-4px);
 }
@@ -12458,7 +12458,7 @@ button.contactChannel {
 .ptSearch input:focus {
   border-color: var(--accent);
 
-  outline: 3px solid color-mix(in srgb, var(--brand-primary) 15%, transparent);
+  outline: 3px solid color-mix(in srgb, var(--accent) 15%, transparent);
 }
 
 .wtChips {
@@ -12504,7 +12504,7 @@ button.contactChannel {
 }
 
 .wtChip:hover {
-  border-color: color-mix(in srgb, var(--brand-primary) 45%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
 .wtChip.active {
@@ -12611,7 +12611,7 @@ button.contactChannel {
 
   background: var(--accent);
 
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--brand-primary) 40%, transparent), 0 4px 10px rgba(16, 19, 23, 0.25);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent), 0 4px 10px rgba(16, 19, 23, 0.25);
 
   cursor: grab;
 
@@ -12630,7 +12630,7 @@ button.contactChannel {
 
   background: var(--accent);
 
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--brand-primary) 40%, transparent), 0 4px 10px rgba(16, 19, 23, 0.25);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent), 0 4px 10px rgba(16, 19, 23, 0.25);
 
   cursor: grab;
 
@@ -12796,9 +12796,9 @@ button.contactChannel {
 }
 
 .wtCard:hover {
-  border-color: color-mix(in srgb, var(--brand-primary) 40%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
 
-  box-shadow: 0 34px 60px -38px color-mix(in srgb, var(--brand-primary) 60%, transparent);
+  box-shadow: 0 34px 60px -38px color-mix(in srgb, var(--accent) 60%, transparent);
 
   transform: translateY(-5px);
 }
@@ -12944,7 +12944,7 @@ button.contactChannel {
 
   border-radius: var(--radius-pill);
 
-  background: color-mix(in srgb, var(--brand-primary) 8%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
 
   color: var(--accent-dark);
 
@@ -13258,7 +13258,7 @@ button.contactChannel {
 
   border-radius: var(--radius-pill);
 
-  background: color-mix(in srgb, var(--brand-primary) 10%, transparent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
 
   color: var(--accent);
 
@@ -13441,7 +13441,7 @@ button.contactChannel {
 }
 
 .ptTable tbody tr:hover {
-  background: color-mix(in srgb, var(--brand-primary) 7%, transparent);
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
 }
 
 .ptTable tbody tr:last-child th,
@@ -13738,7 +13738,7 @@ button.contactChannel {
 
   gap: 16px;
 
-  border: 1px solid color-mix(in srgb, var(--brand-primary) 30%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
 
   border-radius: var(--radius-md);
 
@@ -13989,7 +13989,7 @@ button.contactChannel {
 
   border-radius: var(--radius-pill);
 
-  background: color-mix(in srgb, var(--brand-primary) 10%, transparent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
 
   color: var(--accent);
 
@@ -14087,7 +14087,7 @@ button.contactChannel {
 
   border-radius: var(--radius-sm);
 
-  background: color-mix(in srgb, var(--brand-primary) 4%, transparent);
+  background: color-mix(in srgb, var(--accent) 4%, transparent);
 }
 
 .cmsPaste textarea {
@@ -14329,7 +14329,7 @@ button.contactChannel {
 
   gap: 8px;
 
-  border: 1px solid color-mix(in srgb, var(--brand-primary) 40%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
 
   border-radius: var(--radius-pill);
 
@@ -15324,7 +15324,7 @@ button.contactChannel {
 
 .compareTable tbody tr.differs td,
 .compareTable tbody tr.differs th {
-  background: color-mix(in srgb, var(--brand-primary) 5%, transparent);
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
 }
 
 .compareTable tbody tr.differs th::after {
@@ -15658,7 +15658,7 @@ button.contactChannel {
 }
 
 .finderOption:hover {
-  border-color: color-mix(in srgb, var(--brand-primary) 50%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
 
   transform: translateY(-3px);
 }
@@ -15666,7 +15666,7 @@ button.contactChannel {
 .finderOption.active {
   border-color: var(--accent);
 
-  box-shadow: inset 0 0 0 1px var(--accent), 0 20px 40px -26px color-mix(in srgb, var(--brand-primary) 70%, transparent);
+  box-shadow: inset 0 0 0 1px var(--accent), 0 20px 40px -26px color-mix(in srgb, var(--accent) 70%, transparent);
 }
 
 .finderOptionIcon {
@@ -15682,7 +15682,7 @@ button.contactChannel {
 
   border-radius: 50%;
 
-  background: color-mix(in srgb, var(--brand-primary) 10%, transparent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
 
   color: var(--accent);
 }
@@ -15986,7 +15986,7 @@ button.contactChannel {
 .finderResult.best {
   border-color: var(--accent);
 
-  box-shadow: inset 0 0 0 1px var(--accent), 0 30px 60px -36px color-mix(in srgb, var(--brand-primary) 70%, transparent);
+  box-shadow: inset 0 0 0 1px var(--accent), 0 30px 60px -36px color-mix(in srgb, var(--accent) 70%, transparent);
 }
 
 .finderBadge {
@@ -16405,7 +16405,7 @@ button.contactChannel {
 
   border-radius: var(--radius-pill);
 
-  background: color-mix(in srgb, var(--brand-primary) 10%, transparent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
 
   color: var(--accent);
 
@@ -16592,7 +16592,7 @@ button.contactChannel {
   text-decoration: none;
 
   box-shadow:
-    0 18px 40px -18px color-mix(in srgb, var(--brand-primary) 75%, transparent),
+    0 18px 40px -18px color-mix(in srgb, var(--accent) 75%, transparent),
     0 0 0 0 color-mix(in srgb, var(--accent-light) 45%, transparent);
 
   transition: transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 350ms ease;
@@ -16688,7 +16688,7 @@ button.contactChannel {
 
   background: linear-gradient(145deg, var(--accent-light), var(--accent));
 
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-light) 18%, transparent), 0 10px 22px -8px color-mix(in srgb, var(--brand-primary) 90%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-light) 18%, transparent), 0 10px 22px -8px color-mix(in srgb, var(--accent) 90%, transparent);
 }
 
 .finderCtaIcon svg {
@@ -16788,7 +16788,7 @@ button.contactChannel {
 
 .finderCta:hover,
 .finderCta:focus-visible {
-  box-shadow: 0 24px 50px -16px color-mix(in srgb, var(--brand-primary) 95%, transparent), 0 0 0 6px color-mix(in srgb, var(--accent-light) 18%, transparent);
+  box-shadow: 0 24px 50px -16px color-mix(in srgb, var(--accent) 95%, transparent), 0 0 0 6px color-mix(in srgb, var(--accent-light) 18%, transparent);
 
   transform: translateY(-3px);
 }
@@ -16831,12 +16831,12 @@ button.contactChannel {
 
 @keyframes finderCtaPulse {
   0% {
-    box-shadow: 0 18px 40px -18px color-mix(in srgb, var(--brand-primary) 75%, transparent), 0 0 0 0 color-mix(in srgb, var(--accent-light) 45%, transparent);
+    box-shadow: 0 18px 40px -18px color-mix(in srgb, var(--accent) 75%, transparent), 0 0 0 0 color-mix(in srgb, var(--accent-light) 45%, transparent);
   }
 
   70%,
   100% {
-    box-shadow: 0 18px 40px -18px color-mix(in srgb, var(--brand-primary) 75%, transparent), 0 0 0 14px color-mix(in srgb, var(--accent-light) 0%, transparent);
+    box-shadow: 0 18px 40px -18px color-mix(in srgb, var(--accent) 75%, transparent), 0 0 0 14px color-mix(in srgb, var(--accent-light) 0%, transparent);
   }
 }
 
@@ -17457,7 +17457,7 @@ html[dir="rtl"] .navDropdown > a::after {
 .desktopNav > a:hover,
 .navDropdown > a:hover,
 .navDropdown.open > a {
-  background: color-mix(in srgb, var(--brand-primary) 7%, transparent);
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
   color: var(--accent);
 }
 
@@ -17585,7 +17585,7 @@ html[dir="rtl"] .desktopNav a {
 
 .megaGroups a:hover,
 .megaGroups a:focus-visible {
-  border-color: color-mix(in srgb, var(--brand-primary) 18%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 18%, transparent);
   background: var(--ink-050);
 }
 
@@ -17720,7 +17720,7 @@ html[dir="rtl"] .desktopNav a {
   place-items: center;
   flex: none;
   border-radius: 8px;
-  background: color-mix(in srgb, var(--brand-primary) 8%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
   color: var(--accent);
 }
 
@@ -18762,7 +18762,7 @@ html[lang="ar"] .pageHeader h1 {
 
 .qmSearch:focus-within {
   border-color: var(--accent);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-primary) 12%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .qmSearch svg {
@@ -18825,7 +18825,7 @@ html[lang="ar"] .pageHeader h1 {
 }
 
 .qmResult:hover {
-  border-color: color-mix(in srgb, var(--brand-primary) 40%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
   box-shadow: 0 8px 20px -14px rgba(16, 19, 23, 0.5);
 }
 
@@ -18842,7 +18842,7 @@ html[lang="ar"] .pageHeader h1 {
   align-items: center;
   gap: 5px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--brand-primary) 8%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
   color: var(--accent);
   font-size: 12.5px;
   font-weight: 700;
@@ -18920,7 +18920,7 @@ html[lang="ar"] .pageHeader h1 {
   display: flex;
   align-items: center;
   gap: 10px;
-  border: 1px solid color-mix(in srgb, var(--brand-primary) 20%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
   border-radius: 8px;
   background: color-mix(in srgb, var(--accent) 5%, #fff);
   color: var(--text);
@@ -18976,7 +18976,7 @@ html[lang="ar"] .pageHeader h1 {
 .qmForm .formField textarea:focus {
   border-color: var(--accent);
   background: #ffffff;
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-primary) 12%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .qmForm .formField textarea {
@@ -19322,7 +19322,7 @@ html[lang="ar"] .pageHeader h1 {
   display: inline-flex;
   padding: 6px 12px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--brand-primary) 8%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
   color: var(--accent);
   font-size: 12px;
   font-weight: 700;
@@ -19485,7 +19485,7 @@ html[lang="ar"] .pageHeader h1 {
   height: 38px;
   padding: 9px;
   border-radius: 8px;
-  background: color-mix(in srgb, var(--brand-primary) 8%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
   color: var(--accent);
 }
 
@@ -19598,7 +19598,7 @@ html[lang="ar"] .pageHeader h1 {
 .pmUses li {
   padding: 7px 14px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--brand-primary) 8%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
   color: var(--accent);
   font-size: 13.5px;
   font-weight: 600;
@@ -19911,13 +19911,13 @@ html[lang="ar"] .pageHeader h1 {
 }
 
 .wtUseTile:hover {
-  border-color: color-mix(in srgb, var(--brand-primary) 40%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
   transform: translateY(-1px);
 }
 
 .wtUseTile.active {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 14%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
 .wtUseIcon {
@@ -19927,7 +19927,7 @@ html[lang="ar"] .pageHeader h1 {
   display: grid;
   place-items: center;
   border-radius: 8px;
-  background: color-mix(in srgb, var(--brand-primary) 8%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
   color: var(--accent);
   transition: background-color 180ms ease, color 180ms ease;
 }
@@ -20069,7 +20069,7 @@ html[lang="ar"] .pageHeader h1 {
 .wtSearchField:focus-within {
   border-color: var(--accent);
   background: #ffffff;
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-primary) 12%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .wtSearchField input {
@@ -20149,7 +20149,7 @@ html[lang="ar"] .pageHeader h1 {
 }
 
 .wtOption:hover:not(:disabled) {
-  border-color: color-mix(in srgb, var(--brand-primary) 40%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
 .wtOption.active {
@@ -20330,7 +20330,7 @@ html[lang="ar"] .pageHeader h1 {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border: 1px solid color-mix(in srgb, var(--brand-primary) 25%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
   border-radius: 999px;
   background: color-mix(in srgb, var(--accent) 5%, #fff);
   color: var(--accent-dark);
@@ -20792,7 +20792,7 @@ button.wtTextLink {
 .ptBar .ptSearch:focus-within {
   border-color: var(--accent);
   background: #ffffff;
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-primary) 12%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .ptBar .ptSearch input {
@@ -21703,7 +21703,7 @@ html[lang="ar"] .ecoBandEyebrow {
 }
 
 .adKpi:hover {
-  border-color: color-mix(in srgb, var(--brand-primary) 35%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
   transform: translateY(-1px);
 }
 
@@ -21901,7 +21901,7 @@ html[lang="ar"] .ecoBandEyebrow {
 }
 
 .adContentCard:hover {
-  border-color: color-mix(in srgb, var(--brand-primary) 35%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 .adContentCard .adKpiIcon {
@@ -22065,7 +22065,7 @@ html[lang="ar"] .ecoBandEyebrow {
 
 .adSearch:focus-within {
   border-color: var(--accent);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-primary) 12%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .adSearch svg {
@@ -23267,7 +23267,7 @@ html[lang="ar"] .ecoBandEyebrow {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  border: 1px dashed color-mix(in srgb, var(--brand-primary) 35%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--accent) 35%, transparent);
   border-radius: 999px;
   background: var(--ink-100);
   color: var(--text-secondary);
@@ -23495,7 +23495,7 @@ html[lang="ar"] .ecoBandEyebrow {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  border: 1px solid color-mix(in srgb, var(--brand-primary) 35%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
   border-radius: var(--radius-sm);
   background: #ffffff;
   color: var(--accent);
@@ -23582,7 +23582,7 @@ html[lang="ar"] .ecoBandEyebrow {
 .videoCard:hover,
 .ecoBandList li:hover {
   transform: translateY(-4px);
-  border-color: color-mix(in srgb, var(--brand-primary) 28%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 28%, transparent);
   box-shadow:
     0 28px 50px -30px rgba(16, 19, 23, 0.45),
     0 2px 6px -2px rgba(16, 19, 23, 0.08),
@@ -23605,7 +23605,7 @@ html[lang="ar"] .ecoBandEyebrow {
 .pfCard:hover,
 .wtCard:hover {
   transform: translateY(-4px);
-  border-color: color-mix(in srgb, var(--brand-primary) 25%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 25%, transparent);
   box-shadow: 0 30px 56px -32px rgba(16, 19, 23, 0.5), 0 2px 6px -2px rgba(16, 19, 23, 0.08);
 }
 
@@ -24037,7 +24037,7 @@ html[lang="ar"] .ecoBandEyebrow {
 .adNoteForm textarea:focus {
   border-color: var(--accent);
   outline: 0;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 12%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .adNoteActions {
@@ -24336,7 +24336,7 @@ html[lang="ar"] .ecoBandEyebrow {
 }
 
 .adColumn.active::before {
-  background: color-mix(in srgb, var(--brand-primary) 6%, transparent);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
 }
 
 .adColumnBar {
@@ -25393,11 +25393,11 @@ html[lang="ar"] .ecoBandEyebrow {
 }
 
 .faqAccordionItem:hover {
-  border-color: color-mix(in srgb, var(--brand-primary) 28%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 28%, transparent);
 }
 
 .faqAccordionItem.open {
-  border-color: color-mix(in srgb, var(--brand-primary) 35%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
   box-shadow: 0 14px 34px rgba(16, 19, 23, 0.07);
 }
 
@@ -25436,7 +25436,7 @@ html[lang="ar"] .ecoBandEyebrow {
   flex: none;
   padding: 7px;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--brand-primary) 8%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
   color: var(--accent);
   transition: transform 260ms ease, background 220ms ease, color 220ms ease;
 }
@@ -25678,7 +25678,7 @@ html[lang="ar"] .ecoBandEyebrow {
 .adOfferLines input:focus {
   border-color: var(--accent);
   outline: 0;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 12%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .adOfferLines input.empty {
@@ -25837,7 +25837,7 @@ html[lang="ar"] .ecoBandEyebrow {
   padding: 14px 16px;
   display: grid;
   gap: 10px;
-  border: 1px solid color-mix(in srgb, var(--brand-primary) 35%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
   border-radius: 8px;
   background: color-mix(in srgb, var(--accent) 4%, #fff);
   font-size: 14px;
@@ -26438,14 +26438,14 @@ html.booting .heroWords .heroWord,
 }
 
 .ddTrigger:hover {
-  border-color: color-mix(in srgb, var(--brand-primary) 45%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
 .ddTrigger:focus-visible,
 .dd.open .ddTrigger {
   border-color: var(--accent);
   outline: 0;
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-primary) 12%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .ddIcon {
@@ -26999,7 +26999,7 @@ section:has(> .sectionDeco) {
 
 /* White sections */
 .sectionDeco.light {
-  color: color-mix(in srgb, var(--brand-primary) 13%, transparent);
+  color: color-mix(in srgb, var(--accent) 13%, transparent);
 }
 
 .sectionDeco.light .sdOrb.a {
@@ -27378,7 +27378,7 @@ html.booting .heroBrandName strong {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  border: 1px solid color-mix(in srgb, var(--brand-primary) 30%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
   border-radius: 8px;
   background: color-mix(in srgb, var(--accent) 9%, #fff);
   color: var(--brand-primary);
@@ -27701,7 +27701,7 @@ html.booting .heroBrandName strong {
 .catalogGateField input:focus {
   outline: 0;
   border-color: var(--accent);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-primary) 12%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .catalogGateTrap {
@@ -28038,7 +28038,7 @@ html.booting .heroBrandName strong {
   padding: 4px 16px 4px 4px;
   gap: 9px;
   flex: none;
-  box-shadow: 0 10px 24px -14px color-mix(in srgb, var(--brand-primary) 75%, transparent);
+  box-shadow: 0 10px 24px -14px color-mix(in srgb, var(--accent) 75%, transparent);
 }
 
 .headerFinder .finderCtaIcon {
@@ -28063,7 +28063,7 @@ html.booting .heroBrandName strong {
 .headerFinder.finderCta:hover,
 .headerFinder.finderCta:focus-visible {
   transform: translateY(-1px);
-  box-shadow: 0 14px 30px -14px color-mix(in srgb, var(--brand-primary) 95%, transparent), 0 0 0 4px color-mix(in srgb, var(--accent-light) 16%, transparent);
+  box-shadow: 0 14px 30px -14px color-mix(in srgb, var(--accent) 95%, transparent), 0 0 0 4px color-mix(in srgb, var(--accent-light) 16%, transparent);
 }
 
 /* Narrower screens: wand icon only */
@@ -28582,7 +28582,7 @@ html.booting .heroBrandName strong {
   outline: 0;
   border-color: var(--accent);
   background: #ffffff;
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-primary) 12%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .algInput:focus-within > svg {
@@ -28964,7 +28964,7 @@ a.algSubmit {
 }
 
 .adNotice.info {
-  border-color: color-mix(in srgb, var(--brand-primary) 25%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 25%, transparent);
   background: color-mix(in srgb, var(--accent) 8%, #fff);
   color: var(--brand-primary-hover);
 }
@@ -29529,7 +29529,7 @@ body {
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--brand-primary) 18%, transparent);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
 
   color: inherit;
 }
@@ -29556,7 +29556,7 @@ body {
 }
 
 .pmTable tr:hover {
-  background: color-mix(in srgb, var(--brand-primary) 6%, transparent);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
 }
 
 .pmTable tr:last-child th,
@@ -29582,7 +29582,7 @@ body {
   }
 
   .ptTable tbody tr:hover {
-    background: color-mix(in srgb, var(--brand-primary) 7%, #fff);
+    background: color-mix(in srgb, var(--accent) 7%, #fff);
   }
 
   .ptTable tbody th {
@@ -29991,7 +29991,7 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  border: 1px solid color-mix(in srgb, var(--brand-primary) 22%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
   border-radius: 10px;
   background: #ffffff;
   box-shadow: 0 18px 40px -18px rgba(16, 19, 23, 0.45);
@@ -30233,7 +30233,7 @@ body {
 .adTargetHero {
   margin: 4px 0 16px;
   padding: 16px 18px;
-  border: 1px solid color-mix(in srgb, var(--brand-primary) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 16%, transparent);
   border-radius: 10px;
   background: linear-gradient(135deg, #f3f7ff, #ffffff);
 }
@@ -30489,7 +30489,7 @@ body {
 }
 
 .adTargetPerson:hover {
-  border-color: color-mix(in srgb, var(--brand-primary) 35%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
   background: #f8fbff;
 }
 
@@ -31582,4 +31582,329 @@ html.booting .heroVideo .heroStats {
 .siteFooter .footerIconButton:hover,
 .siteFooter .footerIconButton:hover svg {
   color: #ffffff;
+}
+
+/* =====================================================
+   SITE COLOURS v3
+   Blue = icons, eyebrows, units and small accents; red = quote buttons,
+   the short eyebrow rule and the headline sweep only. The admin panel
+   keeps its red accent.
+===================================================== */
+:root {
+  --accent: var(--rma-blue);
+  --accent-dark: #145a91;
+  --accent-light: var(--rma-blue-light);
+  --eyebrow: var(--rma-blue);
+  --icon: var(--rma-blue);
+  --btn-bg: var(--ink-900);
+  --btn-fg: #ffffff;
+  --btn-bg-hover: var(--ink-700);
+}
+
+.adminPage,
+.algPage {
+  --accent: var(--brand-primary);
+  --accent-dark: var(--brand-primary-hover);
+  --accent-light: var(--rma-red-light);
+}
+
+/* Dark surfaces: lighter blue, white neutral buttons */
+.heroVideo,
+.pageHeader,
+.matFeatures,
+.dark,
+.qmAside,
+.machinePark,
+.cmCtaPanel {
+  --eyebrow: var(--rma-blue-light);
+  --icon: var(--rma-blue-light);
+  --btn-bg: #ffffff;
+  --btn-fg: var(--ink-900);
+  --btn-bg-hover: var(--ink-100);
+}
+
+/* Eyebrows: blue uppercase text after a short solid red rule
+   (many sections colour their eyebrow; this one wins everywhere) */
+.eyebrow,
+.phEyebrow {
+  color: var(--eyebrow) !important;
+}
+
+.eyebrow::before,
+.phEyebrow::before {
+  content: "";
+  width: 22px;
+  height: 3px;
+  flex: none;
+  border-radius: 2px;
+  background: var(--rma-red);
+}
+
+/* Icons outside the footer are blue (buttons keep their text colour) */
+
+/* Arrows and icons inside white / graphite buttons are blue too */
+.heroVideo .heroExplore .buttonArrow,
+.pageHeader .button.ghost .buttonArrow,
+.pageHeader .button.ghost .buttonIcon,
+.button.primary:not(.quoteButton) .buttonArrow,
+.button.primary:not(.quoteButton) .buttonIcon {
+  color: var(--icon);
+}
+
+/* Quote buttons stay brand red wherever they are */
+.headerQuote,
+.mobileMenuQuote,
+.wtQuote {
+  border-color: var(--brand-primary);
+  background: var(--brand-primary);
+  color: #ffffff;
+}
+
+.headerQuote:hover,
+.mobileMenuQuote:hover,
+.wtQuote:hover {
+  border-color: var(--brand-primary-hover);
+  background: var(--brand-primary-hover);
+  color: #ffffff;
+}
+
+.headerQuote {
+  box-shadow: var(--shadow-brand);
+}
+
+/* Inner page headlines: both lines extra bold */
+.pageHeader h1 span {
+  font-weight: inherit;
+}
+
+.matFeaturesIcon {
+  color: var(--rma-blue-light);
+}
+
+/* Red is for quote requests only: other primary buttons are graphite
+   on light surfaces and white on dark ones */
+.button.primary:not(.quoteButton) {
+  border-color: var(--btn-bg);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  box-shadow: none;
+}
+
+.button.primary:not(.quoteButton):hover {
+  border-color: var(--btn-bg-hover);
+  background: var(--btn-bg-hover);
+  color: var(--btn-fg);
+}
+
+/* Inner page headers look like the home hero: black with the stripes,
+   white headline, eyebrow with the red rule, figures without tiles */
+.pageHeader {
+  border-radius: 0;
+  background: #0a0b0d;
+}
+
+.pageHeaderBg {
+  background:
+    radial-gradient(42% 60% at 92% 10%, color-mix(in srgb, var(--brand-primary) 22%, transparent), transparent 70%),
+    linear-gradient(180deg, #0a0b0d 0%, var(--ink-900) 100%);
+}
+
+.pageHeaderBg::after {
+  background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.045) 0 14px, transparent 14px 28px);
+  background-size: auto;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+[dir="rtl"] .pageHeaderBg::after {
+  background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.045) 0 14px, transparent 14px 28px);
+}
+
+.pageHeaderBg::before,
+.phOrb,
+.phBeam,
+.phDot,
+.phEyebrow > svg {
+  display: none;
+}
+
+.phEyebrow {
+  padding: 0;
+  gap: 10px;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+}
+
+.pageHeader h1 {
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.pageHeader h1 span,
+.pageHeader h1 > span,
+[dir="rtl"] .pageHeader h1 span {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+}
+
+.phLead {
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.pageHeader .button.ghost {
+  border-color: #ffffff;
+  background: #ffffff;
+  color: var(--ink-900);
+}
+
+.pageHeader .button.ghost:hover {
+  border-color: var(--ink-100);
+  background: var(--ink-100);
+  color: var(--ink-900);
+}
+
+.pageHeader .phFacts {
+  padding: 28px 0 40px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px 56px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.pageHeader .phFacts > div,
+.pageHeader .phFacts > div:first-child {
+  min-width: 0;
+  max-width: 240px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  transform: none;
+}
+
+.pageHeader .phFacts > div::before {
+  display: none;
+}
+
+.pageHeader .phFacts dt {
+  font-size: clamp(30px, 3vw, 44px);
+}
+
+.pageHeader .phFacts .statUnit {
+  color: var(--rma-blue-light);
+}
+
+.pageHeader .phFacts dd {
+  margin-top: 10px;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+[dir="rtl"] .pageHeader .phFacts dd {
+  letter-spacing: 0;
+}
+
+@media (max-width: 640px) {
+  .pageHeader .phFacts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 20px;
+  }
+
+  .pageHeader .phFacts > div,
+  .pageHeader .phFacts > div:first-child {
+    padding: 0;
+  }
+}
+
+/* Home hero: the eyebrow follows the same blue */
+.heroKicker {
+  color: var(--eyebrow) !important;
+}
+
+/* Section headlines in one colour, like the reference: the second
+   (accent) line takes the headline colour instead of grey / red / blue */
+main section h2 > span:not([class]),
+main section h2 > span:not([class]) > span {
+  background: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+  opacity: 1 !important;
+}
+
+/* Card corner glows follow the blue accent */
+.cmService,
+.productsTool {
+  background-image: none;
+}
+
+/* Hero units in blue (as the reference) */
+.heroVideo .heroStats dt span {
+  color: var(--rma-blue-light);
+}
+
+/* Closing call to action: black with the stripes instead of the red
+   sweep, so the quote button is the only red on it */
+.cmCtaPanel {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    radial-gradient(50% 120% at 100% 0%, color-mix(in srgb, var(--rma-red) 22%, transparent), transparent 70%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.045) 0 14px, transparent 14px 28px),
+    #0a0b0d;
+  box-shadow: none;
+}
+
+.cmCtaPanel .button.primary.quoteButton {
+  border-color: var(--brand-primary);
+  background: var(--brand-primary);
+  color: #ffffff;
+  box-shadow: var(--shadow-brand);
+}
+
+.cmCtaPanel .button.primary.quoteButton:hover {
+  border-color: var(--brand-primary-hover);
+  background: var(--brand-primary-hover);
+}
+
+.industriesMetaCta .button {
+  border-color: var(--btn-bg);
+}
+
+/* Quote dialog: the send button and the quote list button stay red,
+   the title is white in one colour */
+.qmSubmit,
+.quoteCartFab {
+  border-color: var(--brand-primary);
+  background: var(--brand-primary);
+  color: #ffffff;
+}
+
+.qmSubmit:hover:not(:disabled),
+.quoteCartFab:hover {
+  border-color: var(--brand-primary-hover);
+  background: var(--brand-primary-hover);
+}
+
+.qmSubmit {
+  box-shadow: 0 12px 24px -14px color-mix(in srgb, var(--brand-primary) 70%, transparent);
+}
+
+#quote-modal-title span {
+  background: none;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
 }

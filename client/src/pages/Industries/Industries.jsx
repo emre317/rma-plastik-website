@@ -36,7 +36,7 @@ export default function Industries() {
         ]}
         actions={(
           <>
-            <button type="button" className="button primary" onClick={() => openQuote()}>
+            <button type="button" className="button primary quoteButton" onClick={() => openQuote()}>
               <span>{t('common.requestQuote')}</span>
               <Arrow className="buttonArrow" />
             </button>
