@@ -32519,3 +32519,18 @@ select:disabled {
 .qmForm textarea[name="deliveryAddress"] {
   min-height: 74px;
 }
+
+/* Density / temperature side by side: labels of different length keep the
+   two inputs on one line (the fields sit on the bottom of their row) */
+.qmPairField {
+  align-self: end;
+}
+
+.qmPairField .qmLabelRow {
+  align-items: flex-end;
+}
+
+.qmPairField .qmUnknown {
+  flex: none;
+  padding-bottom: 1px;
+}

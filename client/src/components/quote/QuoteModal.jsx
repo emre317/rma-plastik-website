@@ -727,7 +727,7 @@ export default function QuoteModal() {
 
             {showProperties && (
               <>
-                <label className="formField">
+                <label className="formField qmPairField">
                   <span className="qmLabelRow">
                     {fieldLabel('density', propertiesRequired)}
                     <button type="button" className="qmUnknown" onClick={() => markUnknown('density')}>{t('contact.unknown')}</button>
@@ -735,7 +735,7 @@ export default function QuoteModal() {
                   <input type="text" name="density" maxLength={80} value={form.density} onChange={handleChange} required={propertiesRequired} placeholder={t('contact.placeholders.density')} />
                 </label>
 
-                <label className="formField">
+                <label className="formField qmPairField">
                   <span className="qmLabelRow">
                     {fieldLabel('temperature', propertiesRequired)}
                     <button type="button" className="qmUnknown" onClick={() => markUnknown('temperature')}>{t('contact.unknown')}</button>
