@@ -1103,6 +1103,7 @@ const en = {
       searchEyebrow: 'Industries',
       searchTitle: 'Find products for your industry',
       productLink: 'View',
+      productCount: 'products',
       onRequestText: 'Made to order; request a quote with the dimensions and quantity.',
       eyebrow: 'Industrial Applications',
       title: 'Solutions designed',

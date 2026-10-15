@@ -1102,6 +1102,7 @@ const tr = {
       searchEyebrow: 'Sektörler',
       searchTitle: 'Sektörünüze göre ürün arayın',
       productLink: 'İncele',
+      productCount: 'ürün',
       onRequestText: 'Talebe göre üretilir; ölçü ve adet bilgisiyle teklif isteyebilirsiniz.',
       eyebrow: 'Endüstriyel Uygulamalar',
       title: 'Sektörlere göre',

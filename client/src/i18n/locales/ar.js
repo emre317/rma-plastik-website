@@ -1103,6 +1103,7 @@ const ar = {
       searchEyebrow: 'القطاعات',
       searchTitle: 'ابحثوا عن المنتجات حسب قطاعكم',
       productLink: 'عرض',
+      productCount: 'منتجات',
       onRequestText: 'يُصنع حسب الطلب؛ اطلبوا عرض سعر مع المقاسات والكمية.',
       eyebrow: 'التطبيقات الصناعية',
       title: 'حلول مصمَّمة',

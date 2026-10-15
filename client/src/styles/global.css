@@ -32536,23 +32536,47 @@ select:disabled {
 }
 
 /* =====================================================
-   INDUSTRIES — "Sektörünüze göre ürün arayın": one block per sector,
-   product cards with photo, name and description
+   INDUSTRIES — "Sektörünüze göre ürün arayın": a sticky sector menu,
+   then one block per sector with the product cards of the Products page
 ===================================================== */
-.inSectors .cmSectionHead {
+
+.secPage {
+  padding-bottom: 40px;
+}
+
+.secPage .cmSectionHead {
   margin-bottom: 22px;
 }
 
-.inJump {
-  margin: 0 0 34px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+/* Sector menu */
+.secNav {
+  position: sticky;
+  top: 76px;
+  z-index: 20;
+  margin-bottom: 8px;
+  padding: 12px 0;
+  border-block: 1px solid var(--line);
+  background: rgba(247, 249, 250, 0.94);
+  backdrop-filter: blur(10px);
 }
 
-.inJump a {
+.secNav ul {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  list-style: none;
+  scrollbar-width: none;
+}
+
+.secNav ul::-webkit-scrollbar {
+  display: none;
+}
+
+.secNav a {
   min-height: 44px;
-  padding: 0 18px 0 14px;
+  padding: 0 8px 0 14px;
   display: inline-flex;
   align-items: center;
   gap: 9px;
@@ -32561,179 +32585,212 @@ select:disabled {
   background: #ffffff;
   color: var(--text);
   font-family: var(--font-display);
-  font-size: 14.5px;
+  font-size: 14px;
   font-weight: 700;
-  transition: border-color 160ms ease, color 160ms ease;
+  white-space: nowrap;
+  transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease;
 }
 
-.inJump a:hover {
-  border-color: var(--rma-blue);
-  color: var(--rma-blue);
+.secNav a:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
-.inJump svg {
+.secNav svg {
   width: 18px;
   height: 18px;
-  color: var(--rma-blue);
+  flex: none;
+  color: var(--accent);
 }
 
-.inList {
-  grid-template-columns: minmax(0, 1fr);
-  gap: 22px;
+.secNav small {
+  min-width: 26px;
+  height: 26px;
+  padding: 0 7px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--ink-050);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 700;
 }
 
-.inSector {
-  padding: 30px;
+.secNav a.active {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #ffffff;
 }
 
-.inSectorHead {
+.secNav a.active svg {
+  color: #ffffff;
+}
+
+.secNav a.active small {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+/* Sector block */
+.secBlock {
+  padding: 56px 0 8px;
+  scroll-margin-top: 150px;
+}
+
+.secBlock + .secBlock {
+  margin-top: 40px;
+  border-top: 1px solid var(--line);
+}
+
+.secHead {
+  margin-bottom: 28px;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: start;
-  gap: 18px 22px;
+  align-items: end;
+  gap: 18px 24px;
 }
 
-.inSectorHead h2 {
-  margin: 4px 0 6px;
+.secIcon {
+  width: 60px;
+  height: 60px;
+  align-self: start;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--accent) 10%, #ffffff);
+  color: var(--accent);
 }
 
-.inSectorHead p {
+.secIcon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.secHeadText .eyebrow {
+  margin-bottom: 10px;
+}
+
+.secHeadText h2 {
+  margin: 0 0 10px;
+  font-size: clamp(28px, 3vw, 40px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.secHeadText .cmLead {
   margin: 0;
   max-width: 680px;
-  color: var(--text-secondary);
-  font-size: 15.5px;
-  line-height: 1.6;
 }
 
-.inSectorHead .inQuote {
-  margin: 0;
-  padding: 10px 0 0;
-  align-self: start;
+.secQuote {
   white-space: nowrap;
 }
 
-.inProducts {
-  margin: 26px 0 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 14px;
-  list-style: none;
+/* Product cards: the Products page card, four to a row */
+.secGrid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-.inProduct {
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
-  background: #ffffff;
-  color: var(--text);
-  font: inherit;
-  text-align: start;
-  transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+.secGrid .pfBody {
+  padding: 20px 20px 22px;
 }
 
-.inProduct:hover {
-  border-color: color-mix(in srgb, var(--rma-blue) 45%, transparent);
-  box-shadow: var(--shadow-md);
-  color: var(--text);
-  transform: translateY(-3px);
+.secGrid .pfBody h3 {
+  margin: 8px 0 8px;
+  font-size: 17.5px;
 }
 
-.inProductMedia {
-  aspect-ratio: 4 / 3;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  background: var(--ink-050);
-  color: hsl(var(--hue) 55% 45%);
-}
-
-.inProductMedia img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  padding: 14px;
-  transition: transform 300ms ease;
-}
-
-.inProduct:hover .inProductMedia img {
-  transform: scale(1.04);
-}
-
-.inProductMedia > svg {
-  width: 44px;
-  height: 44px;
-  opacity: 0.55;
-}
-
-.inProductBody {
-  padding: 14px 16px 16px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.inProductBody strong {
-  font-family: var(--font-display);
-  font-size: 15.5px;
-  font-weight: 700;
-  line-height: 1.3;
-}
-
-.inProductBody small {
+.secGrid .pfBody > p {
   display: -webkit-box;
   overflow: hidden;
-  color: var(--text-secondary);
-  font-size: 13.5px;
-  line-height: 1.5;
+  font-size: 14px;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
 }
 
-.inProductBody em {
-  margin-top: auto;
-  padding-top: 6px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--rma-blue);
-  font-family: var(--font-display);
-  font-size: 13.5px;
-  font-style: normal;
-  font-weight: 700;
+.secGrid .pfMedia {
+  display: grid;
+  place-items: center;
 }
 
-@media (max-width: 720px) {
-  .inSector {
-    padding: 20px;
-  }
+.secMediaIcon {
+  width: 48px;
+  height: 48px;
+  color: var(--accent);
+  opacity: 0.45;
+}
 
-  .inSectorHead {
+.secGrid .pfActions {
+  padding-top: 16px;
+}
+
+.secGrid .pfPrimary {
+  height: 40px;
+  padding: 0 14px;
+}
+
+@media (max-width: 1200px) {
+  .secGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .secHead {
     grid-template-columns: auto minmax(0, 1fr);
   }
 
-  .inSectorHead .inQuote {
+  .secQuote {
     grid-column: 1 / -1;
-    padding: 0;
+    justify-self: start;
   }
 
-  .inProducts {
+  .secGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+  }
+}
+
+@media (max-width: 560px) {
+  .secBlock {
+    padding-top: 40px;
   }
 
-  .inProductBody {
-    padding: 12px;
+  .secHead {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .inProductBody small {
+  .secIcon {
+    display: none;
+  }
+
+  .secGrid {
+    gap: 12px;
+  }
+
+  .secGrid .pfBody {
+    padding: 14px 14px 16px;
+  }
+
+  .secGrid .pfBody h3 {
+    font-size: 15.5px;
+  }
+
+  .secGrid .pfBody > p {
+    font-size: 13px;
     -webkit-line-clamp: 2;
+  }
+
+  .secGrid .pfActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .secGrid .pfPrimary {
+    justify-content: center;
+  }
+
+  .secGrid .pfSecondary {
+    justify-content: center;
   }
 }
 

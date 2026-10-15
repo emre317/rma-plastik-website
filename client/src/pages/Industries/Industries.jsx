@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MessageSquare } from 'lucide-react';
 
@@ -21,6 +22,45 @@ export default function Industries() {
   const items = t('industries.items', { returnObjects: true });
   const list = Array.isArray(items) ? items : [];
   const p = (key) => t(`pages.industries.${key}`);
+
+  // Each sector with its look (icon, colour) and its products in the sector's own names
+  const sectors = list.map((industry, index) => {
+    const look = INDUSTRIES[index % INDUSTRIES.length];
+    const names = Array.isArray(industry.products) ? industry.products : [];
+    const products = look.products.map((entry, i) => ({ ...sectorProduct(entry), name: names[i] || '' })).filter((item) => item.name);
+    return { look, industry, products, firstGroup: look.products.find((entry) => entry.group)?.group };
+  });
+
+  // The sector in view, marked in the sector menu
+  const [active, setActive] = useState('');
+  const slugs = sectors.map(({ look }) => look.slug).join(',');
+
+  useEffect(() => {
+    const blocks = slugs.split(',').map((slug) => document.getElementById(slug)).filter(Boolean);
+    if (!blocks.length || typeof IntersectionObserver === 'undefined') return undefined;
+
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting);
+      if (visible.length) setActive(visible[0].target.id);
+    }, { rootMargin: '-160px 0px -55% 0px' });
+
+    blocks.forEach((block) => observer.observe(block));
+    return () => observer.disconnect();
+  }, [slugs]);
+
+  // Keep the marked sector visible in the (horizontally scrolling) menu
+  const navList = useRef(null);
+
+  useEffect(() => {
+    const list = navList.current;
+    const link = list?.querySelector('a.active');
+    if (!list || !link) return;
+
+    const listBox = list.getBoundingClientRect();
+    const linkBox = link.getBoundingClientRect();
+    const offset = linkBox.left - listBox.left - (listBox.width - linkBox.width) / 2;
+    list.scrollBy({ left: offset, behavior: 'smooth' });
+  }, [active]);
 
   return (
     <main className="internalPage industriesPage">
@@ -56,98 +96,122 @@ export default function Industries() {
         ]}
       />
 
-      <section className="cmBlock inSectors">
+      <section className="cmBlock secPage">
         <div className="container">
           <div className="cmSectionHead">
             <p className="eyebrow">{p('searchEyebrow')}</p>
             <h2>{p('searchTitle')}</h2>
           </div>
+        </div>
 
-          {/* Jump to a sector */}
-          <nav className="inJump" aria-label={p('searchTitle')}>
-            {list.map((industry, index) => {
-              const look = INDUSTRIES[index % INDUSTRIES.length];
-              const Icon = look.icon;
-              return (
-                <a key={look.slug} href={`#${look.slug}`} style={{ '--hue': look.hue }}>
-                  <Icon aria-hidden="true" />
-                  {industry.title}
-                </a>
-              );
-            })}
-          </nav>
+        {/* Sector menu: stays under the header, marks the sector in view */}
+        <nav className="secNav" aria-label={p('searchTitle')}>
+          <div className="container">
+            <ul ref={navList}>
+              {sectors.map(({ look, industry, products }) => {
+                const Icon = look.icon;
+                const current = active === look.slug;
+                return (
+                  <li key={look.slug}>
+                    <a href={`#${look.slug}`} aria-current={current ? 'true' : undefined} className={current ? 'active' : ''}>
+                      <Icon aria-hidden="true" />
+                      <span>{industry.title}</span>
+                      <small aria-label={`${products.length} ${p('productCount')}`}>{products.length}</small>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </nav>
 
-          <ol className="inList">
-            {list.map((industry, index) => {
-              const look = INDUSTRIES[index % INDUSTRIES.length];
-              const Icon = look.icon;
-              const names = Array.isArray(industry.products) ? industry.products : [];
-              const products = look.products.map((entry, i) => ({ ...sectorProduct(entry), name: names[i] || '' })).filter((item) => item.name);
-              const firstGroup = look.products.find((entry) => entry.group)?.group;
+        <div className="container">
+          {sectors.map(({ look, industry, products, firstGroup }, index) => {
+            const Icon = look.icon;
+            const headingId = `${look.slug}-title`;
 
-              return (
-                <li key={look.slug} id={look.slug} className="inSector" style={{ '--hue': look.hue }}>
-                  <div className="inSectorHead">
-                    <span className="inSectorIcon" aria-hidden="true"><Icon /></span>
-                    <div>
-                      <span className="inSectorIndex">
-                        {pad(index + 1)}
-                        <small> / {pad(list.length)}</small>
-                      </span>
-                      <h2>{industry.title}</h2>
-                      <p>{industry.description}</p>
-                    </div>
-                    <button
-                      type="button"
-                      className="inQuote"
-                      onClick={() => openQuote(`${industry.title} – ${t('meta.titles.industries')}`, { hint: { group: firstGroup, stored: look.stored } })}
-                    >
-                      {p('quote')}
-                      <Arrow />
-                    </button>
+            return (
+              <section key={look.slug} id={look.slug} className="secBlock" aria-labelledby={headingId} style={{ '--hue': look.hue }}>
+                <div className="secHead">
+                  <span className="secIcon" aria-hidden="true"><Icon /></span>
+                  <div className="secHeadText">
+                    <p className="eyebrow">
+                      {pad(index + 1)} / {pad(sectors.length)} · {products.length} {p('productCount')}
+                    </p>
+                    <h2 id={headingId}>{industry.title}</h2>
+                    <p className="cmLead">{industry.description}</p>
                   </div>
+                  <button
+                    type="button"
+                    className="button primary quoteButton secQuote"
+                    onClick={() => openQuote(`${industry.title} – ${t('meta.titles.industries')}`, { hint: { group: firstGroup, stored: look.stored } })}
+                  >
+                    <span>{p('quote')}</span>
+                    <Arrow className="buttonArrow" />
+                  </button>
+                </div>
 
-                  <ul className="inProducts">
-                    {products.map((item, i) => {
-                      // The family's own text, else the group's; made-to-order items get the request note
-                      const description = item.quote
-                        ? p('onRequestText')
-                        : item.familyData
-                          ? familyText(item.familyData, 'text', lang, t) || t(`productExplorer.items.${item.groupData.id}.description`)
-                          : t(`productExplorer.items.${item.groupData.id}.description`);
-                      const askQuote = () => openQuote(`${item.name} – ${industry.title}`, { hint: { group: item.group || firstGroup, stored: look.stored } });
+                <ul className="pfGrid secGrid">
+                  {products.map((item, i) => {
+                    // The family's own text, else the group's; made-to-order items get the request note
+                    const description = item.quote
+                      ? p('onRequestText')
+                      : item.familyData
+                        ? familyText(item.familyData, 'text', lang, t) || t(`productExplorer.items.${item.groupData.id}.description`)
+                        : t(`productExplorer.items.${item.groupData.id}.description`);
+                    const label = item.quote || !item.groupData
+                      ? t('productExplorer.onRequest')
+                      : t(`productExplorer.items.${item.groupData.id}.label`);
+                    const askQuote = () => openQuote(`${item.name} – ${industry.title}`, { hint: { group: item.group || firstGroup, stored: look.stored } });
+                    const media = (
+                      <>
+                        {item.image
+                          ? <img src={item.image} alt="" loading="lazy" decoding="async" />
+                          : <Icon className="secMediaIcon" />}
+                      </>
+                    );
 
-                      const body = (
-                        <>
-                          <span className="inProductMedia" aria-hidden="true">
-                            {item.image ? <img src={item.image} alt="" loading="lazy" decoding="async" /> : <Icon />}
-                          </span>
-                          <span className="inProductBody">
-                            <strong>{item.name}</strong>
-                            <small>{description}</small>
-                            <em>
-                              {item.link ? p('productLink') : t('productExplorer.quote')}
-                              <Arrow />
-                            </em>
-                          </span>
-                        </>
-                      );
+                    return (
+                      <li key={`${item.name}-${i}`} className="pfCard">
+                        {item.link ? (
+                          <LocalizedLink to={item.link} className="pfMedia" tabIndex={-1} aria-hidden="true">{media}</LocalizedLink>
+                        ) : (
+                          <span className="pfMedia" aria-hidden="true">{media}</span>
+                        )}
 
-                      return (
-                        <li key={`${item.name}-${i}`}>
-                          {item.link ? (
-                            <LocalizedLink to={item.link} className="inProduct">{body}</LocalizedLink>
-                          ) : (
-                            <button type="button" className="inProduct" onClick={askQuote}>{body}</button>
-                          )}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </li>
-              );
-            })}
-          </ol>
+                        <div className="pfBody">
+                          <span className="pfLabel">{label}</span>
+                          <h3>
+                            {item.link ? <LocalizedLink to={item.link}>{item.name}</LocalizedLink> : item.name}
+                          </h3>
+                          <p>{description}</p>
+
+                          <div className="pfActions">
+                            {item.link ? (
+                              <>
+                                <LocalizedLink to={item.link} className="pfPrimary" aria-label={`${p('productLink')}: ${item.name}`}>
+                                  {p('productLink')}
+                                  <Arrow />
+                                </LocalizedLink>
+                                <button type="button" className="pfSecondary" onClick={askQuote} aria-label={`${t('productExplorer.quote')}: ${item.name}`}>
+                                  {t('productExplorer.quote')}
+                                </button>
+                              </>
+                            ) : (
+                              <button type="button" className="pfPrimary" onClick={askQuote} aria-label={`${t('productExplorer.quote')}: ${item.name}`}>
+                                {t('productExplorer.quote')}
+                                <Arrow />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+            );
+          })}
         </div>
       </section>
 
