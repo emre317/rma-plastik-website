@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import ProductGroup, { GROUP_PAGES } from '../models/ProductGroup.js';
+import ProductGroup, { GROUP_CATEGORIES, GROUP_PAGES } from '../models/ProductGroup.js';
 import Sector, { SECTOR_ICONS, SECTOR_STORED } from '../models/Sector.js';
 import ProductFamily from '../models/ProductFamily.js';
 import { CONTENT_LANGUAGES } from '../config/languages.js';
@@ -60,6 +60,7 @@ function groupPayload(body = {}) {
     quoteOnly: Boolean(body.quoteOnly),
     monoblock: body.monoblock === undefined ? true : Boolean(body.monoblock),
     page: GROUP_PAGES.includes(body.page) ? body.page : 'tables',
+    category: GROUP_CATEGORIES.includes(body.category) ? body.category : 'other',
     i18n: texts(body.i18n, GROUP_TEXT),
   };
 }
@@ -101,6 +102,7 @@ export async function publicProductGroups() {
     quoteOnly: group.quoteOnly,
     monoblock: group.monoblock,
     page: group.page,
+    category: group.category || 'other',
     i18n: texts(group.i18n, GROUP_TEXT),
   }));
 }

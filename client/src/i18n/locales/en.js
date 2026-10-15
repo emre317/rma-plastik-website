@@ -359,7 +359,7 @@ const en = {
     groups: {
       tanks: 'Polyethylene Tanks',
       textile: 'Textile',
-      chemical: 'Chemical and silo',
+      chemical: 'Chemical and Silo',
       food: 'Food',
       other: 'Other Products',
     },

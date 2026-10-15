@@ -37,6 +37,9 @@ const BUILT_IN_TABLES = builtInFamilies.map((family) => ({
   i18n: { tr: { title: tr.productTables.families?.[family.id]?.title || family.id } },
 }));
 
+// Main category: the tabs above the home page product cards
+const CATEGORIES = ['tanks', 'textile', 'chemical', 'food', 'other'].map((value) => ({ value, label: tr.productTables.groups[value] || value }));
+
 const kindOf = (group) => (group.quoteOnly ? 'quote' : group.page || 'tables');
 
 const emptyTexts = () => Object.fromEntries(LANGS.map(({ code }) => [code, { label: '', title: '', description: '', application: '' }]));
@@ -49,6 +52,7 @@ const empty = (order = 0) => ({
   image: '',
   hue: 210,
   kind: 'tables',
+  category: 'other',
   monoblock: true,
   i18n: emptyTexts(),
 });
@@ -110,6 +114,7 @@ export default function AdminProductGroups() {
             image: group.image || '',
             hue: group.hue ?? 210,
             kind: kindOf(group),
+            category: group.category || 'other',
             monoblock: group.monoblock !== false,
             i18n: Object.fromEntries(LANGS.map(({ code }) => [code, { ...emptyTexts()[code], ...group.i18n?.[code] }])),
           }
@@ -259,6 +264,12 @@ export default function AdminProductGroups() {
                 <small>{kind?.hint}</small>
               </div>
 
+              <div className="cmsField">
+                <span>Kategori</span>
+                <Dropdown value={form.category} onChange={(value) => setForm({ ...form, category: value })} label="Kategori" options={CATEGORIES} />
+                <small>Ana sayfadaki ürün kartlarının üstündeki sekme.</small>
+              </div>
+
               {(form.kind === 'tables' || form.kind === 'waterTanks') && (
                 <div className="cmsField">
                   <span>Bu gruptaki ürün tabloları</span>
@@ -366,7 +377,7 @@ export default function AdminProductGroups() {
                   {group.image ? <img src={group.image} alt="" /> : <span className="cmsThumbEmpty" aria-hidden="true" />}
                   <span>
                     <strong>{group.i18n?.tr?.label || group.groupId}</strong>
-                    <small>{group.i18n?.tr?.title || group.groupId}</small>
+                    <small>{CATEGORIES.find((item) => item.value === (group.category || 'other'))?.label} · {group.i18n?.tr?.title || group.groupId}</small>
                   </span>
                 </span>
 

@@ -358,7 +358,7 @@ const tr = {
     groups: {
       tanks: 'Polietilen Tanklar',
       textile: 'Tekstil',
-      chemical: 'Kimyasal ve silo',
+      chemical: 'Kimyasal ve Silo',
       food: 'Gıda',
       other: 'Diğer Ürünler',
     },

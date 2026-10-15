@@ -11,6 +11,9 @@ import { CONTENT_LANGUAGES } from '../config/languages.js';
 // Where the group's "Modelleri İncele" opens
 export const GROUP_PAGES = ['tables', 'waterTanks', 'custom'];
 
+// Main category: the tabs above the home page product cards
+export const GROUP_CATEGORIES = ['tanks', 'textile', 'chemical', 'food', 'other'];
+
 const textSchema = new mongoose.Schema(
   {
     label: { type: String, trim: true, default: '', maxlength: 60 },
@@ -39,6 +42,7 @@ const productGroupSchema = new mongoose.Schema(
     // One-piece (monoblock) product: shown as a trust badge on model pages
     monoblock: { type: Boolean, default: true },
     page: { type: String, enum: GROUP_PAGES, default: 'tables' },
+    category: { type: String, enum: GROUP_CATEGORIES, default: 'other' },
     i18n: Object.fromEntries(CONTENT_LANGUAGES.map((lang) => [lang, { type: textSchema, default: () => ({}) }])),
   },
   { timestamps: true }

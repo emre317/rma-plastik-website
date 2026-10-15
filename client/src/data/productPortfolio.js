@@ -34,6 +34,7 @@ const portfolio = source.map((group) => {
     hue: Number.isFinite(group.hue) ? group.hue : 210,
     quoteOnly: Boolean(group.quoteOnly) && !custom,
     monoblock: group.monoblock !== false,
+    category: group.category || 'other',
     custom,
     round: custom,
     // Water tank tables can be chosen with the tank finder
