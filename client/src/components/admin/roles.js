@@ -6,7 +6,7 @@
 export const ROLES = [
   { id: 'admin', label: 'Yönetici', tone: 'blue', text: 'Tüm bölümler, kullanıcılar, site ayarları ve işlem geçmişi.' },
   { id: 'sales', label: 'Satış', tone: 'green', text: 'Teklif talepleri, proforma, satış raporu ve potansiyel müşteriler.' },
-  { id: 'content', label: 'İçerik', tone: 'violet', text: 'Ürün tabloları, blog, projeler, fotoğraflar, SSS, videolar, metinler ve yayınlama.' },
+  { id: 'content', label: 'İçerik', tone: 'violet', text: 'Ürün tabloları, blog, projeler, fotoğraflar, videolar, metinler ve yayınlama.' },
 ];
 
 const AREAS = {

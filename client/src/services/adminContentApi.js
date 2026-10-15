@@ -73,19 +73,6 @@ export const updateProject = (id, body, token) => request(`/admin/projects/${enc
 export const deleteProject = (id, token) => request(`/admin/projects/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Proje silinemedi.' });
 export const importProjects = (token) => request('/admin/projects/import-defaults', { method: 'POST', token, fallbackMessage: 'Broşür projeleri aktarılamadı.' });
 
-/* Export markets (İhracat ağı) */
-export const listExportMarkets = (token) => request('/admin/export-markets', { token, fallbackMessage: 'Pazarlar yüklenemedi.' });
-export const createExportMarket = (body, token) => request('/admin/export-markets', { method: 'POST', body, token, fallbackMessage: 'Pazar kaydedilemedi.' });
-export const updateExportMarket = (id, body, token) => request(`/admin/export-markets/${encodeURIComponent(id)}`, { method: 'PUT', body, token, fallbackMessage: 'Pazar kaydedilemedi.' });
-export const deleteExportMarket = (id, token) => request(`/admin/export-markets/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Pazar silinemedi.' });
-export const importExportMarkets = (token) => request('/admin/export-markets/import-defaults', { method: 'POST', token, fallbackMessage: 'Broşür pazarları aktarılamadı.' });
-
-/* FAQ (Sık sorulan sorular) */
-export const listFaqs = (token) => request('/admin/faqs', { token, fallbackMessage: 'Sorular yüklenemedi.' });
-export const createFaq = (body, token) => request('/admin/faqs', { method: 'POST', body, token, fallbackMessage: 'Soru kaydedilemedi.' });
-export const updateFaq = (id, body, token) => request(`/admin/faqs/${encodeURIComponent(id)}`, { method: 'PUT', body, token, fallbackMessage: 'Soru kaydedilemedi.' });
-export const deleteFaq = (id, token) => request(`/admin/faqs/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Soru silinemedi.' });
-
 /* Field photos (Saha fotoğrafları) */
 export const uploadGalleryImage = (file, token) => uploadImage('gallery-image', file, token);
 export const listGallery = (token) => request('/admin/gallery', { token, fallbackMessage: 'Fotoğraflar yüklenemedi.' });

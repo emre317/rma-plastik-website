@@ -52,8 +52,6 @@ const AdminPosts = lazy(() => import('../pages/AdminPosts/AdminPosts'));
 const AdminPostEdit = lazy(() => import('../pages/AdminPostEdit/AdminPostEdit'));
 const AdminVideos = lazy(() => import('../pages/AdminVideos/AdminVideos'));
 const AdminProjects = lazy(() => import('../pages/AdminProjects/AdminProjects'));
-const AdminExportMarkets = lazy(() => import('../pages/AdminExportMarkets/AdminExportMarkets'));
-const AdminFaqs = lazy(() => import('../pages/AdminFaqs/AdminFaqs'));
 const AdminGallery = lazy(() => import('../pages/AdminGallery/AdminGallery'));
 
 export default function AppRoutes() {
@@ -120,8 +118,6 @@ export default function AppRoutes() {
           <Route path="/admin/posts/:id" element={<RequireArea area="content"><AdminPostEdit /></RequireArea>} />
           <Route path="/admin/videos" element={<RequireArea area="content"><AdminVideos /></RequireArea>} />
           <Route path="/admin/projects" element={<RequireArea area="content"><AdminProjects /></RequireArea>} />
-          <Route path="/admin/export-markets" element={<RequireArea area="content"><AdminExportMarkets /></RequireArea>} />
-          <Route path="/admin/faqs" element={<RequireArea area="content"><AdminFaqs /></RequireArea>} />
           <Route path="/admin/gallery" element={<RequireArea area="content"><AdminGallery /></RequireArea>} />
         </Route>
       </Route>

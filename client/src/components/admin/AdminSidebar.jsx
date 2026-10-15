@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
-  BarChart3, Briefcase, Camera, CircleHelp, ExternalLink, Globe2, FileText, Inbox, LayoutDashboard, LogOut, Menu, PlayCircle, Settings, Table2, Type, UserPlus, Users, X, History,
+  BarChart3, Briefcase, Camera, ExternalLink, FileText, Inbox, LayoutDashboard, LogOut, Menu, PlayCircle, Settings, Table2, Type, UserPlus, Users, X, History,
 } from 'lucide-react';
 
 import { getUnreadLeadCount, getUnreadQuoteCount } from '../../services/adminApi';
@@ -36,7 +36,6 @@ const NAV = [
     group: 'Katalog',
     items: [
       { to: '/admin/product-families', label: 'Ürün Tabloları', icon: Table2, hint: 'Ürün ve su deposu modelleri', area: 'content' },
-      { to: '/admin/export-markets', label: 'İhracat Ağı', icon: Globe2, hint: 'Haritadaki pazarlar', area: 'content' },
     ],
   },
   {
@@ -45,7 +44,6 @@ const NAV = [
       { to: '/admin/posts', label: 'Blog Yazıları', icon: FileText, area: 'content' },
       { to: '/admin/projects', label: 'Referans Projeler', icon: Briefcase, hint: 'Özel üretim projeleri', area: 'content' },
       { to: '/admin/gallery', label: 'Saha Fotoğrafları', icon: Camera, hint: 'Kullanımdaki ürünler', area: 'content' },
-      { to: '/admin/faqs', label: 'Sık Sorulan Sorular', icon: CircleHelp, hint: 'SSS sayfası', area: 'content' },
       { to: '/admin/videos', label: 'Videolar', icon: PlayCircle, area: 'content' },
       { to: '/admin/texts', label: 'Sayfa Metinleri', icon: Type, area: 'content' },
     ],

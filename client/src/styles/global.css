@@ -32127,7 +32127,7 @@ select:disabled {
 
 /* Body: light surface, map beside the address */
 .ctMain {
-  padding: 72px 0 24px;
+  padding: 72px 0 96px;
   background: var(--background);
 }
 

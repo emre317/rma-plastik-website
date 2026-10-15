@@ -14,8 +14,9 @@ const LANGS = [
   { code: 'ar', label: 'العربية', dir: 'rtl' },
 ];
 
-// Not page copy
-const EXCLUDED = ['language'];
+// Not page copy, or copy of sections no longer on the site
+const EXCLUDED = ['language', 'global', 'faq'];
+const EXCLUDED_KEYS = ['pages.company.eco'];
 
 const SECTION_LABELS = {
   meta: 'SEO – sayfa başlıkları ve açıklamaları',
@@ -30,7 +31,6 @@ const SECTION_LABELS = {
   productExplorer: 'Ana sayfa – Ürün gezgini',
   industries: 'Ana sayfa – Sektörler',
   customMolding: 'Ana sayfa – Özel Üretim',
-  global: 'Ana sayfa – İhracat',
   pages: 'İç sayfalar (Kurumsal, Özel Üretim, Sektörler…)',
   productsPage: 'Ürünler Sayfası',
   waterTanks: 'Su depoları sayfası',
@@ -92,6 +92,7 @@ export default function AdminTexts() {
 
     return source
       .flatMap((name) => flatten(tr[name], name))
+      .filter(([key]) => !EXCLUDED_KEYS.some((prefix) => key === prefix || key.startsWith(`${prefix}.`)))
       .filter(([key, value]) => {
         if (!q) return true;
         const current = { ...saved[key], ...draft[key] };

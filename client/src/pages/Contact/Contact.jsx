@@ -4,7 +4,6 @@ import { FileText, Mail, MessageCircle, Phone } from 'lucide-react';
 import ContactSection from '../../sections/ContactSection';
 import Seo from '../../seo/Seo';
 import PageHeader from '../../components/ui/PageHeader';
-import QuoteStrip from '../../components/ui/QuoteStrip';
 import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
 import company from '../../data/company';
@@ -72,8 +71,6 @@ export default function Contact() {
       />
 
       <ContactSection />
-
-      <QuoteStrip />
     </main>
   );
 }
