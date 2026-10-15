@@ -12,6 +12,7 @@ import StatValue from './StatValue';
   crumbs: [{ label, to? }] after "Ana Sayfa" (the last one is the current page)
   facts:  [{ value, label }]
   media:  [{ src }] – one to three product photos (mediaTone 'glass' for round cut-outs)
+  side:   any content for the right column instead of photos (e.g. contact cards)
 */
 export default function PageHeader({
   crumbs = [],
@@ -24,6 +25,7 @@ export default function PageHeader({
   facts,
   media,
   mediaTone = 'light',
+  side,
   children,
   compact = false,
   className = '',
@@ -36,7 +38,7 @@ export default function PageHeader({
     <section
       className={[
         'pageHeader',
-        photos.length ? 'withMedia' : '',
+        photos.length || side ? 'withMedia' : '',
         compact ? 'compact' : '',
         className,
       ].filter(Boolean).join(' ')}
@@ -92,6 +94,8 @@ export default function PageHeader({
 
             {actions && <div className="phActions">{actions}</div>}
           </div>
+
+          {side && !photos.length && <div className="phSide">{side}</div>}
 
           {photos.length > 0 && (
             <div className={`phMedia count${photos.length} ${mediaTone === 'glass' ? 'glass' : ''}`} aria-hidden="true">

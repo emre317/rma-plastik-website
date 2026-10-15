@@ -1116,6 +1116,9 @@ const ar = {
     homeIndex: 'التواصل',
     close: 'إغلاق',
     locations: {
+      quick: 'تواصل سريع',
+      whatsappValue: 'أرسل رسالة',
+      follow: 'تابعونا',
       phone: 'الهاتف',
       index: 'الموقع',
       eyebrow: 'المرفق الرئيسي',

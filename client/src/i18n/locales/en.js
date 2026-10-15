@@ -1123,6 +1123,9 @@ const en = {
     homeIndex: 'CONTACT',
     close: 'Close',
     locations: {
+      quick: 'Quick Contact',
+      whatsappValue: 'Send a message',
+      follow: 'Follow Us',
       phone: 'Phone',
       index: 'Location',
       eyebrow: 'Main Facility',

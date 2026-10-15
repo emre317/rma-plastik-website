@@ -1121,6 +1121,9 @@ const tr = {
     homeIndex: 'İLETİŞİM',
     close: 'Kapat',
     locations: {
+      quick: 'Hızlı İletişim',
+      whatsappValue: 'Mesaj gönderin',
+      follow: 'Bizi Takip Edin',
       phone: 'Telefon',
       index: 'Konum',
       eyebrow: 'Merkez Tesis',

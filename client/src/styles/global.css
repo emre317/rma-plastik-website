@@ -32008,3 +32008,358 @@ input:disabled,
 select:disabled {
   cursor: not-allowed;
 }
+
+/* =====================================================
+   CONTACT PAGE — quick contact card in the header, map + address below
+===================================================== */
+.phSide {
+  align-self: center;
+}
+
+.ctQuick {
+  padding: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.ctQuickTitle {
+  margin: 0 0 14px;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.ctQuick ul {
+  margin: 0 0 18px;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  list-style: none;
+}
+
+.ctQuickRow {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.04);
+  color: #ffffff;
+  transition: background-color 200ms ease, border-color 200ms ease, transform 200ms ease;
+}
+
+.ctQuickRow:hover {
+  border-color: color-mix(in srgb, var(--rma-blue-light) 55%, transparent);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.ctQuickIcon {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--rma-blue-light) 16%, transparent);
+  color: var(--rma-blue-light);
+}
+
+.ctQuick-whatsapp .ctQuickIcon {
+  background: rgba(37, 211, 102, 0.16);
+  color: #25d366;
+}
+
+.ctQuickIcon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.ctQuickText {
+  min-width: 0;
+  flex: 1;
+  display: grid;
+  gap: 3px;
+}
+
+.ctQuickText small {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ctQuickText strong {
+  overflow: hidden;
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+[dir="rtl"] .ctQuickText strong[dir="ltr"] {
+  text-align: end;
+}
+
+.ctQuickArrow {
+  color: var(--rma-blue-light);
+  font-size: 18px;
+}
+
+.ctQuick .ctQuickQuote {
+  width: 100%;
+  min-height: 58px;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.ctQuick .ctQuickQuote .buttonArrow {
+  margin-inline-start: auto;
+}
+
+/* Body: light surface, map beside the address */
+.ctMain {
+  padding: 72px 0 24px;
+  background: var(--background);
+}
+
+.ctGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(320px, 1fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.ctMap {
+  min-height: 520px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--ink-100);
+  box-shadow: var(--shadow-md);
+}
+
+.ctMap iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 520px;
+  display: block;
+  border: 0;
+}
+
+.ctInfo {
+  display: grid;
+  gap: 24px;
+  align-content: start;
+}
+
+.ctCard {
+  padding: 30px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: #ffffff;
+  box-shadow: var(--shadow-sm);
+}
+
+.ctCard h2 {
+  margin: 14px 0 12px;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: clamp(26px, 2.4vw, 34px);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+}
+
+.ctCard h2 span {
+  display: block;
+}
+
+.ctCardText {
+  margin: 0 0 20px;
+  color: var(--text-secondary);
+  font-size: 15.5px;
+  line-height: 1.6;
+}
+
+.ctAddress {
+  margin: 0 0 22px;
+  padding: 16px 18px;
+  display: flex;
+  gap: 14px;
+  border-radius: var(--radius-md);
+  background: var(--ink-050);
+  color: var(--text-body);
+  font-size: 15px;
+  font-style: normal;
+  line-height: 1.55;
+}
+
+.ctAddress svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  margin-top: 2px;
+  color: var(--rma-blue);
+}
+
+.ctAddress strong {
+  display: block;
+  color: var(--text);
+  font-family: var(--font-display);
+}
+
+.ctCardActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+}
+
+.ctCardActions .button {
+  min-height: 52px;
+  padding-inline: 22px;
+  gap: 10px;
+}
+
+.ctTextLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--rma-blue);
+  font-family: var(--font-display);
+  font-size: 14.5px;
+  font-weight: 700;
+}
+
+.ctTextLink:hover {
+  color: #145a91;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ctSocialTitle {
+  margin: 0 0 14px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.ctSocial ul {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  list-style: none;
+}
+
+.ctSocial a {
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-radius: var(--radius-md);
+  color: var(--text);
+  transition: background-color 180ms ease;
+}
+
+.ctSocial a:hover {
+  background: var(--ink-050);
+  color: var(--text);
+}
+
+.ctSocialIcon {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--rma-blue) 10%, transparent);
+  color: var(--rma-blue);
+}
+
+.ctSocialIcon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.ctSocial a > span:nth-child(2) {
+  flex: 1;
+  display: grid;
+  gap: 2px;
+}
+
+.ctSocial small {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.ctSocial strong {
+  font-family: var(--font-display);
+  font-size: 15px;
+}
+
+.ctSocialArrow {
+  color: var(--rma-blue);
+}
+
+@media (max-width: 1024px) {
+  .ctGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ctMap,
+  .ctMap iframe {
+    min-height: 380px;
+  }
+
+  .ctInfo {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .ctMain {
+    padding-top: 40px;
+  }
+
+  .ctInfo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ctCard,
+  .ctQuick {
+    padding: 20px;
+  }
+
+  .ctMap,
+  .ctMap iframe {
+    min-height: 300px;
+  }
+}
+
+.ctCard h2 span {
+  font-weight: inherit;
+}
+
+.ctCardActions .button {
+  justify-content: center;
+}
+
+@media (max-width: 1024px) {
+  .phSide {
+    margin-top: 28px;
+    margin-bottom: 36px;
+  }
+}
