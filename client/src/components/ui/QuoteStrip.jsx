@@ -6,33 +6,36 @@ import { LocalizedLink } from '../i18n/LocalizedLink';
 import { useQuote } from '../quote/QuoteContext';
 
 /*
-  Full-width quote strip above the footer: red → magenta sweep, one line of
-  promise, a short note and a white quote button (optionally a contact link).
+  Closing quote panel above the footer (the same pink striped panel as the
+  other pages): one line of promise, a short note, a white quote button and
+  optionally a contact link.
 */
 export default function QuoteStrip({ title, text, buttonLabel, contactLabel }) {
   const { t } = useTranslation();
   const { openQuote } = useQuote();
 
   return (
-    <section className="quoteStrip" data-track-area="quote_strip">
-      <div className="container quoteStripInner">
-        <div className="quoteStripText">
-          <h2>{title || t('quoteStrip.title')}</h2>
-          <p>{text || t('quoteStrip.text')}</p>
-        </div>
+    <section className="cmCta quoteStrip" data-track-area="quote_strip">
+      <div className="container">
+        <div className="cmCtaPanel">
+          <div>
+            <h2>{title || t('quoteStrip.title')}</h2>
+            <p>{text || t('quoteStrip.text')}</p>
+          </div>
 
-        <div className="quoteStripActions">
-          <button type="button" className="button quoteButton quoteStripButton" onClick={() => openQuote()}>
-            <span>{buttonLabel || t('quoteStrip.button')}</span>
-            <Arrow className="buttonArrow" />
-          </button>
+          <div className="cmCtaActions">
+            <button type="button" className="button primary quoteButton" onClick={() => openQuote()}>
+              <span>{buttonLabel || t('quoteStrip.button')}</span>
+              <Arrow className="buttonArrow" />
+            </button>
 
-          {contactLabel && (
-            <LocalizedLink to="/contact" className="quoteStripLink">
-              <MessageSquare aria-hidden="true" />
-              {contactLabel}
-            </LocalizedLink>
-          )}
+            {contactLabel && (
+              <LocalizedLink to="/contact" className="cmCtaLink">
+                <MessageSquare aria-hidden="true" />
+                {contactLabel}
+              </LocalizedLink>
+            )}
+          </div>
         </div>
       </div>
     </section>

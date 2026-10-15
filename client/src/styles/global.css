@@ -31859,27 +31859,67 @@ main section h2 > span:not([class]) > span {
   color: var(--rma-blue-light);
 }
 
-/* Closing call to action: black with the stripes instead of the red
-   sweep, so the quote button is the only red on it */
+/* Closing panels on every page: the pink (red → magenta) sweep with the
+   diagonal stripes, white buttons on it */
 .cmCtaPanel {
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 0;
   background:
-    radial-gradient(50% 120% at 100% 0%, color-mix(in srgb, var(--rma-red) 22%, transparent), transparent 70%),
-    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.045) 0 14px, transparent 14px 28px),
-    #0a0b0d;
-  box-shadow: none;
-}
-
-.cmCtaPanel .button.primary.quoteButton {
-  border-color: var(--brand-primary);
-  background: var(--brand-primary);
-  color: #ffffff;
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0 14px, transparent 14px 28px),
+    var(--gradient-wordmark);
   box-shadow: var(--shadow-brand);
 }
 
-.cmCtaPanel .button.primary.quoteButton:hover {
-  border-color: var(--brand-primary-hover);
-  background: var(--brand-primary-hover);
+[dir="rtl"] .cmCtaPanel {
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.07) 0 14px, transparent 14px 28px),
+    linear-gradient(264deg, var(--rma-red) 0%, var(--rma-magenta) 100%);
+}
+
+.cmCtaPanel h2,
+.cmCtaPanel p {
+  color: #ffffff;
+}
+
+.cmCtaPanel .button.primary,
+.cmCtaPanel .button.primary.quoteButton,
+.cmCtaPanel .button.primary:not(.quoteButton) {
+  border-color: #ffffff;
+  background: #ffffff;
+  color: var(--ink-900);
+  box-shadow: 0 12px 28px -14px rgba(16, 19, 23, 0.55);
+}
+
+.cmCtaPanel .button.primary:hover,
+.cmCtaPanel .button.primary.quoteButton:hover,
+.cmCtaPanel .button.primary:not(.quoteButton):hover {
+  border-color: var(--ink-050);
+  background: var(--ink-050);
+  color: var(--ink-900);
+}
+
+.cmCtaPanel .button.primary .buttonArrow,
+.cmCtaPanel .button.primary:not(.quoteButton) .buttonArrow {
+  color: var(--brand-primary);
+}
+
+.cmCtaPanel .cmCtaLink {
+  border-color: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.cmCtaPanel .cmCtaLink:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+}
+
+.cmCtaPanel .cmCtaLink svg {
+  color: #ffffff;
+}
+
+/* Home: the panel sits on the page background right above the footer */
+.quoteStrip {
+  padding-top: 24px;
 }
 
 .industriesMetaCta .button {
@@ -31911,114 +31951,8 @@ main section h2 > span:not([class]) > span {
   -webkit-text-fill-color: #ffffff;
 }
 
-/* =====================================================
-   QUOTE STRIP — full-width red → magenta band above the footer
-===================================================== */
-.quoteStrip {
-  padding: 46px 0;
-  background: linear-gradient(96deg, var(--rma-red) 0%, #d21f4f 45%, var(--rma-magenta) 100%);
+
+.cmCtaPanel .cmCtaLink .buttonArrow,
+.cmCtaPanel .cmCtaLink svg {
   color: #ffffff;
-}
-
-[dir="rtl"] .quoteStrip {
-  background: linear-gradient(264deg, var(--rma-red) 0%, #d21f4f 45%, var(--rma-magenta) 100%);
-}
-
-.quoteStripInner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px 40px;
-}
-
-.quoteStrip h2 {
-  margin: 0;
-  color: #ffffff;
-  font-family: var(--font-display);
-  font-size: clamp(22px, 2.1vw, 30px);
-  font-weight: 800;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-}
-
-.quoteStrip p {
-  margin: 8px 0 0;
-  color: rgba(255, 255, 255, 0.86);
-  font-size: 16px;
-}
-
-.quoteStripActions {
-  display: flex;
-  flex: none;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-}
-
-.quoteStrip .quoteStripButton {
-  min-height: 58px;
-  padding-inline: 30px 24px;
-  gap: 24px;
-  border: 0;
-  border-radius: var(--radius-sm, 6px);
-  background: #ffffff;
-  color: var(--ink-900);
-  font-size: 16.5px;
-  box-shadow: 0 12px 28px -14px rgba(16, 19, 23, 0.55);
-}
-
-.quoteStrip .quoteStripButton:hover {
-  background: var(--ink-050);
-  color: var(--ink-900);
-  transform: translateY(-2px);
-}
-
-.quoteStrip .quoteStripButton .buttonArrow {
-  color: var(--brand-primary);
-}
-
-.quoteStripLink {
-  min-height: 58px;
-  padding: 0 22px;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  border-radius: var(--radius-sm, 6px);
-  color: #ffffff;
-  font-family: var(--font-display);
-  font-size: 15px;
-  font-weight: 700;
-  transition: background-color 200ms ease;
-}
-
-.quoteStripLink:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #ffffff;
-}
-
-.quoteStripLink svg {
-  width: 18px;
-  height: 18px;
-  color: #ffffff;
-}
-
-@media (max-width: 760px) {
-  .quoteStrip {
-    padding: 36px 0;
-  }
-
-  .quoteStripInner {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .quoteStripActions,
-  .quoteStrip .quoteStripButton {
-    width: 100%;
-  }
-
-  .quoteStrip .quoteStripButton {
-    justify-content: space-between;
-  }
 }
