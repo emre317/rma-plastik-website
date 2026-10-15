@@ -11,6 +11,9 @@ import builtInGroups from './productGroups.builtin';
   put there by i18n/applyCatalogue.js).
 */
 
+// Groups saved before categories existed take the built-in group's category
+const builtInCategory = Object.fromEntries(builtInGroups.map((group) => [group.id, group.category]));
+
 const source = Array.isArray(content.productGroups) && content.productGroups.length
   ? content.productGroups
   : builtInGroups;
@@ -34,7 +37,7 @@ const portfolio = source.map((group) => {
     hue: Number.isFinite(group.hue) ? group.hue : 210,
     quoteOnly: Boolean(group.quoteOnly) && !custom,
     monoblock: group.monoblock !== false,
-    category: group.category || 'other',
+    category: group.category || builtInCategory[group.id] || 'other',
     custom,
     round: custom,
     // Water tank tables can be chosen with the tank finder

@@ -42,7 +42,8 @@ const productGroupSchema = new mongoose.Schema(
     // One-piece (monoblock) product: shown as a trust badge on model pages
     monoblock: { type: Boolean, default: true },
     page: { type: String, enum: GROUP_PAGES, default: 'tables' },
-    category: { type: String, enum: GROUP_CATEGORIES, default: 'other' },
+    // No default: groups saved before this field take the built-in group's category
+    category: { type: String, enum: GROUP_CATEGORIES },
     i18n: Object.fromEntries(CONTENT_LANGUAGES.map((lang) => [lang, { type: textSchema, default: () => ({}) }])),
   },
   { timestamps: true }

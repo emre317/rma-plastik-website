@@ -60,7 +60,8 @@ function groupPayload(body = {}) {
     quoteOnly: Boolean(body.quoteOnly),
     monoblock: body.monoblock === undefined ? true : Boolean(body.monoblock),
     page: GROUP_PAGES.includes(body.page) ? body.page : 'tables',
-    category: GROUP_CATEGORIES.includes(body.category) ? body.category : 'other',
+    // Left empty when not chosen, so the built-in group's category applies
+    category: GROUP_CATEGORIES.includes(body.category) ? body.category : undefined,
     i18n: texts(body.i18n, GROUP_TEXT),
   };
 }
@@ -93,7 +94,12 @@ function sectorPayload(body = {}) {
 /* ---------- Public snapshot ---------- */
 
 export async function publicProductGroups() {
-  const groups = await ProductGroup.find({ published: true }).sort({ order: 1, createdAt: 1 });
+  const [groups, { groups: builtInGroups }] = await Promise.all([
+    ProductGroup.find({ published: true }).sort({ order: 1, createdAt: 1 }),
+    builtIn(),
+  ]);
+  // Groups saved before categories existed take the built-in group's category
+  const builtInCategory = (id) => builtInGroups.find((item) => item.id === id)?.category;
 
   return groups.map((group) => ({
     id: group.groupId,
@@ -102,7 +108,7 @@ export async function publicProductGroups() {
     quoteOnly: group.quoteOnly,
     monoblock: group.monoblock,
     page: group.page,
-    category: group.category || 'other',
+    category: group.category || builtInCategory(group.groupId) || 'other',
     i18n: texts(group.i18n, GROUP_TEXT),
   }));
 }

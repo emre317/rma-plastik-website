@@ -114,7 +114,7 @@ export default function AdminProductGroups() {
             image: group.image || '',
             hue: group.hue ?? 210,
             kind: kindOf(group),
-            category: group.category || 'other',
+            category: group.category || builtInGroups.find((item) => item.id === group.groupId)?.category || 'other',
             monoblock: group.monoblock !== false,
             i18n: Object.fromEntries(LANGS.map(({ code }) => [code, { ...emptyTexts()[code], ...group.i18n?.[code] }])),
           }
@@ -377,7 +377,7 @@ export default function AdminProductGroups() {
                   {group.image ? <img src={group.image} alt="" /> : <span className="cmsThumbEmpty" aria-hidden="true" />}
                   <span>
                     <strong>{group.i18n?.tr?.label || group.groupId}</strong>
-                    <small>{CATEGORIES.find((item) => item.value === (group.category || 'other'))?.label} · {group.i18n?.tr?.title || group.groupId}</small>
+                    <small>{CATEGORIES.find((item) => item.value === (group.category || builtInGroups.find((item2) => item2.id === group.groupId)?.category || 'other'))?.label} · {group.i18n?.tr?.title || group.groupId}</small>
                   </span>
                 </span>
 
