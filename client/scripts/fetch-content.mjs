@@ -61,6 +61,15 @@ try {
     data.projects = null;
   }
 
+  // No product groups or sectors in the database yet: keep the built-in ones
+  if (!Array.isArray(data.productGroups) || data.productGroups.length === 0) {
+    data.productGroups = null;
+  }
+
+  if (!Array.isArray(data.sectors) || data.sectors.length === 0) {
+    data.sectors = null;
+  }
+
   // No product tables in the database yet: keep the built-in brochure tables
   if (!Array.isArray(data.productFamilies) || data.productFamilies.length === 0) {
     data.productFamilies = null;

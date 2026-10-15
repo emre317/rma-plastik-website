@@ -1,69 +1,38 @@
-import { Droplets, Filter, FlaskConical, Layers, Shirt, TrafficCone, Trees, UtensilsCrossed } from 'lucide-react';
+import content from '@content';
 
 import portfolio from './productPortfolio';
 import families from './productTables';
+import builtInSectors from './sectors.builtin';
+import { sectorIcon } from './sectorIcons';
 
 /*
-  Sectors of the "Sektörünüze göre ürün arayın" brief, in the order of
-  industries.items in the locale files. `products` follows the order of
-  industries.items[i].products (the sector's own product names):
-    { group }            a product group (data/productPortfolio.js)
-    { group, family }    one product table family of that group
-                         (`also`: further families the card stands for)
-    { quote: true }      produced on request, no catalogue entry yet
+  Sectors (/industries and /industries/:slug): the sectors saved in the admin
+  panel (Sektörler), else the built-in ones of the sectors brief. Texts come
+  from industries.items in the same order (admin texts are put there by
+  i18n/applyCatalogue.js); products[j] is named industries.items[i].products[j].
+    { group }               a product group
+    { group, families }     only these product tables of the group
+    { quote: true }         made to order, no catalogue entry yet
   `stored` is the stored product suggested in the quote form (data/quoteForm.js).
 */
-const industries = [
-  {
-    slug: 'water', icon: Droplets, hue: 205, stored: 'water',
-    products: [{ group: 'vertical' }, { group: 'horizontal' }, { group: 'fuel', family: 'rectangular-tanks' }, { group: 'twoLayer' }],
-  },
-  {
-    slug: 'treatment', icon: Filter, hue: 190,
-    products: [{ group: 'vertical' }, { group: 'treatment' }, { group: 'silo', family: 'silo-tanks' }],
-  },
-  {
-    slug: 'textile', icon: Shirt, hue: 262,
-    products: [
-      { group: 'textile', family: 'cylinder-trolleys' },
-      { group: 'textile', family: 'textile-trolleys' },
-      { group: 'textile', family: 'stackable-rectangular', also: ['stackable-cylinder'] },
-      { group: 'copBoxes' },
-      { group: 'ropeCans' },
-      { group: 'silo', family: 'silo-tanks' },
-      { group: 'vertical' },
-      { quote: true },
-      { quote: true },
-    ],
-  },
-  {
-    slug: 'food', icon: UtensilsCrossed, hue: 28, stored: 'food',
-    products: [
-      { group: 'vertical' },
-      { group: 'food', family: 'brine-tanks' },
-      { group: 'food', family: 'pickle-tanks' },
-      { quote: true, group: 'food' },
-      { group: 'silo', family: 'mixer-silo-tanks' },
-      { group: 'silo', family: 'silo-tanks' },
-    ],
-  },
-  {
-    slug: 'chemicals', icon: FlaskConical, hue: 200,
-    products: [
-      { group: 'vertical' },
-      { group: 'silo', family: 'mixer-silo-tanks' },
-      { group: 'silo', family: 'silo-tanks' },
-      { group: 'treatment' },
-      { group: 'vehicle' },
-      { group: 'fuel', family: 'adblue-tanks' },
-      { group: 'silo', family: 'mixer-silo-tanks' },
-      { group: 'confit' },
-    ],
-  },
-  { slug: 'traffic', icon: TrafficCone, hue: 0, products: [{ group: 'barriers' }] },
-  { slug: 'landscape', icon: Trees, hue: 140, products: [{ group: 'planters' }, { group: 'planters' }] },
-  { slug: 'pallets', icon: Layers, hue: 28, products: [{ group: 'pallets' }, { group: 'pallets' }] },
-];
+const source = Array.isArray(content.sectors) && content.sectors.length ? content.sectors : builtInSectors;
+
+const industries = source.map((sector) => ({
+  slug: sector.id,
+  icon: sectorIcon(sector.icon),
+  hue: Number.isFinite(sector.hue) ? sector.hue : 210,
+  stored: sector.stored || '',
+  products: (sector.products || []).map((entry) => {
+    const families = Array.isArray(entry.families) ? entry.families : [];
+    return {
+      group: entry.group || '',
+      families,
+      // First table stands for the card (text, photo, link)
+      family: families[0] || '',
+      quote: !entry.group,
+    };
+  }),
+}));
 
 // Sector slugs of the earlier list -> the sector that now covers them
 export const LEGACY_INDUSTRIES = {
@@ -78,31 +47,34 @@ const familyById = Object.fromEntries(families.map((family) => [family.id, famil
 
 /*
   A sector product resolved for display: group, family (if any), image and link.
-  Quote-only entries (and groups without a model table) have no link.
+  Made-to-order entries (and groups without a model table or no longer shown)
+  have no link and show the sector icon.
 */
 export function sectorProduct(entry) {
-  const group = entry.group ? groupById[entry.group] : null;
-  const family = entry.family ? familyById[entry.family] : null;
+  const group = entry.group ? groupById[entry.group] || null : null;
+  const family = entry.families.map((id) => familyById[id]).find(Boolean) || null;
+  const quote = entry.quote || !group;
 
-  // A family that was removed in the admin panel falls back to its group
-  // Quote-only entries show the sector icon rather than a look-alike photo
-  const image = entry.quote ? '' : family?.image || (entry.family ? '' : group?.image) || '';
-  const link = entry.quote || group?.quoteOnly
+  // A table that was removed in the admin panel falls back to its group
+  const image = quote ? '' : family?.image || (entry.families.length ? '' : group.image) || '';
+  const link = quote || group.quoteOnly
     ? ''
-    : family ? (entry.group === 'vertical' ? '/water-tanks' : `/product-tables#${family.id}`) : group?.link || '';
+    : family ? (group.link === '/water-tanks' ? '/water-tanks' : `/product-tables#${family.id}`) : group.link || '';
 
-  return { ...entry, groupData: group, familyData: family, image, link };
+  return { ...entry, quote, groupData: group, familyData: family, image, link };
 }
 
 /*
-  Sectors that use a product table family (directly or through its group),
-  with their index in industries.items, e.g. for "Used in" on model pages.
+  Sectors that use a product table (directly or through its group), with
+  their index in industries.items, e.g. for "Used in" on model pages.
 */
 export function industriesForFamily(familyId) {
-  const groups = portfolio.filter((group) => group.families.includes(familyId)).map((group) => group.id);
+  const groupId = familyById[familyId]?.group;
+
   return industries
     .map((industry, index) => ({ ...industry, index }))
-    .filter((industry) => industry.products.some((entry) => entry.family === familyId || entry.also?.includes(familyId) || (!entry.family && groups.includes(entry.group))));
+    .filter((industry) => industry.products.some((entry) =>
+      entry.families.length ? entry.families.includes(familyId) : Boolean(entry.group) && entry.group === groupId));
 }
 
 export default industries;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
-  BarChart3, Briefcase, Camera, ExternalLink, FileText, Inbox, LayoutDashboard, LogOut, Menu, PlayCircle, Settings, Table2, Type, UserPlus, Users, X, History,
+  BarChart3, Boxes, Briefcase, Camera, Factory, ExternalLink, FileText, Inbox, LayoutDashboard, LogOut, Menu, PlayCircle, Settings, Table2, Type, UserPlus, Users, X, History,
 } from 'lucide-react';
 
 import { getUnreadLeadCount, getUnreadQuoteCount } from '../../services/adminApi';
@@ -35,7 +35,9 @@ const NAV = [
   {
     group: 'Katalog',
     items: [
+      { to: '/admin/product-groups', label: 'Ürün Grupları', icon: Boxes, hint: 'Menüdeki ve Ürünler sayfasındaki gruplar', area: 'content' },
       { to: '/admin/product-families', label: 'Ürün Tabloları', icon: Table2, hint: 'Ürün ve su deposu modelleri', area: 'content' },
+      { to: '/admin/sectors', label: 'Sektörler', icon: Factory, hint: 'Sektör sayfaları ve sektördeki ürünler', area: 'content' },
     ],
   },
   {

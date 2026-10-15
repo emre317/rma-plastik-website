@@ -7,6 +7,7 @@ import content from '@content';
 // sent to the sales team; English and Arabic load only when a page needs them
 import tr from './locales/tr';
 import applyOverrides from './applyOverrides';
+import applyCatalogue from './applyCatalogue';
 
 import {
   DEFAULT_LANGUAGE,
@@ -28,7 +29,7 @@ i18n
   .init({
     resources: {
       // Texts edited in the admin panel (published snapshot) override the defaults
-      tr: { translation: applyOverrides(tr, content.texts?.tr) },
+      tr: { translation: applyCatalogue(applyOverrides(tr, content.texts?.tr), content, 'tr') },
     },
     // Lets the language be set before its texts are added (loadLanguage)
     partialBundledLanguages: true,
@@ -64,7 +65,7 @@ export function loadLanguage(code) {
   }
 
   loading[code] ||= LOADERS[code]().then((module) => {
-    i18n.addResourceBundle(code, 'translation', applyOverrides(module.default, content.texts?.[code]), true, true);
+    i18n.addResourceBundle(code, 'translation', applyCatalogue(applyOverrides(module.default, content.texts?.[code]), content, code), true, true);
   });
 
   return loading[code];

@@ -1,18 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import tr from '../../i18n/locales/tr';
 import useAdminApi from '../../hooks/useAdminApi';
 import usePageTitle from '../../hooks/usePageTitle';
 import { createFamily, deleteFamily, importFamilies, listFamilies, updateFamily } from '../../services/adminContentApi';
 import { exportFamilies, readFamiliesFile } from './familyExcel';
-
-const groupLabel = (key) => tr.productTables.groups[key] || key;
+import useProductGroupOptions, { tableGroup } from '../../hooks/useProductGroupOptions';
 
 export default function AdminProductFamilies() {
   usePageTitle('Ürün Tabloları');
 
   const call = useAdminApi();
+  const { labelOf: groupLabel } = useProductGroupOptions();
 
   const [families, setFamilies] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -290,7 +289,7 @@ export default function AdminProductFamilies() {
                   </span>
                 </span>
 
-                <span>{groupLabel(family.group)}</span>
+                <span>{groupLabel(tableGroup(family))}</span>
 
                 <span>{family.rows.length}</span>
 

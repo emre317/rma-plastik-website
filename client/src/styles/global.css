@@ -32963,3 +32963,205 @@ select:disabled {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* =====================================================
+   ADMIN — Ürün Grupları and Sektörler
+===================================================== */
+
+.adGroupTables {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+  list-style: none;
+}
+
+.adGroupTables li {
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 13.5px;
+}
+
+.adGroupTables small {
+  color: var(--text-secondary);
+}
+
+.adGroupImage img {
+  object-fit: contain;
+}
+
+.adSectorIcon {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--accent) 10%, #ffffff);
+  color: var(--accent);
+}
+
+.adSectorIcon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.adIconPicker {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+  gap: 6px;
+}
+
+.adIconPicker button {
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.adIconPicker button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.adIconPicker button.active {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.adIconPicker svg {
+  width: 20px;
+  height: 20px;
+}
+
+.adSectorProducts {
+  margin-top: 20px;
+}
+
+.adSectorProductsHead {
+  margin-bottom: 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.adSectorProductsHead h2 {
+  margin: 0 0 6px;
+}
+
+.adSectorProductsHead p {
+  margin: 0;
+  max-width: 760px;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.adSectorProductsHead .cmsButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.adSectorProductsHead .cmsButton svg {
+  width: 16px;
+  height: 16px;
+}
+
+.adSectorProductList {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  list-style: none;
+}
+
+.adSectorProductList > li {
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.adSectorProductIndex {
+  width: 32px;
+  height: 32px;
+  margin-top: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--ink-050);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.adSectorProductFields {
+  display: grid;
+  gap: 10px;
+}
+
+.adSectorProductFields .cmsField {
+  margin: 0;
+}
+
+.adSectorTables {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.adSectorTables > span {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.adSectorProductActions {
+  margin-top: 22px;
+}
+
+.adSectorProductActions svg {
+  width: 16px;
+  height: 16px;
+}
+
+.adSectorSave {
+  margin-top: 18px;
+  justify-content: flex-end;
+}
+
+@media (max-width: 760px) {
+  .adSectorProductsHead {
+    flex-direction: column;
+  }
+
+  .adSectorProductList > li {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .adSectorProductIndex,
+  .adSectorProductActions {
+    margin-top: 0;
+  }
+}
+
+.adGroupImage,
+.adGroupImage img {
+  border-radius: 12px;
+}

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import ProductFamily, { COLUMN_KEYS, GROUPS, WATER_USES } from '../models/ProductFamily.js';
+import ProductFamily, { COLUMN_KEYS, WATER_USES } from '../models/ProductFamily.js';
 import { CONTENT_LANGUAGES } from '../config/languages.js';
 import { markContentChanged } from '../models/SiteSettings.js';
 
@@ -68,7 +68,7 @@ function familyPayload(body = {}) {
 
   return {
     familyId: str(body.familyId, 80).toLowerCase(),
-    group: GROUPS.includes(body.group) ? body.group : 'other',
+    group: /^[A-Za-z0-9-]{2,60}$/.test(str(body.group, 60)) ? str(body.group, 60) : '',
     order: Number.isFinite(Number(body.order)) ? Number(body.order) : 0,
     published: body.published === undefined ? true : Boolean(body.published),
     image: cleanImage(body.image),

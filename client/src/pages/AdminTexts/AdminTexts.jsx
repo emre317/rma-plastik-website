@@ -16,7 +16,8 @@ const LANGS = [
 
 // Not page copy, or copy of sections no longer on the site
 const EXCLUDED = ['language', 'global', 'faq'];
-const EXCLUDED_KEYS = ['pages.company.eco'];
+// Managed on their own pages (Ürün Grupları, Sektörler)
+const EXCLUDED_KEYS = ['pages.company.eco', 'productExplorer.items', 'industries.items'];
 
 const SECTION_LABELS = {
   meta: 'SEO – sayfa başlıkları ve açıklamaları',

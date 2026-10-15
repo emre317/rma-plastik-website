@@ -66,6 +66,21 @@ export const updateFamily = (id, body, token) => request(`/admin/product-familie
 export const deleteFamily = (id, token) => request(`/admin/product-families/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Ürün ailesi silinemedi.' });
 export const importFamilies = (token) => request('/admin/product-families/import-defaults', { method: 'POST', token, fallbackMessage: 'Broşür tabloları aktarılamadı.' });
 
+/* Product groups (Ürün Grupları) */
+export const listProductGroups = (token) => request('/admin/product-groups', { token, fallbackMessage: 'Ürün grupları yüklenemedi.' });
+export const createProductGroup = (body, token) => request('/admin/product-groups', { method: 'POST', body, token, fallbackMessage: 'Ürün grubu kaydedilemedi.' });
+export const updateProductGroup = (id, body, token) => request(`/admin/product-groups/${encodeURIComponent(id)}`, { method: 'PUT', body, token, fallbackMessage: 'Ürün grubu kaydedilemedi.' });
+export const deleteProductGroup = (id, token) => request(`/admin/product-groups/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Ürün grubu silinemedi.' });
+export const importProductGroups = (token) => request('/admin/product-groups/import-defaults', { method: 'POST', token, fallbackMessage: 'Broşür grupları aktarılamadı.' });
+
+/* Sectors (Sektörler) */
+export const listSectors = (token) => request('/admin/sectors', { token, fallbackMessage: 'Sektörler yüklenemedi.' });
+export const getSector = (id, token) => request(`/admin/sectors/${encodeURIComponent(id)}`, { token, fallbackMessage: 'Sektör yüklenemedi.' });
+export const createSector = (body, token) => request('/admin/sectors', { method: 'POST', body, token, fallbackMessage: 'Sektör kaydedilemedi.' });
+export const updateSector = (id, body, token) => request(`/admin/sectors/${encodeURIComponent(id)}`, { method: 'PUT', body, token, fallbackMessage: 'Sektör kaydedilemedi.' });
+export const deleteSector = (id, token) => request(`/admin/sectors/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Sektör silinemedi.' });
+export const importSectors = (token) => request('/admin/sectors/import-defaults', { method: 'POST', token, fallbackMessage: 'Broşür sektörleri aktarılamadı.' });
+
 /* Reference projects (Referans projeler) */
 export const listProjects = (token) => request('/admin/projects', { token, fallbackMessage: 'Projeler yüklenemedi.' });
 export const createProject = (body, token) => request('/admin/projects', { method: 'POST', body, token, fallbackMessage: 'Proje kaydedilemedi.' });

@@ -22,6 +22,7 @@ export function labelOf(doc) {
     doc.company,
     pickText(doc.title),
     tr.title,
+    tr.label,
     tr.question,
     pickText(doc.question),
     pickText(doc.name),
@@ -31,6 +32,8 @@ export function labelOf(doc) {
     doc.email,
     doc.code,
     doc.familyId,
+    doc.groupId,
+    doc.sectorId,
     doc.slug,
   ];
 

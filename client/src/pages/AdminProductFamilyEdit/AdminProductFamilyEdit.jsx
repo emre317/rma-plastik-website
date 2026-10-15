@@ -4,7 +4,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import tr from '../../i18n/locales/tr';
 import useAdminApi from '../../hooks/useAdminApi';
 import usePageTitle from '../../hooks/usePageTitle';
-import { COLUMN_KEYS, GROUPS, WATER_USES } from '../../data/productTables.builtin';
+import { COLUMN_KEYS, WATER_USES } from '../../data/productTables.builtin';
+import useProductGroupOptions, { tableGroup } from '../../hooks/useProductGroupOptions';
 import {
   createFamily,
   getFamily,
@@ -20,12 +21,11 @@ const LANGUAGES = [
 ];
 
 const columnLabel = (key) => tr.productTables.columns[key] || key;
-const groupLabel = (key) => tr.productTables.groups[key] || key;
 const useLabel = (key) => tr.waterTanks.uses[key] || key;
 
 const emptyFamily = {
   familyId: '',
-  group: 'tanks',
+  group: 'vertical',
   order: 100,
   published: true,
   image: '',
@@ -67,6 +67,7 @@ export default function AdminProductFamilyEdit() {
   const isNew = id === 'new';
   const navigate = useNavigate();
   const call = useAdminApi();
+  const { options: groupOptions } = useProductGroupOptions();
 
   usePageTitle(isNew ? 'Yeni ürün ailesi' : 'Ürün ailesini düzenle');
 
@@ -93,6 +94,7 @@ export default function AdminProductFamilyEdit() {
         setForm({
           ...emptyFamily,
           ...data,
+          group: tableGroup(data),
           i18n: Object.fromEntries(LANGUAGES.map(({ code }) => [code, { title: '', text: '', ...data.i18n?.[code] }])),
           waterTank: { ...emptyFamily.waterTank, ...data.waterTank },
           rows: (data.rows || []).map((row) => ({
@@ -322,13 +324,16 @@ export default function AdminProductFamilyEdit() {
               </label>
 
               <div className="cmsField">
-                <span>Grup</span>
+                <span>Ürün Grubu</span>
                 <Dropdown
                   value={form.group}
                   onChange={(group) => set('group', group)}
-                  label="Grup"
-                  options={GROUPS.map((key) => ({ value: key, label: groupLabel(key) }))}
+                  label="Ürün Grubu"
+                  placeholder="Grup seçin"
+                  searchable
+                  options={groupOptions}
                 />
+                <small>Tablo sitede bu grubun altında listelenir. Gruplar <Link to="/admin/product-groups">Ürün Grupları</Link> sayfasından yönetilir.</small>
               </div>
 
               <label className="cmsField">

@@ -1,6 +1,6 @@
 import content from '@content';
 
-import builtInFamilies, { COLUMN_KEYS, GROUPS, WATER_USES } from './productTables.builtin';
+import builtInFamilies, { COLUMN_KEYS, LEGACY_GROUPS, WATER_USES } from './productTables.builtin';
 
 /*
   Product tables shown on /product-tables and /water-tanks.
@@ -25,12 +25,19 @@ export function modelSlug(code) {
     .replace(/^-+|-+$/g, '') || 'model';
 }
 
+// Tables saved with a category of the first admin version join the product
+// group of the matching brochure table
+const builtInGroup = Object.fromEntries(builtInFamilies.map((family) => [family.id, family.group]));
+const productGroupOf = (family) =>
+  !family.group || LEGACY_GROUPS.includes(family.group) ? builtInGroup[family.id] || '' : family.group;
+
 // Every row gets a slug that is unique within its family (model page address)
 const families = sourceFamilies.map((family) => {
   const seen = {};
 
   return {
     ...family,
+    group: productGroupOf(family),
     rows: family.rows.map((row) => {
       const base = modelSlug(row.code);
       seen[base] = (seen[base] || 0) + 1;
@@ -68,8 +75,6 @@ export function similarModels(family, row, count = 4) {
     .slice(0, count)
     .map(({ item }) => item);
 }
-
-export const groups = GROUPS.filter((group) => families.some((family) => family.group === group));
 
 export { COLUMN_KEYS, WATER_USES };
 

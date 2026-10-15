@@ -8,8 +8,8 @@ import { CONTENT_LANGUAGES } from '../config/languages.js';
   Shown on /product-tables; families marked as water tank also feed /water-tanks.
 */
 
-// Same lists as client/src/data/productTables.builtin.js
-export const GROUPS = ['tanks', 'textile', 'chemical', 'food', 'other'];
+// Categories of the first version; a table now joins a product group (ProductGroup.groupId)
+export const LEGACY_GROUPS = ['tanks', 'textile', 'chemical', 'food', 'other'];
 
 export const COLUMN_KEYS = [
   'volume', 'diameter', 'height', 'length', 'width', 'cap', 'outlet', 'wheel', 'conical',
@@ -46,7 +46,8 @@ const productFamilySchema = new mongoose.Schema(
       lowercase: true,
       match: [/^[a-z0-9-]{2,80}$/, 'Kimlik yalnızca küçük harf, rakam ve tire içerebilir.'],
     },
-    group: { type: String, enum: GROUPS, default: 'other' },
+    // Product group the table belongs to (ProductGroup.groupId)
+    group: { type: String, trim: true, default: '', maxlength: 60 },
     order: { type: Number, default: 0 },
     published: { type: Boolean, default: true },
     image: { type: String, trim: true, default: '', maxlength: 300 },

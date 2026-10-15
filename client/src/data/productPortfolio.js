@@ -1,54 +1,53 @@
+import content from '@content';
+
 import families from './productTables';
+import builtInGroups from './productGroups.builtin';
 
 /*
-  Home "04 / Ürünler" portfolio: product groups of the brochure, each made of
-  one or more product table families. Model counts and volume ranges are
-  calculated from the tables (admin panel), so they stay up to date.
-  Texts: productExplorer.items.<id> in the locale files.
+  Product groups (menu, Products page, home "Ürün portföyü"): the groups saved
+  in the admin panel (Ürün Grupları), else the built-in ones. A group is made
+  of the product tables whose `group` is its id, so model counts and volume
+  ranges follow the tables. Texts: productExplorer.items.<id> (admin texts are
+  put there by i18n/applyCatalogue.js).
 */
 
-const IMG = '/images/products';
+const source = Array.isArray(content.productGroups) && content.productGroups.length
+  ? content.productGroups
+  : builtInGroups;
 
-// Order and names follow the "Ürünlerimiz" list of the sectors brief.
-// `quoteOnly`: produced on request, no catalogue models yet (no table, no counts)
-const ILL = '/images/products/illustrations';
+// Where "Modelleri İncele" opens
+function groupLink(group, members) {
+  if (group.page === 'custom') return '/custom-molding';
+  if (group.quoteOnly) return `/products#${group.id}`;
+  if (group.page === 'waterTanks') return '/water-tanks';
+  return members.length ? `/product-tables#${members[0].id}` : `/products#${group.id}`;
+}
 
-const GROUPS = [
-  { id: 'vertical', families: ['vertical-tanks'], image: `${IMG}/rd-15000.webp`, hue: 214, link: '/water-tanks', finder: true },
-  { id: 'horizontal', families: ['horizontal-tanks'], image: `${IMG}/ry-1000.webp`, hue: 204, link: '/product-tables#horizontal-tanks', finder: true },
-  { id: 'twoLayer', families: ['two-layer-vertical', 'two-layer-horizontal'], image: `${IMG}/sd-set.webp`, hue: 196, link: '/product-tables#two-layer-vertical', finder: true },
-  { id: 'underground', families: [], image: `${ILL}/underground.svg`, hue: 200, link: '/products#underground', quoteOnly: true },
-  { id: 'silo', families: ['silo-tanks', 'mixer-silo-tanks'], image: `${IMG}/silo-tank.webp`, hue: 226, link: '/product-tables#silo-tanks' },
-  { id: 'textile', families: ['textile-trolleys', 'cylinder-trolleys', 'stackable-rectangular', 'stackable-cylinder'], image: `${IMG}/textile-trolley.webp`, hue: 262, link: '/product-tables#textile-trolleys' },
-  { id: 'copBoxes', families: ['cop-boxes', 'yarn-boxes'], image: `${IMG}/cop-box.webp`, hue: 250, link: '/product-tables#cop-boxes' },
-  { id: 'ropeCans', families: ['rope-dyeing-cans'], image: `${IMG}/rope-dyeing-can.webp`, hue: 236, link: '/product-tables#rope-dyeing-cans' },
-  { id: 'confit', families: ['confit-pools'], image: `${ILL}/confit.svg`, hue: 186, link: '/product-tables#confit-pools' },
-  { id: 'food', families: ['brine-tanks', 'pickle-tanks'], image: `${IMG}/pickle-tank.webp`, hue: 30, link: '/product-tables#brine-tanks' },
-  { id: 'treatment', families: ['salt-tanks', 'chlor-tanks'], image: `${IMG}/chlor-tank.webp`, hue: 190, link: '/product-tables#salt-tanks' },
-  { id: 'vehicle', families: [], image: `${ILL}/vehicle.svg`, hue: 218, link: '/products#vehicle', quoteOnly: true },
-  { id: 'fuel', families: ['adblue-tanks', 'rectangular-tanks'], image: `${IMG}/adblue-tank.webp`, hue: 222, link: '/product-tables#adblue-tanks' },
-  { id: 'pallets', families: [], image: `${ILL}/pallets.svg`, hue: 28, link: '/products#pallets', quoteOnly: true },
-  { id: 'barriers', families: ['road-barriers'], image: `${IMG}/road-barrier.webp`, hue: 0, link: '/product-tables#road-barriers' },
-  { id: 'planters', families: [], image: `${ILL}/planters.svg`, hue: 140, link: '/products#planters', quoteOnly: true },
-  { id: 'custom', families: [], image: '/images/custom-molding/train-tank.webp', hue: 240, link: '/custom-molding', custom: true, round: true },
-];
-
-const portfolio = GROUPS.map((group) => {
-  const members = families.filter((family) => group.families.includes(family.id));
+const portfolio = source.map((group) => {
+  const custom = group.page === 'custom';
+  const members = custom ? [] : families.filter((family) => family.group === group.id);
   const volumes = members.flatMap((family) => family.rows.map((row) => row.volume)).filter((value) => typeof value === 'number');
 
   return {
-    ...group,
+    id: group.id,
+    image: group.image || '',
+    hue: Number.isFinite(group.hue) ? group.hue : 210,
+    quoteOnly: Boolean(group.quoteOnly) && !custom,
+    monoblock: group.monoblock !== false,
+    custom,
+    round: custom,
+    // Water tank tables can be chosen with the tank finder
+    finder: !group.quoteOnly && members.some((family) => family.waterTank),
+    families: members.map((family) => family.id),
     members,
     models: members.reduce((sum, family) => sum + family.rows.length, 0),
     minVolume: volumes.length ? Math.min(...volumes) : null,
     maxVolume: volumes.length ? Math.max(...volumes) : null,
-    // First family in the group decides the link when the group's main family was removed
-    link: group.custom || group.quoteOnly || members.some((family) => group.link.endsWith(`#${family.id}`)) || !group.link.includes('#')
-      ? group.link
-      : `/product-tables#${members[0]?.id || ''}`,
+    link: groupLink(group, members),
   };
 }).filter((group) => group.custom || group.quoteOnly || group.models > 0);
+
+export const groupById = (id) => portfolio.find((group) => group.id === id) || null;
 
 /* Early generic product slugs (blog links, old URLs) -> product group */
 export const LEGACY_PRODUCT_GROUPS = {

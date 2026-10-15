@@ -15,6 +15,19 @@ import {
   listFamilies,
   updateFamily,
 } from '../controllers/productFamilyController.js';
+import {
+  createGroup,
+  createSector,
+  deleteGroup,
+  deleteSector,
+  getSector,
+  importDefaultGroups,
+  importDefaultSectors,
+  listGroups,
+  listSectors,
+  updateGroup,
+  updateSector,
+} from '../controllers/catalogueController.js';
 import { requireAdmin, requirePermission } from '../middleware/authMiddleware.js';
 import {
   uploadGalleryImage, uploadPostImage, uploadProductImage, uploadProjectImage,
@@ -51,6 +64,8 @@ import {
 import { getPublishState, startPublish } from '../services/publisher.js';
 import { getSiteSettings } from '../models/SiteSettings.js';
 import ProductFamily from '../models/ProductFamily.js';
+import ProductGroup from '../models/ProductGroup.js';
+import Sector from '../models/Sector.js';
 import Post from '../models/Post.js';
 import Project from '../models/Project.js';
 import Faq from '../models/Faq.js';
@@ -80,6 +95,19 @@ adminContentRouter.post('/product-families/import-defaults', content, audit({ ar
 adminContentRouter.get('/product-families/:id', getFamily);
 adminContentRouter.put('/product-families/:id', content, audit({ area: 'content', type: 'family', action: 'Ürün ailesi güncelledi', lookup: ProductFamily }), updateFamily);
 adminContentRouter.delete('/product-families/:id', content, audit({ area: 'content', type: 'family', action: 'Ürün ailesi sildi', lookup: ProductFamily }), deleteFamily);
+
+adminContentRouter.get('/product-groups', listGroups);
+adminContentRouter.post('/product-groups', content, audit({ area: 'content', type: 'group', action: 'Ürün grubu ekledi' }), createGroup);
+adminContentRouter.post('/product-groups/import-defaults', content, audit({ area: 'content', type: 'group', action: 'Broşür verilerini içe aktardı', label: () => 'Ürün grubu' }), importDefaultGroups);
+adminContentRouter.put('/product-groups/:id', content, audit({ area: 'content', type: 'group', action: 'Ürün grubu güncelledi', lookup: ProductGroup }), updateGroup);
+adminContentRouter.delete('/product-groups/:id', content, audit({ area: 'content', type: 'group', action: 'Ürün grubu sildi', lookup: ProductGroup }), deleteGroup);
+
+adminContentRouter.get('/sectors', listSectors);
+adminContentRouter.post('/sectors', content, audit({ area: 'content', type: 'sector', action: 'Sektör ekledi' }), createSector);
+adminContentRouter.post('/sectors/import-defaults', content, audit({ area: 'content', type: 'sector', action: 'Broşür verilerini içe aktardı', label: () => 'Sektör' }), importDefaultSectors);
+adminContentRouter.get('/sectors/:id', getSector);
+adminContentRouter.put('/sectors/:id', content, audit({ area: 'content', type: 'sector', action: 'Sektör güncelledi', lookup: Sector }), updateSector);
+adminContentRouter.delete('/sectors/:id', content, audit({ area: 'content', type: 'sector', action: 'Sektör sildi', lookup: Sector }), deleteSector);
 
 adminContentRouter.post('/uploads/product-image', content, uploadProductImage);
 adminContentRouter.post('/uploads/post-image', content, uploadPostImage);

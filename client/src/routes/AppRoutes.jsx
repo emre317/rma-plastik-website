@@ -51,6 +51,9 @@ const AdminSettings = lazy(() => import('../pages/AdminSettings/AdminSettings'))
 const AdminPosts = lazy(() => import('../pages/AdminPosts/AdminPosts'));
 const AdminPostEdit = lazy(() => import('../pages/AdminPostEdit/AdminPostEdit'));
 const AdminVideos = lazy(() => import('../pages/AdminVideos/AdminVideos'));
+const AdminProductGroups = lazy(() => import('../pages/AdminProductGroups/AdminProductGroups'));
+const AdminSectors = lazy(() => import('../pages/AdminSectors/AdminSectors'));
+const AdminSectorEdit = lazy(() => import('../pages/AdminSectorEdit/AdminSectorEdit'));
 const AdminProjects = lazy(() => import('../pages/AdminProjects/AdminProjects'));
 const AdminGallery = lazy(() => import('../pages/AdminGallery/AdminGallery'));
 
@@ -109,6 +112,9 @@ export default function AppRoutes() {
           <Route path="/admin/customer" element={<RequireArea area="sales"><AdminCustomer /></RequireArea>} />
           <Route path="/admin/product-families" element={<RequireArea area="content"><AdminProductFamilies /></RequireArea>} />
           <Route path="/admin/product-families/:id" element={<RequireArea area="content"><AdminProductFamilyEdit /></RequireArea>} />
+          <Route path="/admin/product-groups" element={<RequireArea area="content"><AdminProductGroups /></RequireArea>} />
+          <Route path="/admin/sectors" element={<RequireArea area="content"><AdminSectors /></RequireArea>} />
+          <Route path="/admin/sectors/:id" element={<RequireArea area="content"><AdminSectorEdit /></RequireArea>} />
           <Route path="/admin/texts" element={<RequireArea area="content"><AdminTexts /></RequireArea>} />
           <Route path="/admin/settings" element={<RequireArea area="settings"><AdminSettings /></RequireArea>} />
           <Route path="/admin/users" element={<RequireArea area="users"><AdminUsers /></RequireArea>} />

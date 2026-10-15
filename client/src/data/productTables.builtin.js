@@ -22,7 +22,7 @@ const families = [
   // ---------- Polyethylene tanks (p. 9–10)
   {
     id: 'vertical-tanks',
-    group: 'tanks',
+    group: 'vertical',
     image: `${IMG}/rd-15000.webp`,
     columns: ['code', 'volume', 'diameter', 'height', 'cap', 'outlet'],
     rows: rows(['code', 'volume', 'diameter', 'height', 'cap', 'outlet'], [
@@ -52,7 +52,7 @@ const families = [
   },
   {
     id: 'horizontal-tanks',
-    group: 'tanks',
+    group: 'horizontal',
     image: `${IMG}/ry-1000.webp`,
     columns: ['code', 'volume', 'diameter', 'height', 'length', 'cap', 'outlet'],
     rows: rows(['code', 'volume', 'diameter', 'height', 'length', 'cap', 'outlet'], [
@@ -65,7 +65,7 @@ const families = [
   },
   {
     id: 'two-layer-vertical',
-    group: 'tanks',
+    group: 'twoLayer',
     image: `${IMG}/sd-set.webp`,
     columns: ['code', 'volume', 'diameter', 'height', 'cap'],
     rows: rows(['code', 'volume', 'diameter', 'height', 'cap'], [
@@ -76,7 +76,7 @@ const families = [
   },
   {
     id: 'two-layer-horizontal',
-    group: 'tanks',
+    group: 'twoLayer',
     image: `${IMG}/sy-500.webp`,
     columns: ['code', 'volume', 'diameter', 'height', 'length', 'cap'],
     rows: rows(['code', 'volume', 'diameter', 'height', 'length', 'cap'], [
@@ -163,7 +163,7 @@ const families = [
   },
   {
     id: 'cop-boxes',
-    group: 'textile',
+    group: 'copBoxes',
     image: `${IMG}/cop-box.webp`,
     columns: ['code', 'volume', 'length', 'width', 'height'],
     rows: rows(['code', 'volume', 'length', 'width', 'height'], [
@@ -185,7 +185,7 @@ const families = [
   },
   {
     id: 'yarn-boxes',
-    group: 'textile',
+    group: 'copBoxes',
     image: `${IMG}/yarn-box.webp`,
     columns: ['code', 'length', 'width', 'height'],
     rows: rows(['code', 'length', 'width', 'height'], [
@@ -195,7 +195,7 @@ const families = [
   },
   {
     id: 'rope-dyeing-cans',
-    group: 'textile',
+    group: 'ropeCans',
     image: `${IMG}/rope-dyeing-can.webp`,
     columns: ['code', 'diameter', 'height'],
     rows: rows(['code', 'diameter', 'height'], [
@@ -207,7 +207,7 @@ const families = [
   // ---------- Chemical (p. 14–15, 17)
   {
     id: 'silo-tanks',
-    group: 'chemical',
+    group: 'silo',
     image: `${IMG}/silo-tank.webp`,
     columns: ['code', 'volume', 'diameter', 'height', 'conical', 'cap'],
     rows: rows(['code', 'volume', 'diameter', 'height', 'conical', 'cap'], [
@@ -227,7 +227,7 @@ const families = [
   },
   {
     id: 'mixer-silo-tanks',
-    group: 'chemical',
+    group: 'silo',
     image: `${IMG}/mixer-silo-tank.webp`,
     columns: ['code', 'volume', 'diameter', 'height', 'conical', 'cap', 'reducer'],
     rows: rows(['code', 'volume', 'diameter', 'height', 'conical', 'cap', 'reducer'], [
@@ -247,7 +247,7 @@ const families = [
   },
   {
     id: 'salt-tanks',
-    group: 'chemical',
+    group: 'treatment',
     image: `${IMG}/salt-tank.webp`,
     columns: ['code', 'volume', 'width', 'height'],
     rows: rows(['code', 'volume', 'width', 'height'], [
@@ -262,7 +262,7 @@ const families = [
   },
   {
     id: 'chlor-tanks',
-    group: 'chemical',
+    group: 'treatment',
     image: `${IMG}/chlor-tank.webp`,
     columns: ['code', 'volume', 'width', 'height'],
     rows: rows(['code', 'volume', 'width', 'height'], [
@@ -310,7 +310,7 @@ const families = [
   },
   {
     id: 'confit-pools',
-    group: 'chemical',
+    group: 'confit',
     image: null,
     columns: ['code', 'volume', 'width', 'height', 'length'],
     rows: rows(['code', 'volume', 'width', 'height', 'length'], [
@@ -325,7 +325,7 @@ const families = [
   // ---------- Other (p. 17–19)
   {
     id: 'rectangular-tanks',
-    group: 'other',
+    group: 'fuel',
     image: null,
     columns: ['code', 'volume', 'width', 'height', 'length', 'cap'],
     rows: rows(['code', 'volume', 'width', 'height', 'length', 'cap'], [
@@ -337,7 +337,7 @@ const families = [
   },
   {
     id: 'adblue-tanks',
-    group: 'other',
+    group: 'fuel',
     image: `${IMG}/adblue-tank.webp`,
     columns: ['code', 'volume', 'diameter', 'height'],
     rows: rows(['code', 'volume', 'diameter', 'height'], [
@@ -348,7 +348,7 @@ const families = [
   },
   {
     id: 'road-barriers',
-    group: 'other',
+    group: 'barriers',
     image: `${IMG}/road-barrier.webp`,
     columns: ['code', 'length', 'width', 'height'],
     rows: rows(['code', 'length', 'width', 'height'], [
@@ -360,7 +360,8 @@ const families = [
   },
 ];
 
-export const GROUPS = ['tanks', 'textile', 'chemical', 'food', 'other'];
+// Categories of the first admin version; tables saved then still carry them
+export const LEGACY_GROUPS = ['tanks', 'textile', 'chemical', 'food', 'other'];
 
 export const COLUMN_KEYS = [
   'volume', 'diameter', 'height', 'length', 'width', 'cap', 'outlet', 'wheel', 'conical',

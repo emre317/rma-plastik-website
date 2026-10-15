@@ -18,6 +18,7 @@ import useModelQuote from '../../hooks/useModelQuote';
 import formatNumber from '../../utils/formatNumber';
 import { ZoomableImage } from '../../components/ui/ImageLightbox';
 import { industriesForFamily } from '../../data/industries';
+import { groupById } from '../../data/productPortfolio';
 import { familyText, findModel, modelPath, similarModels } from '../../data/productTables';
 
 // Up to four headline values shown as large tiles, in this order of preference
@@ -83,7 +84,7 @@ export default function ProductModel() {
 
   const similar = similarModels(family, row);
   const features = t('waterTanks.features', { returnObjects: true });
-  const showFeatures = family.group === 'tanks' && Array.isArray(features);
+  const showFeatures = Boolean(family.waterTank) && Array.isArray(features);
   const uses = family.waterTank?.uses || [];
   const sectors = industriesForFamily(family.id);
   const industryList = t('industries.items', { returnObjects: true });
@@ -159,7 +160,7 @@ export default function ProductModel() {
               </figure>
 
               <ul className="pmTrust">
-                {family.group !== 'textile' && (
+                {groupById(family.group)?.monoblock !== false && (
                   <li><Layers aria-hidden="true" />{t('productModel.trust.monoblock')}</li>
                 )}
                 <li><Recycle aria-hidden="true" />{t('eco.recycle')}</li>

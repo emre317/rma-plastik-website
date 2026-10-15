@@ -75,7 +75,7 @@ export default function ProductDatasheet() {
   const headline = ['volume', 'diameter', 'width', 'length', 'height', 'weight'].filter((key) => columns.includes(key)).slice(0, 4);
   const uses = family.waterTank?.uses || [];
   const features = t('waterTanks.features', { returnObjects: true });
-  const showFeatures = family.group === 'tanks' && Array.isArray(features);
+  const showFeatures = Boolean(family.waterTank) && Array.isArray(features);
   const pagePath = `/${lang}${modelPath(family, row)}`;
   const pageUrl = `${SITE_URL}${pagePath}`;
   const issued = new Intl.DateTimeFormat(lang === 'ar' ? 'ar' : lang, { dateStyle: 'long' }).format(new Date());

@@ -27,6 +27,7 @@ function targetLink(entry) {
   const links = {
     quote: `/admin/quotes/${entry.targetId}`,
     family: `/admin/product-families/${entry.targetId}`,
+    sector: `/admin/sectors/${entry.targetId}`,
     post: `/admin/posts/${entry.targetId}`,
   };
   return links[entry.targetType] || null;

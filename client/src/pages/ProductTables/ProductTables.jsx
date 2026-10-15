@@ -10,13 +10,21 @@ import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
 import useLanguage from '../../hooks/useLanguage';
 import formatNumber from '../../utils/formatNumber';
-import families, { familyText, groups, modelPath } from '../../data/productTables';
+import families, { familyText, modelPath } from '../../data/productTables';
+import portfolio from '../../data/productPortfolio';
 import useModelQuote from '../../hooks/useModelQuote';
 import AddToCartButton from '../../components/quote/AddToCartButton';
 import CompareButton from '../../components/compare/CompareButton';
 import { EcoBadge } from '../../components/ui/EcoMarks';
 import FinderCta from '../../components/ui/FinderCta';
 import CatalogLink, { CATALOG_PDF } from '../../components/ui/CatalogLink';
+
+// Tables are listed under their product group; tables of no shown group under "Diğer"
+const groupOf = (family) => portfolio.find((group) => group.families.includes(family.id))?.id || 'other';
+const groups = [
+  ...portfolio.filter((group) => group.members.length > 0).map((group) => group.id),
+  ...(families.some((family) => groupOf(family) === 'other') ? ['other'] : []),
+];
 
 const normalise = (text) => String(text).toLocaleLowerCase('tr').replace(/\s+/g, '');
 
@@ -39,6 +47,7 @@ export default function ProductTables() {
   const [volume, setVolume] = useState('all');
 
   const p = (key, options) => t(`productTables.${key}`, options);
+  const groupLabel = (id) => (id === 'other' ? p('groups.other') : t(`productExplorer.items.${id}.label`));
   const totalModels = families.reduce((sum, family) => sum + family.rows.length, 0);
 
   const visible = useMemo(() => {
@@ -47,7 +56,7 @@ export default function ProductTables() {
     const [min, max] = VOLUME_RANGES[volume] || [];
 
     return families
-      .filter((family) => group === 'all' || family.group === group)
+      .filter((family) => group === 'all' || groupOf(family) === group)
       .map((family) => ({
         ...family,
         rows: family.rows.filter((row) =>
@@ -61,7 +70,7 @@ export default function ProductTables() {
   const shownModels = visible.reduce((sum, family) => sum + family.rows.length, 0);
   const filtered = query || group !== 'all' || volume !== 'all';
   const groupCount = (id) => families
-    .filter((family) => id === 'all' || family.group === id)
+    .filter((family) => id === 'all' || groupOf(family) === id)
     .reduce((sum, family) => sum + family.rows.length, 0);
 
   const jumpTo = (id) => {
@@ -129,7 +138,7 @@ export default function ProductTables() {
                 aria-pressed={group === id}
                 onClick={() => setGroup(id)}
               >
-                {id === 'all' ? t('waterTanks.all') : p(`groups.${id}`)}
+                {id === 'all' ? t('waterTanks.all') : groupLabel(id)}
                 <small>{groupCount(id)}</small>
               </button>
             ))}
@@ -178,12 +187,12 @@ export default function ProductTables() {
           <nav className="ptToc" aria-label={p('jumpLabel')}>
             <span className="ptTocTitle">{p('tocTitle')}</span>
             {groups.map((groupId) => {
-              const list = visible.filter((family) => family.group === groupId);
+              const list = visible.filter((family) => groupOf(family) === groupId);
               if (list.length === 0) return null;
 
               return (
                 <div key={groupId} className="ptTocGroup">
-                  <span>{p(`groups.${groupId}`)}</span>
+                  <span>{groupLabel(groupId)}</span>
                   <ul>
                     {list.map((family) => (
                       <li key={family.id}>
@@ -211,13 +220,13 @@ export default function ProductTables() {
           )}
 
           {groups.map((groupId) => {
-            const list = visible.filter((family) => family.group === groupId);
+            const list = visible.filter((family) => groupOf(family) === groupId);
             if (list.length === 0) return null;
 
             return (
               <div key={groupId} className="ptGroup">
                 <h2 className="ptGroupTitle">
-                  {p(`groups.${groupId}`)}
+                  {groupLabel(groupId)}
                   <span>{list.length}</span>
                 </h2>
 
