@@ -32,8 +32,9 @@ export default function ProductExplorerSection() {
         : `${num(group.minVolume)} – ${num(group.maxVolume)} L`;
 
   // Tabs: the main categories that have groups, in this order
-  const [category, setCategory] = useState('all');
+  // Opens on the first category (Polietilen Tanklar); "Tümü" shows every group
   const categories = ['tanks', 'textile', 'chemical', 'food', 'other'].filter((id) => portfolio.some((group) => group.category === id));
+  const [category, setCategory] = useState(categories[0] || 'all');
   const shown = category === 'all' ? portfolio : portfolio.filter((group) => group.category === category);
   const tabCount = (id) => (id === 'all' ? portfolio.length : portfolio.filter((group) => group.category === id).length);
 
