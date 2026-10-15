@@ -31953,6 +31953,58 @@ main section h2 > span:not([class]) > span {
 
 
 .cmCtaPanel .cmCtaLink .buttonArrow,
+.cmCtaPanel .cmCtaLink span,
 .cmCtaPanel .cmCtaLink svg {
   color: #ffffff;
+}
+
+/* Hand cursor on everything clickable (buttons, links, chips, menus);
+   disabled controls show "not allowed" */
+a[href],
+button,
+summary,
+label[for],
+select,
+[role="button"],
+[role="tab"],
+[role="option"],
+[role="menuitem"],
+[role="switch"],
+[role="checkbox"],
+[role="radio"],
+[role="combobox"],
+.button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="checkbox"],
+input[type="radio"],
+input[type="range"],
+input[type="color"],
+input[type="file"],
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+a[href] *,
+button *,
+.button * {
+  cursor: inherit;
+}
+
+/* Photos that open larger keep the magnifier */
+button.cmDisc,
+button.cmZoom,
+button.fgItem,
+.fgItem {
+  cursor: zoom-in;
+}
+
+button:disabled,
+button[aria-disabled="true"],
+.button.disabled,
+.button[aria-disabled="true"],
+input:disabled,
+select:disabled {
+  cursor: not-allowed;
 }
