@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Konfit sistem havuzu">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f7fa"/><stop offset="1" stop-color="#e6edf3"/></linearGradient>
+    <linearGradient id="wall" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d8dee5"/><stop offset="1" stop-color="#b9c3ce"/></linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg)"/>
+  <ellipse cx="200" cy="252" rx="160" ry="14" fill="#101317" opacity=".08"/>
+  <path d="M60 110h280v126a10 10 0 0 1-10 10H70a10 10 0 0 1-10-10z" fill="url(#wall)"/>
+  <path d="M60 110l40-30h240l-40 30z" fill="#eef2f6" stroke="#aeb9c5" stroke-width="2"/>
+  <path d="M340 110l40-30v126l-40 30z" fill="#a9b4c0"/>
+  <path d="M106 86h226l-28 20H78z" fill="#5aa7dc" opacity=".85"/>
+  <path d="M120 92c30 6 60 6 90 0s60-6 90 0" stroke="#ffffff" stroke-opacity=".6" stroke-width="3" fill="none"/>
+  <g stroke="#9aa6b2" stroke-width="2"><path d="M60 150h280"/><path d="M60 190h280"/></g>
+</svg>

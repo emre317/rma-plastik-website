@@ -310,7 +310,7 @@ const families = [
   },
   {
     id: 'confit-pools',
-    group: 'food',
+    group: 'chemical',
     image: null,
     columns: ['code', 'volume', 'width', 'height', 'length'],
     rows: rows(['code', 'volume', 'width', 'height', 'length'], [

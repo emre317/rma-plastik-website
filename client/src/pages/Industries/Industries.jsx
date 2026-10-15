@@ -6,14 +6,17 @@ import PageHeader from '../../components/ui/PageHeader';
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
-import INDUSTRIES from '../../data/industries';
+import INDUSTRIES, { sectorProduct } from '../../data/industries';
 import portfolio, { totals } from '../../data/productPortfolio';
+import { familyText } from '../../data/productTables';
+import useLanguage from '../../hooks/useLanguage';
 
 const pad = (n) => String(n).padStart(2, '0');
 
 export default function Industries() {
   const { t } = useTranslation();
   const { openQuote } = useQuote();
+  const { code: lang } = useLanguage();
 
   const items = t('industries.items', { returnObjects: true });
   const list = Array.isArray(items) ? items : [];
@@ -55,54 +58,92 @@ export default function Industries() {
 
       <section className="cmBlock inSectors">
         <div className="container">
+          <div className="cmSectionHead">
+            <p className="eyebrow">{p('searchEyebrow')}</p>
+            <h2>{p('searchTitle')}</h2>
+          </div>
+
+          {/* Jump to a sector */}
+          <nav className="inJump" aria-label={p('searchTitle')}>
+            {list.map((industry, index) => {
+              const look = INDUSTRIES[index % INDUSTRIES.length];
+              const Icon = look.icon;
+              return (
+                <a key={look.slug} href={`#${look.slug}`} style={{ '--hue': look.hue }}>
+                  <Icon aria-hidden="true" />
+                  {industry.title}
+                </a>
+              );
+            })}
+          </nav>
+
           <ol className="inList">
             {list.map((industry, index) => {
               const look = INDUSTRIES[index % INDUSTRIES.length];
               const Icon = look.icon;
-              const related = look.groups
-                .map((id) => portfolio.find((group) => group.id === id))
-                .filter(Boolean);
+              const names = Array.isArray(industry.products) ? industry.products : [];
+              const products = look.products.map((entry, i) => ({ ...sectorProduct(entry), name: names[i] || '' })).filter((item) => item.name);
+              const firstGroup = look.products.find((entry) => entry.group)?.group;
 
               return (
-                <li key={industry.title} id={look.slug} className="inSector" style={{ '--hue': look.hue }}>
+                <li key={look.slug} id={look.slug} className="inSector" style={{ '--hue': look.hue }}>
                   <div className="inSectorHead">
                     <span className="inSectorIcon" aria-hidden="true"><Icon /></span>
-                    <span className="inSectorIndex">
-                      {pad(index + 1)}
-                      <small> / {pad(list.length)}</small>
-                    </span>
+                    <div>
+                      <span className="inSectorIndex">
+                        {pad(index + 1)}
+                        <small> / {pad(list.length)}</small>
+                      </span>
+                      <h2>{industry.title}</h2>
+                      <p>{industry.description}</p>
+                    </div>
+                    <button
+                      type="button"
+                      className="inQuote"
+                      onClick={() => openQuote(`${industry.title} – ${t('meta.titles.industries')}`, { hint: { group: firstGroup, stored: look.stored } })}
+                    >
+                      {p('quote')}
+                      <Arrow />
+                    </button>
                   </div>
 
-                  <h2>{industry.title}</h2>
-                  <p>{industry.description}</p>
+                  <ul className="inProducts">
+                    {products.map((item, i) => {
+                      // The family's own text, else the group's; made-to-order items get the request note
+                      const description = item.quote
+                        ? p('onRequestText')
+                        : item.familyData
+                          ? familyText(item.familyData, 'text', lang, t) || t(`productExplorer.items.${item.groupData.id}.description`)
+                          : t(`productExplorer.items.${item.groupData.id}.description`);
+                      const askQuote = () => openQuote(`${item.name} – ${industry.title}`, { hint: { group: item.group || firstGroup, stored: look.stored } });
 
-                  {related.length > 0 && (
-                    <div className="inRelated">
-                      <span className="inRelatedLabel">{p('relatedLabel')}</span>
-                      <ul>
-                        {related.map((group) => (
-                          <li key={group.id}>
-                            <LocalizedLink to={group.link}>
-                              <span className="inThumb" aria-hidden="true">
-                                <img src={group.image} alt="" loading="lazy" decoding="async" />
-                              </span>
-                              <span>{t(`productExplorer.items.${group.id}.label`)}</span>
+                      const body = (
+                        <>
+                          <span className="inProductMedia" aria-hidden="true">
+                            {item.image ? <img src={item.image} alt="" loading="lazy" decoding="async" /> : <Icon />}
+                          </span>
+                          <span className="inProductBody">
+                            <strong>{item.name}</strong>
+                            <small>{description}</small>
+                            <em>
+                              {item.link ? p('productLink') : t('productExplorer.quote')}
                               <Arrow />
-                            </LocalizedLink>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                            </em>
+                          </span>
+                        </>
+                      );
 
-                  <button
-                    type="button"
-                    className="inQuote"
-                    onClick={() => openQuote(`${industry.title} – ${t('meta.titles.industries')}`, { hint: { group: look.groups[0], stored: look.stored } })}
-                  >
-                    {p('quote')}
-                    <Arrow />
-                  </button>
+                      return (
+                        <li key={`${item.name}-${i}`}>
+                          {item.link ? (
+                            <LocalizedLink to={item.link} className="inProduct">{body}</LocalizedLink>
+                          ) : (
+                            <button type="button" className="inProduct" onClick={askQuote}>{body}</button>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
                 </li>
               );
             })}

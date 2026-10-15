@@ -7,7 +7,7 @@ import { COUNTRY_CODES } from './countries';
 */
 
 // Portfolio groups (data/productPortfolio.js) that hold a liquid or bulk product
-export const TANK_GROUPS = ['vertical', 'horizontal', 'twoLayer', 'silo', 'treatment', 'food', 'fuel'];
+export const TANK_GROUPS = ['vertical', 'horizontal', 'twoLayer', 'underground', 'silo', 'confit', 'treatment', 'food', 'vehicle', 'fuel'];
 
 // What will be stored. `detail`: ask the product name / concentration;
 // `properties`: 'hidden' (water), 'optional' or 'required' (density and temperature)

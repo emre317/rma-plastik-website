@@ -145,7 +145,9 @@ export default function Header() {
                                 <small>
                                   {group.custom
                                     ? t('productExplorer.projectBased')
-                                    : `${group.models} ${t('productExplorer.models')}`}
+                                    : group.quoteOnly
+                                      ? t('productExplorer.onRequest')
+                                      : `${group.models} ${t('productExplorer.models')}`}
                                 </small>
                               </span>
                             </LocalizedLink>

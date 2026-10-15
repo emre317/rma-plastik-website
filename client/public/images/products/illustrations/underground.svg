@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Yeraltı tankı">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f7fa"/><stop offset="1" stop-color="#e8eef4"/></linearGradient>
+    <linearGradient id="soil" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9cbb8"/><stop offset="1" stop-color="#c6b39b"/></linearGradient>
+    <linearGradient id="tank" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d8fd0"/><stop offset="1" stop-color="#1b5f99"/></linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#sky)"/>
+  <rect y="110" width="400" height="190" fill="url(#soil)"/>
+  <path d="M0 110h400" stroke="#8a7a64" stroke-width="3"/>
+  <g fill="#7fb069"><path d="M40 110c4-14 10-14 14 0z"/><path d="M300 110c5-16 12-16 16 0z"/><path d="M350 110c3-10 8-10 11 0z"/></g>
+  <rect x="176" y="80" width="48" height="52" rx="6" fill="#2a6fae"/>
+  <rect x="168" y="74" width="64" height="12" rx="6" fill="#1b5f99"/>
+  <rect x="80" y="128" width="240" height="120" rx="60" fill="url(#tank)"/>
+  <g stroke="#ffffff" stroke-opacity=".28" stroke-width="4"><path d="M130 132v112"/><path d="M200 128v120"/><path d="M270 132v112"/></g>
+  <path d="M104 160c20-14 60-18 96-18" stroke="#ffffff" stroke-opacity=".35" stroke-width="6" stroke-linecap="round" fill="none"/>
+</svg>

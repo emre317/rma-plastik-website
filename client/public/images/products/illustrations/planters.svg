@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Polietilen saksı">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f7fa"/><stop offset="1" stop-color="#e6edf3"/></linearGradient>
+    <linearGradient id="pot" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3b4450"/><stop offset="1" stop-color="#20262e"/></linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg)"/>
+  <ellipse cx="200" cy="252" rx="110" ry="12" fill="#101317" opacity=".1"/>
+  <g fill="#5f9e4f">
+    <path d="M200 140c-6-40 10-74 30-90-4 30-10 62-22 90z"/>
+    <path d="M196 140c-24-30-56-40-80-38 22 14 46 30 72 44z"/>
+    <path d="M204 140c22-26 54-34 78-30-22 12-44 26-70 36z"/>
+    <path d="M198 140c-14-34-12-66 0-86 4 30 6 58 6 86z" fill="#77b562"/>
+  </g>
+  <path d="M120 140h160l-18 108a6 6 0 0 1-6 5H144a6 6 0 0 1-6-5z" fill="url(#pot)"/>
+  <rect x="112" y="132" width="176" height="18" rx="4" fill="#4a5462"/>
+  <path d="M140 168h120" stroke="#ffffff" stroke-opacity=".12" stroke-width="3"/>
+</svg>

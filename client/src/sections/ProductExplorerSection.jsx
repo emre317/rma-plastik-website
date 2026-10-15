@@ -123,7 +123,7 @@ export default function ProductExplorerSection() {
 
                 <span className="portfolioCardBody">
                   <strong>{text(group.id, 'label')}</strong>
-                  <em>{range(group) || (group.custom ? p('projectBased') : `${group.models} ${p('models')}`)}</em>
+                  <em>{range(group) || (group.custom ? p('projectBased') : group.quoteOnly ? p('onRequest') : `${group.models} ${p('models')}`)}</em>
                   <small>{text(group.id, 'application')}</small>
                 </span>
               </LocalizedLink>
@@ -157,22 +157,29 @@ export default function ProductExplorerSection() {
           <div className="portfolioDetailSide">
             <dl>
               <div>
-                <dt>{active.custom ? p('application') : p('range')}</dt>
-                <dd>{active.custom ? text(active.id, 'application') : range(active) || '–'}</dd>
+                <dt>{active.custom || active.quoteOnly ? p('application') : p('range')}</dt>
+                <dd>{active.custom || active.quoteOnly ? text(active.id, 'application') : range(active) || '–'}</dd>
               </div>
               <div>
-                <dt>{active.custom ? p('capacity') : p('modelsLabel')}</dt>
-                <dd>{active.custom ? p('projectBased') : active.models}</dd>
+                <dt>{active.custom || active.quoteOnly ? p('capacity') : p('modelsLabel')}</dt>
+                <dd>{active.custom ? p('projectBased') : active.quoteOnly ? p('onRequest') : active.models}</dd>
               </div>
             </dl>
 
             <div className="portfolioActions">
-              <LocalizedLink to={active.link} className="button primary">
-                <span>{active.custom ? p('customLink') : p('explore')}</span>
-                <Arrow className="buttonArrow" />
-              </LocalizedLink>
+              {active.quoteOnly ? (
+                <button type="button" className="button primary quoteButton" onClick={() => openQuote(text(active.id, 'title'))}>
+                  <span>{p('quote')}</span>
+                  <Arrow className="buttonArrow" />
+                </button>
+              ) : (
+                <LocalizedLink to={active.link} className="button primary">
+                  <span>{active.custom ? p('customLink') : p('explore')}</span>
+                  <Arrow className="buttonArrow" />
+                </LocalizedLink>
+              )}
 
-              {active.finder ? (
+              {active.quoteOnly ? null : active.finder ? (
                 <FinderCta subtitle={false} />
               ) : (
                 <button type="button" className="portfolioSecondary" onClick={() => openQuote(text(active.id, 'title'))}>

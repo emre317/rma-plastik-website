@@ -12,7 +12,7 @@ const tr = {
       home: 'RMA Plastik, Mersin’de endüstriyel polietilen depolama tankları, kimyasal tanklar, su depoları, tarım tankları ve özel ürünler üretir. Hemen teklif alın.',
       company: 'RMA Plastik hakkında: 1998’den beri Mersin’de mühendislik deneyimi ve üretim altyapısıyla endüstriyel polietilen ürünler üretiyoruz.',
       products: 'Endüstriyel depolama tankı, kimyasal depolama tankı, su deposu, tarım tankı ve özel polietilen ürünler. RMA Plastik ürün portföyünü inceleyin.',
-      industries: 'Kimya, gıda, tarım, otomotiv, tekstil, altyapı ve denizcilik sektörleri için polietilen depolama ve özel üretim çözümleri.',
+      industries: 'Su depolama, arıtma, tekstil, gıda, kimya, trafik, peyzaj ve palet ihtiyaçları için polietilen tanklar ve ürünler. Sektörünüze göre ürün arayın.',
       contact: 'RMA Plastik iletişim: Nacarlı OSB, Cumhuriyet Cd. No: 22, Akdeniz, Mersin. Telefon +90 (324) 676 4500, WhatsApp ve online teklif formu.',
       notFound: 'Aradığınız sayfa bulunamadı. RMA Plastik ürünlerini ve çözümlerini ana sayfadan inceleyebilirsiniz.',
       customMolding: 'RMA Plastik özel üretim (custom molding): 25 yıllık kalıp imalat tecrübesi, CAD/CAM tasarım, prototip ve 3D baskı, CNC kalıp imalatı ve rotasyonel, şişirme ve enjeksiyon ile seri üretim.',
@@ -204,7 +204,7 @@ const tr = {
     requestSolution: 'Teklif Alın',
     visualTop: ['Endüstriyel', 'Polietilen'],
     productionRange: 'Üretim Aralığı',
-    productionRangeValue: '100 — 40.000 L',
+    productionRangeValue: '100 — 37.500 L',
     scroll: 'Keşfetmek için kaydırın',
     // Figures under the buttons (given by RMA Plastik)
     stats: [
@@ -337,7 +337,7 @@ const tr = {
       },
       'confit-pools': {
         title: 'Konfit Sistem Havuzları',
-        text: 'Gıda işleme endüstrisinde et veya balık gibi gıdaların uzun süreli saklanması ve muhafazası için kullanılır.',
+        text: 'Yüzey işlem, asitleme ve kaplama hatları için açık üstlü polietilen havuzlar.',
       },
       'rectangular-tanks': {
         title: 'Köşeli Tanklar',
@@ -697,7 +697,7 @@ const tr = {
         label: 'Tek parça ürün ağırlığı',
       },
       {
-        value: '40.000 L',
+        value: '37.500 L',
         label: 'Rotasyonla üretim hacmi',
       },
     ],
@@ -709,7 +709,7 @@ const tr = {
       {
         count: '6',
         name: 'Rotasyon Makinası',
-        spec: '100 – 40.000 L · 50 cm – 7 m',
+        spec: '100 – 37.500 L · 50 cm – 7 m',
         text: 'Monoblok plastik parçaların üretimi.',
       },
       {
@@ -753,7 +753,7 @@ const tr = {
     eyebrow: 'Ürün Portföyü',
     title: 'Her uygulama için',
     titleAccent: 'doğru çözüm.',
-    intro: 'Su ve kimyasal tanklardan tekstil arabalarına, gıda tanklarından yol bariyerlerine kadar RMA Plastik ürün gruplarını keşfedin.',
+    intro: 'Su ve kimyasal tanklardan tekstil ürünlerine, gıda tanklarından paletlere ve yol bariyerlerine kadar RMA Plastik ürün gruplarını keşfedin.',
     previewTop: 'RMA / Ürün sistemi',
     selected: 'Seçili Kategori',
     capacity: 'Kapasite',
@@ -773,6 +773,7 @@ const tr = {
     quickLinks: 'Hızlı Erişim',
     statsFamilies: 'ürün ailesi',
     statsModels: 'model',
+    onRequest: 'Talebe göre',
     items: {
       vertical: {
         label: 'Dikey Tanklar',
@@ -792,47 +793,89 @@ const tr = {
         description: 'Şişirme teknolojisiyle HDPE malzemeden üretilen ekonomik ve uzun ömürlü çift katmanlı su tankları.',
         application: 'Su Depolama',
       },
+      underground: {
+        label: 'Yeraltı Tankları',
+        title: 'Yeraltı Tankları',
+        description: 'Yer altı temiz ve kirli su tankları (foseptik).',
+        application: 'Su / Atık Su',
+      },
       silo: {
         label: 'Silo Tanklar',
-        title: 'Silo ve Karıştırıcılı Tanklar',
-        description: 'Konik tabanlı, tam boşaltımlı kimyasal hazırlama ve stoklama siloları; isteğe göre mikser veya havalı karıştırıcı ile.',
-        application: 'Kimya / Proses',
-      },
-      treatment: {
-        label: 'Arıtma Tankları',
-        title: 'Tuz ve Klor Tankları',
-        description: 'Su arıtma amacıyla kullanılan tuz ve klorun stoklanması için tanklar.',
-        application: 'Su Arıtma',
-      },
-      food: {
-        label: 'Gıda Tankları',
-        title: 'Salamura, Turşu ve Konfit',
-        description: 'Zeytin salamurası, turşu ve konfit sistemleri için gıdaya uygun hazırlama ve stoklama tankları.',
-        application: 'Gıda İşleme',
+        title: 'Konik Tabanlı ve Karıştırıcılı Silo Tanklar',
+        description: 'Tam boşaltım sağlayan farklı konik taban açılarına ve karıştırıcı ekleme seçeneğine sahip silo tanklar. Çökertme yapılabilir; kullanımdan sonra rahatça temizlenip farklı ürünlerin stoklanmasında kullanılabilir.',
+        application: 'Kimya / Gıda / Arıtma',
       },
       textile: {
-        label: 'Tekstil Ürünleri',
-        title: 'Tekstil Arabaları ve Kovaları',
-        description: 'Boyahaneler ve tekstil atölyeleri için arabalar, silindir ve istiflenebilir arabalar, kops ve telef kutuları.',
+        label: 'Tekstil Arabaları',
+        title: 'Tekstil Arabaları',
+        description: 'Tekstil, iplik ve kumaş boyahaneleri için ıslak ve kuru kumaşa dayanıklı taşıma ve stoklama çözümleri.',
         application: 'Tekstil / Boyahane',
       },
+      copBoxes: {
+        label: 'Telef ve Kops Kutuları',
+        title: 'Telef ve Kops Kutuları',
+        description: 'Tekstil atölyeleri ve iplik üretim fabrikaları için tasarlanmış, farklı ebatlarda telef ve kops kutuları.',
+        application: 'Tekstil / İplik',
+      },
+      ropeCans: {
+        label: 'Halat Boyama Kovaları',
+        title: 'Halat Boyama Kovaları',
+        description: 'İplik ve halat boyama işlemlerinde kullanılan; talebe göre farklı tekerlek seçenekleri ve delik ölçüleriyle üretilebilen dayanıklı halat boyama, denim ve indigo kovaları.',
+        application: 'Tekstil / Boyahane',
+      },
+      confit: {
+        label: 'Konfit Havuzları',
+        title: 'Konfit Sistem Havuzları',
+        description: 'Yüzey işlem, asitleme ve kaplama hatları için açık üstlü polietilen havuzlar.',
+        application: 'Yüzey İşlem / Kimya',
+      },
+      food: {
+        label: 'Salamura ve Turşu',
+        title: 'Salamura ve Turşu Tankları',
+        description: 'Zeytin ve turşu salamurası ile turşu hazırlama tankları.',
+        application: 'Gıda İşleme',
+      },
+      treatment: {
+        label: 'Tuz ve Klor Tankları',
+        title: 'Tuz ve Klor Tankları',
+        description: 'Arıtma amacıyla kullanılan tuz ve klorun stoklanması için tanklar (dozajlama tankı).',
+        application: 'Su Arıtma',
+      },
+      vehicle: {
+        label: 'Araç Üstü Tanklar',
+        title: 'Araç Üstü Taşıma Tankları',
+        description: 'Araç üstü gıda ve kimyasal ürün taşıma tankları; üretim ve metal aksamlı montaj.',
+        application: 'Taşıma / Lojistik',
+      },
       fuel: {
-        label: 'AdBlue ve Yakıt',
-        title: 'AdBlue, Dizel ve Köşeli Tanklar',
-        description: 'Çift cidarlı AdBlue ve dizel stoklama-dolum tankları; karavan ve araçlar için köşeli tanklar.',
-        application: 'Otomotiv / Akaryakıt',
+        label: 'AdBlue ve Dizel',
+        title: 'AdBlue ve Dizel Tankları',
+        description: 'AdBlue, motorin ve benzinin depolanması ve araçlara kolayca dolum yapılması için tasarlanmış polietilen tanklar.',
+        application: 'Akaryakıt / Lojistik',
+      },
+      pallets: {
+        label: 'Paletler',
+        title: 'Paletler',
+        description: 'Depolama ve lojistik süreçleri için tasarlanmış, dayanıklı ve uzun ömürlü polietilen paletler; endüstriyel taşıma ve istifleme ihtiyaçlarına uygun.',
+        application: 'Depolama / Lojistik',
       },
       barriers: {
         label: 'Yol Bariyerleri',
-        title: 'Yol Güvenlik Bariyerleri',
-        description: 'Rotasyonel kalıplama ve şişirmeyle üretilen, su veya kumla doldurulabilen yol güvenlik bariyerleri.',
-        application: 'Altyapı / Trafik',
+        title: 'Yol Bariyerleri',
+        description: 'Trafik düzenlemesi ve yol güvenliği için kullanılan, dayanıklı polietilen yol bariyerleri.',
+        application: 'Trafik',
+      },
+      planters: {
+        label: 'Saksılar ve Peyzaj',
+        title: 'Saksılar ve Peyzaj Ürünleri',
+        description: 'Kentsel alanlar, peyzaj projeleri ve dış mekân uygulamaları için polietilen saksılar ve kent mobilyası.',
+        application: 'Peyzaj / Kent Mobilyası',
       },
       custom: {
         label: 'Özel Üretim',
-        title: 'Projeye Özel Üretim',
-        description: '25 yıllık kalıp imalat tecrübesiyle tasarım, prototip, kalıp ve seri üretim; fikir ve projelerinizi hayata geçiriyoruz.',
-        application: 'OEM / Özel proje',
+        title: 'Özel Üretim ve Fason Kalıplama',
+        description: 'Teknik çiziminizden nihai ürüne kadar, projenize özel üretim.',
+        application: 'OEM / Fason',
       },
     },
   },
@@ -847,42 +890,90 @@ const tr = {
     title: 'Gerçek sektörler',
     titleAccent: 'için tasarlandı.',
     description:
-      'RMA, kimyasal depolamadan tarıma, altyapıdan özel üretim ortamlarına kadar farklı sektörlerin operasyonel ihtiyaçlarına göre polietilen çözümler geliştirir.',
+      'Su depolamadan arıtmaya, tekstilden gıda ve kimyaya kadar sektörünüze uygun polietilen ürünleri tek sayfada bulun.',
     items: [
       {
-        title: 'Kimya',
-        description:
-          'Zorlu kimyasal uygulamalar ve proses ortamları için tasarlanmış depolama ve taşıma çözümleri.',
+        title: 'Su Depolama',
+        description: 'İçme ve kullanma suyu depolaması için dikey, yatay, kare ve çift katmanlı polietilen tanklar.',
+        products: [
+          'Dikey Tanklar',
+          'Yatay Tanklar',
+          'Kare Tanklar',
+          'Çift Katmanlı Tanklar',
+        ],
       },
       {
-        title: 'Gıda ve İçecek',
-        description:
-          'Gıda ile ilgili uygulamalar, depolama ve kontrollü endüstriyel kullanım için uygun polietilen çözümler.',
-      },
-      {
-        title: 'Tarım',
-        description:
-          'Çiftçilik, sulama, sıvı depolama ve saha operasyonları için dayanıklı ürünler.',
-      },
-      {
-        title: 'Otomotiv',
-        description:
-          'Otomotiv ihtiyaçlarına yönelik uygulamaya özel polietilen parçalar ve üretim çözümleri.',
+        title: 'Arıtma',
+        description: 'Su arıtmada stoklama, dozajlama ve çökertme için polietilen tanklar.',
+        products: [
+          'Dikey Tanklar',
+          'Tuz ve Klor Tankları',
+          'Silo Tanklar (Çökertme Tankı)',
+        ],
       },
       {
         title: 'Tekstil',
-        description:
-          'Tekstil üretimini, proseslerini ve malzeme taşımayı destekleyen endüstriyel polietilen çözümler.',
+        description: 'Boyahaneler, iplik ve kumaş üretimi için arabalar, kovalar, kutular ve stoklama tankları.',
+        products: [
+          'Silindir Tekstil Arabaları (Boyahane Arabası)',
+          'Köşeli Tekstil Arabaları (Kumaş Taşıma ve Masura Arabası)',
+          'İstiflenebilir Tekstil Arabaları',
+          'Telef ve Kops Kutuları',
+          'Halat Boyama Kovaları (İndigo Kovası / Denim)',
+          'Silo Tanklar (Tank Çiftliği)',
+          'Dikey Tanklar (Kimyasal Stok / Tuz Tankı)',
+          'Taşkan Kabı',
+          'Cağlık Kovası',
+        ],
       },
       {
-        title: 'Altyapı',
-        description:
-          'İnşaat, altyapı ve kamu hizmeti uygulamaları için güvenilir depolama ve teknik çözümler.',
+        title: 'Gıda',
+        description: 'Salamura, turşu ve şalgam üretimi ile gıda stoklama ve dolum için polietilen tanklar.',
+        products: [
+          'Dikey Tanklar',
+          'Salamura Tankları',
+          'Turşu Tankları',
+          'Şalgam Tankları',
+          'Karıştırıcılı Silo Tanklar (Üretim Tankı)',
+          'Silo Tanklar (Stoklama ve Dolum Tankı)',
+        ],
       },
       {
-        title: 'Denizcilik',
-        description:
-          'Deniz ortamları ve özel operasyonel ihtiyaçlar için dayanıklı polietilen ürünler.',
+        title: 'Kimya',
+        description: 'Kimyasal stoklama, üretim ve taşıma için dikey, silo, karıştırıcılı ve araç üstü tanklar.',
+        products: [
+          'Dikey Tanklar',
+          'Karıştırıcılı Silo Tanklar (Üretim Tankı / Reaktör)',
+          'Silo Tanklar (Kimyasal Stok Tankı)',
+          'Tuz ve Klor Tankları',
+          'Araç Üstü Tanklar',
+          'AdBlue ve Dizel Tankları',
+          'Gübre Tankları (Karıştırıcılı Tanklar)',
+          'Konfit Sistem Havuzları',
+        ],
+      },
+      {
+        title: 'Trafik',
+        description: 'Trafik düzenlemesi ve yol güvenliği için polietilen yol bariyerleri.',
+        products: [
+          'Yol Bariyerleri (New Jersey)',
+        ],
+      },
+      {
+        title: 'Peyzaj',
+        description: 'Kentsel alanlar ve dış mekân projeleri için polietilen saksılar ve kent mobilyası.',
+        products: [
+          'Kent Mobilyası',
+          'Saksılar',
+        ],
+      },
+      {
+        title: 'Paletler',
+        description: 'Depolama, lojistik ve istifleme için polietilen paletler.',
+        products: [
+          'Euro Palet',
+          'Yumurta Paleti',
+        ],
       },
     ],
     ctaEyebrow: 'Sizin Sektörünüz',
@@ -1008,6 +1099,10 @@ const tr = {
       },
     },
     industries: {
+      searchEyebrow: 'Sektörler',
+      searchTitle: 'Sektörünüze göre ürün arayın',
+      productLink: 'İncele',
+      onRequestText: 'Talebe göre üretilir; ölçü ve adet bilgisiyle teklif isteyebilirsiniz.',
       eyebrow: 'Endüstriyel Uygulamalar',
       title: 'Sektörlere göre',
       titleAccent: 'tasarlanan çözümler.',

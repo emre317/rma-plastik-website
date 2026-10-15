@@ -9,16 +9,27 @@ import families from './productTables';
 
 const IMG = '/images/products';
 
+// Order and names follow the "Ürünlerimiz" list of the sectors brief.
+// `quoteOnly`: produced on request, no catalogue models yet (no table, no counts)
+const ILL = '/images/products/illustrations';
+
 const GROUPS = [
   { id: 'vertical', families: ['vertical-tanks'], image: `${IMG}/rd-15000.webp`, hue: 214, link: '/water-tanks', finder: true },
   { id: 'horizontal', families: ['horizontal-tanks'], image: `${IMG}/ry-1000.webp`, hue: 204, link: '/product-tables#horizontal-tanks', finder: true },
   { id: 'twoLayer', families: ['two-layer-vertical', 'two-layer-horizontal'], image: `${IMG}/sd-set.webp`, hue: 196, link: '/product-tables#two-layer-vertical', finder: true },
+  { id: 'underground', families: [], image: `${ILL}/underground.svg`, hue: 200, link: '/products#underground', quoteOnly: true },
   { id: 'silo', families: ['silo-tanks', 'mixer-silo-tanks'], image: `${IMG}/silo-tank.webp`, hue: 226, link: '/product-tables#silo-tanks' },
+  { id: 'textile', families: ['textile-trolleys', 'cylinder-trolleys', 'stackable-rectangular', 'stackable-cylinder'], image: `${IMG}/textile-trolley.webp`, hue: 262, link: '/product-tables#textile-trolleys' },
+  { id: 'copBoxes', families: ['cop-boxes', 'yarn-boxes'], image: `${IMG}/cop-box.webp`, hue: 250, link: '/product-tables#cop-boxes' },
+  { id: 'ropeCans', families: ['rope-dyeing-cans'], image: `${IMG}/rope-dyeing-can.webp`, hue: 236, link: '/product-tables#rope-dyeing-cans' },
+  { id: 'confit', families: ['confit-pools'], image: `${ILL}/confit.svg`, hue: 186, link: '/product-tables#confit-pools' },
+  { id: 'food', families: ['brine-tanks', 'pickle-tanks'], image: `${IMG}/pickle-tank.webp`, hue: 30, link: '/product-tables#brine-tanks' },
   { id: 'treatment', families: ['salt-tanks', 'chlor-tanks'], image: `${IMG}/chlor-tank.webp`, hue: 190, link: '/product-tables#salt-tanks' },
-  { id: 'food', families: ['brine-tanks', 'pickle-tanks', 'confit-pools'], image: `${IMG}/pickle-tank.webp`, hue: 30, link: '/product-tables#brine-tanks' },
-  { id: 'textile', families: ['textile-trolleys', 'cylinder-trolleys', 'stackable-rectangular', 'stackable-cylinder', 'cop-boxes', 'yarn-boxes', 'rope-dyeing-cans'], image: `${IMG}/textile-trolley.webp`, hue: 262, link: '/product-tables#textile-trolleys' },
+  { id: 'vehicle', families: [], image: `${ILL}/vehicle.svg`, hue: 218, link: '/products#vehicle', quoteOnly: true },
   { id: 'fuel', families: ['adblue-tanks', 'rectangular-tanks'], image: `${IMG}/adblue-tank.webp`, hue: 222, link: '/product-tables#adblue-tanks' },
+  { id: 'pallets', families: [], image: `${ILL}/pallets.svg`, hue: 28, link: '/products#pallets', quoteOnly: true },
   { id: 'barriers', families: ['road-barriers'], image: `${IMG}/road-barrier.webp`, hue: 0, link: '/product-tables#road-barriers' },
+  { id: 'planters', families: [], image: `${ILL}/planters.svg`, hue: 140, link: '/products#planters', quoteOnly: true },
   { id: 'custom', families: [], image: '/images/custom-molding/train-tank.webp', hue: 240, link: '/custom-molding', custom: true, round: true },
 ];
 
@@ -33,11 +44,11 @@ const portfolio = GROUPS.map((group) => {
     minVolume: volumes.length ? Math.min(...volumes) : null,
     maxVolume: volumes.length ? Math.max(...volumes) : null,
     // First family in the group decides the link when the group's main family was removed
-    link: group.custom || members.some((family) => group.link.endsWith(`#${family.id}`)) || !group.link.includes('#')
+    link: group.custom || group.quoteOnly || members.some((family) => group.link.endsWith(`#${family.id}`)) || !group.link.includes('#')
       ? group.link
       : `/product-tables#${members[0]?.id || ''}`,
   };
-}).filter((group) => group.custom || group.models > 0);
+}).filter((group) => group.custom || group.quoteOnly || group.models > 0);
 
 /* Early generic product slugs (blog links, old URLs) -> product group */
 export const LEGACY_PRODUCT_GROUPS = {

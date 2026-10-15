@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Araç üstü taşıma tankı">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f7fa"/><stop offset="1" stop-color="#e6edf3"/></linearGradient>
+    <linearGradient id="tank" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7f9fb"/><stop offset="1" stop-color="#cfd6de"/></linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg)"/>
+  <ellipse cx="200" cy="236" rx="170" ry="10" fill="#101317" opacity=".1"/>
+  <rect x="40" y="168" width="250" height="18" rx="4" fill="#4a5361"/>
+  <rect x="58" y="96" width="220" height="74" rx="37" fill="url(#tank)" stroke="#aab4bf" stroke-width="2"/>
+  <g stroke="#9aa6b2" stroke-width="3"><path d="M110 100v66"/><path d="M168 96v74"/><path d="M226 100v66"/></g>
+  <rect x="150" y="84" width="36" height="14" rx="4" fill="#b8c1cb"/>
+  <path d="M290 132h46l26 30v24h-72z" fill="#e4173a"/>
+  <path d="M300 140h32l16 20h-48z" fill="#bfe1f6"/>
+  <g fill="#1d2228"><circle cx="96" cy="200" r="20"/><circle cx="150" cy="200" r="20"/><circle cx="326" cy="200" r="20"/></g>
+  <g fill="#9aa6b2"><circle cx="96" cy="200" r="8"/><circle cx="150" cy="200" r="8"/><circle cx="326" cy="200" r="8"/></g>
+</svg>

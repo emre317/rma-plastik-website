@@ -124,21 +124,29 @@ export default function Products() {
 
                   <dl className="pfMeta">
                     <div>
-                      <dt>{group.custom ? p('application') : p('range')}</dt>
-                      <dd>{group.custom ? p('projectBased') : range(group) || '–'}</dd>
+                      <dt>{group.custom || group.quoteOnly ? p('application') : p('range')}</dt>
+                      <dd>{group.custom ? p('projectBased') : group.quoteOnly ? p('onRequest') : range(group) || '–'}</dd>
                     </div>
                     <div>
                       <dt>{p('modelsLabel')}</dt>
-                      <dd>{group.custom ? '–' : group.models}</dd>
+                      <dd>{group.custom || group.quoteOnly ? '–' : group.models}</dd>
                     </div>
                   </dl>
 
                   <div className="pfActions">
-                    <LocalizedLink to={group.link} className="pfPrimary">
-                      {group.custom ? p('customLink') : p('explore')}
-                      <Arrow />
-                    </LocalizedLink>
-                    {group.finder ? (
+                    {/* Produced on request: no model table yet, the quote is the next step */}
+                    {group.quoteOnly ? (
+                      <button type="button" className="pfPrimary" onClick={() => openQuote(text(group.id, 'title'))}>
+                        {p('quote')}
+                        <Arrow />
+                      </button>
+                    ) : (
+                      <LocalizedLink to={group.link} className="pfPrimary">
+                        {group.custom ? p('customLink') : p('explore')}
+                        <Arrow />
+                      </LocalizedLink>
+                    )}
+                    {group.quoteOnly ? null : group.finder ? (
                       <LocalizedLink to="/tank-finder" className="pfSecondary">
                         <Wand2 aria-hidden="true" />
                         {p('finder')}
