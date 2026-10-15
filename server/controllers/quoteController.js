@@ -7,6 +7,7 @@ import QuoteRequest, {
   QUOTE_OUTCOMES,
   QUOTE_STATUSES,
 } from '../models/QuoteRequest.js';
+import AdminUser from '../models/AdminUser.js';
 import { CHANNELS, cleanAttribution } from '../services/attribution.js';
 import { getSiteSettings } from '../models/SiteSettings.js';
 import { isMailConfigured } from '../services/mailer.js';
@@ -605,14 +606,33 @@ export async function getQuoteReport(req, res) {
   }
 }
 
-/* Names already used as assignee (suggestions in the admin) */
+/* Active sales and admin users: the people a request can be assigned to */
+async function assignableUsers() {
+  const users = await AdminUser.find({ isActive: true, role: { $in: ['admin', 'sales'] } }).select('name').lean();
+  const names = new Map();
+
+  for (const user of users) {
+    const name = cleanString(user.name).slice(0, 80);
+    if (name && !names.has(name.toLocaleLowerCase('tr'))) names.set(name.toLocaleLowerCase('tr'), name);
+  }
+
+  return [...names.values()].sort((a, b) => a.localeCompare(b, 'tr'));
+}
+
+/* Assignees: `users` for the picker, `data` also keeps names used before (list filter) */
 export async function getQuoteAssignees(req, res) {
   try {
-    const names = await QuoteRequest.distinct('assignee', { assignee: { $ne: '' } });
+    const [users, used] = await Promise.all([
+      assignableUsers(),
+      QuoteRequest.distinct('assignee', { assignee: { $ne: '' } }),
+    ]);
+
+    const all = new Map([...used, ...users].map((name) => [name.toLocaleLowerCase('tr'), name]));
 
     return res.json({
       success: true,
-      data: names.sort((a, b) => a.localeCompare(b, 'tr')),
+      data: [...all.values()].sort((a, b) => a.localeCompare(b, 'tr')),
+      users,
     });
   } catch (error) {
     console.error('Quote assignees error:', error);
@@ -737,8 +757,28 @@ export async function updateQuoteTracking(req, res) {
     const body = req.body || {};
     const update = {};
 
+    // The assignee is picked from the user list (an old free-text name may stay as it is)
     if (body.assignee !== undefined) {
-      update.assignee = cleanString(body.assignee).slice(0, 80);
+      const wanted = cleanString(body.assignee).slice(0, 80);
+
+      if (wanted) {
+        const [users, current] = await Promise.all([
+          assignableUsers(),
+          QuoteRequest.findById(req.params.id).select('assignee').lean(),
+        ]);
+
+        if (!current) return notFound(res);
+
+        const match = users.find((name) => name.toLocaleLowerCase('tr') === wanted.toLocaleLowerCase('tr'));
+
+        if (!match && wanted !== current.assignee) {
+          return res.status(400).json({ success: false, message: 'Sorumlu, kullanıcı listesinden seçilmelidir.' });
+        }
+
+        update.assignee = match || wanted;
+      } else {
+        update.assignee = '';
+      }
     }
 
     if (body.followUpAt !== undefined) {

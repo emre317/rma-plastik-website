@@ -105,11 +105,9 @@ export default function AdminQuoteDetail() {
   const [saving, setSaving] = useState('');
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
-  const [assignee, setAssignee] = useState('');
   const [assignees, setAssignees] = useState([]);
   const [note, setNote] = useState('');
   const [outcomeNote, setOutcomeNote] = useState('');
-  const [suggestOpen, setSuggestOpen] = useState(false);
   const [history, setHistory] = useState(null);
   const [customer, setCustomer] = useState(null);
 
@@ -123,7 +121,6 @@ export default function AdminQuoteDetail() {
         const response = await call(getQuoteById, id);
         if (cancelled) return;
         setQuote(response.data);
-        setAssignee(response.data?.assignee || '');
         setOutcomeNote(response.data?.outcomeNote || '');
         // Opening a request marks it as read on the server
         notifyQuotesChanged();
@@ -187,9 +184,9 @@ export default function AdminQuoteDetail() {
     };
   }, [call, quoteEmail, quoteCompany]);
 
-  // Suggestions for the assignee field (names used before)
+  // People a request can be assigned to (active sales and admin users)
   useEffect(() => {
-    call(getQuoteAssignees).then((response) => setAssignees(Array.isArray(response.data) ? response.data : [])).catch(() => {});
+    call(getQuoteAssignees).then((response) => setAssignees(Array.isArray(response.users) ? response.users : [])).catch(() => {});
   }, [call]);
 
   async function saveTracking(changes, key) {
@@ -199,7 +196,6 @@ export default function AdminQuoteDetail() {
     try {
       const response = await call(updateQuoteTracking, id, changes);
       setQuote(response.data);
-      setAssignee(response.data?.assignee || '');
       setOutcomeNote(response.data?.outcomeNote || '');
       if (changes.outcome !== undefined) notifyQuotesChanged();
     } catch (err) {
@@ -217,10 +213,6 @@ export default function AdminQuoteDetail() {
 
   function saveOutcomeNote() {
     if (outcomeNote.trim() !== (quote.outcomeNote || '')) saveTracking({ outcomeNote: outcomeNote.trim() }, 'outcomeNote');
-  }
-
-  function saveAssignee() {
-    if (assignee.trim() !== (quote.assignee || '')) saveTracking({ assignee: assignee.trim() }, 'assignee');
   }
 
   async function submitNote(event) {
@@ -289,10 +281,12 @@ export default function AdminQuoteDetail() {
   const totalPieces = items.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
   const notes = [...(quote.notes || [])].reverse();
   const followUp = followUpState(quote);
-  const typed = assignee.trim().toLocaleLowerCase('tr');
-  const suggestions = suggestOpen
-    ? assignees.filter((name) => name !== assignee && name.toLocaleLowerCase('tr').includes(typed)).slice(0, 8)
-    : [];
+  // An old free-text name (before the user list) stays selectable until it is changed
+  const assigneeOptions = [
+    { value: '', label: 'Atanmadı' },
+    ...(quote.assignee && !assignees.includes(quote.assignee) ? [{ value: quote.assignee, label: `${quote.assignee} (listede yok)` }] : []),
+    ...assignees.map((name) => ({ value: name, label: name })),
+  ];
   const source = quote.attribution;
   const campaign = source && [source.utmCampaign, [source.utmSource, source.utmMedium].filter(Boolean).join(' / ')].filter(Boolean);
   const CLICK_LABELS = { gclid: 'Google Ads tıklaması', fbclid: 'Facebook / Instagram bağlantısı', msclkid: 'Microsoft Ads tıklaması' };
@@ -558,61 +552,24 @@ export default function AdminQuoteDetail() {
 
             <div className="cmsField">
               <span id="assignee-label">Sorumlu Kişi</span>
-              {/* Free text with suggestions from earlier requests (rounded list instead of the browser's) */}
-              <div className="dd adSuggest">
-                <input
-                  role="combobox"
-                  aria-labelledby="assignee-label"
-                  aria-autocomplete="list"
-                  aria-expanded={suggestions.length > 0}
-                  aria-controls="assignee-suggestions"
-                  value={assignee}
-                  maxLength={80}
-                  placeholder="ör. Ayşe (İhracat)"
-                  autoComplete="off"
-                  onChange={(event) => {
-                    setAssignee(event.target.value);
-                    setSuggestOpen(true);
-                  }}
-                  onFocus={() => setSuggestOpen(true)}
-                  onBlur={() => {
-                    setSuggestOpen(false);
-                    saveAssignee();
-                  }}
-                  onKeyDown={(event) => {
-                    if (event.key === 'Enter') {
-                      event.preventDefault();
-                      setSuggestOpen(false);
-                      saveAssignee();
-                    } else if (event.key === 'Escape') {
-                      setSuggestOpen(false);
-                    }
-                  }}
-                />
-                {suggestions.length > 0 && (
-                  <div className="ddPanel">
-                    <ul className="ddList" id="assignee-suggestions" role="listbox" aria-labelledby="assignee-label">
-                      {suggestions.map((name) => (
-                        <li
-                          key={name}
-                          role="option"
-                          aria-selected={false}
-                          className="ddOption"
-                          onMouseDown={(event) => {
-                            event.preventDefault();
-                            setAssignee(name);
-                            setSuggestOpen(false);
-                            if (name !== (quote.assignee || '')) saveTracking({ assignee: name }, 'assignee');
-                          }}
-                        >
-                          <span>{name}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-              <small>{saving === 'assignee' ? 'Kaydediliyor…' : 'Alandan çıkınca kaydedilir.'}</small>
+              <Dropdown
+                value={quote.assignee || ''}
+                onChange={(value) => {
+                  if (value !== (quote.assignee || '')) saveTracking({ assignee: value }, 'assignee');
+                }}
+                options={assigneeOptions}
+                placeholder="Kullanıcı seçin"
+                label="Sorumlu Kişi"
+                searchable={assignees.length > 8}
+                searchPlaceholder="Kullanıcı ara…"
+              />
+              <small>
+                {saving === 'assignee'
+                  ? 'Kaydediliyor…'
+                  : assignees.length
+                    ? 'Satış ve yönetici kullanıcılarından seçilir.'
+                    : 'Listede kullanıcı yok: Kullanıcılar sayfasından satış kullanıcısı ekleyin.'}
+              </small>
             </div>
 
             <label className="cmsField">

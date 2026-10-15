@@ -31570,3 +31570,16 @@ html.booting .heroVideo .heroStats {
 .siteFooter {
   background: #000000;
 }
+
+/* Footer: every icon in white (social buttons, contact rows, language chevron) */
+.siteFooter .footerIcon,
+.siteFooter .footerIconButton,
+.siteFooter .footerIconButton svg,
+.siteFooter .languageSwitcherButton svg {
+  color: #ffffff;
+}
+
+.siteFooter .footerIconButton:hover,
+.siteFooter .footerIconButton:hover svg {
+  color: #ffffff;
+}

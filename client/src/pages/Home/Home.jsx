@@ -5,10 +5,7 @@ import MachineParkSection from '../../sections/MachineParkSection';
 import ProductExplorerSection from '../../sections/ProductExplorerSection';
 import IndustriesSection from '../../sections/IndustriesSection';
 import CustomMoldingSection from '../../sections/CustomMoldingSection';
-import GlobalPresenceSection from '../../sections/GlobalPresenceSection';
 import ContactSection from '../../sections/ContactSection';
-import FaqSection from '../../components/ui/FaqSection';
-import { SustainabilityBand } from '../../components/ui/EcoMarks';
 import { useTranslation } from 'react-i18next';
 
 import Seo from '../../seo/Seo';
@@ -23,12 +20,9 @@ export default function Home() {
       <MaterialFeaturesSection />
       <StatsSection />
       <MachineParkSection />
-      <SustainabilityBand />
       <ProductExplorerSection />
       <IndustriesSection />
       <CustomMoldingSection />
-      <GlobalPresenceSection />
-      <FaqSection />
       <ContactSection index={t('contact.homeIndex')} />
     </main>
   );
