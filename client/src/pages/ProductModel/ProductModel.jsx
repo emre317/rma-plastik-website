@@ -293,7 +293,7 @@ export default function ProductModel() {
                     const Icon = sector.icon;
                     return (
                       <li key={sector.slug}>
-                        <LocalizedLink to={`/industries#${sector.slug}`} style={{ '--hue': sector.hue }}>
+                        <LocalizedLink to={`/industries/${sector.slug}`} style={{ '--hue': sector.hue }}>
                           <span className="pmSectorIcon" aria-hidden="true"><Icon /></span>
                           <span>{industryTitles[sector.index]?.title}</span>
                           <Arrow />

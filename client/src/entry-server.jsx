@@ -10,6 +10,7 @@ import i18n, { loadLanguage } from './i18n';
 import App from './App';
 import { modelPaths } from './data/productTables';
 import { postsForLanguage } from './data/posts';
+import INDUSTRIES from './data/industries';
 import { SUPPORTED_LANGUAGES } from './i18n/languages';
 import { SeoCollectorContext, renderHeadTags } from './seo/Seo';
 import { SITE_URL } from './seo/site';
@@ -28,6 +29,7 @@ export function getPublicPaths(lang) {
     ...modelPaths(),
     '/custom-molding',
     '/industries',
+    ...INDUSTRIES.map(({ slug }) => `/industries/${slug}`),
     '/contact',
     '/blog',
     // Articles only exist in the languages they were written in

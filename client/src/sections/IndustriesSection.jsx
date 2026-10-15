@@ -94,7 +94,7 @@ export default function IndustriesSection() {
                       <p>{industry.description}</p>
 
                       <LocalizedLink
-                        to={`/industries#${slug}`}
+                        to={`/industries/${slug}`}
                         className="industryShowLink"
                         tabIndex={copy === 1 ? -1 : undefined}
                       >

@@ -32536,8 +32536,8 @@ select:disabled {
 }
 
 /* =====================================================
-   INDUSTRIES — "Sektörünüze göre ürün arayın": a sticky sector menu,
-   then one block per sector with the product cards of the Products page
+   INDUSTRIES — overview cards (/industries) and sector pages
+   (/industries/:slug) with the product cards of the Products page
 ===================================================== */
 
 .secPage {
@@ -32548,107 +32548,6 @@ select:disabled {
   margin-bottom: 22px;
 }
 
-/* Sector menu */
-.secNav {
-  position: sticky;
-  top: 76px;
-  z-index: 20;
-  margin-bottom: 8px;
-  padding: 12px 0;
-  border-block: 1px solid var(--line);
-  background: rgba(247, 249, 250, 0.94);
-  backdrop-filter: blur(10px);
-}
-
-.secNav ul {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  list-style: none;
-  scrollbar-width: none;
-}
-
-.secNav ul::-webkit-scrollbar {
-  display: none;
-}
-
-.secNav a {
-  min-height: 44px;
-  padding: 0 8px 0 14px;
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: #ffffff;
-  color: var(--text);
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 700;
-  white-space: nowrap;
-  transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease;
-}
-
-.secNav a:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.secNav svg {
-  width: 18px;
-  height: 18px;
-  flex: none;
-  color: var(--accent);
-}
-
-.secNav small {
-  min-width: 26px;
-  height: 26px;
-  padding: 0 7px;
-  display: inline-grid;
-  place-items: center;
-  border-radius: 999px;
-  background: var(--ink-050);
-  color: var(--text-secondary);
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.secNav a.active {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: #ffffff;
-}
-
-.secNav a.active svg {
-  color: #ffffff;
-}
-
-.secNav a.active small {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-}
-
-/* Sector block */
-.secBlock {
-  padding: 56px 0 8px;
-  scroll-margin-top: 150px;
-}
-
-.secBlock + .secBlock {
-  margin-top: 40px;
-  border-top: 1px solid var(--line);
-}
-
-.secHead {
-  margin-bottom: 28px;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: end;
-  gap: 18px 24px;
-}
 
 .secIcon {
   width: 60px;
@@ -32666,25 +32565,9 @@ select:disabled {
   height: 28px;
 }
 
-.secHeadText .eyebrow {
-  margin-bottom: 10px;
-}
 
-.secHeadText h2 {
-  margin: 0 0 10px;
-  font-size: clamp(28px, 3vw, 40px);
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-}
 
-.secHeadText .cmLead {
-  margin: 0;
-  max-width: 680px;
-}
 
-.secQuote {
-  white-space: nowrap;
-}
 
 /* Product cards: the Products page card, four to a row */
 .secGrid {
@@ -32736,33 +32619,12 @@ select:disabled {
 }
 
 @media (max-width: 900px) {
-  .secHead {
-    grid-template-columns: auto minmax(0, 1fr);
-  }
-
-  .secQuote {
-    grid-column: 1 / -1;
-    justify-self: start;
-  }
-
   .secGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 560px) {
-  .secBlock {
-    padding-top: 40px;
-  }
-
-  .secHead {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .secIcon {
-    display: none;
-  }
-
   .secGrid {
     gap: 12px;
   }
@@ -32791,6 +32653,266 @@ select:disabled {
 
   .secGrid .pfSecondary {
     justify-content: center;
+  }
+}
+
+/* Overview: one introduction card per sector */
+.secCards {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  list-style: none;
+}
+
+.secCard {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(16, 19, 23, 0.08);
+  border-radius: var(--radius-lg);
+  background: #ffffff;
+  box-shadow: var(--shadow-soft);
+  color: var(--text);
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+.secCard:hover {
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  box-shadow: 0 30px 60px -36px rgba(16, 19, 23, 0.45);
+  color: var(--text);
+  transform: translateY(-3px);
+}
+
+.secCardMedia {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #f2f2f2;
+}
+
+.secCardMedia img {
+  width: 100%;
+  height: 100%;
+  padding: 12% 10% 8%;
+  object-fit: contain;
+  transition: transform 500ms ease;
+}
+
+/* Two or three photos side by side, the first one larger */
+.secCardMedia.count2,
+.secCardMedia.count3 {
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+}
+
+.secCardMedia img {
+  min-width: 0;
+  min-height: 0;
+}
+
+.secCardMedia.count2 img,
+.secCardMedia.count3 img {
+  padding: 10%;
+}
+
+.secCardMedia.count2 img:first-child,
+.secCardMedia.count3 img:first-child {
+  grid-row: 1 / -1;
+  padding: 14% 8% 10%;
+}
+
+.secCardMedia.count2 img:nth-child(2) {
+  grid-row: 1 / -1;
+}
+
+.secCard:hover .secCardMedia img {
+  transform: scale(1.04);
+}
+
+.secCardIndex {
+  position: absolute;
+  top: 14px;
+  inset-inline-start: 16px;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.secCardBody {
+  flex: 1;
+  padding: 20px 22px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.secCardTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.secCardTitle .secIcon {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 12px;
+}
+
+.secCardTitle .secIcon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.secCardTitle h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+.secCardTitle small {
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.secCardText {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.secCardTags {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+}
+
+.secCardTags li {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--ink-050);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.secCardTags li.more {
+  background: color-mix(in srgb, var(--accent) 10%, #ffffff);
+  color: var(--accent);
+}
+
+.secCardLink {
+  margin-top: auto;
+  padding-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Sector page: the other sectors */
+.secOthers {
+  padding-top: 0;
+}
+
+.secOtherList {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  list-style: none;
+}
+
+.secOtherList a {
+  min-height: 72px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  color: var(--text);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.secOtherList a:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md);
+  color: var(--text);
+}
+
+.secOtherList a > span:nth-child(2) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.secOtherList strong {
+  font-family: var(--font-display);
+  font-size: 15px;
+}
+
+.secOtherList small {
+  color: var(--text-secondary);
+  font-size: 12.5px;
+}
+
+.secOtherList .secIcon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+}
+
+.secOtherList .secIcon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.secOtherList a > :last-child {
+  flex: none;
+  color: var(--accent);
+}
+
+@media (max-width: 1200px) {
+  .secCards,
+  .secOtherList {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .secCards,
+  .secOtherList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .secCards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .secOtherList {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
