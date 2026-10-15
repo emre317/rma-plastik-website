@@ -37,6 +37,7 @@ const initialForm = {
   designInput: '',
   needs: [],
   deliveryCity: '',
+  deliveryAddress: '',
   message: '',
 };
 
@@ -115,6 +116,13 @@ export default function QuoteModal() {
   const [limit, setLimit] = useState(PAGE);
   const [picker, setPicker] = useState(false);
   const [capacityOther, setCapacityOther] = useState(false);
+  const [addressOpen, setAddressOpen] = useState(false);
+  const addressRef = useRef(null);
+
+  // The address box takes the focus when it is opened with the button
+  useEffect(() => {
+    if (addressOpen) addressRef.current?.focus();
+  }, [addressOpen]);
   const pickerRef = useRef(false);
   const deferredQuery = useDeferredValue(query);
 
@@ -201,6 +209,7 @@ export default function QuoteModal() {
     setLimit(PAGE);
     setPicker(false);
     setCapacityOther(false);
+    setAddressOpen(false);
     track('quote_form_open', { product: product || '(none)' });
 
     // Known details first: remembered contact, guessed country (with its phone code), page hints
@@ -595,8 +604,9 @@ export default function QuoteModal() {
               <input type="tel" name="phone" dir="ltr" autoComplete="tel" maxLength={40} pattern="^[^0-9]*([0-9][^0-9]*){7,}$" title={t('contact.phoneInvalid')} value={form.phone} onChange={handleChange} required placeholder={t('contact.placeholders.phone')} />
             </label>
 
+            {/* Group on its own row; next row: model picker, or capacity + quantity */}
             {cart.length === 0 && (
-              <div className="formField">
+              <div className={`formField ${modelPicker || showCustom ? '' : 'formFieldFull'}`}>
                 <span>{fieldLabel('product')}</span>
                 <Dropdown
                   name="product"
@@ -772,6 +782,34 @@ export default function QuoteModal() {
                 <span>{fieldLabel('deliveryCity')}</span>
                 <input type="text" name="deliveryCity" maxLength={200} autoComplete="address-level2" value={form.deliveryCity} onChange={handleChange} placeholder={t('contact.placeholders.deliveryCity')} />
               </label>
+            )}
+
+            {/* Full address only when the customer wants to give it (city is enough for a price) */}
+            {addressOpen || form.deliveryAddress ? (
+              <label className="formField formFieldFull">
+                <span className="qmLabelRow">
+                  {fieldLabel('deliveryAddress')}
+                  <small className="qmOptional">{t('contact.optional')}</small>
+                </span>
+                <textarea
+                  name="deliveryAddress"
+                  rows="2"
+                  maxLength={300}
+                  autoComplete="street-address"
+                  value={form.deliveryAddress}
+                  onChange={handleChange}
+                  placeholder={t('contact.placeholders.deliveryAddress')}
+                  ref={addressRef}
+                />
+              </label>
+            ) : (
+              <div className="formFieldFull qmAddressToggle">
+                <button type="button" className="qmTextButton" onClick={() => setAddressOpen(true)}>
+                  <Plus aria-hidden="true" />
+                  {t('contact.addAddress')}
+                </button>
+                <small>{t('contact.addressHint')}</small>
+              </div>
             )}
 
             {/* Follow-up needs: one click instead of typing */}

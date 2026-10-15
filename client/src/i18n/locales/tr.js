@@ -1162,13 +1162,14 @@ const tr = {
       storedProduct: 'Tank içerisinde stoklanacak ürün',
       density: 'Ürünün özgül ağırlığı / yoğunluğu',
       temperature: 'Ürün sıcaklığı ve (varsa) maks. tepkime sıcaklığı',
-      deliveryCity: 'Teslimat Şehri / Adresi',
+      deliveryCity: 'Teslimat Şehri',
       message: 'Detaylar',
       capacityModel: 'Model / Kapasite',
       storedDetail: 'Ürün adı / konsantrasyon',
       customSpec: 'Ürün tanımı / ölçüler',
       designInput: 'Elinizde ne var?',
       needs: 'İhtiyaçlar',
+      deliveryAddress: 'Açık Adres',
     },
     placeholders: {
       countrySelect: 'Ülke Seçin',
@@ -1193,6 +1194,7 @@ const tr = {
       customSpec: 'ör. 120 × 80 × 60 cm, yaklaşık 15 kg, siyah',
       provinceSelect: 'İl seçin',
       provinceSearch: 'İl ara…',
+      deliveryAddress: 'Mahalle, cadde / sokak, no, ilçe, posta kodu',
       storedDetail: {
         acid: 'ör. Sülfürik asit %98',
         caustic: 'ör. Sodyum hidroksit %50',
@@ -1226,6 +1228,9 @@ const tr = {
     },
     unknown: 'Bilinmiyor',
     remember: 'Bilgilerimi bu cihazda hatırla',
+    addAddress: 'Açık adres ekle',
+    addressHint: 'Fiyat için şehir yeterli; adresi şimdi veya sipariş aşamasında paylaşabilirsiniz.',
+    optional: 'isteğe bağlı',
     customRequirement: 'Özel İhtiyaç',
     removeProduct: 'Ürünü Kaldır',
     consent:

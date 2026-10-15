@@ -1164,13 +1164,14 @@ const en = {
       storedProduct: 'Product to be stored in the tank',
       density: 'Specific gravity / density of the product',
       temperature: 'Product temperature and (if any) max. reaction temperature',
-      deliveryCity: 'Delivery City / Address',
+      deliveryCity: 'Delivery City',
       message: 'Details',
       capacityModel: 'Model / Capacity',
       storedDetail: 'Product name / concentration',
       customSpec: 'Product description / dimensions',
       designInput: 'What do you have?',
       needs: 'Requirements',
+      deliveryAddress: 'Full Address',
     },
     placeholders: {
       countrySelect: 'Select Country',
@@ -1195,6 +1196,7 @@ const en = {
       customSpec: 'e.g. 120 × 80 × 60 cm, about 15 kg, black',
       provinceSelect: 'Select province',
       provinceSearch: 'Search province…',
+      deliveryAddress: 'Street, number, district, postcode',
       storedDetail: {
         acid: 'e.g. Sulphuric acid 98%',
         caustic: 'e.g. Sodium hydroxide 50%',
@@ -1228,6 +1230,9 @@ const en = {
     },
     unknown: 'Unknown',
     remember: 'Remember my details on this device',
+    addAddress: 'Add full address',
+    addressHint: 'The city is enough for a price; you can share the address now or when ordering.',
+    optional: 'optional',
     customRequirement: 'Custom Requirement',
     removeProduct: 'Remove Product',
     consent:

@@ -34,6 +34,7 @@ const OPTIONAL_FIELD_LIMITS = {
   density: 80,
   temperature: 160,
   deliveryCity: 200,
+  deliveryAddress: 300,
   customSpec: 300,
   message: 5000,
 };
@@ -309,6 +310,9 @@ function buildFilter(query = {}) {
       'product',
       'country',
       'items.name',
+      'storedProduct',
+      'deliveryCity',
+      'deliveryAddress',
     ].map((field) => ({
       [field]: pattern,
     }));
@@ -454,6 +458,20 @@ export async function getQuoteReport(req, res) {
             { $sort: { count: -1, _id: 1 } },
           ],
 
+          // Stored product type: the part before " – " ("Asit – Sülfürik asit %98" -> "Asit")
+          byStored: [
+            { $match: { storedProduct: { $nin: ['', null] } } },
+            { $group: { _id: { $trim: { input: { $arrayElemAt: [{ $split: ['$storedProduct', ' – '] }, 0] } } }, count: { $sum: 1 } } },
+            { $sort: { count: -1, _id: 1 } },
+          ],
+
+          byCity: [
+            { $match: { deliveryCity: { $nin: ['', null] } } },
+            { $group: { _id: { $trim: { input: '$deliveryCity' } }, count: { $sum: 1 } } },
+            { $sort: { count: -1, _id: 1 } },
+            { $limit: 50 },
+          ],
+
           // Cart items; a request without items counts its product / subject once
           byProduct: [
             {
@@ -590,6 +608,8 @@ export async function getQuoteReport(req, res) {
         total: result.total[0]?.count || 0,
         byMonth: rename(result.byMonth, (month) => ({ month })),
         byCountry: rename(result.byCountry, (country) => ({ country })),
+        byStored: rename(result.byStored, (stored) => ({ stored })),
+        byCity: rename(result.byCity, (city) => ({ city })),
         byProduct: rename(result.byProduct, (name) => ({ name })),
         byStatus: rename(result.byStatus, (status) => ({ status })),
         byAssignee: rename(result.byAssignee, (assignee) => ({ assignee })),

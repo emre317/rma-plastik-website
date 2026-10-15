@@ -32484,3 +32484,38 @@ select:disabled {
   font-size: 12.5px;
   font-weight: 700;
 }
+
+/* Quote form: optional full address behind one link */
+.qmAddressToggle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  margin-top: -4px;
+}
+
+.qmAddressToggle .qmTextButton {
+  color: var(--rma-blue);
+}
+
+.qmAddressToggle small {
+  color: var(--text-secondary);
+  font-size: 12.5px;
+}
+
+.qmOptional {
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* Quote detail: a long value over both columns */
+.adTankFacts .adFactWide {
+  grid-column: 1 / -1;
+}
+
+.qmForm textarea[name="deliveryAddress"] {
+  min-height: 74px;
+}

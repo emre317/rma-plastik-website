@@ -71,7 +71,10 @@ const OfferDocument = forwardRef(function OfferDocument({ quote, offer, company 
           <span className="ofLabel">{copy.buyer}</span>
           <strong dir="auto">{quote.company}</strong>
           {quote.name && <span dir="auto">{quote.name}</span>}
-          {quote.country && <span dir="auto">{quote.country}</span>}
+          {/* Delivery address when the customer gave it, otherwise the country */}
+          {[quote.deliveryAddress, quote.deliveryCity, quote.country].some(Boolean) && (
+            <span dir="auto">{[quote.deliveryAddress, quote.deliveryCity, quote.country].filter(Boolean).join(', ')}</span>
+          )}
           {quote.email && <span dir="ltr">{quote.email}</span>}
           {quote.phone && <span dir="ltr">{quote.phone}</span>}
         </div>

@@ -1157,13 +1157,14 @@ const ar = {
       storedProduct: 'المادة التي ستُخزَّن في الخزان',
       density: 'الوزن النوعي / كثافة المادة',
       temperature: 'درجة حرارة المادة وأقصى درجة حرارة للتفاعل (إن وجد)',
-      deliveryCity: 'مدينة / عنوان التسليم',
+      deliveryCity: 'مدينة التسليم',
       message: 'التفاصيل',
       capacityModel: 'الطراز / السعة',
       storedDetail: 'اسم المادة / التركيز',
       customSpec: 'وصف المنتج / المقاسات',
       designInput: 'ماذا لديك؟',
       needs: 'المتطلبات',
+      deliveryAddress: 'العنوان الكامل',
     },
     placeholders: {
       countrySelect: 'اختر الدولة',
@@ -1188,6 +1189,7 @@ const ar = {
       customSpec: 'مثال: 120 × 80 × 60 سم، نحو 15 كغ، أسود',
       provinceSelect: 'اختر المحافظة',
       provinceSearch: 'ابحث عن المحافظة…',
+      deliveryAddress: 'الحي، الشارع، الرقم، المنطقة، الرمز البريدي',
       storedDetail: {
         acid: 'مثال: حمض الكبريتيك 98%',
         caustic: 'مثال: هيدروكسيد الصوديوم 50%',
@@ -1221,6 +1223,9 @@ const ar = {
     },
     unknown: 'غير معروف',
     remember: 'تذكر بياناتي على هذا الجهاز',
+    addAddress: 'إضافة العنوان الكامل',
+    addressHint: 'المدينة تكفي لتحديد السعر؛ يمكنكم مشاركة العنوان الآن أو عند الطلب.',
+    optional: 'اختياري',
     customRequirement: 'متطلب مخصص',
     removeProduct: 'إزالة المنتج',
     consent:

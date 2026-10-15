@@ -152,6 +152,14 @@ const quoteRequestSchema = new mongoose.Schema(
       maxlength: 200,
     },
 
+    // Optional full delivery address (the city is enough for a price)
+    deliveryAddress: {
+      type: String,
+      trim: true,
+      default: '',
+      maxlength: 300,
+    },
+
     // Custom part: description / dimensions and what the customer already has
     customSpec: {
       type: String,

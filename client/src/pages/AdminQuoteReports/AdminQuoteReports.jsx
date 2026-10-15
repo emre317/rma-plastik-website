@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  ArrowLeft, Banknote, Download, Flag, Globe2, LogIn, Megaphone, Package, Target, UserRound,
+  ArrowLeft, Banknote, Download, Flag, FlaskConical, Globe2, LogIn, MapPin, Megaphone, Package, Target, UserRound,
 } from 'lucide-react';
 
 import { getQuoteReport } from '../../services/adminApi';
@@ -357,6 +357,34 @@ export default function AdminQuoteReports() {
                 value={(row) => row.count}
                 suffix={(row) => pf.format(row.count / Math.max(1, report.total))}
                 link={(row) => (row.country === 'Belirtilmemiş' ? '/admin/quotes' : `/admin/quotes?q=${encodeURIComponent(row.country)}`)}
+              />
+            </div>
+
+            <div className="adCard">
+              <div className="adCardHead">
+                <h2><FlaskConical aria-hidden="true" />Stoklanacak Ürün</h2>
+                <span className="adHint">Belirtilen talepler</span>
+              </div>
+              <RankList
+                rows={report.byStored || []}
+                label={(row) => row.stored}
+                value={(row) => row.count}
+                suffix={(row) => pf.format(row.count / Math.max(1, (report.byStored || []).reduce((sum, item) => sum + item.count, 0)))}
+                link={(row) => `/admin/quotes?q=${encodeURIComponent(row.stored)}`}
+              />
+            </div>
+
+            <div className="adCard">
+              <div className="adCardHead">
+                <h2><MapPin aria-hidden="true" />Teslimat Şehri</h2>
+                <span className="adHint">Talep Sayısı</span>
+              </div>
+              <RankList
+                rows={report.byCity || []}
+                label={(row) => row.city}
+                value={(row) => row.count}
+                suffix={(row) => pf.format(row.count / Math.max(1, report.total))}
+                link={(row) => `/admin/quotes?q=${encodeURIComponent(row.city)}`}
               />
             </div>
 

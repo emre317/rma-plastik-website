@@ -40,7 +40,8 @@ const COLUMNS = [
   ['Stoklanacak ürün', 24],
   ['Yoğunluk', 14],
   ['Sıcaklık', 22],
-  ['Teslimat şehri / adresi', 26],
+  ['Teslimat şehri', 18],
+  ['Açık adres', 36],
   ['Ürün tanımı / ölçüler', 30],
   ['Müşteride olan', 14],
   ['İhtiyaçlar', 30],
@@ -88,6 +89,7 @@ function quoteRow(quote) {
     text(quote.density),
     text(quote.temperature),
     text(quote.deliveryCity),
+    longText(quote.deliveryAddress),
     text(quote.customSpec),
     text(DESIGN_INPUT_LABELS[quote.designInput] || ''),
     text(needsText(quote.needs)),
@@ -157,6 +159,10 @@ export async function exportReportFile(report, { rangeLabel, monthLabel }) {
     sheet('Ülkeler', ['Ülke', 'Talep', 'Pay'], report.byCountry.map((row) => [
       row.country, number(row.count), percent(row.count, report.total),
     ]), [26, 10, 10]),
+    sheet('Stoklanacak ürün', ['Ürün', 'Talep'], (report.byStored || []).map((row) => [row.stored, number(row.count)]), [28, 10]),
+    sheet('Teslimat şehirleri', ['Şehir', 'Talep', 'Pay'], (report.byCity || []).map((row) => [
+      row.city, number(row.count), percent(row.count, report.total),
+    ]), [28, 10, 10]),
     sheet('Ürünler', ['Ürün / model', 'Talep', 'Toplam adet'], report.byProduct.map((row) => [
       row.name, number(row.requests), number(row.pieces),
     ]), [44, 10, 14]),

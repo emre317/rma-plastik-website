@@ -395,14 +395,15 @@ export default function AdminQuoteDetail() {
               </dl>
             )}
 
-            {(quote.storedProduct || quote.density || quote.temperature || quote.deliveryCity || quote.customSpec || quote.designInput) && (
+            {(quote.storedProduct || quote.density || quote.temperature || quote.deliveryCity || quote.deliveryAddress || quote.customSpec || quote.designInput) && (
               <dl className="adFacts adTankFacts">
                 {quote.storedProduct && <div><dt>Stoklanacak Ürün</dt><dd>{quote.storedProduct}</dd></div>}
                 {quote.density && <div><dt>Özgül Ağırlık / Yoğunluk</dt><dd>{quote.density}</dd></div>}
                 {quote.temperature && <div><dt>Sıcaklık / Maks. Tepkime Sıcaklığı</dt><dd>{quote.temperature}</dd></div>}
                 {quote.customSpec && <div><dt>Ürün Tanımı / Ölçüler</dt><dd>{quote.customSpec}</dd></div>}
                 {quote.designInput && <div><dt>Müşteride Olan</dt><dd>{DESIGN_INPUT_LABELS[quote.designInput] || quote.designInput}</dd></div>}
-                {quote.deliveryCity && <div><dt>Teslimat Şehri / Adresi</dt><dd>{quote.deliveryCity}</dd></div>}
+                {quote.deliveryCity && <div><dt>Teslimat Şehri</dt><dd>{quote.deliveryCity}</dd></div>}
+                {quote.deliveryAddress && <div className="adFactWide"><dt>Açık Adres</dt><dd>{quote.deliveryAddress}</dd></div>}
               </dl>
             )}
 
