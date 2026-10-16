@@ -62,7 +62,7 @@ import {
   updateVideo,
 } from '../controllers/mediaController.js';
 import { getPublishState, startPublish } from '../services/publisher.js';
-import { getSiteSettings } from '../models/SiteSettings.js';
+import { requireContentToken } from '../middleware/serviceAuth.js';
 import ProductFamily from '../models/ProductFamily.js';
 import ProductGroup from '../models/ProductGroup.js';
 import Sector from '../models/Sector.js';
@@ -77,7 +77,8 @@ import { audit } from '../services/audit.js';
 /* Public: content snapshot read by the site build */
 export const publicContentRouter = express.Router();
 
-publicContentRouter.get('/', getPublicContent);
+// Read by the site build (GitHub Actions or the local build) with CONTENT_API_TOKEN
+publicContentRouter.get('/', requireContentToken, getPublicContent);
 
 /* Admin: content management */
 export const adminContentRouter = express.Router();
@@ -154,23 +155,31 @@ adminContentRouter.get('/settings', getSettings);
 adminContentRouter.put('/settings', settings, audit({ area: 'settings', type: 'settings', action: 'Site ayarlarını güncelledi', label: () => 'Site Ayarları' }), updateSettings);
 
 adminContentRouter.get('/publish', async (req, res) => {
-  const settings = await getSiteSettings();
-
-  res.json({
-    success: true,
-    data: {
-      ...getPublishState(),
-      contentChangedAt: settings.contentChangedAt,
-      publishedAt: settings.publishedAt,
-    },
-  });
+  try {
+    res.json({ success: true, data: await getPublishState() });
+  } catch (error) {
+    console.error('Publish state error:', error);
+    res.status(500).json({ success: false, message: 'Yayın durumu alınamadı.' });
+  }
 });
 
-adminContentRouter.post('/publish', content, audit({ area: 'content', type: 'site', action: 'Siteyi yayınladı', label: () => 'Web sitesi' }), (req, res) => {
-  const started = startPublish();
+adminContentRouter.post('/publish', content, audit({ area: 'content', type: 'site', action: 'Siteyi yayınladı', label: () => 'Web sitesi' }), async (req, res) => {
+  try {
+    const result = await startPublish(req.admin);
 
-  res.status(started ? 202 : 409).json({
-    success: started,
-    message: started ? 'Yayınlama başladı.' : 'Bir yayınlama zaten sürüyor.',
-  });
+    if (result.busy) {
+      return res.status(409).json({ success: false, message: 'Bir yayınlama zaten sürüyor.' });
+    }
+
+    const failed = result.job?.status === 'failed';
+
+    return res.status(failed ? 502 : 202).json({
+      success: !failed,
+      message: failed ? result.job.error || 'Yayınlama başlatılamadı.' : 'Yayınlama başladı.',
+      data: { publishId: result.job?.publishId },
+    });
+  } catch (error) {
+    console.error('Publish start error:', error);
+    return res.status(error.status || 500).json({ success: false, message: error.status ? error.message : 'Yayınlama başlatılamadı.' });
+  }
 });

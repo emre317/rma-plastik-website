@@ -35,6 +35,20 @@ npm run dev                 # http://localhost:5173 (proxies /api to :5000)
 
 In production, set `VITE_API_URL` for the client build and `CLIENT_URL` (comma-separated allowed origins) for the API.
 
+## Production (Hosting.com.tr Node.js hosting)
+
+The site is built on GitHub Actions and copied to `public_html`; the API runs as a cPanel
+Node.js (Passenger) app with `server/passenger.cjs` as startup file and MongoDB Atlas as database.
+Setup, environment variables, GitHub secrets, publishing, backups and rollback:
+**[docs/hosting-com-tr-deployment.md](docs/hosting-com-tr-deployment.md)**.
+
+```bash
+cd server
+npm test                        # API tests (no database needed)
+npm run check-env -- --db --smtp  # on the hosting: settings, Atlas and SMTP check
+npm run backup-db               # database backup as gzip'ed Extended JSON
+```
+
 ## SEO, analytics and production build
 
 `npm run build` (client) builds the app, prerenders every public page in TR/EN/AR to

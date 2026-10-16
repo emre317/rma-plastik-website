@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 
 import {
-  addQuoteNote, deleteQuoteNote, getCustomer, getQuoteAssignees, getQuoteById, getQuoteHistory, updateQuoteStatus, updateQuoteTracking,
+  addQuoteNote, deleteQuoteNote, getCustomer, getQuoteAssignees, getQuoteById, getQuoteHistory, resendQuoteMail, updateQuoteStatus, updateQuoteTracking,
 } from '../../services/adminApi';
 import { notifyQuotesChanged } from '../../services/adminAuth';
 import useAdminApi from '../../hooks/useAdminApi';
@@ -15,6 +15,69 @@ import {
   LANGUAGE_LABELS, LOSS_REASONS, QUOTE_OUTCOMES, QUOTE_STATUSES, dayValue, followUpState, formatDate, outcomeLabel, quoteReference, statusLabel, statusTone, todayValue, DESIGN_INPUT_LABELS, NEED_LABELS,
 } from '../../components/admin/quoteStatus';
 import Dropdown from '../../components/ui/Dropdown';
+
+const MAIL_KINDS = [
+  { kind: 'notification', label: 'Satış Bildirimi' },
+  { kind: 'confirmation', label: 'Müşteri Onayı' },
+];
+
+const MAIL_STATUS = {
+  sent: { label: 'Gönderildi', tone: 'ok' },
+  failed: { label: 'Gönderilemedi', tone: 'bad' },
+  skipped: { label: 'Gönderilmedi', tone: 'muted' },
+};
+
+/* Whether the request's e-mails went out; a failed one can be sent again */
+function MailStatusCard({ quote, onChange }) {
+  const call = useAdminApi();
+  const [busy, setBusy] = useState('');
+  const [message, setMessage] = useState('');
+
+  async function resend(kind) {
+    try {
+      setBusy(kind);
+      setMessage('');
+      const response = await call(resendQuoteMail, quote._id, kind);
+      onChange(response.data);
+      setMessage(response.message || 'E-posta gönderildi.');
+    } catch (err) {
+      setMessage(err.message);
+    } finally {
+      setBusy('');
+    }
+  }
+
+  return (
+    <div className="adCard adMailCard">
+      <div className="adCardHead"><h2><Mail aria-hidden="true" />E-posta Durumu</h2></div>
+      <ul className="adMailList">
+        {MAIL_KINDS.map(({ kind, label }) => {
+          const entry = quote.mail?.[kind];
+          const state = entry ? MAIL_STATUS[entry.status] : null;
+
+          return (
+            <li key={kind}>
+              <span>
+                <strong>{label}</strong>
+                <small>
+                  {state ? `${state.label} · ${formatDate(entry.at)}${entry.attempts > 1 ? ` · ${entry.attempts}. deneme` : ''}` : 'Kayıt yok'}
+                </small>
+                {entry?.status !== 'sent' && entry?.error && <small className="adMailError">{entry.error}</small>}
+              </span>
+              <span className={`adMailBadge ${state?.tone || 'muted'}`}>{state?.label || '—'}</span>
+              {entry?.status === 'failed' && (
+                <button type="button" className="cmsButton" disabled={Boolean(busy)} onClick={() => resend(kind)}>
+                  {busy === kind ? 'Gönderiliyor…' : 'Yeniden Gönder'}
+                </button>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+      {message && <small className="adMailMessage">{message}</small>}
+    </div>
+  );
+}
 
 const FOLLOW_UP_LABELS = { overdue: 'Takip tarihi geçti', today: 'Takip Bugün', upcoming: 'Takip Planlandı' };
 
@@ -556,6 +619,8 @@ export default function AdminQuoteDetail() {
                   : 'Kazanıldı veya Kaybedildi seçildiğinde talep kapanır.'}
             </small>
           </div>
+
+          <MailStatusCard quote={quote} onChange={(mail) => setQuote((current) => ({ ...current, mail }))} />
 
           <div className="adCard adTrackCard">
             <div className="adCardHead"><h2><CalendarClock aria-hidden="true" />Takip</h2></div>

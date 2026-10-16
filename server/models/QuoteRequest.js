@@ -26,6 +26,16 @@ export const QUOTE_STATUSES = [
   'closed',
 ];
 
+const mailStatusSchema = new mongoose.Schema(
+  {
+    status: { type: String, enum: ['sent', 'failed', 'skipped'], required: true },
+    at: { type: Date, default: Date.now },
+    error: { type: String, trim: true, default: '', maxlength: 300 },
+    attempts: { type: Number, default: 1 },
+  },
+  { _id: false }
+);
+
 const quoteRequestSchema = new mongoose.Schema(
   {
     company: {
@@ -296,6 +306,12 @@ const quoteRequestSchema = new mongoose.Schema(
         { _id: false }
       ),
       default: null,
+    },
+
+    // Delivery of the e-mails sent for this request (the request is saved either way)
+    mail: {
+      notification: { type: mailStatusSchema, default: null },
+      confirmation: { type: mailStatusSchema, default: null },
     },
 
     notes: {

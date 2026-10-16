@@ -31,6 +31,9 @@ const siteSettingsSchema = new mongoose.Schema(
     // Publishing bookkeeping
     contentChangedAt: { type: Date, default: null },
     publishedAt: { type: Date, default: null },
+    // Only one publish at a time: id of the running job and when it took the lock
+    publishLock: { type: String, default: '' },
+    publishLockAt: { type: Date, default: null },
   },
   { timestamps: true }
 );

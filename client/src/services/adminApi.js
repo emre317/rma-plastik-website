@@ -125,6 +125,15 @@ export function deleteQuoteNote(id, noteId, token) {
   });
 }
 
+export function resendQuoteMail(id, kind, token) {
+  return request(`/quote/${encodeURIComponent(id)}/resend-mail`, {
+    method: 'POST',
+    body: { kind },
+    token,
+    fallbackMessage: 'E-posta gönderilemedi.',
+  });
+}
+
 export function saveQuoteOffer(id, offer, token) {
   return request(`/quote/${encodeURIComponent(id)}/offer`, {
     method: 'PUT',

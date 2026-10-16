@@ -12,6 +12,7 @@ import {
   getQuoteAssignees,
   updateQuoteTracking,
   addQuoteNote,
+  resendQuoteMail,
   deleteQuoteNote,
   saveQuoteOffer,
   sendQuoteOffer,
@@ -104,6 +105,7 @@ router.get('/:id', requireAdmin, sales, getQuoteRequestById);
 
 router.patch('/:id/status', requireAdmin, sales, quoteAudit('Durumu değiştirdi', (req, data, before) => `${STATUS[before?.status] || '—'} → ${STATUS[req.body?.status] || req.body?.status}`), updateQuoteStatus);
 router.patch('/:id', requireAdmin, sales, quoteAudit('Takip bilgisini güncelledi', trackingDetails), updateQuoteTracking);
+router.post('/:id/resend-mail', requireAdmin, sales, quoteAudit('E-postayı yeniden gönderdi', (req) => (req.body?.kind === 'confirmation' ? 'Müşteri onayı' : 'Satış bildirimi')), resendQuoteMail);
 router.post('/:id/notes', requireAdmin, sales, quoteAudit('Not ekledi', (req) => String(req.body?.text || '').slice(0, 160)), addQuoteNote);
 router.delete('/:id/notes/:noteId', requireAdmin, sales, quoteAudit('Not sildi'), deleteQuoteNote);
 router.put('/:id/offer', requireAdmin, sales, quoteAudit('Proformayı kaydetti', (req, data) => (data?.offer ? `R${data.offer.revision} · ${data.offer.lines?.length || 0} satır · ${data.offer.currency}` : '')), saveQuoteOffer);

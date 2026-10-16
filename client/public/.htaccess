@@ -1,0 +1,83 @@
+# =====================================================================
+#  RMA Plastik – public_html/.htaccess (LiteSpeed / Apache, cPanel)
+#  Deployed with the site build (client/public/.htaccess). Rules that cPanel
+#  adds to this file are overwritten on the next deployment: add them here.
+#
+#  Layout on the hosting (see docs/hosting-com-tr-deployment.md):
+#    public_html/                 this build (prerendered pages + assets)
+#    public_html/api/.htaccess    written by cPanel "Setup Node.js App"
+#                                 (Passenger) when the API runs on /api
+#    public_html/uploads          symlink to the upload folder (UPLOAD_DIR)
+# =====================================================================
+
+Options -Indexes -MultiViews +SymLinksIfOwnerMatch
+DirectoryIndex index.html
+# /tr/products is served from /tr/products/index.html without a redirect
+# to a trailing slash (canonical URLs have no slash)
+DirectorySlash Off
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # --- HTTPS (also behind a proxy that terminates SSL) ---
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteCond %{REQUEST_URI} !^/\.well-known/
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # --- rmaplastik.com -> www.rmaplastik.com (VITE_SITE_URL uses www) ---
+  RewriteCond %{HTTP_HOST} ^rmaplastik\.com$ [NC]
+  RewriteCond %{REQUEST_URI} !^/\.well-known/
+  RewriteRule ^ https://www.rmaplastik.com%{REQUEST_URI} [L,R=301]
+
+  # --- The home page lives at /tr (docs/analytics-seo-setup.md) ---
+  RewriteRule ^$ https://%{HTTP_HOST}/tr [L,R=301]
+
+  # --- Not handled here: the API (Node.js app), uploads, SSL validation ---
+  RewriteRule ^(api|uploads|\.well-known)(/|$) - [L]
+
+  # --- Prerendered pages: /tr/products -> /tr/products/index.html ---
+  RewriteCond %{REQUEST_URI} !\.[a-z0-9]{2,5}$ [NC]
+  RewriteCond %{DOCUMENT_ROOT}/$1/index.html -f
+  RewriteRule ^(.+?)/?$ /$1/index.html [L]
+
+  # --- Everything else without a file extension (admin, unknown pages): the app shell.
+  #     A missing file (old /assets/x.js, image) gets a real 404, not the HTML shell. ---
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} !\.[a-z0-9]{2,5}$ [NC]
+  RewriteRule ^ /index.html [L]
+</IfModule>
+
+# --- Caching: hashed build files forever, pages always fresh ---
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|json|xml|txt)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  # Scripts, styles and fonts all come from /assets with a content hash in the name
+  <FilesMatch "\.(js|css|woff2?)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(webp|avif|jpg|jpeg|png|svg|ico|pdf)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+
+  # --- Security headers ---
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+  # Turn on after HTTPS works on www and the bare domain (cannot be undone quickly):
+  # Header always set Strict-Transport-Security "max-age=31536000"
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType application/manifest+json .webmanifest
+  AddType image/avif .avif
+  AddType image/webp .webp
+</IfModule>
+
+# Never serve .htaccess, .git or .env files
+<FilesMatch "^\.(ht|git|env)">
+  Require all denied
+</FilesMatch>

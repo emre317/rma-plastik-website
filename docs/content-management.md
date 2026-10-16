@@ -34,9 +34,13 @@ Panel adresi: `https://ALAN-ADI/admin` (giriş: `npm run create-admin` ile oluş
 ### Nasıl çalışır?
 1. Değişiklik yapıp **Kaydet**'e basın (veritabanına kaydedilir, site henüz değişmez).
 2. Sol alttaki kutu "Yayınlanmamış değişiklikler var" der → **Yayınla**'ya basın.
-3. Sunucu siteyi yeni içerikle yeniden oluşturur (genelde 10–30 sn). Her sayfa Google için
-   hazır HTML olarak üretilir, sitemap güncellenir. Eski site, yenisi tamamen hazır olana kadar
-   yayında kalır; ziyaretçiler yarım bir site görmez. Derleme hata verirse eski site aynen kalır.
+3. Site yeni içerikle yeniden oluşturulur. Canlıda bu iş **GitHub Actions**'ta yapılır (genelde 3–6 dk),
+   site sonra hostinge yüklenir (bkz. `docs/hosting-com-tr-deployment.md`). Her sayfa Google için hazır
+   HTML olarak üretilir, sitemap güncellenir. Sol alttaki kutu adımları gösterir (Sırada → Site derleniyor
+   → Sunucuya yükleniyor → Site Güncel) ve GitHub kaydına bağlantı verir.
+4. Eski site, yenisi tamamen yüklenip doğrulanana kadar yayında kalır. Derleme ya da yükleme hata
+   verirse eski site aynen kalır; kutu hatanın derlemede mi yüklemede mi olduğunu ve log'un son
+   satırlarını gösterir. Aynı anda yalnızca bir yayın çalışır; durum sunucu yeniden başlasa da kaybolmaz.
 
 ### Ürünler
 - Boş bırakılan İngilizce/Arapça alanlarda Türkçe metin gösterilir.
@@ -105,19 +109,9 @@ Veritabanında hiç ürün yoksa site kendi içindeki ürün listesini gösterir
 (veya seed çalıştırıldığı) andan itibaren ürünler tamamen panelden yönetilir.
 
 ## Sunucu gereksinimleri
-- API ve site projesi (`client/`) aynı sunucuda; `client` klasöründe `npm install` yapılmış olmalı
-  (Yayınla bu klasörde `npm run build` çalıştırır). Farklı konumdaysa `server/.env` → `CLIENT_DIR`.
-- nginx `client/dist` klasörünü sunar (bkz. `docs/analytics-seo-setup.md`); ürün görselleri için:
-
-```nginx
-location /uploads/ {
-  alias /var/www/rma/server/uploads/;
-  add_header Cache-Control "public, max-age=2592000";
-}
-```
-
-- Yedekleme: MongoDB veritabanı + `server/uploads` klasörü.
-
-## Geliştirme ortamı
-`npm run dev` sitenin son çekilen içeriğini kullanır. Veritabanındaki güncel içeriği yerelde görmek için
-API çalışırken `cd client && npm run content:pull`.
+- **Canlı ortam (Hosting.com.tr, cPanel):** tüm kurulum, ortam değişkenleri, yayınlama ve yedekleme
+  `docs/hosting-com-tr-deployment.md` belgesindedir. Site sunucuda derlenmez (`PUBLISH_MODE=github`).
+- **Geliştirme / kendi sunucunuz:** `PUBLISH_MODE=local` ile Yayınla, API'nin yanındaki `client`
+  klasöründe `npm run build` çalıştırır (`client` içinde `npm install` yapılmış olmalı; farklı
+  konumdaysa `server/.env` → `CLIENT_DIR`).
+- Yedekleme: MongoDB veritabanı (`npm run backup-db` veya Atlas yedekleri) + yüklenen görseller (`UPLOAD_DIR`).

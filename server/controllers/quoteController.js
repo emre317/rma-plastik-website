@@ -13,6 +13,7 @@ import AdminUser from '../models/AdminUser.js';
 import { CHANNELS, cleanAttribution } from '../services/attribution.js';
 import { getSiteSettings } from '../models/SiteSettings.js';
 import { isMailConfigured } from '../services/mailer.js';
+import { trackQuoteMail } from '../services/mailTracking.js';
 import {
   isCustomerConfirmationEnabled,
   quoteReference,
@@ -184,20 +185,17 @@ export async function createQuoteRequest(req, res) {
       });
 
     // Email the sales team; a mail failure must not fail the request
-    sendQuoteNotification(quoteRequest).catch((error) => {
-      console.error('Quote notification email error:', error);
-    });
+    // (the delivery result is saved on the request and shown in the panel)
+    trackQuoteMail(quoteRequest._id, 'notification', () => sendQuoteNotification(quoteRequest));
 
     // Receipt with the reference number for the customer, in the site language
     const confirmation = isMailConfigured() && isCustomerConfirmationEnabled();
 
     if (confirmation) {
-      getSiteSettings()
-        .catch(() => ({}))
-        .then((settings) => sendQuoteConfirmation(quoteRequest, settings || {}))
-        .catch((error) => {
-          console.error('Quote confirmation email error:', error);
-        });
+      trackQuoteMail(quoteRequest._id, 'confirmation', async () => {
+        const settings = await getSiteSettings().catch(() => ({}));
+        return sendQuoteConfirmation(quoteRequest, settings || {});
+      });
     }
 
     return res.status(201).json({
@@ -1158,5 +1156,41 @@ export async function getUnreadQuoteCount(req, res) {
       success: false,
       message: 'Unread count could not be loaded.',
     });
+  }
+}
+
+
+/* Sends a quote e-mail again (after an SMTP failure); returns the new delivery status */
+export async function resendQuoteMail(req, res) {
+  try {
+    const kind = req.body?.kind === 'confirmation' ? 'confirmation' : 'notification';
+
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      return res.status(404).json({ success: false, message: 'Quote request not found.' });
+    }
+
+    const quote = await QuoteRequest.findById(req.params.id);
+    if (!quote) return res.status(404).json({ success: false, message: 'Quote request not found.' });
+
+    if (!isMailConfigured()) {
+      return res.status(400).json({ success: false, message: 'SMTP ayarlı değil; e-posta gönderilemez.' });
+    }
+
+    const entry = await trackQuoteMail(quote._id, kind, async () => {
+      if (kind === 'notification') return sendQuoteNotification(quote);
+      const settings = await getSiteSettings().catch(() => ({}));
+      return sendQuoteConfirmation(quote, settings || {});
+    });
+
+    const fresh = await QuoteRequest.findById(quote._id).select('mail').lean();
+
+    return res.status(entry.status === 'failed' ? 502 : 200).json({
+      success: entry.status !== 'failed',
+      message: entry.status === 'sent' ? 'E-posta gönderildi.' : entry.error,
+      data: fresh?.mail || {},
+    });
+  } catch (error) {
+    console.error('Resend quote mail error:', error);
+    return res.status(500).json({ success: false, message: 'E-posta gönderilemedi.' });
   }
 }

@@ -93,6 +93,19 @@ fs.writeFileSync(
   `User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/\n\nSitemap: ${SITE_URL}/sitemap.xml\n`
 );
 
+/* build.json: which release this is (the deployment checks the live copy against it) */
+fs.writeFileSync(
+  path.join(dist, 'build.json'),
+  `${JSON.stringify({
+    builtAt: new Date().toISOString(),
+    commit: process.env.GITHUB_SHA || '',
+    publishId: process.env.PUBLISH_ID || '',
+    run: process.env.GITHUB_RUN_ID || '',
+    pages: count,
+    siteUrl: SITE_URL,
+  }, null, 2)}\n`
+);
+
 fs.rmSync(ssrDir, { recursive: true, force: true });
 
 console.log(`Prerendered ${count} pages, sitemap.xml and robots.txt for ${SITE_URL}`);

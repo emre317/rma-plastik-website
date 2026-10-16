@@ -1,0 +1,55 @@
+# =====================================================================
+#  Puts an earlier site release back live (SSH deployments only; the last
+#  five releases are kept on the hosting in ~/rma-deploy/releases).
+#  Content saved in the panel is not affected; "Yayınla" builds again later.
+# =====================================================================
+name: Rollback site
+
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: Release id (folder name in ~/rma-deploy/releases) or "previous"
+        required: true
+        default: previous
+
+concurrency:
+  group: publish-site
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Roll back over SSH
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          PORT: ${{ secrets.DEPLOY_PORT || '22' }}
+          USER_NAME: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PATH: ${{ vars.DEPLOY_PATH || 'public_html' }}
+          RELEASE: ${{ inputs.release }}
+        run: |
+          set -e
+          case "$RELEASE" in previous|[0-9]*-[0-9]*) ;; *) echo "::error::Invalid release id"; exit 1 ;; esac
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/deploy_key ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy_key -p "$PORT" -o BatchMode=yes -o StrictHostKeyChecking=yes "$USER_NAME@$HOST" \
+            "bash -s -- rollback '$RELEASE' - '$DEPLOY_PATH'" < deploy/remote-site.sh
+
+      - name: Show live build
+        run: curl -fsS --max-time 15 "${{ vars.SITE_URL }}/build.json?ts=$(date +%s)"
+
+      - name: Clean up key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key

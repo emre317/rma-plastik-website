@@ -123,7 +123,10 @@ Gerekli kurallar:
 - `/assets/*` uzun süreli önbellek (dosya adları içerik özetli).
 - **Eski sitenin adresleri** yeni adreslere 301 ile yönlendirilmeli (liste eski siteden çıkarılacak).
 
-Örnek **nginx**:
+**cPanel / LiteSpeed (Hosting.com.tr):** bu kuralların hepsi `client/public/.htaccess` dosyasında hazırdır ve
+derlemeyle `public_html` içine gider (bkz. `docs/hosting-com-tr-deployment.md`).
+
+Kendi sunucunuzda örnek **nginx**:
 
 ```nginx
 server {

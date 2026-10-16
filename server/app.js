@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import mongoose from 'mongoose';
 
 import quoteRoutes from './routes/quoteRoutes.js';
 import leadRoutes from './routes/leadRoutes.js';
@@ -9,6 +8,8 @@ import userRoutes from './routes/userRoutes.js';
 import auditRoutes from './routes/auditRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import { adminContentRouter, publicContentRouter } from './routes/contentRoutes.js';
+import publishRoutes from './routes/publishRoutes.js';
+import { databaseState } from './config/db.js';
 import { UPLOAD_ROOT } from './middleware/upload.js';
 
 const app = express();
@@ -21,7 +22,8 @@ const allowedOrigins = (
   .map((origin) => origin.trim())
   .filter(Boolean);
 
-// Needed for correct client IPs (rate limiting) behind a reverse proxy.
+// Needed for correct client IPs (rate limiting) behind a reverse proxy
+// (LiteSpeed + Passenger on shared hosting: TRUST_PROXY=1 = one proxy hop).
 if (process.env.TRUST_PROXY) {
   app.set(
     'trust proxy',
@@ -29,12 +31,33 @@ if (process.env.TRUST_PROXY) {
   );
 }
 
+app.disable('x-powered-by');
+
+/*
+  cPanel "Setup Node.js App" can publish the API under an application URL such
+  as rmaplastik.com/api. Depending on the Passenger setup the app receives the
+  path with or without that prefix; both arrive at the same routes here.
+  (/uploads stays as it is.)
+*/
+app.use((req, res, next) => {
+  if (!req.url.startsWith('/api') && !req.url.startsWith('/uploads')) {
+    req.url = `/api${req.url === '/' ? '' : req.url}`;
+  }
+  next();
+});
+
 
 /* =====================================================
    MIDDLEWARE
 ===================================================== */
 
-app.use(helmet());
+// JSON API: no inline content is served, so the strictest defaults apply
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: 'same-site' },
+  strictTransportSecurity: process.env.NODE_ENV === 'production'
+    ? { maxAge: 31536000, includeSubDomains: false }
+    : false,
+}));
 
 app.use(
   cors({
@@ -67,17 +90,17 @@ app.use(
 ===================================================== */
 
 app.get('/api/health', (_, res) => {
-  const connected =
-    mongoose.connection.readyState === 1;
+  const database = databaseState();
+  const connected = database === 'connected';
+
+  res.set('Cache-Control', 'no-store');
 
   return res
     .status(connected ? 200 : 503)
     .json({
       status: connected ? 'OK' : 'DEGRADED',
       service: 'RMA API',
-      database: connected
-        ? 'connected'
-        : 'disconnected',
+      database,
     });
 });
 
@@ -100,13 +123,17 @@ app.use('/api/leads', leadRoutes);
 
 app.use('/api/content', publicContentRouter);
 
+app.use('/api/publish', publishRoutes);
+
 app.use('/api/admin/users', userRoutes);
 
 app.use('/api/admin/audit', auditRoutes);
 
 app.use('/api/admin', adminContentRouter);
 
-// Uploaded product images (nginx can serve this folder directly in production)
+// Uploaded images. On the hosting, /uploads is normally served by LiteSpeed from
+// a symlink in public_html (see docs/hosting-com-tr-deployment.md); this route
+// serves the same folder when the request reaches the API instead.
 app.use(
   '/uploads',
   express.static(UPLOAD_ROOT, {

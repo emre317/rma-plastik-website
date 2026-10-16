@@ -5,9 +5,12 @@
   "scripts": {
     "dev": "node --watch server.js",
     "start": "node server.js",
+    "test": "node --test \"test/*.test.js\"",
+    "check-env": "node scripts/checkEnv.js",
     "create-admin": "node scripts/createAdmin.js",
     "seed-content": "node scripts/seedContent.js",
-    "mail-test": "node scripts/mailTest.js"
+    "mail-test": "node scripts/mailTest.js",
+    "backup-db": "node scripts/backupDatabase.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -20,5 +23,8 @@
     "mongoose": "^9.10.3",
     "multer": "^2.4.0",
     "nodemailer": "^10.0.15"
+  },
+  "engines": {
+    "node": ">=22.12"
   }
 }

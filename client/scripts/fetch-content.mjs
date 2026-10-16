@@ -5,6 +5,9 @@
   - CONTENT_API_URL set (admin "Publish", or `npm run content:pull`): the download
     must succeed, otherwise the build stops instead of publishing stale content.
   - Not set: the step is skipped and the last snapshot (or the built-in defaults) is used.
+  - CONTENT_API_TOKEN is sent as "Authorization: Bearer …" (the API requires it in
+    production). PUBLISH_ID (set by the publish workflow) is passed on so the
+    publish job records when its content was taken.
 */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -22,7 +25,13 @@ if (!url) {
 }
 
 try {
-  const response = await fetch(url, { signal: AbortSignal.timeout(15000) });
+  const requestUrl = new URL(url);
+  if (process.env.PUBLISH_ID && !requestUrl.searchParams.has('publishId')) {
+    requestUrl.searchParams.set('publishId', process.env.PUBLISH_ID);
+  }
+
+  const headers = process.env.CONTENT_API_TOKEN ? { Authorization: `Bearer ${process.env.CONTENT_API_TOKEN}` } : {};
+  const response = await fetch(requestUrl, { headers, signal: AbortSignal.timeout(30000) });
 
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}`);
@@ -79,6 +88,7 @@ try {
 
   console.log(`Content: ${data.productFamilies?.length ?? 'built-in'} product tables, saved to src/data/content.live.json`);
 } catch (error) {
-  console.error(`Content: could not load ${url} (${error.message})`);
+  // The address only, never the token
+  console.error(`Content: could not load ${url.split('?')[0]} (${error.message})`);
   process.exit(1);
 }

@@ -1,0 +1,89 @@
+# =====================================================================
+#  Updates the API (Express) on the hosting: copies the server code and the
+#  client data files it imports, runs `npm ci --omit=dev` inside the cPanel
+#  Node.js environment and restarts the Passenger app.
+#  Started by hand only (Actions > Deploy API > Run workflow).
+# =====================================================================
+name: Deploy API
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-api
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: production
+    env:
+      RELEASE_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check the API
+        working-directory: server
+        run: |
+          npm ci --no-audit --no-fund
+          for file in $(git ls-files '*.js' '*.cjs'); do node --check "$file"; done
+          npm test
+
+      - name: Package
+        run: |
+          tar -czf "api-$RELEASE_ID.tar.gz" \
+            --exclude=server/node_modules --exclude=server/uploads --exclude='server/.env*' --exclude=server/test \
+            server \
+            client/src/data/offerText.js \
+            client/src/data/productGroups.builtin.js \
+            client/src/data/sectors.builtin.js \
+            client/src/data/productTables.builtin.js \
+            client/src/data/exportMarkets.builtin.js \
+            client/src/data/projects.builtin.js \
+            client/src/i18n/locales/tr.js \
+            client/src/i18n/locales/en.js \
+            client/src/i18n/locales/ar.js
+          tar -tzf "api-$RELEASE_ID.tar.gz" | head -n 20
+
+      - name: Upload and install
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          PORT: ${{ secrets.DEPLOY_PORT || '22' }}
+          USER_NAME: ${{ secrets.DEPLOY_USER }}
+          APP_DIR: ${{ vars.DEPLOY_APP_DIR || 'rma-app' }}
+          ACTIVATE: ${{ vars.NODEVENV_ACTIVATE }}
+        run: |
+          set -e
+          [ -n "$ACTIVATE" ] || { echo "::error::Repository variable NODEVENV_ACTIVATE is not set"; exit 1; }
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/deploy_key ~/.ssh/known_hosts
+          SSH="ssh -i $HOME/.ssh/deploy_key -p $PORT -o BatchMode=yes -o StrictHostKeyChecking=yes"
+          $SSH "$USER_NAME@$HOST" 'mkdir -p ~/rma-deploy/incoming'
+          scp -i ~/.ssh/deploy_key -P "$PORT" -o BatchMode=yes -o StrictHostKeyChecking=yes \
+            "api-$RELEASE_ID.tar.gz" "$USER_NAME@$HOST:rma-deploy/incoming/"
+          $SSH "$USER_NAME@$HOST" "bash -s -- '$RELEASE_ID' \"\$HOME/rma-deploy/incoming/api-$RELEASE_ID.tar.gz\" '$APP_DIR' '$ACTIVATE'" < deploy/remote-api.sh
+
+      - name: Health check
+        run: |
+          for _ in 1 2 3 4 5 6; do
+            if curl -fsS --max-time 15 "${{ vars.API_URL }}/api/health"; then echo; exit 0; fi
+            echo "API not healthy yet, waiting…"; sleep 10
+          done
+          echo "::error::/api/health does not answer OK (database or start-up problem: see the app log in cPanel)."
+          exit 1
+
+      - name: Clean up key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key

@@ -14,15 +14,31 @@ function formatTime(value) {
   }).format(new Date(value));
 }
 
+const STEP_LABELS = {
+  pending: 'Bekliyor',
+  running: 'Sürüyor',
+  success: 'Tamam',
+  failed: 'Hata',
+  skipped: 'Yapılmadı',
+};
+
+const RUNNING_LABELS = {
+  queued: 'Sırada…',
+  building: 'Site derleniyor…',
+  deploying: 'Sunucuya yükleniyor…',
+};
+
 /*
-  Shows whether saved content is live and rebuilds the public site on demand.
-  Polls while a build is running.
+  Shows whether saved content is live and publishes it on demand (the build
+  runs on GitHub Actions in production). The state comes from the server, so
+  it survives a page reload or a server restart. Polls while a publish runs.
 */
 export default function PublishPanel() {
   const call = useAdminApi();
 
   const [state, setState] = useState(null);
   const [error, setError] = useState('');
+  const [starting, setStarting] = useState(false);
 
   const refresh = useCallback(async () => {
     try {
@@ -34,54 +50,83 @@ export default function PublishPanel() {
     }
   }, [call]);
 
+  const running = state?.status === 'running';
+
   useEffect(() => {
     refresh();
 
     // Content pages save in the background; re-check now and then
-    const timer = setInterval(refresh, state?.status === 'running' ? 2500 : 20000);
+    const timer = setInterval(refresh, running ? 5000 : 30000);
 
     return () => clearInterval(timer);
-  }, [refresh, state?.status]);
+  }, [refresh, running]);
 
   async function publish() {
     try {
       setError('');
+      setStarting(true);
       await call(startPublish);
-      setState((current) => ({ ...current, status: 'running' }));
     } catch (err) {
       setError(err.message);
+    } finally {
+      setStarting(false);
+      refresh();
     }
   }
 
-  const running = state?.status === 'running';
+  const job = state?.job;
   const pending =
     state?.contentChangedAt &&
     (!state.publishedAt || new Date(state.contentChangedAt) > new Date(state.publishedAt));
+  const failed = job?.status === 'failed';
+  const lastEvent = job?.events?.[job.events.length - 1];
 
   return (
-    <div className={`publishPanel ${pending ? 'pending' : ''} ${running ? 'running' : ''} ${state?.status === 'failed' ? 'failed' : ''}`}>
+    <div className={`publishPanel ${pending ? 'pending' : ''} ${running ? 'running' : ''} ${failed ? 'failed' : ''}`}>
       <span className="publishPanelLabel">
         <i className="publishDot" aria-hidden="true" />
         {running
-          ? 'Site güncelleniyor…'
+          ? RUNNING_LABELS[job?.status] || 'Site güncelleniyor…'
           : pending
             ? 'Yayınlanmamış değişiklikler var'
             : 'Site Güncel'}
       </span>
 
       <small>Son yayın: {formatTime(state?.publishedAt)}</small>
+
+      {running && (
+        <small className="publishPanelSteps" aria-live="polite">
+          Derleme: {STEP_LABELS[job.build]} · Yükleme: {STEP_LABELS[job.deploy]}
+          {lastEvent?.message ? <><br />{lastEvent.message}</> : null}
+        </small>
+      )}
+
       {pending && !running && <small className="publishPanelHint">Kaydettiğiniz değişiklikler yayınlanınca sitede görünür.</small>}
 
-      {state?.status === 'failed' && (
+      {failed && (
         <>
           <small className="publishPanelError">
-            Son yayın başarısız oldu{state.error ? `: ${state.error}` : '.'}
+            {job.build === 'success'
+              ? 'Site derlendi ama sunucuya yüklenemedi; eski site yayında.'
+              : 'Son yayın başarısız oldu; eski site yayında.'}
+            {/* The reason, unless it only repeats the sentence above */}
+            {job.error && !/eski site yayında/i.test(job.error) ? ` ${job.error}` : ''}
           </small>
 
-          {state.log && (
+          {(job.log || job.events?.length > 0 || job.runUrl) && (
             <details className="publishPanelLog">
               <summary>Ayrıntıları Göster</summary>
-              <pre>{state.log.slice(-2500)}</pre>
+              {job.events?.length > 0 && (
+                <ol className="publishPanelEvents">
+                  {job.events.slice(-8).map((event, index) => (
+                    <li key={`${event.at}-${index}`}><time>{formatTime(event.at)}</time> {event.message}</li>
+                  ))}
+                </ol>
+              )}
+              {job.log && <pre>{job.log.slice(-2500)}</pre>}
+              {job.runUrl && (
+                <a href={job.runUrl} target="_blank" rel="noopener noreferrer">GitHub Actions kaydını aç</a>
+              )}
             </details>
           )}
         </>
@@ -89,9 +134,17 @@ export default function PublishPanel() {
 
       {error && <small className="publishPanelError">{error}</small>}
 
-      <button type="button" onClick={publish} disabled={running} title={pending ? undefined : 'Siteyi yeniden yayınla'}>
-        {running ? 'Yayınlanıyor…' : pending ? 'Değişiklikleri Yayınla' : 'Yayınla'}
-      </button>
+      {state?.mode === 'off' ? (
+        <small className="publishPanelHint">Yayınlama bu sunucuda kapalı.</small>
+      ) : (
+        <button type="button" onClick={publish} disabled={running || starting} title={pending ? undefined : 'Siteyi yeniden yayınla'}>
+          {running || starting ? 'Yayınlanıyor…' : pending ? 'Değişiklikleri Yayınla' : 'Yayınla'}
+        </button>
+      )}
+
+      {running && job?.runUrl && (
+        <a className="publishPanelRun" href={job.runUrl} target="_blank" rel="noopener noreferrer">İlerlemeyi GitHub'da gör</a>
+      )}
     </div>
   );
 }
