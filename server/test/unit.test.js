@@ -6,6 +6,7 @@ import { tokenMatches, requireContentToken, requireCallbackToken } from '../midd
 import { checkEnvironment, publishMode } from '../config/env.js';
 import { redactUri } from '../config/db.js';
 import { sanitizeLog } from '../services/publisher.js';
+import { githubConfig } from '../services/githubActions.js';
 
 const res = () => {
   const r = { code: 200, body: null, status(c) { r.code = c; return r; }, json(b) { r.body = b; return r; } };
@@ -70,7 +71,7 @@ test('production environment check', () => {
   const base = {
     NODE_ENV: 'production', MONGODB_URI: 'mongodb+srv://u:p@cluster0.example.mongodb.net/rma', JWT_SECRET: 'x'.repeat(40),
     CLIENT_URL: 'https://www.rmaplastik.com', TRUST_PROXY: '1', CONTENT_API_TOKEN: 'c'.repeat(32), PUBLISH_CALLBACK_TOKEN: 'p'.repeat(32),
-    GITHUB_TOKEN: 'g', GITHUB_REPOSITORY: 'emre317/rma-plastik-website', UPLOAD_DIR: '/home/u/rma-data/uploads',
+    PUBLISH_GITHUB_TOKEN: 'g', PUBLISH_GITHUB_REPOSITORY: 'emre317/rma-plastik-website', UPLOAD_DIR: '/home/u/rma-data/uploads',
     SMTP_HOST: 'h', SMTP_USER: 'u', SMTP_PASS: 'p', PUBLISH_MODE: undefined,
   };
   withEnv(base, () => {
@@ -97,4 +98,12 @@ test('secrets are hidden in logs and messages', () => {
   assert.ok(!log.includes('ghp_'));
   assert.ok(!log.includes('u:p@'));
   assert.ok(!log.includes('hunter2'));
+});
+
+test('variables the GitHub Actions runner sets do not change the publish settings', () => {
+  const runner = { GITHUB_REF: 'refs/heads/main', GITHUB_WORKFLOW: 'CI', GITHUB_REPOSITORY: 'someone/else', GITHUB_API_URL: 'https://api.example.com', GITHUB_TOKEN: 'runner-token' };
+  const ours = { PUBLISH_GITHUB_REF: undefined, PUBLISH_GITHUB_WORKFLOW: undefined, PUBLISH_GITHUB_REPOSITORY: undefined, PUBLISH_GITHUB_API_URL: undefined, PUBLISH_GITHUB_TOKEN: undefined };
+  withEnv({ ...runner, ...ours }, () => {
+    assert.deepEqual(githubConfig(), { api: 'https://api.github.com', repo: '', workflow: 'publish-site.yml', ref: 'main', token: '' });
+  });
 });

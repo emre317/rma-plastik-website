@@ -35,9 +35,9 @@ test.after(() => fake.close());
 Object.assign(process.env, {
   NODE_ENV: 'production',
   PUBLISH_MODE: 'github',
-  GITHUB_TOKEN: 'test-github-token',
-  GITHUB_REPOSITORY: 'emre317/rma-plastik-website',
-  GITHUB_API_URL: `http://127.0.0.1:${fake.address().port}`,
+  PUBLISH_GITHUB_TOKEN: 'test-github-token',
+  PUBLISH_GITHUB_REPOSITORY: 'emre317/rma-plastik-website',
+  PUBLISH_GITHUB_API_URL: `http://127.0.0.1:${fake.address().port}`,
 });
 
 const { default: PublishJob } = await import('../models/PublishJob.js');
@@ -135,7 +135,7 @@ test('GitHub refusing the start is shown and frees the lock', async () => {
   const { job } = await publisher.startPublish(user);
   github.dispatchStatus = 204;
   assert.equal(job.status, 'failed');
-  assert.match(job.error, /GITHUB_TOKEN/);
+  assert.match(job.error, /PUBLISH_GITHUB_TOKEN/);
   assert.equal(await lock(), '');
 });
 

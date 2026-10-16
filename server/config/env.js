@@ -57,7 +57,7 @@ export function checkEnvironment() {
     }
 
     if (publishMode() === 'github') {
-      ['GITHUB_TOKEN', 'GITHUB_REPOSITORY', 'PUBLISH_CALLBACK_TOKEN'].forEach((key) => {
+      ['PUBLISH_GITHUB_TOKEN', 'PUBLISH_GITHUB_REPOSITORY', 'PUBLISH_CALLBACK_TOKEN'].forEach((key) => {
         if (!env[key]) warnings.push(`${key} is not set; the admin "Yayınla" button cannot start a build.`);
       });
     }

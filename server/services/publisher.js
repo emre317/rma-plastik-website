@@ -32,7 +32,7 @@ const serverRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const CLIENT_DIR = path.resolve(process.env.CLIENT_DIR || path.join(serverRoot, '..', 'client'));
 
 // Server secrets are not needed by the site build, so they are not passed on
-const SECRET_KEYS = /^(MONGODB_|JWT_SECRET|SMTP_|MAIL_|QUOTE_NOTIFY_TO|ADMIN_|GITHUB_TOKEN|PUBLISH_CALLBACK_TOKEN)/i;
+const SECRET_KEYS = /^(MONGODB_|JWT_SECRET|SMTP_|MAIL_|QUOTE_NOTIFY_TO|ADMIN_|PUBLISH_GITHUB_TOKEN|PUBLISH_CALLBACK_TOKEN)/i;
 
 const TIMEOUT_MIN = Number(process.env.PUBLISH_TIMEOUT_MIN) || 40;
 const POLL_EVERY_MS = 15000;
@@ -153,7 +153,7 @@ export async function applyStage(job, stage, { message = '', log = '', runId = '
 
 async function startGithub(job) {
   if (!isGithubConfigured()) {
-    await finish(job, { success: false, error: 'GitHub bağlantısı yapılandırılmamış (GITHUB_TOKEN, GITHUB_REPOSITORY).', failedStep: 'build' });
+    await finish(job, { success: false, error: 'GitHub bağlantısı yapılandırılmamış (PUBLISH_GITHUB_TOKEN, PUBLISH_GITHUB_REPOSITORY).', failedStep: 'build' });
     return;
   }
 

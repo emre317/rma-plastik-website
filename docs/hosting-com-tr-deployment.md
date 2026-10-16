@@ -138,9 +138,9 @@ Gerçek değerler **asla git'e girmez**.
 | `QUOTE_CONFIRM_CUSTOMER` | `true` (müşteriye referans numaralı onay e-postası) |
 | `UPLOAD_DIR` | `/home/<kullanıcı>/rma-data/uploads` |
 | `PUBLISH_MODE` | `github` |
-| `GITHUB_TOKEN` | Fine-grained token ([§8.1](#81-github-token-api-için)) |
-| `GITHUB_REPOSITORY` | `emre317/rma-plastik-website` |
-| `GITHUB_WORKFLOW` / `GITHUB_REF` | `publish-site.yml` / `main` |
+| `PUBLISH_GITHUB_TOKEN` | Fine-grained token ([§8.1](#81-github-token-api-için)) |
+| `PUBLISH_GITHUB_REPOSITORY` | `emre317/rma-plastik-website` |
+| `PUBLISH_GITHUB_WORKFLOW` / `PUBLISH_GITHUB_REF` | `publish-site.yml` / `main` |
 | `CONTENT_API_TOKEN` | Rastgele, en az 24 karakter. GitHub secret'ı ile **aynı** |
 | `PUBLISH_CALLBACK_TOKEN` | Rastgele, en az 24 karakter. GitHub secret'ı ile **aynı** |
 | `PUBLISH_TIMEOUT_MIN` | `40` (bitmeyen yayın bu süreden sonra "başarısız" sayılır) |
@@ -325,8 +325,8 @@ GitHub › Settings › Developer settings › **Fine-grained personal access to
   - Repository permissions › **Actions: Read and write** (workflow başlatma ve durum okuma)
   - **Metadata: Read** (zorunlu)
   - Başka izin vermeyin.
-- Süre: 1 yıl. Bitmeden yenileyin; süresi biterse panel "GITHUB_TOKEN geçersiz" der.
-- Token **yalnızca** API ortamında (`GITHUB_TOKEN`) durur. Tarayıcıya ve repoya gitmez.
+- Süre: 1 yıl. Bitmeden yenileyin; süresi biterse panel "PUBLISH_GITHUB_TOKEN geçersiz" der.
+- Token **yalnızca** API ortamında (`PUBLISH_GITHUB_TOKEN`) durur. Tarayıcıya ve repoya gitmez.
 
 ### 8.2 Secrets (Settings › Secrets and variables › Actions › **Secrets**)
 
@@ -540,7 +540,7 @@ Kısıtları:
 | `/api/health` 503, `database: connecting` | Atlas IP erişim listesi, kullanıcı/şifre, çıkış portu ⚠️ → `npm run check-env -- --db` |
 | Uygulama hiç açılmıyor | cPanel'deki `stderr.log`/uygulama logunda `[env] …` hataları; başlangıç dosyası `passenger.cjs` mi? |
 | `ERR_REQUIRE_ESM` / `ERR_REQUIRE_ASYNC_MODULE` | Startup file olarak `server.js` seçilmiş → `passenger.cjs` yapın |
-| Panelde "GITHUB_TOKEN geçersiz ya da Actions yazma izni yok" | Token süresi doldu ya da izin eksik ([§8.1](#81-github-token-api-için)) |
+| Panelde "PUBLISH_GITHUB_TOKEN geçersiz ya da Actions yazma izni yok" | Token süresi doldu ya da izin eksik ([§8.1](#81-github-token-api-için)) |
 | Yayın "zaman aşımı" | Workflow sırada bekliyor ya da `production` ortamında onay bekliyor; Actions sekmesine bakın |
 | Workflow "Missing configuration" | Eksik secret/variable adı log'da yazar |
 | İçerik alınamadı (HTTP 401) | `CONTENT_API_TOKEN` API ile GitHub'da farklı |

@@ -1,23 +1,23 @@
 /*
   Minimal GitHub REST client for the publish workflow. The token stays on the
-  server (GITHUB_TOKEN, a fine-grained token limited to this repository with
+  server (PUBLISH_GITHUB_TOKEN, a fine-grained token limited to this repository with
   "Actions: read and write"); the browser never sees it.
 
-    GITHUB_REPOSITORY   owner/repo, e.g. emre317/rma-plastik-website
-    GITHUB_WORKFLOW     workflow file, default publish-site.yml
-    GITHUB_REF          branch the workflow runs on, default main
-    GITHUB_API_URL      default https://api.github.com (tests point it elsewhere)
+    PUBLISH_GITHUB_REPOSITORY   owner/repo, e.g. emre317/rma-plastik-website
+    PUBLISH_GITHUB_WORKFLOW     workflow file, default publish-site.yml
+    PUBLISH_GITHUB_REF          branch the workflow runs on, default main
+    PUBLISH_GITHUB_API_URL      default https://api.github.com (tests point it elsewhere)
 */
 
 const TIMEOUT_MS = 15000;
 
 export function githubConfig() {
   return {
-    api: (process.env.GITHUB_API_URL || 'https://api.github.com').replace(/\/$/, ''),
-    repo: process.env.GITHUB_REPOSITORY || '',
-    workflow: process.env.GITHUB_WORKFLOW || 'publish-site.yml',
-    ref: process.env.GITHUB_REF || 'main',
-    token: process.env.GITHUB_TOKEN || '',
+    api: (process.env.PUBLISH_GITHUB_API_URL || 'https://api.github.com').replace(/\/$/, ''),
+    repo: process.env.PUBLISH_GITHUB_REPOSITORY || '',
+    workflow: process.env.PUBLISH_GITHUB_WORKFLOW || 'publish-site.yml',
+    ref: process.env.PUBLISH_GITHUB_REF || 'main',
+    token: process.env.PUBLISH_GITHUB_TOKEN || '',
   };
 }
 
@@ -56,7 +56,7 @@ async function call(path, { method = 'GET', body } = {}) {
     // GitHub's own message, never the token or headers
     const reason = data?.message ? String(data.message).slice(0, 200) : `HTTP ${response.status}`;
     const hint = response.status === 401 || response.status === 403
-      ? ' (GITHUB_TOKEN geçersiz ya da Actions yazma izni yok)'
+      ? ' (PUBLISH_GITHUB_TOKEN geçersiz ya da Actions yazma izni yok)'
       : response.status === 404
         ? ' (depo, workflow dosyası ya da dal bulunamadı)'
         : '';
