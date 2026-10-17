@@ -206,17 +206,17 @@ jobs:
           sudo apt-get install -y -qq lftp
 
           # Hosting FTPS certificate:
-          # CN = codex.wisrv.com
+          # CN = codex.wlsrv.com
           #
           # This hostname does not resolve publicly.
           # Map the verified server IP to the certificate name.
           # Keep TLS certificate verification enabled.
 
-          echo "77.245.159.39 codex.wisrv.com" | sudo tee -a /etc/hosts > /dev/null
+          echo "77.245.159.39 codex.wlsrv.com" | sudo tee -a /etc/hosts > /dev/null
 
           echo "Checking FTPS hostname..."
 
-          getent ahostsv4 codex.wisrv.com
+          getent ahostsv4 codex.wlsrv.com
 
           echo "Connecting to FTPS..."
 
@@ -245,7 +245,7 @@ jobs:
           # and are not printed to the workflow log.
           lftp -f /dev/stdin <<EOF
           source $LFTP_CONFIG
-          open -u "$FTP_USER","$FTP_PASSWORD" "ftp://codex.wisrv.com"
+          open -u "$FTP_USER","$FTP_PASSWORD" "ftp://codex.wlsrv.com"
           set ftp:ssl-force true
           set ftp:ssl-protect-data true
           set ssl:verify-certificate true
