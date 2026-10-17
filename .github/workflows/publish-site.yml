@@ -250,7 +250,7 @@ jobs:
           set ftp:ssl-protect-data true
           set ssl:verify-certificate true
           cd "$DEPLOY_PATH"
-          mirror -R --verbose=1 --parallel=4 \
+          pwd mirror -R --verbose=1 --parallel=4 \
             --exclude-glob api/ \
             --exclude-glob uploads/ \
             --exclude-glob .well-known/ \
