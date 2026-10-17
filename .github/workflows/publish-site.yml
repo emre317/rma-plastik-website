@@ -190,74 +190,56 @@ jobs:
             < deploy/remote-site.sh
 
       # FTPS deployment for hosting.com.tr
+      
+      # FTPS deployment for hosting.com.tr
       - name: Deploy over FTPS
         id: deploy_ftps
         if: env.DEPLOY_METHOD == 'ftps'
         env:
-          FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
           set -euo pipefail
 
-          echo "Installing FTPS client..."
-
           sudo apt-get update -qq
           sudo apt-get install -y -qq lftp
 
-          # Hosting FTPS certificate:
-          # CN = codex.wlsrv.com
-          #
-          # This hostname does not resolve publicly.
-          # Map the verified server IP to the certificate name.
-          # Keep TLS certificate verification enabled.
+          test -n "$FTP_USER"
+          test -n "$FTP_PASSWORD"
 
-          echo "77.245.159.39 codex.wlsrv.com" | sudo tee -a /etc/hosts > /dev/null
+          echo "77.245.159.39 codex.wlsrv.com" | sudo tee -a /etc/hosts >/dev/null
 
-          echo "Checking FTPS hostname..."
+          CREDENTIALS_FILE="$(mktemp)"
+          chmod 600 "$CREDENTIALS_FILE"
+          trap 'rm -f "$CREDENTIALS_FILE"' EXIT
 
-          getent ahostsv4 codex.wlsrv.com
+          printf 'user "%s" "%s"\n' \
+            "$FTP_USER" "$FTP_PASSWORD" > "$CREDENTIALS_FILE"
 
           echo "Connecting to FTPS..."
 
-          # Use a temporary lftp configuration file to avoid
-          # embedding credentials directly in shell commands.
-          LFTP_CONFIG="$(mktemp)"
-          chmod 600 "$LFTP_CONFIG"
+          lftp -e "
+            set ftp:ssl-force true
+            set ftp:ssl-protect-data true
+            set ssl:verify-certificate true
+            set ftp:passive-mode true
+            set net:max-retries 2
+            set net:timeout 30
+            open ftp://codex.wlsrv.com
+            source $CREDENTIALS_FILE
+            cls
+            cd \"$DEPLOY_PATH\"
+            mirror -R --parallel=4 --verbose=1 \
+              --exclude-glob api/ \
+              --exclude-glob uploads/ \
+              --exclude-glob .well-known/ \
+              --exclude-glob cgi-bin/ \
+              client/dist .
+            bye
+          "
 
-          trap 'rm -f "$LFTP_CONFIG"' EXIT
+          echo "FTPS upload completed"
 
-          cat > "$LFTP_CONFIG" <<'EOF'
-          set ftp:ssl-force true
-          set ftp:ssl-protect-data true
-          set ftp:ssl-auth TLS
-          set ssl:verify-certificate true
-          set net:max-retries 2
-          set net:timeout 20
-          set net:reconnect-interval-base 3
-          set ftp:passive-mode true
-          set ftp:list-options -a
-          EOF
-
-          export LFTP_PASSWORD="$FTP_PASSWORD"
-
-          # Credentials are passed through environment variables
-          # and are not printed to the workflow log.
-          lftp -f /dev/stdin <<EOF
-          source $LFTP_CONFIG
-          open -u "$FTP_USER","$FTP_PASSWORD" "ftp://codex.wlsrv.com"
-          set ftp:ssl-force true
-          set ftp:ssl-protect-data true
-          set ssl:verify-certificate true
-          cd "$DEPLOY_PATH"
-          pwd mirror -R --verbose=1 --parallel=4 \
-            --exclude-glob api/ \
-            --exclude-glob uploads/ \
-            --exclude-glob .well-known/ \
-            --exclude-glob cgi-bin/ \
-            client/dist .
-          bye
-          EOF
 
           echo "FTPS upload completed"
 
