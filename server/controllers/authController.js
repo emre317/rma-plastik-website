@@ -20,6 +20,8 @@ export const publicAdmin = (admin) => ({
   id: admin._id,
   name: admin.name,
   email: admin.email,
+  phone: admin.phone || '',
+  title: admin.title || '',
   role: admin.role,
 });
 

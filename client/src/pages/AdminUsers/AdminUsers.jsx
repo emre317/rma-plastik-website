@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
-  Check, KeyRound, Mail, Power, Send, Trash2, UserPlus, Users, Wand2, X,
+  Check, KeyRound, Mail, Pencil, Phone, Power, Send, Trash2, UserPlus, Users, Wand2, X,
 } from 'lucide-react';
 
 import {
@@ -12,8 +12,39 @@ import { formatDate, timeAgo } from '../../components/admin/quoteStatus';
 import PasswordField, { generatePassword, passwordOk } from '../../components/admin/PasswordField';
 import Dropdown from '../../components/ui/Dropdown';
 import { ROLES, roleLabel, roleTone } from '../../components/admin/roles';
+import { useAdminSession } from '../../components/admin/AdminSession';
 
-const emptyForm = { name: '', email: '', method: 'password', password: '', role: 'sales' };
+const emptyForm = { name: '', email: '', title: '', phone: '', method: 'password', password: '', role: 'sales' };
+
+const INFO_FIELDS = ['name', 'email', 'title', 'phone'];
+
+const infoOf = (user) => ({ name: user.name || '', email: user.email || '', title: user.title || '', phone: user.phone || '' });
+
+/* Ad Soyad, E-posta, Unvan, Telefon: used by the add and the edit forms */
+function InfoFields({ value, onChange, autoFocus }) {
+  const set = (key) => (event) => onChange({ ...value, [key]: event.target.value });
+
+  return (
+    <div className="adUserFormGrid">
+      <label className="cmsField">
+        <span>Ad Soyad</span>
+        <input value={value.name} maxLength={80} required placeholder="ör. Ayşe Yılmaz" autoFocus={autoFocus} onChange={set('name')} />
+      </label>
+      <label className="cmsField">
+        <span>E-posta</span>
+        <input type="email" value={value.email} maxLength={254} required placeholder="ayse@rmaplastik.com" autoComplete="off" onChange={set('email')} />
+      </label>
+      <label className="cmsField">
+        <span>Unvan (isteğe bağlı)</span>
+        <input value={value.title} maxLength={80} placeholder="ör. Satış Temsilcisi" onChange={set('title')} />
+      </label>
+      <label className="cmsField">
+        <span>Telefon (isteğe bağlı)</span>
+        <input type="tel" value={value.phone} maxLength={40} placeholder="+90 5xx xxx xx xx" autoComplete="off" onChange={set('phone')} />
+      </label>
+    </div>
+  );
+}
 
 const roleOptions = ROLES.map((role) => ({ value: role.id, label: role.label, hint: role.text }));
 
@@ -22,11 +53,12 @@ function initials(name, email) {
   return (parts[0][0] + (parts[1]?.[0] || '')).toLocaleUpperCase('tr');
 }
 
-/* Admin users: add (invitation e-mail or a password you choose), role, reset, deactivate, delete */
+/* Admin users: add (invitation e-mail or a password you choose), edit details, role, reset, deactivate, delete */
 export default function AdminUsers() {
   usePageTitle('Kullanıcılar');
 
   const call = useAdminApi();
+  const { updateAdmin } = useAdminSession();
 
   const [users, setUsers] = useState([]);
   const [mail, setMail] = useState(false);
@@ -38,6 +70,8 @@ export default function AdminUsers() {
   const [saving, setSaving] = useState('');
   const [resetFor, setResetFor] = useState(null);
   const [resetPassword, setResetPassword] = useState('');
+  const [editFor, setEditFor] = useState(null);
+  const [editForm, setEditForm] = useState(infoOf({}));
 
   const load = useCallback(async () => {
     try {
@@ -61,6 +95,49 @@ export default function AdminUsers() {
   }, [load]);
 
   const replaceUser = (user) => setUsers((list) => list.map((item) => (item._id === user._id ? user : item)));
+
+  function openEdit(user) {
+    const open = editFor !== user._id;
+    setEditFor(open ? user._id : null);
+    setEditForm(infoOf(user));
+    if (open) setResetFor(null);
+  }
+
+  async function saveInfo(event, user) {
+    event.preventDefault();
+
+    const before = infoOf(user);
+    // Only what changed, so the activity log names exactly that
+    const changed = Object.fromEntries(INFO_FIELDS
+      .filter((key) => editForm[key].trim() !== (key === 'email' ? before[key].toLowerCase() : before[key]))
+      .map((key) => [key, editForm[key]]));
+
+    if (!Object.keys(changed).length) {
+      setEditFor(null);
+      return;
+    }
+
+    setSaving(`edit-${user._id}`);
+    setNotice(null);
+
+    try {
+      const response = await call(updateAdminUser, user._id, changed);
+      replaceUser(response.data);
+      if (response.data.self) updateAdmin(response.data);
+      setEditFor(null);
+
+      const parts = [`${response.data.name} bilgileri güncellendi.`];
+      if (changed.email && response.data.self) parts.push('Bundan sonra panele yeni e-posta adresinizle giriş yapın.');
+      else if (changed.email) parts.push(`Panele artık ${response.data.email} adresiyle giriş yapacak.`);
+      if (changed.email && user.invitePending) parts.push('Önceki davet bağlantısı geçersiz oldu; "Davet" butonundan yeni adrese yeniden gönderin.');
+      if (changed.name && user.name !== response.data.name) parts.push('Sorumlusu olduğu teklif talepleri ve satış hedefleri yeni adla güncellendi.');
+      setNotice({ type: 'success', text: parts.join(' ') });
+    } catch (err) {
+      setNotice({ type: 'error', text: err.message });
+    } finally {
+      setSaving('');
+    }
+  }
 
   async function copy(text) {
     try {
@@ -88,6 +165,8 @@ export default function AdminUsers() {
       const response = await call(createAdminUser, {
         name: form.name,
         email: form.email,
+        title: form.title,
+        phone: form.phone,
         role: form.role,
         invite,
         ...(invite ? {} : { password: form.password }),
@@ -205,7 +284,7 @@ export default function AdminUsers() {
         <div>
           <span className="adEyebrow">Ayarlar</span>
           <h1>Kullanıcılar</h1>
-          <p>Panele giriş yapabilen kişiler ve rolleri. Kimse kendi hesabını silemez, pasif yapamaz veya rolünü değiştiremez; en az bir aktif Yönetici her zaman kalır.</p>
+          <p>Panele giriş yapabilen kişiler ve rolleri. Bilgileri "Düzenle" ile güncelleyebilirsiniz. Kimse kendi hesabını silemez, pasif yapamaz veya rolünü değiştiremez; en az bir aktif Yönetici her zaman kalır.</p>
         </div>
         <div className="adHeadActions">
           <button type="button" className="cmsButton cmsButtonPrimary" onClick={() => setAdding((open) => !open)} aria-expanded={adding}>
@@ -234,16 +313,7 @@ export default function AdminUsers() {
         <form className="adCard adUserForm" onSubmit={addUser}>
           <div className="adCardHead"><h2><UserPlus aria-hidden="true" />Yeni Kullanıcı</h2></div>
 
-          <div className="adUserFormGrid">
-            <label className="cmsField">
-              <span>Ad Soyad</span>
-              <input value={form.name} maxLength={80} required placeholder="ör. Ayşe Yılmaz" onChange={(event) => setForm({ ...form, name: event.target.value })} />
-            </label>
-            <label className="cmsField">
-              <span>E-posta</span>
-              <input type="email" value={form.email} maxLength={254} required placeholder="ayse@rmaplastik.com" autoComplete="off" onChange={(event) => setForm({ ...form, email: event.target.value })} />
-            </label>
-          </div>
+          <InfoFields value={form} onChange={(info) => setForm((current) => ({ ...current, ...info }))} />
 
           <div className="cmsField">
             <span>Rol</span>
@@ -317,7 +387,14 @@ export default function AdminUsers() {
                         {user.name}
                         {user.self && <em className="adSelfTag">Siz</em>}
                       </strong>
+                      {user.title && <span className="adUserTitle">{user.title}</span>}
                       <a href={`mailto:${user.email}`}>{user.email}</a>
+                      {user.phone && (
+                        <a className="adUserPhone" href={`tel:${user.phone.replace(/[^\d+]/g, '')}`}>
+                          <Phone aria-hidden="true" />
+                          {user.phone}
+                        </a>
+                      )}
                     </span>
                   </div>
 
@@ -334,12 +411,17 @@ export default function AdminUsers() {
                   </div>
 
                   <div className="adUserActions">
+                    <button type="button" className="cmsButton" onClick={() => openEdit(user)} aria-expanded={editFor === user._id}>
+                      <Pencil aria-hidden="true" />
+                      Düzenle
+                    </button>
                     <button
                       type="button"
                       className="cmsButton"
                       onClick={() => {
                         setResetFor(resetFor === user._id ? null : user._id);
                         setResetPassword('');
+                        setEditFor(null);
                       }}
                       aria-expanded={resetFor === user._id}
                       disabled={user.self}
@@ -368,6 +450,25 @@ export default function AdminUsers() {
                       </>
                     )}
                   </div>
+
+                  {editFor === user._id && (
+                    <form className="adUserReset adUserEdit" onSubmit={(event) => saveInfo(event, user)}>
+                      <strong>Bilgileri Düzenle</strong>
+                      <InfoFields value={editForm} onChange={setEditForm} autoFocus />
+                      <small className="cmsHint">
+                        {user.self
+                          ? 'E-postanızı değiştirirseniz panele bundan sonra yeni adresle giriş yaparsınız.'
+                          : 'E-posta, panele giriş adresidir; değişirse kişi yeni adresle giriş yapar. Rol ve aktiflik satırdaki butonlardan değişir.'}
+                      </small>
+                      <div className="adUserFormActions">
+                        <button type="button" className="cmsButton" onClick={() => setEditFor(null)}>Vazgeç</button>
+                        <button type="submit" className="cmsButton cmsButtonPrimary" disabled={busy || !editForm.name.trim() || !editForm.email.trim()}>
+                          <Check aria-hidden="true" />
+                          {busy ? 'Kaydediliyor…' : 'Kaydet'}
+                        </button>
+                      </div>
+                    </form>
+                  )}
 
                   {resetFor === user._id && (
                     <div className="adUserReset">

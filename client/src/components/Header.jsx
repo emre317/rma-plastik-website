@@ -234,33 +234,33 @@ export default function Header() {
           </div>
 
           <nav className="mobileNav" aria-label={t('nav.mobile')}>
-            {mobileNavItems.map((item, index) => (
+            {mobileNavItems.map((item) => (
               <LocalizedNavLink
                 to={item.path}
                 key={item.key}
                 onClick={closeMenu}
               >
-                <span>
-                  {String(index + 1).padStart(2, '0')}
-                </span>
                 {t(`nav.${item.key}`)}
               </LocalizedNavLink>
             ))}
           </nav>
 
-          <FinderCta tone="glass" className="mobileMenuFinder" />
+          {/* Side by side: the tank finder and the quote form */}
+          <div className="mobileMenuActions">
+            <FinderCta tone="glass" className="mobileMenuFinder" subtitle={false} label={t('nav.finder')} />
 
-          <button
-            type="button"
-            className="mobileMenuQuote"
-            onClick={() => {
-              closeMenu();
-              openQuote();
-            }}
-          >
-            {t('common.requestQuote')}
-            <Arrow />
-          </button>
+            <button
+              type="button"
+              className="mobileMenuQuote"
+              onClick={() => {
+                closeMenu();
+                openQuote();
+              }}
+            >
+              {t('common.requestQuote')}
+              <Arrow />
+            </button>
+          </div>
 
           <div className="mobileMenuBottom">
             <span>{t('common.locations')}</span>

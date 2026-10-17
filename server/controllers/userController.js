@@ -2,6 +2,8 @@ import crypto from 'node:crypto';
 import mongoose from 'mongoose';
 
 import AdminUser, { ADMIN_ROLES } from '../models/AdminUser.js';
+import QuoteRequest from '../models/QuoteRequest.js';
+import SalesTarget from '../models/SalesTarget.js';
 import { passwordProblem } from './authController.js';
 import {
   INVITE_HOURS, RESET_HOURS, canSendAccountMail, issueResetToken, sendInviteEmail, sendResetEmail,
@@ -10,10 +12,12 @@ import {
 /*
   Admin users (Kullanıcılar), each with a role (models/AdminUser.js). Nobody can
   deactivate, delete or change the role of their own account, and at least
-  one active account with the admin role always stays.
+  one active account with the admin role always stays. Admins can correct
+  anyone's name, e-mail, phone and title (Düzenle).
 */
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_PATTERN = /^[\d\s()+./-]*$/;
 
 const clean = (value, max) => (typeof value === 'string' ? value.trim().slice(0, max) : '');
 
@@ -24,6 +28,8 @@ function row(user, selfId) {
     _id: user._id,
     name: user.name,
     email: user.email,
+    phone: user.phone || '',
+    title: user.title || '',
     role: user.role || 'admin',
     isActive: user.isActive,
     invitePending: Boolean(user.invitePending),
@@ -41,6 +47,45 @@ async function otherActiveAdmins(id) {
 const isActiveAdmin = (user) => user.isActive && (user.role || 'admin') === 'admin';
 
 const LAST_ADMIN = 'En az bir aktif Yönetici kalmalı.';
+
+const EMAIL_TAKEN = 'Bu e-posta adresiyle bir kullanıcı zaten var.';
+
+/* Optional phone and title from a request body; { error } when invalid */
+function contactFields(body) {
+  const fields = {};
+
+  if (body.phone !== undefined) {
+    const phone = clean(body.phone, 40);
+    if (!PHONE_PATTERN.test(phone)) return { error: 'Telefon yalnızca rakam, boşluk ve + ( ) - karakterleri içerebilir.' };
+    fields.phone = phone;
+  }
+
+  if (body.title !== undefined) fields.title = clean(body.title, 80);
+
+  return { fields };
+}
+
+/*
+  Quote requests ("Sorumlu") and sales targets refer to a person by name, so a
+  renamed user keeps their requests and targets. A target the new name already
+  has for the same month stays as it is.
+*/
+async function renameReferences(from, to) {
+  if (!from || from === to) return;
+
+  await QuoteRequest.updateMany({ assignee: from }, { $set: { assignee: to } });
+
+  const targets = await SalesTarget.find({ owner: from });
+
+  for (const target of targets) {
+    try {
+      target.owner = to;
+      await target.save();
+    } catch (error) {
+      if (error?.code !== 11000) throw error;
+    }
+  }
+}
 
 export async function listUsers(req, res) {
   try {
@@ -65,12 +110,14 @@ export async function createUser(req, res) {
     const email = clean(body.email, 254).toLowerCase();
     const invite = body.invite === true;
     const role = ADMIN_ROLES.includes(body.role) ? body.role : 'sales';
+    const contact = contactFields(body);
 
     if (!name) return res.status(400).json({ success: false, message: 'Ad soyad yazın.' });
     if (!EMAIL_PATTERN.test(email)) return res.status(400).json({ success: false, message: 'Geçerli bir e-posta adresi yazın.' });
+    if (contact.error) return res.status(400).json({ success: false, message: contact.error });
 
     if (await AdminUser.exists({ email })) {
-      return res.status(409).json({ success: false, message: 'Bu e-posta adresiyle bir kullanıcı zaten var.' });
+      return res.status(409).json({ success: false, message: EMAIL_TAKEN });
     }
 
     if (invite && !canSendAccountMail()) {
@@ -87,7 +134,7 @@ export async function createUser(req, res) {
       if (problem) return res.status(400).json({ success: false, message: problem });
     }
 
-    const user = new AdminUser({ name, email, password, role, invitePending: invite });
+    const user = new AdminUser({ name, email, password, role, invitePending: invite, ...contact.fields });
     const token = invite ? issueResetToken(user, INVITE_HOURS) : null;
     await user.save();
 
@@ -107,7 +154,7 @@ export async function createUser(req, res) {
     return res.status(201).json({ success: true, data: row(user, req.admin._id) });
   } catch (error) {
     if (error?.code === 11000) {
-      return res.status(409).json({ success: false, message: 'Bu e-posta adresiyle bir kullanıcı zaten var.' });
+      return res.status(409).json({ success: false, message: EMAIL_TAKEN });
     }
 
     console.error('Create user error:', error);
@@ -115,7 +162,7 @@ export async function createUser(req, res) {
   }
 }
 
-/* { name }, { role } and / or { isActive } */
+/* Any of { name, email, phone, title, role, isActive } */
 export async function updateUser(req, res) {
   try {
     if (!mongoose.isValidObjectId(req.params.id)) return notFound(res);
@@ -124,12 +171,33 @@ export async function updateUser(req, res) {
     if (!user) return notFound(res);
 
     const body = req.body || {};
+    const oldName = user.name;
 
     if (body.name !== undefined) {
       const name = clean(body.name, 80);
       if (!name) return res.status(400).json({ success: false, message: 'Ad soyad boş olamaz.' });
       user.name = name;
     }
+
+    if (body.email !== undefined) {
+      const email = clean(body.email, 254).toLowerCase();
+      if (!EMAIL_PATTERN.test(email)) return res.status(400).json({ success: false, message: 'Geçerli bir e-posta adresi yazın.' });
+
+      if (email !== user.email) {
+        if (await AdminUser.exists({ email, _id: { $ne: user._id } })) {
+          return res.status(409).json({ success: false, message: EMAIL_TAKEN });
+        }
+
+        user.email = email;
+        // A pending invitation or reset link went to the old address
+        user.resetTokenHash = null;
+        user.resetTokenExpires = null;
+      }
+    }
+
+    const contact = contactFields(body);
+    if (contact.error) return res.status(400).json({ success: false, message: contact.error });
+    Object.assign(user, contact.fields);
 
     if (body.role !== undefined) {
       if (!ADMIN_ROLES.includes(body.role)) {
@@ -162,9 +230,14 @@ export async function updateUser(req, res) {
     }
 
     await user.save();
+    await renameReferences(oldName, user.name);
 
     return res.json({ success: true, data: row(user, req.admin._id) });
   } catch (error) {
+    if (error?.code === 11000) {
+      return res.status(409).json({ success: false, message: EMAIL_TAKEN });
+    }
+
     console.error('Update user error:', error);
     return res.status(500).json({ success: false, message: 'Kullanıcı güncellenemedi.' });
   }

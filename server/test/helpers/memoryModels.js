@@ -10,6 +10,7 @@ function matches(doc, filter = {}) {
     const value = get(doc, key);
     if (condition && typeof condition === 'object' && !(condition instanceof Date)) {
       if ('$in' in condition) return condition.$in.includes(value);
+      if ('$ne' in condition) return String(value) !== String(condition.$ne);
       if ('$lt' in condition) return value != null && value < condition.$lt;
       if ('$lte' in condition) return value != null && value <= condition.$lte;
     }
@@ -57,6 +58,12 @@ export function memoryModel(Model) {
   Model.findOne = (filter) => one(store.find((item) => matches(item, filter)) || null);
   Model.findById = (id) => one(store.find((item) => String(item._id) === String(id)) || null);
   Model.countDocuments = async (filter) => store.filter((doc) => matches(doc, filter)).length;
+  Model.exists = async (filter) => (store.some((doc) => matches(doc, filter)) ? { _id: true } : null);
+  Model.updateMany = async (filter, update) => {
+    const docs = store.filter((doc) => matches(doc, filter));
+    docs.forEach((doc) => doc.set(update.$set || update));
+    return { matchedCount: docs.length, modifiedCount: docs.length };
+  };
   Model.updateOne = async (filter, update) => {
     const doc = store.find((item) => matches(item, filter));
     if (doc) { doc.set(update.$set || update); return { matchedCount: 1 }; }

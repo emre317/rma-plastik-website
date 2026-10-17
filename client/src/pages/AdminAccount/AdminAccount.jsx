@@ -133,6 +133,8 @@ export default function AdminAccount() {
         <dl className="adFacts">
           <div><dt>Ad Soyad</dt><dd>{admin?.name || '—'}</dd></div>
           <div><dt>E-posta</dt><dd>{admin?.email || '—'}</dd></div>
+          {admin?.title && <div><dt>Unvan</dt><dd>{admin.title}</dd></div>}
+          {admin?.phone && <div><dt>Telefon</dt><dd>{admin.phone}</dd></div>}
           <div>
             <dt>Rol</dt>
             <dd><span className={`adPill tone-${roleTone(role?.id)}`}>{roleLabel(role?.id)}</span></dd>

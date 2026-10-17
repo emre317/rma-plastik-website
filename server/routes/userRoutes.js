@@ -17,7 +17,10 @@ function changes(req, data, before) {
   const parts = [];
   if (body.role !== undefined && before && body.role !== before.role) parts.push(`Rol: ${ROLE[before.role] || before.role} → ${ROLE[body.role] || body.role}`);
   if (body.isActive !== undefined && before && body.isActive !== before.isActive) parts.push(body.isActive ? 'Aktif edildi' : 'Pasif yapıldı');
-  if (body.name !== undefined && before && body.name.trim() !== before.name) parts.push(`Ad: ${before.name} → ${body.name.trim()}`);
+  if (body.name !== undefined && before && String(body.name).trim() !== before.name) parts.push(`Ad: ${before.name} → ${String(body.name).trim()}`);
+  if (body.email !== undefined && before && String(body.email).trim().toLowerCase() !== before.email) parts.push(`E-posta: ${before.email} → ${String(body.email).trim().toLowerCase()}`);
+  if (body.phone !== undefined && before && String(body.phone).trim() !== (before.phone || '')) parts.push('Telefon güncellendi');
+  if (body.title !== undefined && before && String(body.title).trim() !== (before.title || '')) parts.push('Unvan güncellendi');
   return parts.join(' · ');
 }
 

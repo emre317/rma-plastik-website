@@ -40,6 +40,21 @@ const adminUserSchema = new mongoose.Schema(
       minlength: 8,
     },
 
+    // Optional contact details, shown in the user list
+    phone: {
+      type: String,
+      trim: true,
+      default: '',
+      maxlength: 40,
+    },
+
+    title: {
+      type: String,
+      trim: true,
+      default: '',
+      maxlength: 80,
+    },
+
     role: {
       type: String,
       enum: ADMIN_ROLES,

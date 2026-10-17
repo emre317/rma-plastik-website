@@ -29114,6 +29114,32 @@ a.algSubmit {
   white-space: nowrap;
 }
 
+.adUserTitle {
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.adUserIdentity a.adUserPhone {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.adUserPhone svg {
+  width: 13px;
+  height: 13px;
+}
+
+.adUserEdit > strong {
+  font-size: 14px;
+}
+
+.adUserEdit .cmsHint {
+  margin: 0;
+}
+
 .adSelfTag {
   padding: 2px 8px;
   border-radius: 999px;
@@ -33547,4 +33573,50 @@ html[lang="ar"] .pgBody small {
   color: #9cc9ff;
   font-size: 12px;
   text-decoration: underline;
+}
+
+/* Mobile menu: no item numbers; finder and quote buttons side by side */
+.mobileMenuActions {
+  margin-bottom: 28px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 10px;
+}
+
+.mobileMenuActions .mobileMenuFinder.finderCta {
+  width: auto;
+  min-width: 0;
+  min-height: 56px;
+  margin: 0;
+  padding: 6px 12px 6px 6px;
+  gap: 10px;
+}
+
+.mobileMenuActions .finderCtaIcon {
+  width: 42px;
+  height: 42px;
+  flex: none;
+}
+
+.mobileMenuActions .finderCtaText {
+  min-width: 0;
+}
+
+.mobileMenuActions .finderCtaText strong {
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.mobileMenuActions .finderCtaArrow {
+  display: none;
+}
+
+.mobileMenuActions .mobileMenuQuote {
+  min-width: 0;
+  min-height: 56px;
+  margin: 0;
+  padding: 0 16px;
+  gap: 8px;
+  font-size: 14px;
 }
