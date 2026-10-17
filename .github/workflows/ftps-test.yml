@@ -25,19 +25,27 @@ jobs:
         run: |
           set -euo pipefail
 
+          test -n "$FTP_USER" || {
+            echo "::error::FTP_USER is empty"
+            exit 1
+          }
+
+          test -n "$FTP_PASSWORD" || {
+            echo "::error::FTP_PASSWORD is empty"
+            exit 1
+          }
+
           echo "77.245.159.39 codex.wisrv.com" | sudo tee -a /etc/hosts >/dev/null
 
-          export LFTP_PASSWORD="$FTP_PASSWORD"
-
-          lftp -u "$FTP_USER" \
+          lftp -u "$FTP_USER,$FTP_PASSWORD" \
             -e '
               set ftp:ssl-force true
               set ftp:ssl-protect-data true
               set ssl:verify-certificate true
               set net:max-retries 1
               set net:timeout 15
-              open ftp://codex.wisrv.com
               pwd
               cls
               bye
-            '
+            ' \
+            ftp://codex.wisrv.com
