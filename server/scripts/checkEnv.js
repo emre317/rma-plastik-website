@@ -11,7 +11,7 @@ import mongoose from 'mongoose';
 import { checkEnvironment, publishMode } from '../config/env.js';
 import { redactUri } from '../config/db.js';
 import { isGithubConfigured } from '../services/githubActions.js';
-import { verifyMail } from '../services/mailer.js';
+import { mailFrom, verifyMail } from '../services/mailer.js';
 import { UPLOAD_ROOT } from '../middleware/upload.js';
 
 const args = process.argv.slice(2);
@@ -24,6 +24,8 @@ console.log(`CLIENT_URL:    ${process.env.CLIENT_URL || '(not set)'}`);
 console.log(`Uploads:       ${UPLOAD_ROOT}`);
 console.log(`Publish mode:  ${publishMode()}${publishMode() === 'github' ? (isGithubConfigured() ? ' (GitHub configured)' : ' (GitHub NOT configured)') : ''}`);
 console.log(`TRUST_PROXY:   ${process.env.TRUST_PROXY || '(not set)'}`);
+console.log(`Mail sender:   ${mailFrom().name} <${mailFrom().address || '(no address)'}>`);
+console.log(`Quote notice:  ${process.env.QUOTE_NOTIFY_TO || '(not set)'}`);
 console.log('');
 
 warnings.forEach((message) => console.log(`WARNING  ${message}`));

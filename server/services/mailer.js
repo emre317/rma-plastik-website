@@ -47,6 +47,23 @@ export async function verifyMail() {
   return getTransporter().verify();
 }
 
+const DEFAULT_SENDER_NAME = 'RMA Plastik';
+
+/*
+  The From header as { name, address }. MAIL_FROM may arrive as
+  "RMA Plastik" <web@rmaplastik.com>, without quotes, with quotes escaped by
+  the hosting panel, only a name, or only an address; the address falls back
+  to SMTP_USER and the name to "RMA Plastik", so the sender name never gets lost.
+*/
+export function mailFrom() {
+  const raw = String(process.env.MAIL_FROM || '').replace(/\\/g, '').trim();
+  const found = raw.match(/[^\s<>"',;]+@[^\s<>"',;]+/);
+  const address = found ? found[0] : String(process.env.SMTP_USER || '').trim();
+  const name = (found ? raw.replace(found[0], '') : raw).replace(/[<>"']/g, '').replace(/\s+/g, ' ').trim();
+
+  return { name: name || DEFAULT_SENDER_NAME, address };
+}
+
 export async function sendMail(message) {
   if (!isMailConfigured()) {
     console.warn('SMTP is not configured; email skipped:', message.subject);
@@ -54,9 +71,7 @@ export async function sendMail(message) {
   }
 
   return getTransporter().sendMail({
-    from:
-      process.env.MAIL_FROM ||
-      `"RMA Plastik" <${process.env.SMTP_USER}>`,
+    from: mailFrom(),
     ...message,
   });
 }
