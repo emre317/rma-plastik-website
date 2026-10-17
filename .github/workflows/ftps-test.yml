@@ -31,7 +31,7 @@ jobs:
           fi
 
           # Match the FTP server's TLS certificate hostname.
-          echo "77.245.159.39 codex.wisrv.com" | sudo tee -a /etc/hosts >/dev/null
+          echo "77.245.159.39 codex.wlsrv.com" | sudo tee -a /etc/hosts >/dev/null
 
           # Store credentials outside command-line arguments.
           # Do not print this file to the logs.
@@ -50,7 +50,7 @@ jobs:
             set ssl:verify-certificate true
             set net:max-retries 1
             set net:timeout 20
-            open ftp://codex.wisrv.com
+            open ftp://codex.wlsrv.com
             source $CREDENTIALS_FILE
             cls
             bye
