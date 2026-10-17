@@ -37,13 +37,14 @@ jobs:
 
           echo "77.245.159.39 codex.wisrv.com" | sudo tee -a /etc/hosts >/dev/null
 
-          lftp -d -u "$FTP_USER,$FTP_PASSWORD" \
+          lftp -u "$FTP_USER,$FTP_PASSWORD" \
             -e '
               set ftp:ssl-force true
               set ftp:ssl-protect-data true
               set ssl:verify-certificate true
               set net:max-retries 1
               set net:timeout 15
+              open ftp://codex.wisrv.com
               pwd
               cls
               bye
