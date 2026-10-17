@@ -18,33 +18,42 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq lftp
 
-      - name: Test FTPS
+      - name: Test secure FTPS connection
         env:
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
           set -euo pipefail
 
-          test -n "$FTP_USER"
-          test -n "$FTP_PASSWORD"
+          if [ -z "$FTP_USER" ] || [ -z "$FTP_PASSWORD" ]; then
+            echo "::error::FTP credentials are missing"
+            exit 1
+          fi
 
+          # Match the FTP server's TLS certificate hostname.
           echo "77.245.159.39 codex.wisrv.com" | sudo tee -a /etc/hosts >/dev/null
 
-          # Avoid printing credentials in command logs.
-          NETRC_FILE="$HOME/.netrc"
-          trap 'rm -f "$NETRC_FILE"' EXIT
+          # Store credentials outside command-line arguments.
+          # Do not print this file to the logs.
+          CREDENTIALS_FILE="$(mktemp)"
+          chmod 600 "$CREDENTIALS_FILE"
+          trap 'rm -f "$CREDENTIALS_FILE"' EXIT
 
-          printf 'machine codex.wisrv.com login %s password %s\n' \
-            "$FTP_USER" "$FTP_PASSWORD" > "$NETRC_FILE"
-          chmod 600 "$NETRC_FILE"
+          printf 'user "%s" "%s"\n' \
+            "$FTP_USER" "$FTP_PASSWORD" > "$CREDENTIALS_FILE"
 
-          lftp -e '
+          echo "Testing FTPS connection..."
+
+          lftp -e "
             set ftp:ssl-force true
             set ftp:ssl-protect-data true
             set ssl:verify-certificate true
-            set net:max-retries 2
+            set net:max-retries 1
             set net:timeout 20
             open ftp://codex.wisrv.com
+            source $CREDENTIALS_FILE
             cls
             bye
-          '
+          "
+
+          echo "FTPS connection successful!"
