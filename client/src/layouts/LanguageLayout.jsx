@@ -8,12 +8,11 @@ import {
   getLanguage,
   getPreferredLanguage,
   isSupportedLanguage,
-  storeLanguage,
 } from '../i18n/languages';
 
 /*
   Wraps every public page under /:lang.
-  - Unknown prefixes (e.g. old "/products" links) redirect to the preferred language
+  - Unknown prefixes (e.g. old "/products" links) redirect to Turkish
   - Keeps i18next and <html lang/dir> in sync (page <head> tags: see seo/Seo.jsx)
 */
 export default function LanguageLayout() {
@@ -28,8 +27,6 @@ export default function LanguageLayout() {
     if (!valid) {
       return;
     }
-
-    storeLanguage(lang);
 
     if (i18n.language === lang) {
       applyDocumentLanguage(lang, getLanguage(lang).dir);

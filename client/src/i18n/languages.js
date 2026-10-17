@@ -24,7 +24,16 @@ export const SUPPORTED_LANGUAGES = [
 
 export const DEFAULT_LANGUAGE = 'tr';
 
-const STORAGE_KEY = 'rma_language';
+// Earlier versions remembered the last language here; it is no longer used
+const OLD_STORAGE_KEY = 'rma_language';
+
+if (typeof window !== 'undefined') {
+  try {
+    window.localStorage.removeItem(OLD_STORAGE_KEY);
+  } catch {
+    // Storage unavailable
+  }
+}
 
 const codes = SUPPORTED_LANGUAGES.map((language) => language.code);
 
@@ -45,30 +54,12 @@ export function getLanguageFromPath(pathname) {
   return isSupportedLanguage(segment) ? segment : null;
 }
 
-export function storeLanguage(code) {
-  try {
-    localStorage.setItem(STORAGE_KEY, code);
-  } catch {
-    // Storage unavailable — preference is simply not remembered
-  }
-}
-
 /*
-  Saved choice → Turkish.
-  The site opens in Turkish for every new visitor; once someone picks a
-  language from the switcher, that choice is remembered.
+  The site always opens in Turkish: the root address and links without a
+  language prefix go to /tr. Another language is shown only when its URL
+  (/en/…, /ar/…) is opened or picked from the switcher; it is not remembered.
 */
 export function getPreferredLanguage() {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-
-    if (isSupportedLanguage(stored)) {
-      return stored;
-    }
-  } catch {
-    // Ignore storage errors
-  }
-
   return DEFAULT_LANGUAGE;
 }
 
