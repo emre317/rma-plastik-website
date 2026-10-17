@@ -117,6 +117,15 @@ export function addQuoteNote(id, text, token) {
   });
 }
 
+/* Admin role only */
+export function deleteQuote(id, token) {
+  return request(`/quote/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+    token,
+    fallbackMessage: 'Teklif talebi silinemedi.',
+  });
+}
+
 export function deleteQuoteNote(id, noteId, token) {
   return request(`/quote/${encodeURIComponent(id)}/notes/${encodeURIComponent(noteId)}`, {
     method: 'DELETE',

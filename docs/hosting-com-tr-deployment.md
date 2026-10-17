@@ -134,7 +134,7 @@ Gerçek değerler **asla git'e girmez**.
 | `TRUST_PROXY` | `1` (LiteSpeed + Passenger) ⚠️ |
 | `SMTP_HOST` / `SMTP_PORT` / `SMTP_SECURE` / `SMTP_USER` / `SMTP_PASS` | Uzman Posta: `proxy.uzmanposta.com` / `587` / `false` / `web@rmaplastik.com` / şifre |
 | `MAIL_FROM` | İsteğe bağlı, örn. `'"RMA Plastik" <web@rmaplastik.com>'` |
-| `QUOTE_NOTIFY_TO` | Teklif bildirimlerinin gideceği adres(ler) |
+| `QUOTE_NOTIFY_TO` | `info@rmaplastik.com` (teklif bildirimlerinin gideceği adres; birden fazlaysa virgülle) |
 | `QUOTE_CONFIRM_CUSTOMER` | `true` (müşteriye referans numaralı onay e-postası) |
 | `UPLOAD_DIR` | `/home/<kullanıcı>/rma-data/uploads` |
 | `PUBLISH_MODE` | `github` |

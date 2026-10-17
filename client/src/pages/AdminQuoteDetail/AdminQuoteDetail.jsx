@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   AlertTriangle, ArrowLeft, ArrowRight, Building2, CalendarClock, Check, Copy, Contact, FileSignature, Flag, Globe2, History, Mail, Megaphone, MessageCircle, NotebookPen, Package, Phone, Trash2, User,
 } from 'lucide-react';
 
 import {
-  addQuoteNote, deleteQuoteNote, getCustomer, getQuoteAssignees, getQuoteById, getQuoteHistory, resendQuoteMail, updateQuoteStatus, updateQuoteTracking,
+  addQuoteNote, deleteQuote, deleteQuoteNote, getCustomer, getQuoteAssignees, getQuoteById, getQuoteHistory, resendQuoteMail, updateQuoteStatus, updateQuoteTracking,
 } from '../../services/adminApi';
 import { notifyQuotesChanged } from '../../services/adminAuth';
 import useAdminApi from '../../hooks/useAdminApi';
@@ -15,6 +15,7 @@ import {
   LANGUAGE_LABELS, LOSS_REASONS, QUOTE_OUTCOMES, QUOTE_STATUSES, dayValue, followUpState, formatDate, outcomeLabel, quoteReference, statusLabel, statusTone, todayValue, DESIGN_INPUT_LABELS, NEED_LABELS,
 } from '../../components/admin/quoteStatus';
 import Dropdown from '../../components/ui/Dropdown';
+import { useAdminSession } from '../../components/admin/AdminSession';
 
 const MAIL_KINDS = [
   { kind: 'notification', label: 'Satış Bildirimi' },
@@ -162,6 +163,12 @@ export default function AdminQuoteDetail() {
 
   const { id } = useParams();
   const call = useAdminApi();
+  const navigate = useNavigate();
+  const { admin } = useAdminSession();
+  // Only the admin role may delete a request (the server checks it as well)
+  const canDelete = (admin?.role || 'admin') === 'admin';
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
 
   const [quote, setQuote] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -198,6 +205,23 @@ export default function AdminQuoteDetail() {
       cancelled = true;
     };
   }, [call, id]);
+
+  async function removeQuote() {
+    const ok = window.confirm(`${quote.company} (${quoteReference(quote._id)}) talebi kalıcı olarak silinsin mi?\n\nNotları, takip bilgileri ve proformasıyla birlikte silinir; geri alınamaz.`);
+    if (!ok) return;
+
+    setDeleting(true);
+    setDeleteError('');
+
+    try {
+      await call(deleteQuote, id);
+      notifyQuotesChanged();
+      navigate('/admin/quotes', { replace: true, state: { notice: `${quote.company} (${quoteReference(quote._id)}) talebi silindi.` } });
+    } catch (err) {
+      setDeleteError(err.message || 'Teklif talebi silinemedi.');
+      setDeleting(false);
+    }
+  }
 
   async function changeStatus(status) {
     if (!quote || status === quote.status) return;
@@ -738,6 +762,18 @@ export default function AdminQuoteDetail() {
               <div><dt>Son Güncelleme</dt><dd>{formatDate(quote.updatedAt, true)}</dd></div>
             </dl>
           </div>
+
+          {canDelete && (
+            <div className="adCard adDangerCard">
+              <div className="adCardHead"><h2><Trash2 aria-hidden="true" />Talebi Sil</h2></div>
+              <p>Talep; notları, takip bilgileri ve proformasıyla birlikte kalıcı olarak silinir ve geri alınamaz. Yalnızca test ya da spam talepleri için kullanın; işi biten talepleri durumunu "Kapandı" yaparak saklayın.</p>
+              <button type="button" className="cmsButton adDangerButton" onClick={removeQuote} disabled={deleting}>
+                <Trash2 aria-hidden="true" />
+                {deleting ? 'Siliniyor…' : 'Talebi Kalıcı Olarak Sil'}
+              </button>
+              {deleteError && <div className="adminInlineError" role="alert">{deleteError}</div>}
+            </div>
+          )}
         </aside>
       </div>
     </section>

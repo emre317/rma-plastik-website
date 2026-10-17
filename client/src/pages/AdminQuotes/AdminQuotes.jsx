@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import {
-  BarChart3, CalendarClock, ChevronLeft, ChevronRight, Download, Flag, Inbox, Megaphone, Package, RotateCcw, Search, UserRound, X,
+  BarChart3, CalendarClock, Check, ChevronLeft, ChevronRight, Download, Flag, Inbox, Megaphone, Package, RotateCcw, Search, UserRound, X,
 } from 'lucide-react';
 
 import { exportQuotes, getQuoteAssignees, getQuoteStats, getQuotes } from '../../services/adminApi';
@@ -22,6 +22,14 @@ export default function AdminQuotes() {
 
   const call = useAdminApi();
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // "… talebi silindi." after a delete on the detail page (shown once)
+  const [notice, setNotice] = useState(location.state?.notice || '');
+  useEffect(() => {
+    if (location.state?.notice) navigate(`${location.pathname}${location.search}`, { replace: true, state: null });
+  }, [location, navigate]);
 
   // The URL is the single source of truth for filters and paging
   const statusFilter = ALLOWED.includes(searchParams.get('status')) ? searchParams.get('status') : 'all';
@@ -162,6 +170,14 @@ export default function AdminQuotes() {
           )}
         </div>
       </header>
+
+      {notice && (
+        <div className="adNotice success" role="status">
+          <Check aria-hidden="true" />
+          <span>{notice}</span>
+          <button type="button" className="adIconButton" onClick={() => setNotice('')} aria-label="Kapat"><X aria-hidden="true" /></button>
+        </div>
+      )}
 
       <div className="adTabs" role="tablist" aria-label="Duruma göre filtrele">
         {tabs.map((tab) => (

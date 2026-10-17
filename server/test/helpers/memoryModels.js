@@ -43,6 +43,12 @@ export function memoryModel(Model) {
     return this;
   };
 
+  Model.prototype.deleteOne = async function deleteOne() {
+    const index = store.indexOf(this);
+    if (index >= 0) store.splice(index, 1);
+    return { deletedCount: index >= 0 ? 1 : 0 };
+  };
+
   Model.create = async (data) => new Model(data).save();
   Model.find = (filter) => query(store.filter((doc) => matches(doc, filter)));
   // Single-document queries: awaitable, with the chain methods the code uses

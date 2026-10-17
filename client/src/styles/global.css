@@ -33620,3 +33620,47 @@ html[lang="ar"] .pgBody small {
   gap: 8px;
   font-size: 14px;
 }
+
+/* Quote detail: delete card, admin role only */
+.adDangerCard {
+  border-color: rgba(194, 65, 12, 0.22);
+}
+
+.adDangerCard .adCardHead h2 {
+  color: #c2410c;
+}
+
+.adDangerCard p {
+  margin: 0 0 14px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.adDangerCard .adminInlineError {
+  margin-top: 12px;
+}
+
+.cmsButton.adDangerButton {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border-color: rgba(194, 65, 12, 0.35);
+  color: #c2410c;
+}
+
+.cmsButton.adDangerButton:hover:not(:disabled) {
+  border-color: #c2410c;
+  background: #fdf0ea;
+}
+
+.cmsButton.adDangerButton svg {
+  width: 15px;
+  height: 15px;
+}
+
+.adQuotes > .adNotice {
+  margin-bottom: 16px;
+}

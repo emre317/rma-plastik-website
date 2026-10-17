@@ -932,6 +932,31 @@ export async function deleteQuoteNote(req, res) {
   }
 }
 
+/* Removes a request for good (admin role only, see routes/quoteRoutes.js) */
+export async function deleteQuoteRequest(req, res) {
+  try {
+    if (!isValidId(req.params.id)) {
+      return notFound(res);
+    }
+
+    const quote = await QuoteRequest.findById(req.params.id);
+
+    if (!quote) {
+      return notFound(res);
+    }
+
+    await quote.deleteOne();
+
+    return res.json({ success: true, reference: quoteReference(quote._id) });
+  } catch (error) {
+    console.error('Delete quote request error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Teklif talebi silinemedi.',
+    });
+  }
+}
 
 /* ---------- Commercial offer (Teklif) ---------- */
 

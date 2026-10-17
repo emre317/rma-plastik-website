@@ -58,6 +58,21 @@ export async function requireAdmin(
   }
 }
 
+/* Use after requireAdmin: only these roles (e.g. requireRole('admin')) */
+export function requireRole(...roles) {
+  return (req, res, next) => {
+    // Accounts saved before roles existed are admins
+    if (roles.includes(req.admin?.role || 'admin')) {
+      return next();
+    }
+
+    return res.status(403).json({
+      success: false,
+      message: 'Bu işlemi yalnızca Yönetici rolündeki kullanıcılar yapabilir.',
+    });
+  };
+}
+
 /* Use after requireAdmin: the user's role must include one of the areas */
 export function requirePermission(...areas) {
   return (req, res, next) => {

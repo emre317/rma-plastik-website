@@ -14,6 +14,7 @@ import {
   addQuoteNote,
   resendQuoteMail,
   deleteQuoteNote,
+  deleteQuoteRequest,
   saveQuoteOffer,
   sendQuoteOffer,
 } from '../controllers/quoteController.js';
@@ -21,6 +22,7 @@ import {
 import {
   requireAdmin,
   requirePermission,
+  requireRole,
 } from '../middleware/authMiddleware.js';
 
 import {
@@ -30,6 +32,7 @@ import {
 import { offerPdfUpload } from '../middleware/upload.js';
 import QuoteRequest from '../models/QuoteRequest.js';
 import { audit } from '../services/audit.js';
+import { quoteReference } from '../services/quoteEmail.js';
 import { getTargetHistory } from '../controllers/auditController.js';
 import { getCustomer, getRecentQuotes } from '../controllers/customerController.js';
 import { deleteTarget, getTargets, saveTarget } from '../controllers/targetController.js';
@@ -107,6 +110,8 @@ router.patch('/:id/status', requireAdmin, sales, quoteAudit('Durumu değiştirdi
 router.patch('/:id', requireAdmin, sales, quoteAudit('Takip bilgisini güncelledi', trackingDetails), updateQuoteTracking);
 router.post('/:id/resend-mail', requireAdmin, sales, quoteAudit('E-postayı yeniden gönderdi', (req) => (req.body?.kind === 'confirmation' ? 'Müşteri onayı' : 'Satış bildirimi')), resendQuoteMail);
 router.post('/:id/notes', requireAdmin, sales, quoteAudit('Not ekledi', (req) => String(req.body?.text || '').slice(0, 160)), addQuoteNote);
+// Deleting a request: admin role only (sales can close it, not remove it)
+router.delete('/:id', requireAdmin, requireRole('admin'), quoteAudit('Teklif talebini sildi', (req, data, before) => (before ? `${quoteReference(before._id)} · ${[before.name, before.email, before.country].filter(Boolean).join(' · ')}` : '')), deleteQuoteRequest);
 router.delete('/:id/notes/:noteId', requireAdmin, sales, quoteAudit('Not sildi'), deleteQuoteNote);
 router.put('/:id/offer', requireAdmin, sales, quoteAudit('Proformayı kaydetti', (req, data) => (data?.offer ? `R${data.offer.revision} · ${data.offer.lines?.length || 0} satır · ${data.offer.currency}` : '')), saveQuoteOffer);
 router.post('/:id/offer/send', requireAdmin, sales, offerPdfUpload, quoteAudit('Proformayı e-postayla gönderdi', (req, data) => (data?.offer?.sentTo ? `Alıcı: ${data.offer.sentTo}` : '')), sendQuoteOffer);
