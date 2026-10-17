@@ -95,7 +95,7 @@ jobs:
         working-directory: client
         env:
           NODE_ENV: production
-          CONTENT_API_URL: ${{ vars.API_URL }}/api/content
+          CONTENT_API_URL: ${{ vars.API_URL }}/content
           CONTENT_API_TOKEN: ${{ secrets.CONTENT_API_TOKEN }}
           VITE_SITE_URL: ${{ vars.SITE_URL }}
           VITE_API_URL: ${{ vars.VITE_API_URL }}
