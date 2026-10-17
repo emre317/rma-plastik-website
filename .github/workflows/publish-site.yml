@@ -245,7 +245,7 @@ jobs:
           # and are not printed to the workflow log.
           lftp -f /dev/stdin <<EOF
           source $LFTP_CONFIG
-          open -u "$FTP_USER" "ftp://codex.wisrv.com"
+          open -u "$FTP_USER","$FTP_PASSWORD" "ftp://codex.wisrv.com"
           set ftp:ssl-force true
           set ftp:ssl-protect-data true
           set ssl:verify-certificate true
