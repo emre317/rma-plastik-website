@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 
-import { isMailConfigured, sendMail } from './mailer.js';
+import { emailLogo, isMailConfigured, sendMail } from './mailer.js';
 
 /*
   Admin account links: password reset ("Şifremi unuttum", or sent by another
@@ -49,7 +49,7 @@ function layout({ title, intro, button, link, note }) {
       <tr>
         <td align="center">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#ffffff;border-radius:16px;overflow:hidden;">
-            <tr><td style="background:#101317;border-bottom:4px solid #e4173a;padding:22px 28px;color:#ffffff;font-size:16px;font-weight:bold;">RMA Plastik · Yönetim Paneli</td></tr>
+            <tr><td style="background:#101317;border-bottom:4px solid #e4173a;padding:22px 28px;color:#ffffff;font-size:13px;font-weight:bold;">${emailLogo()}<div style="margin-top:8px;color:#afb7c1;letter-spacing:0.06em;text-transform:uppercase;font-size:11px;">Yönetim Paneli</div></td></tr>
             <tr>
               <td style="padding:28px;">
                 <h1 style="margin:0 0 12px;font-size:21px;line-height:1.3;">${escapeHtml(title)}</h1>

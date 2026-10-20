@@ -33664,3 +33664,18 @@ html[lang="ar"] .pgBody small {
 .adQuotes > .adNotice {
   margin-bottom: 16px;
 }
+
+/* Product tables: the search and filter bar scrolls with the page (not sticky) */
+.ptBar {
+  position: static;
+}
+
+.ptFamily {
+  scroll-margin-top: 100px;
+}
+
+@media (max-width: 900px) {
+  .ptFamily {
+    scroll-margin-top: 84px;
+  }
+}

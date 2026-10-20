@@ -7,6 +7,10 @@ export const REVEAL_SELECTOR = [
   '.pmSimilarCard', '.wtCard', '.wtUseTile', '.cmService', '.cmMachine', '.cmStep', '.cmProject',
   '.cmHomeProject', '.blogCard', '.videoCard', '.ecoBandList li',
   '.ptFamily', '.contactChannel', '.contactAddressCard', '.ecoBandPanel', '.cmCtaPanel',
+  // Home page: section headings, cards and visuals (stat figures animate on their own)
+  '.matFeaturesList > li', '.statsShowcaseText', '.productExplorerHeader', '.pgTabs', '.pgCard',
+  '.machineParkHeader', '.machineParkBody', '.industriesShowcaseHeader', '.industriesRow',
+  '.cmHomeIntro', '.cmHomeVisual',
 ].join(',');
 
 /*

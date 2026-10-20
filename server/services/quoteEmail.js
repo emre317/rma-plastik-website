@@ -1,4 +1,4 @@
-import { sendMail } from './mailer.js';
+import { emailLogo, sendMail } from './mailer.js';
 
 /*
   Notification sent to the sales team for every new quote request.
@@ -163,7 +163,7 @@ export function buildQuoteEmail(quote) {
             <td style="background:#101317;border-bottom:4px solid #e4173a;padding:28px 32px;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td style="font-size:20px;font-weight:700;color:#ffffff;letter-spacing:-0.01em;">RMA <span style="color:#e4173a;">Plastik</span></td>
+                  <td style="vertical-align:middle;">${emailLogo()}</td>
                   <td align="right" style="font-size:11px;font-weight:700;color:#818b98;letter-spacing:0.08em;text-transform:uppercase;">${reference}</td>
                 </tr>
               </table>
@@ -416,7 +416,7 @@ export function buildCustomerConfirmation(quote, contact = {}) {
 
           <tr>
             <td style="background:#101317;border-bottom:4px solid #e4173a;padding:28px 32px;text-align:${align};">
-              <div style="font-size:20px;font-weight:700;color:#ffffff;letter-spacing:-0.01em;" dir="ltr">RMA <span style="color:#e4173a;">Plastik</span></div>
+              <div dir="ltr" style="text-align:${align};">${emailLogo()}</div>
               <p style="margin:22px 0 6px;font-size:12px;font-weight:700;color:#ff4560;letter-spacing:0.06em;text-transform:uppercase;">${escapeHtml(copy.eyebrow)}</p>
               <h1 style="margin:0;font-size:22px;line-height:1.35;color:#ffffff;font-weight:600;">${escapeHtml(copy.greeting(name))}</h1>
             </td>
@@ -581,7 +581,7 @@ export async function buildOfferEmail(quote, offer, contact = {}) {
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:620px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #d5dae0;">
           <tr>
             <td style="background:#101317;border-bottom:4px solid #e4173a;padding:26px 32px;text-align:${align};">
-              <div style="font-size:20px;font-weight:700;color:#ffffff;" dir="ltr">RMA <span style="color:#e4173a;">Plastik</span></div>
+              <div dir="ltr" style="text-align:${align};">${emailLogo()}</div>
               <p style="margin:20px 0 4px;font-size:12px;font-weight:700;color:#ff4560;letter-spacing:0.06em;text-transform:uppercase;">${escapeHtml(copy.title)}</p>
               <h1 style="margin:0;font-size:22px;color:#ffffff;font-weight:600;" dir="ltr">${escapeHtml(number)}</h1>
             </td>

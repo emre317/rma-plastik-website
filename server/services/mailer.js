@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import { fileURLToPath } from 'node:url';
 
 /*
   SMTP transport built from environment variables.
@@ -64,14 +65,37 @@ export function mailFrom() {
   return { name: name || DEFAULT_SENDER_NAME, address };
 }
 
+/*
+  Logo in the e-mail headers: the white wordmark for the dark header band,
+  embedded in the message (cid:) so it shows even where remote images are
+  blocked. sendMail() attaches it to every message whose HTML uses it.
+*/
+const LOGO_CID = 'rma-logo@rmaplastik.com';
+const LOGO_PATH = fileURLToPath(new URL('../assets/email-logo.png', import.meta.url));
+
+export function emailLogo() {
+  return `<img src="cid:${LOGO_CID}" alt="RMA Plastik" width="160" height="58" style="display:inline-block;width:160px;height:58px;border:0;outline:none;text-decoration:none;color:#ffffff;font-size:20px;font-weight:700;">`;
+}
+
 export async function sendMail(message) {
   if (!isMailConfigured()) {
     console.warn('SMTP is not configured; email skipped:', message.subject);
     return null;
   }
 
-  return getTransporter().sendMail({
+  return getTransporter().sendMail(prepareMessage(message));
+}
+
+/* Sender and, when the HTML shows the logo, the embedded logo file */
+export function prepareMessage(message) {
+  const usesLogo = typeof message.html === 'string' && message.html.includes(`cid:${LOGO_CID}`);
+
+  return {
     from: mailFrom(),
     ...message,
-  });
+    attachments: [
+      ...(message.attachments || []),
+      ...(usesLogo ? [{ filename: 'rma-plastik.png', path: LOGO_PATH, cid: LOGO_CID, contentDisposition: 'inline' }] : []),
+    ],
+  };
 }
