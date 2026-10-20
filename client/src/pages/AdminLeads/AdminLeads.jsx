@@ -11,6 +11,7 @@ import usePageTitle from '../../hooks/usePageTitle';
 import { LANGUAGE_LABELS, formatDate, timeAgo } from '../../components/admin/quoteStatus';
 import { exportLeadsFile } from '../AdminQuotes/quoteExcel';
 import Dropdown from '../../components/ui/Dropdown';
+import { useConfirm } from '../../components/ui/ConfirmDialog';
 
 const PAGE_SIZE = 20;
 
@@ -19,6 +20,7 @@ export default function AdminLeads() {
   usePageTitle('Potansiyel Müşteriler');
 
   const call = useAdminApi();
+  const confirm = useConfirm();
 
   const [leads, setLeads] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, pages: 1, total: 0 });
@@ -86,7 +88,7 @@ export default function AdminLeads() {
   }
 
   async function remove(lead) {
-    if (!window.confirm(`${lead.email} kaydı kalıcı olarak silinsin mi? (ör. kişi verilerinin silinmesini istediyse)`)) return;
+    if (!(await confirm({ title: 'Kayıt silinsin mi?', message: `${lead.email} kaydı kalıcı olarak silinir (ör. kişi verilerinin silinmesini istediyse).`, confirmLabel: 'Kaydı Sil', tone: 'danger' }))) return;
 
     try {
       await call(deleteLead, lead._id);

@@ -86,7 +86,7 @@ export async function syncAdditions(additions = {}, { apply = false } = {}) {
     import('../controllers/catalogueController.js'),
     import('../models/ProductGroup.js'),
   ]);
-  const report = { families: [], rows: [], groups: [], groupUpdates: [], skipped: [] };
+  const report = { families: [], rows: [], groups: [], groupUpdates: [], groupRemovals: [], skipped: [] };
   const builtIn = await builtInFamilyDocs();
   const order = builtIn.map((doc) => doc.familyId);
 
@@ -155,6 +155,13 @@ export async function syncAdditions(additions = {}, { apply = false } = {}) {
       report.groups.push(groupId);
       if (apply) await ProductGroup.create({ ...doc, order: previous ? (previous.order || 0) + 1 : doc.order });
     }
+    // Groups replaced by tables in other groups (e.g. underground tanks)
+    for (const groupId of additions.groupRemovals || []) {
+      const group = await ProductGroup.findOne({ groupId });
+      if (!group) continue;
+      report.groupRemovals.push(groupId);
+      if (apply) await group.deleteOne();
+    }
     for (const update of additions.groupUpdates || []) {
       const group = await ProductGroup.findOne({ groupId: update.groupId });
       if (!group || group[update.field] !== update.from) continue;
@@ -166,7 +173,7 @@ export async function syncAdditions(additions = {}, { apply = false } = {}) {
     }
   }
 
-  const any = report.families.length || report.rows.length || report.groups.length || report.groupUpdates.length;
+  const any = report.families.length || report.rows.length || report.groups.length || report.groupUpdates.length || report.groupRemovals.length;
   if (apply && any) await markContentChanged();
   return report;
 }

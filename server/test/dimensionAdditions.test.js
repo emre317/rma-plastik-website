@@ -26,6 +26,8 @@ for (const doc of await builtInGroupDocs()) {
   if (additions.groups.includes(doc.groupId)) continue;
   await ProductGroup.create({ ...doc, quoteOnly: doc.groupId === 'pallets' ? true : doc.quoteOnly });
 }
+// ...which still had the separate underground group
+await ProductGroup.create({ groupId: 'underground', category: 'tanks', quoteOnly: true, order: 35, i18n: { tr: { label: 'Yeraltı Tankları' } } });
 
 const codes = async (familyId) => (await ProductFamily.findOne({ familyId })).rows.map((row) => row.code);
 
@@ -34,6 +36,8 @@ test('a dry run lists the additions and writes nothing', async () => {
   assert.equal(report.families.length, additions.families.length);
   assert.equal(report.rows.length, additions.rows.length);
   assert.deepEqual(report.groups, ['bins']);
+  assert.deepEqual(report.groupRemovals, ['underground']);
+  assert.ok(await ProductGroup.findOne({ groupId: 'underground' }), 'dry run keeps it');
   assert.equal(report.groupUpdates.length, 1);
   assert.equal(await ProductFamily.findOne({ familyId: 'pallets' }), null);
   assert.ok(!(await codes('vertical-tanks')).includes('RD 501 HK'));
@@ -53,6 +57,10 @@ test('--apply adds tables, models and the group in their place; nothing is overw
   assert.ok((await codes('brine-tanks')).includes('RDSMR 7000'));
   assert.deepEqual(await codes('pallets'), ['RP 70*100', 'RP 80*120', 'RP 90*100', 'RP 100*100', 'RP 100*120', 'RP 105*105', 'RP 120*120']);
 
+  assert.equal(await ProductGroup.findOne({ groupId: 'underground' }), null);
+  const underground = await ProductFamily.findOne({ familyId: 'underground-vertical-tanks' });
+  assert.ok(underground && underground.rows.length === 0 && underground.group === 'vertical');
+  assert.equal((await ProductFamily.findOne({ familyId: 'underground-horizontal-tanks' })).group, 'horizontal');
   const pallets = await ProductGroup.findOne({ groupId: 'pallets' });
   const bins = await ProductGroup.findOne({ groupId: 'bins' });
   assert.equal(pallets.quoteOnly, false);
@@ -65,7 +73,7 @@ test('--apply adds tables, models and the group in their place; nothing is overw
   assert.equal(turnip.i18n.tr.title, 'Şalgam Tankları');
 
   const again = await syncAdditions(additions, { apply: true });
-  assert.equal(again.families.length + again.rows.length + again.groups.length + again.groupUpdates.length, 0);
+  assert.equal(again.families.length + again.rows.length + again.groups.length + again.groupUpdates.length + again.groupRemovals.length, 0);
 });
 
 test('an empty database is left alone (the built-in data already has everything)', async () => {

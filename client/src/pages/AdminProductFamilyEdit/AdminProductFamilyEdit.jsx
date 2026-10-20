@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 import tr from '../../i18n/locales/tr';
 import useAdminApi from '../../hooks/useAdminApi';
@@ -13,6 +14,7 @@ import {
   uploadProductImage,
 } from '../../services/adminContentApi';
 import Dropdown from '../../components/ui/Dropdown';
+import { useConfirm } from '../../components/ui/ConfirmDialog';
 
 const LANGUAGES = [
   { code: 'tr', label: 'Türkçe' },
@@ -67,6 +69,7 @@ export default function AdminProductFamilyEdit() {
   const isNew = id === 'new';
   const navigate = useNavigate();
   const call = useAdminApi();
+  const confirm = useConfirm();
   const { options: groupOptions } = useProductGroupOptions();
 
   usePageTitle(isNew ? 'Yeni ürün ailesi' : 'Ürün ailesini düzenle');
@@ -148,7 +151,15 @@ export default function AdminProductFamilyEdit() {
   const duplicateRow = (index) =>
     setRows((rows) => [...rows.slice(0, index + 1), { ...rows[index], values: { ...rows[index].values } }, ...rows.slice(index + 1)]);
 
-  const removeRow = (index) => setRows((rows) => rows.filter((_, i) => i !== index));
+  const removeRow = async (index, code) => {
+    const ok = await confirm({
+      title: 'Model silinsin mi?',
+      message: `${code?.trim() || 'Bu satır'} tablodan kaldırılır. Değişiklik "Kaydet" ile kalıcı olur.`,
+      confirmLabel: 'Modeli Sil',
+      tone: 'danger',
+    });
+    if (ok) setRows((rows) => rows.filter((_, i) => i !== index));
+  };
 
   async function upload(file, target) {
     try {
@@ -244,7 +255,7 @@ export default function AdminProductFamilyEdit() {
 
       <div className="adminPageHeader">
         <div>
-          <Link to="/admin/product-families" className="adminBack">← Ürün tabloları</Link>
+          <Link to="/admin/product-families" className="adBack"><ArrowLeft aria-hidden="true" />Ürün Tabloları</Link>
           <h1>{isNew ? 'Yeni ürün ailesi' : form.i18n.tr.title || 'Ürün ailesini düzenle'}</h1>
         </div>
       </div>
@@ -516,7 +527,7 @@ export default function AdminProductFamilyEdit() {
                           <button type="button" onClick={() => moveRow(index, -1)} disabled={index === 0} aria-label="Yukarı taşı">↑</button>
                           <button type="button" onClick={() => moveRow(index, 1)} disabled={index === form.rows.length - 1} aria-label="Aşağı taşı">↓</button>
                           <button type="button" onClick={() => duplicateRow(index)} aria-label="Kopyala" title="Kopyala">⧉</button>
-                          <button type="button" className="danger" onClick={() => removeRow(index)} aria-label="Sil" title="Sil">×</button>
+                          <button type="button" className="danger" onClick={() => removeRow(index, row.code)} aria-label="Sil" title="Sil">×</button>
                         </span>
                       </td>
                     </tr>

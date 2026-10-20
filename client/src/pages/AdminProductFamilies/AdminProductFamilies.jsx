@@ -6,11 +6,13 @@ import usePageTitle from '../../hooks/usePageTitle';
 import { createFamily, deleteFamily, importFamilies, listFamilies, updateFamily } from '../../services/adminContentApi';
 import { exportFamilies, readFamiliesFile } from './familyExcel';
 import useProductGroupOptions, { tableGroup } from '../../hooks/useProductGroupOptions';
+import { useConfirm } from '../../components/ui/ConfirmDialog';
 
 export default function AdminProductFamilies() {
   usePageTitle('Ürün Tabloları');
 
   const call = useAdminApi();
+  const confirm = useConfirm();
   const { labelOf: groupLabel } = useProductGroupOptions();
 
   const [families, setFamilies] = useState([]);
@@ -66,7 +68,7 @@ export default function AdminProductFamilies() {
   async function remove(family) {
     const name = family.i18n?.tr?.title || family.familyId;
 
-    if (!window.confirm(`"${name}" ve tablosundaki ${family.rows.length} model kalıcı olarak silinsin mi?`)) {
+    if (!(await confirm({ title: 'Ürün tablosu silinsin mi?', message: `"${name}" ve tablosundaki ${family.rows.length} model kalıcı olarak silinir.`, details: ['Model sayfaları da siteden kalkar (bir sonraki yayında).', 'Bu işlem geri alınamaz.'], confirmLabel: 'Tabloyu Sil', tone: 'danger' }))) {
       return;
     }
 

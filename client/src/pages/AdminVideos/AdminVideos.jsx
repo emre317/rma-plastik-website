@@ -4,6 +4,7 @@ import useAdminApi from '../../hooks/useAdminApi';
 import usePageTitle from '../../hooks/usePageTitle';
 import { youtubeThumbnail } from '../../components/content/YouTubeEmbed';
 import { createVideo, deleteVideo, listVideos, updateVideo } from '../../services/adminContentApi';
+import { useConfirm } from '../../components/ui/ConfirmDialog';
 
 const LANGS = [
   { code: 'tr', label: 'Türkçe' },
@@ -32,6 +33,7 @@ export default function AdminVideos() {
   usePageTitle('Videolar');
 
   const call = useAdminApi();
+  const confirm = useConfirm();
   const [videos, setVideos] = useState([]);
   const [form, setForm] = useState(null);
   const [lang, setLang] = useState('tr');
@@ -95,7 +97,7 @@ export default function AdminVideos() {
   }
 
   async function remove(video) {
-    if (!window.confirm(`"${video.i18n?.tr?.title || video.youtubeId}" listeden kaldırılsın mı? (YouTube'daki video silinmez.)`)) return;
+    if (!(await confirm({ title: 'Video listeden kaldırılsın mı?', message: `"${video.i18n?.tr?.title || video.youtubeId}" sitedeki video listesinden kaldırılır. YouTube'daki video silinmez.`, confirmLabel: 'Listeden Kaldır', tone: 'danger' }))) return;
 
     try {
       await call(deleteVideo, video._id);

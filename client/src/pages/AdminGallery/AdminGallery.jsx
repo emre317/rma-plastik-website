@@ -6,6 +6,7 @@ import usePageTitle from '../../hooks/usePageTitle';
 import {
   createGalleryPhoto, deleteGalleryPhoto, listGallery, updateGalleryPhoto, uploadGalleryImage,
 } from '../../services/adminContentApi';
+import { useConfirm } from '../../components/ui/ConfirmDialog';
 
 const LANGS = [
   { code: 'tr', label: 'Türkçe' },
@@ -20,6 +21,7 @@ export default function AdminGallery() {
   usePageTitle('Saha Fotoğrafları');
 
   const call = useAdminApi();
+  const confirm = useConfirm();
   const fileRef = useRef(null);
   const replaceRef = useRef(null);
 
@@ -122,7 +124,7 @@ export default function AdminGallery() {
   }
 
   async function remove(photo) {
-    if (!window.confirm('Bu fotoğraf silinsin mi?')) return;
+    if (!(await confirm({ title: 'Fotoğraf silinsin mi?', message: 'Fotoğraf galeriden kalıcı olarak kaldırılır.', confirmLabel: 'Fotoğrafı Sil', tone: 'danger' }))) return;
 
     try {
       await call(deleteGalleryPhoto, photo._id);

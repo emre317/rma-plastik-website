@@ -19,7 +19,6 @@ const groups = [
   { id: 'vertical', category: 'tanks', image: `${IMG}/rd-15000.webp`, hue: 214, page: 'waterTanks' },
   { id: 'horizontal', category: 'tanks', image: `${IMG}/ry-1000.webp`, hue: 204 },
   { id: 'twoLayer', category: 'tanks', image: `${IMG}/sd-set.webp`, hue: 196 },
-  { id: 'underground', category: 'tanks', image: `${ILL}/underground.svg`, hue: 200, quoteOnly: true },
   { id: 'silo', category: 'chemical', image: `${IMG}/silo-tank.webp`, hue: 226 },
   { id: 'textile', category: 'textile', image: `${IMG}/textile-trolley.webp`, hue: 262, monoblock: false },
   { id: 'copBoxes', category: 'textile', image: `${IMG}/cop-box.webp`, hue: 250, monoblock: false },

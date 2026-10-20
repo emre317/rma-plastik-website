@@ -6,6 +6,7 @@ import builtInProjects from '../../data/projects.builtin';
 import {
   createProject, deleteProject, importProjects, listProjects, updateProject, uploadProjectImage,
 } from '../../services/adminContentApi';
+import { useConfirm } from '../../components/ui/ConfirmDialog';
 
 const LANGS = [
   { code: 'tr', label: 'Türkçe' },
@@ -26,6 +27,7 @@ export default function AdminProjects() {
   usePageTitle('Referans Projeler');
 
   const call = useAdminApi();
+  const confirm = useConfirm();
   const fileRef = useRef(null);
 
   const [projects, setProjects] = useState([]);
@@ -104,7 +106,7 @@ export default function AdminProjects() {
   }
 
   async function remove(project) {
-    if (!window.confirm(`"${project.i18n?.tr?.title || 'Proje'}" silinsin mi?`)) return;
+    if (!(await confirm({ title: 'Proje silinsin mi?', message: `"${project.i18n?.tr?.title || 'Proje'}" referans projelerden kalıcı olarak silinir.`, confirmLabel: 'Projeyi Sil', tone: 'danger' }))) return;
 
     try {
       await call(deleteProject, project._id);

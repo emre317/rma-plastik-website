@@ -351,6 +351,14 @@ const tr = {
         title: 'Yol Bariyerleri',
         text: 'Rotasyonel kalıplama ve şişirme teknikleriyle üretilen yol güvenlik bariyerleri. Seri üretime uygundur, günde 300 adet teslim edilebilir; içerisine su veya kum doldurulabilir.',
       },
+      'underground-vertical-tanks': {
+        title: 'Yeraltı Tankları',
+        text: 'Yer altı temiz ve kirli su tankları (foseptik).',
+      },
+      'underground-horizontal-tanks': {
+        title: 'Yeraltı Tankları',
+        text: 'Yer altı temiz ve kirli su tankları (foseptik).',
+      },
       'horizontal-cylinder-tanks': {
         title: 'Yatay Silindir ve Römork Üstü Tanklar',
         text: 'Yatay silindir gövdeli polietilen depolar ve römork üzerine monte edilen yatay tank.',

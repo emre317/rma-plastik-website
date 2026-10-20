@@ -7,6 +7,7 @@ import useAdminApi from '../../hooks/useAdminApi';
 import { formatMoney, OFFER_CURRENCIES } from '../../data/offerText';
 import Dropdown from '../ui/Dropdown';
 import { useAdminSession } from './AdminSession';
+import { useConfirm } from '../ui/ConfirmDialog';
 
 /*
   Monthly sales targets (set by admins) against the offers won in each month.
@@ -134,6 +135,7 @@ const amountText = (value) => (value ? new Intl.NumberFormat('tr-TR', { maximumF
 /* Satış Raporu: the year's targets, editable by admins */
 export default function SalesTargets() {
   const call = useAdminApi();
+  const confirm = useConfirm();
   const { can } = useAdminSession();
   const editor = can('settings');
 
@@ -210,7 +212,7 @@ export default function SalesTargets() {
   }
 
   async function remove(month) {
-    if (!window.confirm(`${monthName(month)} hedefi (${owner || 'şirket geneli'}) silinsin mi?`)) return;
+    if (!(await confirm({ title: 'Satış hedefi silinsin mi?', message: `${monthName(month)} hedefi (${owner || 'şirket geneli'}) kalıcı olarak silinir.`, confirmLabel: 'Hedefi Sil', tone: 'danger' }))) return;
     setSaving(true);
     setError('');
     try {

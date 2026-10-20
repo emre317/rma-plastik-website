@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 import tr from '../../i18n/locales/tr';
 import portfolio, { LEGACY_PRODUCT_GROUPS } from '../../data/productPortfolio';
@@ -201,7 +202,7 @@ export default function AdminPostEdit() {
     <section className="adminContent">
       <div className="adminPageHeader">
         <div>
-          <Link to="/admin/posts" className="adminBack">← Blog yazıları</Link>
+          <Link to="/admin/posts" className="adBack"><ArrowLeft aria-hidden="true" />Blog Yazıları</Link>
           <h1>{isNew ? 'Yeni yazı' : form.i18n.tr.title || 'Yazıyı düzenle'}</h1>
         </div>
       </div>

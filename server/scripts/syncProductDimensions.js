@@ -38,9 +38,10 @@ section(apply ? 'Eklenen ürün tabloları' : 'Eklenecek ürün tabloları', add
 section(apply ? 'Eklenen modeller' : 'Eklenecek modeller', added.rows);
 section(apply ? 'Eklenen ürün grupları' : 'Eklenecek ürün grupları', added.groups);
 section(apply ? 'Güncellenen ürün grupları' : 'Güncellenecek ürün grupları', added.groupUpdates);
+section(apply ? 'Kaldırılan ürün grupları' : 'Kaldırılacak ürün grupları', added.groupRemovals);
 added.skipped.forEach((line) => console.log(line));
 console.log(`Zaten güncel: ${report.already.length}`);
-const addedAny = added.families.length || added.rows.length || added.groups.length || added.groupUpdates.length;
+const addedAny = added.families.length || added.rows.length || added.groups.length || added.groupUpdates.length || added.groupRemovals.length;
 if (apply && (report.updated.length || report.removed.length || addedAny)) console.log('\nPanelden "Yayınla" ile siteyi yayınlayın.');
 
 await mongoose.disconnect();

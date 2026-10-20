@@ -9,6 +9,10 @@
   02.09.2026 (server/scripts/data/product-dimensions-2026-09.json). Built-in titles/descriptions live in the locale files
   under productTables.families.<id>.
 
+  A table without rows is shown on the site as an "on request" card with a
+  quote button (e.g. the underground tanks in the vertical and horizontal
+  groups).
+
   Columns: code, volume, diameter, height, length, width, cap, outlet,
   wheel, conical, reducer, upperLength, bottomLength, upperDiameter,
   bottomDiameter, camber, throat
@@ -56,6 +60,14 @@ const families = [
     ]),
   },
   {
+    // No models: shown as an "on request" card with a quote button
+    id: 'underground-vertical-tanks',
+    group: 'vertical',
+    image: `${ILL}/underground.svg`,
+    columns: ['code'],
+    rows: [],
+  },
+  {
     id: 'horizontal-tanks',
     group: 'horizontal',
     image: `${IMG}/ry-1000.webp`,
@@ -81,6 +93,14 @@ const families = [
       ['RYS 9000', 9000, 200, 360, null, '40'],
       ['RYS 15000', 15000, 230, 400, null, '40'],
     ]),
+  },
+  {
+    // No models: shown as an "on request" card with a quote button
+    id: 'underground-horizontal-tanks',
+    group: 'horizontal',
+    image: `${ILL}/underground.svg`,
+    columns: ['code'],
+    rows: [],
   },
   {
     id: 'two-layer-vertical',

@@ -16,6 +16,7 @@ import {
 } from '../../components/admin/quoteStatus';
 import Dropdown from '../../components/ui/Dropdown';
 import { useAdminSession } from '../../components/admin/AdminSession';
+import { useConfirm } from '../../components/ui/ConfirmDialog';
 
 const MAIL_KINDS = [
   { kind: 'notification', label: 'Satış Bildirimi' },
@@ -159,6 +160,7 @@ function CustomerSummary({ data, quote }) {
 
 /* One quote request: status steps, contact actions, products and message */
 export default function AdminQuoteDetail() {
+  const confirm = useConfirm();
   usePageTitle('Teklif Talebi');
 
   const { id } = useParams();
@@ -207,7 +209,7 @@ export default function AdminQuoteDetail() {
   }, [call, id]);
 
   async function removeQuote() {
-    const ok = window.confirm(`${quote.company} (${quoteReference(quote._id)}) talebi kalıcı olarak silinsin mi?\n\nNotları, takip bilgileri ve proformasıyla birlikte silinir; geri alınamaz.`);
+    const ok = await confirm({ title: 'Teklif talebi silinsin mi?', message: `${quote.company} (${quoteReference(quote._id)}) talebi kalıcı olarak silinir.`, details: ['Notları, takip bilgileri ve proformasıyla birlikte silinir.', 'Bu işlem geri alınamaz.'], confirmLabel: 'Talebi Sil', tone: 'danger' });
     if (!ok) return;
 
     setDeleting(true);
@@ -292,9 +294,9 @@ export default function AdminQuoteDetail() {
     }
   }
 
-  function chooseOutcome(outcome) {
+  async function chooseOutcome(outcome) {
     if (outcome === (quote.outcome || '')) return;
-    if (outcome === '' && !window.confirm('Sonuç kaldırılsın mı? Talebin durumu değişmez.')) return;
+    if (outcome === '' && !(await confirm({ title: 'Sonuç kaldırılsın mı?', message: 'Kazanıldı / Kaybedildi bilgisi silinir; talebin durumu değişmez.', confirmLabel: 'Sonucu Kaldır', tone: 'warning' }))) return;
     saveTracking({ outcome }, 'outcome');
   }
 
@@ -321,7 +323,7 @@ export default function AdminQuoteDetail() {
   }
 
   async function removeNote(noteId) {
-    if (!window.confirm('Bu not silinsin mi?')) return;
+    if (!(await confirm({ title: 'Not silinsin mi?', message: 'Bu not kalıcı olarak silinir.', confirmLabel: 'Notu Sil', tone: 'danger' }))) return;
 
     try {
       const response = await call(deleteQuoteNote, id, noteId);

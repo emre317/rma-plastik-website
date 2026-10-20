@@ -10,6 +10,7 @@ import builtInFamilies from '../../data/productTables.builtin';
 import SECTOR_ICONS from '../../data/sectorIcons';
 import Dropdown from '../../components/ui/Dropdown';
 import { createSector, getSector, listFamilies, updateSector } from '../../services/adminContentApi';
+import { useConfirm } from '../../components/ui/ConfirmDialog';
 
 const LANGS = [
   { code: 'tr', label: 'Türkçe' },
@@ -69,6 +70,17 @@ export default function AdminSectorEdit() {
   const isNew = id === 'new';
   const navigate = useNavigate();
   const call = useAdminApi();
+  const confirm = useConfirm();
+
+  const removeProduct = async (index, name) => {
+    const ok = await confirm({
+      title: 'Ürün sektörden kaldırılsın mı?',
+      message: `${name?.trim() || 'Bu ürün'} sektör sayfasından kaldırılır. Değişiklik "Kaydet" ile kalıcı olur.`,
+      confirmLabel: 'Kaldır',
+      tone: 'danger',
+    });
+    if (ok) setProducts((list) => list.filter((_, i) => i !== index));
+  };
   const { options: groupOptions, labelOf } = useProductGroupOptions();
 
   usePageTitle(isNew ? 'Yeni sektör' : 'Sektörü düzenle');
@@ -348,7 +360,7 @@ export default function AdminSectorEdit() {
                     <span className="cmsRowTools adSectorProductActions">
                       <button type="button" onClick={() => moveProduct(index, -1)} disabled={index === 0} aria-label="Yukarı taşı"><ArrowUp aria-hidden="true" /></button>
                       <button type="button" onClick={() => moveProduct(index, 1)} disabled={index === form.products.length - 1} aria-label="Aşağı taşı"><ArrowDown aria-hidden="true" /></button>
-                      <button type="button" className="danger" onClick={() => setProducts((list) => list.filter((_, i) => i !== index))} aria-label="Ürünü kaldır"><Trash2 aria-hidden="true" /></button>
+                      <button type="button" className="danger" onClick={() => removeProduct(index, product.i18n?.tr?.name)} aria-label="Ürünü kaldır"><Trash2 aria-hidden="true" /></button>
                     </span>
                   </li>
                 );

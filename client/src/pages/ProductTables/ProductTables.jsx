@@ -61,12 +61,14 @@ export default function ProductTables() {
       .filter((family) => group === 'all' || groupOf(family) === group)
       .map((family) => ({
         ...family,
+        onRequest: family.rows.length === 0,
         rows: family.rows.filter((row) =>
           (!q || normalise(row.code).includes(q)) &&
           (volume === 'all' || (typeof row.volume === 'number' && row.volume >= min && row.volume <= max))
         ),
       }))
-      .filter((family) => family.rows.length > 0);
+      // Tables without models ("on request") show only while no code / volume filter is used
+      .filter((family) => family.rows.length > 0 || (family.onRequest && !q && volume === 'all'));
   }, [query, group, volume]);
 
   const shownModels = visible.reduce((sum, family) => sum + family.rows.length, 0);
@@ -200,7 +202,7 @@ export default function ProductTables() {
                       <li key={family.id}>
                         <a href={`#${family.id}`} onClick={(event) => { event.preventDefault(); jumpTo(family.id); }}>
                           {familyText(family, 'title', lang, t)}
-                          <small>{family.rows.length}</small>
+                          <small>{family.rows.length || '–'}</small>
                         </a>
                       </li>
                     ))}
@@ -250,7 +252,7 @@ export default function ProductTables() {
 
                           <div className="ptFamilyMeta">
                             <span>
-                              {family.rows.length} {p('models')}
+                              {family.onRequest ? t('productExplorer.onRequest') : `${family.rows.length} ${p('models')}`}
                             </span>
                             {family.waterTank && (
                               <LocalizedLink to="/water-tanks" className="ptFamilyLink">
@@ -262,6 +264,15 @@ export default function ProductTables() {
                         </div>
                       </header>
 
+                      {family.onRequest ? (
+                        <div className="ptOnRequest">
+                          <p>{t('pages.industries.onRequestText')}</p>
+                          <button type="button" className="button primary quoteButton" onClick={() => openQuote(title)}>
+                            <span>{p('quote')}</span>
+                            <Arrow className="buttonArrow" />
+                          </button>
+                        </div>
+                      ) : (
                       <div className="ptTableWrap" ref={fitTable}>
                         <table className="ptTable">
                           <thead>
@@ -298,6 +309,7 @@ export default function ProductTables() {
                           </tbody>
                         </table>
                       </div>
+                      )}
                     </article>
                   );
                 })}

@@ -352,6 +352,14 @@ const en = {
         title: 'Road Barriers',
         text: 'Road safety barriers produced with rotational and blow molding. Suitable for mass production, 300 units can be delivered per day; can be filled with water or sand.',
       },
+      'underground-vertical-tanks': {
+        title: 'Underground Tanks',
+        text: 'Underground clean and waste water tanks (septic).',
+      },
+      'underground-horizontal-tanks': {
+        title: 'Underground Tanks',
+        text: 'Underground clean and waste water tanks (septic).',
+      },
       'horizontal-cylinder-tanks': {
         title: 'Horizontal Cylinder and Trailer Tanks',
         text: 'Polyethylene tanks with a horizontal cylindrical body, and a horizontal tank for mounting on a trailer.',

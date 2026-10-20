@@ -12,6 +12,7 @@ import {
   createProductGroup, deleteProductGroup, importProductGroups, listFamilies, listProductGroups,
   updateProductGroup, uploadProductImage,
 } from '../../services/adminContentApi';
+import { useConfirm } from '../../components/ui/ConfirmDialog';
 
 const LANGS = [
   { code: 'tr', label: 'Türkçe' },
@@ -72,6 +73,7 @@ export default function AdminProductGroups() {
   usePageTitle('Ürün Grupları');
 
   const call = useAdminApi();
+  const confirm = useConfirm();
   const fileRef = useRef(null);
 
   const [groups, setGroups] = useState([]);
@@ -176,7 +178,7 @@ export default function AdminProductGroups() {
   }
 
   async function remove(group) {
-    if (!window.confirm(`"${group.i18n?.tr?.label || group.groupId}" grubu silinsin mi?`)) return;
+    if (!(await confirm({ title: 'Ürün grubu silinsin mi?', message: `"${group.i18n?.tr?.label || group.groupId}" grubu silinir; ana sayfadaki kartı ve menüdeki yeri kalkar.`, confirmLabel: 'Grubu Sil', tone: 'danger' }))) return;
 
     try {
       await call(deleteProductGroup, group._id);

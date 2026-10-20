@@ -13,6 +13,7 @@ import PasswordField, { generatePassword, passwordOk } from '../../components/ad
 import Dropdown from '../../components/ui/Dropdown';
 import { ROLES, roleLabel, roleTone } from '../../components/admin/roles';
 import { useAdminSession } from '../../components/admin/AdminSession';
+import { useConfirm } from '../../components/ui/ConfirmDialog';
 
 const emptyForm = { name: '', email: '', title: '', phone: '', method: 'password', password: '', role: 'sales' };
 
@@ -58,6 +59,7 @@ export default function AdminUsers() {
   usePageTitle('Kullanıcılar');
 
   const call = useAdminApi();
+  const confirm = useConfirm();
   const { updateAdmin } = useAdminSession();
 
   const [users, setUsers] = useState([]);
@@ -210,7 +212,7 @@ export default function AdminUsers() {
 
   async function toggleActive(user) {
     const next = !user.isActive;
-    if (!next && !window.confirm(`${user.name} pasif yapılsın mı? Panele giriş yapamaz; açık oturumu da kapanır.`)) return;
+    if (!next && !(await confirm({ title: `${user.name} pasif yapılsın mı?`, message: 'Panele giriş yapamaz; açık oturumu da kapanır. İstediğiniz zaman yeniden aktif edebilirsiniz.', confirmLabel: 'Pasif Yap', tone: 'warning' }))) return;
 
     setSaving(`active-${user._id}`);
     setNotice(null);
@@ -227,7 +229,7 @@ export default function AdminUsers() {
   }
 
   async function remove(user) {
-    if (!window.confirm(`${user.name} (${user.email}) kalıcı olarak silinsin mi? Bu işlem geri alınamaz.`)) return;
+    if (!(await confirm({ title: 'Kullanıcı silinsin mi?', message: `${user.name} (${user.email}) kalıcı olarak silinir; bu işlem geri alınamaz.`, confirmLabel: 'Kullanıcıyı Sil', tone: 'danger' }))) return;
 
     setSaving(`delete-${user._id}`);
     setNotice(null);

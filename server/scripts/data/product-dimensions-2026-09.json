@@ -627,7 +627,9 @@
       "metal-stand-silo-tanks",
       "turnip-tanks",
       "trash-bins",
-      "pallets"
+      "pallets",
+      "underground-vertical-tanks",
+      "underground-horizontal-tanks"
     ],
     "rows": [
       {
@@ -701,6 +703,9 @@
         "from": true,
         "to": false
       }
+    ],
+    "groupRemovals": [
+      "underground"
     ]
   }
 }

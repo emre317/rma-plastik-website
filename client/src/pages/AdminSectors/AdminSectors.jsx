@@ -6,12 +6,14 @@ import usePageTitle from '../../hooks/usePageTitle';
 import builtInSectors from '../../data/sectors.builtin';
 import { sectorIcon } from '../../data/sectorIcons';
 import { deleteSector, importSectors, listSectors, updateSector } from '../../services/adminContentApi';
+import { useConfirm } from '../../components/ui/ConfirmDialog';
 
 /* Sectors (Sektörler): /industries cards and the sector pages with their products */
 export default function AdminSectors() {
   usePageTitle('Sektörler');
 
   const call = useAdminApi();
+  const confirm = useConfirm();
 
   const [sectors, setSectors] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -43,7 +45,7 @@ export default function AdminSectors() {
   }
 
   async function remove(sector) {
-    if (!window.confirm(`"${sector.i18n?.tr?.title || sector.sectorId}" sektörü silinsin mi? Sektör sayfası da kaldırılır.`)) return;
+    if (!(await confirm({ title: 'Sektör silinsin mi?', message: `"${sector.i18n?.tr?.title || sector.sectorId}" sektörü ve sitedeki sektör sayfası kaldırılır.`, confirmLabel: 'Sektörü Sil', tone: 'danger' }))) return;
 
     try {
       await call(deleteSector, sector._id);

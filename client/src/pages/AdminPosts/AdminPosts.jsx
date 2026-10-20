@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import useAdminApi from '../../hooks/useAdminApi';
 import usePageTitle from '../../hooks/usePageTitle';
 import { deletePost, listPosts } from '../../services/adminContentApi';
+import { useConfirm } from '../../components/ui/ConfirmDialog';
 
 const LANGS = ['tr', 'en', 'ar'];
 
@@ -20,6 +21,7 @@ export default function AdminPosts() {
   usePageTitle('Blog Yazıları');
 
   const call = useAdminApi();
+  const confirm = useConfirm();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -38,7 +40,7 @@ export default function AdminPosts() {
   }, [call]);
 
   async function remove(post) {
-    if (!window.confirm(`"${post.i18n?.tr?.title || post.slug}" kalıcı olarak silinsin mi?`)) return;
+    if (!(await confirm({ title: 'Blog yazısı silinsin mi?', message: `"${post.i18n?.tr?.title || post.slug}" kalıcı olarak silinir; bu işlem geri alınamaz.`, confirmLabel: 'Yazıyı Sil', tone: 'danger' }))) return;
 
     try {
       await call(deletePost, post._id);
