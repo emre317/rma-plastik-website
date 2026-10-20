@@ -13,6 +13,7 @@ import formatNumber from '../../utils/formatNumber';
 import families, { familyText, modelPath } from '../../data/productTables';
 import portfolio from '../../data/productPortfolio';
 import useModelQuote from '../../hooks/useModelQuote';
+import useTableFit from '../../hooks/useTableFit';
 import AddToCartButton from '../../components/quote/AddToCartButton';
 import CompareButton from '../../components/compare/CompareButton';
 import { EcoBadge } from '../../components/ui/EcoMarks';
@@ -41,6 +42,7 @@ export default function ProductTables() {
   const quoteFor = useModelQuote();
   const { code: lang } = useLanguage();
   const { openQuote } = useQuote();
+  const fitTable = useTableFit();
 
   const [query, setQuery] = useState('');
   const [group, setGroup] = useState('all');
@@ -260,7 +262,7 @@ export default function ProductTables() {
                         </div>
                       </header>
 
-                      <div className="ptTableWrap">
+                      <div className="ptTableWrap" ref={fitTable}>
                         <table className="ptTable">
                           <thead>
                             <tr>
@@ -279,10 +281,10 @@ export default function ProductTables() {
                                       <LocalizedLink to={modelPath(family, row)}>{row.code}</LocalizedLink>
                                     </th>
                                   ) : (
-                                    <td key={key}>{formatNumber(row[key], lang)}</td>
+                                    <td key={key} data-label={p(`columns.${key}`)}>{formatNumber(row[key], lang)}</td>
                                   )
                                 )}
-                                <td>
+                                <td className="ptActionsCell">
                                   <span className="ptRowActions">
                                     <button type="button" className="ptRowQuote" onClick={() => openQuote(quoteFor(family, row))}>
                                       {p('quote')}
