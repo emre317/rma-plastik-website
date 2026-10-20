@@ -1,32 +1,23 @@
-# =====================================================================
-#  Publish the public site (React build + TR/EN/AR prerender) to the hosting.
-#
-#  Started by the admin panel "Yayınla" (workflow_dispatch with publish_id),
-#  by hand from the Actions tab, or – only when the repository variable
-#  AUTO_DEPLOY_ON_PUSH is "true" – by a push that changes the site code.
-#
-#  Nothing is built on the hosting. The live site stays as it is until a
-#  complete, verified build has been copied over (see deploy/remote-site.sh).
-#  Configuration: docs/hosting-com-tr-deployment.md ("GitHub Secrets").
-# =====================================================================
+
 name: Publish site
+
 run-name: "Yayınla ${{ inputs.publish_id || github.sha }}"
 
 on:
   workflow_dispatch:
     inputs:
       publish_id:
-        description: Publish job id (set by the admin panel; leave empty when starting by hand)
+        description: Publish job ID
         required: false
-        default: ''
+        default: ""
+
   push:
     branches: [main]
     paths:
-      - 'client/**'
-      - 'deploy/remote-site.sh'
-      - '.github/workflows/publish-site.yml'
+      - "client/**"
+      - "deploy/remote-site.sh"
+      - ".github/workflows/publish-site.yml"
 
-# One publish at a time; a second one waits for the first
 concurrency:
   group: publish-site
   cancel-in-progress: false
@@ -46,56 +37,74 @@ jobs:
       SITE_URL: ${{ vars.SITE_URL }}
       PUBLISH_ID: ${{ inputs.publish_id }}
       PUBLISH_CALLBACK_TOKEN: ${{ secrets.PUBLISH_CALLBACK_TOKEN }}
-      DEPLOY_METHOD: ${{ vars.DEPLOY_METHOD || 'ssh' }}
-      DEPLOY_PATH: ${{ vars.DEPLOY_PATH || 'public_html' }}
+      DEPLOY_METHOD: ${{ vars.DEPLOY_METHOD || 'ftps' }}
+      DEPLOY_PATH: ${{ vars.DEPLOY_PATH || '.' }}
       RELEASE_ID: ${{ github.run_id }}-${{ github.run_attempt }}
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Check configuration
+        env:
+          CONTENT_TOKEN: ${{ secrets.CONTENT_API_TOKEN }}
+          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
+          SSH_USER: ${{ secrets.DEPLOY_USER }}
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
           missing=""
-          [ -n "$API_URL" ] || missing="$missing API_URL(variable)"
-          [ -n "$SITE_URL" ] || missing="$missing SITE_URL(variable)"
-          [ -n "${{ secrets.CONTENT_API_TOKEN }}" ] || missing="$missing CONTENT_API_TOKEN(secret)"
+
+          [ -n "$API_URL" ] || missing="$missing API_URL"
+          [ -n "$SITE_URL" ] || missing="$missing SITE_URL"
+          [ -n "$CONTENT_TOKEN" ] || missing="$missing CONTENT_API_TOKEN"
+
           if [ "$DEPLOY_METHOD" = "ssh" ]; then
-            [ -n "${{ secrets.DEPLOY_HOST }}" ] || missing="$missing DEPLOY_HOST(secret)"
-            [ -n "${{ secrets.DEPLOY_USER }}" ] || missing="$missing DEPLOY_USER(secret)"
-            [ -n "${{ secrets.DEPLOY_SSH_KEY }}" ] || missing="$missing DEPLOY_SSH_KEY(secret)"
-            [ -n "${{ secrets.DEPLOY_KNOWN_HOSTS }}" ] || missing="$missing DEPLOY_KNOWN_HOSTS(secret)"
+            [ -n "$SSH_HOST" ] || missing="$missing DEPLOY_HOST"
+            [ -n "$SSH_USER" ] || missing="$missing DEPLOY_USER"
+            [ -n "$SSH_KEY" ] || missing="$missing DEPLOY_SSH_KEY"
+            [ -n "$SSH_KNOWN_HOSTS" ] || missing="$missing DEPLOY_KNOWN_HOSTS"
+
           elif [ "$DEPLOY_METHOD" = "ftps" ]; then
-            [ -n "${{ secrets.FTP_HOST }}" ] || missing="$missing FTP_HOST(secret)"
-            [ -n "${{ secrets.FTP_USER }}" ] || missing="$missing FTP_USER(secret)"
-            [ -n "${{ secrets.FTP_PASSWORD }}" ] || missing="$missing FTP_PASSWORD(secret)"
+            [ -n "$FTP_HOST" ] || missing="$missing FTP_HOST"
+            [ -n "$FTP_USER" ] || missing="$missing FTP_USER"
+            [ -n "$FTP_PASSWORD" ] || missing="$missing FTP_PASSWORD"
+
           else
-            missing="$missing DEPLOY_METHOD(ssh|ftps)"
+            missing="$missing DEPLOY_METHOD"
           fi
+
           if [ -n "$missing" ]; then
             echo "::error::Missing configuration:$missing"
             exit 1
           fi
 
+          echo "Configuration OK"
+          echo "Deploy method: $DEPLOY_METHOD"
+
       - name: Report start
         run: node .github/scripts/report.mjs build_started
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: client/package-lock.json
 
-      - name: Install
+      - name: Install dependencies
         working-directory: client
-        run: npm ci --no-audit --no-fund
+        run: npm ci --include=dev --no-audit --no-fund
 
-      # Content snapshot from the API, Vite build, SSR prerender, sitemap, robots
-      - name: Build
+      - name: Build website
         id: build
         working-directory: client
         env:
           NODE_ENV: production
-          CONTENT_API_URL: ${{ vars.API_URL }}/api/content
+          CONTENT_API_URL: ${{ vars.API_URL }}/content
           CONTENT_API_TOKEN: ${{ secrets.CONTENT_API_TOKEN }}
           VITE_SITE_URL: ${{ vars.SITE_URL }}
           VITE_API_URL: ${{ vars.VITE_API_URL }}
@@ -110,24 +119,40 @@ jobs:
         working-directory: client/dist
         run: |
           set -e
+
           for file in index.html build.json sitemap.xml robots.txt .htaccess; do
-            test -s "$file" || { echo "::error::$file missing"; exit 1; }
+            test -s "$file" || {
+              echo "::error::$file missing"
+              exit 1
+            }
           done
+
           pages=$(find tr en ar -name index.html | wc -l)
           min=${{ vars.MIN_PAGES || 100 }}
-          echo "Prerendered pages: $pages (minimum $min)"
-          [ "$pages" -ge "$min" ] || { echo "::error::Only $pages pages were prerendered"; exit 1; }
-          grep -q "<loc>$SITE_URL/tr</loc>" sitemap.xml || { echo "::error::sitemap.xml does not use $SITE_URL"; exit 1; }
+
+          echo "Prerendered pages: $pages"
+
+          if [ "$pages" -lt "$min" ]; then
+            echo "::error::Not enough prerendered pages"
+            exit 1
+          fi
+
+          grep -q "<loc>$SITE_URL/tr</loc>" sitemap.xml
+
           grep -q '"run": "${{ github.run_id }}"' build.json
+
           du -sh .
+
+          echo "Build verification successful"
 
       - name: Report build
         run: node .github/scripts/report.mjs build_succeeded
 
-      - name: Package
-        run: tar -czf "release-$RELEASE_ID.tar.gz" -C client/dist .
+      - name: Package release
+        run: |
+          tar -czf "release-$RELEASE_ID.tar.gz" -C client/dist .
 
-      # --- SSH: upload, then deploy/remote-site.sh puts it live and keeps it for rollback
+      # SSH deployment (optional)
       - name: Deploy over SSH
         id: deploy_ssh
         if: env.DEPLOY_METHOD == 'ssh'
@@ -139,47 +164,126 @@ jobs:
           USER_NAME: ${{ secrets.DEPLOY_USER }}
         run: |
           set -e
+
           mkdir -p ~/.ssh
+
           printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
           printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/deploy_key ~/.ssh/known_hosts
-          SSH="ssh -i $HOME/.ssh/deploy_key -p $PORT -o BatchMode=yes -o StrictHostKeyChecking=yes"
-          $SSH "$USER_NAME@$HOST" 'mkdir -p ~/rma-deploy/incoming'
-          scp -i ~/.ssh/deploy_key -P "$PORT" -o BatchMode=yes -o StrictHostKeyChecking=yes \
-            "release-$RELEASE_ID.tar.gz" "$USER_NAME@$HOST:rma-deploy/incoming/"
-          $SSH "$USER_NAME@$HOST" "bash -s -- deploy '$RELEASE_ID' \"\$HOME/rma-deploy/incoming/release-$RELEASE_ID.tar.gz\" '$DEPLOY_PATH' 5" < deploy/remote-site.sh
 
-      # --- FTPS (when SSH is not available): mirror with lftp, protected paths excluded
+          chmod 600 ~/.ssh/deploy_key ~/.ssh/known_hosts
+
+          SSH="ssh -i $HOME/.ssh/deploy_key -p $PORT -o BatchMode=yes -o StrictHostKeyChecking=yes"
+
+          $SSH "$USER_NAME@$HOST" \
+            'mkdir -p ~/rma-deploy/incoming'
+
+          scp \
+            -i ~/.ssh/deploy_key \
+            -P "$PORT" \
+            -o BatchMode=yes \
+            -o StrictHostKeyChecking=yes \
+            "release-$RELEASE_ID.tar.gz" \
+            "$USER_NAME@$HOST:rma-deploy/incoming/"
+
+          $SSH "$USER_NAME@$HOST" \
+            "bash -s -- deploy '$RELEASE_ID' \"\$HOME/rma-deploy/incoming/release-$RELEASE_ID.tar.gz\" '$DEPLOY_PATH' 5" \
+            < deploy/remote-site.sh
+
+      # FTPS deployment for hosting.com.tr
+      
+      # FTPS deployment for hosting.com.tr
       - name: Deploy over FTPS
         id: deploy_ftps
         if: env.DEPLOY_METHOD == 'ftps'
         env:
-          FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
-          set -e
-          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
-          EXCLUDES="--exclude-glob api/ --exclude-glob uploads --exclude-glob .well-known/ --exclude-glob cgi-bin/"
-          lftp -u "$FTP_USER,$FTP_PASSWORD" "ftp://$FTP_HOST" -e "
-            set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate true;
-            mirror -R --parallel=4 client/dist/assets $DEPLOY_PATH/assets;
-            mirror -R --parallel=4 $EXCLUDES client/dist $DEPLOY_PATH;
-            mirror -R --parallel=4 --delete $EXCLUDES client/dist $DEPLOY_PATH;
-            bye"
+          set -euo pipefail
 
-      # The live site must now serve this build
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq lftp
+
+          test -n "$FTP_USER"
+          test -n "$FTP_PASSWORD"
+
+          echo "77.245.159.39 codex.wlsrv.com" | sudo tee -a /etc/hosts >/dev/null
+
+          CREDENTIALS_FILE="$(mktemp)"
+          chmod 600 "$CREDENTIALS_FILE"
+          trap 'rm -f "$CREDENTIALS_FILE"' EXIT
+
+          printf 'user "%s" "%s"\n' \
+            "$FTP_USER" "$FTP_PASSWORD" > "$CREDENTIALS_FILE"
+
+          echo "Connecting to FTPS..."
+
+          lftp -e "
+            set ftp:ssl-force true
+            set ftp:ssl-protect-data true
+            set ssl:verify-certificate true
+            set ftp:passive-mode true
+            set net:max-retries 2
+            set net:timeout 30
+            open ftp://codex.wlsrv.com
+            source $CREDENTIALS_FILE
+            cls
+            cd \"$DEPLOY_PATH\"
+            mirror -R --parallel=4 --verbose=1 \
+              --exclude-glob api/ \
+              --exclude-glob uploads/ \
+              --exclude-glob .well-known/ \
+              --exclude-glob cgi-bin/ \
+              client/dist .
+            bye
+          "
+
+          echo "FTPS upload completed"
+
+
+          echo "FTPS upload completed"
+
       - name: Verify live site
         id: live
         run: |
-          for _ in 1 2 3 4 5 6; do
-            run=$(curl -fsS --max-time 15 "$SITE_URL/build.json?ts=$(date +%s)" | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{try{console.log(JSON.parse(s).run)}catch{console.log('')}})" || true)
+          set -e
+
+          for attempt in 1 2 3 4 5 6; do
+
+            run=$(
+              curl -fsS --max-time 15 \
+                "$SITE_URL/build.json?ts=$(date +%s)" \
+                | node -e "
+                  let s = '';
+                  process.stdin.on('data', d => s += d);
+                  process.stdin.on('end', () => {
+                    try {
+                      console.log(JSON.parse(s).run);
+                    } catch {
+                      console.log('');
+                    }
+                  });
+                " || true
+            )
+
             if [ "$run" = "${{ github.run_id }}" ]; then
-              curl -fsS --max-time 15 -o /dev/null "$SITE_URL/tr/" && curl -fsS --max-time 15 -o /dev/null "$SITE_URL/en/products" && echo "Live site serves run $run." && exit 0
+
+              curl -fsS --max-time 15 \
+                -o /dev/null "$SITE_URL/tr/"
+
+              curl -fsS --max-time 15 \
+                -o /dev/null "$SITE_URL/en/products"
+
+              echo "Live site verified successfully"
+              exit 0
             fi
-            echo "Live build.json run='$run', waiting…"; sleep 10
+
+            echo "Waiting for live deployment ($attempt/6)"
+            sleep 10
+
           done
-          echo "::error::The live site does not serve this build."
+
+          echo "::error::Live site does not serve the new build"
           exit 1
 
       - name: Report success
@@ -188,16 +292,34 @@ jobs:
       - name: Report failure
         if: failure()
         run: |
-          if [ "${{ steps.build.outcome }}" = "failure" ] || [ "${{ steps.verify.outcome }}" = "failure" ]; then
-            node .github/scripts/report.mjs build_failed "Derleme ya da derleme kontrolü başarısız."
+          if [ "${{ steps.build.outcome }}" = "failure" ] || \
+             [ "${{ steps.verify.outcome }}" = "failure" ]; then
+
+            node .github/scripts/report.mjs \
+              build_failed \
+              "Derleme ya da derleme kontrolü başarısız."
+
           elif [ "${{ steps.live.outcome }}" = "failure" ]; then
-            node .github/scripts/report.mjs deploy_failed "Dosyalar yüklendi ama canlı site yeni sürümü göstermiyor."
-          elif [ "${{ steps.deploy_ssh.outcome }}" = "failure" ] || [ "${{ steps.deploy_ftps.outcome }}" = "failure" ]; then
-            node .github/scripts/report.mjs deploy_failed "Sunucuya yükleme başarısız; eski site yayında."
+
+            node .github/scripts/report.mjs \
+              deploy_failed \
+              "Dosyalar yüklendi ancak canlı site yeni sürümü göstermiyor."
+
+          elif [ "${{ steps.deploy_ssh.outcome }}" = "failure" ] || \
+               [ "${{ steps.deploy_ftps.outcome }}" = "failure" ]; then
+
+            node .github/scripts/report.mjs \
+              deploy_failed \
+              "Sunucuya yükleme başarısız; eski site yayında."
+
           else
-            node .github/scripts/report.mjs build_failed "Yayınlama hazırlığı başarısız (yapılandırmayı kontrol edin)."
+
+            node .github/scripts/report.mjs \
+              build_failed \
+              "Yayınlama hazırlığı başarısız."
+
           fi
 
-      - name: Clean up key
+      - name: Clean up SSH key
         if: always()
         run: rm -f ~/.ssh/deploy_key
