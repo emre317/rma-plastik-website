@@ -2,6 +2,7 @@
 #  Puts an earlier site release back live (SSH deployments only; the last
 #  five releases are kept on the hosting in ~/rma-deploy/releases).
 #  Content saved in the panel is not affected; "Yayınla" builds again later.
+#  Runs from main only.
 # =====================================================================
 name: Rollback site
 
@@ -21,7 +22,24 @@ permissions:
   contents: read
 
 jobs:
+  # Production is updated only from main (development is merged into main first)
+  main-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Only from main
+        env:
+          REF: ${{ github.ref }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          if [ "$REF" != "refs/heads/main" ]; then
+            echo "::error title=Yalnızca main::Bu iş akışı yalnızca main dalından çalıştırılabilir (seçilen: $REF_NAME). Önce development'ı main'e birleştirin, sonra 'Use workflow from' kutusunda main'i seçin."
+            exit 1
+          fi
+          echo "main dalı: devam ediliyor."
+
   rollback:
+    needs: main-only
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment: production

@@ -350,9 +350,14 @@ ekleyebilirsiniz. *Publish site* için eklemeyin; yoksa paneldeki Yayınla onay 
 | Dosya | Ne yapar | Nasıl başlar |
 |---|---|---|
 | `.github/workflows/publish-site.yml` | İçerik snapshot'ı → derleme → doğrulama → yükleme → canlı kontrol → panele bildirim | Panelde Yayınla; elle; `AUTO_DEPLOY_ON_PUSH=true` ise push |
-| `.github/workflows/rollback-site.yml` | Hostingde saklanan önceki site sürümünü yayına alır | Elle (`release`: `previous` veya sürüm adı) |
-| `.github/workflows/deploy-api.yml` | API kodunu kurar ve yeniden başlatır | Elle |
+| `.github/workflows/rollback-site.yml` | Hostingde saklanan önceki site sürümünü yayına alır | Elle, **yalnızca `main`'den** (`release`: `previous` veya sürüm adı) |
+| `.github/workflows/deploy-api.yml` | API kodunu kurar ve yeniden başlatır | Elle, **yalnızca `main`'den** |
 | `.github/workflows/ci.yml` | Her push/PR'da API testleri + site derlemesi (yayınlamaz) | Otomatik |
+
+**Dallar:** Geliştirme `development` dalında yapılır; canlıya alınacağı zaman `development`, `main`'e
+birleştirilir. Canlıyı yalnızca `main` günceller: *Deploy API* ve *Rollback site* başka bir daldan
+("Use workflow from") başlatılırsa ilk adımda durur ve sunucuya hiç bağlanmaz. Panelin *Yayınla* butonu
+da her zaman `main`'i derler (`PUBLISH_GITHUB_REF=main`).
 
 ---
 
