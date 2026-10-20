@@ -352,6 +352,26 @@ const en = {
         title: 'Road Barriers',
         text: 'Road safety barriers produced with rotational and blow molding. Suitable for mass production, 300 units can be delivered per day; can be filled with water or sand.',
       },
+      'horizontal-cylinder-tanks': {
+        title: 'Horizontal Cylinder and Trailer Tanks',
+        text: 'Polyethylene tanks with a horizontal cylindrical body, and a horizontal tank for mounting on a trailer.',
+      },
+      'metal-stand-silo-tanks': {
+        title: 'Silo Tanks with Metal Stand',
+        text: 'Metal-stand (MT) versions of the cone-bottom polyethylene silo tanks.',
+      },
+      'turnip-tanks': {
+        title: 'Turnip Juice Tanks',
+        text: 'Vertical polyethylene tanks for producing and storing şalgam (turnip juice).',
+      },
+      'trash-bins': {
+        title: 'Waste Bins',
+        text: 'Polyethylene waste bins with lids.',
+      },
+      'pallets': {
+        title: 'Pallets',
+        text: 'Polyethylene pallets for storage and handling.',
+      },
     },
     quote: 'Request a Quote',
     waterLink: 'Filter water tanks',
@@ -859,6 +879,12 @@ const en = {
         title: 'Pallets',
         description: 'Durable, long-lasting polyethylene pallets designed for storage and logistics; suited to industrial handling and stacking.',
         application: 'Storage / Logistics',
+      },
+      bins: {
+        label: 'Waste Bins',
+        title: 'Waste Bins',
+        description: 'Polyethylene waste bins with lids.',
+        application: 'Waste Collection',
       },
       barriers: {
         label: 'Road Barriers',

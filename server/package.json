@@ -10,7 +10,8 @@
     "create-admin": "node scripts/createAdmin.js",
     "seed-content": "node scripts/seedContent.js",
     "mail-test": "node scripts/mailTest.js",
-    "backup-db": "node scripts/backupDatabase.js"
+    "backup-db": "node scripts/backupDatabase.js",
+    "sync-dimensions": "node scripts/syncProductDimensions.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

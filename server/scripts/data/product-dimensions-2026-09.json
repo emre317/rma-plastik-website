@@ -1,0 +1,706 @@
+{
+  "source": "Fiyat listesi / kod algoritması V53, 02.09.2026 (yalnızca ölçüler; fiyatlar alınmadı)",
+  "units": {
+    "volume": "L",
+    "sizes": "cm",
+    "cap": "cm"
+  },
+  "changes": [
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 200",
+      "field": "volume",
+      "from": 201,
+      "to": 200
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 200",
+      "field": "diameter",
+      "from": 59,
+      "to": 57
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 200",
+      "field": "height",
+      "from": 102,
+      "to": 98
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 300",
+      "field": "diameter",
+      "from": 58,
+      "to": 70
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 300",
+      "field": "height",
+      "from": 136,
+      "to": 90
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 2001",
+      "field": "diameter",
+      "from": 130,
+      "to": 132
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 2001",
+      "field": "height",
+      "from": 148,
+      "to": 155
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 10000",
+      "field": "diameter",
+      "from": 221,
+      "to": 220
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 10002",
+      "field": "diameter",
+      "from": 278,
+      "to": 280
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 15000",
+      "field": "diameter",
+      "from": 278,
+      "to": 280
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 20000",
+      "field": "diameter",
+      "from": 278,
+      "to": 290
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 20000",
+      "field": "height",
+      "from": 356,
+      "to": 360
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 20001",
+      "field": "diameter",
+      "from": 291,
+      "to": 290
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 20001",
+      "field": "height",
+      "from": 319,
+      "to": 320
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 25000",
+      "field": "diameter",
+      "from": 291,
+      "to": 290
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 25000",
+      "field": "height",
+      "from": 398,
+      "to": 390
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 30000",
+      "field": "height",
+      "from": 382,
+      "to": 380
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 30000",
+      "field": "cap",
+      "from": "60",
+      "to": "60-60"
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 40000",
+      "field": "height",
+      "from": 443,
+      "to": 445
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 40000",
+      "field": "cap",
+      "from": "60",
+      "to": "60-60"
+    },
+    {
+      "familyId": "horizontal-tanks",
+      "code": "RY 500",
+      "field": "diameter",
+      "from": 81,
+      "to": 80
+    },
+    {
+      "familyId": "horizontal-tanks",
+      "code": "RY 500",
+      "field": "length",
+      "from": 139,
+      "to": 140
+    },
+    {
+      "familyId": "horizontal-tanks",
+      "code": "RY 500",
+      "field": "height",
+      "from": 74,
+      "to": 75
+    },
+    {
+      "familyId": "horizontal-tanks",
+      "code": "RY 2000",
+      "field": "height",
+      "from": 133,
+      "to": 135
+    },
+    {
+      "familyId": "horizontal-tanks",
+      "code": "RY 3000",
+      "field": "diameter",
+      "from": 136,
+      "to": 135
+    },
+    {
+      "familyId": "horizontal-tanks",
+      "code": "RY 3000",
+      "field": "length",
+      "from": 234,
+      "to": 235
+    },
+    {
+      "familyId": "horizontal-tanks",
+      "code": "RY 5000",
+      "field": "volume",
+      "from": 5500,
+      "to": 5000
+    },
+    {
+      "familyId": "horizontal-tanks",
+      "code": "RY 5000",
+      "field": "height",
+      "from": 182,
+      "to": 185
+    },
+    {
+      "familyId": "two-layer-horizontal",
+      "code": "ŞY 500",
+      "field": "cap",
+      "from": "25",
+      "to": "45"
+    },
+    {
+      "familyId": "two-layer-horizontal",
+      "code": "ŞY 1000",
+      "field": "cap",
+      "from": "25",
+      "to": "45"
+    },
+    {
+      "familyId": "silo-tanks",
+      "code": "RS 1300",
+      "field": "height",
+      "from": 212,
+      "to": 210
+    },
+    {
+      "familyId": "silo-tanks",
+      "code": "RS 1500",
+      "field": "height",
+      "from": 183,
+      "to": 185
+    },
+    {
+      "familyId": "silo-tanks",
+      "code": "RS 3000",
+      "field": "cap",
+      "from": "60",
+      "to": "40"
+    },
+    {
+      "familyId": "silo-tanks",
+      "code": "RS 5000",
+      "field": "cap",
+      "from": "60",
+      "to": "40-60"
+    },
+    {
+      "familyId": "silo-tanks",
+      "code": "RS 10000",
+      "field": "height",
+      "from": 324,
+      "to": 325
+    },
+    {
+      "familyId": "silo-tanks",
+      "code": "RS 10000",
+      "field": "cap",
+      "from": "60",
+      "to": "40-60"
+    },
+    {
+      "familyId": "silo-tanks",
+      "code": "RS 10001",
+      "field": "cap",
+      "from": "60",
+      "to": "40-60"
+    },
+    {
+      "familyId": "silo-tanks",
+      "code": "RS 15000",
+      "field": "cap",
+      "from": "60",
+      "to": "40-60"
+    },
+    {
+      "familyId": "silo-tanks",
+      "code": "RS 24000",
+      "field": "cap",
+      "from": "60",
+      "to": "60-60"
+    },
+    {
+      "familyId": "mixer-silo-tanks",
+      "code": "RS 1300",
+      "field": "height",
+      "from": 212,
+      "to": 210
+    },
+    {
+      "familyId": "mixer-silo-tanks",
+      "code": "RS 1500",
+      "field": "height",
+      "from": 183,
+      "to": 185
+    },
+    {
+      "familyId": "mixer-silo-tanks",
+      "code": "RS 3000",
+      "field": "cap",
+      "from": "60",
+      "to": "40"
+    },
+    {
+      "familyId": "mixer-silo-tanks",
+      "code": "RS 5000",
+      "field": "cap",
+      "from": "60",
+      "to": "40-60"
+    },
+    {
+      "familyId": "mixer-silo-tanks",
+      "code": "RS 10000",
+      "field": "height",
+      "from": 324,
+      "to": 325
+    },
+    {
+      "familyId": "mixer-silo-tanks",
+      "code": "RS 10000",
+      "field": "cap",
+      "from": "60",
+      "to": "40-60"
+    },
+    {
+      "familyId": "mixer-silo-tanks",
+      "code": "RS 15000",
+      "field": "cap",
+      "from": "60",
+      "to": "40-60"
+    },
+    {
+      "familyId": "mixer-silo-tanks",
+      "code": "RS 24000",
+      "field": "cap",
+      "from": "60",
+      "to": "60-60"
+    },
+    {
+      "familyId": "brine-tanks",
+      "code": "RDS 700",
+      "field": "height",
+      "from": 113,
+      "to": 115
+    },
+    {
+      "familyId": "brine-tanks",
+      "code": "RDS 1000",
+      "field": "diameter",
+      "from": 134,
+      "to": 135
+    },
+    {
+      "familyId": "brine-tanks",
+      "code": "RDS 1000",
+      "field": "height",
+      "from": 91,
+      "to": 90
+    },
+    {
+      "familyId": "brine-tanks",
+      "code": "RDS 1500",
+      "field": "diameter",
+      "from": 127,
+      "to": 125
+    },
+    {
+      "familyId": "brine-tanks",
+      "code": "RDS 1500",
+      "field": "height",
+      "from": 124,
+      "to": 125
+    },
+    {
+      "familyId": "brine-tanks",
+      "code": "RDS 2500",
+      "field": "diameter",
+      "from": 151,
+      "to": 150
+    },
+    {
+      "familyId": "brine-tanks",
+      "code": "RDS 2500",
+      "field": "height",
+      "from": 136,
+      "to": 135
+    },
+    {
+      "familyId": "brine-tanks",
+      "code": "RDS 3000",
+      "field": "diameter",
+      "from": 162,
+      "to": 160
+    },
+    {
+      "familyId": "brine-tanks",
+      "code": "RDS 3000",
+      "field": "height",
+      "from": 174,
+      "to": 175
+    },
+    {
+      "familyId": "brine-tanks",
+      "code": "RDS 3800",
+      "field": "height",
+      "from": 186,
+      "to": 185
+    },
+    {
+      "familyId": "brine-tanks",
+      "code": "RDS 4500",
+      "field": "diameter",
+      "from": 194,
+      "to": 195
+    },
+    {
+      "familyId": "brine-tanks",
+      "code": "RDS 4500",
+      "field": "height",
+      "from": 167,
+      "to": 165
+    },
+    {
+      "familyId": "brine-tanks",
+      "code": "RDS 7000",
+      "field": "height",
+      "from": 189,
+      "to": 190
+    },
+    {
+      "familyId": "pickle-tanks",
+      "code": "RDT 1500",
+      "field": "diameter",
+      "from": 125,
+      "to": 130
+    },
+    {
+      "familyId": "pickle-tanks",
+      "code": "RDT 1500",
+      "field": "height",
+      "from": 181,
+      "to": 180
+    },
+    {
+      "familyId": "pickle-tanks",
+      "code": "RDT 2500",
+      "field": "diameter",
+      "from": 148,
+      "to": 150
+    },
+    {
+      "familyId": "pickle-tanks",
+      "code": "RDT 2500",
+      "field": "height",
+      "from": 213,
+      "to": 215
+    },
+    {
+      "familyId": "pickle-tanks",
+      "code": "RDT 5000",
+      "field": "diameter",
+      "from": 192,
+      "to": 190
+    },
+    {
+      "familyId": "pickle-tanks",
+      "code": "RDT 10001",
+      "field": "diameter",
+      "from": 218,
+      "to": 220
+    },
+    {
+      "familyId": "pickle-tanks",
+      "code": "RDT 10001",
+      "field": "height",
+      "from": 324,
+      "to": 325
+    },
+    {
+      "familyId": "rectangular-tanks",
+      "code": "Kare 100",
+      "field": "cap",
+      "from": "30",
+      "to": "25"
+    },
+    {
+      "familyId": "rectangular-tanks",
+      "code": "Kare 200",
+      "field": "cap",
+      "from": "30",
+      "to": "25"
+    },
+    {
+      "familyId": "rectangular-tanks",
+      "code": "Kare 300",
+      "field": "cap",
+      "from": "30",
+      "to": "25"
+    },
+    {
+      "familyId": "rectangular-tanks",
+      "code": "Kare 500",
+      "field": "cap",
+      "from": "30",
+      "to": "25"
+    },
+    {
+      "familyId": "road-barriers",
+      "code": "RYB 1000",
+      "field": "height",
+      "from": 85,
+      "to": 77
+    },
+    {
+      "familyId": "road-barriers",
+      "code": "RYB 1001",
+      "field": "height",
+      "from": 51,
+      "to": 50
+    },
+    {
+      "familyId": "horizontal-tanks",
+      "code": "RY 1000",
+      "field": "length",
+      "from": 172,
+      "to": 170
+    },
+    {
+      "familyId": "adblue-tanks",
+      "code": "AdBlue 1000",
+      "field": "diameter",
+      "from": 102,
+      "to": 155
+    },
+    {
+      "familyId": "adblue-tanks",
+      "code": "AdBlue 1000",
+      "field": "height",
+      "from": 135,
+      "to": 188
+    },
+    {
+      "familyId": "adblue-tanks",
+      "code": "AdBlue 2500",
+      "field": "diameter",
+      "from": 130,
+      "to": 155
+    },
+    {
+      "familyId": "adblue-tanks",
+      "code": "AdBlue 2500",
+      "field": "height",
+      "from": 130,
+      "to": 188
+    },
+    {
+      "familyId": "adblue-tanks",
+      "code": "AdBlue 5000",
+      "field": "diameter",
+      "from": 190,
+      "to": 220
+    },
+    {
+      "familyId": "adblue-tanks",
+      "code": "AdBlue 5000",
+      "field": "height",
+      "from": 212,
+      "to": 240
+    }
+  ],
+  "removals": [
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 500"
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 1000"
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 2002"
+    },
+    {
+      "familyId": "vertical-tanks",
+      "code": "RD 10000 B"
+    },
+    {
+      "familyId": "textile-trolleys",
+      "code": "RTA 102"
+    },
+    {
+      "familyId": "textile-trolleys",
+      "code": "RTA 115"
+    },
+    {
+      "familyId": "silo-tanks",
+      "code": "RS 1001"
+    },
+    {
+      "familyId": "mixer-silo-tanks",
+      "code": "RS 1001"
+    },
+    {
+      "familyId": "mixer-silo-tanks",
+      "code": "RS 10001"
+    },
+    {
+      "familyId": "salt-tanks",
+      "code": "TUZ 400"
+    },
+    {
+      "familyId": "salt-tanks",
+      "code": "TUZ 800"
+    },
+    {
+      "familyId": "chlor-tanks",
+      "code": "RDK 140"
+    },
+    {
+      "familyId": "brine-tanks",
+      "code": "RDS 1200"
+    }
+  ],
+  "additions": {
+    "families": [
+      "horizontal-cylinder-tanks",
+      "metal-stand-silo-tanks",
+      "turnip-tanks",
+      "trash-bins",
+      "pallets"
+    ],
+    "rows": [
+      {
+        "familyId": "vertical-tanks",
+        "code": "RD 501 HK"
+      },
+      {
+        "familyId": "vertical-tanks",
+        "code": "RD 750 HK"
+      },
+      {
+        "familyId": "vertical-tanks",
+        "code": "RD 1000 HK"
+      },
+      {
+        "familyId": "vertical-tanks",
+        "code": "RD 1500"
+      },
+      {
+        "familyId": "vertical-tanks",
+        "code": "RD 2000 HK"
+      },
+      {
+        "familyId": "vertical-tanks",
+        "code": "RD 8000"
+      },
+      {
+        "familyId": "vertical-tanks",
+        "code": "RD 20002"
+      },
+      {
+        "familyId": "textile-trolleys",
+        "code": "RTA 244"
+      },
+      {
+        "familyId": "textile-trolleys",
+        "code": "RTA 344"
+      },
+      {
+        "familyId": "stackable-cylinder",
+        "code": "RKS 135"
+      },
+      {
+        "familyId": "brine-tanks",
+        "code": "RDSM 3800"
+      },
+      {
+        "familyId": "brine-tanks",
+        "code": "RDSM 15000"
+      },
+      {
+        "familyId": "brine-tanks",
+        "code": "RDSMR 3800"
+      },
+      {
+        "familyId": "brine-tanks",
+        "code": "RDSMR 4500"
+      },
+      {
+        "familyId": "brine-tanks",
+        "code": "RDSMR 7000"
+      }
+    ],
+    "groups": [
+      "bins"
+    ],
+    "groupUpdates": [
+      {
+        "groupId": "pallets",
+        "field": "quoteOnly",
+        "from": true,
+        "to": false
+      }
+    ]
+  }
+}

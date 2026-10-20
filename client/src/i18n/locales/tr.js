@@ -351,6 +351,26 @@ const tr = {
         title: 'Yol Bariyerleri',
         text: 'Rotasyonel kalıplama ve şişirme teknikleriyle üretilen yol güvenlik bariyerleri. Seri üretime uygundur, günde 300 adet teslim edilebilir; içerisine su veya kum doldurulabilir.',
       },
+      'horizontal-cylinder-tanks': {
+        title: 'Yatay Silindir ve Römork Üstü Tanklar',
+        text: 'Yatay silindir gövdeli polietilen depolar ve römork üzerine monte edilen yatay tank.',
+      },
+      'metal-stand-silo-tanks': {
+        title: 'Metal Sehpalı Silo Tanklar',
+        text: 'Konik tabanlı polietilen silo depoların metal sehpalı (MT) versiyonları.',
+      },
+      'turnip-tanks': {
+        title: 'Şalgam Tankları',
+        text: 'Şalgam üretimi ve depolaması için polietilen dikey depolar.',
+      },
+      'trash-bins': {
+        title: 'Çöp Kovaları',
+        text: 'Kapaklı polietilen çöp kovaları.',
+      },
+      'pallets': {
+        title: 'Paletler',
+        text: 'Depolama ve taşıma için polietilen paletler.',
+      },
     },
     quote: 'Teklif İste',
     waterLink: 'Su depolarını filtreleyin',
@@ -858,6 +878,12 @@ const tr = {
         title: 'Paletler',
         description: 'Depolama ve lojistik süreçleri için tasarlanmış, dayanıklı ve uzun ömürlü polietilen paletler; endüstriyel taşıma ve istifleme ihtiyaçlarına uygun.',
         application: 'Depolama / Lojistik',
+      },
+      bins: {
+        label: 'Çöp Kovaları',
+        title: 'Çöp Kovaları',
+        description: 'Kapaklı polietilen çöp kovaları.',
+        application: 'Atık Toplama',
       },
       barriers: {
         label: 'Yol Bariyerleri',
