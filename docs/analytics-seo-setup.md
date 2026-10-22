@@ -112,6 +112,38 @@ Container içeriği `docs/gtm/` klasöründeki iki dosyadan içe aktarıldı:
 > Yeniden içe aktarırken üstte mutlaka **Birleştir** seçin. **Üzerine yaz**
 > bütün container'ı dosyanın içeriğiyle değiştirir ve diğer etiketleri siler.
 
+### 3.10 Gelişmiş dönüşümler (Google Ads)
+Teklif formu gönderilince site, `generate_lead` olayına **SHA-256 ile şifrelenmiş**
+e-posta ve telefonu ekler (`client/src/analytics/userData.js`):
+
+```js
+user_data: {
+  sha256_email_address: '…',   // küçük harf, boşluksuz; Gmail'de noktalar atılır
+  sha256_phone_number: '…',    // +905321234567 biçimi; ülke kodu yoksa gönderilmez
+}
+```
+
+Yalnızca ziyaretçi **pazarlama çerezine** izin verdiyse gönderilir; açık e-posta
+veya telefon dataLayer'a hiç yazılmaz. Olaydan hemen sonra `user_data` temizlenir.
+
+**GTM:**
+1. *Değişkenler → Yeni → Veri Katmanı Değişkeni*:
+   `DLV - user_data.sha256_email_address` (ad: `user_data.sha256_email_address`) ve
+   `DLV - user_data.sha256_phone_number` (ad: `user_data.sha256_phone_number`).
+2. *Değişkenler → Yeni → Kullanıcı Tarafından Sağlanan Veriler* → **Manuel yapılandırma**:
+   E-posta = `{{DLV - user_data.sha256_email_address}}`,
+   Telefon = `{{DLV - user_data.sha256_phone_number}}`. Ad: `Ads – Kullanıcı Verisi`.
+3. *Etiketler → Ads – Teklif Talebi* → **Web sitenizden kullanıcı tarafından sağlanan
+   verileri dahil edin** işaretli → değişken: `{{Ads – Kullanıcı Verisi}}`.
+4. Önizleme → test teklifi (pazarlama çerezine izin vererek) → etikette kullanıcı
+   verisinin dolu olduğunu görün → Gönder.
+
+**Google Ads:** *Hedefler → Ayarlar → Gelişmiş dönüşümler* → aç → yöntem
+**Google Etiket Yöneticisi** → müşteri verisi şartlarını kabul edin.
+
+> Google, gelişmiş dönüşümler için bu veri kullanımının gizlilik politikasında
+> açıklanmasını şart koşar (KVKK aydınlatma metni).
+
 ---
 
 ## 4. Google Search Console

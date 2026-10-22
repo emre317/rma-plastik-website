@@ -19,6 +19,7 @@ import { submitQuote } from '../../services/api';
 import { visitAttribution } from '../../analytics/attribution';
 import { useQuote } from './QuoteContext';
 import { track } from '../../analytics/track';
+import { clearUserData, hashedUserData } from '../../analytics/userData';
 
 const initialForm = {
   company: '',
@@ -349,14 +350,18 @@ export default function QuoteModal() {
         subject: listFields.product ? '' : form.product,
       });
 
-      // Conversion for GA4 / Google Ads / Meta (configured in GTM)
+      // Conversion for GA4 / Google Ads / Meta (configured in GTM); with marketing
+      // consent it carries the hashed e-mail and phone for enhanced conversions
+      const userData = await hashedUserData({ email: form.email, phone: isBarePrefix(form.phone) ? '' : form.phone });
       track('generate_lead', {
         form_name: 'quote',
         product: listFields.product || form.product || '(none)',
         items: cart.length,
         country: form.country || '(not set)',
         site_language: i18n.resolvedLanguage,
+        ...(userData ? { user_data: userData } : {}),
       });
+      if (userData) clearUserData();
 
       writeContact(remember ? Object.fromEntries(CONTACT_FIELDS.map((key) => [key, form[key]])) : null);
 
