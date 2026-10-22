@@ -702,6 +702,12 @@
         "field": "quoteOnly",
         "from": true,
         "to": false
+      },
+      {
+        "groupId": "vertical",
+        "field": "page",
+        "from": "waterTanks",
+        "to": "tables"
       }
     ],
     "groupRemovals": [
