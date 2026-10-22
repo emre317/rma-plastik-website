@@ -240,7 +240,7 @@ export default function AdminQuotes() {
           </button>
         )}
         <span className="adToolbarCount">{pagination.total} talep</span>
-        <button type="button" className="cmsButton" onClick={download} disabled={exporting || !pagination.total} title="Görünen filtrelerle Excel dosyası indir">
+        <button type="button" className="cmsButton cmsButtonInfo" onClick={download} disabled={exporting || !pagination.total} title="Görünen filtrelerle Excel dosyası indir">
           <Download aria-hidden="true" />
           {exporting ? 'Hazırlanıyor…' : 'Excel’e aktar'}
         </button>

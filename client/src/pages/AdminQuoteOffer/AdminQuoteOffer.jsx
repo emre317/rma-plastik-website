@@ -309,7 +309,7 @@ export default function AdminQuoteOffer() {
                     <span className="adOfferLineTools">
                       <button type="button" className="adIconButton" onClick={() => moveLine(index, -1)} disabled={index === 0} aria-label="Yukarı">↑</button>
                       <button type="button" className="adIconButton" onClick={() => moveLine(index, 1)} disabled={index === offer.lines.length - 1} aria-label="Aşağı">↓</button>
-                      <button type="button" className="adIconButton" onClick={() => update({ lines: offer.lines.filter((_, position) => position !== index) })} disabled={offer.lines.length === 1} aria-label="Satırı sil"><Trash2 aria-hidden="true" /></button>
+                      <button type="button" className="adIconButton danger" onClick={() => update({ lines: offer.lines.filter((_, position) => position !== index) })} disabled={offer.lines.length === 1} aria-label="Satırı sil"><Trash2 aria-hidden="true" /></button>
                     </span>
                   </div>
                   <input className="adOfferDetails" value={line.details} maxLength={600} placeholder="Açıklama (ölçü, renk, aksesuar…)" aria-label="Açıklama" onChange={(event) => updateLine(index, { details: event.target.value })} />
@@ -390,7 +390,7 @@ export default function AdminQuoteOffer() {
               <Save aria-hidden="true" />
               {busy === 'save' ? 'Kaydediliyor…' : dirty || !quote.offer ? 'Kaydet' : 'Kaydedildi'}
             </button>
-            <button type="button" className="cmsButton" onClick={download} disabled={Boolean(busy)}>
+            <button type="button" className="cmsButton cmsButtonInfo" onClick={download} disabled={Boolean(busy)}>
               <Download aria-hidden="true" />
               {busy === 'pdf' ? 'Hazırlanıyor…' : 'PDF İndir'}
             </button>

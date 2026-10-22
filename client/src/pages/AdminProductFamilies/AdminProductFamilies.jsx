@@ -177,10 +177,10 @@ export default function AdminProductFamilies() {
             <small>Tüm modelleri indirin, Excel’de düzenleyin ve geri yükleyin. Önce değişiklikleri önizlersiniz.</small>
           </div>
           <div className="cmsRowActions">
-            <button type="button" className="cmsButton" onClick={downloadExcel} disabled={Boolean(excelBusy)}>
+            <button type="button" className="cmsButton cmsButtonInfo" onClick={downloadExcel} disabled={Boolean(excelBusy)}>
               {excelBusy === 'export' ? 'Hazırlanıyor…' : 'Excel’e aktar'}
             </button>
-            <button type="button" className="cmsButton cmsButtonPrimary" onClick={() => fileInput.current?.click()} disabled={Boolean(excelBusy)}>
+            <button type="button" className="cmsButton cmsButtonInfo" onClick={() => fileInput.current?.click()} disabled={Boolean(excelBusy)}>
               {excelBusy === 'read' ? 'Okunuyor…' : 'Excel’den içe aktar'}
             </button>
             <input ref={fileInput} type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden onChange={readExcel} />

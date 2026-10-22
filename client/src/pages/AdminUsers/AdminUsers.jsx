@@ -442,7 +442,7 @@ export default function AdminUsers() {
                           options={roleOptions}
                           align="end"
                         />
-                        <button type="button" className="cmsButton" onClick={() => toggleActive(user)} disabled={busy}>
+                        <button type="button" className={`cmsButton ${user.isActive ? 'cmsButtonWarning' : 'cmsButtonSuccess'}`} onClick={() => toggleActive(user)} disabled={busy}>
                           <Power aria-hidden="true" />
                           {user.isActive ? 'Pasif Yap' : 'Aktif Et'}
                         </button>
@@ -502,7 +502,7 @@ export default function AdminUsers() {
                             )}
                           />
                         </div>
-                        <button type="submit" className="cmsButton" disabled={busy || !passwordOk(resetPassword)}>
+                        <button type="submit" className="cmsButton cmsButtonPrimary" disabled={busy || !passwordOk(resetPassword)}>
                           <Check aria-hidden="true" />
                           Kaydet
                         </button>

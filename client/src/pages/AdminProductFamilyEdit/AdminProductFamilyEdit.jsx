@@ -447,7 +447,7 @@ export default function AdminProductFamilyEdit() {
                 <button type="button" className="cmsButton" onClick={() => setPasteOpen((open) => !open)}>
                   Excel’den yapıştır
                 </button>
-                <button type="button" className="cmsButton cmsButtonPrimary" onClick={() => setRows((rows) => [...rows, emptyRow()])}>
+                <button type="button" className="cmsButton" onClick={() => setRows((rows) => [...rows, emptyRow()])}>
                   + Satır ekle
                 </button>
               </div>

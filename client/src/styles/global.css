@@ -22349,11 +22349,6 @@ html[lang="ar"] .ecoBandEyebrow {
   gap: 8px;
 }
 
-.adWhatsapp:hover {
-  border-color: #25d366;
-  color: #128c4b;
-}
-
 .adSteps {
   margin: 0 0 20px;
   padding: 6px;
@@ -33648,13 +33643,6 @@ html[lang="ar"] .pgBody small {
   align-items: center;
   justify-content: center;
   gap: 7px;
-  border-color: rgba(194, 65, 12, 0.35);
-  color: #c2410c;
-}
-
-.cmsButton.adDangerButton:hover:not(:disabled) {
-  border-color: #c2410c;
-  background: #fdf0ea;
 }
 
 .cmsButton.adDangerButton svg {
@@ -34371,4 +34359,140 @@ html[lang="ar"] .pgBody small {
   color: var(--text-secondary);
   font-size: 14.5px;
   line-height: 1.6;
+}
+
+/* =====================================================
+   ADMIN BUTTON ROLES
+   One colour per purpose, the same on every admin page:
+     cmsButtonPrimary  red, solid       the page's main action (Kaydet, Gönder, + Yeni)
+     cmsButton         white, neutral   secondary steps (Vazgeç, Düzenle, Ara, back links)
+     cmsButtonInfo     blue             files and documents (Excel, PDF, Proforma)
+     cmsButtonSuccess  green            positive / contact (WhatsApp, Aktif Et)
+     cmsButtonWarning  amber            reversible restrictions (Pasif Yap)
+     cmsButtonDanger   red outline      deleting and removing (Sil, Kaldır)
+   Icon buttons and row tools stay neutral; their .danger variant is red.
+   Text links (adTextButton, cmsLink) are blue; selected tabs/chips are graphite.
+===================================================== */
+.adminPage,
+.confirmLayer {
+  --role-danger: var(--status-danger);
+  --role-danger-bg: #fdecef;
+  --role-warning: #a86400;
+  --role-warning-bg: #fdf4e3;
+  --role-success: var(--status-success);
+  --role-success-bg: #e7f5ee;
+  --role-info: var(--status-info);
+  --role-info-bg: #e8f2fa;
+}
+
+/* Secondary: neutral hover, so only main actions and deletes read as red */
+.adminPage .cmsButton:hover:not(:disabled) {
+  border-color: var(--ink-400);
+  color: var(--text);
+  background: var(--ink-050);
+}
+
+.adminPage .cmsButtonPrimary,
+.adminPage .cmsButtonPrimary:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: #fff;
+  background: var(--accent);
+}
+
+.adminPage .cmsButtonPrimary:hover:not(:disabled) {
+  border-color: var(--accent-dark);
+  background: var(--accent-dark);
+}
+
+.adminPage .cmsButtonInfo,
+.adminPage .cmsButtonSuccess,
+.adminPage .cmsButtonWarning,
+.adminPage .cmsButtonDanger {
+  --role: var(--role-info);
+  --role-bg: var(--role-info-bg);
+  border-color: color-mix(in srgb, var(--role) 38%, #fff);
+  color: var(--role);
+  background: #fff;
+}
+
+.adminPage .cmsButtonSuccess { --role: var(--role-success); --role-bg: var(--role-success-bg); }
+.adminPage .cmsButtonWarning { --role: var(--role-warning); --role-bg: var(--role-warning-bg); }
+.adminPage .cmsButtonDanger { --role: var(--role-danger); --role-bg: var(--role-danger-bg); }
+
+.adminPage .cmsButtonInfo:hover:not(:disabled),
+.adminPage .cmsButtonSuccess:hover:not(:disabled),
+.adminPage .cmsButtonWarning:hover:not(:disabled),
+.adminPage .cmsButtonDanger:hover:not(:disabled) {
+  border-color: var(--role);
+  color: var(--role);
+  background: var(--role-bg);
+}
+
+/* Icon buttons and row tools (↑ ↓ ⧉ ×) */
+.adminPage .adIconButton,
+.adminPage .cmsRowTools button {
+  transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease;
+}
+
+.adminPage .adIconButton:hover:not(:disabled),
+.adminPage .cmsRowTools button:hover:not(:disabled) {
+  border-color: var(--ink-400);
+  color: var(--text);
+  background: var(--ink-050);
+}
+
+.adminPage .adIconButton.danger,
+.adminPage .cmsRowTools button.danger {
+  border-color: color-mix(in srgb, var(--role-danger) 28%, #fff);
+  color: var(--role-danger);
+}
+
+.adminPage .adIconButton.danger:hover:not(:disabled),
+.adminPage .cmsRowTools button.danger:hover:not(:disabled) {
+  border-color: var(--role-danger);
+  color: var(--role-danger);
+  background: var(--role-danger-bg);
+}
+
+/* Chips: neutral, selected = graphite, "Temizle" = red */
+.adminPage .adChip:hover:not(:disabled):not(.active) {
+  border-color: var(--ink-400);
+  background: var(--ink-050);
+}
+
+.adminPage .adChip.danger {
+  color: var(--role-danger);
+}
+
+.adminPage .adChip.danger:hover:not(:disabled) {
+  border-color: var(--role-danger);
+  background: var(--role-danger-bg);
+}
+
+/* Text actions and links: blue, like links across the site */
+.adminPage .adTextButton,
+.adminPage .cmsLink,
+.adminPage .adRankMore {
+  color: var(--role-info);
+}
+
+.adminPage .adFilterChip {
+  border-color: color-mix(in srgb, var(--role-info) 30%, transparent);
+  color: var(--role-info);
+  background: var(--role-info-bg);
+}
+
+/* Confirm dialog: a plain confirmation uses the main action colour */
+.confirmPanel.tone-default .confirmOk {
+  --tone: var(--brand-primary);
+}
+
+.confirmPanel.tone-danger {
+  --tone: var(--role-danger);
+  --tone-soft: var(--role-danger-bg);
+}
+
+.confirmPanel.tone-warning {
+  --tone: var(--role-warning);
+  --tone-soft: var(--role-warning-bg);
 }

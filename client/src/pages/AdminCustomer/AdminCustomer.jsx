@@ -100,7 +100,7 @@ export default function AdminCustomer() {
                 </a>
               )}
               {phoneDigits.length >= 10 && (
-                <a className="cmsButton adWhatsapp" href={`https://wa.me/${phoneDigits}`} target="_blank" rel="noreferrer">
+                <a className="cmsButton cmsButtonSuccess" href={`https://wa.me/${phoneDigits}`} target="_blank" rel="noreferrer">
                   <MessageCircle aria-hidden="true" />
                   WhatsApp
                 </a>

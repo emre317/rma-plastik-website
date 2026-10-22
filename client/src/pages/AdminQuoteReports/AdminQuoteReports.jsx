@@ -185,7 +185,7 @@ export default function AdminQuoteReports() {
           <h1>Satış Raporu</h1>
           <p>Siteden gelen teklif taleplerinin aya, ülkeye, ürüne, kanala ve sorumluya göre dağılımı; kazanma oranı ve proforma tutarları. Tarihler talebin geldiği güne göredir.</p>
         </div>
-        <button type="button" className="cmsButton" onClick={download} disabled={!report || exporting || !report.total}>
+        <button type="button" className="cmsButton cmsButtonInfo" onClick={download} disabled={!report || exporting || !report.total}>
           <Download aria-hidden="true" />
           {exporting ? 'Hazırlanıyor…' : 'Excel’e aktar'}
         </button>

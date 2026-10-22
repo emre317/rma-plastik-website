@@ -130,7 +130,7 @@ export default function AdminLeads() {
           options={[{ value: '', label: 'Tümü' }, { value: 'yes', label: 'E-posta İzni Verenler' }]}
         />
         <span className="adToolbarCount">{pagination.total} kayıt</span>
-        <button type="button" className="cmsButton" onClick={download} disabled={exporting || !pagination.total}>
+        <button type="button" className="cmsButton cmsButtonInfo" onClick={download} disabled={exporting || !pagination.total}>
           <Download aria-hidden="true" />
           {exporting ? 'Hazırlanıyor…' : 'Excel’e aktar'}
         </button>
@@ -189,7 +189,7 @@ export default function AdminLeads() {
                   {lead.downloads > 1 && <small><FileDown aria-hidden="true" />{lead.downloads} indirme</small>}
                 </span>
                 <span role="cell">
-                  <button type="button" className="adIconButton" onClick={() => remove(lead)} aria-label={`${lead.email} kaydını sil`} title="Sil">
+                  <button type="button" className="adIconButton danger" onClick={() => remove(lead)} aria-label={`${lead.email} kaydını sil`} title="Sil">
                     <Trash2 aria-hidden="true" />
                   </button>
                 </span>

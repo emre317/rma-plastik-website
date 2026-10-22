@@ -408,7 +408,7 @@ export default function AdminQuoteDetail() {
             </a>
           )}
           {phoneDigits.length >= 10 && (
-            <a className="cmsButton adWhatsapp" href={`https://wa.me/${phoneDigits}`} target="_blank" rel="noreferrer">
+            <a className="cmsButton cmsButtonSuccess" href={`https://wa.me/${phoneDigits}`} target="_blank" rel="noreferrer">
               <MessageCircle aria-hidden="true" />
               WhatsApp
             </a>
@@ -523,7 +523,7 @@ export default function AdminQuoteDetail() {
                     {quote.offer.sentAt ? `${formatDate(quote.offer.sentAt, true)} tarihinde gönderildi` : `taslak, ${formatDate(quote.offer.savedAt, true)} kaydedildi`}
                   </small>
                 </div>
-                <Link to={`/admin/quotes/${quote._id}/offer`} className="cmsButton">Proformayı Aç</Link>
+                <Link to={`/admin/quotes/${quote._id}/offer`} className="cmsButton cmsButtonInfo">Proformayı Aç</Link>
               </div>
             ) : (
               <div className="adOfferSummary">
@@ -573,7 +573,7 @@ export default function AdminQuoteDetail() {
                     <div className="adNoteMeta">
                       <strong>{item.author || 'Yönetici'}</strong>
                       <time dateTime={item.createdAt}>{formatDate(item.createdAt, true)}</time>
-                      <button type="button" className="adIconButton" onClick={() => removeNote(item._id)} aria-label="Notu sil" title="Sil">
+                      <button type="button" className="adIconButton danger" onClick={() => removeNote(item._id)} aria-label="Notu sil" title="Sil">
                         <Trash2 aria-hidden="true" />
                       </button>
                     </div>
@@ -769,7 +769,7 @@ export default function AdminQuoteDetail() {
             <div className="adCard adDangerCard">
               <div className="adCardHead"><h2><Trash2 aria-hidden="true" />Talebi Sil</h2></div>
               <p>Talep; notları, takip bilgileri ve proformasıyla birlikte kalıcı olarak silinir ve geri alınamaz. Yalnızca test ya da spam talepleri için kullanın; işi biten talepleri durumunu "Kapandı" yaparak saklayın.</p>
-              <button type="button" className="cmsButton adDangerButton" onClick={removeQuote} disabled={deleting}>
+              <button type="button" className="cmsButton cmsButtonDanger adDangerButton" onClick={removeQuote} disabled={deleting}>
                 <Trash2 aria-hidden="true" />
                 {deleting ? 'Siliniyor…' : 'Talebi Kalıcı Olarak Sil'}
               </button>
