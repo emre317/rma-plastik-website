@@ -97,6 +97,21 @@ Consent Mode'u otomatik okur; Meta ve Hotjar için yukarıdaki "ek izin" ayarlar
 GTM'de **Önizleme** ile siteyi açın; sayfa geçişi, teklif gönderimi ve WhatsApp
 tıklamasında olayların göründüğünü kontrol edin, sonra **Gönder → Yayınla**.
 
+### 3.9 Kurulu durum (Ekim 2026)
+| | Kimlik |
+| --- | --- |
+| GTM container | `GTM-NH4V3TWX` (GitHub değişkeni `VITE_GTM_ID`) |
+| GA4 ölçüm kimliği | `G-15MEPYKQ44` |
+| Google Ads | `AW-18530639193`, dönüşüm "Teklif Talebi" (birincil) |
+
+Container içeriği `docs/gtm/` klasöründeki iki dosyadan içe aktarıldı:
+- `rma-gtm-ga4.json` – GA4 Google etiketi, `page_view`, site olayları, Conversion Linker
+- `rma-gtm-ads.json` – Ads Google etiketi ve "Teklif Talebi" dönüşümü
+  (yalnızca `generate_lead` + `form_name = quote`; katalog formu sayılmaz)
+
+> Yeniden içe aktarırken üstte mutlaka **Birleştir** seçin. **Üzerine yaz**
+> bütün container'ı dosyanın içeriğiyle değiştirir ve diğer etiketleri siler.
+
 ---
 
 ## 4. Google Search Console
