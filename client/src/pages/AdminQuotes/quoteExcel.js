@@ -1,6 +1,7 @@
 import {
   LANGUAGE_LABELS, lossReasonLabel, outcomeLabel, quoteReference, statusLabel, DESIGN_INPUT_LABELS, needsText } from '../../components/admin/quoteStatus';
 import { offerTotals } from '../../data/offerText';
+import { projectRows } from '../../data/projectBrief';
 
 /*
   Excel files of the quote requests (list export) and of the sales report.
@@ -43,6 +44,8 @@ const COLUMNS = [
   ['Teslimat şehri', 18],
   ['Açık adres', 36],
   ['Ürün tanımı / ölçüler', 30],
+  ['Özel üretim projesi', 48],
+  ['Ekli dosya', 10],
   ['Müşteride olan', 14],
   ['İhtiyaçlar', 30],
   ['Uygulama', 24],
@@ -90,7 +93,9 @@ function quoteRow(quote) {
     text(quote.temperature),
     text(quote.deliveryCity),
     longText(quote.deliveryAddress),
-    text(quote.customSpec),
+    longText(quote.project?.description || quote.customSpec),
+    longText(projectRows(quote.project).map(([label, value]) => `${label}: ${value}`).join('\n')),
+    quote.files?.length ? { value: quote.files.length, type: Number } : null,
     text(DESIGN_INPUT_LABELS[quote.designInput] || ''),
     text(needsText(quote.needs)),
     text(quote.application),

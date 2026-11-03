@@ -137,6 +137,7 @@ Gerçek değerler **asla git'e girmez**.
 | `QUOTE_NOTIFY_TO` | `info@rmaplastik.com` (teklif bildirimlerinin gideceği adres; birden fazlaysa virgülle) |
 | `QUOTE_CONFIRM_CUSTOMER` | `true` (müşteriye referans numaralı onay e-postası) |
 | `UPLOAD_DIR` | `/home/<kullanıcı>/rma-data/uploads` |
+| `QUOTE_FILES_DIR` | `/home/<kullanıcı>/rma-data/quote-files` (gizli; `public_html` dışında, [§6](#6-görsel-yüklemeleri-uploads)) |
 | `PUBLISH_MODE` | `github` |
 | `PUBLISH_GITHUB_TOKEN` | Fine-grained token ([§8.1](#81-github-token-api-için)) |
 | `PUBLISH_GITHUB_REPOSITORY` | `emre317/rma-plastik-website` |
@@ -268,6 +269,23 @@ ln -s ~/rma-data/uploads ~/public_html/uploads     # bir kez
 - Dosya adı her zaman rastgele bir UUID'dir; istekten hiçbir yol bilgisi kullanılmaz.
 - Proforma PDF'leri yalnızca bellekte tutulur ve `%PDF-` imzası kontrol edilir.
 
+### Proje dosyaları (`QUOTE_FILES_DIR`, gizli)
+
+Özel üretim proje sihirbazından (`/custom-molding/project`) gelen çizim ve fotoğraflar **müşteri
+belgeleridir** ve herkese açık `/uploads` klasöründe **tutulmaz**:
+
+```bash
+mkdir -p ~/rma-data/quote-files      # public_html'e bağlantı VERİLMEZ
+```
+- `QUOTE_FILES_DIR=/home/<kullanıcı>/rma-data/quote-files`. Boş bırakılırsa `server/private/quote-files`
+  kullanılır (dağıtım bu klasörü de korur). `public_html` içinde bir yol verilirse API varsayılan klasöre
+  döner, `npm run check-env` de hata verir.
+- Kabul edilen türler: PDF, JPG, PNG, WEBP, STEP/STP, IGES/IGS, STL, DXF, DWG, ZIP. Dosya başına en fazla
+  10 MB, talep başına en fazla 5 dosya. Her dosyanın ilk baytları uzantısıyla eşleşmelidir.
+- Dosyalar yalnızca admin panelinde, satış yetkisi olan kullanıcılara **indirme** olarak verilir
+  (`GET /api/quote/:id/files/:fileId`); her indirme işlem kaydına yazılır. Talep silinince dosyaları da silinir.
+- Yedeğe `~/rma-data/quote-files` klasörünü de ekleyin (bkz. §12).
+
 **Disk yetersizse (S3 uyumlu depolama):** 15 GB SSD şu an yeterli görünüyor. Site derlemesi ~57 MB,
 son 5 sürüm ~300 MB yer kaplar; görsel yüklemeleri bunun üstüne eklenir. Disk dolarsa:
 - Cloudflare R2, Backblaze B2 veya AWS S3 gibi bir depolamaya geçilebilir. Bunun için
@@ -294,7 +312,7 @@ son 5 sürüm ~300 MB yer kaplar; görsel yüklemeleri bunun üstüne eklenir. D
    firmanın verdiğiyle karşılaştırın.
 3. **Klasörler:**
    ```bash
-   mkdir -p ~/rma-app ~/rma-data/uploads ~/rma-deploy/incoming ~/rma-backups/db
+   mkdir -p ~/rma-app ~/rma-data/uploads ~/rma-data/quote-files ~/rma-deploy/incoming ~/rma-backups/db
    ln -s ~/rma-data/uploads ~/public_html/uploads
    ```
 4. **Atlas** ([§3](#3-mongodb-atlas-kurulumu)) ve **GitHub secrets/variables** ([§8](#8-github-ayarları)).
@@ -476,7 +494,7 @@ Kısıtları:
 ### Görseller
 
 ```
-30 3 * * * tar -czf ~/rma-backups/uploads-$(date +\%F).tar.gz -C ~/rma-data uploads && find ~/rma-backups -name 'uploads-*.tar.gz' -mtime +14 -delete
+30 3 * * * tar -czf ~/rma-backups/uploads-$(date +\%F).tar.gz -C ~/rma-data uploads quote-files && find ~/rma-backups -name 'uploads-*.tar.gz' -mtime +14 -delete
 ```
 
 ### Site

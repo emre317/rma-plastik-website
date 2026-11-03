@@ -20,6 +20,7 @@ const loaders = {
   Compare: () => import('../pages/Compare/Compare'),
   TankFinder: () => import('../pages/TankFinder/TankFinder'),
   CustomMolding: () => import('../pages/CustomMolding/CustomMolding'),
+  CustomProject: () => import('../pages/CustomProject/CustomProject'),
   Industries: () => import('../pages/Industries/Industries'),
   IndustryDetail: () => import('../pages/IndustryDetail/IndustryDetail'),
   Contact: () => import('../pages/Contact/Contact'),

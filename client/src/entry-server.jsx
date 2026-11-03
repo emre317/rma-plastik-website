@@ -28,6 +28,7 @@ export function getPublicPaths(lang) {
     '/product-tables',
     ...modelPaths(),
     '/custom-molding',
+    '/custom-molding/project',
     '/industries',
     ...INDUSTRIES.map(({ slug }) => `/industries/${slug}`),
     '/contact',

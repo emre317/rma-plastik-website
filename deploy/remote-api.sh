@@ -5,7 +5,7 @@
 #    <APP_DIR>/server/...            the API (application root in cPanel)
 #    <APP_DIR>/client/src/data/...   built-in data the API imports
 #    <APP_DIR>/client/src/i18n/...   locale texts the API imports
-#  Never touched: server/.env, server/node_modules, server/uploads, tmp, logs.
+#  Never touched: server/.env, server/node_modules, server/uploads, server/private, tmp, logs.
 #  The previous code is kept in ~/rma-deploy/api-releases for a rollback.
 #
 #  remote-api.sh <release-id> <tarball> <app-dir> <nodevenv-activate>
@@ -34,11 +34,11 @@ rm -f "$TARBALL"
 # Copy of the code that runs now, for a rollback
 if [ -d "$APP_DIR/server" ]; then
   tar -czf "$BASE/before-$RELEASE.tar.gz" -C "$APP_DIR" \
-    --exclude=server/node_modules --exclude=server/uploads --exclude=server/.env --exclude=server/tmp --exclude=server/logs \
+    --exclude=server/node_modules --exclude=server/uploads --exclude=server/private --exclude=server/.env --exclude=server/tmp --exclude=server/logs \
     server client 2>/dev/null || true
 fi
 
-KEEP=(--exclude=/server/node_modules --exclude=/server/uploads --exclude=/server/.env --exclude=/server/tmp --exclude=/server/logs --exclude=/server/*.log)
+KEEP=(--exclude=/server/node_modules --exclude=/server/uploads --exclude=/server/private --exclude=/server/.env --exclude=/server/tmp --exclude=/server/logs --exclude=/server/*.log)
 
 if command -v rsync >/dev/null 2>&1; then
   rsync -a --delete "${KEEP[@]}" "$DIR/" "$APP_DIR/"

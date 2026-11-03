@@ -1,4 +1,4 @@
-import { request } from './http';
+import { ApiError, request } from './http';
 
 export function submitQuote(payload) {
   return request('/quote', {
@@ -14,4 +14,31 @@ export function submitCatalogLead(payload) {
     body: payload,
     fallbackMessage: 'Request could not be completed.',
   });
+}
+
+/*
+  Custom project brief with its drawings (multipart: `data` + `files`),
+  so it does not go through request() (JSON only).
+*/
+export async function submitProject(payload, files = []) {
+  const API_BASE_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
+  const form = new FormData();
+  form.append('data', JSON.stringify(payload));
+  files.forEach((file) => form.append('files', file, file.name));
+
+  let response;
+
+  try {
+    response = await fetch(`${API_BASE_URL}/quote/project`, { method: 'POST', body: form });
+  } catch {
+    throw new ApiError('Network error.', 0);
+  }
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new ApiError(data.message || 'Project could not be submitted.', response.status);
+  }
+
+  return data;
 }

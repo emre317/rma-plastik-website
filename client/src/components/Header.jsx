@@ -14,6 +14,7 @@ import { useQuote } from './quote/QuoteContext';
 import portfolio from '../data/productPortfolio';
 import CatalogLink from './ui/CatalogLink';
 import FinderCta from './ui/FinderCta';
+import SearchButton from './search/SearchButton';
 
 const navItems = [
   { key: 'company', path: '/company' },
@@ -182,6 +183,8 @@ export default function Header() {
 
           <div className="headerActions">
 
+            <SearchButton className="headerSearch" />
+
             <LanguageSwitcher />
 
             <FinderCta className="headerFinder" subtitle={false} label={t('nav.finder')} />
@@ -232,6 +235,8 @@ export default function Header() {
             <span>{t('nav.navigation')}</span>
             <span>RMA</span>
           </div>
+
+          <SearchButton variant="field" className="mobileMenuSearch" source="mobile_menu" />
 
           <nav className="mobileNav" aria-label={t('nav.mobile')}>
             {mobileNavItems.map((item) => (

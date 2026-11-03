@@ -66,6 +66,12 @@ export function checkEnvironment() {
       warnings.push('UPLOAD_DIR is not set; uploads go to server/uploads inside the application folder.');
     }
 
+    if (!env.QUOTE_FILES_DIR) {
+      warnings.push('QUOTE_FILES_DIR is not set; project drawings go to server/private/quote-files inside the application folder.');
+    } else if (/(^|[\\/])public_html([\\/]|$)/.test(env.QUOTE_FILES_DIR)) {
+      errors.push('QUOTE_FILES_DIR must not be inside public_html: customer drawings would become public.');
+    }
+
     if (!(env.SMTP_HOST && env.SMTP_USER && env.SMTP_PASS)) {
       warnings.push('SMTP is not configured; quote, password reset and invitation e-mails are not sent.');
     }
