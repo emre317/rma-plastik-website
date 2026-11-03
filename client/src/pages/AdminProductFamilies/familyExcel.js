@@ -126,9 +126,14 @@ export async function readFamiliesFile(file, families) {
 
   const plan = [...groups.entries()].map(([familyId, group]) => {
     const existing = families.find((family) => family.familyId === familyId);
-    const imagesByCode = new Map((existing?.rows || []).map((row) => [row.code, row.image]));
+    // Photos are not in the file: each model keeps its cover and gallery
+    const imagesByCode = new Map((existing?.rows || []).map((row) => [row.code, row]));
 
-    const rows = group.rows.map((row) => ({ ...row, image: imagesByCode.get(row.code) || '' }));
+    const rows = group.rows.map((row) => ({
+      ...row,
+      image: imagesByCode.get(row.code)?.image || '',
+      images: imagesByCode.get(row.code)?.images || [],
+    }));
     // Keep the family's own column order; columns new in the file are appended
     const filled = COLUMN_KEYS.filter((key) => rows.some((row) => row.values[key] !== undefined));
     const columns = [

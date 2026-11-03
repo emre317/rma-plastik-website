@@ -1669,6 +1669,34 @@ const tr = {
     },
   },
 
+  gallery3d: {
+    modes: 'Görünüm',
+    photo: 'Fotoğraf',
+    view3d: '3D',
+    open3d: '3D görünümde incele',
+    backToPhoto: 'Fotoğraf görünümüne dön',
+    thumbs: 'Ürün görselleri',
+    show: 'Görsel',
+    previous: 'Önceki görsel',
+    next: 'Sonraki görsel',
+    counter: '{{current}} / {{total}}',
+    label: '3D görünüm',
+    loading: '3D görünüm hazırlanıyor…',
+    unsupported: 'Bu tarayıcı 3D görüntülemeyi desteklemiyor.',
+    error: '3D görünüm oluşturulamadı.',
+    badge: 'Fotoğraftan 3D',
+    note: 'Bu görünüm ürün fotoğrafından otomatik oluşturulur ve ürünün önden görünümünü üç boyutlu gösterir.',
+    hint: 'Döndürmek için sürükleyin',
+    controls: '3D görünüm kontrolleri',
+    zoomIn: 'Yakınlaştır',
+    zoomOut: 'Uzaklaştır',
+    reset: 'Görünümü sıfırla',
+    pause: 'Otomatik hareketi durdur',
+    play: 'Otomatik hareketi başlat',
+    fullscreen: 'Tam ekran',
+    exitFullscreen: 'Tam ekrandan çık',
+  },
+
 };
 
 export default tr;

@@ -76,6 +76,20 @@ export function similarModels(family, row, count = 4) {
     .map(({ item }) => item);
 }
 
+/*
+  Photos of a model page, cover first: the model's cover (or the family's),
+  the model's own gallery, then the family's gallery (shared views such as
+  details of lids and outlets). Each photo once.
+*/
+export function modelGallery(family, row) {
+  const list = [
+    row?.image || family?.image,
+    ...(Array.isArray(row?.images) ? row.images : []),
+    ...(Array.isArray(family?.images) ? family.images : []),
+  ];
+  return [...new Set(list.filter((src) => typeof src === 'string' && src))];
+}
+
 export { COLUMN_KEYS, WATER_USES };
 
 export default families;

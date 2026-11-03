@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Images, X } from 'lucide-react';
 
 import tr from '../../i18n/locales/tr';
 import useAdminApi from '../../hooks/useAdminApi';
@@ -15,6 +16,12 @@ import {
 } from '../../services/adminContentApi';
 import Dropdown from '../../components/ui/Dropdown';
 import { useConfirm } from '../../components/ui/ConfirmDialog';
+import ImageGalleryEditor from '../../components/admin/ImageGalleryEditor';
+
+// Cover + gallery (server limits: 16 extra photos for a family, 12 for a model)
+const FAMILY_PHOTOS = 17;
+const ROW_PHOTOS = 13;
+const photoList = (item) => [item.image, ...(item.images || [])].filter(Boolean);
 
 const LANGUAGES = [
   { code: 'tr', label: 'Türkçe' },
@@ -31,13 +38,14 @@ const emptyFamily = {
   order: 100,
   published: true,
   image: '',
+  images: [],
   columns: ['volume', 'diameter', 'height'],
   i18n: { tr: { title: '', text: '' }, en: { title: '', text: '' }, ar: { title: '', text: '' } },
   rows: [],
   waterTank: { enabled: false, orientation: 'vertical', layer: 'single', uses: ['water'] },
 };
 
-const emptyRow = () => ({ code: '', image: '', values: {} });
+const emptyRow = () => ({ code: '', image: '', images: [], values: {} });
 
 function slugify(value) {
   return value
@@ -60,6 +68,7 @@ function parsePasted(text, columns) {
     .map(([code, ...cells]) => ({
       code,
       image: '',
+      images: [],
       values: Object.fromEntries(columns.map((key, index) => [key, cells[index] ?? ''])),
     }));
 }
@@ -78,13 +87,13 @@ export default function AdminProductFamilyEdit() {
   const [lang, setLang] = useState('tr');
   const [loading, setLoading] = useState(!isNew);
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState('');
+  const [, setUploading] = useState('');
   const [message, setMessage] = useState(null);
   const [pasteOpen, setPasteOpen] = useState(false);
   const [pasteText, setPasteText] = useState('');
 
-  const rowImageInput = useRef(null);
-  const rowImageTarget = useRef(-1);
+  // Index of the model whose photos are being edited (-1: none)
+  const [rowGallery, setRowGallery] = useState(-1);
 
   useEffect(() => {
     if (isNew) {
@@ -97,12 +106,14 @@ export default function AdminProductFamilyEdit() {
         setForm({
           ...emptyFamily,
           ...data,
+          images: Array.isArray(data.images) ? data.images : [],
           group: tableGroup(data),
           i18n: Object.fromEntries(LANGUAGES.map(({ code }) => [code, { title: '', text: '', ...data.i18n?.[code] }])),
           waterTank: { ...emptyFamily.waterTank, ...data.waterTank },
           rows: (data.rows || []).map((row) => ({
             code: row.code,
             image: row.image || '',
+            images: Array.isArray(row.images) ? row.images : [],
             values: Object.fromEntries(Object.entries(row.values || {}).map(([key, value]) => [key, String(value)])),
           })),
         });
@@ -149,7 +160,7 @@ export default function AdminProductFamilyEdit() {
     });
 
   const duplicateRow = (index) =>
-    setRows((rows) => [...rows.slice(0, index + 1), { ...rows[index], values: { ...rows[index].values } }, ...rows.slice(index + 1)]);
+    setRows((rows) => [...rows.slice(0, index + 1), { ...rows[index], images: [...(rows[index].images || [])], values: { ...rows[index].values } }, ...rows.slice(index + 1)]);
 
   const removeRow = async (index, code) => {
     const ok = await confirm({
@@ -174,27 +185,10 @@ export default function AdminProductFamilyEdit() {
     }
   }
 
-  async function handleFamilyImage(event) {
-    const file = event.target.files?.[0];
-    event.target.value = '';
-    if (!file) return;
-    const url = await upload(file, 'family');
-    if (url) set('image', url);
-  }
-
-  async function handleRowImage(event) {
-    const file = event.target.files?.[0];
-    const index = rowImageTarget.current;
-    event.target.value = '';
-    if (!file || index < 0) return;
-    const url = await upload(file, `row-${index}`);
-    if (url) setRows((rows) => rows.map((row, i) => (i === index ? { ...row, image: url } : row)));
-  }
-
-  function pickRowImage(index) {
-    rowImageTarget.current = index;
-    rowImageInput.current?.click();
-  }
+  // Photo list -> cover (image) + gallery (images)
+  const setFamilyPhotos = (list) => setForm((current) => ({ ...current, image: list[0] || '', images: list.slice(1) }));
+  const setRowPhotos = (index, list) =>
+    setRows((rows) => rows.map((row, i) => (i === index ? { ...row, image: list[0] || '', images: list.slice(1) } : row)));
 
   function applyPaste(mode) {
     const parsed = parsePasted(pasteText, form.columns);
@@ -360,21 +354,20 @@ export default function AdminProductFamilyEdit() {
             </div>
 
             <div className="cmsCard">
-              <h2>Görsel</h2>
+              <h2>Görseller</h2>
+              <p className="cmsHint">
+                Ailenin kapak görseli ve tüm modellerde gösterilecek ortak görseller (ör. kapak, vana çıkışı detayı).
+                Modele özel görseller tablodaki “Görseller” sütunundan eklenir.
+              </p>
 
-              <div className="cmsImage">
-                {form.image ? <img src={form.image} alt="" /> : <span>Görsel Yok</span>}
-              </div>
-
-              <div className="cmsRowActions">
-                <label className="cmsButton">
-                  {uploading === 'family' ? 'Yükleniyor…' : form.image ? 'Değiştir' : 'Görsel Yükle'}
-                  <input type="file" accept="image/jpeg,image/png,image/webp" hidden onChange={handleFamilyImage} disabled={Boolean(uploading)} />
-                </label>
-                {form.image && (
-                  <button type="button" className="cmsButton cmsButtonDanger" onClick={() => set('image', '')}>Kaldır</button>
-                )}
-              </div>
+              <ImageGalleryEditor
+                images={photoList(form)}
+                onChange={setFamilyPhotos}
+                upload={(file) => upload(file, 'family')}
+                max={FAMILY_PHOTOS}
+                title={form.i18n.tr.title}
+                compact
+              />
             </div>
 
             <div className="cmsCard">
@@ -477,7 +470,6 @@ export default function AdminProductFamilyEdit() {
               Hacim litre, ölçüler cm cinsindendir.
             </p>
 
-            <input ref={rowImageInput} type="file" accept="image/jpeg,image/png,image/webp" hidden onChange={handleRowImage} />
 
             <div className="cmsRowsTableWrap">
               <table className="cmsRowsTable">
@@ -487,7 +479,7 @@ export default function AdminProductFamilyEdit() {
                     {columns.map((key) => (
                       <th key={key}>{columnLabel(key)}</th>
                     ))}
-                    <th>Görsel</th>
+                    <th>Görseller</th>
                     <th />
                   </tr>
                 </thead>
@@ -514,12 +506,15 @@ export default function AdminProductFamilyEdit() {
                       ))}
                       <td>
                         <span className="cmsRowImage">
-                          <button type="button" onClick={() => pickRowImage(index)} title="Bu modele özel görsel (boşsa ailenin görseli kullanılır)">
-                            {uploading === `row-${index}` ? '…' : row.image ? <img src={row.image} alt="" /> : '+'}
+                          <button
+                            type="button"
+                            onClick={() => setRowGallery(index)}
+                            title="Bu modelin görselleri (boşsa ailenin görseli kullanılır)"
+                            aria-label={`${row.code || `${index + 1}. satır`} – görseller (${photoList(row).length})`}
+                          >
+                            {row.image ? <img src={row.image} alt="" /> : <Images aria-hidden="true" />}
                           </button>
-                          {row.image && (
-                            <button type="button" className="cmsRowImageRemove" onClick={() => setRows((rows) => rows.map((item, i) => (i === index ? { ...item, image: '' } : item)))} aria-label="Görseli kaldır">×</button>
-                          )}
+                          {photoList(row).length > 1 && <span className="cmsRowImageCount">{photoList(row).length}</span>}
                         </span>
                       </td>
                       <td>
@@ -538,6 +533,31 @@ export default function AdminProductFamilyEdit() {
           </div>
 
         </div>
+
+        {rowGallery >= 0 && form.rows[rowGallery] && createPortal(
+          <div className="ig3dLayer" onMouseDown={(event) => { if (event.target === event.currentTarget) setRowGallery(-1); }}>
+            <div className="ig3dPanel igRowPanel" role="dialog" aria-modal="true" aria-label="Model görselleri">
+              <div className="ig3dHead">
+                <div>
+                  <strong>{form.rows[rowGallery].code || `${rowGallery + 1}. satır`} · Görseller</strong>
+                  <small>Değişiklikler “Kaydet” ile kalıcı olur. Boş bırakılırsa ailenin görselleri gösterilir.</small>
+                </div>
+                <button type="button" onClick={() => setRowGallery(-1)} aria-label="Kapat"><X aria-hidden="true" /></button>
+              </div>
+              <ImageGalleryEditor
+                images={photoList(form.rows[rowGallery])}
+                onChange={(list) => setRowPhotos(rowGallery, list)}
+                upload={(file) => upload(file, `row-${rowGallery}`)}
+                max={ROW_PHOTOS}
+                title={`${form.rows[rowGallery].code} – ${form.i18n.tr.title}`}
+              />
+              <div className="igRowActions">
+                <button type="button" className="cmsButton cmsButtonPrimary" onClick={() => setRowGallery(-1)}>Tamam</button>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
 
         <div className="cmsSaveBar">
           <button type="submit" className="cmsButton cmsButtonPrimary" disabled={saving}>

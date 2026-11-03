@@ -59,13 +59,22 @@ Panel adresi: `https://ALAN-ADI/admin` (giriş: `npm run create-admin` ile oluş
 - **Modeller:** “Satır ekle” ile tek tek veya **Excel’den yapıştır** ile toplu eklenir. Excel’de sütun
   sırası ekranda yazan sırayla aynı olmalıdır (ilk sütun ürün kodu). Satırlar ↑ ↓ ile sıralanır, ⧉ ile kopyalanır.
 - Sayılar (1000, 48) sıralama ve filtrelerde kullanılır; “40-60”, “35 x 35”, 3/4" gibi değerler yazıldığı gibi gösterilir.
-- Bir modele özel görsel eklenebilir; boşsa ailenin görseli kullanılır (Su Depoları kartları ve teklif formu).
+- **Görseller (galeri):** Ailenin “Görseller” kartına ve her modelin “Görseller” sütununa birden fazla fotoğraf
+  yüklenebilir (aynı anda birden fazla dosya seçilebilir veya sürükleyip bırakılabilir). İlk fotoğraf **kapak**tır:
+  listelerde, Su Depoları kartlarında, teklif formunda ve paylaşımlarda kullanılır. Sıra ← → ile, kapak ☆ ile değişir.
+  Model sayfasındaki galeri sırası: modelin kapağı (yoksa ailenin kapağı) → modelin diğer fotoğrafları → ailenin
+  ortak fotoğrafları. Aile başına en fazla 16, model başına en fazla 12 ek fotoğraf.
+- **3D görünüm:** Model sayfasında “3D” seçilince fotoğraf, ziyaretçinin tarayıcısında otomatik olarak üç boyutlu
+  bir görünüme dönüştürülür (arka plan ayrılır, ürüne hacim verilir; sürükleyerek yaklaşık ±30° döndürülür). Ek dosya
+  gerekmez. Tek fotoğraftan üretildiği için ürünün arkası gösterilmez. En iyi sonucu **düz (beyaz / açık gri) zeminde,
+  tek ürünün tamamının göründüğü** fotoğraflar verir; zemini ve başka nesneleri içeren sahne fotoğrafları zayıf sonuç
+  verir. Paneldeki her fotoğrafın “3D önizleme” düğmesiyle sonuç yayınlamadan önce kontrol edilebilir.
 - **Su deposu seçici:** işaretlenen ailelerin modelleri Su Depoları sayfasında filtrelenir (tip, yapı ve kullanım
   alanları buradan seçilir). Hacim ve Yükseklik sütunları dolu olmalıdır.
 - Bir ürün ailesini sitede gizlemek için “Yayında / Gizli” düğmesini kullanın; silmek geri alınamaz.
 - **Excel ile toplu güncelleme:** “Excel’e aktar” tüm modelleri tek dosyada indirir (Modeller sayfası).
   Dosyayı düzenleyip “Excel’den içe aktar” ile yükleyin; önce hangi ailede kaç modelin eklendiği/silindiği/değiştiği
-  gösterilir, “Uygula” deyince kaydedilir. Dosyada olmayan aileler değişmez, model görselleri ürün koduna göre korunur.
+  gösterilir, “Uygula” deyince kaydedilir. Dosyada olmayan aileler değişmez, model görselleri (kapak ve galeri) ürün koduna göre korunur.
   Dosyada panelde olmayan bir aile kimliği ve “Aile adı (TR)” varsa yeni aile **gizli** olarak eklenir.
 - **Model sayfaları:** her model için otomatik bir sayfa oluşur (ör. `/tr/product-tables/vertical-tanks/rd-5000`).
   Adres ürün kodundan üretilir; yayındaki bir modelin kodunu değiştirmek adresini de değiştirir.

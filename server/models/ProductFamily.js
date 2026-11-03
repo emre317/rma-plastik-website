@@ -18,6 +18,17 @@ export const COLUMN_KEYS = [
 
 export const WATER_USES = ['water', 'food', 'chemical', 'acid'];
 
+// Photo galleries: the cover stays in `image`, further photos in `images`
+export const MAX_FAMILY_IMAGES = 16;
+export const MAX_ROW_IMAGES = 12;
+const IMAGE_PATH = /^\/(uploads|images)\/[\w./-]{1,280}$/;
+
+const imageList = (max) => ({
+  type: [{ type: String, trim: true, maxlength: 300, match: IMAGE_PATH }],
+  default: [],
+  validate: { validator: (list) => list.length <= max, message: `En fazla ${max} ek görsel eklenebilir.` },
+});
+
 const textSchema = new mongoose.Schema(
   {
     title: { type: String, trim: true, default: '', maxlength: 120 },
@@ -30,6 +41,7 @@ const rowSchema = new mongoose.Schema(
   {
     code: { type: String, trim: true, required: true, maxlength: 60 },
     image: { type: String, trim: true, default: '', maxlength: 300 },
+    images: imageList(MAX_ROW_IMAGES),
     // { volume: 1000, diameter: 102, cap: '40-60', ... } – keys from COLUMN_KEYS
     values: { type: mongoose.Schema.Types.Mixed, default: {} },
   },
@@ -51,6 +63,7 @@ const productFamilySchema = new mongoose.Schema(
     order: { type: Number, default: 0 },
     published: { type: Boolean, default: true },
     image: { type: String, trim: true, default: '', maxlength: 300 },
+    images: imageList(MAX_FAMILY_IMAGES),
     columns: {
       type: [{ type: String, enum: COLUMN_KEYS }],
       default: ['volume'],

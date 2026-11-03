@@ -16,10 +16,10 @@ import company from '../../data/company';
 import useLanguage from '../../hooks/useLanguage';
 import useModelQuote from '../../hooks/useModelQuote';
 import formatNumber from '../../utils/formatNumber';
-import { ZoomableImage } from '../../components/ui/ImageLightbox';
+import ProductGallery from '../../components/product3d/ProductGallery';
 import { industriesForFamily } from '../../data/industries';
 import { groupById } from '../../data/productPortfolio';
-import { familyText, findModel, modelPath, similarModels } from '../../data/productTables';
+import { familyText, findModel, modelGallery, modelPath, similarModels } from '../../data/productTables';
 
 // Up to four headline values shown as large tiles, in this order of preference
 const HIGHLIGHT_KEYS = ['volume', 'diameter', 'width', 'length', 'height', 'outlet', 'cap'];
@@ -63,7 +63,8 @@ export default function ProductModel() {
   const product = quoteFor(family, row);
   const title = familyText(family, 'title', lang, t);
   const text = familyText(family, 'text', lang, t);
-  const image = row.image || family.image;
+  const gallery = modelGallery(family, row);
+  const image = gallery[0];
   const num = (value) => formatNumber(value, lang);
   const col = (key) => t(`productTables.columns.${key}`);
 
@@ -120,7 +121,7 @@ export default function ProductModel() {
             sku: row.code,
             description,
             category: title,
-            image: image ? absoluteUrl(image) : OG_IMAGE,
+            image: gallery.length ? gallery.map((src) => absoluteUrl(src)) : OG_IMAGE,
             brand: { '@type': 'Brand', name: 'RMA Plastik' },
             manufacturer: { '@id': `${SITE_URL}/#organization` },
             additionalProperty: specs.map((spec) => ({ '@type': 'PropertyValue', name: spec.label, value: String(spec.value) })),
@@ -151,13 +152,7 @@ export default function ProductModel() {
           <div className="pmGrid">
             {/* Visual */}
             <div className="pmMediaCol">
-              <figure className="pmMedia">
-                {image ? <ZoomableImage className="pmZoom" src={image} alt={`${row.code} – ${title}`} caption={`${row.code} – ${title}`} /> : <Package aria-hidden="true" />}
-                <figcaption>
-                  <span className="pmMediaTag">{title}</span>
-                  <span className="pmMediaCode">{row.code}</span>
-                </figcaption>
-              </figure>
+              <ProductGallery images={gallery} alt={`${row.code} – ${title}`} tag={title} code={row.code} />
 
               <ul className="pmTrust">
                 {groupById(family.group)?.monoblock !== false && (

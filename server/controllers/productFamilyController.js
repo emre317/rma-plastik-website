@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import ProductFamily, { COLUMN_KEYS, WATER_USES } from '../models/ProductFamily.js';
+import ProductFamily, { COLUMN_KEYS, MAX_FAMILY_IMAGES, MAX_ROW_IMAGES, WATER_USES } from '../models/ProductFamily.js';
 import { CONTENT_LANGUAGES } from '../config/languages.js';
 import { markContentChanged } from '../models/SiteSettings.js';
 
@@ -17,6 +17,10 @@ const cleanImage = (value) => {
   const image = str(value, 300);
   return IMAGE_PATTERN.test(image) && !image.includes('..') ? image : '';
 };
+
+// Extra photos: valid site paths only, no duplicates, never the cover again
+const cleanImages = (value, max, cover = '') =>
+  [...new Set((Array.isArray(value) ? value : []).map(cleanImage).filter((image) => image && image !== cover))].slice(0, max);
 
 // Numbers stay numbers (sorting/filters); "40-60", "35 x 35", '3/4"' stay text
 function cleanValue(value) {
@@ -56,6 +60,7 @@ function familyPayload(body = {}) {
     .map((row) => ({
       code: str(row?.code, 60),
       image: cleanImage(row?.image),
+      images: cleanImages(row?.images, MAX_ROW_IMAGES, cleanImage(row?.image)),
       values: Object.fromEntries(
         columns
           .map((key) => [key, cleanValue(row?.values?.[key])])
@@ -72,6 +77,7 @@ function familyPayload(body = {}) {
     order: Number.isFinite(Number(body.order)) ? Number(body.order) : 0,
     published: body.published === undefined ? true : Boolean(body.published),
     image: cleanImage(body.image),
+    images: cleanImages(body.images, MAX_FAMILY_IMAGES, cleanImage(body.image)),
     columns,
     i18n: Object.fromEntries(
       CONTENT_LANGUAGES.map((lang) => [
@@ -96,14 +102,16 @@ export function toPublicFamily(doc) {
     id: doc.familyId,
     group: doc.group,
     image: doc.image || null,
+    ...(doc.images?.length ? { images: [...doc.images] } : {}),
     columns: ['code', ...doc.columns],
     i18n: Object.fromEntries(
       CONTENT_LANGUAGES.map((lang) => [lang, { title: doc.i18n?.[lang]?.title || '', text: doc.i18n?.[lang]?.text || '' }])
     ),
     rows: doc.rows.map((row) => ({
       code: row.code,
-      ...(row.image ? { image: row.image } : {}),
       ...row.values,
+      ...(row.image ? { image: row.image } : {}),
+      ...(row.images?.length ? { images: [...row.images] } : {}),
     })),
     waterTank: doc.waterTank?.enabled
       ? { orientation: doc.waterTank.orientation, layer: doc.waterTank.layer, uses: doc.waterTank.uses }

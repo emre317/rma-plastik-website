@@ -1673,6 +1673,34 @@ const en = {
     },
   },
 
+  gallery3d: {
+    modes: 'View',
+    photo: 'Photo',
+    view3d: '3D',
+    open3d: 'View in 3D',
+    backToPhoto: 'Back to photo view',
+    thumbs: 'Product images',
+    show: 'Image',
+    previous: 'Previous image',
+    next: 'Next image',
+    counter: '{{current}} / {{total}}',
+    label: '3D view',
+    loading: 'Preparing the 3D view…',
+    unsupported: 'This browser does not support 3D viewing.',
+    error: 'The 3D view could not be created.',
+    badge: '3D from photo',
+    note: 'This view is created automatically from the product photo and shows the front of the product in three dimensions.',
+    hint: 'Drag to rotate',
+    controls: '3D view controls',
+    zoomIn: 'Zoom in',
+    zoomOut: 'Zoom out',
+    reset: 'Reset view',
+    pause: 'Stop automatic motion',
+    play: 'Start automatic motion',
+    fullscreen: 'Full screen',
+    exitFullscreen: 'Exit full screen',
+  },
+
 };
 
 export default en;
