@@ -22,6 +22,7 @@ import {
 import { submitProject } from '../../services/api';
 import { visitAttribution } from '../../analytics/attribution';
 import { track } from '../../analytics/track';
+import { clearUserData, hashedUserData } from '../../analytics/userData';
 
 const STEPS = ['project', 'specs', 'volume', 'files', 'contact'];
 
@@ -414,13 +415,19 @@ export default function CustomProject() {
       setSent({ email: payload.email, reference: response?.reference || '', confirmation: Boolean(response?.confirmation), files: files.length });
       writeDraft(null);
 
+      // Counted as a quote request in Google Ads ("Teklif Talebi" fires on form_name = quote);
+      // `product` tells project briefs apart in GA4. With marketing consent it carries
+      // the hashed e-mail and phone for enhanced conversions (analytics/userData.js).
+      const userData = await hashedUserData({ email: payload.email, phone: payload.phone });
       track('generate_lead', {
-        form_name: 'custom_project',
-        product: `custom:${form.type}`,
+        form_name: 'quote',
+        product: `custom_project:${form.type}`,
         files: files.length,
         country: form.country || '(not set)',
         site_language: lang,
+        ...(userData ? { user_data: userData } : {}),
       });
+      if (userData) clearUserData();
 
     } catch (error) {
       setStatus('error');

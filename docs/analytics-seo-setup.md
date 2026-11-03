@@ -30,10 +30,16 @@ Sonra `cd client && npm run build`. Çıktı `client/dist` klasöründedir.
 | Olay | Ne zaman | Parametreler |
 | --- | --- | --- |
 | `virtual_page_view` | Her sayfa açılışı ve site içi geçiş | `page_location`, `page_path`, `page_title`, `site_language` |
-| `generate_lead` | Teklif formu **başarıyla** gönderildiğinde | `form_name`, `product`, `country`, `site_language` |
+| `generate_lead` | Teklif formu veya özel üretim proje sihirbazı **başarıyla** gönderildiğinde (sihirbazda `product` = `custom_project:<ürün tipi>`) | `form_name`, `product`, `country`, `site_language` |
 | `quote_form_open` | Teklif penceresi açıldığında | `product` |
 | `contact_click` | Telefon, e-posta veya WhatsApp linkine tıklandığında | `contact_method` (`phone`/`email`/`whatsapp`), `click_area`, `page_path` |
 | `consent_update` | Ziyaretçi çerez tercihini kaydettiğinde | `consent_analytics`, `consent_marketing` |
+| `search_open` | Site içi arama açıldığında | `source` (`button`/`shortcut`/`mobile_menu`/`not_found`) |
+| `search` | Arama sonucundan bir kayıt açıldığında (GA4 önerilen olay) | `search_term`, `results` |
+| `search_select` | Açılan arama sonucu | `search_term`, `item_type`, `item_id`, `position` |
+| `search_add_to_quote` | Arama sonucundan model teklif listesine eklendiğinde | `item_id` |
+| `search_no_results_quote` | Sonuç bulunamayınca "Satış ekibine sorun" seçildiğinde | `search_term` |
+| `project_wizard_start` / `project_wizard_step` / `project_wizard_files` | Özel üretim sihirbazında ilk giriş, adım geçişi, dosya ekleme | `site_language` / `step`, `step_name` / `files` |
 
 **Çerez onayı (Consent Mode v2):** Varsayılan olarak `analytics_storage`,
 `ad_storage`, `ad_user_data`, `ad_personalization` = **denied**. Ziyaretçi izin
