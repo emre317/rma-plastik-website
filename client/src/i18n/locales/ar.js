@@ -1397,6 +1397,7 @@ const ar = {
     dialogLabel: 'البحث في الموقع',
     placeholder: 'ابحث عن منتج أو رمز طراز أو سعة أو قطاع…',
     placeholderShort: 'ابحث عن منتج أو طراز أو سعة…',
+    placeholderMini: 'ابحث عن منتج أو طراز',
     clear: 'مسح البحث',
     close: 'إغلاق',
     filterLabel: 'تصفية النتائج',

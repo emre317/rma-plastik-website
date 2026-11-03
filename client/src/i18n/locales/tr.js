@@ -1402,6 +1402,7 @@ const tr = {
     dialogLabel: 'Sitede ara',
     placeholder: 'Ürün, model kodu, hacim veya sektör arayın…',
     placeholderShort: 'Ürün, model veya hacim arayın…',
+    placeholderMini: 'Ürün veya model arayın',
     clear: 'Aramayı temizle',
     close: 'Kapat',
     filterLabel: 'Sonuçları filtrele',

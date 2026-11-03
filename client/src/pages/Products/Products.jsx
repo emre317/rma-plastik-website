@@ -3,6 +3,7 @@ import { GitCompareArrows, SlidersHorizontal, Table2, Wand2 } from 'lucide-react
 
 import Seo from '../../seo/Seo';
 import PageHeader from '../../components/ui/PageHeader';
+import SearchButton from '../../components/search/SearchButton';
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
@@ -70,7 +71,9 @@ export default function Products() {
           { value: totals.families, label: p('statsFamilies') },
           { value: totals.models, label: p('statsModels') },
         ]}
-      />
+      >
+        <SearchButton className="phSearch" source="products_page" />
+      </PageHeader>
 
       <section className="productsTools">
         <div className="container productsToolsGrid">

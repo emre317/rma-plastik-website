@@ -1404,6 +1404,7 @@ const en = {
     dialogLabel: 'Search the site',
     placeholder: 'Search products, model codes, volumes or industries…',
     placeholderShort: 'Search products, models or volumes…',
+    placeholderMini: 'Search products or models',
     clear: 'Clear search',
     close: 'Close',
     filterLabel: 'Filter results',

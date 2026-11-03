@@ -34533,55 +34533,7 @@ html[lang="ar"] .pgBody small {
   color: var(--rma-blue);
 }
 
-.searchTriggerKbd {
-  padding: 3px 7px;
-  border: 1px solid var(--ink-200);
-  border-bottom-width: 2px;
-  border-radius: 6px;
-  background: var(--ink-050);
-  color: var(--ink-500);
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 700;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-/* Header: round icon button; the labelled pill on wide screens */
-.searchTrigger-header {
-  width: 42px;
-  height: 42px;
-  padding: 0;
-  justify-content: center;
-  border-radius: 999px;
-}
-
-.searchTrigger-header .searchTriggerLabel,
-.searchTrigger-header .searchTriggerKbd {
-  display: none;
-}
-
-@media (min-width: 1560px) {
-  .searchTrigger-header {
-    width: auto;
-    min-width: 168px;
-    padding: 0 8px 0 14px;
-    justify-content: flex-start;
-  }
-
-  .searchTrigger-header .searchTriggerLabel {
-    display: inline;
-    margin-inline-end: auto;
-    font-size: 13px;
-    font-weight: 600;
-  }
-
-  .searchTrigger-header .searchTriggerKbd {
-    display: inline-block;
-  }
-}
-
-/* Field look: mobile menu and 404 page */
+/* Field look: mega menu, products page, home portfolio, mobile menu, 404 page */
 .searchTrigger-field {
   width: 100%;
   height: 54px;
@@ -34625,10 +34577,6 @@ html[lang="ar"] .pgBody small {
   color: rgba(255, 255, 255, 0.62);
 }
 
-.mobileMenuSearch .searchTriggerKbd {
-  display: none;
-}
-
 .notFoundSearch {
   max-width: 520px;
   display: flex;
@@ -34650,11 +34598,69 @@ html[lang="ar"] .pgBody small {
   color: rgba(255, 255, 255, 0.62);
 }
 
-.notFoundSearch .searchTriggerKbd {
+/* Products mega menu: first thing in the side column */
+.megaSearch {
+  height: 46px;
+  margin-bottom: 14px;
+  padding-inline: 14px 12px;
+  border-radius: 12px;
+  background: var(--ink-050);
+  font-size: 14px;
+}
+
+.megaSearch:hover {
+  background: #ffffff;
+}
+
+/* Products page header (dark): glass field under the lead */
+.phSearch {
+  max-width: 520px;
+  height: 56px;
+  margin-top: 24px;
   border-color: rgba(255, 255, 255, 0.18);
   background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.7);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
+
+.phSearch:hover {
+  border-color: rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: none;
+}
+
+.phSearch .searchTriggerIcon {
+  color: var(--rma-blue-light);
+}
+
+.phSearch .searchTriggerLabel {
+  color: rgba(255, 255, 255, 0.66);
+}
+
+/* Home product portfolio: under the intro text */
+.explorerSearch {
+  max-width: 560px;
+  height: 58px;
+  margin: 22px 0 6px;
+  padding-inline: 20px 16px;
+  border-color: var(--ink-200);
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px -18px rgba(16, 19, 23, 0.35);
+  font-size: 15.5px;
+}
+
+.explorerSearch:hover {
+  border-color: var(--rma-blue);
+  box-shadow: 0 0 0 4px rgba(27, 117, 187, 0.1), 0 10px 30px -18px rgba(16, 19, 23, 0.35);
+}
+
+.explorerSearch .searchTriggerIcon {
+  width: 20px;
+  height: 20px;
+}
+
+
 
 /* ---------- Dialog ---------- */
 
@@ -37084,18 +37090,6 @@ html[lang="ar"] .pgBody small {
     transition: none;
     animation: none;
     stroke-dashoffset: 0;
-  }
-}
-
-/* The search button joins the header actions: tighter spacing on mid-size screens */
-@media (max-width: 1240px) {
-  .siteHeader .headerActions {
-    gap: 10px;
-  }
-
-  .searchTrigger-header {
-    width: 38px;
-    height: 38px;
   }
 }
 

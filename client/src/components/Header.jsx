@@ -157,6 +157,7 @@ export default function Header() {
                       </ul>
 
                       <div className="megaSide">
+                        <SearchButton className="megaSearch" source="mega_menu" short />
                         <span className="megaSideLabel">{t('productExplorer.quickLinks')}</span>
                         {quickLinks.map((link) => (
                           <LocalizedLink key={link.path} to={link.path} onClick={() => setProductsOpen(false)}>
@@ -182,8 +183,6 @@ export default function Header() {
           </nav>
 
           <div className="headerActions">
-
-            <SearchButton className="headerSearch" />
 
             <LanguageSwitcher />
 

@@ -1,30 +1,16 @@
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Search } from 'lucide-react';
 
 import { preloadSearch, useSearch } from './SearchContext';
 
-/* "⌘ K" on Apple devices, "Ctrl K" elsewhere (decided after hydration) */
-function useShortcutLabel() {
-  const [label, setLabel] = useState('Ctrl K');
-
-  useEffect(() => {
-    const platform = navigator.userAgentData?.platform || navigator.platform || '';
-    if (/mac|iphone|ipad/i.test(platform)) setLabel('⌘ K');
-  }, []);
-
-  return label;
-}
-
 /*
-  Search trigger.
-  variant 'header': pill with the shortcut on wide screens, round icon button below
-  variant 'field':  a full-width search field look (mobile menu, 404 page)
+  Search trigger with the look of a search field: products mega menu,
+  products page header, home product portfolio, mobile menu, 404 page.
+  (Ctrl/⌘ K and "/" open the search everywhere without being shown.)
 */
-export default function SearchButton({ variant = 'header', className = '', source = variant }) {
+export default function SearchButton({ variant = 'field', className = '', source = variant, short = false }) {
   const { t } = useTranslation();
   const { openSearch } = useSearch();
-  const shortcut = useShortcutLabel();
 
   return (
     <button
@@ -35,11 +21,9 @@ export default function SearchButton({ variant = 'header', className = '', sourc
       onFocus={preloadSearch}
       aria-label={t('search.open')}
       aria-keyshortcuts="Control+K Meta+K"
-      title={`${t('search.open')} (${shortcut})`}
     >
       <Search className="searchTriggerIcon" aria-hidden="true" />
-      <span className="searchTriggerLabel">{variant === 'field' ? t('search.placeholderShort') : t('search.label')}</span>
-      <kbd className="searchTriggerKbd" aria-hidden="true">{shortcut}</kbd>
+      <span className="searchTriggerLabel">{short ? t('search.placeholderMini') : t('search.placeholderShort')}</span>
     </button>
   );
 }

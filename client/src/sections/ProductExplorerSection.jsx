@@ -9,6 +9,7 @@ import useLanguage from '../hooks/useLanguage';
 import formatNumber from '../utils/formatNumber';
 import portfolio, { totals } from '../data/productPortfolio';
 import SectionDeco from '../components/ui/SectionDeco';
+import SearchButton from '../components/search/SearchButton';
 
 /*
   "04 / Ürünler – Ürün portföyü": every product group as a photo card (model
@@ -63,6 +64,8 @@ export default function ProductExplorerSection() {
             </h2>
 
             <p className="productIntroText">{p('intro')}</p>
+
+            <SearchButton className="explorerSearch" source="home_portfolio" />
 
             <dl className="portfolioTotals">
               <div>
