@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import {
-  BarChart3, CalendarClock, Check, ChevronLeft, ChevronRight, Download, Flag, Inbox, Megaphone, Package, RotateCcw, Search, UserRound, X,
+  BarChart3, CalendarClock, Check, ChevronLeft, ChevronRight, ClipboardList, Download, Flag, Inbox, Megaphone, Package, Paperclip, RotateCcw, Search, UserRound, X,
 } from 'lucide-react';
 
 import { exportQuotes, getQuoteAssignees, getQuoteStats, getQuotes } from '../../services/adminApi';
@@ -310,7 +310,17 @@ export default function AdminQuotes() {
                   {quote.items?.length > 0 && (
                     <span className="adItemCount"><Package aria-hidden="true" />{quote.items.length}</span>
                   )}
-                  <span>{quote.product || 'Genel Talep'}</span>
+                  {quote.project ? (
+                    <>
+                      <span className="adProjectTag"><ClipboardList aria-hidden="true" />Özel Üretim</span>
+                      <span>{quote.project.title || 'Proje'}</span>
+                      {quote.files?.length > 0 && (
+                        <span className="adFileCount" title={`${quote.files.length} ekli dosya`}><Paperclip aria-hidden="true" />{quote.files.length}</span>
+                      )}
+                    </>
+                  ) : (
+                    <span>{quote.product || 'Genel Talep'}</span>
+                  )}
                 </span>
                 <span role="cell">
                   {quote.outcome ? (

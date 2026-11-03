@@ -26,7 +26,12 @@ function ProjectCard({ quote }) {
   const call = useAdminApi();
   const [busy, setBusy] = useState('');
   const [error, setError] = useState('');
-  const rows = projectRows(quote.project);
+  const rows = [
+    ...projectRows(quote.project),
+    ['Müşteride Olan', DESIGN_INPUT_LABELS[quote.designInput] || ''],
+    ['İlk Sipariş Adedi', quote.quantity ? `${quote.quantity} adet` : ''],
+    ['Teslimat', [quote.deliveryCity, quote.country].filter(Boolean).join(', ')],
+  ].filter(([, value]) => value);
   const files = quote.files || [];
 
   async function download(file) {
@@ -54,7 +59,15 @@ function ProjectCard({ quote }) {
         {rows.map(([label, value]) => (
           <div key={label}><dt>{label}</dt><dd>{value}</dd></div>
         ))}
+        {quote.deliveryAddress && <div className="adFactWide"><dt>Açık Adres</dt><dd>{quote.deliveryAddress}</dd></div>}
       </dl>
+
+      {quote.message && (
+        <div className="adBriefNote">
+          <span>Müşterinin Notu</span>
+          <p>{quote.message}</p>
+        </div>
+      )}
 
       <div className="adBriefFiles">
         <span>Ekli Dosyalar</span>
@@ -506,7 +519,8 @@ export default function AdminQuoteDetail() {
 
       <div className="adDetailGrid">
         <div className="adDetailMain">
-          {/* Products */}
+          {/* Custom project brief, or the requested products */}
+          {quote.project ? <ProjectCard quote={quote} /> : (
           <div className="adCard">
             <div className="adCardHead">
               <h2><Package aria-hidden="true" />İstenen Ürünler</h2>
@@ -572,8 +586,7 @@ export default function AdminQuoteDetail() {
               <p className="adApplication"><span>Uygulama</span>{quote.application}</p>
             )}
           </div>
-
-          {quote.project && <ProjectCard quote={quote} />}
+          )}
 
           {/* Commercial offer */}
           <div className="adCard adOfferCard">
@@ -600,11 +613,13 @@ export default function AdminQuoteDetail() {
             )}
           </div>
 
-          {/* Message */}
-          <div className="adCard">
-            <div className="adCardHead"><h2>Proje Detayları</h2></div>
-            <p className="adMessage">{quote.message || '—'}</p>
-          </div>
+          {/* Message (a project brief shows the customer's note in its own card) */}
+          {!quote.project && (
+            <div className="adCard">
+              <div className="adCardHead"><h2>Proje Detayları</h2></div>
+              <p className="adMessage">{quote.message || '—'}</p>
+            </div>
+          )}
 
           {/* Internal notes */}
           <div className="adCard">

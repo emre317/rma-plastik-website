@@ -38097,3 +38097,67 @@ html[lang="ar"] .pgBody small {
   display: flex;
   justify-content: flex-end;
 }
+
+/* Admin: custom project requests in the list and the detail */
+.adProjectTag,
+.adFileCount {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.adProjectTag {
+  background: rgba(27, 117, 187, 0.1);
+  color: var(--rma-blue-dark);
+}
+
+.adFileCount {
+  background: var(--ink-100);
+  color: var(--ink-600);
+}
+
+.adProjectTag svg,
+.adFileCount svg {
+  width: 13px;
+  height: 13px;
+}
+
+.adTableProduct .adProjectTag + span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.adBriefFacts .adFactWide {
+  grid-column: 1 / -1;
+}
+
+.adBriefNote {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #fffaf0;
+  border: 1px solid rgba(183, 121, 31, 0.18);
+}
+
+.adBriefNote span {
+  display: block;
+  margin-bottom: 4px;
+  color: #8a5300;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.adBriefNote p {
+  margin: 0;
+  color: var(--text);
+  font-size: 14.5px;
+  line-height: 1.6;
+  white-space: pre-line;
+}
