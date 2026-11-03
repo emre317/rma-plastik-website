@@ -10,7 +10,7 @@ import { useQuote } from '../quote/QuoteContext';
   other pages): one line of promise, a short note, a white quote button and
   optionally a contact link.
 */
-export default function QuoteStrip({ title, text, buttonLabel, contactLabel }) {
+export default function QuoteStrip({ title, text, buttonLabel, contactLabel, to }) {
   const { t } = useTranslation();
   const { openQuote } = useQuote();
 
@@ -24,10 +24,18 @@ export default function QuoteStrip({ title, text, buttonLabel, contactLabel }) {
           </div>
 
           <div className="cmCtaActions">
-            <button type="button" className="button primary quoteButton" onClick={() => openQuote()}>
-              <span>{buttonLabel || t('quoteStrip.button')}</span>
-              <Arrow className="buttonArrow" />
-            </button>
+            {/* `to`: a page instead of the quote dialog (e.g. the project wizard) */}
+            {to ? (
+              <LocalizedLink to={to} className="button primary quoteButton">
+                <span>{buttonLabel || t('quoteStrip.button')}</span>
+                <Arrow className="buttonArrow" />
+              </LocalizedLink>
+            ) : (
+              <button type="button" className="button primary quoteButton" onClick={() => openQuote()}>
+                <span>{buttonLabel || t('quoteStrip.button')}</span>
+                <Arrow className="buttonArrow" />
+              </button>
+            )}
 
             {contactLabel && (
               <LocalizedLink to="/contact" className="cmCtaLink">

@@ -12,6 +12,7 @@ import FloatingContact from '../components/ui/FloatingContact';
 import CookieConsent from '../components/CookieConsent';
 import CursorTrail from '../components/ui/CursorTrail';
 import CatalogGate from '../components/catalog/CatalogGate';
+import { SearchProvider } from '../components/search/SearchContext';
 import useScrollReveal from '../hooks/useScrollReveal';
 import { captureVisit } from '../analytics/attribution';
 import { prefetchPages } from '../routes/publicPages';
@@ -39,6 +40,7 @@ export default function PublicLayout() {
   return (
     <QuoteProvider>
       <CompareProvider>
+      <SearchProvider>
       <Header />
       {/* Page files load on demand; header and footer stay in place meanwhile */}
       <Suspense fallback={<div className="pageLoading" aria-busy="true" />}>
@@ -53,6 +55,7 @@ export default function PublicLayout() {
       <QuoteModal />
       <CursorTrail />
       <CatalogGate />
+      </SearchProvider>
       </CompareProvider>
     </QuoteProvider>
   );

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import Seo from '../../seo/Seo';
+import SearchButton from '../../components/search/SearchButton';
 
 export default function NotFound() {
   const { t } = useTranslation();
@@ -21,6 +22,8 @@ export default function NotFound() {
           {t('pages.notFound.title')}
           <span>{t('pages.notFound.titleAccent')}</span>
         </h1>
+
+        <SearchButton variant="field" className="notFoundSearch" source="not_found" />
 
         <LocalizedLink to="/">
           {t('pages.notFound.home')} <Arrow />

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
-  AlertTriangle, ArrowLeft, ArrowRight, Building2, CalendarClock, Check, Copy, Contact, FileSignature, Flag, Globe2, History, Mail, Megaphone, MessageCircle, NotebookPen, Package, Phone, Trash2, User,
+  AlertTriangle, ArrowLeft, ArrowRight, Building2, ClipboardList, Download, FileText, Lock, CalendarClock, Check, Copy, Contact, FileSignature, Flag, Globe2, History, Mail, Megaphone, MessageCircle, NotebookPen, Package, Phone, Trash2, User,
 } from 'lucide-react';
 
 import {
-  addQuoteNote, deleteQuote, deleteQuoteNote, getCustomer, getQuoteAssignees, getQuoteById, getQuoteHistory, resendQuoteMail, updateQuoteStatus, updateQuoteTracking,
+  addQuoteNote, deleteQuote, deleteQuoteNote, downloadQuoteFile, getCustomer, getQuoteAssignees, getQuoteById, getQuoteHistory, resendQuoteMail, updateQuoteStatus, updateQuoteTracking,
 } from '../../services/adminApi';
 import { notifyQuotesChanged } from '../../services/adminAuth';
 import useAdminApi from '../../hooks/useAdminApi';
@@ -17,6 +17,71 @@ import {
 import Dropdown from '../../components/ui/Dropdown';
 import { useAdminSession } from '../../components/admin/AdminSession';
 import { useConfirm } from '../../components/ui/ConfirmDialog';
+import { projectRows } from '../../data/projectBrief';
+
+const fileSize = (bytes) => (bytes >= 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1).replace('.', ',')} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`);
+
+/* Custom project brief: the answers of the wizard and the attached drawings */
+function ProjectCard({ quote }) {
+  const call = useAdminApi();
+  const [busy, setBusy] = useState('');
+  const [error, setError] = useState('');
+  const rows = projectRows(quote.project);
+  const files = quote.files || [];
+
+  async function download(file) {
+    try {
+      setBusy(file.id);
+      setError('');
+      await call(downloadQuoteFile, quote._id, file);
+    } catch (problem) {
+      setError(problem.message || 'Dosya indirilemedi.');
+    } finally {
+      setBusy('');
+    }
+  }
+
+  return (
+    <div className="adCard adBriefCard">
+      <div className="adCardHead">
+        <h2><ClipboardList aria-hidden="true" />Özel Üretim Projesi</h2>
+        {quote.project.nda && <span className="adBriefBadge"><Lock aria-hidden="true" />NDA talep ediyor</span>}
+      </div>
+
+      {quote.project.description && <p className="adBriefText">{quote.project.description}</p>}
+
+      <dl className="adFacts adBriefFacts">
+        {rows.map(([label, value]) => (
+          <div key={label}><dt>{label}</dt><dd>{value}</dd></div>
+        ))}
+      </dl>
+
+      <div className="adBriefFiles">
+        <span>Ekli Dosyalar</span>
+        {files.length ? (
+          <ul>
+            {files.map((file) => (
+              <li key={file.id}>
+                <span className="adBriefFileType" aria-hidden="true"><FileText /><em>{file.type}</em></span>
+                <span className="adBriefFileName">
+                  <strong>{file.name}</strong>
+                  <small>{fileSize(file.size)}</small>
+                </span>
+                <button type="button" className="cmsButton cmsButtonInfo" onClick={() => download(file)} disabled={busy === file.id}>
+                  <Download aria-hidden="true" />
+                  {busy === file.id ? 'İndiriliyor…' : 'İndir'}
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="adHint">Dosya eklenmedi.</p>
+        )}
+        {error && <p className="adminInlineError" role="alert">{error}</p>}
+      </div>
+    </div>
+  );
+}
 
 const MAIL_KINDS = [
   { kind: 'notification', label: 'Satış Bildirimi' },
@@ -489,7 +554,7 @@ export default function AdminQuoteDetail() {
                 {quote.storedProduct && <div><dt>Stoklanacak Ürün</dt><dd>{quote.storedProduct}</dd></div>}
                 {quote.density && <div><dt>Özgül Ağırlık / Yoğunluk</dt><dd>{quote.density}</dd></div>}
                 {quote.temperature && <div><dt>Sıcaklık / Maks. Tepkime Sıcaklığı</dt><dd>{quote.temperature}</dd></div>}
-                {quote.customSpec && <div><dt>Ürün Tanımı / Ölçüler</dt><dd>{quote.customSpec}</dd></div>}
+                {quote.customSpec && !quote.project && <div><dt>Ürün Tanımı / Ölçüler</dt><dd>{quote.customSpec}</dd></div>}
                 {quote.designInput && <div><dt>Müşteride Olan</dt><dd>{DESIGN_INPUT_LABELS[quote.designInput] || quote.designInput}</dd></div>}
                 {quote.deliveryCity && <div><dt>Teslimat Şehri</dt><dd>{quote.deliveryCity}</dd></div>}
                 {quote.deliveryAddress && <div className="adFactWide"><dt>Açık Adres</dt><dd>{quote.deliveryAddress}</dd></div>}
@@ -507,6 +572,8 @@ export default function AdminQuoteDetail() {
               <p className="adApplication"><span>Uygulama</span>{quote.application}</p>
             )}
           </div>
+
+          {quote.project && <ProjectCard quote={quote} />}
 
           {/* Commercial offer */}
           <div className="adCard adOfferCard">

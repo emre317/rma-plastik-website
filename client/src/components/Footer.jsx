@@ -30,6 +30,7 @@ const linkColumns = [
       { key: 'quality', path: '/company#quality' },
       { key: 'industries', path: '/industries', label: 'nav.industries' },
       { key: 'customMolding', path: '/custom-molding' },
+      { key: 'customProject', path: '/custom-molding/project', label: 'project.footerLink' },
       { key: 'blog', path: '/blog' },
       { key: 'videos', path: '/videos' },
     ],

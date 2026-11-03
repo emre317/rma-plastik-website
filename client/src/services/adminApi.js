@@ -179,6 +179,34 @@ export async function sendQuoteOffer(id, pdfBlob, filename, token) {
   return data;
 }
 
+/* A drawing sent with a project brief: fetched with the login, saved by the browser */
+export async function downloadQuoteFile(id, file, token) {
+  const API_BASE_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
+  let response;
+
+  try {
+    response = await fetch(`${API_BASE_URL}/quote/${encodeURIComponent(id)}/files/${encodeURIComponent(file.id)}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  } catch {
+    throw new ApiError('Sunucuya ulaşılamadı.', 0);
+  }
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new ApiError(data.message || 'Dosya indirilemedi.', response.status);
+  }
+
+  const url = URL.createObjectURL(await response.blob());
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = file.name;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+
 /* Catalogue downloads (potential customers) */
 
 function leadParams({ search, consent } = {}) {

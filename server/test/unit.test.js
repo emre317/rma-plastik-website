@@ -71,7 +71,7 @@ test('production environment check', () => {
   const base = {
     NODE_ENV: 'production', MONGODB_URI: 'mongodb+srv://u:p@cluster0.example.mongodb.net/rma', JWT_SECRET: 'x'.repeat(40),
     CLIENT_URL: 'https://www.rmaplastik.com', TRUST_PROXY: '1', CONTENT_API_TOKEN: 'c'.repeat(32), PUBLISH_CALLBACK_TOKEN: 'p'.repeat(32),
-    PUBLISH_GITHUB_TOKEN: 'g', PUBLISH_GITHUB_REPOSITORY: 'emre317/rma-plastik-website', UPLOAD_DIR: '/home/u/rma-data/uploads',
+    PUBLISH_GITHUB_TOKEN: 'g', PUBLISH_GITHUB_REPOSITORY: 'emre317/rma-plastik-website', UPLOAD_DIR: '/home/u/rma-data/uploads', QUOTE_FILES_DIR: '/home/u/rma-data/quote-files',
     SMTP_HOST: 'h', SMTP_USER: 'u', SMTP_PASS: 'p', PUBLISH_MODE: undefined,
   };
   withEnv(base, () => {
@@ -84,6 +84,9 @@ test('production environment check', () => {
     const { errors } = checkEnvironment();
     assert.ok(errors.some((e) => e.includes('JWT_SECRET')));
     assert.ok(errors.some((e) => e.includes('CONTENT_API_TOKEN')));
+  });
+  withEnv({ ...base, QUOTE_FILES_DIR: '/home/u/public_html/quote-files' }, () => {
+    assert.ok(checkEnvironment().errors.some((e) => e.includes('QUOTE_FILES_DIR')));
   });
   withEnv({ ...base, CLIENT_URL: 'http://localhost:5173' }, () => {
     assert.ok(checkEnvironment().warnings.length >= 2);

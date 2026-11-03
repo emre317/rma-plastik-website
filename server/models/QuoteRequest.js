@@ -1,6 +1,16 @@
 import mongoose from 'mongoose';
 
 import attributionSchema from './attributionSchema.js';
+import {
+  PROJECT_COLOURS,
+  PROJECT_CONDITIONS,
+  PROJECT_FEATURES,
+  PROJECT_MATERIALS,
+  PROJECT_STAGES,
+  PROJECT_TIMELINES,
+  PROJECT_TYPES,
+  PROJECT_VOLUMES,
+} from '../../client/src/data/projectBrief.js';
 
 export const DESIGN_INPUTS = ['drawing', 'sample', 'idea'];
 export const QUOTE_NEEDS = ['fittings', 'color', 'installation', 'shipping', 'urgent'];
@@ -182,6 +192,53 @@ const quoteRequestSchema = new mongoose.Schema(
       type: String,
       enum: ['', ...DESIGN_INPUTS],
       default: '',
+    },
+
+    // Custom project brief (/custom-molding/project); null for other requests
+    project: {
+      type: new mongoose.Schema(
+        {
+          type: { type: String, enum: PROJECT_TYPES, required: true },
+          stage: { type: String, enum: ['', ...PROJECT_STAGES], default: '' },
+          title: { type: String, trim: true, default: '', maxlength: 120 },
+          description: { type: String, trim: true, default: '', maxlength: 1500 },
+          // Sizes in mm, volume in litres, weight in kg, wall thickness in mm
+          length: { type: Number, min: 0, max: 100000, default: null },
+          width: { type: Number, min: 0, max: 100000, default: null },
+          height: { type: Number, min: 0, max: 100000, default: null },
+          volume: { type: Number, min: 0, max: 1000000, default: null },
+          weight: { type: Number, min: 0, max: 100000, default: null },
+          wall: { type: Number, min: 0, max: 1000, default: null },
+          material: { type: String, enum: ['', ...PROJECT_MATERIALS], default: '' },
+          method: { type: String, trim: true, default: '', maxlength: 80 },
+          colour: { type: String, enum: ['', ...PROJECT_COLOURS], default: '' },
+          colourNote: { type: String, trim: true, default: '', maxlength: 80 },
+          conditions: { type: [{ type: String, enum: PROJECT_CONDITIONS }], default: [] },
+          features: { type: [{ type: String, enum: PROJECT_FEATURES }], default: [] },
+          annualVolume: { type: String, enum: ['', ...PROJECT_VOLUMES], default: '' },
+          needsPrototype: { type: Boolean, default: false },
+          timeline: { type: String, enum: ['', ...PROJECT_TIMELINES], default: '' },
+          nda: { type: Boolean, default: false },
+        },
+        { _id: false }
+      ),
+      default: null,
+    },
+
+    // Drawings / photos of a project brief, stored privately (QUOTE_FILES_DIR)
+    files: {
+      type: [
+        new mongoose.Schema(
+          {
+            id: { type: String, required: true, match: /^[0-9a-f-]{36}\.[a-z0-9]{2,5}$/ },
+            name: { type: String, trim: true, required: true, maxlength: 140 },
+            size: { type: Number, min: 0, default: 0 },
+            type: { type: String, trim: true, default: '', maxlength: 8 },
+          },
+          { _id: false }
+        ),
+      ],
+      default: [],
     },
 
     // Follow-up needs picked with one click (fittings, colour, installation…)

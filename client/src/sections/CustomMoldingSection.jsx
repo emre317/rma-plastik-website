@@ -45,10 +45,15 @@ export default function CustomMoldingSection() {
                 ))}
             </dl>
 
-            <LocalizedLink to="/custom-molding" className="button primary">
-              <span>{t('customMolding.link')}</span>
-              <Arrow className="buttonArrow" />
-            </LocalizedLink>
+            <div className="cmHomeActions">
+              <LocalizedLink to="/custom-molding" className="button primary">
+                <span>{t('customMolding.link')}</span>
+                <Arrow className="buttonArrow" />
+              </LocalizedLink>
+              <LocalizedLink to="/custom-molding/project" className="button ghost">
+                <span>{t('project.cta.button')}</span>
+              </LocalizedLink>
+            </div>
           </div>
 
           <div className="cmHomeVisual">

@@ -25,7 +25,8 @@ const LANGS = [
   { code: 'ar', label: 'العربية' },
 ];
 
-const VAT_PRESETS = [20, 10, 1];
+// Proformas are issued either with 20 % VAT or without VAT
+const VAT_RATE = 20;
 
 const emptyLine = () => ({ name: '', details: '', quantity: 1, unit: '', unitPrice: 0, discount: 0 });
 
@@ -48,7 +49,7 @@ function draftFromQuote(quote, settings) {
     language,
     currency: language === 'tr' ? 'TRY' : 'USD',
     lines: items,
-    vatRate: null,
+    vatRate: VAT_RATE,
     incoterm: '',
     deliveryPlace: '',
     deliveryTime: '',
@@ -332,10 +333,8 @@ export default function AdminQuoteOffer() {
             <div className="adOfferVat">
               <span>KDV</span>
               <div className="adQuickDates">
-                <button type="button" className={`adChip ${offer.vatRate === null ? 'active' : ''}`} onClick={() => update({ vatRate: null })}>Gösterme</button>
-                {VAT_PRESETS.map((rate) => (
-                  <button key={rate} type="button" className={`adChip ${Number(offer.vatRate) === rate && offer.vatRate !== null ? 'active' : ''}`} onClick={() => update({ vatRate: rate })}>%{rate}</button>
-                ))}
+                <button type="button" className={`adChip ${totals.hasVat ? 'active' : ''}`} onClick={() => update({ vatRate: VAT_RATE })}>KDV'li %{totals.hasVat ? offer.vatRate : VAT_RATE}</button>
+                <button type="button" className={`adChip ${totals.hasVat ? '' : 'active'}`} onClick={() => update({ vatRate: null })}>KDV'siz</button>
               </div>
             </div>
 

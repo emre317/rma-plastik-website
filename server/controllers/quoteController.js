@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+
 import mongoose from 'mongoose';
 
 import QuoteRequest, {
@@ -14,6 +16,17 @@ import { CHANNELS, cleanAttribution } from '../services/attribution.js';
 import { getSiteSettings } from '../models/SiteSettings.js';
 import { isMailConfigured } from '../services/mailer.js';
 import { trackQuoteMail } from '../services/mailTracking.js';
+import {
+  PROJECT_COLOURS,
+  PROJECT_CONDITIONS,
+  PROJECT_FEATURES,
+  PROJECT_MATERIALS,
+  PROJECT_STAGES,
+  PROJECT_TIMELINES,
+  PROJECT_TYPES,
+  PROJECT_VOLUMES,
+} from '../../client/src/data/projectBrief.js';
+import { projectFilePath, removeProjectFiles } from '../middleware/projectFiles.js';
 import {
   isCustomerConfirmationEnabled,
   quoteReference,
@@ -72,7 +85,15 @@ function notFound(res) {
   });
 }
 
-export async function createQuoteRequest(req, res) {
+export function createQuoteRequest(req, res) {
+  return saveQuoteRequest(req, res);
+}
+
+/*
+  Saves a quote request from the website. `extra` holds fields that only the
+  server sets (the project brief, its files and the source of the request).
+*/
+async function saveQuoteRequest(req, res, extra = {}) {
   try {
     const body = req.body || {};
 
@@ -182,6 +203,7 @@ export async function createQuoteRequest(req, res) {
         quantity,
         language,
         attribution: cleanAttribution(body.attribution),
+        ...extra,
       });
 
     // Email the sales team; a mail failure must not fail the request
@@ -230,6 +252,119 @@ export async function createQuoteRequest(req, res) {
       message:
         'Quote request could not be submitted.',
     });
+  }
+}
+
+/* ---------- Custom project brief ---------- */
+
+const pick = (value, list) => (list.includes(value) ? value : '');
+const pickAll = (value, list) => [...new Set((Array.isArray(value) ? value : []).filter((key) => list.includes(key)))];
+
+// A positive number up to `max` (sizes, volume, weight), else null
+function measure(value, max) {
+  if (value === undefined || value === null || value === '') return null;
+  const number = Number(String(value).replace(',', '.'));
+  return Number.isFinite(number) && number > 0 && number <= max ? Math.round(number * 10) / 10 : null;
+}
+
+/* The brief from the wizard, checked field by field; { error } when it cannot be used */
+export function cleanProject(input) {
+  const project = input && typeof input === 'object' && !Array.isArray(input) ? input : {};
+  const type = pick(project.type, PROJECT_TYPES);
+  const description = cleanString(project.description);
+
+  if (!type) return { error: 'Please choose the type of product.' };
+  if (description.length < 10) return { error: 'Please describe the product in a few words.' };
+  if (description.length > 1500) return { error: 'The description must be at most 1500 characters.' };
+
+  return {
+    project: {
+      type,
+      stage: pick(project.stage, PROJECT_STAGES),
+      title: cleanString(project.title).slice(0, 120),
+      description,
+      length: measure(project.length, 100000),
+      width: measure(project.width, 100000),
+      height: measure(project.height, 100000),
+      volume: measure(project.volume, 1000000),
+      weight: measure(project.weight, 100000),
+      wall: measure(project.wall, 1000),
+      material: pick(project.material, PROJECT_MATERIALS),
+      method: cleanString(project.method).slice(0, 80),
+      colour: pick(project.colour, PROJECT_COLOURS),
+      colourNote: cleanString(project.colourNote).slice(0, 80),
+      conditions: pickAll(project.conditions, PROJECT_CONDITIONS),
+      features: pickAll(project.features, PROJECT_FEATURES),
+      annualVolume: pick(project.annualVolume, PROJECT_VOLUMES),
+      needsPrototype: project.needsPrototype === true,
+      timeline: pick(project.timeline, PROJECT_TIMELINES),
+      nda: project.nda === true,
+    },
+  };
+}
+
+/*
+  POST /api/quote/project (multipart, see middleware/projectFiles.js):
+  the custom project wizard. Saved as a quote request with source "project",
+  so it shows up in the panel, the e-mails and the reports like any other.
+*/
+export function createProjectRequest(req, res) {
+  const body = req.body || {};
+  const { project, error } = cleanProject(body.project);
+
+  if (error) {
+    return res.status(400).json({ success: false, message: error });
+  }
+
+  const firstOrder = Number.parseInt(body.firstOrder, 10);
+
+  req.body = {
+    company: body.company,
+    name: body.name,
+    email: body.email,
+    phone: body.phone,
+    country: body.country,
+    deliveryCity: body.deliveryCity,
+    language: body.language,
+    attribution: body.attribution,
+    product: `Özel Üretim Projesi${project.title ? `: ${project.title}` : ''}`.slice(0, 150),
+    customSpec: project.description.slice(0, 300),
+    designInput: body.designInput,
+    quantity: Number.isInteger(firstOrder) && firstOrder > 0 ? Math.min(firstOrder, 10000000) : '',
+    message: cleanString(body.notes).slice(0, 5000),
+  };
+
+  return saveQuoteRequest(req, res, {
+    project,
+    files: req.projectFiles || [],
+    source: 'project',
+  });
+}
+
+/* GET /api/quote/:id/files/:fileId: a project file, as a download for the panel */
+export async function downloadProjectFile(req, res) {
+  try {
+    if (!isValidId(req.params.id)) return notFound(res);
+
+    const quote = await QuoteRequest.findById(req.params.id).lean();
+    const file = quote?.files?.find((item) => item.id === req.params.fileId);
+    const location = file ? projectFilePath(file.id) : '';
+
+    if (!location || !fs.existsSync(location)) {
+      return res.status(404).json({ success: false, message: 'Dosya bulunamadı.' });
+    }
+
+    res.set({
+      'Cache-Control': 'private, no-store',
+      'Content-Security-Policy': "default-src 'none'; sandbox",
+      'X-Content-Type-Options': 'nosniff',
+    });
+    res.type('application/octet-stream');
+
+    return res.download(location, file.name, { dotfiles: 'deny' });
+  } catch (error) {
+    console.error('Project file download error:', error);
+    return res.status(500).json({ success: false, message: 'Dosya indirilemedi.' });
   }
 }
 
@@ -946,6 +1081,9 @@ export async function deleteQuoteRequest(req, res) {
     }
 
     await quote.deleteOne();
+
+    // Project drawings go with the request
+    removeProjectFiles(quote.files || []);
 
     return res.json({ success: true, reference: quoteReference(quote._id) });
   } catch (error) {

@@ -18,6 +18,7 @@ const {
   Compare,
   TankFinder,
   CustomMolding,
+  CustomProject,
   Industries,
   IndustryDetail,
   Contact,
@@ -79,6 +80,7 @@ export default function AppRoutes() {
         <Route path="product-tables/:familyId/:modelSlug" element={<ProductModel />} />
         <Route path="product-tables/:familyId/:modelSlug/datasheet" element={<ProductDatasheet />} />
         <Route path="custom-molding" element={<CustomMolding />} />
+        <Route path="custom-molding/project" element={<CustomProject />} />
 
         <Route path="industries" element={<Industries />} />
         <Route

@@ -42,6 +42,9 @@ dist-ssr/
 # Uploaded files
 server/uploads/
 
+# Customer drawings sent with project briefs (never public)
+server/private/
+
 # Passenger restart marker and logs on the hosting
 server/tmp/
 

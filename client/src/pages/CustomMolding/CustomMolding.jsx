@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Seo from '../../seo/Seo';
 import PageHeader from '../../components/ui/PageHeader';
 import Arrow from '../../components/i18n/Arrow';
-import { useQuote } from '../../components/quote/QuoteContext';
+import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import { galleryImages, machineIcons, serviceIcons } from '../../data/customMolding';
 import projects, { projectText } from '../../data/projects';
 import useLanguage from '../../hooks/useLanguage';
@@ -18,7 +18,6 @@ const pad = (n) => String(n).padStart(2, '0');
 export default function CustomMolding() {
   const { t } = useTranslation();
   const { code: lang } = useLanguage();
-  const { openQuote } = useQuote();
   const [viewer, setViewer] = useState(-1);
 
   const list = (key) => {
@@ -68,10 +67,10 @@ export default function CustomMolding() {
         ]}
         actions={(
           <>
-            <button type="button" className="button primary quoteButton" onClick={() => openQuote()}>
-              <span>{text('ctaQuote')}</span>
+            <LocalizedLink to="/custom-molding/project" className="button primary quoteButton">
+              <span>{t('project.cta.button')}</span>
               <Arrow className="buttonArrow" />
-            </button>
+            </LocalizedLink>
             <a href="#references" className="button ghost">
               <span>{text('referencesLabel')}</span>
               <Arrow direction="down" className="buttonArrow" />
@@ -224,10 +223,11 @@ export default function CustomMolding() {
 
       {/* Closing quote strip */}
       <QuoteStrip
-        title={text('ctaTitle')}
-        text={text('ctaText')}
-        buttonLabel={text('ctaQuote')}
+        title={t('project.cta.title')}
+        text={t('project.cta.text')}
+        buttonLabel={t('project.cta.button')}
         contactLabel={text('ctaContact')}
+        to="/custom-molding/project"
       />
     </main>
   );

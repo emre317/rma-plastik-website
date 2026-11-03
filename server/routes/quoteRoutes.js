@@ -17,6 +17,8 @@ import {
   deleteQuoteRequest,
   saveQuoteOffer,
   sendQuoteOffer,
+  createProjectRequest,
+  downloadProjectFile,
 } from '../controllers/quoteController.js';
 
 import {
@@ -30,6 +32,7 @@ import {
 } from '../middleware/rateLimit.js';
 
 import { offerPdfUpload } from '../middleware/upload.js';
+import { projectUpload } from '../middleware/projectFiles.js';
 import QuoteRequest from '../models/QuoteRequest.js';
 import { audit } from '../services/audit.js';
 import { quoteReference } from '../services/quoteEmail.js';
@@ -83,6 +86,9 @@ const quoteAudit = (action, details) => audit({ area: 'sales', type: 'quote', ac
 
 router.post('/', quoteSubmitLimiter, createQuoteRequest);
 
+// Custom project wizard: the brief (JSON in `data`) with up to five drawings or photos
+router.post('/project', quoteSubmitLimiter, projectUpload, createProjectRequest);
+
 /* ADMIN */
 
 router.get('/', requireAdmin, sales, getQuoteRequests);
@@ -105,6 +111,13 @@ router.put('/targets/:month', requireAdmin, requirePermission('settings'), audit
 router.delete('/targets/:month', requireAdmin, requirePermission('settings'), audit({ area: 'sales', type: 'target', action: 'Satış hedefini sildi', label: targetLabel }), deleteTarget);
 router.get('/:id/history', requireAdmin, sales, (req, res) => getTargetHistory(req, res, 'quote'));
 router.get('/:id', requireAdmin, sales, getQuoteRequestById);
+router.get(
+  '/:id/files/:fileId',
+  requireAdmin,
+  sales,
+  quoteAudit('Proje dosyasını indirdi', (req, data, before) => before?.files?.find((file) => file.id === req.params.fileId)?.name || ''),
+  downloadProjectFile
+);
 
 router.patch('/:id/status', requireAdmin, sales, quoteAudit('Durumu değiştirdi', (req, data, before) => `${STATUS[before?.status] || '—'} → ${STATUS[req.body?.status] || req.body?.status}`), updateQuoteStatus);
 router.patch('/:id', requireAdmin, sales, quoteAudit('Takip bilgisini güncelledi', trackingDetails), updateQuoteTracking);

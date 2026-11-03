@@ -1,4 +1,5 @@
 import { emailLogo, sendMail } from './mailer.js';
+import { projectRows } from '../../client/src/data/projectBrief.js';
 
 /*
   Notification sent to the sales team for every new quote request.
@@ -77,8 +78,15 @@ function quoteRows(quote) {
     ['Sıcaklık / Maks. Tepkime Sıcaklığı', quote.temperature],
     ['Teslimat Şehri', quote.deliveryCity],
     ['Açık Adres', quote.deliveryAddress],
-    ['Ürün Tanımı / Ölçüler', quote.customSpec],
+    // A project brief brings its own rows and the full description
+    ...(quote.project
+      ? [
+          ...projectRows(quote.project),
+          ['Ürün Tanımı', quote.project.description],
+        ]
+      : [['Ürün Tanımı / Ölçüler', quote.customSpec]]),
     ['Müşteride Olan', DESIGN_INPUT_LABELS[quote.designInput] || ''],
+    ['Ekli Dosyalar', (quote.files || []).length ? `${quote.files.length} dosya (panelden indirilebilir): ${quote.files.map((file) => file.name).join(', ')}` : ''],
     ['İhtiyaçlar', needsText(quote.needs)],
     ['Uygulama', quote.application],
     ['Site Dili', LANGUAGE_NAMES[quote.language] || ''],
@@ -91,7 +99,10 @@ export function buildQuoteEmail(quote) {
   const link = adminUrl(quote._id);
   const rows = quoteRows(quote);
 
-  const subject = `Yeni teklif talebi: ${quote.company}${quote.product ? ` – ${quote.product}` : ''}`;
+  const isProject = Boolean(quote.project);
+  const subject = isProject
+    ? `Yeni özel üretim projesi: ${quote.company}${quote.project.title ? ` – ${quote.project.title}` : ''}`
+    : `Yeni teklif talebi: ${quote.company}${quote.product ? ` – ${quote.product}` : ''}`;
 
   const rowsHtml = rows
     .map(([label, value, href], index) => {
@@ -167,7 +178,7 @@ export function buildQuoteEmail(quote) {
                   <td align="right" style="font-size:11px;font-weight:700;color:#818b98;letter-spacing:0.08em;text-transform:uppercase;">${reference}</td>
                 </tr>
               </table>
-              <p style="margin:22px 0 6px;font-size:11px;font-weight:700;color:#e4173a;letter-spacing:0.08em;text-transform:uppercase;">Yeni teklif talebi</p>
+              <p style="margin:22px 0 6px;font-size:11px;font-weight:700;color:#e4173a;letter-spacing:0.08em;text-transform:uppercase;">${isProject ? 'Yeni özel üretim projesi' : 'Yeni teklif talebi'}</p>
               <h1 style="margin:0;font-size:24px;line-height:1.3;color:#ffffff;font-weight:600;">${escapeHtml(quote.company)}</h1>
               <p style="margin:6px 0 0;font-size:13px;color:#afb7c1;">${createdAt}</p>
             </td>
@@ -288,6 +299,8 @@ const CONFIRM_TEXT = {
     capacity: 'Kapasite / Ürün Kodu',
     date: 'Talep Tarihi',
     general: 'Genel Talep',
+    project: 'Özel Üretim Projesi',
+    files: 'Ekli Dosyalar',
     reply: 'Eklemek istediğiniz bilgi, çizim veya ölçü varsa bu e-postayı yanıtlayabilirsiniz.',
     contact: 'Bize Ulaşın',
     footer: (site) => `Bu e-posta${site ? ` ${site} adresindeki` : ''} teklif formunu doldurduğunuz için gönderilmiştir. Bu talebi siz göndermediyseniz e-postayı dikkate almayın.`,
@@ -309,6 +322,8 @@ const CONFIRM_TEXT = {
     capacity: 'Capacity / Product Code',
     date: 'Request Date',
     general: 'General Enquiry',
+    project: 'Custom Manufacturing Project',
+    files: 'Attached Files',
     reply: 'If you would like to add details, drawings or dimensions, simply reply to this email.',
     contact: 'Contact Us',
     footer: (site) => `You are receiving this email because you submitted the quote form${site ? ` on ${site}` : ''}. If you did not send this request, please ignore this email.`,
@@ -331,6 +346,8 @@ const CONFIRM_TEXT = {
     capacity: 'السعة / رمز المنتج',
     date: 'تاريخ الطلب',
     general: 'طلب عام',
+    project: 'مشروع تصنيع حسب الطلب',
+    files: 'الملفات المرفقة',
     reply: 'إذا رغبتم في إضافة معلومات أو رسومات أو مقاسات، يمكنكم الرد على هذا البريد الإلكتروني.',
     contact: 'تواصلوا معنا',
     footer: (site) => `تم إرسال هذا البريد لأنكم قمتم بتعبئة نموذج طلب عرض السعر${site ? ` على ${site}` : ''}. إذا لم تقوموا بإرسال هذا الطلب، يرجى تجاهل هذه الرسالة.`,
@@ -363,7 +380,9 @@ export function buildCustomerConfirmation(quote, contact = {}) {
     // Countries are stored with their Turkish name
     [copy.country, lang === 'tr' ? quote.country : ''],
     ...(items.length ? [] : [
-      [copy.product, quote.product || copy.general],
+      // Project title and file names are the visitor's own text: only the kind and the count are sent
+      [copy.product, quote.project ? copy.project : quote.product || copy.general],
+      [copy.files, (quote.files || []).length || ''],
       [copy.capacity, quote.capacity],
       [copy.quantity, quote.quantity ?? ''],
     ]),
