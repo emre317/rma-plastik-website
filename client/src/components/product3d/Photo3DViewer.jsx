@@ -10,12 +10,12 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { buildRelief } from './photoDepth';
 import { track } from '../../analytics/track';
 
-const GRID = 320;           // relief resolution (longest side, pixels)
-const SEGMENTS = 180;       // mesh resolution (longest side)
-const DEPTH = 0.34;         // relief height relative to the longest side
-const YAW = 0.52;           // ±30° left and right
-const PITCH_UP = 0.3;
-const PITCH_DOWN = 0.18;
+const GRID = 448;           // relief and outline resolution (longest side, pixels)
+const SEGMENTS = 224;       // mesh resolution (longest side)
+const DEPTH = 0.34;         // panel relief (photos without a clear background)
+const YAW = 0.44;           // ±25° left and right: the sides a front photo can show
+const PITCH_UP = 0.22;
+const PITCH_DOWN = 0.14;
 
 function loadImage(src) {
   return new Promise((resolve, reject) => {
@@ -168,7 +168,10 @@ export default function Photo3DViewer({ src, alt = '', onUnsupported }) {
         const at = (px, py) => relief.depth[py * width + px];
         return (at(x0, y0) * (1 - fx) + at(x1, y0) * fx) * (1 - fy) + (at(x0, y1) * (1 - fx) + at(x1, y1) * fx) * fy;
       };
-      const depthScale = DEPTH * Math.max(planeWidth, planeHeight) * (relief.cutout ? 1 : 0.5);
+      // A cut-out product is as deep as its sections are wide (true round shape)
+      const depthScale = relief.cutout
+        ? (relief.radius / Math.max(width, height)) * Math.max(planeWidth, planeHeight)
+        : DEPTH * Math.max(planeWidth, planeHeight) * 0.5;
       for (let i = 0; i < positions.count; i += 1) {
         positions.setZ(i, sample(uv.getX(i), uv.getY(i)) * depthScale);
       }
@@ -193,6 +196,18 @@ export default function Photo3DViewer({ src, alt = '', onUnsupported }) {
         emissiveMap: map,
         emissiveIntensity: 0.5,
       });
+      // The photo lights the surfaces that face the viewer; surfaces turning
+      // away get darker, as on a real round product. This also hides the
+      // stretched photo pixels on the sides, which a front photo cannot fill.
+      material.onBeforeCompile = (shader) => {
+        shader.fragmentShader = shader.fragmentShader.replace(
+          '#include <emissivemap_fragment>',
+          `#include <emissivemap_fragment>
+          float facing = clamp(dot(normal, normalize(vViewPosition)), 0.0, 1.0);
+          totalEmissiveRadiance *= mix(0.3, 1.0, pow(facing, 0.9));
+          diffuseColor.rgb *= mix(0.55, 1.0, facing);`
+        );
+      };
       const mesh = new Mesh(geometry, material);
       mesh.scale.z = 0.001;
       scene.add(mesh);

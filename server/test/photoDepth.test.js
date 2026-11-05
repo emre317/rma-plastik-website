@@ -94,3 +94,16 @@ test('a white tank on a white background keeps its body (narrow leaks are sealed
   assert.ok(relief.alpha[100 * W + 80] > 0.5, 'the middle of the white body is product');
   assert.equal(relief.alpha[100 * W + 10], 0);
 });
+
+test('an upright tank becomes a straight-walled cylinder, as deep as it is wide', () => {
+  const relief = buildRelief(photo((x, y) => [236, 236, 238, 255]), W, H);
+  assert.equal(relief.axis, 'rows');
+  // Same depth all the way down a vertical line (no pillow shape)
+  const column = [80, 100, 120, 140].map((y) => relief.depth[y * W + 70]);
+  column.forEach((value) => assert.ok(Math.abs(value - column[0]) < 0.03, `depth ${column}`));
+  // Round section: centre deepest, sides falling to the outline
+  assert.ok(relief.depth[100 * W + 80] > 0.95);
+  assert.ok(relief.depth[100 * W + 52] < 0.45);
+  // Radius in pixels = half the tank width (60 px)
+  assert.ok(Math.abs(relief.radius - 30) <= 2, `radius ${relief.radius}`);
+});

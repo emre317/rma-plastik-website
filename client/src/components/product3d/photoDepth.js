@@ -396,7 +396,72 @@ function dropSpecks(background, width, height, minShare = 0.02) {
     bounds { top, bottom, left, right } of the product (pixels)
     cutout true when a background was removed
 */
-export function buildRelief(rgba, width, height, { detail = 0.06 } = {}) {
+/*
+  Cylinder cross-sections, run by run: along each row (or column) every
+  stretch of product pixels is read as the front half of a round section of
+  that width. A vertical tank becomes a straight-walled cylinder (no pillow
+  shape), thin legs and ladders become thin rods. Small gaps inside a row are
+  bridged so a seam or a dark line does not split a tank in two. Depth is in
+  pixels (radius of the section).
+*/
+export function sectionDepth(inside, width, height, axis = 'rows') {
+  const along = axis === 'rows' ? width : height;
+  const lines = axis === 'rows' ? height : width;
+  const at = axis === 'rows' ? (line, k) => line * width + k : (line, k) => k * width + line;
+  const depth = new Float32Array(width * height);
+  const bridge = Math.max(2, Math.round(along * 0.02));
+
+  for (let line = 0; line < lines; line += 1) {
+    // Runs of product pixels on this line
+    const runs = [];
+    let start = -1;
+    for (let k = 0; k <= along; k += 1) {
+      const filled = k < along && inside[at(line, k)];
+      if (filled && start < 0) start = k;
+      if (!filled && start >= 0) {
+        const last = runs[runs.length - 1];
+        if (last && start - last[1] - 1 <= bridge) last[1] = k - 1;
+        else runs.push([start, k - 1]);
+        start = -1;
+      }
+    }
+
+    for (const [a, b] of runs) {
+      const centre = (a + b) / 2;
+      const radius = (b - a + 1) / 2;
+      for (let k = a; k <= b; k += 1) {
+        const u = (k - centre) / radius;
+        if (inside[at(line, k)]) depth[at(line, k)] = Math.sqrt(Math.max(0, 1 - u * u)) * radius;
+      }
+    }
+  }
+
+  return depth;
+}
+
+/* Blur along one axis only (keeps the sections round, evens out the steps between lines) */
+function blurAxis(source, width, height, radius, axis) {
+  const out = new Float32Array(source.length);
+  const along = axis === 'rows' ? height : width;
+  const lines = axis === 'rows' ? width : height;
+  const at = axis === 'rows' ? (line, k) => k * width + line : (line, k) => line * width + k;
+  for (let line = 0; line < lines; line += 1) {
+    for (let k = 0; k < along; k += 1) {
+      let sum = 0;
+      let n = 0;
+      for (let d = -radius; d <= radius; d += 1) {
+        const m = k + d;
+        if (m < 0 || m >= along) continue;
+        sum += source[at(line, m)];
+        n += 1;
+      }
+      out[at(line, k)] = sum / n;
+    }
+  }
+  return out;
+}
+
+export function buildRelief(rgba, width, height, { detail = 0.025 } = {}) {
   const count = width * height;
   const { background, found, lum, mode } = findBackground(rgba, width, height);
 
@@ -414,16 +479,40 @@ export function buildRelief(rgba, width, height, { detail = 0.06 } = {}) {
   const alpha = blur(Float32Array.from(inside), width, height, 1, 2);
   for (let i = 0; i < count; i += 1) alpha[i] = Math.min(1, Math.max(0, (alpha[i] - 0.35) / 0.5));
 
-  // Round cross-section from the distance to the outline
+  const bounds = { top: height, bottom: 0, left: width, right: 0 };
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      if (!inside[y * width + x]) continue;
+      if (y < bounds.top) bounds.top = y;
+      if (y > bounds.bottom) bounds.bottom = y;
+      if (x < bounds.left) bounds.left = x;
+      if (x > bounds.right) bounds.right = x;
+    }
+  }
+
   let depth;
+  let axis = 'rows';
+  // Largest section radius in pixels: the true depth of the product
+  let radius = 0;
   if (found) {
+    // Upright products (tanks, silos, trolleys): round sections along the rows.
+    // Clearly wide, lying products (horizontal tanks): along the columns.
+    const productWidth = bounds.right - bounds.left + 1;
+    const productHeight = bounds.bottom - bounds.top + 1;
+    axis = productWidth > productHeight * 1.35 ? 'columns' : 'rows';
+
+    const sections = blurAxis(sectionDepth(inside, width, height, axis), width, height, Math.max(1, Math.round(Math.min(width, height) * 0.012)), axis);
+
+    // Soft bevel at the ends (top and bottom of a tank) instead of a cut wall
     const distance = distanceInside(inside, width, height);
-    let radius = 0;
-    for (let i = 0; i < count; i += 1) radius = Math.max(radius, distance[i]);
+    for (let i = 0; i < count; i += 1) radius = Math.max(radius, sections[i]);
+    const bevel = Math.max(2, radius * 0.18);
+
     depth = new Float32Array(count);
     for (let i = 0; i < count; i += 1) {
-      const t = radius ? Math.min(1, distance[i] / radius) : 0;
-      depth[i] = Math.sqrt(Math.max(0, 1 - (1 - t) * (1 - t)));
+      if (!inside[i] || !radius) continue;
+      const edge = Math.min(1, distance[i] / bevel);
+      depth[i] = (sections[i] / radius) * Math.sqrt(edge * (2 - edge));
     }
   } else {
     depth = new Float32Array(count);
@@ -435,7 +524,7 @@ export function buildRelief(rgba, width, height, { detail = 0.06 } = {}) {
       }
     }
   }
-  depth = blur(depth, width, height, 2, 2);
+  depth = blur(depth, width, height, 1, 1);
 
   // Surface detail from the photo's own shading (ribs, lids, outlets)
   if (detail > 0) {
@@ -449,16 +538,5 @@ export function buildRelief(rgba, width, height, { detail = 0.06 } = {}) {
 
   for (let i = 0; i < count; i += 1) depth[i] = inside[i] ? Math.max(0, Math.min(1, depth[i])) : 0;
 
-  const bounds = { top: height, bottom: 0, left: width, right: 0 };
-  for (let y = 0; y < height; y += 1) {
-    for (let x = 0; x < width; x += 1) {
-      if (!inside[y * width + x]) continue;
-      if (y < bounds.top) bounds.top = y;
-      if (y > bounds.bottom) bounds.bottom = y;
-      if (x < bounds.left) bounds.left = x;
-      if (x > bounds.right) bounds.right = x;
-    }
-  }
-
-  return { alpha, depth, bounds, cutout: found };
+  return { alpha, depth, bounds, cutout: found, axis, radius };
 }
