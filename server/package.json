@@ -12,7 +12,8 @@
     "mail-test": "node scripts/mailTest.js",
     "backup-db": "node scripts/backupDatabase.js",
     "sync-dimensions": "node scripts/syncProductDimensions.js",
-    "kvkk-retention": "node scripts/kvkkRetention.js"
+    "kvkk-retention": "node scripts/kvkkRetention.js",
+    "meeting-reminders": "node scripts/meetingReminders.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

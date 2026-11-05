@@ -11,8 +11,12 @@ function matches(doc, filter = {}) {
     if (condition && typeof condition === 'object' && !(condition instanceof Date)) {
       if ('$in' in condition) return condition.$in.includes(value);
       if ('$ne' in condition) return String(value) !== String(condition.$ne);
-      if ('$lt' in condition) return value != null && value < condition.$lt;
-      if ('$lte' in condition) return value != null && value <= condition.$lte;
+      // Range operators may come together ({ $gte, $lte })
+      const range = ['$gt', '$gte', '$lt', '$lte'].filter((op) => op in condition);
+      if (range.length) {
+        if (value == null) return false;
+        return range.every((op) => (op === '$gt' ? value > condition.$gt : op === '$gte' ? value >= condition.$gte : op === '$lt' ? value < condition.$lt : value <= condition.$lte));
+      }
     }
     if (condition === null) return value == null;
     return value === condition;

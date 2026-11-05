@@ -1,9 +1,10 @@
 import 'dotenv/config';
 
 import app from './app.js';
-import { closeDatabase, connectDatabase } from './config/db.js';
+import { closeDatabase, connectDatabase, databaseState } from './config/db.js';
 import { checkEnvironment } from './config/env.js';
 import { recoverPublishJobs } from './services/publisher.js';
+import { startReminderTimer } from './services/meetingReminders.js';
 
 
 /* =====================================================
@@ -37,6 +38,9 @@ connectDatabase({ wait: false });
 
 // Publish jobs left running by a restart are checked against GitHub or closed
 setTimeout(() => recoverPublishJobs().catch((error) => console.error('[publish] recovery:', error.message)), 15000).unref();
+
+// Meeting reminders (24 h before by default); also `npm run meeting-reminders` from cron
+startReminderTimer(() => databaseState() === 'connected');
 
 
 /* =====================================================

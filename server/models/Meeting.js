@@ -103,6 +103,14 @@ const meetingSchema = new mongoose.Schema(
       receipt: { type: mailStatusSchema, default: undefined },
       customer: { type: mailStatusSchema, default: undefined },
       staff: { type: mailStatusSchema, default: undefined },
+      reminder: { type: mailStatusSchema, default: undefined },
+    },
+
+    // Reminder before the meeting (services/meetingReminders.js). `forStart` is the start
+    // time it was sent for: a meeting moved to another time gets a new reminder.
+    reminder: {
+      sentAt: { type: Date, default: null },
+      forStart: { type: Date, default: null },
     },
 
     attribution: { type: attributionSchema, default: undefined },
@@ -114,6 +122,7 @@ const meetingSchema = new mongoose.Schema(
 );
 
 meetingSchema.index({ status: 1, startAt: 1 });
+meetingSchema.index({ status: 1, startAt: 1, 'reminder.forStart': 1 });
 meetingSchema.index({ createdAt: -1 });
 meetingSchema.index({ expireAt: 1 }, { expireAfterSeconds: 0 });
 

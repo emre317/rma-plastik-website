@@ -49,6 +49,28 @@ güncellenir, ikinci kayıt oluşmaz). Toplantıdan çıkarılan çalışana ipt
 **Reddet / İptal et** müşteriye (ve onaylanmışsa çalışanlara) nedeniyle birlikte bildirim
 gönderir ve takvim kaydını siler.
 
+## Hatırlatma e-postası
+
+Onaylı her toplantıdan **24 saat önce** (`MEETING_REMINDER_HOURS`) müşteriye (online ise
+katılımcıları Cc’de) site dilinde, RMA katılımcılarına Türkçe hatırlatma gider: tarih/saat,
+yer ve yol tarifi ya da “Teams toplantısına katıl” düğmesi. Takvim daveti yeniden eklenmez.
+
+- Her başlangıç saati için bir kez gönderilir; saat değiştirilirse yeni saate göre yeniden gider.
+- Onay / değişiklik e-postası 6 saatten kısa süre önce gittiyse bekler (ör. sabah onaylanan
+  ertesi günkü toplantının hatırlatması akşama kalır); başlamasına 30 dakikadan az kalan
+  toplantıya gönderilmez.
+- Toplantı detayında “Hatırlatma” satırı ne zaman gideceğini ya da gittiğini gösterir;
+  gönderim sonucu “E-postalar” kartında görünür.
+- `MEETING_REMINDERS=false` ile kapanır.
+
+API çalışırken hatırlatmaları 15 dakikada bir kendisi kontrol eder. Paylaşımlı hostingde
+Passenger boşta kalan uygulamayı durdurabildiği için cPanel › **Cron Jobs**’a şunu da ekleyin
+(aynı toplantı iki kez hatırlatılmaz):
+
+```
+*/15 * * * * cd ~/rma-app/server && . ~/nodevenv/rma-app/server/22/bin/activate && npm run meeting-reminders >> ~/rma-backups/reminders.log 2>&1
+```
+
 Panelin üstündeki şerit yaklaşan onaylı toplantıları (“36 dk sonra · Firma · Online”) ve
 onay bekleyen talep sayısını gösterir; başlamasına 15 dakika kalan online toplantıda
 **Katıl** düğmesi çıkar.

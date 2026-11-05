@@ -60,6 +60,11 @@ const TEXT = {
       eyebrow: 'Toplantı güncellendi',
       intro: 'Toplantınızın bilgileri güncellendi. Güncel ayrıntılar aşağıdadır; takviminizdeki kayıt da güncellenecektir.',
     },
+    reminder: {
+      subject: (ref) => `Hatırlatma: toplantınız yaklaşıyor – ${ref}`,
+      eyebrow: 'Toplantı hatırlatması',
+      intro: 'Yaklaşan toplantınızı hatırlatmak isteriz. Ayrıntılar aşağıdadır; bir değişiklik gerekirse bu e-postayı yanıtlayabilirsiniz.',
+    },
     cancelled: {
       subject: (ref) => `Toplantı iptal edildi – ${ref}`,
       eyebrow: 'Toplantı iptal edildi',
@@ -106,6 +111,11 @@ const TEXT = {
       subject: (ref) => `Your meeting has been updated – ${ref}`,
       eyebrow: 'Meeting updated',
       intro: 'The details of your meeting have changed. The updated details are below; the entry in your calendar will be updated as well.',
+    },
+    reminder: {
+      subject: (ref) => `Reminder: your meeting is coming up – ${ref}`,
+      eyebrow: 'Meeting reminder',
+      intro: 'This is a reminder of your upcoming meeting. The details are below; if anything needs to change, simply reply to this e-mail.',
     },
     cancelled: {
       subject: (ref) => `Meeting cancelled – ${ref}`,
@@ -154,6 +164,11 @@ const TEXT = {
       subject: (ref) => `تم تحديث اجتماعكم – ${ref}`,
       eyebrow: 'تم تحديث الاجتماع',
       intro: 'تم تغيير تفاصيل اجتماعكم. التفاصيل المحدثة أدناه، وسيتم تحديث الموعد في تقويمكم أيضاً.',
+    },
+    reminder: {
+      subject: (ref) => `تذكير: موعد اجتماعكم يقترب – ${ref}`,
+      eyebrow: 'تذكير بالاجتماع',
+      intro: 'نودّ تذكيركم بالاجتماع القادم. التفاصيل أدناه، وإذا احتجتم إلى أي تغيير يمكنكم الرد على هذه الرسالة.',
     },
     cancelled: {
       subject: (ref) => `تم إلغاء الاجتماع – ${ref}`,
@@ -458,6 +473,7 @@ export function sendCustomerMeetingEmail(meeting, kind) {
 /* ---------- 4. Staff: confirmed, updated, cancelled ---------- */
 
 const STAFF_TEXT = {
+  reminder: { subject: 'Hatırlatma: toplantı yaklaşıyor', eyebrow: 'Toplantı hatırlatması' },
   confirmed: { subject: 'Toplantıya katılımcı olarak eklendiniz', eyebrow: 'Toplantı onaylandı' },
   updated: { subject: 'Toplantı güncellendi', eyebrow: 'Toplantı güncellendi' },
   cancelled: { subject: 'Toplantı iptal edildi', eyebrow: 'Toplantı iptal edildi' },
@@ -504,7 +520,9 @@ export function buildStaffMeetingEmail(meeting, kind) {
       meeting.internalNote ? section(`${label('İç not')}${quoteBox(meeting.internalNote)}`, 20) : '',
       actions.length ? section(`<table role="presentation" cellpadding="0" cellspacing="0"><tr>${actions.join('<td style="width:10px;"></td>')}</tr></table>`, 24) : '',
     ],
-    footer: 'Bu e-posta, toplantı yönetim panelinde onaylandığı ya da değiştirildiği için gönderilmiştir. Ekteki davetle toplantı takviminize eklenir.',
+    footer: kind === 'reminder'
+      ? 'Bu hatırlatma, toplantıdan önce otomatik gönderilmiştir. Toplantı takviminizde zaten kayıtlıdır.'
+      : 'Bu e-posta, toplantı yönetim panelinde onaylandığı ya da değiştirildiği için gönderilmiştir. Ekteki davetle toplantı takviminize eklenir.',
   });
 
   const text = [
@@ -524,8 +542,9 @@ export function sendStaffMeetingEmail(meeting, kind) {
   if (!staff.length) return Promise.resolve(null);
 
   const { subject, html, text } = buildStaffMeetingEmail(meeting, kind);
+  // A reminder is for a meeting that is already in the calendars
   let icalEvent;
-  if (sendsOwnInvite(meeting)) icalEvent = inviteFor(meeting, kind === 'cancelled' ? 'CANCEL' : 'REQUEST', allAttendees(meeting));
+  if (sendsOwnInvite(meeting) && kind !== 'reminder') icalEvent = inviteFor(meeting, kind === 'cancelled' ? 'CANCEL' : 'REQUEST', allAttendees(meeting));
 
   return sendMail({
     to: staff.map((person) => ({ name: person.name, address: person.email })),

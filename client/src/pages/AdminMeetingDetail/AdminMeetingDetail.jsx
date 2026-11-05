@@ -23,8 +23,19 @@ import { MEETING_DEFAULT_DURATION, MEETING_DURATIONS, istanbulDateTime, istanbul
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const DEFAULT_LOCATION = `${company.name}, ${company.address.street}, ${company.address.district}, ${company.address.country}`.replace(/ /g, ' ');
 
-const MAIL_LABELS = { notification: 'info@ bildirimi', receipt: 'Müşteriye alındı e-postası', customer: 'Müşteriye onay / değişiklik', staff: 'RMA katılımcılarına' };
+const MAIL_LABELS = { notification: 'info@ bildirimi', receipt: 'Müşteriye alındı e-postası', customer: 'Müşteriye onay / değişiklik', staff: 'RMA katılımcılarına', reminder: 'Hatırlatma (müşteri ve RMA)' };
 const MAIL_STATUS = { sent: 'Gönderildi', failed: 'Gönderilemedi', skipped: 'Atlandı (SMTP yok)' };
+
+/* "Gönderildi · 9 Kas 09:00" or "9 Kas Pazartesi · 10:00 civarı gönderilecek" */
+function reminderText(meeting, hours) {
+  const start = new Date(meeting.startAt).getTime();
+  if (meeting.reminder?.forStart && new Date(meeting.reminder.forStart).getTime() === start) {
+    return `Gönderildi · ${formatDate(meeting.reminder.sentAt, true)}`;
+  }
+  if (start < Date.now()) return 'Gönderilmedi';
+  const due = new Date(start - hours * 3600 * 1000);
+  return due.getTime() <= Date.now() ? 'Kısa süre içinde gönderilecek' : `${meetingWhen(due)} civarı gönderilecek (${hours} saat önce)`;
+}
 
 const initial = (text) => String(text || '?').trim().charAt(0).toLocaleUpperCase('tr');
 
@@ -283,6 +294,7 @@ export default function AdminMeetingDetail() {
               {isConfirmed && isOnline && meeting.joinUrl && (
                 <><dt>Teams bağlantısı</dt><dd><a className="mtTeamsLink" href={meeting.joinUrl} target="_blank" rel="noreferrer"><Video aria-hidden="true" />Toplantıya katıl</a></dd></>
               )}
+              {isConfirmed && config.reminders !== false && <><dt>Hatırlatma</dt><dd>{reminderText(meeting, config.reminderHours || 24)}</dd></>}
               {meeting.handledBy?.name && <><dt>İşlemi yapan</dt><dd>{meeting.handledBy.name}</dd></>}
             </dl>
             {meeting.message && <p className="mtMessage">{meeting.message}</p>}

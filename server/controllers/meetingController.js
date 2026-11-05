@@ -6,6 +6,7 @@ import { QUOTE_LANGUAGES } from '../models/QuoteRequest.js';
 import { cleanAttribution } from '../services/attribution.js';
 import { isMailConfigured } from '../services/mailer.js';
 import { cancelTeamsMeeting, isTeamsConfigured, saveTeamsMeeting, teamsOrganizer } from '../services/teams.js';
+import { reminderHours, remindersEnabled } from '../services/meetingReminders.js';
 import {
   formatWhen,
   meetingReference,
@@ -189,7 +190,7 @@ export async function meetingSummary(req, res) {
 export function meetingConfig(req, res) {
   return res.json({
     success: true,
-    data: { teams: isTeamsConfigured(), organizer: isTeamsConfigured() ? teamsOrganizer() : '', mail: isMailConfigured(), durations: MEETING_DURATIONS },
+    data: { teams: isTeamsConfigured(), organizer: isTeamsConfigured() ? teamsOrganizer() : '', mail: isMailConfigured(), durations: MEETING_DURATIONS, reminders: remindersEnabled(), reminderHours: reminderHours() },
   });
 }
 

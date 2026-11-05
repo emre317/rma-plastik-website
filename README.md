@@ -95,7 +95,8 @@ subject and contact details; online guests). Requests land in `/admin/meetings` 
 mailed to `MEETING_NOTIFY_TO` (default `info@rmaplastik.com`). Confirming in the panel sets
 the time, the RMA staff and the place or Teams link, and mails the customer, the guests and
 the staff with a calendar invitation. Teams links are created automatically when the
-Microsoft Graph settings are present, otherwise pasted in. Setup:
+Microsoft Graph settings are present, otherwise pasted in. A reminder goes out 24 hours
+before each confirmed meeting (`npm run meeting-reminders` from cron as well). Setup:
 **[docs/meetings.md](docs/meetings.md)**.
 
 ## Languages (TR / EN / AR)
