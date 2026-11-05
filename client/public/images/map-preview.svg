@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Harita önizlemesi">
+  <rect width="800" height="600" fill="#eef1f4"/>
+  <g fill="#e2e7ec">
+    <rect x="40" y="40" width="200" height="140" rx="6"/><rect x="280" y="40" width="240" height="140" rx="6"/><rect x="560" y="40" width="200" height="140" rx="6"/>
+    <rect x="40" y="230" width="200" height="150" rx="6"/><rect x="560" y="230" width="200" height="150" rx="6"/>
+    <rect x="40" y="430" width="200" height="130" rx="6"/><rect x="280" y="430" width="240" height="130" rx="6"/><rect x="560" y="430" width="200" height="130" rx="6"/>
+  </g>
+  <rect x="280" y="230" width="240" height="150" rx="6" fill="#d9e8dc"/>
+  <g stroke="#ffffff" stroke-width="22" stroke-linecap="round">
+    <path d="M0 205h800M0 405h800M260 0v600M540 0v600"/>
+  </g>
+  <path d="M0 300c160-40 260 60 400 10s260-70 400-20" fill="none" stroke="#c9d6e2" stroke-width="10"/>
+  <g transform="translate(400 300)">
+    <ellipse cx="0" cy="46" rx="26" ry="8" fill="#101317" opacity=".15"/>
+    <path d="M0 44c-4-14-38-40-38-70a38 38 0 0 1 76 0c0 30-34 56-38 70z" fill="#e4173a"/>
+    <circle cx="0" cy="-26" r="14" fill="#fff"/>
+  </g>
+</svg>

@@ -334,6 +334,20 @@ export function getQuoteHistory(id, token) {
 }
 
 /* Customer card: every request from an e-mail address / company */
+/* KVKK consent boxes (A, B, C) of one e-mail address, and taking them back */
+export function getConsents(email, token) {
+  return request(`/admin/consents?${new URLSearchParams({ email }).toString()}`, { token, fallbackMessage: 'İzin kayıtları yüklenemedi.' });
+}
+
+export function withdrawConsents(email, token) {
+  return request('/admin/consents/withdraw', {
+    method: 'POST',
+    body: { email },
+    token,
+    fallbackMessage: 'Onaylar geri alınamadı.',
+  });
+}
+
 export function getCustomer({ email = '', company = '' }, token) {
   const params = new URLSearchParams();
   if (email) params.set('email', email);

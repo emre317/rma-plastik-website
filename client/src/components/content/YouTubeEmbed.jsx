@@ -3,12 +3,19 @@ import { useTranslation } from 'react-i18next';
 
 import { track } from '../../analytics/track';
 
-export const youtubeThumbnail = (id, size = 'hqdefault') => `https://i.ytimg.com/vi/${id}/${size}.jpg`;
+const API_BASE_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
+
+// Cover image through our own server (server/routes/videoThumbRoutes.js): the
+// visitor's browser never contacts YouTube before a video is played (KVKK)
+export const youtubeThumbnail = (id, size = 'hqdefault') => `${API_BASE_URL}/yt-thumb/${id}/${size}`;
+
+// Only for search engines' structured data (no request from the browser)
+export const youtubeThumbnailPublic = (id, size = 'hqdefault') => `https://i.ytimg.com/vi/${id}/${size}.jpg`;
 
 /*
-  Lightweight YouTube player: only a thumbnail is loaded with the page;
-  the real player (youtube-nocookie.com) is created when the visitor clicks.
-  Keeps pages fast and avoids YouTube cookies until a video is played.
+  Lightweight YouTube player: only a cover image (from our own server) is
+  loaded with the page; the real player (youtube-nocookie.com) is created when
+  the visitor clicks. Nothing reaches Google until a video is played.
 */
 export default function YouTubeEmbed({ id, title, className = '' }) {
   const { t } = useTranslation();

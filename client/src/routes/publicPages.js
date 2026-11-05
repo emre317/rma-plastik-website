@@ -27,6 +27,8 @@ const loaders = {
   Blog: () => import('../pages/Blog/Blog'),
   BlogPost: () => import('../pages/BlogPost/BlogPost'),
   Videos: () => import('../pages/Videos/Videos'),
+  Kvkk: () => import('../pages/Legal/Kvkk'),
+  CookiePolicy: () => import('../pages/Legal/CookiePolicy'),
   NotFound: () => import('../pages/NotFound/NotFound'),
 };
 

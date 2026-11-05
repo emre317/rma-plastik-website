@@ -6,8 +6,12 @@ import { readConsent } from './consent';
   generate_lead event. GTM's "Ads – Teklif Talebi" tag reads them through a
   User-Provided Data variable (docs/analytics-seo-setup.md, 3.10).
 
-  - Only with marketing consent (Consent Mode ad_user_data); otherwise nothing.
+  - Only with the marketing cookie consent AND box C ticked on the form
+    (KVKK set, section 5 "Uygulama"); otherwise nothing.
   - The plain e-mail or phone never goes into the dataLayer.
+  - Stage 3 of the KVKK technical note: GTM / Google Ads only read these
+    values once enhanced conversions are switched on after the lawyer's
+    approval (docs/analytics-seo-setup.md, 3.10).
 */
 
 async function sha256(value) {
@@ -33,8 +37,8 @@ export function normalisePhone(value) {
 }
 
 /* { sha256_email_address, sha256_phone_number } or null */
-export async function hashedUserData({ email, phone }) {
-  if (typeof window === 'undefined' || !window.crypto?.subtle || !readConsent()?.marketing) return null;
+export async function hashedUserData({ email, phone, matchingConsent }) {
+  if (typeof window === 'undefined' || !window.crypto?.subtle || matchingConsent !== true || !readConsent()?.marketing) return null;
 
   try {
     const data = {};

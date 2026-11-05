@@ -56,7 +56,7 @@ export function channelOf({ utmSource = '', utmMedium = '', clickId = '', referr
   // Facebook adds fbclid to every outgoing link, paid or not: only a paid utm_medium marks an ad
   if (SOCIAL_SOURCES.test(source) && PAID_MEDIUMS.test(medium)) return CHANNELS.paidSocial;
   if (clickId === 'fbclid' && !medium) return CHANNELS.social;
-  if (clickId === 'msclkid' || PAID_MEDIUMS.test(medium)) return CHANNELS.otherAds;
+  if (PAID_MEDIUMS.test(medium)) return CHANNELS.otherAds;
   if (/^(e-?mail|newsletter|bulten|bülten)$/i.test(medium) || /^(e-?mail|newsletter)$/i.test(source)) return CHANNELS.email;
   if (SOCIAL_SOURCES.test(source) || medium === 'social') return CHANNELS.social;
   if (medium === 'organic') return CHANNELS.organic;
@@ -71,7 +71,8 @@ export function channelOf({ utmSource = '', utmMedium = '', clickId = '', referr
 export function cleanAttribution(value) {
   if (!value || typeof value !== 'object') return null;
 
-  const clickIds = ['gclid', 'fbclid', 'msclkid'];
+  // Microsoft Ads is not used: msclkid is not collected (KVKK technical note B.1)
+  const clickIds = ['gclid', 'fbclid'];
   const clickId = clickIds.includes(value.clickId) ? value.clickId : '';
 
   const result = {

@@ -6,6 +6,8 @@ const tr = {
     tagline: 'Endüstriyel Polietilen Çözümleri',
     description: 'RMA Plastik endüstriyel polietilen çözümleri',
     descriptions: {
+      kvkk: 'RMA Plastik web sitesi formları kişisel verilerin işlenmesine ilişkin aydınlatma metni ve izin metinleri.',
+      cookiePolicy: 'RMA Plastik web sitesinde kullanılan çerezler, süreleri ve tercihlerinizi nasıl değiştirebileceğiniz.',
       faq: 'RMA Plastik polietilen tanklar, su depoları ve özel üretim hakkında sık sorulan sorular: teslimat, montaj, sipariş ve daha fazlası.',
       blog: 'Polietilen tanklar, rotasyonel kalıplama, kimyasal ve su depolama hakkında RMA Plastik’ten teknik bilgiler ve rehberler.',
       videos: 'RMA Plastik üretim, ürün ve uygulama videoları: polietilen tanklar ve rotasyonel kalıplama süreçleri.',
@@ -22,6 +24,8 @@ const tr = {
       compare: 'RMA Plastik ürünlerini ölçüleriyle yan yana karşılaştırın.',
     },
     titles: {
+      kvkk: 'KVKK Aydınlatma Metni',
+      cookiePolicy: 'Çerez Politikası',
       faq: 'Sık Sorulan Sorular',
       blog: 'Blog',
       videos: 'Videolar',
@@ -81,9 +85,7 @@ const tr = {
     name: 'Ad Soyad',
     company: 'Firma',
     country: 'Ülke',
-    marketing: 'Yeni ürünler ve kampanyalar hakkında e-posta almak istiyorum.',
     submit: 'Kataloğu İndir',
-    privacy: 'Bilgileriniz, katalog talebiniz ve ürünlerimizle ilgili sizinle iletişime geçmek amacıyla kullanılır.',
     successTitle: 'İndirme Başladı',
     successText: 'Teşekkür ederiz. Katalog cihazınıza indiriliyor; başlamadıysa aşağıdaki butonu kullanın.',
     downloadAgain: 'Kataloğu İndir',
@@ -108,17 +110,66 @@ const tr = {
 
   cookies: {
     title: 'Çerez Tercihleriniz',
-    text: 'Sitenin çalışması için zorunlu çerezler kullanıyoruz. İzin verirseniz ziyaret istatistiklerini ölçmek ve reklamlarımızın etkisini değerlendirmek için analiz ve pazarlama çerezleri de kullanırız. Tercihinizi istediğiniz zaman sayfanın altındaki “Çerez tercihleri” bağlantısından değiştirebilirsiniz.',
+    // KVKK set, section 7 (AYA Hukuk, 03.11.2026)
+    text: 'Sitenin çalışması için zorunlu çerezler kullanıyoruz. İzin verirseniz ziyaret istatistiklerini ölçmek için Google Analytics, reklamlarımızın etkisini ölçmek ve size uygun reklamlar göstermek için Google Ads ve Meta (Facebook, Instagram) çerezlerini de kullanırız; bu durumda verileriniz yurt dışındaki Google ve Meta sunucularına aktarılır.',
+    policyBefore: 'Ayrıntılar için ',
+    policyLink: 'Çerez Politikası’nı',
+    policyAfter: ' inceleyebilirsiniz.',
+    change: 'Tercihinizi dilediğiniz zaman sayfanın altındaki “Çerez tercihleri” bağlantısından değiştirebilirsiniz.',
     accept: 'Tümünü kabul et',
-    reject: 'Reddet',
-    customize: 'Tercihleri Yönet',
-    save: 'Seçimi Kaydet',
+    reject: 'Tümünü reddet',
+    customize: 'Tercihleri yönet',
+    save: 'Seçimi kaydet',
     settings: 'Çerez Tercihleri',
     categories: {
-      necessary: { name: 'Zorunlu', description: 'Sitenin temel işlevleri ve tercihlerinizin hatırlanması için gereklidir.' },
-      analytics: { name: 'Analiz', description: 'Google Analytics ve Hotjar ile sitenin nasıl kullanıldığını anonim olarak ölçer.' },
-      marketing: { name: 'Pazarlama', description: 'Google Ads ve Meta (Facebook) reklamlarının ölçümü ve kişiselleştirilmesi.' },
+      necessary: { name: 'Zorunlu', description: 'Sitenin çalışması, teklif sepeti ve karşılaştırma gibi talep ettiğiniz işlevler ve çerez tercihlerinizin hatırlanması için gereklidir. Kapatılamaz.' },
+      analytics: { name: 'Analiz', description: 'Google Analytics ile ziyaret istatistiklerini ölçer; siteye hangi kaynaktan geldiğiniz bilgisinin teklif ve katalog taleplerine eklenmesini sağlar. Veriler Google’a aktarılır.' },
+      marketing: { name: 'Pazarlama', description: 'Google Ads ve Meta (Facebook, Instagram) reklamlarının sonuçlarını ölçer, reklamların kişiselleştirilmesini ve size yeniden reklam gösterilmesini sağlar. Veriler Google ve Meta’ya aktarılır.' },
     },
+  },
+
+  // KVKK set, section 2 (AYA Hukuk, 03.11.2026) – text versions: server/services/consents.js
+  consentBoxes: {
+    quote: {
+      intro: {
+        before: 'Bilgileriniz, teklif talebinizi değerlendirmek ve size teklif iletmek amacıyla RMA Yatırım Makina İnşaat Sanayi ve Ticaret Limited Şirketi tarafından işlenir. Ayrıntılı bilgi için ',
+        link: 'Aydınlatma Metni’ni',
+        after: ' inceleyebilirsiniz. Aşağıdaki izinler isteğe bağlıdır ve teklif talebinizi etkilemez.',
+      },
+      b: 'RMA Plastik’in yeni ürünleri, kampanyaları ve duyuruları hakkında aşağıda seçtiğim kanallardan ticari elektronik ileti gönderilmesine onay veriyorum:',
+      c: {
+        before: 'E-posta adresimin ve telefon numaramın kriptografik özetinin (hash) Google ve Meta’ya aktarılmasına ve reklam ölçümü, eşleştirme, yeniden pazarlama ve hedef kitle oluşturma amaçlarıyla kullanılmasına ilişkin ',
+        link: 'Açık Rıza Metni’ni',
+        after: ' okudum, açık rıza veriyorum.',
+      },
+    },
+    catalog: {
+      intro: {
+        before: 'Kataloğu indirmek için yalnızca e-posta adresiniz gereklidir. Firma adı belirtirseniz satış ekibimiz katalogla ilgili olarak firmanızla iletişime geçebilir. Aşağıdaki izinler isteğe bağlıdır ve kataloğu indirmenizi etkilemez. Ayrıntılar: ',
+        link: 'Aydınlatma Metni',
+        after: '.',
+      },
+      b: 'RMA Plastik’in yeni ürünleri, kampanyaları ve duyuruları hakkında e-posta adresime ticari elektronik ileti gönderilmesine onay veriyorum.',
+      c: {
+        before: 'E-posta adresimin kriptografik özetinin (hash) Google ve Meta’ya aktarılmasına ve reklam ölçümü, eşleştirme, yeniden pazarlama ve hedef kitle oluşturma amaçlarıyla kullanılmasına ilişkin ',
+        link: 'Açık Rıza Metni’ni',
+        after: ' okudum, açık rıza veriyorum.',
+      },
+    },
+    a: {
+      before: 'Ürün, kampanya ve duyurulara ilişkin tanıtım ve pazarlama faaliyetleri kapsamında kişisel verilerimin işlenmesine ilişkin ',
+      link: 'Açık Rıza Metni’ni',
+      after: ' okudum, açık rıza veriyorum.',
+    },
+    channels: { email: 'E-posta', sms: 'SMS', call: 'Telefon araması' },
+  },
+
+  legal: {
+    eyebrow: 'KVKK',
+    turkishOnly: '',
+    noticeLink: 'KVKK Aydınlatma Metni',
+    cookieLink: 'Çerez Politikası',
+    footerLabel: 'Yasal bilgiler',
   },
 
   floatingContact: {
@@ -189,6 +240,7 @@ const tr = {
   },
 
   hero: {
+    playVideo: 'Tanıtım filmini oynat',
     kicker: 'Rotasyonel Kalıplama',
     typePrefix: 'Ürettiklerimiz:',
     categoriesLabel: 'Ürün Grupları',
@@ -1272,6 +1324,8 @@ const tr = {
       directions: 'Yol tarifi al',
       openMap: 'Google Haritalar’da aç',
       mapTitle: 'RMA Plastik konumu – Google Haritalar',
+      loadMap: 'Haritayı yükle',
+      mapNote: 'Haritayı yüklediğinizde Google’a IP adresiniz ve tarayıcı bilgileriniz iletilir.',
       channels: 'İletişim Kanalları',
       email: 'E-posta',
       linkedin: 'LinkedIn',
@@ -1370,8 +1424,6 @@ const tr = {
     optional: 'isteğe bağlı',
     customRequirement: 'Özel İhtiyaç',
     removeProduct: 'Ürünü Kaldır',
-    consent:
-      'Bu formu göndererek, paylaştığınız bilgilerin talebinize yanıt vermek amacıyla kullanılabileceğini onaylamış olursunuz.',
     submit: 'Teklif Talebini Gönder',
     sending: 'Gönderiliyor...',
     successTitle: 'Talebiniz bize ulaştı',

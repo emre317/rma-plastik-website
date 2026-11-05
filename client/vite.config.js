@@ -6,7 +6,7 @@ import react from '@vitejs/plugin-react';
 
 /*
   Injects the measurement snippets into index.html from client/.env:
-    VITE_GTM_ID             GTM-XXXXXXX  (GA4, Ads, Meta Pixel, Hotjar live in GTM)
+    VITE_GTM_ID             GTM-XXXXXXX  (GA4, Ads, Meta Pixel live in GTM; loaded after consent only)
     VITE_GSC_VERIFICATION   Search Console "HTML tag" verification code (optional)
   Nothing is injected when a value is empty, so local builds stay tag-free.
 */
@@ -15,15 +15,18 @@ function siteTags(env) {
   const gscCode = (env.VITE_GSC_VERIFICATION || '').replace(/[^\w-]/g, '');
 
   // `js` class (scroll animations only hide content when JS runs) +
-  // Google Consent Mode v2: deny by default, restore a saved choice before GTM loads
+  // Google Consent Mode v2 in basic mode: everything denied, and GTM itself is
+  // loaded only once the visitor allows analytics or marketing (KVKK). A saved
+  // choice (version 2, at most 12 months old; analytics/consent.js) is applied
+  // before GTM starts. window.rmaLoadGtm() is called by the cookie banner.
   const consentDefaults = `
 document.documentElement.classList.add('js');
 window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;
-gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',functionality_storage:'granted',security_storage:'granted',wait_for_update:500});
-gtag('set','ads_data_redaction',true);gtag('set','url_passthrough',true);
-try{var c=JSON.parse(localStorage.getItem('rma_consent'));if(c&&c.version===1){gtag('consent','update',{analytics_storage:c.analytics?'granted':'denied',ad_storage:c.marketing?'granted':'denied',ad_user_data:c.marketing?'granted':'denied',ad_personalization:c.marketing?'granted':'denied'});}}catch(e){}`;
-
-  const gtmLoader = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${gtmId}');`;
+gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',functionality_storage:'granted',security_storage:'granted'});
+gtag('set','ads_data_redaction',true);
+window.rmaLoadGtm=function(){var i=${JSON.stringify(gtmId)};if(!i||window.rmaGtmLoaded)return;window.rmaGtmLoaded=true;
+dataLayer.push({'gtm.start':new Date().getTime(),event:'gtm.js'});var j=document.createElement('script');j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i;document.head.appendChild(j);};
+try{var c=JSON.parse(localStorage.getItem('rma_consent'));if(c&&c.version===2&&Date.now()-new Date(c.savedAt).getTime()<365*864e5){gtag('consent','update',{analytics_storage:c.analytics?'granted':'denied',ad_storage:c.marketing?'granted':'denied',ad_user_data:c.marketing?'granted':'denied',ad_personalization:c.marketing?'granted':'denied'});if(c.analytics||c.marketing)window.rmaLoadGtm();}}catch(e){}`;
 
   return {
     name: 'rma-site-tags',
@@ -31,18 +34,6 @@ try{var c=JSON.parse(localStorage.getItem('rma_consent'));if(c&&c.version===1){g
       const tags = [
         { tag: 'script', children: consentDefaults, injectTo: 'head-prepend' },
       ];
-
-      if (gtmId) {
-        tags.push(
-          { tag: 'link', attrs: { rel: 'preconnect', href: 'https://www.googletagmanager.com' }, injectTo: 'head' },
-          { tag: 'script', children: gtmLoader, injectTo: 'head' },
-          {
-            tag: 'noscript',
-            children: `<iframe src="https://www.googletagmanager.com/ns.html?id=${gtmId}" height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
-            injectTo: 'body-prepend',
-          }
-        );
-      }
 
       if (gscCode) {
         tags.push({

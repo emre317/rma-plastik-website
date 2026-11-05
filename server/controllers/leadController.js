@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import Lead from '../models/Lead.js';
 import QuoteRequest, { QUOTE_LANGUAGES } from '../models/QuoteRequest.js';
 import { cleanAttribution } from '../services/attribution.js';
+import { hasMarketing, readConsents, recordConsents, salesFollowUp } from '../services/consents.js';
+import { leadExpiry } from '../services/retention.js';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -29,7 +31,10 @@ export async function createCatalogLead(req, res) {
     }
 
     const now = new Date();
-    const marketingConsent = body.marketingConsent === true;
+    // KVKK boxes A, B (e-mail) and C, ticked or not
+    const consents = readConsents(body.consents, 'catalog');
+    const marketing = hasMarketing(consents);
+    const existing = await Lead.findOne({ email }).select('company marketingConsent').lean();
 
     const details = {
       name: clean(body.name, 120),
@@ -43,20 +48,38 @@ export async function createCatalogLead(req, res) {
     set.lastDownloadAt = now;
     set.isRead = false;
 
-    if (marketingConsent) {
+    set.salesFollowUp = salesFollowUp({ company: details.company || existing?.company, email });
+
+    // Kept while a marketing consent stands, otherwise 2 years from this download
+    if (marketing) {
       set.marketingConsent = true;
       set.consentAt = now;
+      set.expireAt = null;
+    } else if (!existing?.marketingConsent) {
+      set.expireAt = leadExpiry(now);
     }
 
-    await Lead.findOneAndUpdate(
+    const lead = await Lead.findOneAndUpdate(
       { email },
       {
         $set: set,
         $inc: { downloads: 1 },
         $setOnInsert: { source: 'catalog', attribution: cleanAttribution(body.attribution) },
       },
-      { upsert: true, runValidators: true, setDefaultsOnInsert: true }
+      { upsert: true, runValidators: true, setDefaultsOnInsert: true, returnDocument: 'after' }
     );
+
+    try {
+      await recordConsents({
+        form: 'catalog',
+        refId: lead?._id,
+        consents,
+        contact: { email, ...details },
+        language: details.language,
+      });
+    } catch (consentError) {
+      console.error('Catalog consent record error:', consentError);
+    }
 
     return res.status(201).json({ success: true, url: CATALOG_URL });
   } catch (error) {
@@ -80,6 +103,7 @@ function leadFilter(query = {}) {
   }
 
   if (query.consent === 'yes') filter.marketingConsent = true;
+  if (query.consent === 'followUp') filter.salesFollowUp = true;
 
   return filter;
 }

@@ -70,10 +70,16 @@ export function memoryModel(Model) {
     docs.forEach((doc) => doc.set(update.$set || update));
     return { matchedCount: docs.length, modifiedCount: docs.length };
   };
-  Model.updateOne = async (filter, update) => {
+  Model.updateOne = async (filter, update, options = {}) => {
     const doc = store.find((item) => matches(item, filter));
     if (doc) { doc.set(update.$set || update); return { matchedCount: 1 }; }
+    if (options.upsert) { await Model.create({ ...filter, ...(update.$set || update) }); return { matchedCount: 0, upsertedCount: 1 }; }
     return { matchedCount: 0 };
+  };
+  Model.deleteOne = async (filter) => {
+    const index = store.findIndex((item) => matches(item, filter));
+    if (index >= 0) store.splice(index, 1);
+    return { deletedCount: index >= 0 ? 1 : 0 };
   };
   Model.findOneAndUpdate = async (filter, update) => {
     const doc = store.find((item) => matches(item, filter));

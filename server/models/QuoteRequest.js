@@ -11,6 +11,7 @@ import {
   PROJECT_TYPES,
   PROJECT_VOLUMES,
 } from '../../client/src/data/projectBrief.js';
+import { quoteExpiry } from '../services/retention.js';
 
 export const DESIGN_INPUTS = ['drawing', 'sample', 'idea'];
 export const QUOTE_NEEDS = ['fittings', 'color', 'installation', 'shipping', 'urgent'];
@@ -371,6 +372,13 @@ const quoteRequestSchema = new mongoose.Schema(
       confirmation: { type: mailStatusSchema, default: null },
     },
 
+    // Deleted by MongoDB 3 years after the last activity (services/retention.js);
+    // moved forward whenever the request is changed in the panel
+    expireAt: {
+      type: Date,
+      default: () => quoteExpiry(),
+    },
+
     notes: {
       type: [
         new mongoose.Schema(
@@ -408,6 +416,8 @@ quoteRequestSchema.index({
 quoteRequestSchema.index({
   email: 1,
 });
+
+quoteRequestSchema.index({ expireAt: 1 }, { expireAfterSeconds: 0 });
 
 const QuoteRequest = mongoose.model(
   'QuoteRequest',

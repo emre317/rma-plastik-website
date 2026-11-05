@@ -126,8 +126,8 @@ export default function AdminLeads() {
           icon={MailCheck}
           value={consent}
           onChange={(value) => { setConsent(value); setPage(1); }}
-          label="E-posta iznine göre filtrele"
-          options={[{ value: '', label: 'Tümü' }, { value: 'yes', label: 'E-posta İzni Verenler' }]}
+          label="İzin ve satış takibine göre filtrele"
+          options={[{ value: '', label: 'Tümü' }, { value: 'yes', label: 'Pazarlama İzni Verenler' }, { value: 'followUp', label: 'Satış Takibi: Evet' }]}
         />
         <span className="adToolbarCount">{pagination.total} kayıt</span>
         <button type="button" className="cmsButton cmsButtonInfo" onClick={download} disabled={exporting || !pagination.total}>
@@ -182,7 +182,9 @@ export default function AdminLeads() {
                   ) : (
                     <span className="adPill tone-gray">Talep yok</span>
                   )}
-                  {lead.marketingConsent && <span className="adPill tone-blue" title={`İzin: ${formatDate(lead.consentAt, true)}`}>E-posta izni</span>}
+                  {lead.marketingConsent && <span className="adPill tone-blue" title={`İzin: ${formatDate(lead.consentAt, true)}`}>Pazarlama izni</span>}
+                  {/* KVKK B.3: sales may write only to company leads with a business e-mail */}
+                  {lead.salesFollowUp && <span className="adPill tone-violet" title="Firma adı var ve kurumsal e-posta: satış ekibi katalogla ilgili yazabilir">Satış takibi</span>}
                 </span>
                 <span className="adTableDate" role="cell" title={formatDate(lead.lastDownloadAt, true)}>
                   {timeAgo(lead.lastDownloadAt)}

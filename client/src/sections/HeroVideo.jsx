@@ -9,6 +9,7 @@ import useLanguage from '../hooks/useLanguage';
 import portfolio from '../data/productPortfolio';
 import HeroTitle from '../components/ui/HeroTitle';
 import HeroStats from '../components/ui/HeroStats';
+import { youtubeThumbnail } from '../components/content/YouTubeEmbed';
 
 const PLAYER_ORIGIN = 'https://www.youtube-nocookie.com';
 
@@ -19,12 +20,12 @@ const PLAYER_ORIGIN = 'https://www.youtube-nocookie.com';
   Home page opening: the first video (lowest "Sıra" in the admin panel) plays
   muted, looped and full-bleed behind the company introduction.
 
-  - The YouTube poster shows immediately (fast first paint, good LCP); the
-    player loads after the page and fades in only once it is really playing,
-    so a blocked or failed video never shows an error screen.
+  - The poster comes from our own server and shows immediately (fast first
+    paint, good LCP). The YouTube player is created only when the visitor
+    presses play (KVKK: nothing reaches Google before that), and fades in
+    once it is really playing, so a blocked video never shows an error screen.
   - Browsers only allow muted autoplay: the background film stays muted and
     has no controls (the films are on the Videolar page).
-  - No autoplay for "reduced motion" or data-saver visitors (poster only).
 */
 export default function HeroVideo({ video }) {
   const { t } = useTranslation();
@@ -40,34 +41,11 @@ export default function HeroVideo({ video }) {
 
   const [load, setLoad] = useState(false);
   const [playing, setPlaying] = useState(false);
-  const [poster, setPoster] = useState(`https://i.ytimg.com/vi/${video.youtubeId}/maxresdefault.jpg`);
+  const [poster, setPoster] = useState(youtubeThumbnail(video.youtubeId, 'maxresdefault'));
   const [size, setSize] = useState(null);
 
   const title = videoText(video, lang, 'title');
   const categories = t('productExplorer.items', { returnObjects: true });
-
-  // Start the background player after the page has loaded
-  useEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const saveData = navigator.connection?.saveData;
-
-    if (reduced || saveData) {
-      return undefined;
-    }
-
-    let timer;
-    const start = () => {
-      timer = setTimeout(() => setLoad(true), 400);
-    };
-
-    if (document.readyState === 'complete') start();
-    else window.addEventListener('load', start, { once: true });
-
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener('load', start);
-    };
-  }, []);
 
   // Cover the whole section with a 16:9 player (slightly enlarged to hide YouTube's edges)
   useEffect(() => {
@@ -180,7 +158,7 @@ export default function HeroVideo({ video }) {
           alt=""
           fetchPriority="high"
           decoding="async"
-          onError={() => setPoster(`https://i.ytimg.com/vi/${video.youtubeId}/hqdefault.jpg`)}
+          onError={() => setPoster((current) => (current.endsWith('hqdefault') ? current : youtubeThumbnail(video.youtubeId, 'hqdefault')))}
         />
 
         {load && (
@@ -196,6 +174,13 @@ export default function HeroVideo({ video }) {
           />
         )}
       </div>
+
+      {!load && (
+        <button type="button" className="heroVideoPlay" onClick={() => setLoad(true)}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>
+          <span>{t('hero.playVideo')}</span>
+        </button>
+      )}
 
       <div className="heroVideoShade" aria-hidden="true" />
       <div className="heroVideoGrain" aria-hidden="true" />

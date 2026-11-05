@@ -38160,3 +38160,308 @@ html[lang="ar"] .pgBody small {
   line-height: 1.6;
   white-space: pre-line;
 }
+
+/* Cookie banner (KVKK): the three choices share one size and look */
+.cookieConsentActions .cookieButton {
+  flex: 1 1 0;
+  border-color: var(--ink-400);
+}
+
+.cookieConsentLink {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* KVKK text and optional consent boxes above the quote / catalogue send button */
+.consentBoxes {
+  margin-top: 18px;
+  display: grid;
+  gap: 10px;
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+.consentIntro {
+  margin: 0;
+}
+
+.consentBox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.consentBox input {
+  margin: 2px 0 0;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  accent-color: var(--accent);
+}
+
+.consentChannels {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.consentChannels legend {
+  padding: 0;
+  margin-bottom: 6px;
+}
+
+.consentChannels > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  padding-inline-start: 26px;
+}
+
+.consentLink {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.qmSubmitRow {
+  justify-content: flex-end;
+}
+
+/* Home video: the YouTube player loads only after this button (KVKK) */
+.heroVideoPlay {
+  position: absolute;
+  z-index: 3;
+  top: 46%;
+  inset-inline-end: 7%;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px 10px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(16, 19, 23, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.heroVideoPlay svg {
+  width: 44px;
+  height: 44px;
+  padding: 11px;
+  border-radius: 50%;
+  background: var(--brand-primary);
+}
+
+.heroVideoPlay:hover {
+  border-color: rgba(255, 255, 255, 0.7);
+  background: rgba(16, 19, 23, 0.65);
+}
+
+[dir='rtl'] .heroVideoPlay {
+  padding: 10px 10px 10px 20px;
+}
+
+@media (max-width: 760px) {
+  .heroVideoPlay {
+    top: auto;
+    bottom: 96px;
+    inset-inline-end: 16px;
+    font-size: 13px;
+  }
+
+  .heroVideoPlay svg {
+    width: 36px;
+    height: 36px;
+    padding: 9px;
+  }
+}
+
+/* Contact map stand-in until "Haritayı yükle" (KVKK) */
+.ctMapPreview {
+  position: relative;
+  height: 100%;
+  min-height: 520px;
+}
+
+.ctMapPreview img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ctMapPreviewBox {
+  position: absolute;
+  inset-inline: 24px;
+  bottom: 24px;
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  padding: 18px;
+  border-radius: var(--radius-md, 12px);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--shadow-md);
+}
+
+.ctMapPreviewBox small {
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+/* Footer legal links (KVKK) */
+.footerLegal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+
+/* KVKK pages (/kvkk, /cerez-politikasi) */
+.legalBody {
+  max-width: 980px;
+}
+
+.legalPage .section {
+  padding: 48px 0 96px;
+}
+
+.legalBody article > h2:first-child {
+  margin-top: 0;
+}
+
+.legalBody article {
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.legalBody h2 {
+  margin: 36px 0 12px;
+  font-size: 21px;
+  scroll-margin-top: 110px;
+}
+
+.legalBody h3 {
+  margin: 24px 0 10px;
+  font-size: 17px;
+}
+
+.legalBody p {
+  margin: 0 0 12px;
+}
+
+.legalBody a,
+.legalSettingsButton {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.legalSettingsButton {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.legalLanguageNote {
+  margin-bottom: 24px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--ink-100);
+  font-weight: 600;
+}
+
+.legalTableWrap {
+  margin: 8px 0 20px;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+
+.legalTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.legalTable th,
+.legalTable td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  text-align: start;
+  vertical-align: top;
+}
+
+.legalTable th {
+  background: var(--ink-050);
+  font-weight: 700;
+}
+
+.legalTable tr:last-child td {
+  border-bottom: 0;
+}
+
+.legalCellLine {
+  display: block;
+}
+
+.legalCellLine + .legalCellLine {
+  margin-top: 6px;
+}
+
+.legalConsent {
+  margin-top: 18px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  scroll-margin-top: 110px;
+}
+
+.legalConsent h3 {
+  margin-top: 0;
+}
+
+.legalConsent small {
+  color: var(--text-secondary);
+}
+
+@media (max-width: 640px) {
+  .legalTable thead {
+    display: none;
+  }
+
+  .legalTable tr {
+    display: block;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .legalTable td {
+    display: grid;
+    grid-template-columns: 38% 1fr;
+    gap: 10px;
+    border-bottom: 0;
+  }
+
+  .legalTable td::before {
+    content: attr(data-label);
+    color: var(--text-secondary);
+    font-weight: 700;
+  }
+}
