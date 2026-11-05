@@ -2,7 +2,7 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ArrowRightLeft, Box, Check, ClipboardCheck, CloudUpload, DraftingCompass, FileArchive, FileBox, FileImage, FileText, Forklift,
-  Lightbulb, Lock, Mail, Package, Pencil, Phone, RotateCcw, Send, Shapes, ShieldCheck, Sparkles, Tractor, Trash2, Trees, Waves,
+  Lightbulb, Lock, Mail, Package, Pencil, Phone, RotateCcw, Send, Shapes, Sparkles, Tractor, Trash2, Trees, Waves,
   Cylinder, X,
 } from 'lucide-react';
 
@@ -23,6 +23,7 @@ import { submitProject } from '../../services/api';
 import { visitAttribution } from '../../analytics/attribution';
 import { track } from '../../analytics/track';
 import { clearUserData, hashedUserData } from '../../analytics/userData';
+import ConsentBoxes, { EMPTY_CONSENTS } from '../../components/forms/ConsentBoxes';
 
 const STEPS = ['project', 'specs', 'volume', 'files', 'contact'];
 
@@ -43,6 +44,11 @@ const emptyForm = {
   notes: '', nda: false,
   company: '', name: '', email: '', phone: '', country: '', deliveryCity: '',
 };
+
+// Contact details are never kept in the draft on the device (KVKK: only with the
+// quote form's own "remember me" choice); the draft holds the project only
+const CONTACT_FIELDS = ['company', 'name', 'email', 'phone', 'country', 'deliveryCity'];
+const withoutContact = (value) => Object.fromEntries(Object.entries(value).filter(([key]) => !CONTACT_FIELDS.includes(key)));
 
 const readJson = (key) => {
   try {
@@ -163,6 +169,8 @@ export default function CustomProject() {
   const [restored, setRestored] = useState(false);
   const [dragging, setDragging] = useState(false);
   const [ready, setReady] = useState(false);
+  // KVKK boxes A, B (e-mail / SMS / call) and C: unticked, never required
+  const [consents, setConsents] = useState(EMPTY_CONSENTS);
 
   const cardRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -186,7 +194,7 @@ export default function CustomProject() {
       let next = { ...current };
       if (draft) {
         Object.keys(emptyForm).forEach((key) => {
-          if (draft[key] === undefined) return;
+          if (draft[key] === undefined || CONTACT_FIELDS.includes(key)) return;
           next[key] = Array.isArray(emptyForm[key]) ? (Array.isArray(draft[key]) ? draft[key] : []) : typeof emptyForm[key] === 'boolean' ? draft[key] === true : String(draft[key]).slice(0, 1500);
         });
       }
@@ -220,7 +228,7 @@ export default function CustomProject() {
     if (!ready || status === 'success') return undefined;
     const timer = setTimeout(() => {
       const meaningful = form.type || form.description || form.title;
-      writeDraft(meaningful ? { ...form, step, reached } : null);
+      writeDraft(meaningful ? { ...withoutContact(form), step, reached } : null);
     }, 400);
     return () => clearTimeout(timer);
   }, [form, step, reached, ready, status]);
@@ -387,6 +395,7 @@ export default function CustomProject() {
       attribution: visitAttribution(),
       designInput: form.designInput,
       firstOrder: form.firstOrder,
+      consents,
       notes: form.notes.trim(),
       project: {
         type: form.type,
@@ -414,11 +423,12 @@ export default function CustomProject() {
       setStatus('success');
       setSent({ email: payload.email, reference: response?.reference || '', confirmation: Boolean(response?.confirmation), files: files.length });
       writeDraft(null);
+      setConsents(EMPTY_CONSENTS);
 
       // Counted as a quote request in Google Ads ("Teklif Talebi" fires on form_name = quote);
       // `product` tells project briefs apart in GA4. With marketing consent it carries
       // the hashed e-mail and phone for enhanced conversions (analytics/userData.js).
-      const userData = await hashedUserData({ email: payload.email, phone: payload.phone });
+      const userData = await hashedUserData({ email: payload.email, phone: payload.phone, matchingConsent: consents.c });
       track('generate_lead', {
         form_name: 'quote',
         product: `custom_project:${form.type}`,
@@ -925,7 +935,7 @@ export default function CustomProject() {
                     </dl>
                   </div>
 
-                  <p className="cpConsent"><ShieldCheck aria-hidden="true" />{t('contact.consent')}</p>
+                  <ConsentBoxes form="quote" value={consents} onChange={setConsents} />
                 </div>
               )}
 
