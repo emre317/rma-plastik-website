@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
-import Meeting, { MEETING_STATUSES } from '../models/Meeting.js';
+import Meeting, { MEETING_OUTCOMES, MEETING_STATUSES } from '../models/Meeting.js';
+import QuoteRequest from '../models/QuoteRequest.js';
 import AdminUser from '../models/AdminUser.js';
 import { QUOTE_LANGUAGES } from '../models/QuoteRequest.js';
 import { cleanAttribution } from '../services/attribution.js';
@@ -136,6 +137,11 @@ export async function listMeetings(req, res) {
       filter.status = 'confirmed';
       filter.startAt = { $lt: new Date(now.getTime() - 2 * 3600 * 1000) };
       sort = { startAt: -1 };
+    } else if (view === 'results') {
+      filter.status = 'confirmed';
+      filter.startAt = { $lt: new Date(now.getTime() - 60 * 60000) };
+      filter['result.outcome'] = { $in: ['', null] };
+      sort = { startAt: -1 };
     } else if (view === 'cancelled') {
       filter.status = 'cancelled';
     }
@@ -168,7 +174,7 @@ export async function meetingSummary(req, res) {
   try {
     const now = new Date();
     const from = new Date(now.getTime() - 2 * 3600 * 1000);
-    const [pending, unread, upcoming] = await Promise.all([
+    const [pending, unread, upcoming, awaitingResult] = await Promise.all([
       Meeting.countDocuments({ status: 'pending' }),
       Meeting.countDocuments({ status: 'pending', isRead: false }),
       Meeting.find({ status: 'confirmed', startAt: { $gte: from } })
@@ -176,10 +182,16 @@ export async function meetingSummary(req, res) {
         .limit(5)
         .select('type company name startAt durationMinutes staff joinUrl location')
         .lean(),
+      // Held in the last 30 days, ended, no outcome written yet
+      Meeting.countDocuments({
+        status: 'confirmed',
+        startAt: { $gte: new Date(now.getTime() - 30 * 86400000), $lt: new Date(now.getTime() - 60 * 60000) },
+        'result.outcome': { $in: ['', null] },
+      }),
     ]);
 
     res.set('Cache-Control', 'no-store');
-    return res.json({ success: true, data: { pending, unread, upcoming, now } });
+    return res.json({ success: true, data: { pending, unread, upcoming, awaitingResult, now } });
   } catch (error) {
     console.error('Meeting summary error:', error);
     return fail(res, 500, 'Toplantı özeti yüklenemedi.');
@@ -427,6 +439,97 @@ export async function deleteMeeting(req, res) {
     return fail(res, 500, 'Toplantı silinemedi.');
   }
 }
+
+/* ---------- After the meeting ---------- */
+
+// A meeting has been held once it is confirmed and its start has passed
+export const isHeld = (meeting, now = new Date()) => meeting.status === 'confirmed' && new Date(meeting.startAt).getTime() <= now.getTime();
+
+const OUTCOME_TEXT = { quote: 'Teklif hazırlanacak', followUp: 'Takip edilecek', noDeal: 'Şimdilik iş yok' };
+
+/* POST /api/meetings/:id/result { outcome, note } */
+export async function saveMeetingResult(req, res) {
+  try {
+    if (!validId(req.params.id)) return fail(res, 404, 'Toplantı bulunamadı.');
+    const meeting = await Meeting.findById(req.params.id);
+    if (!meeting) return fail(res, 404, 'Toplantı bulunamadı.');
+    if (meeting.status !== 'confirmed') return fail(res, 409, 'Sonuç yalnızca onaylanmış toplantıya girilebilir.');
+
+    const outcome = MEETING_OUTCOMES.includes(req.body?.outcome) ? req.body.outcome : '';
+    meeting.result = {
+      outcome: meeting.quoteId ? 'quote' : outcome,
+      note: str(req.body?.note, 3000),
+      recordedAt: new Date(),
+      recordedBy: req.admin?.name || req.admin?.email || '',
+    };
+    await meeting.save();
+    return res.json({ success: true, data: meeting });
+  } catch (error) {
+    console.error('Meeting result error:', error);
+    return fail(res, 500, 'Görüşme sonucu kaydedilemedi.');
+  }
+}
+
+/*
+  POST /api/meetings/:id/quote { product, quantity, note, followUpAt }
+  Turns a held meeting into a quote request: the customer's details, the
+  subject, the meeting notes and the attending staff member as owner. The
+  customer is not e-mailed (the proforma is sent from the quote as usual).
+  A meeting gives one quote request; asking again returns the existing one.
+*/
+export async function convertMeetingToQuote(req, res) {
+  try {
+    if (!validId(req.params.id)) return fail(res, 404, 'Toplantı bulunamadı.');
+    const meeting = await Meeting.findById(req.params.id);
+    if (!meeting) return fail(res, 404, 'Toplantı bulunamadı.');
+    if (meeting.status !== 'confirmed') return fail(res, 409, 'Yalnızca onaylanmış toplantı teklife dönüştürülebilir.');
+
+    if (meeting.quoteId && (await QuoteRequest.exists({ _id: meeting.quoteId }))) {
+      return res.status(409).json({ success: false, message: 'Bu toplantıdan zaten bir teklif talebi oluşturuldu.', quoteId: meeting.quoteId });
+    }
+
+    const body = req.body || {};
+    const note = str(body.note, 3000) || meeting.result?.note || '';
+    const product = str(body.product, 150) || [MEETING_TOPIC_LABELS[meeting.topic], meeting.subject].filter(Boolean).join(' – ').slice(0, 150);
+    const quantity = Number.parseInt(body.quantity, 10);
+    const followUp = typeof body.followUpAt === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(body.followUpAt) ? new Date(`${body.followUpAt}T12:00:00+03:00`) : null;
+    const who = req.admin?.name || req.admin?.email || '';
+    const reference = meetingReference(meeting._id);
+    const when = formatWhen(meeting.startAt);
+
+    const quote = await QuoteRequest.create({
+      company: meeting.company,
+      name: meeting.name,
+      email: meeting.email,
+      phone: meeting.phone,
+      country: meeting.country,
+      language: meeting.language,
+      product,
+      quantity: Number.isInteger(quantity) && quantity > 0 ? Math.min(quantity, 10000000) : null,
+      message: [`${meeting.type === 'online' ? 'Online toplantı' : 'Yüz yüze görüşme'} (${reference}, ${when}) sonrası oluşturuldu.`, note].filter(Boolean).join('\n\n').slice(0, 5000),
+      source: 'meeting',
+      meetingId: meeting._id,
+      status: 'reviewing',
+      isRead: true,
+      assignee: (meeting.staff?.[0]?.name || who).slice(0, 80),
+      followUpAt: followUp && !Number.isNaN(followUp.getTime()) ? followUp : null,
+      attribution: meeting.attribution?.channel ? meeting.attribution : undefined,
+      notes: [{ text: `Toplantıdan oluşturuldu: ${reference} · ${when} · RMA: ${(meeting.staff || []).map((person) => person.name).join(', ') || '—'}`.slice(0, 2000), author: who }],
+    });
+
+    meeting.quoteId = quote._id;
+    meeting.result = { outcome: 'quote', note, recordedAt: new Date(), recordedBy: who };
+    await meeting.save();
+
+    return res.status(201).json({ success: true, data: meeting, quoteId: quote._id });
+  } catch (error) {
+    if (error instanceof mongoose.Error.ValidationError) return fail(res, 400, Object.values(error.errors)[0]?.message || 'Lütfen alanları kontrol edin.');
+    console.error('Meeting to quote error:', error);
+    return fail(res, 500, 'Teklif talebi oluşturulamadı.');
+  }
+}
+
+export const meetingOutcomeText = (outcome) => OUTCOME_TEXT[outcome] || '';
 
 /* "Online · 12 Kasım 2026 Perşembe 14:00" for the activity log */
 export const meetingLogLine = (meeting) =>

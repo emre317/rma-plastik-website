@@ -49,6 +49,30 @@ güncellenir, ikinci kayıt oluşmaz). Toplantıdan çıkarılan çalışana ipt
 **Reddet / İptal et** müşteriye (ve onaylanmışsa çalışanlara) nedeniyle birlikte bildirim
 gönderir ve takvim kaydını siler.
 
+## Toplantı sonrası: görüşme sonucu ve teklife dönüştürme
+
+Toplantı saati geçince detay sayfasının başında **Görüşme sonucu** kartı açılır:
+
+1. Sonucu seçin: **Teklif hazırlanacak**, **Takip edilecek** veya **Şimdilik iş yok**.
+2. **Görüşme notu** yazın (konuşulan ürünler, adet, ölçü, renk, teslim yeri/zamanı, bütçe,
+   karar verici, sonraki adım). Not müşteriye gitmez.
+3. “Teklif hazırlanacak” seçilince ürün/konu, adet ve takip tarihi alanları açılır:
+   - **Dönüştür ve proforma hazırla** → teklif talebi oluşur ve doğrudan proforma ekranı açılır.
+   - **Yalnızca teklif talebi aç** → teklif talebi oluşur, proforma sonra hazırlanır.
+
+Oluşan teklif talebi **Teklif Talepleri** listesine “İnceleniyor” durumunda düşer: firma, kişi,
+e-posta, telefon, ülke ve dil toplantıdan; ürün/adet karttan; görüşme notu talebin mesajına;
+**sorumlu** toplantıya katılan ilk RMA çalışanı; kaynak “Toplantı” (toplantıya bağlantılı) ve
+ziyaretçinin geldiği kanal (Google, reklam vb.) aynen aktarılır. Böylece proforma, takip tarihi,
+kazanıldı/kaybedildi ve satış raporu mevcut teklif akışıyla çalışır. Müşteriye bu aşamada
+e-posta gitmez; proforma her zamanki gibi teklif ekranından gönderilir.
+
+Bir toplantıdan yalnızca bir teklif talebi oluşur; toplantı sayfası ondan sonra teklif
+talebine ve proformaya bağlantı gösterir. Sonucu girilmemiş toplantılar listede
+**Sonuç Bekleyen** sekmesinde ve panel üstündeki şeritte (“2 toplantının sonucu girilmedi”)
+görünür. Toplantı gerçekleşmediyse (müşteri gelmedi) sağdaki **Yeni zaman planla** ile
+yeni saat verilip davet yeniden gönderilebilir.
+
 ## Hatırlatma e-postası
 
 Onaylı her toplantıdan **24 saat önce** (`MEETING_REMINDER_HOURS`) müşteriye (online ise

@@ -42,3 +42,18 @@ export function meetingShort(value) {
 
 /* Minutes until it starts (negative: already started) */
 export const minutesUntil = (value) => Math.round((new Date(value).getTime() - Date.now()) / 60000);
+
+/* After the meeting (server: MEETING_OUTCOMES) */
+export const MEETING_OUTCOMES = [
+  { id: 'quote', label: 'Teklif hazırlanacak', tone: 'green', hint: 'Teklif talebine dönüştürülür, proforma oradan hazırlanır' },
+  { id: 'followUp', label: 'Takip edilecek', tone: 'blue', hint: 'Şimdilik teklif yok, iletişim sürecek' },
+  { id: 'noDeal', label: 'Şimdilik iş yok', tone: 'gray', hint: 'Bu görüşmeden iş çıkmadı' },
+];
+
+export const outcomeLabel = (id) => MEETING_OUTCOMES.find((item) => item.id === id)?.label || '';
+export const outcomeTone = (id) => MEETING_OUTCOMES.find((item) => item.id === id)?.tone || 'gray';
+
+// Held: confirmed and started at least an hour ago (or ended)
+export const isHeld = (meeting) => meeting.status === 'confirmed' && new Date(meeting.startAt).getTime() <= Date.now();
+export const awaitsResult = (meeting) =>
+  meeting.status === 'confirmed' && new Date(meeting.startAt).getTime() < Date.now() - 60 * 60000 && !meeting.result?.outcome;

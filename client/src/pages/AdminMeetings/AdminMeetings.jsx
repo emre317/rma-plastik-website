@@ -7,12 +7,13 @@ import useAdminApi from '../../hooks/useAdminApi';
 import usePageTitle from '../../hooks/usePageTitle';
 import { timeAgo } from '../../components/admin/quoteStatus';
 import {
-  MEETING_TYPE, meetingStatusLabel, meetingStatusTone, meetingTime, meetingTopic,
+  MEETING_TYPE, awaitsResult, outcomeLabel, outcomeTone, meetingStatusLabel, meetingStatusTone, meetingTime, meetingTopic,
 } from '../../components/admin/meetingStatus';
 
 const VIEWS = [
   { id: 'pending', label: 'Onay Bekleyen' },
   { id: 'upcoming', label: 'Yaklaşan' },
+  { id: 'results', label: 'Sonuç Bekleyen' },
   { id: 'past', label: 'Geçmiş' },
   { id: 'cancelled', label: 'İptal' },
   { id: 'all', label: 'Tümü' },
@@ -21,6 +22,7 @@ const VIEWS = [
 const EMPTY = {
   pending: 'Onay bekleyen toplantı talebi yok.',
   upcoming: 'Onaylanmış yaklaşan toplantı yok.',
+  results: 'Sonucu girilmemiş toplantı yok.',
   past: 'Geçmiş toplantı yok.',
   cancelled: 'İptal edilen toplantı yok.',
   all: 'Henüz toplantı talebi gelmedi.',
@@ -45,6 +47,7 @@ export default function AdminMeetings() {
   const [page, setPage] = useState(1);
   const [data, setData] = useState({ list: [], pagination: { page: 1, pages: 1, total: 0 } });
   const [pending, setPending] = useState(0);
+  const [awaiting, setAwaiting] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -69,6 +72,7 @@ export default function AdminMeetings() {
         if (cancelled) return;
         setData({ list: response.data || [], pagination: response.pagination || { page: 1, pages: 1, total: 0 } });
         setPending(summary?.data?.pending || 0);
+        setAwaiting(summary?.data?.awaitingResult || 0);
       } catch (err) {
         if (!cancelled) setError(err.message);
       } finally {
@@ -100,6 +104,7 @@ export default function AdminMeetings() {
           <button key={item.id} type="button" role="tab" aria-selected={view === item.id} className={`adChip ${view === item.id ? 'active' : ''}`} onClick={() => setView(item.id)}>
             {item.label}
             {item.id === 'pending' && pending > 0 && <span className="mtTabCount">{pending}</span>}
+            {item.id === 'results' && awaiting > 0 && <span className="mtTabCount amber">{awaiting}</span>}
           </button>
         ))}
       </div>
@@ -164,7 +169,16 @@ export default function AdminMeetings() {
                   {moved && <small>Zaman revize edildi</small>}
                 </span>
 
-                <span className={`adPill tone-${meetingStatusTone(meeting)}`}>{meetingStatusLabel(meeting)}</span>
+                <span className="mtRowPills">
+                  <span className={`adPill tone-${meetingStatusTone(meeting)}`}>{meetingStatusLabel(meeting)}</span>
+                  {meeting.quoteId ? (
+                    <span className="adPill tone-green">Teklife dönüştü</span>
+                  ) : meeting.result?.outcome ? (
+                    <span className={`adPill tone-${outcomeTone(meeting.result.outcome)}`}>{outcomeLabel(meeting.result.outcome)}</span>
+                  ) : awaitsResult(meeting) ? (
+                    <span className="adPill tone-amber">Sonuç girilmedi</span>
+                  ) : null}
+                </span>
               </Link>
             );
           })}

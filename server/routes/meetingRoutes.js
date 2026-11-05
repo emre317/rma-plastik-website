@@ -3,6 +3,9 @@ import express from 'express';
 import {
   cancelMeeting,
   confirmMeeting,
+  convertMeetingToQuote,
+  meetingOutcomeText,
+  saveMeetingResult,
   createMeeting,
   deleteMeeting,
   getMeeting,
@@ -53,6 +56,14 @@ router.post(
   sales,
   meetingAudit((req, data, before) => (before?.status === 'confirmed' ? 'Toplantıyı iptal etti' : 'Toplantı talebini reddetti'), (req, data, before) => meetingLogLine(before)),
   cancelMeeting
+);
+router.post('/:id/result', requireAdmin, sales, meetingAudit('Görüşme sonucunu girdi', (req) => meetingOutcomeText(req.body?.outcome)), saveMeetingResult);
+router.post(
+  '/:id/quote',
+  requireAdmin,
+  sales,
+  meetingAudit('Toplantıyı teklif talebine dönüştürdü', (req, data) => (data?.quoteId ? `RMA-${String(data.quoteId).slice(-6).toUpperCase()}` : '')),
+  convertMeetingToQuote
 );
 router.patch('/:id', requireAdmin, sales, meetingAudit('Toplantı notunu güncelledi'), updateMeetingNote);
 router.delete(

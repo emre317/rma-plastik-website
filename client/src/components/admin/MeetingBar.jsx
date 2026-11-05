@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Building2, CalendarClock, Video } from 'lucide-react';
+import { Building2, CalendarClock, ClipboardCheck, Video } from 'lucide-react';
 
 import { getMeetingSummary } from '../../services/adminApi';
 import { MEETINGS_CHANGED_EVENT, getAdminToken } from '../../services/adminAuth';
@@ -56,7 +56,7 @@ export default function MeetingBar() {
 
   // Meetings that have not ended yet
   const upcoming = (summary.upcoming || []).filter((meeting) => minutesUntil(meeting.startAt) + (meeting.durationMinutes || 60) > 0);
-  if (!upcoming.length && !summary.pending) return null;
+  if (!upcoming.length && !summary.pending && !summary.awaitingResult) return null;
 
   return (
     <div className="mtBar" role="region" aria-label="Toplantılar">
@@ -100,6 +100,13 @@ export default function MeetingBar() {
         <Link to="/admin/meetings?view=pending" className="mtBarItem pending">
           <span className="mtBarIcon" aria-hidden="true"><CalendarClock /></span>
           <span><strong>{summary.pending}</strong> toplantı talebi onay bekliyor</span>
+        </Link>
+      )}
+
+      {summary.awaitingResult > 0 && (
+        <Link to="/admin/meetings?view=results" className="mtBarItem pending" title="Toplantıdan sonra not ve sonucu girin; gerekirse teklife dönüştürün">
+          <span className="mtBarIcon" aria-hidden="true"><ClipboardCheck /></span>
+          <span><strong>{summary.awaitingResult}</strong> toplantının sonucu girilmedi</span>
         </Link>
       )}
     </div>

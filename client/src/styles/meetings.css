@@ -1679,3 +1679,154 @@
   height: 16px;
   flex: none;
 }
+
+/* After the meeting: outcome and quote conversion */
+
+.mtResultCard {
+  border-color: color-mix(in srgb, var(--status-success) 30%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--status-success) 7%, transparent);
+}
+
+.mtResultCard .adCardHead h2 svg {
+  color: var(--status-success);
+}
+
+.mtOutcomes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.mtOutcome {
+  padding: 12px 14px;
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  border: 1.5px solid var(--ink-150);
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  color: var(--ink-600);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+
+.mtOutcome strong {
+  color: var(--ink-900);
+  font-size: 14px;
+}
+
+.mtOutcome small {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.mtOutcome:hover {
+  border-color: var(--ink-300);
+}
+
+.mtOutcome.active {
+  border-color: var(--tone);
+  background: var(--tone-bg);
+}
+
+.mtOutcome.active strong {
+  color: var(--tone);
+}
+
+.mtQuoteBox {
+  margin-top: 14px;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+  border: 1px dashed color-mix(in srgb, var(--status-success) 45%, transparent);
+  border-radius: var(--radius-md);
+  background: #f3faf6;
+}
+
+.mtQuoteTitle {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #136b43;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.mtQuoteTitle svg {
+  width: 17px;
+  height: 17px;
+}
+
+.mtConverted {
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  border-radius: var(--radius-md);
+  background: #e7f5ee;
+}
+
+.mtConverted strong {
+  display: block;
+  color: #136b43;
+  font-size: 14.5px;
+}
+
+.mtConverted small {
+  color: var(--ink-600);
+  font-size: 12.5px;
+}
+
+.mtConvertedIcon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--status-success);
+  color: #ffffff;
+}
+
+.mtConvertedIcon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.mtConvertedActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.mtResultCard .cmsButton svg {
+  width: 16px;
+  height: 16px;
+}
+
+.mtRowPills {
+  display: grid;
+  gap: 6px;
+  justify-items: end;
+}
+
+.mtTabCount.amber {
+  background: #b7791f;
+}
+
+@media (max-width: 760px) {
+  .mtOutcomes,
+  .mtConverted {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mtRowPills {
+    grid-column: 2;
+    justify-items: start;
+    grid-auto-flow: column;
+    justify-content: start;
+  }
+}

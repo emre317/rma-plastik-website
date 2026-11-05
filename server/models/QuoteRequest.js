@@ -269,6 +269,13 @@ const quoteRequestSchema = new mongoose.Schema(
       default: 'website',
     },
 
+    // Made in the panel from a held meeting (source "meeting")
+    meetingId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Meeting',
+      default: null,
+    },
+
     // Site language the customer used when submitting the request
     language: {
       type: String,

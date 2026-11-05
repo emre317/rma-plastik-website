@@ -17,6 +17,12 @@ import { quoteExpiry } from '../services/retention.js';
 */
 export const MEETING_STATUSES = ['pending', 'confirmed', 'cancelled'];
 
+// What came out of a held meeting (Görüşme sonucu)
+//   quote     a quotation is to be prepared (the meeting becomes a quote request)
+//   followUp  keep in touch, no quotation yet
+//   noDeal    no business for now
+export const MEETING_OUTCOMES = ['quote', 'followUp', 'noDeal'];
+
 const mailStatusSchema = new mongoose.Schema(
   {
     status: { type: String, enum: ['sent', 'failed', 'skipped'], required: true },
@@ -85,6 +91,15 @@ const meetingSchema = new mongoose.Schema(
     customerNote: { type: String, trim: true, default: '', maxlength: 1000 },
     // Internal note, never e-mailed to the customer
     internalNote: { type: String, trim: true, default: '', maxlength: 2000 },
+
+    // After the meeting: notes and outcome, and the quote request made from it
+    result: {
+      outcome: { type: String, enum: [...MEETING_OUTCOMES, ''], default: '' },
+      note: { type: String, trim: true, default: '', maxlength: 3000 },
+      recordedAt: { type: Date, default: null },
+      recordedBy: { type: String, trim: true, default: '', maxlength: 120 },
+    },
+    quoteId: { type: mongoose.Schema.Types.ObjectId, ref: 'QuoteRequest', default: null },
 
     // Calendar invitation revision (iCalendar SEQUENCE): goes up with every change
     sequence: { type: Number, default: 0 },

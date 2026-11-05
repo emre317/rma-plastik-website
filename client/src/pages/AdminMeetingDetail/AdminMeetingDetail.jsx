@@ -18,6 +18,8 @@ import {
   MEETING_TYPE, meetingReference, meetingStatusLabel, meetingStatusTone, meetingTopic, meetingWhen,
 } from '../../components/admin/meetingStatus';
 import company from '../../data/company';
+import MeetingResultCard from './MeetingResultCard';
+import { isHeld } from '../../components/admin/meetingStatus';
 import { MEETING_DEFAULT_DURATION, MEETING_DURATIONS, istanbulDateTime, istanbulParts } from '../../data/meetingForm';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -83,6 +85,8 @@ export default function AdminMeetingDetail() {
   const [internalNote, setInternalNote] = useState('');
   const [cancelOpen, setCancelOpen] = useState(false);
   const [cancelNote, setCancelNote] = useState('');
+  // A held meeting: the edit form opens only when asked (e.g. the customer did not come)
+  const [editHeld, setEditHeld] = useState(false);
 
   usePageTitle(meeting ? `Toplantı · ${meeting.company}` : 'Toplantı');
 
@@ -283,6 +287,11 @@ export default function AdminMeetingDetail() {
 
       <div className="mtDetailGrid">
         <div style={{ display: 'grid', gap: 18 }}>
+          {/* After the meeting: outcome, notes and "turn into a quote" come first */}
+          {isHeld(meeting) && (
+            <MeetingResultCard meeting={meeting} call={call} onChange={setMeeting} onNotice={setNotice} />
+          )}
+
           <article className="adCard">
             <div className="adCardHead"><h2><CalendarCheck2 aria-hidden="true" />Talep</h2></div>
             <dl className="mtDl">
@@ -363,7 +372,16 @@ export default function AdminMeetingDetail() {
         </div>
 
         <aside className="adCard mtActionCard">
-          {isCancelled ? (
+          {isHeld(meeting) && !editHeld ? (
+            <>
+              <div className="adCardHead"><h2><Check aria-hidden="true" />Toplantı gerçekleşti</h2></div>
+              <p className="adHint">{meetingWhen(meeting.startAt)} · {meeting.durationMinutes} dk · {(meeting.staff || []).map((person) => person.name).join(', ')}</p>
+              <p className="adHint">Görüşmenin notunu ve sonucunu soldaki karta girin; teklif çıkacaksa oradan teklif talebine dönüştürün.</p>
+              <button type="button" className="cmsButton" onClick={() => setEditHeld(true)}>
+                <CalendarCheck2 aria-hidden="true" />Yeni zaman planla
+              </button>
+            </>
+          ) : isCancelled ? (
             <>
               <div className="adCardHead"><h2><CalendarX2 aria-hidden="true" />Toplantı iptal edildi</h2></div>
               <p className="adHint">{meeting.cancelledAt ? `${formatDate(meeting.cancelledAt, true)} tarihinde iptal edildi.` : ''} {meeting.customerNote ? `Müşteriye not: “${meeting.customerNote}”` : ''}</p>

@@ -841,7 +841,7 @@ export default function AdminQuoteDetail() {
             <dl className="adFacts compact">
               <div><dt>Referans</dt><dd>{quoteReference(quote._id)}</dd></div>
               <div><dt>Site Dili</dt><dd>{LANGUAGE_LABELS[quote.language] || quote.language || '—'}</dd></div>
-              <div><dt>Kaynak</dt><dd>{quote.source === 'website' ? 'Web sitesi' : quote.source || '—'}</dd></div>
+              <div><dt>Kaynak</dt><dd>{quote.source === 'meeting' && quote.meetingId ? <Link to={`/admin/meetings/${quote.meetingId}`}>Toplantı · TPL-{String(quote.meetingId).slice(-6).toUpperCase()}</Link> : quote.source === 'website' ? 'Web sitesi' : quote.source === 'project' ? 'Özel üretim sihirbazı' : quote.source || '—'}</dd></div>
               <div><dt>Oluşturuldu</dt><dd>{formatDate(quote.createdAt, true)}</dd></div>
               <div><dt>Son Güncelleme</dt><dd>{formatDate(quote.updatedAt, true)}</dd></div>
             </dl>

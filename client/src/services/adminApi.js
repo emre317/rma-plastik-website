@@ -421,3 +421,11 @@ export function updateMeetingNote(id, internalNote, token) {
 export function deleteMeeting(id, token) {
   return request(`/meetings/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Toplantı silinemedi.' });
 }
+
+export function saveMeetingResult(id, body, token) {
+  return request(`/meetings/${encodeURIComponent(id)}/result`, { method: 'POST', body, token, fallbackMessage: 'Görüşme sonucu kaydedilemedi.' });
+}
+
+export function convertMeetingToQuote(id, body, token) {
+  return request(`/meetings/${encodeURIComponent(id)}/quote`, { method: 'POST', body, token, fallbackMessage: 'Teklif talebi oluşturulamadı.' });
+}
