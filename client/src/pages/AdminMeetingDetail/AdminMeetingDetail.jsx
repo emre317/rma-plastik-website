@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 
 import {
-  cancelMeeting, confirmMeeting, deleteMeeting, getMeeting, getMeetingConfig, getMeetingStaff, updateMeetingNote,
+  cancelMeeting, checkMeetingConflicts, confirmMeeting, deleteMeeting, getMeeting, getMeetingConfig, getMeetingStaff, updateMeetingNote,
 } from '../../services/adminApi';
 import { notifyMeetingsChanged } from '../../services/adminAuth';
 import useAdminApi from '../../hooks/useAdminApi';
@@ -87,6 +87,8 @@ export default function AdminMeetingDetail() {
   const [cancelNote, setCancelNote] = useState('');
   // A held meeting: the edit form opens only when asked (e.g. the customer did not come)
   const [editHeld, setEditHeld] = useState(false);
+  // Other meetings, closed times and busy staff at the chosen time
+  const [conflicts, setConflicts] = useState(null);
 
   usePageTitle(meeting ? `Toplantı · ${meeting.company}` : 'Toplantı');
 
@@ -138,6 +140,24 @@ export default function AdminMeetingDetail() {
   }, [meeting, people, admin, staff.length]);
 
   const start = useMemo(() => istanbulDateTime(date, time), [date, time]);
+
+  const staffKey = staff.map((person) => person.email).join(',');
+  useEffect(() => {
+    if (!meeting || meeting.status === 'cancelled' || !start) {
+      setConflicts(null);
+      return undefined;
+    }
+    let cancelled = false;
+    const timer = setTimeout(() => {
+      call(checkMeetingConflicts, id, { date, time, durationMinutes: duration, staff: staffKey ? staffKey.split(',').map((email) => ({ email })) : [] })
+        .then((response) => { if (!cancelled) setConflicts(response.data || null); })
+        .catch(() => {});
+    }, 400);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [call, id, meeting, start, date, time, duration, staffKey]);
   const requested = meeting ? new Date(meeting.requestedStartAt) : null;
   const moved = Boolean(start && requested && start.getTime() !== requested.getTime());
   const isOnline = meeting?.type === 'online';
@@ -412,6 +432,23 @@ export default function AdminMeetingDetail() {
                 </div>
                 <small className="adHint"><Clock3 aria-hidden="true" style={{ width: 13, height: 13, verticalAlign: '-2px' }} /> Türkiye saati. Müşterinin istediği: {meetingWhen(meeting.requestedStartAt)}</small>
                 {moved && <div className="mtChanged">Zaman talep edilenden farklı: müşteriye yeni zaman bildirilecek.</div>}
+                {conflicts && (conflicts.meetings.length > 0 || conflicts.blocks.length > 0 || conflicts.busyStaff.length > 0) && (
+                  <div className="mtConflicts" role="status">
+                    <strong><AlertTriangle aria-hidden="true" />Bu saatte çakışma var</strong>
+                    <ul>
+                      {conflicts.meetings.map((item) => (
+                        <li key={item._id}>
+                          <Link to={`/admin/meetings/${item._id}`}>{item.company}</Link> · {item.type === 'online' ? 'Online' : 'Yüz yüze'} · {meetingWhen(item.startAt)}{item.staff.length ? ` · ${item.staff.join(', ')}` : ''}
+                        </li>
+                      ))}
+                      {conflicts.blocks.map((item) => <li key={item._id}>Kapalı zaman{item.note ? `: ${item.note}` : ''}</li>)}
+                      {conflicts.busyStaff.map((email) => (
+                        <li key={email}>{staff.find((person) => person.email === email)?.name || email} Outlook takviminde meşgul</li>
+                      ))}
+                    </ul>
+                    <small>Yine de onaylayabilirsiniz; farklı bir saat seçmeniz önerilir.</small>
+                  </div>
+                )}
 
                 <div className="mtStaffPicker">
                   <span className="mtLabel"><Users aria-hidden="true" />{isOnline ? 'RMA’dan katılacaklar' : 'Görüşecek RMA çalışanı'}</span>

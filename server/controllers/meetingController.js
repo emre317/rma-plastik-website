@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 
 import Meeting, { MEETING_OUTCOMES, MEETING_STATUSES } from '../models/Meeting.js';
 import QuoteRequest from '../models/QuoteRequest.js';
+import MeetingBlock from '../models/MeetingBlock.js';
+import { clearAvailabilityCache, confirmConflicts, isSlotFree, takenSlots } from '../services/meetingAvailability.js';
 import AdminUser from '../models/AdminUser.js';
 import { QUOTE_LANGUAGES } from '../models/QuoteRequest.js';
 import { cleanAttribution } from '../services/attribution.js';
@@ -76,6 +78,15 @@ export async function createMeeting(req, res) {
       return fail(res, 400, 'Please choose an available date and time.');
     }
 
+    // Taken in the meantime (another request was confirmed, Outlook, closed time)
+    const free = await isSlotFree(startAt).catch((error) => {
+      console.error('Meeting slot check error:', error.message);
+      return true;
+    });
+    if (!free) {
+      return res.status(409).json({ success: false, code: 'taken', message: 'This time is no longer available. Please choose another time.' });
+    }
+
     const { guests, error } = type === 'online' ? cleanGuests(body.guests, email) : { guests: [] };
     if (error) return fail(res, 400, error);
 
@@ -110,6 +121,92 @@ export async function createMeeting(req, res) {
     if (error instanceof mongoose.Error.ValidationError) return fail(res, 400, 'Please check the submitted information.');
     console.error('Create meeting error:', error);
     return fail(res, 500, 'Meeting request could not be sent.');
+  }
+}
+
+/* GET /api/meetings/availability: taken website slots (no details) */
+export async function meetingAvailability(req, res) {
+  try {
+    const taken = await takenSlots();
+    res.set('Cache-Control', 'public, max-age=60');
+    return res.json({ success: true, data: { taken } });
+  } catch (error) {
+    console.error('Meeting availability error:', error);
+    // The form still works; the submit is checked again
+    return res.json({ success: true, data: { taken: {} } });
+  }
+}
+
+/* ---------- Closed times (panel) ---------- */
+
+/* GET /api/meetings/blocks: closed times that have not ended */
+export async function listMeetingBlocks(req, res) {
+  try {
+    const blocks = await MeetingBlock.find({ end: { $gt: new Date() } }).sort({ start: 1 }).lean();
+    return res.json({ success: true, data: blocks });
+  } catch (error) {
+    console.error('List meeting blocks error:', error);
+    return fail(res, 500, 'Kapalı zamanlar yüklenemedi.');
+  }
+}
+
+/* POST /api/meetings/blocks { from: "2026-11-10", to: "2026-11-12", allDay, startTime, endTime, note } */
+export async function createMeetingBlock(req, res) {
+  try {
+    const body = req.body || {};
+    const fromDay = str(body.from, 10);
+    const toDay = str(body.to, 10) || fromDay;
+    const allDay = body.allDay !== false;
+    const start = istanbulDateTime(fromDay, allDay ? '00:00' : str(body.startTime, 5));
+    const endBase = istanbulDateTime(toDay, allDay ? '23:59' : str(body.endTime, 5));
+    const end = endBase && allDay ? new Date(endBase.getTime() + 60000) : endBase;
+
+    if (!start || !end) return fail(res, 400, 'Geçerli tarih ve saat girin.');
+    if (end <= start) return fail(res, 400, 'Bitiş, başlangıçtan sonra olmalı.');
+    if (end.getTime() - start.getTime() > 120 * 86400000) return fail(res, 400, 'En fazla 120 günlük bir aralık kapatılabilir.');
+    if (end <= new Date()) return fail(res, 400, 'Geçmiş bir zaman kapatılamaz.');
+
+    const block = await MeetingBlock.create({ start, end, note: str(body.note, 160), createdBy: req.admin?.name || '' });
+    clearAvailabilityCache();
+    return res.status(201).json({ success: true, data: block });
+  } catch (error) {
+    console.error('Create meeting block error:', error);
+    return fail(res, 500, 'Kapalı zaman eklenemedi.');
+  }
+}
+
+/* DELETE /api/meetings/blocks/:blockId */
+export async function deleteMeetingBlock(req, res) {
+  try {
+    if (!validId(req.params.blockId)) return fail(res, 404, 'Kayıt bulunamadı.');
+    await MeetingBlock.deleteOne({ _id: req.params.blockId });
+    clearAvailabilityCache();
+    return res.json({ success: true });
+  } catch (error) {
+    console.error('Delete meeting block error:', error);
+    return fail(res, 500, 'Kapalı zaman silinemedi.');
+  }
+}
+
+/* POST /api/meetings/:id/check { date, time, durationMinutes, staff }: conflicts before confirming */
+export async function checkMeetingConflicts(req, res) {
+  try {
+    if (!validId(req.params.id)) return fail(res, 404, 'Toplantı bulunamadı.');
+    const start = istanbulDateTime(req.body?.date, req.body?.time);
+    if (!start) return res.json({ success: true, data: { meetings: [], blocks: [], busyStaff: [] } });
+    const duration = Number(req.body?.durationMinutes);
+    const staffEmails = (Array.isArray(req.body?.staff) ? req.body.staff : []).map((person) => str(person?.email, 254).toLowerCase()).filter(isEmail).slice(0, 10);
+
+    const data = await confirmConflicts({
+      start,
+      durationMinutes: MEETING_DURATIONS.includes(duration) ? duration : 60,
+      staffEmails,
+      excludeId: req.params.id,
+    });
+    return res.json({ success: true, data });
+  } catch (error) {
+    console.error('Meeting conflict check error:', error);
+    return res.json({ success: true, data: { meetings: [], blocks: [], busyStaff: [] } });
   }
 }
 
@@ -364,6 +461,7 @@ export async function confirmMeeting(req, res) {
     await meeting.save();
 
     const removedStaff = previousStaff.filter((old) => !staff.some((person) => person.email === old.email));
+    clearAvailabilityCache();
     const mail = await notify(meeting, wasConfirmed ? 'updated' : 'confirmed', removedStaff);
 
     return res.json({ success: true, data: await meetingJson(meeting._id), mail, updated: wasConfirmed });
@@ -400,6 +498,7 @@ export async function cancelMeeting(req, res) {
     });
     await meeting.save();
 
+    clearAvailabilityCache();
     const mail = req.body?.notify === false ? null : await notify(meeting, wasConfirmed ? 'cancelled' : 'declined');
     return res.json({ success: true, data: await meetingJson(meeting._id), mail });
   } catch (error) {

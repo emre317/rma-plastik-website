@@ -253,7 +253,10 @@ const en = {
     back: 'Back',
     submit: 'Request meeting',
     sending: 'Sending…',
+    busy: 'Taken',
+    busyNote: 'Times that are already taken are shown as closed.',
     errors: {
+      taken: 'This time has just been taken. Please choose another time.',
       type: 'Please choose the type of meeting.',
       time: 'Please choose a day and a time.',
       topic: 'Please choose the subject of the meeting.',

@@ -118,3 +118,38 @@ export async function cancelTeamsMeeting(eventId, comment = '') {
     body: { comment: String(comment).slice(0, 500) },
   });
 }
+
+/*
+  Busy times of Microsoft 365 calendars (free/busy only, no meeting details):
+  { 'elif@rmaplastik.com': [{ start: Date, end: Date }], … }.
+  Needs the same app registration (Calendars.ReadWrite covers it). Graph
+  answers at most 62 days per call, so longer ranges are split.
+*/
+export async function getBusyTimes(emails, from, to) {
+  const list = [...new Set(emails.map((email) => String(email || '').trim().toLowerCase()).filter(Boolean))].slice(0, 20);
+  const result = Object.fromEntries(list.map((email) => [email, []]));
+  if (!list.length) return result;
+
+  const organizer = teamsOrganizer();
+  const step = 30 * 86400000;
+
+  for (let start = new Date(from).getTime(); start < new Date(to).getTime(); start += step) {
+    const end = Math.min(start + step, new Date(to).getTime());
+    const data = await graph(`/users/${encodeURIComponent(organizer)}/calendar/getSchedule`, {
+      method: 'POST',
+      body: { schedules: list, startTime: utc(start), endTime: utc(end), availabilityViewInterval: 30 },
+    });
+
+    for (const schedule of data.value || []) {
+      const email = String(schedule.scheduleId || '').toLowerCase();
+      if (!result[email]) continue;
+      for (const item of schedule.scheduleItems || []) {
+        // Free and "working elsewhere" leave the person available
+        if (!['busy', 'oof', 'tentative'].includes(item.status)) continue;
+        result[email].push({ start: new Date(`${item.start.dateTime.replace(/Z$/, '')}Z`), end: new Date(`${item.end.dateTime.replace(/Z$/, '')}Z`) });
+      }
+    }
+  }
+
+  return result;
+}

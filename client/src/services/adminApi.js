@@ -429,3 +429,19 @@ export function saveMeetingResult(id, body, token) {
 export function convertMeetingToQuote(id, body, token) {
   return request(`/meetings/${encodeURIComponent(id)}/quote`, { method: 'POST', body, token, fallbackMessage: 'Teklif talebi oluşturulamadı.' });
 }
+
+export function getMeetingBlocks(token) {
+  return request('/meetings/blocks', { token, fallbackMessage: 'Kapalı zamanlar yüklenemedi.' });
+}
+
+export function createMeetingBlock(body, token) {
+  return request('/meetings/blocks', { method: 'POST', body, token, fallbackMessage: 'Kapalı zaman eklenemedi.' });
+}
+
+export function deleteMeetingBlock(id, token) {
+  return request(`/meetings/blocks/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Kapalı zaman silinemedi.' });
+}
+
+export function checkMeetingConflicts(id, body, token) {
+  return request(`/meetings/${encodeURIComponent(id)}/check`, { method: 'POST', body, token, fallbackMessage: 'Çakışma kontrol edilemedi.' });
+}

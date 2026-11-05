@@ -57,3 +57,12 @@ export const meetingSubmitLimiter = rateLimit({
     'Too many requests. Please try again later or contact us by email.'
   ),
 });
+
+// Website calendar: read only, but not unlimited
+export const availabilityLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  limit: 30,
+  standardHeaders: 'draft-8',
+  legacyHeaders: false,
+  message: limitMessage('Too many requests. Please try again in a minute.'),
+});

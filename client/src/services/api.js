@@ -8,6 +8,11 @@ export function submitQuote(payload) {
   });
 }
 
+/* Taken slots of the meeting calendar: { taken: { '2026-11-10': ['10:00'] } } */
+export function getMeetingAvailability() {
+  return request('/meetings/availability', { fallbackMessage: 'Availability could not be loaded.' });
+}
+
 export function submitMeeting(payload) {
   return request('/meetings', {
     method: 'POST',

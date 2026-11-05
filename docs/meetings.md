@@ -11,6 +11,25 @@ Ziyaretçi, sitenin sağ alt köşesindeki iletişim baloncuklarından **Toplant
    diğer) + başlık, firma, ad soyad, e-posta, telefon, ülke ve mesaj. Online toplantıda
    müşterinin ekibinden en fazla 10 katılımcı (ad + e-posta) eklenebilir.
 
+### Dolu saatler
+
+Sitedeki takvim dolu saatleri çizgili **“Dolu”** olarak kapalı gösterir; tamamen dolu günler
+listede çıkmaz. Ziyaretçi yalnızca “dolu” bilgisini görür, kimin ya da hangi toplantının
+olduğunu görmez. Bir saat şu durumlarda kapanır (toplantı 60 dakika sayılarak):
+
+1. **Onaylı toplantılar:** o saatle çakışan onaylı toplantı sayısı `MEETING_MAX_PARALLEL`
+   (varsayılan 1) kadarsa. Aynı anda iki ekip ayrı toplantı yapabiliyorsa 2 yapın.
+2. **Kapalı zamanlar:** Panel › Toplantılar › **Kapalı zamanlar** bölümünden eklenen tüm gün
+   ya da saat aralıkları (bayram, fuar, bakım…). Bittikten bir ay sonra kendiliğinden silinir.
+3. **Outlook takvimleri (Microsoft 365 ayarlıysa):** `MEETING_CALENDARS` içindeki
+   (varsayılan `TEAMS_ORGANIZER`) **herkes** o saatte meşgulse. Yalnızca meşgul/boş bilgisi
+   okunur; 5 dakika önbelleklenir. Outlook yanıt vermezse o saatler açık kalır.
+
+Gönderim sırasında saat tekrar kontrol edilir: bu arada dolmuşsa ziyaretçiye “bu saat az önce
+doldu” denir ve takvim güncel haliyle yeniden açılır. Panelde onay verirken seçilen saatte
+başka onaylı toplantı, kapalı zaman ya da (Microsoft 365 ile) Outlook’ta meşgul bir katılımcı
+varsa sarı bir **çakışma uyarısı** çıkar; yine de onaylanabilir.
+
 Bu değerler `client/src/data/meetingForm.js` dosyasındadır (iş günleri, ilk/son saat,
 aralık, en fazla katılımcı); hem form hem API bu dosyayı kullanır.
 

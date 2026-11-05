@@ -7,7 +7,7 @@ import {
 
 import Arrow from '../i18n/Arrow';
 import { useMeeting } from './MeetingContext';
-import { submitMeeting } from '../../services/api';
+import { getMeetingAvailability, submitMeeting } from '../../services/api';
 import { visitAttribution } from '../../analytics/attribution';
 import { track } from '../../analytics/track';
 import { countryNameTr, countryOptions } from '../../data/countries';
@@ -70,6 +70,13 @@ export default function MeetingModal() {
   const [error, setError] = useState('');
   const [sent, setSent] = useState(null);
   const [now, setNow] = useState(() => new Date());
+  // Taken slots from the server ({ '2026-11-10': ['10:00'] }); empty = all open
+  const [taken, setTaken] = useState({});
+
+  const loadTaken = () =>
+    getMeetingAvailability()
+      .then((response) => setTaken(response?.data?.taken || {}))
+      .catch(() => {});
 
   // Fresh dialog every time it is opened from a button
   useEffect(() => {
@@ -81,6 +88,7 @@ export default function MeetingModal() {
     setSent(null);
     setType(presetType || '');
     setStep(presetType ? 1 : 0);
+    loadTaken();
     setForm((current) => {
       if (current.email) return current;
       const saved = readContact() || {};
@@ -134,12 +142,13 @@ export default function MeetingModal() {
 
   const slots = useMemo(() => meetingSlots(), []);
   const earliest = now.getTime() + MEETING_MIN_HOURS_AHEAD * 3600 * 1000;
-  const isOpenSlot = (date, slot) => (istanbulDateTime(date, slot)?.getTime() || 0) >= earliest;
+  const isTakenSlot = (date, slot) => Boolean(taken[date]?.includes(slot));
+  const isOpenSlot = (date, slot) => (istanbulDateTime(date, slot)?.getTime() || 0) >= earliest && !isTakenSlot(date, slot);
 
   // Working days with at least one free slot
   const days = useMemo(
     () => (opened ? meetingDays(now).filter((date) => slots.some((slot) => isOpenSlot(date, slot))) : []),
-    [opened, now, slots]
+    [opened, now, slots, taken]
   );
   const pages = Math.max(1, Math.ceil(days.length / DAYS_PER_PAGE));
   const visibleDays = days.slice(page * DAYS_PER_PAGE, (page + 1) * DAYS_PER_PAGE);
@@ -234,6 +243,14 @@ export default function MeetingModal() {
       setForm((current) => ({ ...current, topic: '', subject: '', message: '' }));
     } catch (err) {
       setStatus('idle');
+      // Someone else got the slot first: back to the calendar with fresh data
+      if (err?.status === 409) {
+        setTime('');
+        setStep(1);
+        setError('meeting.errors.taken');
+        loadTaken();
+        return;
+      }
       setError(errorKey(err));
     }
   }
@@ -244,19 +261,20 @@ export default function MeetingModal() {
 
   const slotButton = (slot) => {
     const available = day ? isOpenSlot(day, slot) : true;
-    const own = day ? ownTime(day, slot) : '';
+    const busy = day ? isTakenSlot(day, slot) : false;
+    const own = day && !busy ? ownTime(day, slot) : '';
     return (
       <button
         key={slot}
         type="button"
-        className={`mtSlot ${time === slot ? 'active' : ''}`}
+        className={`mtSlot ${time === slot ? 'active' : ''} ${busy ? 'busy' : ''}`}
         onClick={() => { setTime(slot); setError(''); }}
         disabled={!day || !available}
         aria-pressed={time === slot}
-        title={own ? m('yourTime', { time: own }) : undefined}
+        title={busy ? m('busy') : own ? m('yourTime', { time: own }) : undefined}
       >
         <span dir="ltr">{slot}</span>
-        {own && <small dir="ltr">{own}</small>}
+        {busy ? <small>{m('busy')}</small> : own && <small dir="ltr">{own}</small>}
       </button>
     );
   };
@@ -388,7 +406,7 @@ export default function MeetingModal() {
                       <div className="mtSlotGrid">{afternoon.map(slotButton)}</div>
                     </div>
 
-                    <p className="mtHint"><Globe2 aria-hidden="true" />{m('timeZone')} {m('timeNote')}</p>
+                    <p className="mtHint"><Globe2 aria-hidden="true" />{m('timeZone')} {m('busyNote')} {m('timeNote')}</p>
                   </div>
                 )}
 

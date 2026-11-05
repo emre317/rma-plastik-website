@@ -1830,3 +1830,163 @@
     justify-content: start;
   }
 }
+
+/* Taken slots (confirmed meetings, closed times, Outlook) */
+.mtSlot.busy:disabled {
+  border-style: dashed;
+  background: repeating-linear-gradient(135deg, var(--ink-050) 0 6px, #ffffff 6px 12px);
+  color: var(--ink-300);
+  text-decoration: none;
+}
+
+.mtSlot.busy small {
+  color: var(--ink-400);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Closed times (panel) */
+.mtBlocks {
+  margin-bottom: 18px;
+  padding: 0;
+}
+
+.mtBlocksHead {
+  width: 100%;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.mtBlocksHead > svg:first-child {
+  width: 20px;
+  height: 20px;
+  color: var(--accent);
+}
+
+.mtBlocksHead span {
+  display: grid;
+  gap: 2px;
+}
+
+.mtBlocksHead strong {
+  font-size: 15px;
+}
+
+.mtBlocksHead small {
+  color: var(--ink-500);
+  font-size: 12.5px;
+}
+
+.mtBlocksChevron {
+  width: 18px;
+  height: 18px;
+  margin-inline-start: auto;
+  color: var(--ink-500);
+  transition: transform 180ms ease;
+}
+
+.mtBlocks.open .mtBlocksChevron {
+  transform: rotate(180deg);
+}
+
+.mtBlocksBody {
+  padding: 0 20px 20px;
+  display: grid;
+  gap: 14px;
+}
+
+.mtBlockList {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+  list-style: none;
+}
+
+.mtBlockList li {
+  padding: 8px 8px 8px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid var(--ink-150);
+  border-radius: var(--radius-sm);
+  background: repeating-linear-gradient(135deg, var(--ink-050) 0 8px, #ffffff 8px 16px);
+}
+
+.mtBlockList span {
+  display: grid;
+  gap: 2px;
+  font-size: 14px;
+}
+
+.mtBlockList small {
+  color: var(--ink-500);
+}
+
+.mtBlockForm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.mtBlockForm .cmsField {
+  min-width: 140px;
+}
+
+.mtBlockForm .mtBlockNote {
+  flex: 1;
+  min-width: 180px;
+}
+
+.mtBlockAllDay {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Conflict warning when confirming */
+.mtConflicts {
+  padding: 12px 14px;
+  display: grid;
+  gap: 6px;
+  border: 1px solid #f0c98b;
+  border-radius: var(--radius-sm);
+  background: #fdf4e3;
+  color: #6e4700;
+  font-size: 13px;
+}
+
+.mtConflicts strong {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mtConflicts strong svg {
+  width: 15px;
+  height: 15px;
+}
+
+.mtConflicts ul {
+  margin: 0;
+  padding-inline-start: 18px;
+}
+
+.mtConflicts a {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+}

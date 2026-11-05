@@ -6,6 +6,7 @@ import { getMeetingSummary, getMeetings } from '../../services/adminApi';
 import useAdminApi from '../../hooks/useAdminApi';
 import usePageTitle from '../../hooks/usePageTitle';
 import { timeAgo } from '../../components/admin/quoteStatus';
+import MeetingBlocks from './MeetingBlocks';
 import {
   MEETING_TYPE, awaitsResult, outcomeLabel, outcomeTone, meetingStatusLabel, meetingStatusTone, meetingTime, meetingTopic,
 } from '../../components/admin/meetingStatus';
@@ -98,6 +99,8 @@ export default function AdminMeetings() {
           <p>Siteden gelen yüz yüze ve online (Teams) toplantı talepleri. Bir talebi açıp zamanı onaylayın ya da değiştirin, katılacak RMA çalışanlarını seçin; müşteriye ve çalışanlara davet e-postası gider.</p>
         </div>
       </header>
+
+      <MeetingBlocks call={call} />
 
       <div className="mtTabs" role="tablist" aria-label="Toplantı görünümü">
         {VIEWS.map((item) => (

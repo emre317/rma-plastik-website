@@ -252,7 +252,10 @@ const tr = {
     back: 'Geri',
     submit: 'Toplantı Talep Et',
     sending: 'Gönderiliyor…',
+    busy: 'Dolu',
+    busyNote: 'Dolu saatler kapalı gösterilir.',
     errors: {
+      taken: 'Bu saat az önce doldu. Lütfen başka bir saat seçin.',
       type: 'Lütfen toplantı türünü seçin.',
       time: 'Lütfen gün ve saat seçin.',
       topic: 'Lütfen görüşme konusunu seçin.',
