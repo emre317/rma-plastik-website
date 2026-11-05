@@ -337,7 +337,6 @@ const tr = {
   },
 
   hero: {
-    playVideo: 'Tanıtım filmini oynat',
     kicker: 'Rotasyonel Kalıplama',
     typePrefix: 'Ürettiklerimiz:',
     categoriesLabel: 'Ürün Grupları',

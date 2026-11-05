@@ -210,7 +210,7 @@ export const cookiePolicy = {
       ],
     },
     { type: 'h3', text: '4.4 Harita ve video içerikleri' },
-    { type: 'p', text: 'İletişim sayfasındaki Google Haritalar ve sitedeki YouTube videoları, siz “Haritayı yükle” veya oynat düğmesine tıklayana kadar yüklenmez; bunların yerine sitemizde barındırılan bir önizleme görseli gösterilir. Tıkladığınızda içerik Google/YouTube sunucularından yüklenir ve bu sırada IP adresiniz ve tarayıcı bilgileriniz Google’a iletilir; Google kendi çerezlerini kullanabilir. Videolar, çerez kullanımını sınırlayan youtube-nocookie.com alan adı üzerinden gösterilir.' },
+    { type: 'p', text: 'İletişim sayfasındaki Google Haritalar ve ana sayfa dışındaki YouTube videoları, siz “Haritayı yükle” veya oynat düğmesine tıklayana kadar yüklenmez; bunların yerine sitemizde barındırılan bir önizleme görseli gösterilir. Tıkladığınızda içerik Google/YouTube sunucularından yüklenir. Ana sayfadaki tanıtım filmi ise sayfa açıldığında sessiz olarak kendiliğinden oynatılır. Her iki durumda da içerik yüklenirken IP adresiniz ve tarayıcı bilgileriniz Google’a iletilir; Google kendi çerezlerini kullanabilir. Videolar, çerez kullanımını sınırlayan youtube-nocookie.com alan adı üzerinden gösterilir.' },
 
     { type: 'h2', text: '5. İşlenen Veriler' },
     { type: 'p', text: 'İzin verdiğiniz çerez türlerine göre; IP adresi, cihaz ve tarayıcı bilgileri, yaklaşık konum, ziyaret edilen sayfalar ve site içi etkileşimler, yönlendiren site, kampanya etiketleri, reklam tıklama kimlikleri ve çerez tercih kayıtları işlenebilir.' },

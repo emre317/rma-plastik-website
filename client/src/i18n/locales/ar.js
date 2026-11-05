@@ -338,7 +338,6 @@ const ar = {
   },
 
   hero: {
-    playVideo: 'تشغيل الفيلم التعريفي',
     kicker: 'القولبة الدورانية',
     typePrefix: 'ما نصنعه:',
     categoriesLabel: 'مجموعات المنتجات',

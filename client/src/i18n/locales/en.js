@@ -338,7 +338,6 @@ const en = {
   },
 
   hero: {
-    playVideo: 'Play the company film',
     kicker: 'Rotational Moulding',
     typePrefix: 'What we make:',
     categoriesLabel: 'Product Groups',

@@ -21,9 +21,9 @@ const PLAYER_ORIGIN = 'https://www.youtube-nocookie.com';
   muted, looped and full-bleed behind the company introduction.
 
   - The poster comes from our own server and shows immediately (fast first
-    paint, good LCP). The YouTube player is created only when the visitor
-    presses play (KVKK: nothing reaches Google before that), and fades in
-    once it is really playing, so a blocked video never shows an error screen.
+    paint, good LCP). The YouTube player starts by itself right after the page
+    is ready (no play button, decided by RMA) and fades in once it is really
+    playing, so a blocked video never shows an error screen.
   - Browsers only allow muted autoplay: the background film stays muted and
     has no controls (the films are on the Videolar page).
 */
@@ -43,6 +43,11 @@ export default function HeroVideo({ video }) {
   const [playing, setPlaying] = useState(false);
   const [poster, setPoster] = useState(youtubeThumbnail(video.youtubeId, 'maxresdefault'));
   const [size, setSize] = useState(null);
+
+  // The film starts by itself once the page is on screen (not in the prerendered HTML)
+  useEffect(() => {
+    setLoad(true);
+  }, []);
 
   const title = videoText(video, lang, 'title');
   const categories = t('productExplorer.items', { returnObjects: true });
@@ -174,13 +179,6 @@ export default function HeroVideo({ video }) {
           />
         )}
       </div>
-
-      {!load && (
-        <button type="button" className="heroVideoPlay" onClick={() => setLoad(true)}>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>
-          <span>{t('hero.playVideo')}</span>
-        </button>
-      )}
 
       <div className="heroVideoShade" aria-hidden="true" />
       <div className="heroVideoGrain" aria-hidden="true" />
