@@ -224,6 +224,7 @@ Uygulama oluşunca cPanel `public_html/api/.htaccess` dosyasını yazar. Bu dosy
 tar -czf api.tar.gz --exclude=server/node_modules --exclude=server/uploads --exclude='server/.env*' --exclude=server/test \
   server client/src/data/offerText.js client/src/data/productGroups.builtin.js client/src/data/sectors.builtin.js \
   client/src/data/productTables.builtin.js client/src/data/exportMarkets.builtin.js client/src/data/projects.builtin.js \
+  client/src/data/projectBrief.js client/src/data/meetingForm.js \
   client/src/i18n/locales/tr.js client/src/i18n/locales/en.js client/src/i18n/locales/ar.js
 scp -P <port> api.tar.gz <kullanıcı>@<sunucu>:rma-deploy/incoming/
 ssh -p <port> <kullanıcı>@<sunucu> 'bash -s -- manual1 ~/rma-deploy/incoming/api.tar.gz rma-app nodevenv/rma-app/server/22/bin/activate' < deploy/remote-api.sh

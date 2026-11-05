@@ -380,3 +380,44 @@ export function deleteSalesTarget(month, owner, token) {
   const query = owner ? `?${new URLSearchParams({ owner }).toString()}` : '';
   return request(`/quote/targets/${encodeURIComponent(month)}${query}`, { method: 'DELETE', token, fallbackMessage: 'Hedef silinemedi.' });
 }
+
+/* ---------- Meetings (Toplantı Talepleri) ---------- */
+
+export function getMeetings({ view = 'all', type = '', search = '', page = 1, limit = 30 } = {}, token) {
+  const params = new URLSearchParams({ view, page: String(page), limit: String(limit) });
+  if (type) params.set('type', type);
+  if (search.trim()) params.set('search', search.trim());
+  return request(`/meetings?${params.toString()}`, { token, fallbackMessage: 'Toplantılar yüklenemedi.' });
+}
+
+export function getMeetingSummary(token) {
+  return request('/meetings/summary', { token, fallbackMessage: 'Toplantı özeti yüklenemedi.' });
+}
+
+export function getMeetingConfig(token) {
+  return request('/meetings/config', { token, fallbackMessage: 'Toplantı ayarları yüklenemedi.' });
+}
+
+export function getMeetingStaff(token) {
+  return request('/meetings/staff', { token, fallbackMessage: 'Çalışan listesi yüklenemedi.' });
+}
+
+export function getMeeting(id, token) {
+  return request(`/meetings/${encodeURIComponent(id)}`, { token, fallbackMessage: 'Toplantı yüklenemedi.' });
+}
+
+export function confirmMeeting(id, body, token) {
+  return request(`/meetings/${encodeURIComponent(id)}/confirm`, { method: 'POST', body, token, fallbackMessage: 'Toplantı onaylanamadı.' });
+}
+
+export function cancelMeeting(id, body, token) {
+  return request(`/meetings/${encodeURIComponent(id)}/cancel`, { method: 'POST', body, token, fallbackMessage: 'Toplantı iptal edilemedi.' });
+}
+
+export function updateMeetingNote(id, internalNote, token) {
+  return request(`/meetings/${encodeURIComponent(id)}`, { method: 'PATCH', body: { internalNote }, token, fallbackMessage: 'Not kaydedilemedi.' });
+}
+
+export function deleteMeeting(id, token) {
+  return request(`/meetings/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Toplantı silinemedi.' });
+}

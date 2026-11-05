@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
-  BarChart3, Boxes, Briefcase, Camera, Factory, ExternalLink, FileText, Inbox, LayoutDashboard, LogOut, Menu, PlayCircle, Settings, Table2, Type, UserPlus, Users, X, History,
+  BarChart3, Boxes, Briefcase, CalendarDays, Camera, Factory, ExternalLink, FileText, Inbox, LayoutDashboard, LogOut, Menu, PlayCircle, Settings, Table2, Type, UserPlus, Users, X, History,
 } from 'lucide-react';
 
-import { getUnreadLeadCount, getUnreadQuoteCount } from '../../services/adminApi';
+import { getMeetingSummary, getUnreadLeadCount, getUnreadQuoteCount } from '../../services/adminApi';
 import PublishPanel from './PublishPanel';
 import { useAdminSession } from './AdminSession';
 import { roleLabel } from './roles';
 import BrandLogo from '../BrandLogo';
 import {
+  MEETINGS_CHANGED_EVENT,
   QUOTES_CHANGED_EVENT,
   clearAdminSession,
   getAdminToken,
@@ -28,6 +29,7 @@ const NAV = [
     group: 'Satış',
     items: [
       { to: '/admin/quotes', label: 'Teklif Talepleri', icon: Inbox, badge: true, area: 'sales' },
+      { to: '/admin/meetings', label: 'Toplantılar', icon: CalendarDays, hint: 'Yüz yüze ve online toplantı talepleri', badge: 'meetings', area: 'sales' },
       { to: '/admin/quote-reports', label: 'Satış Raporu', icon: BarChart3, hint: 'Ülke, ürün, kanal ve kazanma oranı', area: 'sales' },
       { to: '/admin/leads', label: 'Potansiyel Müşteriler', icon: UserPlus, hint: 'Kataloğu indiren ziyaretçiler', badge: 'leads', area: 'sales' },
     ],
@@ -75,6 +77,7 @@ export default function AdminSidebar() {
 
   const [unread, setUnread] = useState(0);
   const [newLeads, setNewLeads] = useState(0);
+  const [pendingMeetings, setPendingMeetings] = useState(0);
   const [open, setOpen] = useState(false);
 
   // Phones: the menu closes after navigation
@@ -91,13 +94,15 @@ export default function AdminSidebar() {
         // Unread counts are sales data: other roles do not ask for them
         if (!sales) return;
 
-        const [response, leads] = await Promise.all([
+        const [response, leads, meetings] = await Promise.all([
           getUnreadQuoteCount(token),
           getUnreadLeadCount(token).catch(() => null),
+          getMeetingSummary(token).catch(() => null),
         ]);
         if (!cancelled) {
           setUnread(response.data?.unread || 0);
           setNewLeads(leads?.data?.unread || 0);
+          setPendingMeetings(meetings?.data?.pending || 0);
         }
       } catch (error) {
         if (!cancelled && isAuthError(error)) {
@@ -110,10 +115,12 @@ export default function AdminSidebar() {
 
     loadUnreadCount();
     window.addEventListener(QUOTES_CHANGED_EVENT, loadUnreadCount);
+    window.addEventListener(MEETINGS_CHANGED_EVENT, loadUnreadCount);
 
     return () => {
       cancelled = true;
       window.removeEventListener(QUOTES_CHANGED_EVENT, loadUnreadCount);
+      window.removeEventListener(MEETINGS_CHANGED_EVENT, loadUnreadCount);
     };
   }, [token, pathname, navigate, sales]);
 
@@ -130,7 +137,7 @@ export default function AdminSidebar() {
         <BrandLogo variant="light" alt="RMA Plastik" />
         <button type="button" className="adMenuButton" onClick={() => setOpen(true)} aria-label="Menüyü aç">
           <Menu aria-hidden="true" />
-          {unread > 0 && <span className="adDot" aria-hidden="true" />}
+          {(unread > 0 || pendingMeetings > 0) && <span className="adDot" aria-hidden="true" />}
         </button>
       </div>
 
@@ -158,6 +165,9 @@ export default function AdminSidebar() {
                   <span className="adNavText">{item.label}</span>
                   {item.badge === true && unread > 0 && (
                     <span className="adNavBadge" aria-label={`${unread} okunmamış`}>{unread}</span>
+                  )}
+                  {item.badge === 'meetings' && pendingMeetings > 0 && (
+                    <span className="adNavBadge" aria-label={`${pendingMeetings} onay bekliyor`}>{pendingMeetings}</span>
                   )}
                   {item.badge === 'leads' && newLeads > 0 && (
                     <span className="adNavBadge" aria-label={`${newLeads} yeni`}>{newLeads}</span>

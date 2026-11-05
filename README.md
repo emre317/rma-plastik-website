@@ -88,6 +88,16 @@ confirmation, catalogue links, offers, password reset and user invitation e-mail
 (those links also need `CLIENT_URL`). Check the settings on the server with
 `cd server && npm run mail-test` (add an address to also send a test e-mail).
 
+## Meeting requests (face to face / Microsoft Teams)
+
+The "Toplantı Talep Edin" bubble opens a 3-step meeting request (type, Türkiye-time slot,
+subject and contact details; online guests). Requests land in `/admin/meetings` and are
+mailed to `MEETING_NOTIFY_TO` (default `info@rmaplastik.com`). Confirming in the panel sets
+the time, the RMA staff and the place or Teams link, and mails the customer, the guests and
+the staff with a calendar invitation. Teams links are created automatically when the
+Microsoft Graph settings are present, otherwise pasted in. Setup:
+**[docs/meetings.md](docs/meetings.md)**.
+
 ## Languages (TR / EN / AR)
 
 - Public pages live under a language prefix: `/tr/...`, `/en/...`, `/ar/...`.

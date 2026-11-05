@@ -4,6 +4,7 @@ import helmet from 'helmet';
 
 import quoteRoutes from './routes/quoteRoutes.js';
 import leadRoutes from './routes/leadRoutes.js';
+import meetingRoutes from './routes/meetingRoutes.js';
 import consentRoutes from './routes/consentRoutes.js';
 import videoThumbRoutes from './routes/videoThumbRoutes.js';
 import userRoutes from './routes/userRoutes.js';
@@ -122,6 +123,8 @@ app.use(
 );
 
 app.use('/api/leads', leadRoutes);
+
+app.use('/api/meetings', meetingRoutes);
 
 app.use('/api/yt-thumb', videoThumbRoutes);
 

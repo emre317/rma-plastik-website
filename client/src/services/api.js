@@ -8,6 +8,14 @@ export function submitQuote(payload) {
   });
 }
 
+export function submitMeeting(payload) {
+  return request('/meetings', {
+    method: 'POST',
+    body: payload,
+    fallbackMessage: 'Meeting request could not be sent.',
+  });
+}
+
 export function submitCatalogLead(payload) {
   return request('/leads/catalog', {
     method: 'POST',

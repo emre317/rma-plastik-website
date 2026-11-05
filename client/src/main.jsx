@@ -15,6 +15,7 @@ import '@fontsource/ibm-plex-sans-arabic/700.css';
 import i18n, { initialLanguage, loadLanguage } from './i18n';
 import App from './App';
 import './styles/global.css';
+import './styles/meetings.css';
 
 const root = document.getElementById('root');
 

@@ -65,6 +65,8 @@ jobs:
             client/src/data/productTables.builtin.js \
             client/src/data/exportMarkets.builtin.js \
             client/src/data/projects.builtin.js \
+            client/src/data/projectBrief.js \
+            client/src/data/meetingForm.js \
             client/src/i18n/locales/tr.js \
             client/src/i18n/locales/en.js \
             client/src/i18n/locales/ar.js

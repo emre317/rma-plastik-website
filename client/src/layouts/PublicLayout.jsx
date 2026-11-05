@@ -9,6 +9,8 @@ import QuoteCartButton from '../components/quote/QuoteCartButton';
 import { CompareProvider } from '../components/compare/CompareContext';
 import CompareTray from '../components/compare/CompareTray';
 import FloatingContact from '../components/ui/FloatingContact';
+import { MeetingProvider } from '../components/meeting/MeetingContext';
+import MeetingModal from '../components/meeting/MeetingModal';
 import CookieConsent from '../components/CookieConsent';
 import CursorTrail from '../components/ui/CursorTrail';
 import CatalogGate from '../components/catalog/CatalogGate';
@@ -39,6 +41,7 @@ export default function PublicLayout() {
 
   return (
     <QuoteProvider>
+      <MeetingProvider>
       <CompareProvider>
       <SearchProvider>
       <Header />
@@ -53,10 +56,12 @@ export default function PublicLayout() {
       <QuoteCartButton />
       <CompareTray />
       <QuoteModal />
+      <MeetingModal />
       <CursorTrail />
       <CatalogGate />
       </SearchProvider>
       </CompareProvider>
+      </MeetingProvider>
     </QuoteProvider>
   );
 }

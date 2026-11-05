@@ -26,6 +26,8 @@ console.log(`Publish mode:  ${publishMode()}${publishMode() === 'github' ? (isGi
 console.log(`TRUST_PROXY:   ${process.env.TRUST_PROXY || '(not set)'}`);
 console.log(`Mail sender:   ${mailFrom().name} <${mailFrom().address || '(no address)'}>`);
 console.log(`Quote notice:  ${process.env.QUOTE_NOTIFY_TO || '(not set)'}`);
+console.log(`Meetings to:   ${process.env.MEETING_NOTIFY_TO || process.env.QUOTE_NOTIFY_TO || 'info@rmaplastik.com'}`);
+console.log(`Teams (Graph): ${process.env.MS_GRAPH_TENANT_ID && process.env.MS_GRAPH_CLIENT_ID && process.env.MS_GRAPH_CLIENT_SECRET && process.env.TEAMS_ORGANIZER ? `on, organizer ${process.env.TEAMS_ORGANIZER}` : 'off (Teams links are pasted in the panel)'}`);
 console.log('');
 
 warnings.forEach((message) => console.log(`WARNING  ${message}`));

@@ -47,3 +47,13 @@ export const passwordResetLimiter = rateLimit({
     'Çok fazla deneme yapıldı. Lütfen 15 dakika sonra tekrar deneyin.'
   ),
 });
+
+export const meetingSubmitLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  limit: 10,
+  standardHeaders: 'draft-8',
+  legacyHeaders: false,
+  message: limitMessage(
+    'Too many requests. Please try again later or contact us by email.'
+  ),
+});

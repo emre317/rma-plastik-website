@@ -44,7 +44,7 @@ test('publish callback is closed without its token', async () => {
 });
 
 test('admin endpoints need a login', async () => {
-  for (const path of ['/api/admin/publish', '/api/admin/product-groups', '/api/quote', '/api/admin/users']) {
+  for (const path of ['/api/admin/publish', '/api/admin/product-groups', '/api/quote', '/api/admin/users', '/api/meetings', '/api/meetings/summary']) {
     const response = await get(path);
     assert.equal(response.status, 401, path);
   }

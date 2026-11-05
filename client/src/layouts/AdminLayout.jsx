@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 
 import AdminSidebar from '../components/admin/AdminSidebar';
 import QuoteAlerts from '../components/admin/QuoteAlerts';
+import MeetingBar from '../components/admin/MeetingBar';
 import { AdminSessionProvider } from '../components/admin/AdminSession';
 import useAdminDocumentLanguage from '../hooks/useAdminDocumentLanguage';
 import useNoticeScroll from '../hooks/useNoticeScroll';
@@ -16,7 +17,11 @@ export default function AdminLayout() {
       <main className="adminPage">
         <AdminSidebar />
 
-        <Outlet />
+        {/* Page column: the meeting strip sits above every page */}
+        <div className="adMain">
+          <MeetingBar />
+          <Outlet />
+        </div>
 
         <QuoteAlerts />
       </main>

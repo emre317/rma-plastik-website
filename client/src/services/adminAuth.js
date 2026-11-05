@@ -80,3 +80,10 @@ export const QUOTES_CHANGED_EVENT = 'rma:quotes-changed';
 export function notifyQuotesChanged() {
   window.dispatchEvent(new Event(QUOTES_CHANGED_EVENT));
 }
+
+/* Meeting pages tell the header strip and the sidebar that something changed. */
+export const MEETINGS_CHANGED_EVENT = 'rma:meetings-changed';
+
+export function notifyMeetingsChanged() {
+  window.dispatchEvent(new Event(MEETINGS_CHANGED_EVENT));
+}

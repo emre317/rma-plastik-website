@@ -1,0 +1,1681 @@
+/* =====================================================
+   MEETING REQUEST (website dialog + admin panel)
+   Uses the design tokens of global.css. Logical properties only (RTL).
+===================================================== */
+
+/* ---------- Floating bubble: buttons look like the link bubbles ---------- */
+
+.floatingContactItem button {
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.floatingContact-meeting button::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--rma-red) 55%, transparent);
+  animation: mtBubblePulse 2.8s ease-out 2.2s 3;
+}
+
+@keyframes mtBubblePulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--rma-red) 55%, transparent); }
+  100% { box-shadow: 0 0 0 14px transparent; }
+}
+
+/* ---------- Dialog frame ---------- */
+
+.mtModal {
+  position: fixed;
+  inset: 0;
+  z-index: 1210;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 220ms ease, visibility 0s linear 220ms;
+}
+
+.mtModal.open {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 220ms ease, visibility 0s;
+}
+
+.mtBackdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(16, 19, 23, 0.62);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.mtDialog {
+  position: relative;
+  width: min(1000px, 100%);
+  height: min(720px, calc(100dvh - 48px));
+  display: grid;
+  grid-template-columns: 330px minmax(0, 1fr);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 40px 100px -30px rgba(0, 0, 0, 0.55);
+  transform: translateY(16px) scale(0.985);
+  transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.mtModal.open .mtDialog {
+  transform: none;
+}
+
+.mtClose {
+  position: absolute;
+  top: 16px;
+  inset-inline-end: 16px;
+  z-index: 3;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--ink-150);
+  border-radius: var(--radius-pill);
+  background: #ffffff;
+  color: var(--ink-700);
+  cursor: pointer;
+  transition: background 160ms ease, transform 160ms ease;
+}
+
+.mtClose:hover {
+  background: var(--ink-100);
+  transform: rotate(90deg);
+}
+
+.mtClose svg {
+  width: 18px;
+  height: 18px;
+}
+
+.mtFlip {
+  transform: scaleX(var(--dir-x, 1));
+}
+
+[dir="rtl"] .mtFlip {
+  transform: scaleX(-1);
+}
+
+/* ---------- Side panel ---------- */
+
+.mtAside {
+  position: relative;
+  padding: 36px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  color: #ffffff;
+  background:
+    radial-gradient(120% 60% at 0% 0%, color-mix(in srgb, var(--rma-red) 32%, transparent), transparent 62%),
+    radial-gradient(90% 50% at 100% 100%, color-mix(in srgb, var(--rma-blue) 26%, transparent), transparent 60%),
+    var(--ink-900);
+}
+
+.mtAsideIcon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--gradient-wordmark);
+  box-shadow: 0 12px 28px -10px rgba(228, 23, 58, 0.7);
+}
+
+.mtAsideIcon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.mtAside .eyebrow {
+  margin: 8px 0 0;
+  color: var(--rma-red-light);
+}
+
+.mtAside h2 {
+  margin: 0;
+  font-family: var(--font-heading, inherit);
+  font-size: 30px;
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.mtAside h2 span {
+  display: block;
+  color: var(--rma-red-light);
+}
+
+.mtAsideText {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+.mtPoints {
+  margin: 6px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  list-style: none;
+}
+
+.mtPoints li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+
+.mtPoints svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  margin-top: 1px;
+  color: var(--rma-blue-light);
+}
+
+.mtSteps {
+  margin: auto 0 0;
+  padding: 18px 0 0;
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.mtSteps li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 200ms ease;
+}
+
+.mtSteps li.current,
+.mtSteps li.done {
+  color: #ffffff;
+}
+
+.mtStepDot {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  transition: background 200ms ease, border-color 200ms ease;
+}
+
+.mtSteps li.current .mtStepDot {
+  border-color: var(--rma-blue-light);
+  background: var(--rma-blue);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--rma-blue-light) 28%, transparent);
+}
+
+.mtSteps li.done .mtStepDot {
+  border-color: var(--status-success);
+  background: var(--status-success);
+}
+
+.mtStepDot svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ---------- Main column ---------- */
+
+.mtMain {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.mtForm {
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.mtBody {
+  min-height: 0;
+  flex: 1;
+  padding: 34px 40px 24px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.mtStepLabel {
+  margin: 0 0 6px;
+  color: var(--rma-blue);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mtTitle {
+  margin: 0 0 22px;
+  padding: 0;
+  color: var(--ink-900);
+  font-family: var(--font-heading, inherit);
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.mtFieldset {
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  border: 0;
+}
+
+.mtLabel {
+  margin: 0 0 10px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--ink-700);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.mtLabel svg {
+  width: 16px;
+  height: 16px;
+  color: var(--rma-blue);
+}
+
+.mtLabel small,
+.mtField small {
+  color: var(--ink-400);
+  font-weight: 500;
+}
+
+/* Step 1: meeting type cards */
+
+.mtTypes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.mtType {
+  position: relative;
+  padding: 26px 24px;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  justify-items: start;
+  border: 1.5px solid var(--ink-150);
+  border-radius: var(--radius-lg);
+  background: #ffffff;
+  color: var(--ink-600);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.55;
+  text-align: start;
+  cursor: pointer;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.mtType:hover {
+  border-color: var(--ink-300);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.mtType.active {
+  border-color: var(--rma-blue);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--rma-blue) 14%, transparent), var(--shadow-md);
+}
+
+.mtType strong {
+  color: var(--ink-900);
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.mtTypeIcon {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 8px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  color: #ffffff;
+  background: var(--rma-red);
+}
+
+.mtType-online .mtTypeIcon {
+  background: linear-gradient(135deg, #5b5fc7 0%, var(--rma-blue) 100%);
+}
+
+.mtTypeIcon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.mtTypeCheck {
+  position: absolute;
+  top: 18px;
+  inset-inline-end: 18px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--ink-200);
+  border-radius: 50%;
+  color: transparent;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.mtType.active .mtTypeCheck {
+  border-color: var(--rma-blue);
+  background: var(--rma-blue);
+  color: #ffffff;
+}
+
+.mtTypeCheck svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Step 2: day strip and time slots */
+
+.mtDaysHead {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mtDaysHead .mtLabel {
+  margin: 0;
+}
+
+.mtMonth {
+  color: var(--ink-500);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.mtPager {
+  margin-inline-start: auto;
+  display: flex;
+  gap: 6px;
+}
+
+.mtPager button,
+.mtIconButton {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--ink-150);
+  border-radius: var(--radius-sm);
+  background: #ffffff;
+  color: var(--ink-700);
+  cursor: pointer;
+}
+
+.mtPager button:hover:not(:disabled),
+.mtIconButton:hover {
+  border-color: var(--ink-400);
+}
+
+.mtPager button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.mtPager svg,
+.mtIconButton svg {
+  width: 17px;
+  height: 17px;
+}
+
+.mtDays {
+  margin-bottom: 24px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.mtDay {
+  padding: 12px 6px;
+  display: grid;
+  gap: 2px;
+  justify-items: center;
+  border: 1.5px solid var(--ink-150);
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  color: var(--ink-500);
+  font: inherit;
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.mtDay small {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.mtDay strong {
+  color: var(--ink-900);
+  font-family: var(--font-heading, inherit);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.mtDay:hover {
+  border-color: var(--ink-300);
+  transform: translateY(-1px);
+}
+
+.mtDay.active {
+  border-color: var(--ink-900);
+  background: var(--ink-900);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.mtDay.active strong {
+  color: #ffffff;
+}
+
+.mtSlots {
+  transition: opacity 200ms ease;
+}
+
+.mtSlots.idle {
+  opacity: 0.45;
+}
+
+.mtSlotGroup {
+  margin: 4px 0 8px;
+  color: var(--ink-400);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mtSlotGrid {
+  margin-bottom: 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  gap: 8px;
+}
+
+.mtSlot {
+  min-height: 44px;
+  padding: 6px 4px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  border: 1px solid var(--ink-150);
+  border-radius: var(--radius-sm);
+  background: var(--ink-050);
+  color: var(--ink-900);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 140ms ease, background 140ms ease, color 140ms ease;
+}
+
+.mtSlot small {
+  color: var(--ink-400);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.mtSlot:hover:not(:disabled) {
+  border-color: var(--rma-blue);
+  background: #ffffff;
+}
+
+.mtSlot.active,
+.mtSlot.active:hover:not(:disabled) {
+  border-color: var(--rma-blue);
+  background: var(--rma-blue);
+  color: #ffffff;
+}
+
+.mtSlot.active small {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.mtSlot:disabled {
+  color: var(--ink-300);
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.mtHint {
+  margin: 8px 0 0;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  color: var(--ink-500);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.mtHint svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  margin-top: 2px;
+  color: var(--rma-blue);
+}
+
+/* Step 3: details */
+
+.mtDetails {
+  display: grid;
+  gap: 20px;
+}
+
+.mtSummary {
+  padding: 14px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  border-radius: var(--radius-md);
+  background: var(--ink-050);
+  border: 1px solid var(--ink-150);
+}
+
+.mtSummary strong {
+  color: var(--ink-900);
+  font-size: 15px;
+}
+
+.mtTypeBadge {
+  padding: 5px 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--rma-blue) 10%, #fff);
+  color: var(--rma-blue-dark);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.mtTypeBadge svg {
+  width: 15px;
+  height: 15px;
+}
+
+.mtTextButton {
+  margin-inline-start: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--rma-blue);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mtTextButton:hover {
+  text-decoration: underline;
+}
+
+.mtChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mtChip {
+  min-height: 38px;
+  padding: 0 16px;
+  border: 1px solid var(--ink-200);
+  border-radius: var(--radius-pill);
+  background: #ffffff;
+  color: var(--ink-700);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 140ms ease, background 140ms ease, color 140ms ease;
+}
+
+.mtChip:hover {
+  border-color: var(--ink-500);
+}
+
+.mtChip.active {
+  border-color: var(--ink-900);
+  background: var(--ink-900);
+  color: #ffffff;
+}
+
+.mtGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 16px;
+}
+
+.mtField {
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.mtField > span {
+  color: var(--ink-700);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.mtWide {
+  grid-column: 1 / -1;
+}
+
+.mtField input,
+.mtField select,
+.mtField textarea,
+.mtGuest input {
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 14px;
+  border: 1px solid var(--ink-200);
+  border-radius: var(--radius-sm);
+  background: #ffffff;
+  color: var(--ink-900);
+  font: inherit;
+  font-size: 15px;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.mtField textarea {
+  resize: vertical;
+  min-height: 84px;
+}
+
+.mtField input:focus,
+.mtField select:focus,
+.mtField textarea:focus,
+.mtGuest input:focus {
+  outline: none;
+  border-color: var(--rma-blue);
+  box-shadow: var(--ring-focus);
+}
+
+[dir="rtl"] .mtField input[dir="ltr"],
+[dir="rtl"] .mtGuest input[dir="ltr"] {
+  text-align: right;
+}
+
+.mtGuests {
+  padding: 18px;
+  display: grid;
+  gap: 10px;
+  border: 1px dashed var(--ink-200);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--rma-blue) 3%, #fff);
+}
+
+.mtGuestsHead {
+  display: grid;
+  gap: 2px;
+}
+
+.mtGuestsHead .mtLabel {
+  margin: 0;
+}
+
+.mtGuestsHead > small {
+  color: var(--ink-500);
+  font-size: 12.5px;
+}
+
+.mtGuest {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) auto;
+  gap: 8px;
+  align-items: center;
+  animation: mtFadeIn 220ms ease both;
+}
+
+.mtGuest .mtIconButton {
+  width: 46px;
+  height: 46px;
+  color: var(--status-danger);
+}
+
+.mtAddGuest {
+  justify-self: start;
+  min-height: 40px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--ink-200);
+  border-radius: var(--radius-pill);
+  background: #ffffff;
+  color: var(--rma-blue);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mtAddGuest:hover {
+  border-color: var(--rma-blue);
+}
+
+.mtAddGuest svg {
+  width: 16px;
+  height: 16px;
+}
+
+.mtPrivacy {
+  margin: 0;
+  display: flex;
+  gap: 8px;
+  color: var(--ink-500);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.mtPrivacy svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  margin-top: 1px;
+  color: var(--status-success);
+}
+
+.mtPrivacy a {
+  color: var(--rma-blue);
+  text-decoration: underline;
+}
+
+/* Footer */
+
+.mtFooter {
+  padding: 16px 40px;
+  border-top: 1px solid var(--ink-150);
+  background: #ffffff;
+}
+
+.mtActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mtBack {
+  min-height: 44px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--ink-600);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mtBack:hover {
+  background: var(--ink-100);
+}
+
+.mtBack svg {
+  width: 17px;
+  height: 17px;
+}
+
+.mtActions .button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mtError {
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: #fdecef;
+  color: var(--status-danger);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+/* Success */
+
+.mtSuccess {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.mtSuccess h3 {
+  margin: 6px 0 0;
+  color: var(--ink-900);
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.mtSuccess > p {
+  max-width: 440px;
+  margin: 0;
+  color: var(--ink-500);
+  line-height: 1.6;
+}
+
+.mtSuccess .mtHint {
+  justify-content: center;
+}
+
+.mtSuccessIcon svg {
+  width: 84px;
+  height: 84px;
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mtSuccessIcon circle {
+  stroke: var(--status-success);
+  stroke-dasharray: 151;
+  stroke-dashoffset: 151;
+  animation: mtDraw 600ms ease forwards;
+}
+
+.mtSuccessIcon path {
+  stroke: var(--status-success);
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: mtDraw 400ms ease 450ms forwards;
+}
+
+.mtSuccessCard {
+  margin: 10px 0 4px;
+  padding: 18px 26px;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  border: 1px solid var(--ink-150);
+  border-radius: var(--radius-lg);
+  background: var(--ink-050);
+}
+
+.mtSuccessCard strong {
+  color: var(--ink-900);
+  font-size: 18px;
+}
+
+.mtSuccessCard small {
+  color: var(--ink-500);
+}
+
+.mtReference {
+  margin: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.mtReference small {
+  color: var(--ink-500);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.mtReference strong {
+  font-family: var(--font-heading, inherit);
+  font-size: 22px;
+  letter-spacing: 0.06em;
+}
+
+.mtSuccess .button {
+  margin-top: 10px;
+}
+
+@keyframes mtDraw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes mtFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Dialog on tablets and phones: the side panel shrinks to a header */
+
+@media (max-width: 860px) {
+  .mtModal {
+    padding: 0;
+    place-items: end stretch;
+  }
+
+  .mtDialog {
+    width: 100%;
+    height: 100dvh;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    border-radius: 0;
+  }
+
+  .mtAside {
+    padding: 18px 64px 16px 20px;
+    padding-inline: 20px 64px;
+    gap: 6px;
+    overflow: visible;
+  }
+
+  .mtAsideIcon,
+  .mtAsideText,
+  .mtPoints {
+    display: none;
+  }
+
+  .mtAside .eyebrow {
+    margin: 0;
+  }
+
+  .mtAside h2 {
+    font-size: 22px;
+  }
+
+  .mtAside h2 span {
+    display: inline;
+  }
+
+  .mtSteps {
+    margin: 8px 0 0;
+    padding: 0;
+    display: flex;
+    gap: 6px;
+    border: 0;
+  }
+
+  .mtSteps li {
+    flex: 1;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    font-size: 11.5px;
+  }
+
+  .mtSteps li::before {
+    content: "";
+    height: 3px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.18);
+  }
+
+  .mtSteps li.current::before,
+  .mtSteps li.done::before {
+    background: var(--rma-blue-light);
+  }
+
+  .mtStepDot {
+    display: none;
+  }
+
+  .mtClose {
+    top: 14px;
+    inset-inline-end: 14px;
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+  }
+
+  .mtBody {
+    padding: 22px 18px 18px;
+  }
+
+  .mtFooter {
+    padding: 12px 18px calc(12px + env(safe-area-inset-bottom));
+  }
+
+  .mtStepLabel {
+    display: none;
+  }
+
+  .mtTitle {
+    margin-bottom: 16px;
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 560px) {
+  .mtTypes,
+  .mtGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mtType {
+    padding: 18px;
+    grid-template-columns: auto 1fr;
+    column-gap: 14px;
+    align-items: center;
+  }
+
+  .mtTypeIcon {
+    grid-row: span 2;
+    width: 48px;
+    height: 48px;
+    margin: 0;
+  }
+
+  .mtDays {
+    gap: 6px;
+  }
+
+  .mtDay {
+    padding: 10px 2px;
+  }
+
+  .mtDay strong {
+    font-size: 20px;
+  }
+
+  .mtGuest {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .mtGuest input:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mtDialog,
+  .mtType,
+  .mtDay,
+  .floatingContact-meeting button::after,
+  .mtSuccessIcon circle,
+  .mtSuccessIcon path {
+    animation: none;
+    transition: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* =====================================================
+   ADMIN PANEL
+===================================================== */
+
+.adMain {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header strip: upcoming meetings and new requests */
+
+.mtBar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  padding: 10px 44px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(16, 19, 23, 0.07);
+  background: color-mix(in srgb, #ffffff 88%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.mtBarItem {
+  min-height: 36px;
+  padding: 6px 14px 6px 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(16, 19, 23, 0.08);
+  border-radius: var(--radius-pill);
+  background: #ffffff;
+  color: var(--ink-900);
+  font-size: 13px;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(16, 19, 23, 0.04);
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.mtBarItem:hover {
+  border-color: var(--ink-300);
+  box-shadow: var(--shadow-md);
+}
+
+.mtBarIcon {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  border-radius: 50%;
+  color: #ffffff;
+  background: var(--status-success);
+}
+
+.mtBarIcon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.mtBarItem.soon .mtBarIcon {
+  background: var(--rma-red);
+}
+
+.mtBarItem.soon .mtBarIcon::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border: 2px solid var(--rma-red);
+  border-radius: 50%;
+  animation: mtPing 1.6s ease-out infinite;
+}
+
+.mtBarItem.pending .mtBarIcon {
+  background: #b7791f;
+}
+
+.mtBarItem strong {
+  font-weight: 700;
+}
+
+.mtBarItem small {
+  color: var(--ink-500);
+  font-size: 12.5px;
+}
+
+.mtBarItem .mtBarJoin {
+  margin-inline-start: 4px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: #5b5fc7;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.mtBarMore {
+  color: var(--ink-500);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+@keyframes mtPing {
+  0% { transform: scale(0.9); opacity: 0.9; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+@media (max-width: 960px) {
+  .mtBar {
+    top: 64px;
+    padding: 8px 16px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .mtBarItem {
+    flex: none;
+  }
+}
+
+/* Meetings list */
+
+.mtTabs {
+  margin-bottom: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mtTabs .adChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.mtTabs .adChip.active {
+  border-color: var(--ink-900);
+  background: var(--ink-900);
+  color: #ffffff;
+}
+
+.mtTabCount {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  background: var(--rma-red);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.mtList {
+  display: grid;
+  gap: 10px;
+}
+
+.mtRow {
+  padding: 14px 18px;
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1.6fr) minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  border: 1px solid rgba(16, 19, 23, 0.07);
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  color: inherit;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(16, 19, 23, 0.04);
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.mtRow:hover {
+  border-color: var(--ink-300);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.mtRow.unread {
+  border-inline-start: 3px solid var(--rma-red);
+}
+
+.mtDate {
+  padding: 8px 4px;
+  display: grid;
+  justify-items: center;
+  border-radius: var(--radius-md);
+  background: var(--ink-050);
+  border: 1px solid var(--ink-150);
+  line-height: 1.15;
+}
+
+.mtDate small {
+  color: var(--rma-red);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.mtDate strong {
+  font-family: var(--font-heading, inherit);
+  font-size: 22px;
+}
+
+.mtDate span {
+  color: var(--ink-600);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.mtRowMain {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.mtRowMain strong {
+  overflow: hidden;
+  font-size: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mtRowMain small,
+.mtRowMeta small {
+  overflow: hidden;
+  color: var(--ink-500);
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mtRowMeta {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+  justify-items: start;
+}
+
+.mtKind {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-700);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.mtKind svg {
+  width: 15px;
+  height: 15px;
+  color: var(--rma-red);
+}
+
+.mtKind.online svg {
+  color: #5b5fc7;
+}
+
+@media (max-width: 760px) {
+  .mtRow {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 10px 14px;
+  }
+
+  .mtRowMeta,
+  .mtRow > .adPill {
+    grid-column: 2;
+  }
+}
+
+/* Meeting detail */
+
+.mtDetailGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 440px);
+  gap: 18px;
+  align-items: start;
+}
+
+.mtDl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(120px, 38%) 1fr;
+  border: 1px solid var(--ink-150);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.mtDl dt,
+.mtDl dd {
+  margin: 0;
+  padding: 11px 14px;
+  border-top: 1px solid var(--ink-150);
+  font-size: 14px;
+}
+
+.mtDl dt:first-of-type,
+.mtDl dd:first-of-type {
+  border-top: 0;
+}
+
+.mtDl dt {
+  color: var(--ink-500);
+  background: var(--ink-050);
+}
+
+.mtDl dd {
+  min-width: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.mtDl a {
+  color: var(--rma-blue);
+}
+
+.mtMessage {
+  margin: 14px 0 0;
+  padding: 14px 16px;
+  border-inline-start: 3px solid var(--rma-red);
+  border-radius: var(--radius-sm);
+  background: var(--ink-050);
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.mtPeople {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  list-style: none;
+}
+
+.mtPeople li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.mtPeople small {
+  display: block;
+  color: var(--ink-500);
+  font-size: 12.5px;
+}
+
+.mtActionCard {
+  position: sticky;
+  top: 72px;
+}
+
+.mtActionCard .adCardHead h2 svg {
+  color: var(--status-success);
+}
+
+.mtFormStack {
+  display: grid;
+  gap: 14px;
+}
+
+.mtTwo {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+}
+
+.mtStaffPicker {
+  display: grid;
+  gap: 8px;
+}
+
+.mtStaffList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mtStaffChip {
+  min-height: 34px;
+  padding: 4px 12px 4px 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--ink-200);
+  border-radius: var(--radius-pill);
+  background: #ffffff;
+  color: var(--ink-700);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mtStaffChip .adAvatarSm {
+  width: 26px;
+  height: 26px;
+  font-size: 11px;
+}
+
+.mtStaffChip.active {
+  border-color: var(--status-success);
+  background: #e7f5ee;
+  color: #136b43;
+}
+
+.mtStaffChip svg {
+  width: 14px;
+  height: 14px;
+}
+
+.mtExtra {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr) auto;
+  gap: 8px;
+}
+
+.mtExtra input {
+  min-width: 0;
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 1px solid var(--ink-200);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 13px;
+}
+
+.mtTeamsBox {
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+  border: 1px solid color-mix(in srgb, #5b5fc7 30%, #fff);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, #5b5fc7 5%, #fff);
+}
+
+.mtTeamsBox label.mtSwitch {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mtTeamsBox label.mtSwitch small {
+  display: block;
+  color: var(--ink-500);
+  font-weight: 500;
+}
+
+.mtTeamsBox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: #5b5fc7;
+}
+
+.mtTeamsLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #4b4fb5;
+  font-size: 13px;
+  font-weight: 700;
+  word-break: break-all;
+}
+
+.mtTeamsLink svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+
+.mtFormActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.mtChanged {
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: #fdf4e3;
+  color: #8a5a00;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mtMailStatus {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+  list-style: none;
+  font-size: 13px;
+}
+
+.mtMailStatus li {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mtMailStatus span:last-child {
+  font-weight: 700;
+}
+
+.mtMailStatus .sent { color: var(--status-success); }
+.mtMailStatus .failed { color: var(--status-danger); }
+.mtMailStatus .skipped { color: var(--ink-500); }
+
+@media (max-width: 1180px) {
+  .mtDetailGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mtActionCard {
+    position: static;
+  }
+}
+
+@media (max-width: 520px) {
+  .mtTwo,
+  .mtExtra {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.adMeetingDetail .cmsButton svg,
+.adMeetings .cmsButton svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}

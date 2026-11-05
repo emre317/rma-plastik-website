@@ -5969,7 +5969,7 @@ button.contactChannel {
   animation-delay: calc(600ms + var(--bubble-delay));
 }
 
-.floatingContactItem a {
+.floatingContactItem :is(a, button) {
   position: relative;
 
   width: 54px;
@@ -6022,8 +6022,8 @@ button.contactChannel {
   height: 24px;
 }
 
-.floatingContactItem:hover a,
-.floatingContactItem a:focus-visible {
+.floatingContactItem:hover :is(a, button),
+.floatingContactItem :is(a, button):focus-visible {
   color: #fff;
 
   transform: translateY(-3px) scale(1.06);
@@ -6034,7 +6034,7 @@ button.contactChannel {
 }
 
 .floatingContactItem:hover .floatingContactFill,
-.floatingContactItem a:focus-visible .floatingContactFill {
+.floatingContactItem :is(a, button):focus-visible .floatingContactFill {
   height: 100%;
 }
 
@@ -6144,7 +6144,7 @@ button.contactChannel {
     gap: 8px;
   }
 
-  .floatingContactItem a {
+  .floatingContactItem :is(a, button) {
     width: 42px;
 
     height: 42px;
@@ -31066,7 +31066,7 @@ html.booting .heroVideo .heroStats {
 }
 
 /* Contact bubbles: bigger, solid colours, white ring for contrast on any background */
-.floatingContactItem a {
+.floatingContactItem :is(a, button) {
   width: 64px;
   height: 64px;
   border: 2px solid #ffffff;
@@ -31086,14 +31086,14 @@ html.booting .heroVideo .heroStats {
   display: none;
 }
 
-.floatingContactItem:hover a,
-.floatingContactItem a:focus-visible {
+.floatingContactItem:hover :is(a, button),
+.floatingContactItem :is(a, button):focus-visible {
   color: #ffffff;
   background: color-mix(in srgb, var(--bubble-color) 86%, #000);
 }
 
 @media (max-width: 640px) {
-  .floatingContactItem a {
+  .floatingContactItem :is(a, button) {
     width: 56px;
     height: 56px;
   }
