@@ -20,6 +20,7 @@ import { visitAttribution } from '../../analytics/attribution';
 import { useQuote } from './QuoteContext';
 import { track } from '../../analytics/track';
 import { clearUserData, hashedUserData } from '../../analytics/userData';
+import ConsentBoxes, { EMPTY_CONSENTS } from '../forms/ConsentBoxes';
 
 const initialForm = {
   company: '',
@@ -102,6 +103,7 @@ export default function QuoteModal() {
     cart, addToCart, removeFromCart, setCartQuantity, clearCart,
   } = useQuote();
   const [remember, setRemember] = useState(false);
+  const [consents, setConsents] = useState(EMPTY_CONSENTS);
   const { shareUrl } = useQuoteShare();
   const [shareNote, setShareNote] = useState('');
 
@@ -337,6 +339,7 @@ export default function QuoteModal() {
         country: form.country ? countryNameTr(form.country) : '',
         ...listFields,
         language: i18n.resolvedLanguage,
+        consents,
         attribution: visitAttribution(),
       });
 
@@ -350,9 +353,9 @@ export default function QuoteModal() {
         subject: listFields.product ? '' : form.product,
       });
 
-      // Conversion for GA4 / Google Ads / Meta (configured in GTM); with marketing
-      // consent it carries the hashed e-mail and phone for enhanced conversions
-      const userData = await hashedUserData({ email: form.email, phone: isBarePrefix(form.phone) ? '' : form.phone });
+      // Conversion for GA4 / Google Ads / Meta (configured in GTM); with the marketing
+      // cookie consent and box C it carries the hashed e-mail and phone (enhanced conversions)
+      const userData = await hashedUserData({ email: form.email, phone: isBarePrefix(form.phone) ? '' : form.phone, matchingConsent: consents.c });
       track('generate_lead', {
         form_name: 'quote',
         product: listFields.product || form.product || '(none)',
@@ -366,6 +369,7 @@ export default function QuoteModal() {
       writeContact(remember ? Object.fromEntries(CONTACT_FIELDS.map((key) => [key, form[key]])) : null);
 
       setForm(initialForm);
+      setConsents(EMPTY_CONSENTS);
       clearProduct();
       clearCart();
     } catch (error) {
@@ -842,10 +846,20 @@ export default function QuoteModal() {
             </label>
 
             <label className="qmRemember formFieldFull">
-              <input type="checkbox" checked={remember} onChange={(event) => setRemember(event.target.checked)} />
+              <input
+                type="checkbox"
+                checked={remember}
+                onChange={(event) => {
+                  setRemember(event.target.checked);
+                  // Unticking forgets the saved details at once (Aydınlatma Metni 6)
+                  if (!event.target.checked) writeContact(null);
+                }}
+              />
               <span>{t('contact.remember')}</span>
             </label>
           </div>
+
+          <ConsentBoxes form="quote" value={consents} onChange={setConsents} />
 
           {feedbackKey && (
             <div className={`quoteFeedback ${status}`} role={status === 'error' ? 'alert' : 'status'}>
@@ -854,7 +868,6 @@ export default function QuoteModal() {
           )}
 
           <div className="qmSubmitRow">
-            <p>{t('contact.consent')}</p>
             <button type="submit" disabled={status === 'loading'} className="qmSubmit">
               {status === 'loading' ? <span className="qmSpinner" aria-hidden="true" /> : <Send aria-hidden="true" />}
               <span>{status === 'loading' ? t('contact.sending') : t('contact.submit')}</span>

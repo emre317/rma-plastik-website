@@ -42,7 +42,7 @@ export async function getCustomer(req, res) {
         .limit(LIMIT)
         .select('company name email phone country status outcome lossReason product items quantity assignee isRead language createdAt followUpAt attribution.channel offer.currency offer.lines offer.vatRate offer.sentAt offer.revision')
         .lean(),
-      email ? Lead.findOne({ email }).select('email name company country downloads createdAt lastDownloadAt marketingConsent').lean() : null,
+      email ? Lead.findOne({ email }).select('email name company country downloads createdAt lastDownloadAt marketingConsent salesFollowUp').lean() : null,
     ]);
 
     const { offerTotals } = await import('../../client/src/data/offerText.js');

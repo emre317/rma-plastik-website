@@ -4,6 +4,8 @@ import helmet from 'helmet';
 
 import quoteRoutes from './routes/quoteRoutes.js';
 import leadRoutes from './routes/leadRoutes.js';
+import consentRoutes from './routes/consentRoutes.js';
+import videoThumbRoutes from './routes/videoThumbRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import auditRoutes from './routes/auditRoutes.js';
 import authRoutes from './routes/authRoutes.js';
@@ -121,6 +123,8 @@ app.use(
 
 app.use('/api/leads', leadRoutes);
 
+app.use('/api/yt-thumb', videoThumbRoutes);
+
 app.use('/api/content', publicContentRouter);
 
 app.use('/api/publish', publishRoutes);
@@ -128,6 +132,8 @@ app.use('/api/publish', publishRoutes);
 app.use('/api/admin/users', userRoutes);
 
 app.use('/api/admin/audit', auditRoutes);
+
+app.use('/api/admin/consents', consentRoutes);
 
 app.use('/api/admin', adminContentRouter);
 

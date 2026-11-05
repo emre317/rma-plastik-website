@@ -7,6 +7,8 @@ const en = {
     tagline: 'Industrial Polyethylene Solutions',
     description: 'RMA Plastik industrial polyethylene solutions',
     descriptions: {
+      kvkk: 'Privacy notice and consent texts for the forms on the RMA Plastik website (Turkish).',
+      cookiePolicy: 'Cookies used on the RMA Plastik website, how long they are kept and how to change your choice (Turkish).',
       faq: 'Frequently asked questions about RMA Plastik polyethylene tanks, water tanks and custom moulding: delivery, installation, ordering and more.',
       blog: 'Technical insights and guides from RMA Plastik on polyethylene tanks, rotational moulding, chemical and water storage.',
       videos: 'RMA Plastik production, product and application videos: polyethylene tanks and rotational moulding.',
@@ -23,6 +25,8 @@ const en = {
       compare: 'Compare RMA Plastik products side by side with their dimensions.',
     },
     titles: {
+      kvkk: 'Privacy Notice (KVKK)',
+      cookiePolicy: 'Cookie Policy',
       faq: 'Frequently Asked Questions',
       blog: 'Blog',
       videos: 'Videos',
@@ -82,9 +86,7 @@ const en = {
     name: 'Full Name',
     company: 'Company',
     country: 'Country',
-    marketing: 'I would like to receive e-mails about new products and offers.',
     submit: 'Download Catalogue',
-    privacy: 'Your details are used to contact you about your catalogue request and our products.',
     successTitle: 'Download Started',
     successText: 'Thank you. The catalogue is downloading to your device; if it did not start, use the button below.',
     downloadAgain: 'Download Catalogue',
@@ -109,17 +111,66 @@ const en = {
 
   cookies: {
     title: 'Your cookie preferences',
-    text: 'We use essential cookies to make this site work. With your permission we also use analytics and marketing cookies to measure visits and evaluate our advertising. You can change your choice at any time via “Cookie settings” at the bottom of the page.',
-    accept: 'Accept All',
-    reject: 'Reject',
-    customize: 'Manage Preferences',
-    save: 'Save Choice',
+    // Translation of the KVKK set, section 7 (Turkish text is binding until the lawyer's translation arrives)
+    text: 'We use essential cookies to make this site work. With your permission we also use Google Analytics cookies to measure visits, and Google Ads and Meta (Facebook, Instagram) cookies to measure our advertising and show you relevant ads; in that case your data is transferred to Google and Meta servers abroad.',
+    policyBefore: 'For details, see our ',
+    policyLink: 'Cookie Policy',
+    policyAfter: '.',
+    change: 'You can change your choice at any time via “Cookie settings” at the bottom of the page.',
+    accept: 'Accept all',
+    reject: 'Reject all',
+    customize: 'Manage preferences',
+    save: 'Save choice',
     settings: 'Cookie Settings',
     categories: {
-      necessary: { name: 'Essential', description: 'Required for core site functions and remembering your preferences.' },
-      analytics: { name: 'Analytics', description: 'Google Analytics and Hotjar measure how the site is used, anonymously.' },
-      marketing: { name: 'Marketing', description: 'Measurement and personalisation of Google Ads and Meta (Facebook) ads.' },
+      necessary: { name: 'Essential', description: 'Required for the site to work, for functions you ask for such as the quote list and comparison, and to remember your cookie choice. Cannot be turned off.' },
+      analytics: { name: 'Analytics', description: 'Measures visits with Google Analytics and adds where you came from to your quote and catalogue requests. Data is transferred to Google.' },
+      marketing: { name: 'Marketing', description: 'Measures the results of Google Ads and Meta (Facebook, Instagram) ads and enables personalised ads and remarketing. Data is transferred to Google and Meta.' },
     },
+  },
+
+  // Translation of the KVKK set, section 2 (Turkish text is binding until the lawyer's translation arrives)
+  consentBoxes: {
+    quote: {
+      intro: {
+        before: 'Your details are processed by RMA Yatırım Makina İnşaat Sanayi ve Ticaret Limited Şirketi to assess your quote request and send you a quote. For details, see the ',
+        link: 'Privacy Notice',
+        after: '. The permissions below are optional and do not affect your quote request.',
+      },
+      b: 'I agree to receive commercial electronic messages about RMA Plastik’s new products, campaigns and announcements through the channels I select below:',
+      c: {
+        before: 'I have read the ',
+        link: 'Explicit Consent Text',
+        after: ' on transferring the cryptographic hash of my e-mail address and phone number to Google and Meta and using it for ad measurement, matching, remarketing and audience building, and I give my explicit consent.',
+      },
+    },
+    catalog: {
+      intro: {
+        before: 'Only your e-mail address is needed to download the catalogue. If you give a company name, our sales team may contact your company about the catalogue. The permissions below are optional and do not affect your download. Details: ',
+        link: 'Privacy Notice',
+        after: '.',
+      },
+      b: 'I agree to receive commercial electronic messages about RMA Plastik’s new products, campaigns and announcements at my e-mail address.',
+      c: {
+        before: 'I have read the ',
+        link: 'Explicit Consent Text',
+        after: ' on transferring the cryptographic hash of my e-mail address to Google and Meta and using it for ad measurement, matching, remarketing and audience building, and I give my explicit consent.',
+      },
+    },
+    a: {
+      before: 'I have read the ',
+      link: 'Explicit Consent Text',
+      after: ' on processing my personal data for promotion and marketing of products, campaigns and announcements, and I give my explicit consent.',
+    },
+    channels: { email: 'E-mail', sms: 'SMS', call: 'Phone call' },
+  },
+
+  legal: {
+    eyebrow: 'Privacy',
+    turkishOnly: 'This text is currently available in Turkish only; the English version will be published soon.',
+    noticeLink: 'Privacy Notice (KVKK)',
+    cookieLink: 'Cookie Policy',
+    footerLabel: 'Legal information',
   },
 
   floatingContact: {
@@ -190,6 +241,7 @@ const en = {
   },
 
   hero: {
+    playVideo: 'Play the company film',
     kicker: 'Rotational Moulding',
     typePrefix: 'What we make:',
     categoriesLabel: 'Product Groups',
@@ -1274,6 +1326,8 @@ const en = {
       directions: 'Get Directions',
       openMap: 'Open in Google Maps',
       mapTitle: 'RMA Plastik location – Google Maps',
+      loadMap: 'Load the map',
+      mapNote: 'When you load the map, your IP address and browser details are sent to Google.',
       channels: 'Contact Channels',
       email: 'Email',
       linkedin: 'LinkedIn',
@@ -1372,8 +1426,6 @@ const en = {
     optional: 'optional',
     customRequirement: 'Custom Requirement',
     removeProduct: 'Remove Product',
-    consent:
-      'By submitting this form, you confirm that the provided information may be used to respond to your request.',
     submit: 'Send Quote Request',
     sending: 'Sending...',
     successTitle: 'We have received your request',

@@ -5,6 +5,10 @@ import { memoryModel } from './helpers/memoryModels.js';
 
 const { default: QuoteRequest } = await import('../models/QuoteRequest.js');
 memoryModel(QuoteRequest);
+const { default: ConsentRecord } = await import('../models/ConsentRecord.js');
+memoryModel(ConsentRecord);
+const { default: Suppression } = await import('../models/Suppression.js');
+memoryModel(Suppression);
 const { trackQuoteMail } = await import('../services/mailTracking.js');
 
 const quote = await QuoteRequest.create({ company: 'Akdeniz Gıda', name: 'Ali Veli', email: 'ali@example.com', phone: '+90 532 000 00 00', country: 'Türkiye', product: 'RD 5000' });

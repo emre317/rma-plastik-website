@@ -36,6 +36,8 @@ export function getPublicPaths(lang) {
     // Articles only exist in the languages they were written in
     ...postsForLanguage(lang).map((post) => `/blog/${post.slug}`),
     '/videos',
+    '/kvkk',
+    '/cerez-politikasi',
   ];
 }
 

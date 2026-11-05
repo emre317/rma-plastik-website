@@ -5,6 +5,7 @@ import { Check, FileDown, X } from 'lucide-react';
 
 import { CATALOG_PDF } from '../ui/CatalogLink';
 import Dropdown from '../ui/Dropdown';
+import ConsentBoxes, { EMPTY_CONSENTS } from '../forms/ConsentBoxes';
 import { countryNameTr, countryOptions } from '../../data/countries';
 import { submitCatalogLead } from '../../services/api';
 import { visitAttribution } from '../../analytics/attribution';
@@ -21,9 +22,15 @@ import { track } from '../../analytics/track';
 const DONE_KEY = 'rma_catalog_lead';
 const FILE_NAME = CATALOG_PDF.split('/').pop();
 
+// Remembered for 24 months (Çerez Politikası 4.1), then the form is shown again
+const DONE_MONTHS = 24;
+
 function alreadySent() {
   try {
-    return Boolean(localStorage.getItem(DONE_KEY));
+    const sentAt = Number(localStorage.getItem(DONE_KEY));
+    const limit = new Date();
+    limit.setMonth(limit.getMonth() - DONE_MONTHS);
+    return Boolean(sentAt) && sentAt > limit.getTime();
   } catch {
     return false;
   }
@@ -46,7 +53,7 @@ function startDownload() {
   link.remove();
 }
 
-const emptyForm = { email: '', name: '', company: '', country: '', marketingConsent: false, website: '' };
+const emptyForm = { email: '', name: '', company: '', country: '', website: '' };
 
 export default function CatalogGate() {
   const { t, i18n } = useTranslation();
@@ -55,6 +62,7 @@ export default function CatalogGate() {
   const [open, setOpen] = useState(false);
   const [placement, setPlacement] = useState('');
   const [form, setForm] = useState(emptyForm);
+  const [consents, setConsents] = useState(EMPTY_CONSENTS);
   const [status, setStatus] = useState('idle');
   const dialogRef = useRef(null);
 
@@ -138,6 +146,7 @@ export default function CatalogGate() {
         ...form,
         country: form.country ? countryNameTr(form.country) : '',
         language: i18n.resolvedLanguage,
+        consents,
         attribution: visitAttribution(),
       });
 
@@ -149,6 +158,7 @@ export default function CatalogGate() {
       track('generate_lead', { form_name: 'catalog', placement, country: form.country || '(not set)', site_language: i18n.resolvedLanguage });
       track('file_download', { file_name: FILE_NAME, placement });
       setForm(emptyForm);
+      setConsents(EMPTY_CONSENTS);
     } catch (error) {
       setStatus(error?.status === 400 ? 'invalid' : 'error');
     }
@@ -232,10 +242,7 @@ export default function CatalogGate() {
             {/* Spam trap: hidden from people */}
             <input className="catalogGateTrap" name="website" tabIndex={-1} autoComplete="off" value={form.website} onChange={(event) => set('website', event.target.value)} aria-hidden="true" />
 
-            <label className="catalogGateCheck">
-              <input type="checkbox" checked={form.marketingConsent} onChange={(event) => set('marketingConsent', event.target.checked)} />
-              <span>{c('marketing')}</span>
-            </label>
+            <ConsentBoxes form="catalog" value={consents} onChange={setConsents} />
 
             {(status === 'error' || status === 'invalid') && (
               <p className="catalogGateError" role="alert">
@@ -251,7 +258,6 @@ export default function CatalogGate() {
               <FileDown aria-hidden="true" className="buttonIcon" />
             </button>
 
-            <small className="catalogGatePrivacy">{c('privacy')}</small>
           </form>
         )}
       </div>

@@ -304,6 +304,7 @@ const CONFIRM_TEXT = {
     reply: 'Eklemek istediğiniz bilgi, çizim veya ölçü varsa bu e-postayı yanıtlayabilirsiniz.',
     contact: 'Bize Ulaşın',
     footer: (site) => `Bu e-posta${site ? ` ${site} adresindeki` : ''} teklif formunu doldurduğunuz için gönderilmiştir. Bu talebi siz göndermediyseniz e-postayı dikkate almayın.`,
+    privacy: 'Kişisel verilerinizin işlenmesi hakkında bilgi: KVKK Aydınlatma Metni',
   },
   en: {
     locale: 'en-GB',
@@ -327,6 +328,7 @@ const CONFIRM_TEXT = {
     reply: 'If you would like to add details, drawings or dimensions, simply reply to this email.',
     contact: 'Contact Us',
     footer: (site) => `You are receiving this email because you submitted the quote form${site ? ` on ${site}` : ''}. If you did not send this request, please ignore this email.`,
+    privacy: 'How we process your personal data: Privacy Notice (KVKK)',
   },
   ar: {
     locale: 'ar',
@@ -351,6 +353,7 @@ const CONFIRM_TEXT = {
     reply: 'إذا رغبتم في إضافة معلومات أو رسومات أو مقاسات، يمكنكم الرد على هذا البريد الإلكتروني.',
     contact: 'تواصلوا معنا',
     footer: (site) => `تم إرسال هذا البريد لأنكم قمتم بتعبئة نموذج طلب عرض السعر${site ? ` على ${site}` : ''}. إذا لم تقوموا بإرسال هذا الطلب، يرجى تجاهل هذه الرسالة.`,
+    privacy: 'معلومات عن معالجة بياناتكم الشخصية: نص الإفصاح (KVKK)',
   },
 };
 
@@ -366,6 +369,8 @@ export function buildCustomerConfirmation(quote, contact = {}) {
   const reference = quoteReference(quote._id);
   const origin = siteOrigin();
   const site = origin.replace(/^https?:\/\//, '');
+  // KVKK technical note E: the notice is linked from every confirmation e-mail
+  const privacyUrl = `${origin || 'https://www.rmaplastik.com'}/${lang}/kvkk#teklif-formu`;
   const phoneDisplay = contact.phoneDisplay || DEFAULT_CONTACT.phoneDisplay;
   const phone = (contact.phone || DEFAULT_CONTACT.phone).replace(/[^\d+]/g, '');
   const email = contact.email || DEFAULT_CONTACT.email;
@@ -490,7 +495,8 @@ export function buildCustomerConfirmation(quote, contact = {}) {
 
           <tr>
             <td style="padding:18px 32px;background:#f7f9fa;border-top:1px solid #e4e8ed;font-size:12px;line-height:1.6;color:#818b98;text-align:${align};">
-              ${escapeHtml(copy.footer(site))}
+              ${escapeHtml(copy.footer(site))}<br>
+              <a href="${escapeHtml(privacyUrl)}" style="color:#5c6673;text-decoration:underline;">${escapeHtml(copy.privacy)}</a>
             </td>
           </tr>
 
@@ -518,6 +524,7 @@ export function buildCustomerConfirmation(quote, contact = {}) {
     `${copy.contact}: ${phoneDisplay} · ${email}${site ? ` · ${site}` : ''}`,
     '',
     copy.footer(site),
+    `${copy.privacy}: ${privacyUrl}`,
   ].join('\n');
 
   return { subject, html, text };

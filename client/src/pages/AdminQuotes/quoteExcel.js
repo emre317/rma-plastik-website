@@ -195,7 +195,7 @@ export async function exportReportFile(report, { rangeLabel, monthLabel }) {
 export async function exportLeadsFile(leads) {
   const writeExcelFile = await writer();
   const columns = [
-    ['E-posta', 30], ['Ad soyad', 22], ['Firma', 26], ['Ülke', 16], ['Site dili', 11], ['E-posta izni', 12], ['İzin tarihi', 13],
+    ['E-posta', 30], ['Ad soyad', 22], ['Firma', 26], ['Ülke', 16], ['Site dili', 11], ['Pazarlama izni', 14], ['İzin tarihi', 13], ['Satış takibi', 12],
     ['İlk indirme', 17], ['Son indirme', 17], ['İndirme', 9], ['Teklif talebi', 12], ['Kanal', 18], ['Kampanya', 22], ['İlk sayfa', 32], ['Geldiği site', 28],
   ];
 
@@ -207,6 +207,7 @@ export async function exportLeadsFile(leads) {
     text(LANGUAGE_LABELS[lead.language] || lead.language),
     lead.marketingConsent ? 'Evet' : 'Hayır',
     date(lead.consentAt, 'dd.mm.yyyy'),
+    lead.salesFollowUp ? 'Evet' : 'Hayır',
     date(lead.createdAt),
     date(lead.lastDownloadAt),
     { value: Number(lead.downloads) || 1, type: Number },

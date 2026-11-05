@@ -25,6 +25,8 @@ const {
   Blog,
   BlogPost,
   Videos,
+  Kvkk,
+  CookiePolicy,
   NotFound,
 } = pages;
 
@@ -93,6 +95,8 @@ export default function AppRoutes() {
         <Route path="blog" element={<Blog />} />
         <Route path="blog/:slug" element={<BlogPost />} />
         <Route path="videos" element={<Videos />} />
+        <Route path="kvkk" element={<Kvkk />} />
+        <Route path="cerez-politikasi" element={<CookiePolicy />} />
 
         <Route path="*" element={<NotFound />} />
       </Route>

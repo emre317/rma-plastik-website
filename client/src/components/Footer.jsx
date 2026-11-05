@@ -202,13 +202,18 @@ export default function Footer() {
             © {new Date().getFullYear()} RMA Plastik. {t('footer.rights')}
           </p>
 
-          <button
-            type="button"
-            className="footerCookieLink"
-            onClick={openConsentSettings}
-          >
-            {t('cookies.settings')}
-          </button>
+          {/* KVKK: notice, cookie policy and the cookie settings */}
+          <nav className="footerLegal" aria-label={t('legal.footerLabel')}>
+            <LocalizedLink to="/kvkk" className="footerCookieLink">{t('legal.noticeLink')}</LocalizedLink>
+            <LocalizedLink to="/cerez-politikasi" className="footerCookieLink">{t('legal.cookieLink')}</LocalizedLink>
+            <button
+              type="button"
+              className="footerCookieLink"
+              onClick={openConsentSettings}
+            >
+              {t('cookies.settings')}
+            </button>
+          </nav>
 
           <LanguageSwitcher placement="top" className="footerLanguage" />
 

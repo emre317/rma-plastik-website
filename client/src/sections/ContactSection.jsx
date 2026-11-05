@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MapPin, Navigation } from 'lucide-react';
+import { Map as MapIcon, MapPin, Navigation } from 'lucide-react';
 
 import Arrow from '../components/i18n/Arrow';
 import {
@@ -12,10 +13,12 @@ import company from '../data/company';
 /*
   Contact page body: the map on one side, the plant address with directions
   and the social channels on the other (phone, e-mail and WhatsApp sit in
-  the page header).
+  the page header). The Google map loads only after "Haritayı yükle"; until
+  then a picture from our own server stands in for it (KVKK).
 */
 export default function ContactSection() {
   const { t, i18n } = useTranslation();
+  const [mapLoaded, setMapLoaded] = useState(false);
 
   const socials = [
     { key: 'linkedin', href: company.social.linkedin, icon: LinkedinIcon, label: t('contact.locations.linkedin'), value: t('contact.locations.linkedinValue') },
@@ -27,13 +30,25 @@ export default function ContactSection() {
     <section className="ctMain" id="contact" data-track-area="contact_section">
       <div className="container ctGrid">
         <div className="ctMap">
-          <iframe
-            title={t('contact.locations.mapTitle')}
-            src={company.maps.embed(i18n.resolvedLanguage)}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            allowFullScreen
-          />
+          {mapLoaded ? (
+            <iframe
+              title={t('contact.locations.mapTitle')}
+              src={company.maps.embed(i18n.resolvedLanguage)}
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
+          ) : (
+            <div className="ctMapPreview">
+              <img src="/images/map-preview.svg" alt="" />
+              <div className="ctMapPreviewBox">
+                <button type="button" className="button primary" onClick={() => setMapLoaded(true)}>
+                  <MapIcon aria-hidden="true" className="buttonIcon" />
+                  <span>{t('contact.locations.loadMap')}</span>
+                </button>
+                <small>{t('contact.locations.mapNote')}</small>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="ctInfo">

@@ -16,6 +16,8 @@ import { CHANNELS, cleanAttribution } from '../services/attribution.js';
 import { getSiteSettings } from '../models/SiteSettings.js';
 import { isMailConfigured } from '../services/mailer.js';
 import { trackQuoteMail } from '../services/mailTracking.js';
+import { readConsents, recordConsents } from '../services/consents.js';
+import { quoteExpiry } from '../services/retention.js';
 import {
   PROJECT_COLOURS,
   PROJECT_CONDITIONS,
@@ -205,6 +207,19 @@ async function saveQuoteRequest(req, res, extra = {}) {
         attribution: cleanAttribution(body.attribution),
         ...extra,
       });
+
+    // KVKK boxes A, B (e-mail / SMS / call) and C, ticked or not (proof of consent)
+    try {
+      await recordConsents({
+        form: 'quote',
+        refId: quoteRequest._id,
+        consents: readConsents(body.consents, 'quote'),
+        contact: { email, phone: quoteRequest.phone, name, company, country: quoteRequest.country },
+        language,
+      });
+    } catch (consentError) {
+      console.error('Quote consent record error:', consentError);
+    }
 
     // Email the sales team; a mail failure must not fail the request
     // (the delivery result is saved on the request and shown in the panel)
@@ -873,9 +888,10 @@ export async function updateQuoteStatus(
         req.params.id,
 
         // Re-opening a closed request removes its won / lost result
+        // Any change in the panel keeps the request 3 more years (services/retention.js)
         status === 'closed'
-          ? { status }
-          : { status, outcome: '', lossReason: '', outcomeNote: '', outcomeAt: null },
+          ? { status, expireAt: quoteExpiry() }
+          : { status, outcome: '', lossReason: '', outcomeNote: '', outcomeAt: null, expireAt: quoteExpiry() },
 
         {
           returnDocument: 'after',
@@ -983,6 +999,8 @@ export async function updateQuoteTracking(req, res) {
       update.outcomeNote = cleanString(body.outcomeNote).slice(0, 500);
     }
 
+    update.expireAt = quoteExpiry();
+
     const quote = await QuoteRequest.findByIdAndUpdate(req.params.id, update, {
       returnDocument: 'after',
       runValidators: true,
@@ -1021,7 +1039,7 @@ export async function addQuoteNote(req, res) {
 
     const quote = await QuoteRequest.findByIdAndUpdate(
       req.params.id,
-      { $push: { notes: { text, author: req.admin?.name || req.admin?.email || '' } } },
+      { $push: { notes: { text, author: req.admin?.name || req.admin?.email || '' } }, $set: { expireAt: quoteExpiry() } },
       { returnDocument: 'after', runValidators: true }
     );
 
@@ -1048,7 +1066,7 @@ export async function deleteQuoteNote(req, res) {
 
     const quote = await QuoteRequest.findByIdAndUpdate(
       req.params.id,
-      { $pull: { notes: { _id: req.params.noteId } } },
+      { $pull: { notes: { _id: req.params.noteId } }, $set: { expireAt: quoteExpiry() } },
       { returnDocument: 'after' }
     );
 
@@ -1165,6 +1183,7 @@ export async function saveQuoteOffer(req, res) {
       sentTo: '',
     };
 
+    quote.expireAt = quoteExpiry();
     await quote.save();
 
     return res.json({ success: true, data: quote });
@@ -1221,6 +1240,7 @@ export async function sendQuoteOffer(req, res) {
       author: req.admin?.name || req.admin?.email || '',
     });
 
+    quote.expireAt = quoteExpiry();
     await quote.save();
 
     return res.json({ success: true, data: quote });

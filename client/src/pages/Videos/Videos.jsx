@@ -5,7 +5,7 @@ import Seo from '../../seo/Seo';
 import PageHeader from '../../components/ui/PageHeader';
 import Arrow from '../../components/i18n/Arrow';
 import { YoutubeIcon } from '../../components/icons/SocialIcons';
-import YouTubeEmbed, { youtubeThumbnail } from '../../components/content/YouTubeEmbed';
+import YouTubeEmbed, { youtubeThumbnailPublic } from '../../components/content/YouTubeEmbed';
 import company from '../../data/company';
 import videos, { videoText } from '../../data/videos';
 
@@ -20,7 +20,7 @@ export default function Videos() {
       '@type': 'VideoObject',
       name: videoText(video, lang, 'title'),
       description: videoText(video, lang, 'description') || videoText(video, lang, 'title'),
-      thumbnailUrl: youtubeThumbnail(video.youtubeId),
+      thumbnailUrl: youtubeThumbnailPublic(video.youtubeId),
       uploadDate: new Date(video.uploadDate).toISOString(),
       embedUrl: `https://www.youtube-nocookie.com/embed/${video.youtubeId}`,
       contentUrl: `https://www.youtube.com/watch?v=${video.youtubeId}`,

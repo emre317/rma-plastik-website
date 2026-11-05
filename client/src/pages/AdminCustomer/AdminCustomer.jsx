@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 
 import { getCustomer } from '../../services/adminApi';
+import ConsentCard from '../../components/admin/ConsentCard';
 import useAdminApi from '../../hooks/useAdminApi';
 import usePageTitle from '../../hooks/usePageTitle';
 import { formatMoney } from '../../data/offerText';
@@ -197,12 +198,15 @@ export default function AdminCustomer() {
                     <div><dt>İndirme</dt><dd>{lead.downloads || 1} kez</dd></div>
                     <div><dt>İlk İndirme</dt><dd>{formatDate(lead.createdAt, true)}</dd></div>
                     <div><dt>Son İndirme</dt><dd>{formatDate(lead.lastDownloadAt, true)}</dd></div>
-                    <div><dt>E-posta İzni</dt><dd>{lead.marketingConsent ? 'Var' : 'Yok'}</dd></div>
+                    <div><dt>Pazarlama İzni</dt><dd>{lead.marketingConsent ? 'Var' : 'Yok'}</dd></div>
+                    <div><dt>Satış Takibi</dt><dd>{lead.salesFollowUp ? 'Evet' : 'Hayır'}</dd></div>
                   </dl>
                 ) : (
                   <p className="adNotesEmpty">Bu adresle katalog indirilmedi.</p>
                 )}
               </div>
+
+              {customer.email && <ConsentCard email={customer.email} />}
 
               {summary.open > 0 && (
                 <div className="adCard">
