@@ -27,6 +27,37 @@ function percentile(values, p) {
   return sorted.length ? sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * p))] : 0;
 }
 
+const chroma = (rgba, i) => Math.max(rgba[i * 4], rgba[i * 4 + 1], rgba[i * 4 + 2]) - Math.min(rgba[i * 4], rgba[i * 4 + 1], rgba[i * 4 + 2]);
+
+/*
+  A "transparent" background saved as pixels: the grey-and-white squares that
+  image editors show behind transparent areas. Recognised on the photo's
+  border: almost only light neutral pixels, in two clearly different tones
+  that both appear often. Returns the lighter and darker tone, or null.
+*/
+export function checkerTones(rgba, ring, lum) {
+  const neutral = ring.filter((i) => chroma(rgba, i) < 16 && lum[i] > 140);
+  if (neutral.length < ring.length * 0.85) return null;
+
+  // Two-tone split of the border luminance (k-means, k = 2)
+  const values = neutral.map((i) => lum[i]);
+  let low = Math.min(...values);
+  let high = Math.max(...values);
+  if (high - low < 14) return null;
+  for (let round = 0; round < 8; round += 1) {
+    const middle = (low + high) / 2;
+    const lows = values.filter((v) => v < middle);
+    const highs = values.filter((v) => v >= middle);
+    if (!lows.length || !highs.length) return null;
+    low = lows.reduce((a, b) => a + b, 0) / lows.length;
+    high = highs.reduce((a, b) => a + b, 0) / highs.length;
+  }
+
+  const middle = (low + high) / 2;
+  const share = values.filter((v) => v < middle).length / values.length;
+  return high - low >= 14 && share > 0.2 && share < 0.8 ? { low, high } : null;
+}
+
 /* Box blur, `passes` times (≈ Gaussian), in place on a copy */
 export function blur(source, width, height, radius = 1, passes = 2) {
   let current = Float32Array.from(source);
@@ -133,6 +164,22 @@ export function findBackground(rgba, width, height) {
   }
 
   const transparentBorder = ring.filter((i) => rgba[i * 4 + 3] < 24).length / ring.length > 0.5;
+
+  // A real transparent PNG: its own alpha is the mask (holes included)
+  if (transparentBorder) {
+    const background = new Uint8Array(count);
+    let empty = 0;
+    for (let i = 0; i < count; i += 1) {
+      if (rgba[i * 4 + 3] < 128) {
+        background[i] = 1;
+        empty += 1;
+      }
+    }
+    const share = empty / count;
+    return { background, found: share > 0.04 && share < 0.96, lum, mode: 'alpha' };
+  }
+
+  const checker = checkerTones(rgba, ring, lum);
   const bg = [0, 1, 2].map((c) => median(ring.map((i) => rgba[i * 4 + c])));
   const difference = new Float32Array(count);
   for (let i = 0; i < count; i += 1) {
@@ -143,7 +190,7 @@ export function findBackground(rgba, width, height) {
   }
 
   const ringSpread = percentile(ring.map((i) => difference[i]), 0.9);
-  const threshold = Math.min(72, Math.max(22, ringSpread * 1.6 + 12));
+  const threshold = Math.min(72, Math.max(14, ringSpread * 1.6 + 9));
 
   // Edges (Sobel on luminance) stop the fill
   const edge = new Float32Array(count);
@@ -173,9 +220,22 @@ export function findBackground(rgba, width, height) {
     return Math.hypot(r - bgChroma[0], g - bgChroma[1], b - bgChroma[2]) < 12;
   };
 
-  const open = (i) => (transparentBorder
-    ? rgba[i * 4 + 3] < 24
-    : (difference[i] < threshold || shadowLike(i)) && edge[i] < edgeLimit);
+  // On a checkerboard every square has edges: the tones decide, not the edges
+  const checkerLike = (i) => checker && chroma(rgba, i) < 18 && lum[i] > checker.low - 18 && lum[i] < checker.high + 14;
+
+  // Plain backgrounds: the fill also moves only by small steps from pixel to
+  // pixel, so a cream tank on a white background stops it at its outline
+  // even though both colours are close to the background colour
+  const step = (i, j) => Math.hypot(rgba[i * 4] - rgba[j * 4], rgba[i * 4 + 1] - rgba[j * 4 + 1], rgba[i * 4 + 2] - rgba[j * 4 + 2]);
+  const STEP_LIMIT = 9;
+
+  const open = checker
+    ? checkerLike
+    : (j, i = j) => edge[j] < edgeLimit && (
+      (difference[j] < threshold && step(i, j) < STEP_LIMIT) ||
+      // Floor shadows may start with a sharper step (contact shadows)
+      (shadowLike(j) && step(i, j) < 64)
+    );
 
   ring.forEach((i) => {
     if (!background[i] && open(i)) {
@@ -192,7 +252,7 @@ export function findBackground(rgba, width, height) {
     const y = (i - x) / width;
     const neighbours = [x > 0 ? i - 1 : -1, x < width - 1 ? i + 1 : -1, y > 0 ? i - width : -1, y < height - 1 ? i + width : -1];
     for (const j of neighbours) {
-      if (j >= 0 && !background[j] && open(j)) {
+      if (j >= 0 && !background[j] && open(j, i)) {
         background[j] = 1;
         queue[tail] = j;
         tail += 1;
@@ -200,8 +260,94 @@ export function findBackground(rgba, width, height) {
     }
   }
 
-  const share = tail / count;
-  return { background, found: share > 0.04 && share < 0.96, lum };
+  let filled = tail;
+  if (checker) {
+    const minHole = Math.max(12, Math.round(count * 0.0008));
+    const seen = new Uint8Array(count);
+    const island = [];
+    for (let start = 0; start < count; start += 1) {
+      if (background[start] || seen[start] || !checkerLike(start)) continue;
+      island.length = 0;
+      island.push(start);
+      seen[start] = 1;
+      for (let k = 0; k < island.length; k += 1) {
+        const i = island[k];
+        const x = i % width;
+        const y = (i - x) / width;
+        const neighbours = [x > 0 ? i - 1 : -1, x < width - 1 ? i + 1 : -1, y > 0 ? i - width : -1, y < height - 1 ? i + width : -1];
+        for (const j of neighbours) {
+          if (j >= 0 && !background[j] && !seen[j] && checkerLike(j)) {
+            seen[j] = 1;
+            island.push(j);
+          }
+        }
+      }
+      if (island.length >= minHole) {
+        island.forEach((i) => { background[i] = 1; });
+        filled += island.length;
+      }
+    }
+  }
+
+  const share = filled / count;
+  return { background, found: share > 0.04 && share < 0.96, lum, mode: checker ? 'checker' : 'colour' };
+}
+
+/* Square dilation (radius r) of a 0/1 mask, separable */
+function dilate(mask, width, height, r) {
+  const row = new Uint8Array(mask.length);
+  for (let y = 0; y < height; y += 1) {
+    let run = -1;
+    for (let x = 0; x < width; x += 1) if (mask[y * width + x]) run = x; else if (run >= 0 && x - run <= r) row[y * width + x] = 1;
+    for (let x = 0; x < width; x += 1) if (mask[y * width + x]) row[y * width + x] = 1;
+    run = -1;
+    for (let x = width - 1; x >= 0; x -= 1) if (mask[y * width + x]) run = x; else if (run >= 0 && run - x <= r) row[y * width + x] = 1;
+  }
+  const out = new Uint8Array(mask.length);
+  for (let x = 0; x < width; x += 1) {
+    let run = -1;
+    for (let y = 0; y < height; y += 1) if (row[y * width + x]) { run = y; out[y * width + x] = 1; } else if (run >= 0 && y - run <= r) out[y * width + x] = 1;
+    run = -1;
+    for (let y = height - 1; y >= 0; y -= 1) if (row[y * width + x]) run = y; else if (run >= 0 && run - y <= r) out[y * width + x] = 1;
+  }
+  return out;
+}
+
+/*
+  Seals narrow leaks: the product outline is thickened by `r`, the background
+  is filled again from the border around that thicker outline, and every
+  pixel the border cannot reach any more becomes product again (white parts
+  of a white tank that the first fill reached through a thin gap).
+*/
+function sealLeaks(background, width, height, r) {
+  const count = width * height;
+  const product = new Uint8Array(count);
+  for (let i = 0; i < count; i += 1) product[i] = background[i] ? 0 : 1;
+  const thick = dilate(product, width, height, r);
+
+  const outside = new Uint8Array(count);
+  const queue = new Int32Array(count);
+  let head = 0;
+  let tail = 0;
+  const push = (i) => { if (!outside[i] && !thick[i]) { outside[i] = 1; queue[tail] = i; tail += 1; } };
+  for (let x = 0; x < width; x += 1) { push(x); push((height - 1) * width + x); }
+  for (let y = 0; y < height; y += 1) { push(y * width); push(y * width + width - 1); }
+  while (head < tail) {
+    const i = queue[head];
+    head += 1;
+    const x = i % width;
+    const y = (i - x) / width;
+    if (x > 0) push(i - 1);
+    if (x < width - 1) push(i + 1);
+    if (y > 0) push(i - width);
+    if (y < height - 1) push(i + width);
+  }
+
+  // Back to the real outline: background = outside the thick outline, grown back by r
+  const grown = dilate(outside, width, height, r);
+  for (let i = 0; i < count; i += 1) {
+    if (background[i] && !grown[i]) background[i] = 0;
+  }
 }
 
 /* Keeps the largest product parts: specks smaller than `minShare` of the product go to the background */
@@ -252,11 +398,14 @@ function dropSpecks(background, width, height, minShare = 0.02) {
 */
 export function buildRelief(rgba, width, height, { detail = 0.06 } = {}) {
   const count = width * height;
-  const { background, found, lum } = findBackground(rgba, width, height);
+  const { background, found, lum, mode } = findBackground(rgba, width, height);
 
   // No clear background: the whole photo becomes a softly domed panel
   if (!found) background.fill(0);
-  else dropSpecks(background, width, height);
+  else {
+    if (mode === 'colour') sealLeaks(background, width, height, Math.max(2, Math.round(Math.min(width, height) * 0.025)));
+    dropSpecks(background, width, height);
+  }
 
   const inside = new Uint8Array(count);
   for (let i = 0; i < count; i += 1) inside[i] = background[i] ? 0 : 1;

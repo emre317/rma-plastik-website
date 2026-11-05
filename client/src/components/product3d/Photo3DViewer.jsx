@@ -191,7 +191,7 @@ export default function Photo3DViewer({ src, alt = '', onUnsupported }) {
         metalness: 0,
         emissive: 0xffffff,
         emissiveMap: map,
-        emissiveIntensity: 0.34,
+        emissiveIntensity: 0.5,
       });
       const mesh = new Mesh(geometry, material);
       mesh.scale.z = 0.001;
@@ -209,8 +209,8 @@ export default function Photo3DViewer({ src, alt = '', onUnsupported }) {
       shadow.scale.set(productWidth * 1.25, depthScale * 1.6 + 0.2, 1);
       scene.add(shadow);
 
-      scene.add(new AmbientLight(0xffffff, 0.5));
-      const key = new DirectionalLight(0xffffff, 1.7);
+      scene.add(new AmbientLight(0xffffff, 0.42));
+      const key = new DirectionalLight(0xffffff, 1.45);
       key.position.set(-1.6, 2.2, 3.2);
       scene.add(key);
       const rim = new DirectionalLight(0xdbeaff, 0.65);

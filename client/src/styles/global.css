@@ -37537,9 +37537,8 @@ html[lang="ar"] .pgBody small {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background:
-    radial-gradient(70% 60% at 50% 42%, #ffffff 0%, rgba(255, 255, 255, 0) 70%),
-    linear-gradient(180deg, var(--ink-100) 0%, #dfe4ea 100%);
+  /* Plain white behind the product: only the product and its soft shadow */
+  background: #ffffff;
   outline: none;
   cursor: grab;
 }
