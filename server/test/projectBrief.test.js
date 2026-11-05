@@ -13,11 +13,11 @@ process.env.UPLOAD_DIR = uploadsDir;
 process.env.JWT_SECRET = 'p'.repeat(40);
 
 const models = {};
-for (const name of ['AdminUser', 'QuoteRequest', 'AuditLog']) {
+for (const name of ['AdminUser', 'QuoteRequest', 'AuditLog', 'ConsentRecord', 'Suppression']) {
   models[name] = (await import(`../models/${name}.js`)).default;
   memoryModel(models[name]);
 }
-const { AdminUser, QuoteRequest } = models;
+const { AdminUser, QuoteRequest, ConsentRecord } = models;
 const { createToken } = await import('../controllers/authController.js');
 const { cleanProject } = await import('../controllers/quoteController.js');
 const { buildQuoteEmail } = await import('../services/quoteEmail.js');
@@ -56,6 +56,7 @@ const brief = (overrides = {}) => ({
   designInput: 'drawing',
   firstOrder: '250',
   notes: 'Prototype first, please.',
+  consents: { a: false, bEmail: true, bSms: false, bCall: true, c: false },
   project: {
     type: 'housing',
     stage: 'convert',
@@ -190,4 +191,18 @@ test('deleting the request deletes its files', async () => {
   const response = await fetch(`${base}/${quote._id}`, { method: 'DELETE', headers: auth(admin) });
   assert.equal(response.status, 200);
   ids.forEach((id) => assert.ok(!stored().includes(id)));
+});
+
+test('the KVKK boxes sent with a project are recorded like the quote form\'s', async () => {
+  const { status, body } = await send(brief({ email: 'kvkk@example.com' }), [[PDF, 'kvkk.pdf']]);
+  assert.equal(status, 201, JSON.stringify(body));
+  await new Promise((resolve) => setTimeout(resolve, 50));
+
+  const records = (await ConsentRecord.find({})).filter((record) => String(record.refId) === String(body.requestId));
+  const given = Object.fromEntries(records.map((record) => [record.box, record.value]));
+  assert.equal(records.length, 5, JSON.stringify(records.map((record) => record.box)));
+  assert.equal(given['B-email'], true);
+  assert.equal(given['B-call'], true);
+  assert.equal(given.A, false);
+  assert.equal(given.C, false);
 });

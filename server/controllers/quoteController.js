@@ -342,6 +342,8 @@ export function createProjectRequest(req, res) {
     deliveryCity: body.deliveryCity,
     language: body.language,
     attribution: body.attribution,
+    // KVKK boxes, recorded with the request like the quote form's
+    consents: body.consents,
     product: `Özel Üretim Projesi${project.title ? `: ${project.title}` : ''}`.slice(0, 150),
     customSpec: project.description.slice(0, 300),
     designInput: body.designInput,
