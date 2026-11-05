@@ -1,6 +1,7 @@
 import { emailLogo, mailFrom, sendMail } from './mailer.js';
 import { buildInvite, meetingUid } from './calendarInvite.js';
 import Meeting from '../models/Meeting.js';
+import { quoteNotifyAddress } from './quoteEmail.js';
 import { MEETING_TOPIC_LABELS, MEETING_TYPE_LABELS } from '../../client/src/data/meetingForm.js';
 
 /*
@@ -31,7 +32,7 @@ function siteOrigin() {
 
 const adminUrl = (id) => (siteOrigin() ? `${siteOrigin()}/admin/meetings/${id}` : '');
 
-export const notifyAddress = () => process.env.MEETING_NOTIFY_TO || process.env.QUOTE_NOTIFY_TO || 'info@rmaplastik.com';
+export const notifyAddress = () => String(process.env.MEETING_NOTIFY_TO || '').trim() || quoteNotifyAddress();
 
 const mapsLink = (location) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
 

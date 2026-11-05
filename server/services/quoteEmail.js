@@ -251,13 +251,12 @@ ${quote.message ? `
   return { subject, html, text };
 }
 
-export async function sendQuoteNotification(quote) {
-  const to = process.env.QUOTE_NOTIFY_TO;
+/* Sales inbox for quote requests: QUOTE_NOTIFY_TO, else info@rmaplastik.com */
+export const DEFAULT_SALES_EMAIL = 'info@rmaplastik.com';
+export const quoteNotifyAddress = () => String(process.env.QUOTE_NOTIFY_TO || '').trim() || DEFAULT_SALES_EMAIL;
 
-  if (!to) {
-    console.warn('QUOTE_NOTIFY_TO is not set; quote notification skipped.');
-    return null;
-  }
+export async function sendQuoteNotification(quote) {
+  const to = quoteNotifyAddress();
 
   const { subject, html, text } = buildQuoteEmail(quote);
 
@@ -536,7 +535,7 @@ export async function sendQuoteConfirmation(quote, contact = {}) {
   const { subject, html, text } = buildCustomerConfirmation(quote, contact);
 
   // Replies go to the sales team, not to the sending mailbox
-  const replyTo = contact.email || (process.env.QUOTE_NOTIFY_TO || '').split(',')[0].trim() || undefined;
+  const replyTo = contact.email || quoteNotifyAddress().split(',')[0].trim() || undefined;
 
   return sendMail({
     to: { name: String(quote.name || '').slice(0, 80), address: quote.email },
@@ -687,7 +686,7 @@ export async function sendOfferEmail(quote, offer, contact = {}, pdf) {
   const { subject, html, text, name, number, total } = await buildOfferEmail(quote, offer, contact);
 
   // Copy to the sales team so the sent offer is also in their inbox
-  const sales = (process.env.QUOTE_NOTIFY_TO || '').split(',').map((item) => item.trim()).filter(Boolean);
+  const sales = quoteNotifyAddress().split(',').map((item) => item.trim()).filter(Boolean);
   const replyTo = contact.email || sales[0] || undefined;
 
   await sendMail({

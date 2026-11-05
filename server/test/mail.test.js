@@ -62,3 +62,16 @@ test('a quote request is saved and answered even without SMTP', async () => {
   assert.equal(saved.company, 'Mersin Tarım');
   assert.equal(saved.mail.notification.status, 'skipped');
 });
+
+test('quote notifications go to info@rmaplastik.com when QUOTE_NOTIFY_TO is not set', async () => {
+  const { quoteNotifyAddress } = await import('../services/quoteEmail.js');
+  const saved = process.env.QUOTE_NOTIFY_TO;
+  delete process.env.QUOTE_NOTIFY_TO;
+  assert.equal(quoteNotifyAddress(), 'info@rmaplastik.com');
+  process.env.QUOTE_NOTIFY_TO = '  ';
+  assert.equal(quoteNotifyAddress(), 'info@rmaplastik.com');
+  process.env.QUOTE_NOTIFY_TO = 'satis@rmaplastik.com, info@rmaplastik.com';
+  assert.equal(quoteNotifyAddress(), 'satis@rmaplastik.com, info@rmaplastik.com');
+  if (saved === undefined) delete process.env.QUOTE_NOTIFY_TO;
+  else process.env.QUOTE_NOTIFY_TO = saved;
+});

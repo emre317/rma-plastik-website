@@ -71,6 +71,7 @@ Products, page texts and contact settings are edited at `/admin` and stored in M
 ## Quote request emails
 
 Every quote form submission is saved to MongoDB and emailed to `QUOTE_NOTIFY_TO`
+(default `info@rmaplastik.com` when it is not set)
 (`server/services/quoteEmail.js`). "Reply" in the inbox goes straight to the customer.
 Set these in `server/.env`:
 
