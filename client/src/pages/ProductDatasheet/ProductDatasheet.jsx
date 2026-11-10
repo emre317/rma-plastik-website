@@ -175,6 +175,7 @@ export default function ProductDatasheet() {
           )}
         </section>
 
+        <p className="dsNote dsTolerance"><strong>{t('common.tolerance')}</strong></p>
         <p className="dsNote">{d('note')}</p>
 
         <footer className="dsFoot">

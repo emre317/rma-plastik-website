@@ -46,12 +46,23 @@ const GROUPS = [
 
 const KEYS = GROUPS.flatMap((group) => group.fields.map((field) => field.key));
 
+// On / off switches for the product photos (client/src/data/features.js)
+const SWITCHES = [
+  { key: 'productZoom', label: 'Yakınlaştırma', hint: 'Fareyle büyüteç ve tıklayınca tam ekran fotoğraf.' },
+  { key: 'product3d', label: '3D görünüm', hint: 'Fotoğrafın döndürülebilir 3D görünümü.' },
+];
+const SWITCH_KEYS = SWITCHES.map((item) => item.key);
+const pickForm = (data) => ({
+  ...Object.fromEntries(KEYS.map((key) => [key, data?.[key] || ''])),
+  ...Object.fromEntries(SWITCH_KEYS.map((key) => [key, data?.[key] === true])),
+});
+
 export default function AdminSettings() {
   usePageTitle('Site Ayarları');
 
   const call = useAdminApi();
 
-  const [form, setForm] = useState(Object.fromEntries(KEYS.map((key) => [key, ''])));
+  const [form, setForm] = useState(pickForm({}));
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState(null);
@@ -60,7 +71,7 @@ export default function AdminSettings() {
     (async () => {
       try {
         const { data } = await call(getSettings);
-        setForm(Object.fromEntries(KEYS.map((key) => [key, data?.[key] || ''])));
+        setForm(pickForm(data));
       } catch (err) {
         setMessage({ type: 'error', text: err.message });
       } finally {
@@ -76,7 +87,7 @@ export default function AdminSettings() {
       setSaving(true);
       setMessage(null);
       const { data } = await call(updateSettings, form);
-      setForm(Object.fromEntries(KEYS.map((key) => [key, data?.[key] || ''])));
+      setForm(pickForm(data));
       setMessage({ type: 'success', text: 'Kaydedildi. Sitede görünmesi için “Yayınla”ya basın.' });
     } catch (err) {
       setMessage({ type: 'error', text: err.message });
@@ -134,6 +145,20 @@ export default function AdminSettings() {
                 ))}
               </div>
             ))}
+
+            <div className="cmsCard">
+              <h2>Ürün Fotoğrafları</h2>
+              <p className="cmsHint">Ürün model sayfalarındaki fotoğraf özellikleri. Kapalıyken fotoğraflar, oklar ve küçük resimler normal çalışır. Değişiklik “Yayınla” sonrası sitede görünür.</p>
+              {SWITCHES.map((item) => (
+                <label key={item.key} className="cmsCheck">
+                  <input type="checkbox" checked={form[item.key]} onChange={(event) => setForm((current) => ({ ...current, [item.key]: event.target.checked }))} />
+                  <span>
+                    {item.label}
+                    <small style={{ display: 'block', fontWeight: 400, color: 'var(--ink-500)' }}>{item.hint}</small>
+                  </span>
+                </label>
+              ))}
+            </div>
           </div>
 
           <div className="cmsSaveBar visible">

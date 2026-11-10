@@ -18,6 +18,7 @@ import useModelQuote from '../../hooks/useModelQuote';
 import formatNumber from '../../utils/formatNumber';
 import { familyText, modelPath } from '../../data/productTables';
 import { MAX_VOLUME, USE_OPTIONS, VOLUME_PRESETS, candidatesFor, recommend } from './recommend';
+import ToleranceNote from '../../components/ui/ToleranceNote';
 
 const USE_ICONS = { water: Droplets, food: UtensilsCrossed, chemical: FlaskConical, acid: Beaker };
 const ORIENTATIONS = [
@@ -355,6 +356,7 @@ export default function TankFinder() {
                       <Info aria-hidden="true" />
                       {f('disclaimer')}
                     </p>
+                    <ToleranceNote />
                   </>
                 )}
               </>

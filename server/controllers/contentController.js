@@ -53,6 +53,11 @@ function toPublicSettings(settings) {
   const value = (field) => settings?.[field] || '';
 
   return {
+    // Product photo features (client/src/data/features.js)
+    features: {
+      productZoom: settings?.productZoom === true,
+      product3d: settings?.product3d === true,
+    },
     phoneDisplay: value('phoneDisplay'),
     phone: value('phone'),
     email: value('email'),
@@ -175,6 +180,11 @@ export async function updateSettings(req, res) {
     const update = Object.fromEntries(
       SETTINGS_FIELDS.map((field) => [field, str(req.body?.[field], SETTINGS_LIMITS[field] || 300)])
     );
+
+    // On / off switches (sent as true / false)
+    for (const field of ['productZoom', 'product3d']) {
+      if (typeof req.body?.[field] === 'boolean') update[field] = req.body[field];
+    }
 
     update.whatsapp = update.whatsapp.replace(/\D/g, '');
     update.phone = update.phone.replace(/[^\d+]/g, '');

@@ -19,6 +19,7 @@ import CompareButton from '../../components/compare/CompareButton';
 import { EcoBadge } from '../../components/ui/EcoMarks';
 import FinderCta from '../../components/ui/FinderCta';
 import CatalogLink, { CATALOG_PDF } from '../../components/ui/CatalogLink';
+import ToleranceNote from '../../components/ui/ToleranceNote';
 
 // Tables are listed under their product group; tables of no shown group under "Diğer"
 const groupOf = (family) => portfolio.find((group) => group.families.includes(family.id))?.id || 'other';
@@ -316,6 +317,8 @@ export default function ProductTables() {
               </div>
             );
           })}
+
+          <ToleranceNote />
 
           <p className="ptSource">
             {p('source')}

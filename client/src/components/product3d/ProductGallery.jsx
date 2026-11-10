@@ -4,6 +4,7 @@ import { Box, ChevronLeft, ChevronRight, Image as ImageIcon, Maximize2, Package 
 
 import ImageLightbox from '../ui/ImageLightbox';
 import { track } from '../../analytics/track';
+import features from '../../data/features';
 
 const loadViewer = () => import('./Photo3DViewer');
 const Photo3DViewer = lazy(loadViewer);
@@ -19,6 +20,8 @@ const canHover = () => typeof window !== 'undefined' && window.matchMedia('(hove
     swipe, counter and thumbnails;
   - 3D mode: the selected photo as an interactive 3D relief (Photo3DViewer,
     loaded only when chosen).
+  Magnifier / full screen and 3D follow data/features.js (Site Ayarları);
+  when off, the gallery is a plain photo viewer with arrows and thumbnails.
   images: [src] cover first; tag / code: labels on the photo.
 */
 export default function ProductGallery({ images, alt = '', tag = '', code = '' }) {
@@ -32,6 +35,9 @@ export default function ProductGallery({ images, alt = '', tag = '', code = '' }
   const [no3d, setNo3d] = useState(false);
   const swipe = useRef(null);
   const thumbsRef = useRef(null);
+
+  const zoomOn = features.productZoom;
+  const show3d = features.product3d && !no3d;
 
   const count = images.length;
   const current = images[Math.min(index, count - 1)] || '';
@@ -68,7 +74,7 @@ export default function ProductGallery({ images, alt = '', tag = '', code = '' }
 
   /* Magnifier: the photo follows the pointer at 2× */
   function onMove(event) {
-    if (!canHover()) return;
+    if (!zoomOn || !canHover()) return;
     const box = event.currentTarget.getBoundingClientRect();
     setZoom({
       x: ((event.clientX - box.left) / box.width) * 100,
@@ -121,12 +127,7 @@ export default function ProductGallery({ images, alt = '', tag = '', code = '' }
             onPointerUp={onPointerUp}
             onKeyDown={onKeyDown}
           >
-            <button
-              type="button"
-              className="pgalOpen"
-              onClick={() => setViewer(index)}
-              aria-label={`${t('lightbox.open')}: ${alt}`}
-            >
+            <PhotoFrame zoomOn={zoomOn} onOpen={() => setViewer(index)} label={`${t('lightbox.open')}: ${alt}`}>
               {images.map((src, i) => (
                 <img
                   key={src}
@@ -139,8 +140,8 @@ export default function ProductGallery({ images, alt = '', tag = '', code = '' }
                   style={i === index && zoom ? { transformOrigin: `${zoom.x}% ${zoom.y}%` } : undefined}
                 />
               ))}
-              <span className="pgalZoomHint" aria-hidden="true"><Maximize2 /></span>
-            </button>
+              {zoomOn && <span className="pgalZoomHint" aria-hidden="true"><Maximize2 /></span>}
+            </PhotoFrame>
 
             {count > 1 && (
               <>
@@ -168,7 +169,7 @@ export default function ProductGallery({ images, alt = '', tag = '', code = '' }
         </figcaption>
 
         {/* Photo / 3D switch */}
-        {!no3d && (
+        {show3d && (
           <div className="pgalModes" role="tablist" aria-label={g('modes')}>
             <button type="button" role="tab" aria-selected={mode === 'photo'} className={mode === 'photo' ? 'active' : ''} onClick={() => setMode('photo')}>
               <ImageIcon aria-hidden="true" />
@@ -204,7 +205,7 @@ export default function ProductGallery({ images, alt = '', tag = '', code = '' }
             <img src={src} alt="" loading="lazy" decoding="async" />
           </button>
         ))}
-        {!no3d && (
+        {show3d && (
           <button
             type="button"
             role="listitem"
@@ -220,7 +221,17 @@ export default function ProductGallery({ images, alt = '', tag = '', code = '' }
         )}
       </div>
 
-      <ImageLightbox slides={slides} index={viewer} onClose={() => setViewer(-1)} />
+      {zoomOn && <ImageLightbox slides={slides} index={viewer} onClose={() => setViewer(-1)} />}
     </div>
+  );
+}
+
+/* The large photo: a button that opens full screen, or a plain frame when zoom is off */
+function PhotoFrame({ zoomOn, onOpen, label, children }) {
+  if (!zoomOn) return <div className="pgalOpen pgalStatic">{children}</div>;
+  return (
+    <button type="button" className="pgalOpen" onClick={onOpen} aria-label={label}>
+      {children}
+    </button>
   );
 }

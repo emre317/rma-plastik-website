@@ -71,6 +71,7 @@ const tr = {
   },
 
   common: {
+    tolerance: 'Ölçüler ±%5 toleranslıdır. Polietilen esnek bir malzeme olduğundan ölçülerde küçük farklılıklar olabilir.',
     locations: 'Mersin',
     country: 'Türkiye',
     requestQuote: 'Teklif Al',

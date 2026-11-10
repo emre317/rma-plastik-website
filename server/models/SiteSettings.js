@@ -22,6 +22,10 @@ const siteSettingsSchema = new mongoose.Schema(
     instagramHandle: str(80),
     youtubeHandle: str(80),
 
+    // Product photos on the site (client/src/data/features.js); off until switched on
+    productZoom: { type: Boolean, default: false },
+    product3d: { type: Boolean, default: false },
+
     // Offer document (admin only, never published on the site)
     companyLegalName: str(200),
     taxInfo: str(160),

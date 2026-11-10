@@ -20,6 +20,7 @@ import ProductGallery from '../../components/product3d/ProductGallery';
 import { industriesForFamily } from '../../data/industries';
 import { groupById } from '../../data/productPortfolio';
 import { familyText, findModel, modelGallery, modelPath, similarModels } from '../../data/productTables';
+import ToleranceNote from '../../components/ui/ToleranceNote';
 
 // Up to four headline values shown as large tiles, in this order of preference
 const HIGHLIGHT_KEYS = ['volume', 'diameter', 'width', 'length', 'height', 'outlet', 'cap'];
@@ -278,6 +279,7 @@ export default function ProductModel() {
               {' · '}
               <LocalizedLink to={`${path}/datasheet?print=1`} target="_blank" rel="noopener" className="sourceLink">{t('datasheet.button')}</LocalizedLink>
             </p>
+            <ToleranceNote />
           </div>
 
           <div className="pmSide">

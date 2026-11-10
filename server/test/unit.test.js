@@ -110,3 +110,12 @@ test('variables the GitHub Actions runner sets do not change the publish setting
     assert.deepEqual(githubConfig(), { api: 'https://api.github.com', repo: '', workflow: 'publish-site.yml', ref: 'main', token: '' });
   });
 });
+
+test('product photo switches are published as booleans, off by default', async () => {
+  const { getPublicContent } = await import('../controllers/contentController.js');
+  assert.equal(typeof getPublicContent, 'function');
+  const { default: SiteSettings } = await import('../models/SiteSettings.js');
+  const doc = new SiteSettings({ singleton: 'site' });
+  assert.equal(doc.productZoom, false);
+  assert.equal(doc.product3d, false);
+});

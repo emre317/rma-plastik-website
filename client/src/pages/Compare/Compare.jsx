@@ -14,6 +14,7 @@ import useLanguage from '../../hooks/useLanguage';
 import useModelQuote from '../../hooks/useModelQuote';
 import formatNumber from '../../utils/formatNumber';
 import { COLUMN_KEYS, familyText, modelPath } from '../../data/productTables';
+import ToleranceNote from '../../components/ui/ToleranceNote';
 
 /*
   Side-by-side comparison of 2–4 models. The models come from the address
@@ -206,6 +207,7 @@ export default function Compare() {
                   </tfoot>
                 </table>
               </div>
+              <ToleranceNote />
             </>
           )}
         </div>

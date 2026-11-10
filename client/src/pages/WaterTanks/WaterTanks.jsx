@@ -18,6 +18,7 @@ import useModelQuote from '../../hooks/useModelQuote';
 import AddToCartButton from '../../components/quote/AddToCartButton';
 import CompareButton from '../../components/compare/CompareButton';
 import FinderCta from '../../components/ui/FinderCta';
+import ToleranceNote from '../../components/ui/ToleranceNote';
 
 // Every distinct volume is a stop on the volume slider
 const VOLUME_STEPS = waterTanks.length ? [...new Set(waterTanks.map((tank) => tank.volume))].sort((a, b) => a - b) : [0];
@@ -622,6 +623,8 @@ export default function WaterTanks() {
                   </table>
                 </div>
               )}
+
+              <ToleranceNote />
             </div>
           </div>
         </div>

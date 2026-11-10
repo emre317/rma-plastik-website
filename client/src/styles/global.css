@@ -38410,3 +38410,45 @@ html[lang="ar"] .pgBody small {
     font-weight: 700;
   }
 }
+
+/* =====================================================
+   DIMENSION TOLERANCE NOTE (components/ui/ToleranceNote.jsx)
+===================================================== */
+.toleranceNote {
+  margin: 14px 0 0;
+  padding: 10px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border: 1px solid color-mix(in srgb, var(--rma-blue) 22%, transparent);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--rma-blue) 5%, #fff);
+  color: var(--ink-700);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.toleranceNote svg {
+  width: 17px;
+  height: 17px;
+  flex: none;
+  margin-top: 1px;
+  color: var(--rma-blue);
+}
+
+/* Datasheet: the tolerance line stands out on paper too */
+.dsNote.dsTolerance {
+  padding: 8px 12px;
+  border-inline-start: 3px solid var(--rma-blue);
+  background: #f2f7fb;
+  color: var(--ink-900);
+}
+
+/* Product photos without zoom (data/features.js) */
+.pgalOpen.pgalStatic {
+  cursor: default;
+}
+
+.dsNote.dsTolerance + .dsNote {
+  margin-top: 2mm;
+}

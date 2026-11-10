@@ -72,6 +72,7 @@ const en = {
   },
 
   common: {
+    tolerance: 'Dimensions are subject to a tolerance of ±5%. As polyethylene is a flexible material, dimensions may vary slightly.',
     locations: 'Mersin',
     country: 'Türkiye',
     requestQuote: 'Get a Quote',
