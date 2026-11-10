@@ -9,6 +9,7 @@
 .cat-safety { --cert: #e07a10; --cert-soft: #fdf1e3; }
 .cat-customer { --cert: #6a3d9a; --cert-soft: #f1ebf8; }
 .cat-product { --cert: var(--rma-red); --cert-soft: #fdecef; }
+.cat-registration { --cert: #0f7c80; --cert-soft: #e3f4f4; }
 .cat-other { --cert: var(--ink-600); --cert-soft: var(--ink-100); }
 
 /* ---------- Seal ---------- */
@@ -84,6 +85,24 @@
 }
 
 .certSeal-lg strong { font-size: 30px; }
+
+.certSeal.certSeal-icon .certSealIcon {
+  display: block;
+  width: 34px;
+  height: 34px;
+  margin: 0;
+  opacity: 1;
+}
+
+.certSeal-sm.certSeal-icon .certSealIcon {
+  width: 26px;
+  height: 26px;
+}
+
+.certSeal-lg.certSeal-icon .certSealIcon {
+  width: 48px;
+  height: 48px;
+}
 
 /* ---------- Shared bits ---------- */
 

@@ -8,10 +8,13 @@ import Seo from '../../seo/Seo';
 import PageHeader from '../../components/ui/PageHeader';
 import QuoteStrip from '../../components/ui/QuoteStrip';
 import ImageLightbox from '../../components/ui/ImageLightbox';
-import { CertificateSeal, categoryOf } from '../../components/certificates/CertificateParts';
+import {
+  CertificateSeal, categoryOf, certificateAnchor, isStandard,
+} from '../../components/certificates/CertificateParts';
 import certificates, { certificateDate, certificateText } from '../../data/certificates';
 
-export const certificateAnchor = (certificate) => certificate.code.replace(/[^A-Za-z0-9]+/g, '-').toLowerCase();
+const splitCodeDir = (certificate) => (isStandard(certificate) ? 'ltr' : undefined);
+
 
 /*
   Kalite ve Sertifikalar: every published certificate as a large card (the
@@ -44,6 +47,7 @@ export default function Certificates() {
   const issuers = [...new Set(certificates.map((certificate) => certificate.issuer).filter(Boolean))];
   const accreditations = [...new Set(certificates.map((certificate) => certificate.accreditation).filter(Boolean))];
   const holder = certificates.find((certificate) => certificate.holder)?.holder;
+  const standards = certificates.filter(isStandard);
 
   return (
     <main className="internalPage certPage">
@@ -72,13 +76,13 @@ export default function Certificates() {
             <div className="container certHighlightsGrid">
               <div className="certHighlight">
                 <span className="certHighlightIcon" aria-hidden="true"><Layers /></span>
-                <strong dir="ltr">{certificates.length}</strong>
+                <strong dir="ltr">{standards.length || certificates.length}</strong>
                 <span>{t('certificates.highlights.standards')}</span>
-                <small dir="ltr">{certificates.map((certificate) => certificate.code.split(':')[0]).join(' · ')}</small>
+                <small dir="ltr">{(standards.length ? standards : certificates).map((certificate) => certificate.code.split(':')[0]).join(' · ')}</small>
               </div>
               <div className="certHighlight">
                 <span className="certHighlightIcon" aria-hidden="true"><Stamp /></span>
-                <strong>{issuers[0] || '—'}</strong>
+                <strong>{standards.find((certificate) => certificate.issuer)?.issuer || issuers[0] || '—'}</strong>
                 <span>{t('certificates.highlights.accredited')}</span>
                 {accreditations[0] && <small dir="ltr">{accreditations.join(' · ')}</small>}
               </div>
@@ -116,7 +120,7 @@ export default function Certificates() {
                           <CertificateSeal certificate={certificate} />
                           <div>
                             <span className="certCategory">{t(`certificates.categories.${category}`)}</span>
-                            <h2 dir="ltr">{certificate.code}</h2>
+                            <h2 dir={splitCodeDir(certificate)}>{certificate.code}</h2>
                             <p className="certTitle">{title}</p>
                           </div>
                         </div>

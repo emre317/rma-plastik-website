@@ -292,6 +292,7 @@ const en = {
       verifiableText: 'Validity can be checked on the certification body’s website.',
     },
     categories: {
+      registration: 'Official Registration',
       quality: 'Quality',
       environment: 'Environment',
       safety: 'Occupational Health and Safety',

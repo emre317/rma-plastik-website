@@ -12,13 +12,19 @@ const { default: builtIn } = await import('../../client/src/data/certificates.bu
 
 const response = () => ({ code: 200, body: null, status(c) { this.code = c; return this; }, json(b) { this.body = b; return this; } });
 
-test('the built-in list is the four BelCert certificates as printed', () => {
+test('the built-in list is the four BelCert certificates and the business registration, as printed', () => {
   assert.deepEqual(builtIn.map((item) => [item.code, item.number, item.validUntil]), [
     ['ISO 9001:2015', 'A1803532', '2027-07-04'],
     ['ISO 14001:2015', 'A1803534', '2027-08-26'],
     ['ISO 45001:2018', 'A1803535', '2027-08-26'],
     ['ISO 10002:2018', 'A1803533', '2027-08-26'],
+    ['İşletme Kayıt Belgesi', 'TR-33-K-006441', ''],
   ]);
+  // The registration has no end date: it stays on the site
+  const registration = certificatePayload(builtIn[4]);
+  assert.equal(registration.category, 'registration');
+  assert.equal(registration.validUntil, null);
+  assert.equal(registration.issuedAt.toISOString().slice(0, 10), '2013-01-30');
   for (const item of builtIn) {
     assert.match(item.file, /^\/documents\/certificates\/.+\.pdf$/);
     assert.ok(item.i18n.tr.title && item.i18n.en.title && item.i18n.ar.title);

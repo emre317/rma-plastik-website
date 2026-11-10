@@ -3,7 +3,9 @@ import { BadgeCheck } from 'lucide-react';
 
 import Arrow from '../components/i18n/Arrow';
 import { LocalizedLink } from '../components/i18n/LocalizedLink';
-import { CertificateSeal, categoryOf } from '../components/certificates/CertificateParts';
+import {
+  CertificateSeal, categoryOf, certificateAnchor, isStandard,
+} from '../components/certificates/CertificateParts';
 import certificates, { certificateDate, certificateText } from '../data/certificates';
 
 /*
@@ -39,14 +41,14 @@ export default function CertificatesSection({ id = 'certificates' }) {
         <ul className="certStripGrid">
           {certificates.map((certificate) => (
             <li key={certificate.code} className={`certMini cat-${categoryOf(certificate)}`}>
-              <LocalizedLink to={`/certificates#${certificate.code.replace(/[^A-Za-z0-9]+/g, '-').toLowerCase()}`} className="certMiniLink">
+              <LocalizedLink to={`/certificates#${certificateAnchor(certificate)}`} className="certMiniLink">
                 <span className="certMiniSheet" aria-hidden="true">
                   {certificate.image && <img src={certificate.image} alt="" loading="lazy" decoding="async" width="900" height="1273" />}
                 </span>
                 <CertificateSeal certificate={certificate} size="sm" />
                 <span className="certMiniBody">
                   <small className="certCategory">{t(`certificates.categories.${categoryOf(certificate)}`)}</small>
-                  <strong dir="ltr">{certificate.code}</strong>
+                  <strong dir={isStandard(certificate) ? 'ltr' : undefined}>{certificate.code}</strong>
                   <span className="certMiniTitle">{certificateText(certificate, 'title', lang)}</span>
                   {certificate.validUntil && (
                     <span className="certValid">

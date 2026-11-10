@@ -20,7 +20,7 @@ const LANGS = [
 ];
 
 const CATEGORY_LABELS = {
-  quality: 'Kalite', environment: 'Çevre', safety: 'İş Sağlığı ve Güvenliği', customer: 'Müşteri Memnuniyeti', product: 'Ürün', other: 'Diğer',
+  quality: 'Kalite', environment: 'Çevre', safety: 'İş Sağlığı ve Güvenliği', customer: 'Müşteri Memnuniyeti', product: 'Ürün', registration: 'Resmî kayıt / izin', other: 'Diğer',
 };
 
 const WARN_DAYS = 60;
@@ -30,7 +30,7 @@ const formatDay = (value) => (value ? new Intl.DateTimeFormat('tr-TR', { day: 'n
 
 function expiry(certificate) {
   const left = daysLeft(certificate.validUntil);
-  if (left === null) return { tone: 'gray', text: 'Geçerlilik tarihi yok' };
+  if (left === null) return { tone: 'green', text: 'Süresiz (bitiş tarihi yok)' };
   if (left < 0) return { tone: 'red', text: `Süresi doldu (${formatDay(certificate.validUntil)}) · sitede gösterilmez` };
   if (left <= WARN_DAYS) return { tone: 'amber', text: `${left} gün sonra doluyor · yenisini yükleyin` };
   return { tone: 'green', text: `${formatDay(certificate.validUntil)} tarihine kadar geçerli` };

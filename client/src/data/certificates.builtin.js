@@ -1,6 +1,6 @@
 /*
-  RMA Plastik management system certificates (BelCert, ILAS accredited), as
-  printed on the certificates. Certificates saved in the admin panel
+  RMA Plastik management system certificates (BelCert, ILAS accredited) and
+  the official business registration, as printed on the documents. Certificates saved in the admin panel
   (Sertifikalar) replace this list once published. Kept free of imports:
   the server reads it to import the defaults.
   Dates are YYYY-MM-DD.
@@ -80,8 +80,36 @@ const certificates = [
       ar: { title: 'نظام إدارة رضا العملاء والشكاوى', scope: '' },
     },
   },
+  {
+    // Official registration, not a management system certificate: no end date
+    code: 'İşletme Kayıt Belgesi',
+    category: 'registration',
+    number: 'TR-33-K-006441',
+    holder: 'RMA Yatırım Makina Sanayi Ltd. Şti.',
+    issuer: 'T.C. Akdeniz Kaymakamlığı İlçe Gıda, Tarım ve Hayvancılık Müdürlüğü',
+    accreditation: '',
+    verifyUrl: '',
+    issuedAt: '2013-01-30',
+    validUntil: '',
+    file: '/documents/certificates/rma-plastik-isletme-kayit-belgesi.pdf',
+    image: '/images/certificates/rma-plastik-isletme-kayit-belgesi.webp',
+    i18n: {
+      tr: {
+        title: 'Gıda, Tarım ve Hayvancılık Bakanlığı İşletme Kayıt Belgesi',
+        scope: 'Faaliyet konusu: plastik esaslı madde ve malzeme üretimi. 5996 sayılı Kanun’un 30. maddesine dayanılarak düzenlenmiştir.',
+      },
+      en: {
+        title: 'Business Registration Certificate – Ministry of Food, Agriculture and Livestock',
+        scope: 'Field of activity: production of plastic-based substances and materials. Issued under Article 30 of Law No. 5996.',
+      },
+      ar: {
+        title: 'شهادة تسجيل المنشأة – وزارة الغذاء والزراعة والثروة الحيوانية',
+        scope: 'مجال النشاط: إنتاج المواد والخامات ذات الأساس البلاستيكي. صادرة استناداً إلى المادة 30 من القانون رقم 5996.',
+      },
+    },
+  },
 ];
 
-export const CERTIFICATE_CATEGORIES = ['quality', 'environment', 'safety', 'customer', 'product', 'other'];
+export const CERTIFICATE_CATEGORIES = ['quality', 'environment', 'safety', 'customer', 'product', 'registration', 'other'];
 
 export default certificates;

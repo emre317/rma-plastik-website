@@ -291,6 +291,7 @@ const tr = {
       verifiableText: 'Geçerlilik durumu belgelendirme kuruluşunun sitesinden kontrol edilebilir.',
     },
     categories: {
+      registration: 'Resmî Kayıt',
       quality: 'Kalite',
       environment: 'Çevre',
       safety: 'İş Sağlığı ve Güvenliği',

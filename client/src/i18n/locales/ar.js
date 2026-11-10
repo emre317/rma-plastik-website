@@ -292,6 +292,7 @@ const ar = {
       verifiableText: 'يمكن التحقق من صلاحية الشهادة عبر موقع جهة الاعتماد.',
     },
     categories: {
+      registration: 'تسجيل رسمي',
       quality: 'الجودة',
       environment: 'البيئة',
       safety: 'الصحة والسلامة المهنية',
