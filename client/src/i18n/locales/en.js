@@ -7,6 +7,7 @@ const en = {
     tagline: 'Industrial Polyethylene Solutions',
     description: 'RMA Plastik industrial polyethylene solutions',
     descriptions: {
+      certificates: 'RMA Plastik ISO 9001, ISO 14001, ISO 45001 and ISO 10002 management system certificates: view the certificates, download them as PDF and verify their validity.',
       kvkk: 'Privacy notice and consent texts for the forms on the RMA Plastik website (Turkish).',
       cookiePolicy: 'Cookies used on the RMA Plastik website, how long they are kept and how to change your choice (Turkish).',
       faq: 'Frequently asked questions about RMA Plastik polyethylene tanks, water tanks and custom moulding: delivery, installation, ordering and more.',
@@ -25,6 +26,7 @@ const en = {
       compare: 'Compare RMA Plastik products side by side with their dimensions.',
     },
     titles: {
+      certificates: 'Quality and Certificates',
       kvkk: 'Privacy Notice (KVKK)',
       cookiePolicy: 'Cookie Policy',
       faq: 'Frequently Asked Questions',
@@ -278,6 +280,51 @@ const en = {
     },
   },
 
+  certificates: {
+    eyebrow: 'Quality and Certificates',
+    title: 'Certified',
+    titleAccent: 'management systems',
+    text: 'Our quality, environmental, occupational health and safety and customer satisfaction management systems are certified to international standards. You can view the certificates, download them as PDF and verify their validity on the certification body’s website.',
+    highlights: {
+      standards: 'International standards',
+      accredited: 'Accredited certification',
+      verifiable: 'Every certificate can be verified',
+      verifiableText: 'Validity can be checked on the certification body’s website.',
+    },
+    categories: {
+      quality: 'Quality',
+      environment: 'Environment',
+      safety: 'Occupational Health and Safety',
+      customer: 'Customer Satisfaction',
+      product: 'Product',
+      other: 'Certificate',
+    },
+    labels: {
+      number: 'Certificate No.',
+      issuer: 'Certification body',
+      accreditation: 'Accreditation',
+      issuedAt: 'Issue date',
+      validUntil: 'Valid until',
+      holder: 'Certificate holder',
+      scope: 'Scope of certification',
+    },
+    valid: 'Valid until {{date}}',
+    view: 'View certificate',
+    download: 'Download PDF',
+    verify: 'Verify',
+    scopeTitle: 'Scope of certification',
+    empty: 'Our certificates will be published here soon.',
+    section: {
+      eyebrow: 'Our certificates',
+      title: 'Production certified',
+      titleAccent: 'to international standards',
+      text: 'Our quality, environmental and occupational safety management systems are certified by an accredited body.',
+      all: 'All certificates',
+    },
+    ctaTitle: 'Need stamped copies of our certificates?',
+    ctaText: 'For supplier registration and tender files, you can request up-to-date copies from our sales team.',
+  },
+
   footer: {
     description:
       'Industrial polyethylene manufacturing and engineered product solutions.',
@@ -287,6 +334,7 @@ const en = {
       contact: 'Contact',
     },
     links: {
+      certificates: 'Quality and Certificates',
       faq: 'FAQ',
       tankFinder: 'Tank Finder',
       productTables: 'Product Tables',

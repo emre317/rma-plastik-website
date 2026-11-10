@@ -17,7 +17,7 @@ const TYPES = {
   'image/webp': '.webp',
 };
 
-const FOLDERS = ['products', 'posts', 'projects', 'gallery'];
+const FOLDERS = ['products', 'posts', 'projects', 'gallery', 'certificates'];
 
 /*
   The declared type is not trusted: the first bytes must match it too
@@ -113,6 +113,40 @@ export const uploadProductImage = uploadHandler('products');
 export const uploadPostImage = uploadHandler('posts');
 export const uploadProjectImage = uploadHandler('projects');
 export const uploadGalleryImage = uploadHandler('gallery');
+export const uploadCertificateImage = uploadHandler('certificates');
+
+/*
+  Certificate PDF (Sertifikalar): stored under /uploads/certificates with a
+  random name; the file must start with "%PDF-" whatever its declared type.
+*/
+export function uploadCertificatePdf(req, res) {
+  multer({
+    storage: multer.diskStorage({
+      destination: path.join(UPLOAD_ROOT, 'certificates'),
+      filename: (request, file, cb) => cb(null, `${crypto.randomUUID()}.pdf`),
+    }),
+    limits: { fileSize: 15 * 1024 * 1024, files: 1 },
+    fileFilter: (request, file, cb) => cb(null, file.mimetype === 'application/pdf'),
+  }).single('file')(req, res, (error) => {
+    if (error) {
+      return res.status(400).json({ success: false, message: error.code === 'LIMIT_FILE_SIZE' ? 'PDF en fazla 15 MB olabilir.' : 'PDF yüklenemedi.' });
+    }
+    if (!req.file) return res.status(400).json({ success: false, message: 'Yalnızca PDF dosyası yüklenebilir.' });
+
+    let valid = false;
+    try {
+      valid = readHead(req.file.path, 5).toString('latin1') === '%PDF-';
+    } catch {
+      valid = false;
+    }
+    if (!valid || path.dirname(path.resolve(req.file.path)) !== path.join(UPLOAD_ROOT, 'certificates')) {
+      fs.rmSync(req.file.path, { force: true });
+      return res.status(400).json({ success: false, message: 'Dosya geçerli bir PDF değil.' });
+    }
+
+    return res.status(201).json({ success: true, data: { url: `/uploads/certificates/${req.file.filename}` } });
+  });
+}
 
 /* Offer PDF made in the admin panel, kept in memory only to attach it to the e-mail */
 export function offerPdfUpload(req, res, next) {

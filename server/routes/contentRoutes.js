@@ -74,6 +74,11 @@ import ExportMarket from '../models/ExportMarket.js';
 import Video from '../models/Video.js';
 import { audit } from '../services/audit.js';
 import TranslationJob from '../models/TranslationJob.js';
+import Certificate from '../models/Certificate.js';
+import {
+  createCertificate, deleteCertificate, importDefaultCertificates, listCertificates, updateCertificate,
+} from '../controllers/certificateController.js';
+import { uploadCertificateImage, uploadCertificatePdf } from '../middleware/upload.js';
 import { autoTranslate, autoTranslateTexts } from '../services/autoTranslate.js';
 import { isTranslationEnabled } from '../services/translator.js';
 
@@ -133,6 +138,15 @@ adminContentRouter.post('/uploads/project-image', content, uploadProjectImage);
 adminContentRouter.post('/uploads/gallery-image', content, uploadGalleryImage);
 
 adminContentRouter.get('/projects', listProjects);
+/* Certificates (Kalite ve Sertifikalar) */
+adminContentRouter.get('/certificates', content, listCertificates);
+adminContentRouter.post('/certificates', content, audit({ area: 'content', type: 'certificate', action: 'Sertifika ekledi' }), autoTranslate(Certificate, 'certificate'), createCertificate);
+adminContentRouter.post('/certificates/import-defaults', content, audit({ area: 'content', type: 'certificate', action: 'Hazır sertifikaları içe aktardı', label: () => 'Sertifikalar' }), importDefaultCertificates);
+adminContentRouter.put('/certificates/:id', content, audit({ area: 'content', type: 'certificate', action: 'Sertifika güncelledi', lookup: Certificate }), autoTranslate(Certificate, 'certificate'), updateCertificate);
+adminContentRouter.delete('/certificates/:id', content, audit({ area: 'content', type: 'certificate', action: 'Sertifika sildi', lookup: Certificate }), deleteCertificate);
+adminContentRouter.post('/uploads/certificate-image', content, uploadCertificateImage);
+adminContentRouter.post('/uploads/certificate-file', content, uploadCertificatePdf);
+
 adminContentRouter.post('/projects', content, audit({ area: 'content', type: 'project', action: 'Referans proje ekledi' }), autoTranslate(Project, 'project'), createProject);
 adminContentRouter.post('/projects/import-defaults', content, audit({ area: 'content', type: 'project', action: 'Broşür verilerini içe aktardı', label: () => 'Referans proje' }), importDefaultProjects);
 adminContentRouter.put('/projects/:id', content, audit({ area: 'content', type: 'project', action: 'Referans proje güncelledi', lookup: Project }), autoTranslate(Project, 'project'), updateProject);

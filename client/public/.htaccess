@@ -75,6 +75,7 @@ DirectorySlash Off
   AddType application/manifest+json .webmanifest
   AddType image/avif .avif
   AddType image/webp .webp
+  AddType text/javascript .mjs
 </IfModule>
 
 # Never serve .htaccess, .git or .env files

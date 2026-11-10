@@ -70,6 +70,11 @@ try {
     data.projects = null;
   }
 
+  // No certificates in the panel yet (null): keep the built-in certificates
+  if (!Array.isArray(data.certificates)) {
+    data.certificates = null;
+  }
+
   // No product groups or sectors in the database yet: keep the built-in ones
   if (!Array.isArray(data.productGroups) || data.productGroups.length === 0) {
     data.productGroups = null;

@@ -25,6 +25,7 @@ const {
   Blog,
   BlogPost,
   Videos,
+  Certificates,
   Kvkk,
   CookiePolicy,
   NotFound,
@@ -60,6 +61,7 @@ const AdminProductGroups = lazy(() => import('../pages/AdminProductGroups/AdminP
 const AdminSectors = lazy(() => import('../pages/AdminSectors/AdminSectors'));
 const AdminSectorEdit = lazy(() => import('../pages/AdminSectorEdit/AdminSectorEdit'));
 const AdminProjects = lazy(() => import('../pages/AdminProjects/AdminProjects'));
+const AdminCertificates = lazy(() => import('../pages/AdminCertificates/AdminCertificates'));
 const AdminGallery = lazy(() => import('../pages/AdminGallery/AdminGallery'));
 
 export default function AppRoutes() {
@@ -97,6 +99,7 @@ export default function AppRoutes() {
         <Route path="blog" element={<Blog />} />
         <Route path="blog/:slug" element={<BlogPost />} />
         <Route path="videos" element={<Videos />} />
+        <Route path="certificates" element={<Certificates />} />
         <Route path="kvkk" element={<Kvkk />} />
         <Route path="cerez-politikasi" element={<CookiePolicy />} />
 
@@ -134,6 +137,7 @@ export default function AppRoutes() {
           <Route path="/admin/posts/:id" element={<RequireArea area="content"><AdminPostEdit /></RequireArea>} />
           <Route path="/admin/videos" element={<RequireArea area="content"><AdminVideos /></RequireArea>} />
           <Route path="/admin/projects" element={<RequireArea area="content"><AdminProjects /></RequireArea>} />
+          <Route path="/admin/certificates" element={<RequireArea area="content"><AdminCertificates /></RequireArea>} />
           <Route path="/admin/gallery" element={<RequireArea area="content"><AdminGallery /></RequireArea>} />
         </Route>
       </Route>

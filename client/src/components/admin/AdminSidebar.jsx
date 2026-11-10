@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
-  BarChart3, Boxes, Briefcase, CalendarDays, Camera, Factory, ExternalLink, FileText, Inbox, LayoutDashboard, LogOut, Menu, PlayCircle, Settings, Table2, Type, UserPlus, Users, X, History,
+  Award, BarChart3, Boxes, Briefcase, CalendarDays, Camera, Factory, ExternalLink, FileText, Inbox, LayoutDashboard, LogOut, Menu, PlayCircle, Settings, Table2, Type, UserPlus, Users, X, History,
 } from 'lucide-react';
 
 import { getMeetingSummary, getUnreadLeadCount, getUnreadQuoteCount } from '../../services/adminApi';
@@ -47,6 +47,7 @@ const NAV = [
     items: [
       { to: '/admin/posts', label: 'Blog Yazıları', icon: FileText, area: 'content' },
       { to: '/admin/projects', label: 'Referans Projeler', icon: Briefcase, hint: 'Özel üretim projeleri', area: 'content' },
+      { to: '/admin/certificates', label: 'Sertifikalar', icon: Award, hint: 'Kalite belgeleri ve ISO sertifikaları', area: 'content' },
       { to: '/admin/gallery', label: 'Saha Fotoğrafları', icon: Camera, hint: 'Kullanımdaki ürünler', area: 'content' },
       { to: '/admin/videos', label: 'Videolar', icon: PlayCircle, area: 'content' },
       { to: '/admin/texts', label: 'Sayfa Metinleri', icon: Type, area: 'content' },

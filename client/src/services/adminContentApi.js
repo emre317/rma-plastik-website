@@ -94,3 +94,27 @@ export const listGallery = (token) => request('/admin/gallery', { token, fallbac
 export const createGalleryPhoto = (body, token) => request('/admin/gallery', { method: 'POST', body, token, fallbackMessage: 'Fotoğraf kaydedilemedi.' });
 export const updateGalleryPhoto = (id, body, token) => request(`/admin/gallery/${encodeURIComponent(id)}`, { method: 'PUT', body, token, fallbackMessage: 'Fotoğraf kaydedilemedi.' });
 export const deleteGalleryPhoto = (id, token) => request(`/admin/gallery/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Fotoğraf silinemedi.' });
+
+/* Certificates (Kalite ve Sertifikalar) */
+export const listCertificates = (token) => request('/admin/certificates', { token, fallbackMessage: 'Sertifikalar yüklenemedi.' });
+export const createCertificate = (body, token) => request('/admin/certificates', { method: 'POST', body, token, fallbackMessage: 'Sertifika kaydedilemedi.' });
+export const updateCertificate = (id, body, token) => request(`/admin/certificates/${encodeURIComponent(id)}`, { method: 'PUT', body, token, fallbackMessage: 'Sertifika kaydedilemedi.' });
+export const deleteCertificate = (id, token) => request(`/admin/certificates/${encodeURIComponent(id)}`, { method: 'DELETE', token, fallbackMessage: 'Sertifika silinemedi.' });
+export const importCertificates = (token) => request('/admin/certificates/import-defaults', { method: 'POST', token, fallbackMessage: 'Sertifikalar aktarılamadı.' });
+export const uploadCertificateImage = (file, token) => uploadImage('certificate-image', file, token);
+
+export async function uploadCertificateFile(file, token) {
+  const form = new FormData();
+  form.append('file', file);
+
+  let response;
+  try {
+    response = await fetch(`${API_BASE_URL}/admin/uploads/certificate-file`, { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: form });
+  } catch {
+    throw new ApiError('Sunucuya ulaşılamadı.', 0);
+  }
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new ApiError(data.message || 'PDF yüklenemedi.', response.status);
+  return data;
+}

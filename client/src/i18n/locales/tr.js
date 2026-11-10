@@ -6,6 +6,7 @@ const tr = {
     tagline: 'Endüstriyel Polietilen Çözümleri',
     description: 'RMA Plastik endüstriyel polietilen çözümleri',
     descriptions: {
+      certificates: 'RMA Plastik ISO 9001, ISO 14001, ISO 45001 ve ISO 10002 yönetim sistemi sertifikaları: belgeleri görüntüleyin, PDF olarak indirin ve geçerliliklerini doğrulayın.',
       kvkk: 'RMA Plastik web sitesi formları kişisel verilerin işlenmesine ilişkin aydınlatma metni ve izin metinleri.',
       cookiePolicy: 'RMA Plastik web sitesinde kullanılan çerezler, süreleri ve tercihlerinizi nasıl değiştirebileceğiniz.',
       faq: 'RMA Plastik polietilen tanklar, su depoları ve özel üretim hakkında sık sorulan sorular: teslimat, montaj, sipariş ve daha fazlası.',
@@ -24,6 +25,7 @@ const tr = {
       compare: 'RMA Plastik ürünlerini ölçüleriyle yan yana karşılaştırın.',
     },
     titles: {
+      certificates: 'Kalite ve Sertifikalar',
       kvkk: 'KVKK Aydınlatma Metni',
       cookiePolicy: 'Çerez Politikası',
       faq: 'Sık Sorulan Sorular',
@@ -277,6 +279,51 @@ const tr = {
     },
   },
 
+  certificates: {
+    eyebrow: 'Kalite ve Sertifikalar',
+    title: 'Belgelendirilmiş',
+    titleAccent: 'yönetim sistemlerimiz',
+    text: 'Kalite, çevre, iş sağlığı ve güvenliği ile müşteri memnuniyeti yönetim sistemlerimiz uluslararası standartlara göre belgelendirilmiştir. Belgeleri görüntüleyebilir, PDF olarak indirebilir ve geçerliliklerini belgelendirme kuruluşunun sitesinden doğrulayabilirsiniz.',
+    highlights: {
+      standards: 'Uluslararası standart',
+      accredited: 'Akredite belgelendirme',
+      verifiable: 'Her belge doğrulanabilir',
+      verifiableText: 'Geçerlilik durumu belgelendirme kuruluşunun sitesinden kontrol edilebilir.',
+    },
+    categories: {
+      quality: 'Kalite',
+      environment: 'Çevre',
+      safety: 'İş Sağlığı ve Güvenliği',
+      customer: 'Müşteri Memnuniyeti',
+      product: 'Ürün',
+      other: 'Belge',
+    },
+    labels: {
+      number: 'Belge No',
+      issuer: 'Belgelendiren kuruluş',
+      accreditation: 'Akreditasyon',
+      issuedAt: 'Yayın tarihi',
+      validUntil: 'Geçerlilik',
+      holder: 'Belge sahibi',
+      scope: 'Belgelendirme kapsamı',
+    },
+    valid: '{{date}} tarihine kadar geçerli',
+    view: 'Belgeyi görüntüle',
+    download: 'PDF indir',
+    verify: 'Doğrula',
+    scopeTitle: 'Belgelendirme kapsamı',
+    empty: 'Sertifikalarımız yakında burada yayınlanacak.',
+    section: {
+      eyebrow: 'Sertifikalarımız',
+      title: 'Uluslararası standartlarda',
+      titleAccent: 'belgelendirilmiş üretim',
+      text: 'Kalite, çevre ve iş güvenliği yönetim sistemlerimiz akredite bir kuruluş tarafından belgelendirilmiştir.',
+      all: 'Tüm sertifikalar',
+    },
+    ctaTitle: 'Belgelerin kaşeli kopyasına mı ihtiyacınız var?',
+    ctaText: 'Tedarikçi kaydı ve ihale dosyalarınız için belgelerin güncel kopyalarını satış ekibimizden isteyebilirsiniz.',
+  },
+
   footer: {
     description:
       'Endüstriyel polietilen üretimi ve mühendislik odaklı ürün çözümleri.',
@@ -286,6 +333,7 @@ const tr = {
       contact: 'İletişim',
     },
     links: {
+      certificates: 'Kalite ve Sertifikalar',
       faq: 'Sık sorulan sorular',
       tankFinder: 'Depo Seçim Sihirbazı',
       productTables: 'Ürün Tabloları',

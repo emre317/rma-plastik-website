@@ -16,6 +16,7 @@ import i18n, { initialLanguage, loadLanguage } from './i18n';
 import App from './App';
 import './styles/global.css';
 import './styles/meetings.css';
+import './styles/certificates.css';
 
 const root = document.getElementById('root');
 

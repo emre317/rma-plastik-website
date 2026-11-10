@@ -6,6 +6,7 @@ import { publicPosts, publicVideos } from './mediaController.js';
 import { publicFamilies } from './productFamilyController.js';
 import { publicProductGroups, publicSectors } from './catalogueController.js';
 import { publicProjects } from './projectController.js';
+import { publicCertificates } from './certificateController.js';
 import { publicFaqs } from './faqController.js';
 import { publicGallery } from './galleryController.js';
 import { publicExportMarkets } from './exportMarketController.js';
@@ -75,7 +76,7 @@ function toPublicSettings(settings) {
 
 export async function getPublicContent(req, res) {
   try {
-    const [texts, settings, posts, videos, productFamilies, projects, exportMarkets, faqs, gallery, productGroups, sectors] = await Promise.all([
+    const [texts, settings, posts, videos, productFamilies, projects, exportMarkets, faqs, gallery, productGroups, sectors, certificates] = await Promise.all([
       SiteText.find(),
       SiteSettings.findOne({ singleton: 'site' }),
       publicPosts(),
@@ -87,6 +88,7 @@ export async function getPublicContent(req, res) {
       publicGallery(),
       publicProductGroups(),
       publicSectors(),
+      publicCertificates(),
     ]);
 
     const textMap = Object.fromEntries(CONTENT_LANGUAGES.map((lang) => [lang, {}]));
@@ -113,6 +115,7 @@ export async function getPublicContent(req, res) {
       exportMarkets,
       faqs,
       gallery,
+      certificates,
     });
   } catch (error) {
     return handleError(res, error, 'Public content error');

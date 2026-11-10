@@ -5,6 +5,7 @@ import MachineParkSection from '../../sections/MachineParkSection';
 import ProductExplorerSection from '../../sections/ProductExplorerSection';
 import IndustriesSection from '../../sections/IndustriesSection';
 import CustomMoldingSection from '../../sections/CustomMoldingSection';
+import CertificatesSection from '../../sections/CertificatesSection';
 import QuoteStrip from '../../components/ui/QuoteStrip';
 import { useTranslation } from 'react-i18next';
 
@@ -23,6 +24,7 @@ export default function Home() {
       <MachineParkSection />
       <IndustriesSection />
       <CustomMoldingSection />
+      <CertificatesSection />
       <QuoteStrip />
     </main>
   );

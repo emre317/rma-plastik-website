@@ -20,6 +20,7 @@ import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import { useQuote } from '../../components/quote/QuoteContext';
 import MachineParkSection from '../../sections/MachineParkSection';
+import CertificatesSection from '../../sections/CertificatesSection';
 
 /*
   Company page. Texts follow the RMA Plastik 2025 brochure
@@ -136,6 +137,8 @@ export default function Company() {
           </ol>
         </div>
       </section>
+
+      <CertificatesSection id="certificates" />
 
       <MachineParkSection index={false} />
 

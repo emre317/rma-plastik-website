@@ -101,6 +101,26 @@ Panel adresi: `https://ALAN-ADI/admin` (giriş: `npm run create-admin` ile oluş
 - Sayfada önce yalnızca kapak görüntüsü yüklenir, video tıklanınca oynar (site hızlı kalır).
 - **YouTube yükleme tarihi** girilen videolar Google video sonuçları için işaretlenir.
 
+### Sertifikalar (Kalite ve Sertifikalar)
+
+Panel › İçerik › **Sertifikalar**. Belgeler sitede üç yerde görünür: `/{dil}/certificates` sayfası (büyük kartlar: belge görseli, standart, geçerlilik,
+belge no, belgelendiren kuruluş, akreditasyon; **Belgeyi görüntüle**, **PDF indir**,
+**Doğrula**), ana sayfadaki “Sertifikalarımız” şeridi ve Kurumsal sayfa. Alt bilgideki
+“Kalite ve Sertifikalar” bağlantısı da bu sayfaya gider.
+
+- **İlk kurulum:** Panelde kayıt yokken sitede hazır gelen 4 BelCert belgesi (ISO 9001, 14001,
+  45001, 10002) gösterilir. Düzenlemek için “Sitedeki sertifikaları içe aktar”a basın.
+- **Yeni / yenilenen belge:** “Yeni sertifika” › standart, başlık, numara, tarihler… › **Sertifika
+  PDF’i yükle**. Sitedeki belge görseli PDF’in ilk sayfasından tarayıcıda otomatik üretilir.
+  EN / AR başlık ve kapsam boşsa otomatik çevrilir.
+- **Süre:** Geçerlilik tarihi geçen belge bir sonraki **Yayınla**’da sitede gizlenir. Panel,
+  bitişine 60 gün kalan belgeler için uyarı gösterir.
+- Gizlenen ya da silinen belge sitede hazır listeyle yer değiştirmez; panelde en az bir kayıt
+  olduğu sürece site paneldekini gösterir.
+
+Not: Laboratuvar analiz raporları gibi üzerinde “reklam amacıyla kullanılamaz” yazan belgeler
+siteye konmamalıdır.
+
 ### Sayfa metinleri
 - Boş alan = sitedeki varsayılan metin (gri yazı olarak görünür). "Varsayılana dön" özelleştirmeyi kaldırır.
 - `{{name}}` gibi süslü parantezli ifadeler otomatik doldurulur; silmeyin.

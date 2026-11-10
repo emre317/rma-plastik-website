@@ -27,7 +27,7 @@ const linkColumns = [
     links: [
       { key: 'about', path: '/company' },
       { key: 'facilities', path: '/company#machinery' },
-      { key: 'quality', path: '/company#quality' },
+      { key: 'certificates', path: '/certificates' },
       { key: 'industries', path: '/industries', label: 'nav.industries' },
       { key: 'customMolding', path: '/custom-molding' },
       { key: 'customProject', path: '/custom-molding/project', label: 'project.footerLink' },
