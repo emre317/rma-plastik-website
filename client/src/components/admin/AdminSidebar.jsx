@@ -27,6 +27,7 @@ const NAV = [
   },
   {
     group: 'Satış',
+    collapsible: true,
     items: [
       { to: '/admin/quotes', label: 'Teklif Talepleri', icon: Inbox, badge: true, area: 'sales' },
       { to: '/admin/meetings', label: 'Toplantılar', icon: CalendarDays, hint: 'Yüz yüze ve online toplantı talepleri', badge: 'meetings', area: 'sales' },
@@ -36,6 +37,7 @@ const NAV = [
   },
   {
     group: 'Katalog',
+    collapsible: true,
     items: [
       { to: '/admin/product-groups', label: 'Ürün Grupları', icon: Boxes, hint: 'Menüdeki ve Ürünler sayfasındaki gruplar', area: 'content' },
       { to: '/admin/product-families', label: 'Ürün Tabloları', icon: Table2, hint: 'Ürün ve su deposu modelleri', area: 'content' },
@@ -44,7 +46,6 @@ const NAV = [
   },
   {
     group: 'İçerik',
-    // Opens and closes with its title (closed unless one of its pages is open)
     collapsible: true,
     items: [
       { to: '/admin/posts', label: 'Blog Yazıları', icon: FileText, area: 'content' },
@@ -57,6 +58,7 @@ const NAV = [
   },
   {
     group: 'Ayarlar',
+    collapsible: true,
     items: [
       { to: '/admin/settings', label: 'Site Ayarları', icon: Settings, hint: 'Telefon, e-posta, adres', area: 'settings' },
       { to: '/admin/users', label: 'Kullanıcılar', icon: Users, hint: 'Panel hesapları, roller ve şifreler', area: 'users' },
@@ -65,9 +67,10 @@ const NAV = [
   },
 ];
 
-// Collapsible menu groups the user closed (per browser)
-const GROUPS_KEY = 'rma_admin_closed_groups';
-const DEFAULT_CLOSED = ['İçerik'];
+// Menu groups open and close with their title; the ones the user closed are
+// kept per browser. At first only Ayarlar is closed (v2: new default for all).
+const GROUPS_KEY = 'rma_admin_closed_groups_v2';
+const DEFAULT_CLOSED = ['Ayarlar'];
 
 function readClosedGroups() {
   try {
@@ -193,6 +196,9 @@ export default function AdminSidebar() {
             // A collapsible group is open when chosen, and always while one of its pages is shown
             const expanded = !section.collapsible || containsCurrent || !closedGroups.includes(section.group);
             const groupId = `adnav-${section.group}`;
+            // Unread / waiting counts of the pages inside, shown on a closed group
+            const badgeCount = (item) => (item.badge === true ? unread : item.badge === 'meetings' ? pendingMeetings : item.badge === 'leads' ? newLeads : 0);
+            const waiting = section.items.reduce((sum, item) => sum + badgeCount(item), 0);
 
             return (
             <div key={section.group || 'home'} className={`adNavGroup ${section.collapsible ? 'collapsible' : ''} ${expanded ? 'expanded' : ''}`}>
@@ -207,7 +213,9 @@ export default function AdminSidebar() {
                   title={containsCurrent ? 'Açık sayfa bu grupta' : undefined}
                 >
                   <span>{section.group}</span>
-                  {!expanded && <span className="adNavCount">{section.items.length}</span>}
+                  {!expanded && (waiting > 0
+                    ? <span className="adNavBadge" aria-label={`${waiting} bekleyen`}>{waiting}</span>
+                    : <span className="adNavCount">{section.items.length}</span>)}
                   <ChevronDown aria-hidden="true" className="adNavChevron" />
                 </button>
               ) : <span className="adNavLabel">{section.group}</span>)}
