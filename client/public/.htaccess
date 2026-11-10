@@ -41,12 +41,36 @@ DirectorySlash Off
   RewriteCond %{DOCUMENT_ROOT}/$1/index.html -f
   RewriteRule ^(.+?)/?$ /$1/index.html [L]
 
-  # --- Everything else without a file extension (admin, unknown pages): the app shell.
-  #     A missing file (old /assets/x.js, image) gets a real 404, not the HTML shell. ---
+  # --- Old links without a language (/contact, /company): the Turkish page ---
+  RewriteCond %{REQUEST_URI} !^/(tr|en|ar|admin)(/|$)
+  RewriteCond %{REQUEST_URI} !\.[a-z0-9]{2,5}$ [NC]
+  RewriteCond %{DOCUMENT_ROOT}/tr/$1/index.html -f
+  RewriteRule ^(.+?)/?$ https://%{HTTP_HOST}/tr/$1 [L,R=301]
+
+  # --- Pages of the old site that no longer exist (.php, .html …, e.g. from
+  #     Google results): the home page. Missing images and scripts stay 404. ---
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_URI} \.(php|html?|aspx?|jsp|cfm)$ [NC]
+  RewriteRule ^ https://%{HTTP_HOST}/tr [L,R=301]
+
+  # --- Pages the app draws itself (not prerendered) and the admin panel: the app shell ---
+  RewriteCond %{REQUEST_URI} ^/(admin(/.*)?|(tr|en|ar)/(compare|products/[^/]+|product-tables/[^/]+/[^/]+/datasheet))/?$
+  RewriteRule ^ /index.html [L]
+
+  # --- Any other address without a file extension that does not exist (old or
+  #     mistyped links, e.g. from Google results): permanent redirect to the home
+  #     page of its language (/en/…, /ar/…), otherwise to /tr. The query string
+  #     is kept (ad click ids). A missing file (old /assets/x.js, image) stays 404. ---
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_URI} !\.[a-z0-9]{2,5}$ [NC]
-  RewriteRule ^ /index.html [L]
+  RewriteCond %{REQUEST_URI} ^/(en|ar)(/|$)
+  RewriteRule ^ https://%{HTTP_HOST}/%1 [L,R=301]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} !\.[a-z0-9]{2,5}$ [NC]
+  RewriteRule ^ https://%{HTTP_HOST}/tr [L,R=301]
 </IfModule>
 
 # --- Caching: hashed build files forever, pages always fresh ---

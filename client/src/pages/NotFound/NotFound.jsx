@@ -1,36 +1,13 @@
-import { useTranslation } from 'react-i18next';
+import { Navigate, useParams } from 'react-router-dom';
 
-import { LocalizedLink } from '../../components/i18n/LocalizedLink';
-import Arrow from '../../components/i18n/Arrow';
-import Seo from '../../seo/Seo';
-import SearchButton from '../../components/search/SearchButton';
+import { isSupportedLanguage } from '../../i18n/languages';
 
+/*
+  An address that does not exist inside the app (e.g. a removed blog post or
+  product model): straight to the home page of the language, like the
+  server does for unknown addresses (public/.htaccess). No "not found" page.
+*/
 export default function NotFound() {
-  const { t } = useTranslation();
-
-  return (
-    <main className="notFoundPage">
-      <Seo title={t('meta.titles.notFound')} description={t('meta.descriptions.notFound')} noindex />
-
-      <div className="container">
-
-        <span className="eyebrow">
-          {t('pages.notFound.eyebrow')}
-        </span>
-
-        <h1>
-          {t('pages.notFound.title')}
-          <span>{t('pages.notFound.titleAccent')}</span>
-        </h1>
-
-        <SearchButton variant="field" className="notFoundSearch" source="not_found" />
-
-        <LocalizedLink to="/">
-          {t('pages.notFound.home')} <Arrow />
-        </LocalizedLink>
-
-      </div>
-
-    </main>
-  );
+  const { lang } = useParams();
+  return <Navigate to={`/${isSupportedLanguage(lang) ? lang : 'tr'}`} replace />;
 }
