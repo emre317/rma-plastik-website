@@ -7,7 +7,7 @@ const { default: Certificate } = await import('../models/Certificate.js');
 const store = memoryModel(Certificate);
 const { default: SiteSettings } = await import('../models/SiteSettings.js');
 memoryModel(SiteSettings);
-const { certificatePayload, createCertificate, publicCertificates } = await import('../controllers/certificateController.js');
+const { certificatePayload, createCertificate, importDefaultCertificates, publicCertificates } = await import('../controllers/certificateController.js');
 const { default: builtIn } = await import('../../client/src/data/certificates.builtin.js');
 
 const response = () => ({ code: 200, body: null, status(c) { this.code = c; return this; }, json(b) { this.body = b; return this; } });
@@ -75,4 +75,35 @@ test('public list: null without panel records; hidden and expired ones are left 
   // All hidden: an empty list (the site does not fall back to the built-in one)
   store.store.forEach((doc) => doc.set({ published: false }));
   assert.deepEqual(await publicCertificates(now), []);
+});
+
+test('import adds only the built-in certificates the panel does not have', async () => {
+  store.reset();
+  // The panel has the four ISO certificates (one renamed with extra spaces, one hidden)
+  await Certificate.create({ ...certificatePayload(builtIn[0]), order: 10 });
+  await Certificate.create({ ...certificatePayload({ ...builtIn[1], code: ' ISO  14001:2015 ' }), order: 20 });
+  await Certificate.create({ ...certificatePayload(builtIn[2]), published: false, order: 30 });
+  await Certificate.create({ ...certificatePayload(builtIn[3]), order: 40 });
+
+  let res = response();
+  await importDefaultCertificates({}, res);
+  assert.equal(res.code, 201);
+  assert.deepEqual(res.body.added, ['İşletme Kayıt Belgesi']);
+  assert.equal(store.store.length, 5);
+  const added = store.store.find((doc) => doc.code === 'İşletme Kayıt Belgesi');
+  assert.equal(added.order, 50);
+  assert.equal(added.category, 'registration');
+  // The hidden one stays hidden
+  assert.equal(store.store.find((doc) => doc.code === 'ISO 45001:2018').published, false);
+
+  res = response();
+  await importDefaultCertificates({}, res);
+  assert.equal(res.code, 409);
+  assert.equal(store.store.length, 5);
+
+  // Empty panel: all five
+  store.reset();
+  res = response();
+  await importDefaultCertificates({}, res);
+  assert.equal(res.body.added.length, 5);
 });

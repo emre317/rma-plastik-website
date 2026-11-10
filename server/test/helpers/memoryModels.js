@@ -54,6 +54,7 @@ export function memoryModel(Model) {
   };
 
   Model.create = async (data) => new Model(data).save();
+  Model.insertMany = async (list) => Promise.all(list.map((data) => new Model(data).save()));
   Model.find = (filter) => query(store.filter((doc) => matches(doc, filter)));
   // Single-document queries: awaitable, with the chain methods the code uses
   const one = (doc) => {

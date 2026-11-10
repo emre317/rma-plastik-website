@@ -24,6 +24,8 @@ const CATEGORY_LABELS = {
 };
 
 const WARN_DAYS = 60;
+// Same matching as the server (certificateController.certificateKey)
+const certificateKey = (code) => String(code || '').toLocaleLowerCase('tr').replace(/\s+/g, ' ').trim();
 const dayValue = (value) => (value ? String(value).slice(0, 10) : '');
 const daysLeft = (value) => (value ? Math.ceil((new Date(`${dayValue(value)}T23:59:59+03:00`).getTime() - Date.now()) / 86400000) : null);
 const formatDay = (value) => (value ? new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Istanbul' }).format(new Date(`${dayValue(value)}T12:00:00+03:00`)) : '—');
@@ -178,8 +180,9 @@ export default function AdminCertificates() {
   async function importDefaults() {
     setSaving(true);
     try {
-      await call(importCertificates);
-      setMessage({ type: 'success', text: 'Sitedeki sertifikalar panele aktarıldı. Artık düzenleyebilirsiniz.' });
+      const response = await call(importCertificates);
+      const added = response.added || [];
+      setMessage({ type: 'success', text: `${added.length} belge eklendi: ${added.join(', ')}. Sitede görünmesi için “Yayınla”ya basın.` });
       await load();
     } catch (err) {
       setMessage({ type: 'error', text: err.message });
@@ -189,6 +192,9 @@ export default function AdminCertificates() {
   }
 
   const activeLanguage = LANGS.find((item) => item.code === lang);
+  // Built-in certificates the panel does not have yet (the import button adds only these)
+  const have = new Set(items.map((item) => certificateKey(item.code)));
+  const missing = builtInCertificates.filter((item) => !have.has(certificateKey(item.code)));
   const warnings = items.filter((item) => item.published && ['amber', 'red'].includes(expiry(item).tone));
 
   return (
@@ -297,6 +303,19 @@ export default function AdminCertificates() {
             <button type="submit" className="cmsButton cmsButtonPrimary" disabled={saving || Boolean(uploading)}>{saving ? 'Kaydediliyor…' : 'Kaydet'}</button>
           </div>
         </form>
+      )}
+
+      {!loading && !form && items.length > 0 && missing.length > 0 && (
+        <div className="adNotice adCertMissing">
+          <Plus aria-hidden="true" />
+          <span>
+            <strong>Panelde olmayan {missing.length} hazır belge var:</strong> {missing.map((item) => item.code).join(', ')}.
+            {' '}Eklenenler mevcut belgelerin sonuna gelir; paneldeki belgeler değişmez.
+          </span>
+          <button type="button" className="cmsButton cmsButtonPrimary" onClick={importDefaults} disabled={saving}>
+            {saving ? 'Ekleniyor…' : 'Eksik belgeleri ekle'}
+          </button>
+        </div>
       )}
 
       {loading ? (

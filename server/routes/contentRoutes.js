@@ -141,7 +141,7 @@ adminContentRouter.get('/projects', listProjects);
 /* Certificates (Kalite ve Sertifikalar) */
 adminContentRouter.get('/certificates', content, listCertificates);
 adminContentRouter.post('/certificates', content, audit({ area: 'content', type: 'certificate', action: 'Sertifika ekledi' }), autoTranslate(Certificate, 'certificate'), createCertificate);
-adminContentRouter.post('/certificates/import-defaults', content, audit({ area: 'content', type: 'certificate', action: 'Hazır sertifikaları içe aktardı', label: () => 'Sertifikalar' }), importDefaultCertificates);
+adminContentRouter.post('/certificates/import-defaults', content, audit({ area: 'content', type: 'certificate', action: 'Eksik hazır sertifikaları ekledi', label: () => 'Sertifikalar', details: (req, data, before, body) => (body?.added || []).join(', ') }), importDefaultCertificates);
 adminContentRouter.put('/certificates/:id', content, audit({ area: 'content', type: 'certificate', action: 'Sertifika güncelledi', lookup: Certificate }), autoTranslate(Certificate, 'certificate'), updateCertificate);
 adminContentRouter.delete('/certificates/:id', content, audit({ area: 'content', type: 'certificate', action: 'Sertifika sildi', lookup: Certificate }), deleteCertificate);
 adminContentRouter.post('/uploads/certificate-image', content, uploadCertificateImage);

@@ -143,14 +143,30 @@ export async function deleteCertificate(req, res) {
   }
 }
 
-/* Built-in certificates into the database (only when there are none yet) */
+/* "ISO  9001:2015 " -> "iso 9001:2015" (built-in and panel certificates are matched by name) */
+export const certificateKey = (code) => String(code || '').toLocaleLowerCase('tr').replace(/\s+/g, ' ').trim();
+
+/*
+  POST /api/admin/certificates/import-defaults
+  Adds the built-in certificates the panel does not have yet (matched by
+  name); certificates already in the panel are never changed. 409 when
+  nothing is missing.
+*/
 export async function importDefaultCertificates(req, res) {
   try {
-    if (await Certificate.countDocuments()) return fail(res, 409, 'Sertifikalar zaten panelde.');
     const { default: builtIn } = await import('../../client/src/data/certificates.builtin.js');
-    const docs = await Certificate.insertMany(builtIn.map((item, index) => ({ ...certificatePayload(item), order: (index + 1) * 10 })));
+    const existing = await Certificate.find().select('code order').lean();
+    const have = new Set(existing.map((item) => certificateKey(item.code)));
+    const missing = builtIn.filter((item) => !have.has(certificateKey(item.code)));
+
+    if (!missing.length) return fail(res, 409, 'Hazır belgelerin hepsi zaten panelde.');
+
+    // New ones go after the existing ones, in the built-in order
+    const last = existing.reduce((max, item) => Math.max(max, Number(item.order) || 0), 0);
+    const docs = await Certificate.insertMany(missing.map((item, index) => ({ ...certificatePayload(item), order: last + (index + 1) * 10 })));
+
     await markContentChanged();
-    return res.status(201).json({ success: true, data: docs });
+    return res.status(201).json({ success: true, data: docs, added: docs.map((item) => item.code) });
   } catch (error) {
     return handleError(res, error, 'Import certificates error');
   }

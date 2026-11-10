@@ -907,3 +907,33 @@
     grid-column: 1 / -1;
   }
 }
+
+.adNotice.adCertMissing {
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-inline-start: 4px solid var(--rma-blue);
+}
+
+.adNotice.adCertMissing > svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  color: var(--rma-blue);
+}
+
+.adNotice.adCertMissing > span {
+  flex: 1;
+  font-size: 14px;
+}
+
+.adNotice.adCertMissing .cmsButton {
+  flex: none;
+}
+
+@media (max-width: 760px) {
+  .adNotice.adCertMissing {
+    flex-wrap: wrap;
+  }
+}
