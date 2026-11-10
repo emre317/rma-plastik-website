@@ -1990,3 +1990,74 @@
   font-weight: 700;
   text-decoration: underline;
 }
+
+/* =====================================================
+   AUTOMATIC TRANSLATION NOTICE (admin)
+===================================================== */
+
+.trNotices {
+  position: fixed;
+  inset-inline-start: 288px;
+  bottom: 20px;
+  z-index: 300;
+  display: grid;
+  gap: 10px;
+  width: min(420px, calc(100vw - 32px));
+}
+
+.trNotice {
+  padding: 14px 12px 14px 14px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  border: 1px solid rgba(16, 19, 23, 0.08);
+  border-inline-start: 4px solid var(--rma-blue);
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  box-shadow: var(--shadow-lg);
+  animation: mtFadeIn 220ms ease both;
+}
+
+.trNotice.done { border-inline-start-color: var(--status-success); }
+.trNotice.failed { border-inline-start-color: var(--status-danger); }
+.trNotice.slow { border-inline-start-color: #b7791f; }
+
+.trNoticeIcon svg {
+  width: 22px;
+  height: 22px;
+  color: var(--rma-blue);
+}
+
+.trNotice.running .trNoticeIcon svg {
+  animation: trPulse 1.4s ease-in-out infinite;
+}
+
+.trNotice.done .trNoticeIcon svg { color: var(--status-success); }
+.trNotice.failed .trNoticeIcon svg { color: var(--status-danger); }
+.trNotice.slow .trNoticeIcon svg { color: #b7791f; }
+
+.trNoticeText {
+  display: grid;
+  gap: 3px;
+}
+
+.trNoticeText strong {
+  font-size: 14px;
+}
+
+.trNoticeText small {
+  color: var(--ink-500);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+@keyframes trPulse {
+  50% { opacity: 0.35; }
+}
+
+@media (max-width: 960px) {
+  .trNotices {
+    inset-inline-start: 16px;
+  }
+}

@@ -2,6 +2,8 @@ const API_BASE_URL = (
   import.meta.env.VITE_API_URL || '/api'
 ).replace(/\/$/, '');
 
+export const TRANSLATION_EVENT = 'rma:translation-started';
+
 export class ApiError extends Error {
   constructor(message, status) {
     super(message);
@@ -65,6 +67,12 @@ export async function request(
       data?.message || fallbackMessage,
       response.status
     );
+  }
+
+  // Panel saves that start an automatic English / Arabic translation
+  // (server/services/autoTranslate.js): the admin layout shows its progress
+  if (data?.translation?.jobId && typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent(TRANSLATION_EVENT, { detail: data.translation }));
   }
 
   return data || {};

@@ -32,7 +32,7 @@ const serverRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const CLIENT_DIR = path.resolve(process.env.CLIENT_DIR || path.join(serverRoot, '..', 'client'));
 
 // Server secrets are not needed by the site build, so they are not passed on
-const SECRET_KEYS = /^(MONGODB_|JWT_SECRET|SMTP_|MAIL_|QUOTE_NOTIFY_TO|ADMIN_|PUBLISH_GITHUB_TOKEN|PUBLISH_CALLBACK_TOKEN)/i;
+const SECRET_KEYS = /^(MONGODB_|JWT_SECRET|SMTP_|MAIL_|QUOTE_NOTIFY_TO|ANTHROPIC_|MS_GRAPH_|ADMIN_|PUBLISH_GITHUB_TOKEN|PUBLISH_CALLBACK_TOKEN)/i;
 
 const TIMEOUT_MIN = Number(process.env.PUBLISH_TIMEOUT_MIN) || 40;
 const POLL_EVERY_MS = 15000;

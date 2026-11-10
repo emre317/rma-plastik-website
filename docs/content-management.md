@@ -106,6 +106,40 @@ Panel adresi: `https://ALAN-ADI/admin` (giriş: `npm run create-admin` ile oluş
 - `{{name}}` gibi süslü parantezli ifadeler otomatik doldurulur; silmeyin.
 - Arama kutusu tüm bölümlerde arar.
 
+## Otomatik İngilizce ve Arapça çeviri
+
+Panelde Türkçe girilen içerik, kaydedildiğinde İngilizceye ve Arapçaya otomatik çevrilir
+(Anthropic’in Claude modeli, `claude-opus-5-5`). Kapsam: ürün grupları, ürün tabloları,
+sektörler (ve sektördeki ürün adları), blog yazıları, referans projeler, saha fotoğrafları,
+SSS, ihracat pazarları, videolar ve sayfa metinleri.
+
+**Hangi alan çevrilir?** Türkçesi dolu olan ve
+- İngilizce / Arapça karşılığı **boş** olan alanlar, ya da
+- Türkçesi değiştirilmiş ama İngilizce / Arapçası **elle değiştirilmemiş** olan alanlar.
+
+Elle yazılmış ya da düzeltilmiş bir çeviri **asla ezilmez**. Çeviriyi beğenmezseniz EN / AR
+alanını düzeltip kaydetmeniz yeterli; Türkçe yeniden değişmedikçe ona dokunulmaz.
+
+**Nasıl görünür?** Kayıt hemen tamamlanır; çeviri arka planda yapılır. Sağ altta
+“İngilizce ve Arapça çeviri hazırlanıyor…” bildirimi çıkar, bitince “Çeviriler eklendi” olur
+(uzun bir blog yazısı bir iki dakika sürebilir). Ardından **Yayınla**’ya basın. Çeviri
+yapılamazsa bildirim nedenini söyler; içerik Türkçe kaydedilmiş olarak kalır.
+
+Çeviri kuralları: ürün kodları, LLDPE/HDPE gibi malzeme adları, sayılar, ölçüler, birimler,
+bağlantılar ve Markdown biçimi korunur; bilgi eklenmez ya da çıkarılmaz. Alan uzunluk sınırı
+aşılırsa çeviri kısaltılır (ör. SEO başlığı 70 karakter). Makine çevirisidir: özellikle
+teknik ve satış metinlerini yayından önce bir kez okumanız önerilir.
+
+**Ayarlar** (`server/.env`):
+
+| Değişken | Açıklama |
+| --- | --- |
+| `ANTHROPIC_API_KEY` | console.anthropic.com’dan alınan API anahtarı. Boşsa otomatik çeviri kapalıdır, panel eskisi gibi çalışır. |
+| `AUTO_TRANSLATE` | `false` yapılırsa anahtar dursa da çeviri kapanır. |
+
+Kontrol: `cd server && npm run check-env` çıktısında `Translation: on` görünmelidir.
+Maliyet: kullanım başına ücretlendirilir; her kayıtta yalnızca değişen alanlar çevrilir.
+
 ## İlk kurulum (sunucuda bir kez)
 
 ```bash

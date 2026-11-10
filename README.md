@@ -68,6 +68,10 @@ Products, page texts and contact settings are edited at `/admin` and stored in M
 "Yayınla" (Publish) rebuilds the static site from `/api/content`. First run on the server:
 `cd server && npm run seed-content`. Details: [docs/content-management.md](docs/content-management.md).
 
+Turkish texts saved in the panel are translated into English and Arabic in the background
+with Claude (`ANTHROPIC_API_KEY`); empty or untouched EN/AR fields only, never manual ones.
+See [docs/content-management.md](docs/content-management.md#otomatik-i̇ngilizce-ve-arapça-çeviri).
+
 ## Quote request emails
 
 Every quote form submission is saved to MongoDB and emailed to `QUOTE_NOTIFY_TO`

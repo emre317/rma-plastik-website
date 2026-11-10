@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import AdminSidebar from '../components/admin/AdminSidebar';
 import QuoteAlerts from '../components/admin/QuoteAlerts';
 import MeetingBar from '../components/admin/MeetingBar';
+import TranslationNotice from '../components/admin/TranslationNotice';
 import { AdminSessionProvider } from '../components/admin/AdminSession';
 import useAdminDocumentLanguage from '../hooks/useAdminDocumentLanguage';
 import useNoticeScroll from '../hooks/useNoticeScroll';
@@ -24,6 +25,7 @@ export default function AdminLayout() {
         </div>
 
         <QuoteAlerts />
+        <TranslationNotice />
       </main>
     </AdminSessionProvider>
   );

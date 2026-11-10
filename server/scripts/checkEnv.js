@@ -30,6 +30,7 @@ console.log(`Meetings to:   ${process.env.MEETING_NOTIFY_TO || process.env.QUOTE
 console.log(`Teams (Graph): ${process.env.MS_GRAPH_TENANT_ID && process.env.MS_GRAPH_CLIENT_ID && process.env.MS_GRAPH_CLIENT_SECRET && process.env.TEAMS_ORGANIZER ? `on, organizer ${process.env.TEAMS_ORGANIZER}` : 'off (Teams links are pasted in the panel)'}`);
 console.log(`Reminders:     ${process.env.MEETING_REMINDERS === 'false' ? 'off' : `${process.env.MEETING_REMINDER_HOURS || 24} h before meetings`}`);
 console.log(`Busy slots:    ${process.env.MEETING_MAX_PARALLEL || 1} meeting(s) at a time${process.env.MS_GRAPH_TENANT_ID ? `, Outlook: ${process.env.MEETING_CALENDARS || process.env.TEAMS_ORGANIZER || '-'}` : ''}`);
+console.log(`Translation:   ${process.env.ANTHROPIC_API_KEY ? (process.env.AUTO_TRANSLATE === 'false' ? 'off (AUTO_TRANSLATE=false)' : 'on (Claude, EN + AR)') : 'off (ANTHROPIC_API_KEY not set)'}`);
 console.log('');
 
 warnings.forEach((message) => console.log(`WARNING  ${message}`));

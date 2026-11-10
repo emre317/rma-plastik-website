@@ -73,6 +73,9 @@ import GalleryPhoto from '../models/GalleryPhoto.js';
 import ExportMarket from '../models/ExportMarket.js';
 import Video from '../models/Video.js';
 import { audit } from '../services/audit.js';
+import TranslationJob from '../models/TranslationJob.js';
+import { autoTranslate, autoTranslateTexts } from '../services/autoTranslate.js';
+import { isTranslationEnabled } from '../services/translator.js';
 
 /* Public: content snapshot read by the site build */
 export const publicContentRouter = express.Router();
@@ -90,24 +93,38 @@ adminContentRouter.use(requireAdmin);
 const content = requirePermission('content');
 const settings = requirePermission('settings');
 
+/* Automatic English / Arabic (services/autoTranslate.js): on or off, and one run's result */
+adminContentRouter.get('/translations/status', content, (req, res) => res.json({ success: true, data: { enabled: isTranslationEnabled() } }));
+adminContentRouter.get('/translations/:id', content, async (req, res) => {
+  try {
+    const job = /^[a-f0-9]{24}$/i.test(req.params.id) ? await TranslationJob.findById(req.params.id).lean() : null;
+    if (!job) return res.status(404).json({ success: false, message: 'Çeviri kaydı bulunamadı.' });
+    res.set('Cache-Control', 'no-store');
+    return res.json({ success: true, data: { status: job.status, fields: job.fields, translated: job.translated, error: job.error } });
+  } catch (error) {
+    console.error('Translation status error:', error);
+    return res.status(500).json({ success: false, message: 'Çeviri durumu okunamadı.' });
+  }
+});
+
 adminContentRouter.get('/product-families', listFamilies);
-adminContentRouter.post('/product-families', content, audit({ area: 'content', type: 'family', action: 'Ürün ailesi ekledi' }), createFamily);
+adminContentRouter.post('/product-families', content, audit({ area: 'content', type: 'family', action: 'Ürün ailesi ekledi' }), autoTranslate(ProductFamily, 'family'), createFamily);
 adminContentRouter.post('/product-families/import-defaults', content, audit({ area: 'content', type: 'family', action: 'Broşür verilerini içe aktardı', label: () => 'Ürün ailesi' }), importDefaultFamilies);
 adminContentRouter.get('/product-families/:id', getFamily);
-adminContentRouter.put('/product-families/:id', content, audit({ area: 'content', type: 'family', action: 'Ürün ailesi güncelledi', lookup: ProductFamily }), updateFamily);
+adminContentRouter.put('/product-families/:id', content, audit({ area: 'content', type: 'family', action: 'Ürün ailesi güncelledi', lookup: ProductFamily }), autoTranslate(ProductFamily, 'family'), updateFamily);
 adminContentRouter.delete('/product-families/:id', content, audit({ area: 'content', type: 'family', action: 'Ürün ailesi sildi', lookup: ProductFamily }), deleteFamily);
 
 adminContentRouter.get('/product-groups', listGroups);
-adminContentRouter.post('/product-groups', content, audit({ area: 'content', type: 'group', action: 'Ürün grubu ekledi' }), createGroup);
+adminContentRouter.post('/product-groups', content, audit({ area: 'content', type: 'group', action: 'Ürün grubu ekledi' }), autoTranslate(ProductGroup, 'group'), createGroup);
 adminContentRouter.post('/product-groups/import-defaults', content, audit({ area: 'content', type: 'group', action: 'Broşür verilerini içe aktardı', label: () => 'Ürün grubu' }), importDefaultGroups);
-adminContentRouter.put('/product-groups/:id', content, audit({ area: 'content', type: 'group', action: 'Ürün grubu güncelledi', lookup: ProductGroup }), updateGroup);
+adminContentRouter.put('/product-groups/:id', content, audit({ area: 'content', type: 'group', action: 'Ürün grubu güncelledi', lookup: ProductGroup }), autoTranslate(ProductGroup, 'group'), updateGroup);
 adminContentRouter.delete('/product-groups/:id', content, audit({ area: 'content', type: 'group', action: 'Ürün grubu sildi', lookup: ProductGroup }), deleteGroup);
 
 adminContentRouter.get('/sectors', listSectors);
-adminContentRouter.post('/sectors', content, audit({ area: 'content', type: 'sector', action: 'Sektör ekledi' }), createSector);
+adminContentRouter.post('/sectors', content, audit({ area: 'content', type: 'sector', action: 'Sektör ekledi' }), autoTranslate(Sector, 'sector'), createSector);
 adminContentRouter.post('/sectors/import-defaults', content, audit({ area: 'content', type: 'sector', action: 'Broşür verilerini içe aktardı', label: () => 'Sektör' }), importDefaultSectors);
 adminContentRouter.get('/sectors/:id', getSector);
-adminContentRouter.put('/sectors/:id', content, audit({ area: 'content', type: 'sector', action: 'Sektör güncelledi', lookup: Sector }), updateSector);
+adminContentRouter.put('/sectors/:id', content, audit({ area: 'content', type: 'sector', action: 'Sektör güncelledi', lookup: Sector }), autoTranslate(Sector, 'sector'), updateSector);
 adminContentRouter.delete('/sectors/:id', content, audit({ area: 'content', type: 'sector', action: 'Sektör sildi', lookup: Sector }), deleteSector);
 
 adminContentRouter.post('/uploads/product-image', content, uploadProductImage);
@@ -116,40 +133,40 @@ adminContentRouter.post('/uploads/project-image', content, uploadProjectImage);
 adminContentRouter.post('/uploads/gallery-image', content, uploadGalleryImage);
 
 adminContentRouter.get('/projects', listProjects);
-adminContentRouter.post('/projects', content, audit({ area: 'content', type: 'project', action: 'Referans proje ekledi' }), createProject);
+adminContentRouter.post('/projects', content, audit({ area: 'content', type: 'project', action: 'Referans proje ekledi' }), autoTranslate(Project, 'project'), createProject);
 adminContentRouter.post('/projects/import-defaults', content, audit({ area: 'content', type: 'project', action: 'Broşür verilerini içe aktardı', label: () => 'Referans proje' }), importDefaultProjects);
-adminContentRouter.put('/projects/:id', content, audit({ area: 'content', type: 'project', action: 'Referans proje güncelledi', lookup: Project }), updateProject);
+adminContentRouter.put('/projects/:id', content, audit({ area: 'content', type: 'project', action: 'Referans proje güncelledi', lookup: Project }), autoTranslate(Project, 'project'), updateProject);
 adminContentRouter.delete('/projects/:id', content, audit({ area: 'content', type: 'project', action: 'Referans proje sildi', lookup: Project }), deleteProject);
 
 adminContentRouter.get('/faqs', listFaqs);
-adminContentRouter.post('/faqs', content, audit({ area: 'content', type: 'faq', action: 'Soru ekledi' }), createFaq);
-adminContentRouter.put('/faqs/:id', content, audit({ area: 'content', type: 'faq', action: 'Soru güncelledi', lookup: Faq }), updateFaq);
+adminContentRouter.post('/faqs', content, audit({ area: 'content', type: 'faq', action: 'Soru ekledi' }), autoTranslate(Faq, 'faq'), createFaq);
+adminContentRouter.put('/faqs/:id', content, audit({ area: 'content', type: 'faq', action: 'Soru güncelledi', lookup: Faq }), autoTranslate(Faq, 'faq'), updateFaq);
 adminContentRouter.delete('/faqs/:id', content, audit({ area: 'content', type: 'faq', action: 'Soru sildi', lookup: Faq }), deleteFaq);
 
 adminContentRouter.get('/gallery', listGallery);
-adminContentRouter.post('/gallery', content, audit({ area: 'content', type: 'gallery', action: 'Saha fotoğrafı ekledi' }), createGalleryPhoto);
-adminContentRouter.put('/gallery/:id', content, audit({ area: 'content', type: 'gallery', action: 'Saha fotoğrafı güncelledi', lookup: GalleryPhoto }), updateGalleryPhoto);
+adminContentRouter.post('/gallery', content, audit({ area: 'content', type: 'gallery', action: 'Saha fotoğrafı ekledi' }), autoTranslate(GalleryPhoto, 'gallery'), createGalleryPhoto);
+adminContentRouter.put('/gallery/:id', content, audit({ area: 'content', type: 'gallery', action: 'Saha fotoğrafı güncelledi', lookup: GalleryPhoto }), autoTranslate(GalleryPhoto, 'gallery'), updateGalleryPhoto);
 adminContentRouter.delete('/gallery/:id', content, audit({ area: 'content', type: 'gallery', action: 'Saha fotoğrafı sildi', lookup: GalleryPhoto }), deleteGalleryPhoto);
 
 adminContentRouter.get('/export-markets', listExportMarkets);
-adminContentRouter.post('/export-markets', content, audit({ area: 'content', type: 'market', action: 'İhracat pazarı ekledi' }), createExportMarket);
+adminContentRouter.post('/export-markets', content, audit({ area: 'content', type: 'market', action: 'İhracat pazarı ekledi' }), autoTranslate(ExportMarket, 'market'), createExportMarket);
 adminContentRouter.post('/export-markets/import-defaults', content, audit({ area: 'content', type: 'market', action: 'Broşür verilerini içe aktardı', label: () => 'İhracat pazarı' }), importDefaultExportMarkets);
-adminContentRouter.put('/export-markets/:id', content, audit({ area: 'content', type: 'market', action: 'İhracat pazarı güncelledi', lookup: ExportMarket }), updateExportMarket);
+adminContentRouter.put('/export-markets/:id', content, audit({ area: 'content', type: 'market', action: 'İhracat pazarı güncelledi', lookup: ExportMarket }), autoTranslate(ExportMarket, 'market'), updateExportMarket);
 adminContentRouter.delete('/export-markets/:id', content, audit({ area: 'content', type: 'market', action: 'İhracat pazarı sildi', lookup: ExportMarket }), deleteExportMarket);
 
 adminContentRouter.get('/posts', listPosts);
-adminContentRouter.post('/posts', content, audit({ area: 'content', type: 'post', action: 'Blog yazısı ekledi' }), createPost);
+adminContentRouter.post('/posts', content, audit({ area: 'content', type: 'post', action: 'Blog yazısı ekledi' }), autoTranslate(Post, 'post'), createPost);
 adminContentRouter.get('/posts/:id', getPost);
-adminContentRouter.put('/posts/:id', content, audit({ area: 'content', type: 'post', action: 'Blog yazısı güncelledi', lookup: Post }), updatePost);
+adminContentRouter.put('/posts/:id', content, audit({ area: 'content', type: 'post', action: 'Blog yazısı güncelledi', lookup: Post }), autoTranslate(Post, 'post'), updatePost);
 adminContentRouter.delete('/posts/:id', content, audit({ area: 'content', type: 'post', action: 'Blog yazısı sildi', lookup: Post }), deletePost);
 
 adminContentRouter.get('/videos', listVideos);
-adminContentRouter.post('/videos', content, audit({ area: 'content', type: 'video', action: 'Video ekledi' }), createVideo);
-adminContentRouter.put('/videos/:id', content, audit({ area: 'content', type: 'video', action: 'Video güncelledi', lookup: Video }), updateVideo);
+adminContentRouter.post('/videos', content, audit({ area: 'content', type: 'video', action: 'Video ekledi' }), autoTranslate(Video, 'video'), createVideo);
+adminContentRouter.put('/videos/:id', content, audit({ area: 'content', type: 'video', action: 'Video güncelledi', lookup: Video }), autoTranslate(Video, 'video'), updateVideo);
 adminContentRouter.delete('/videos/:id', content, audit({ area: 'content', type: 'video', action: 'Video sildi', lookup: Video }), deleteVideo);
 
 adminContentRouter.get('/texts', listTexts);
-adminContentRouter.put('/texts', content, audit({ area: 'content', type: 'texts', action: 'Sayfa metinlerini kaydetti', details: (req) => `${Array.isArray(req.body?.items) ? req.body.items.length : 0} metin` }), saveTexts);
+adminContentRouter.put('/texts', content, audit({ area: 'content', type: 'texts', action: 'Sayfa metinlerini kaydetti', details: (req) => `${Array.isArray(req.body?.items) ? req.body.items.length : 0} metin` }), autoTranslateTexts(), saveTexts);
 
 adminContentRouter.get('/settings', getSettings);
 adminContentRouter.put('/settings', settings, audit({ area: 'settings', type: 'settings', action: 'Site ayarlarını güncelledi', label: () => 'Site Ayarları' }), updateSettings);
