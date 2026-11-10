@@ -38452,3 +38452,73 @@ html[lang="ar"] .pgBody small {
 .dsNote.dsTolerance + .dsNote {
   margin-top: 2mm;
 }
+
+/* Admin menu: collapsible groups (AdminSidebar, e.g. İçerik) */
+.adNavItems {
+  display: grid;
+  gap: 2px;
+}
+
+.adNavItems[hidden] {
+  display: none;
+}
+
+.adSidebar .adNavToggle {
+  width: 100%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  font-family: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: color 160ms ease, background 160ms ease;
+}
+
+.adSidebar .adNavToggle:hover:not(:disabled) {
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.adSidebar .adNavToggle:disabled {
+  cursor: default;
+}
+
+.adNavToggle > span:first-child {
+  flex: 1;
+}
+
+.adNavCount {
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 10px;
+  letter-spacing: 0;
+}
+
+.adNavChevron {
+  width: 14px;
+  height: 14px;
+  transition: transform 200ms ease;
+}
+
+.adNavGroup.expanded .adNavChevron {
+  transform: rotate(180deg);
+}
+
+.adNavGroup.collapsible.expanded .adNavItems {
+  animation: adNavOpen 180ms ease both;
+}
+
+@keyframes adNavOpen {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}

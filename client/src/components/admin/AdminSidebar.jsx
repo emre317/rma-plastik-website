@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
-  Award, BarChart3, Boxes, Briefcase, CalendarDays, Camera, Factory, ExternalLink, FileText, Inbox, LayoutDashboard, LogOut, Menu, PlayCircle, Settings, Table2, Type, UserPlus, Users, X, History,
+  Award, BarChart3, Boxes, Briefcase, CalendarDays, ChevronDown, Camera, Factory, ExternalLink, FileText, Inbox, LayoutDashboard, LogOut, Menu, PlayCircle, Settings, Table2, Type, UserPlus, Users, X, History,
 } from 'lucide-react';
 
 import { getMeetingSummary, getUnreadLeadCount, getUnreadQuoteCount } from '../../services/adminApi';
@@ -44,6 +44,8 @@ const NAV = [
   },
   {
     group: 'İçerik',
+    // Opens and closes with its title (closed unless one of its pages is open)
+    collapsible: true,
     items: [
       { to: '/admin/posts', label: 'Blog Yazıları', icon: FileText, area: 'content' },
       { to: '/admin/projects', label: 'Referans Projeler', icon: Briefcase, hint: 'Özel üretim projeleri', area: 'content' },
@@ -63,6 +65,27 @@ const NAV = [
   },
 ];
 
+// Collapsible menu groups the user closed (per browser)
+const GROUPS_KEY = 'rma_admin_closed_groups';
+const DEFAULT_CLOSED = ['İçerik'];
+
+function readClosedGroups() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(GROUPS_KEY) || 'null');
+    return Array.isArray(saved) ? saved : DEFAULT_CLOSED;
+  } catch {
+    return DEFAULT_CLOSED;
+  }
+}
+
+function saveClosedGroups(list) {
+  try {
+    localStorage.setItem(GROUPS_KEY, JSON.stringify(list));
+  } catch {
+    // Private mode: the choice lasts for this page only
+  }
+}
+
 export default function AdminSidebar() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -80,6 +103,14 @@ export default function AdminSidebar() {
   const [newLeads, setNewLeads] = useState(0);
   const [pendingMeetings, setPendingMeetings] = useState(0);
   const [open, setOpen] = useState(false);
+  const [closedGroups, setClosedGroups] = useState(readClosedGroups);
+
+  const toggleGroup = (group) =>
+    setClosedGroups((current) => {
+      const next = current.includes(group) ? current.filter((item) => item !== group) : [...current, group];
+      saveClosedGroups(next);
+      return next;
+    });
 
   // Phones: the menu closes after navigation
   useEffect(() => setOpen(false), [pathname]);
@@ -157,9 +188,30 @@ export default function AdminSidebar() {
         </div>
 
         <nav className="adNav" aria-label="Yönetim menüsü">
-          {nav.map((section) => (
-            <div key={section.group || 'home'} className="adNavGroup">
-              {section.group && <span className="adNavLabel">{section.group}</span>}
+          {nav.map((section) => {
+            const containsCurrent = section.items.some((item) => (item.end ? pathname === item.to : pathname.startsWith(item.to)));
+            // A collapsible group is open when chosen, and always while one of its pages is shown
+            const expanded = !section.collapsible || containsCurrent || !closedGroups.includes(section.group);
+            const groupId = `adnav-${section.group}`;
+
+            return (
+            <div key={section.group || 'home'} className={`adNavGroup ${section.collapsible ? 'collapsible' : ''} ${expanded ? 'expanded' : ''}`}>
+              {section.group && (section.collapsible ? (
+                <button
+                  type="button"
+                  className="adNavLabel adNavToggle"
+                  aria-expanded={expanded}
+                  aria-controls={groupId}
+                  onClick={() => toggleGroup(section.group)}
+                  disabled={containsCurrent}
+                  title={containsCurrent ? 'Açık sayfa bu grupta' : undefined}
+                >
+                  <span>{section.group}</span>
+                  {!expanded && <span className="adNavCount">{section.items.length}</span>}
+                  <ChevronDown aria-hidden="true" className="adNavChevron" />
+                </button>
+              ) : <span className="adNavLabel">{section.group}</span>)}
+              <div id={section.collapsible ? groupId : undefined} className="adNavItems" hidden={!expanded}>
               {section.items.map((item) => (
                 <NavLink key={item.to} to={item.to} end={item.end} title={item.hint} className={({ isActive }) => (isActive ? 'active' : '')}>
                   <item.icon aria-hidden="true" />
@@ -175,8 +227,10 @@ export default function AdminSidebar() {
                   )}
                 </NavLink>
               ))}
+              </div>
             </div>
-          ))}
+            );
+          })}
 
         </nav>
 
