@@ -138,11 +138,9 @@ jobs:
           fi
 
           grep -q "<loc>$SITE_URL/tr</loc>" sitemap.xml
-
           grep -q '"run": "${{ github.run_id }}"' build.json
 
           du -sh .
-
           echo "Build verification successful"
 
       - name: Report build
@@ -153,7 +151,7 @@ jobs:
         run: |
           tar -czf "release-$RELEASE_ID.tar.gz" -C client/dist .
 
-      # SSH deployment (optional)
+      # Optional SSH deployment
       - name: Deploy over SSH
         id: deploy_ssh
         if: env.DEPLOY_METHOD == 'ssh'
@@ -190,7 +188,7 @@ jobs:
             "bash -s -- deploy '$RELEASE_ID' \"\$HOME/rma-deploy/incoming/release-$RELEASE_ID.tar.gz\" '$DEPLOY_PATH' 5" \
             < deploy/remote-site.sh
 
-      # FTPS deployment without apt-get or lftp
+      # Secure FTPS deployment using Node.js
       - name: Deploy over FTPS
         id: deploy_ftps
         if: env.DEPLOY_METHOD == 'ftps'
@@ -199,10 +197,11 @@ jobs:
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           FTP_PORT: ${{ vars.FTP_PORT || '21' }}
+          FTP_CONNECT_IP: ${{ vars.FTP_CONNECT_IP || '77.245.159.39' }}
         run: |
           set -euo pipefail
 
-          echo "Installing Node.js FTPS client..."
+          echo "Installing secure FTPS client..."
 
           mkdir -p "$RUNNER_TEMP/rma-ftps"
           cd "$RUNNER_TEMP/rma-ftps"
@@ -212,11 +211,11 @@ jobs:
             --no-package-lock \
             --no-audit \
             --no-fund \
-            basic-ftp@5.2.0
+            basic-ftp@5.2.1
 
           cd "$GITHUB_WORKSPACE"
 
-          echo "Starting secure FTPS deployment..."
+          echo "Starting FTPS deployment..."
 
           node <<'EOF'
           const ftp = require(
@@ -226,9 +225,10 @@ jobs:
 
           const fs = require('node:fs');
           const path = require('node:path');
-          const dns = require('node:dns').promises;
+          const dns = require('node:dns');
 
           const client = new ftp.Client(60000);
+          client.ftp.verbose = false;
 
           const localRoot = path.resolve('client/dist');
           const remoteRoot = process.env.DEPLOY_PATH || '.';
@@ -240,14 +240,33 @@ jobs:
             'cgi-bin'
           ]);
 
-          async function resolveHost(host) {
-            // Preserve the previous workflow's known server IP.
-            // TLS verification still uses the configured hostname.
-            if (host === 'codex.wlsrv.com') {
-              return '77.245.159.39';
+          function validateConfiguration() {
+            const required = [
+              'FTP_HOST',
+              'FTP_USER',
+              'FTP_PASSWORD',
+              'FTP_CONNECT_IP'
+            ];
+
+            for (const name of required) {
+              if (!process.env[name]) {
+                throw new Error(
+                  `Missing configuration: ${name}`
+                );
+              }
             }
 
-            return (await dns.lookup(host)).address;
+            if (!fs.existsSync(localRoot)) {
+              throw new Error('Build directory not found');
+            }
+
+            if (
+              !fs.statSync(localRoot).isDirectory()
+            ) {
+              throw new Error(
+                'Build path is not a directory'
+              );
+            }
           }
 
           async function uploadDirectory(localDir, remoteDir) {
@@ -301,48 +320,56 @@ jobs:
           }
 
           async function main() {
+            validateConfiguration();
+
             const host = process.env.FTP_HOST;
-            const user = process.env.FTP_USER;
-            const password = process.env.FTP_PASSWORD;
-            const port = Number(process.env.FTP_PORT || 21);
+            const ip = process.env.FTP_CONNECT_IP;
+            const port = Number(
+              process.env.FTP_PORT || 21
+            );
 
-            if (!host || !user || !password) {
-              throw new Error('Missing FTP credentials');
+            if (!Number.isInteger(port) || port < 1 || port > 65535) {
+              throw new Error('Invalid FTP port');
             }
 
-            if (!fs.existsSync(localRoot)) {
-              throw new Error('Build directory not found');
-            }
+            console.log(
+              `Connecting to FTPS server on port ${port}...`
+            );
 
-            const ip = await resolveHost(host);
-
-            console.log(`Connecting to FTPS: ${host}`);
-
+            // Connect to the known IP without DNS lookup.
+            // Verify the TLS certificate against FTP_HOST.
             await client.access({
               host: ip,
               port,
-              user,
-              password,
-              secure: true,
+              user: process.env.FTP_USER,
+              password: process.env.FTP_PASSWORD,
+              secure: 'explicit',
               secureOptions: {
                 servername: host,
                 rejectUnauthorized: true
               }
             });
 
-            console.log('Secure FTPS connection established');
+            console.log(
+              'Secure FTPS connection established'
+            );
 
             await client.cd(remoteRoot);
+
             const baseDirectory = await client.pwd();
 
-            console.log('Remote directory selected');
+            console.log(
+              'Remote deployment directory selected'
+            );
 
             await uploadDirectory(
               localRoot,
               baseDirectory
             );
 
-            console.log('FTPS upload completed');
+            console.log(
+              'FTPS upload completed successfully'
+            );
           }
 
           main()
@@ -364,7 +391,6 @@ jobs:
           set -e
 
           for attempt in 1 2 3 4 5 6; do
-
             run=$(
               curl -fsS --max-time 15 \
                 "$SITE_URL/build.json?ts=$(date +%s)" \
@@ -382,7 +408,6 @@ jobs:
             )
 
             if [ "$run" = "${{ github.run_id }}" ]; then
-
               curl -fsS --max-time 15 \
                 -o /dev/null "$SITE_URL/tr/"
 
@@ -395,7 +420,6 @@ jobs:
 
             echo "Waiting for live deployment ($attempt/6)"
             sleep 10
-
           done
 
           echo "::error::Live site does not serve the new build"
@@ -428,11 +452,9 @@ jobs:
               "Sunucuya yükleme başarısız; eski site yayında."
 
           else
-
             node .github/scripts/report.mjs \
               build_failed \
               "Yayınlama hazırlığı başarısız."
-
           fi
 
       - name: Clean up SSH key
