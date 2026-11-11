@@ -56,6 +56,8 @@ jobs:
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
+          set -euo pipefail
+
           missing=""
 
           [ -n "$API_URL" ] || missing="$missing API_URL"
@@ -98,6 +100,24 @@ jobs:
       - name: Install dependencies
         working-directory: client
         run: npm ci --include=dev --no-audit --no-fund
+
+      # Diagnose the live content endpoint before building.
+      - name: Diagnose content API
+        env:
+          CONTENT_TOKEN: ${{ secrets.CONTENT_API_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          echo "Checking content API response..."
+
+          curl -sS -L \
+            --max-time 20 \
+            -o /dev/null \
+            -w 'HTTP status: %{http_code}\nContent type: %{content_type}\nFinal URL: %{url_effective}\n' \
+            -H "Authorization: Bearer $CONTENT_TOKEN" \
+            "$API_URL/content"
+
+          echo "Content API diagnostic completed"
 
       - name: Build website
         id: build
