@@ -225,7 +225,6 @@ jobs:
 
           const fs = require('node:fs');
           const path = require('node:path');
-          const dns = require('node:dns');
 
           const client = new ftp.Client(60000);
           client.ftp.verbose = false;
@@ -256,15 +255,12 @@ jobs:
               }
             }
 
-            if (!fs.existsSync(localRoot)) {
-              throw new Error('Build directory not found');
-            }
-
             if (
+              !fs.existsSync(localRoot) ||
               !fs.statSync(localRoot).isDirectory()
             ) {
               throw new Error(
-                'Build path is not a directory'
+                'Build directory not found'
               );
             }
           }
@@ -328,7 +324,11 @@ jobs:
               process.env.FTP_PORT || 21
             );
 
-            if (!Number.isInteger(port) || port < 1 || port > 65535) {
+            if (
+              !Number.isInteger(port) ||
+              port < 1 ||
+              port > 65535
+            ) {
               throw new Error('Invalid FTP port');
             }
 
@@ -336,17 +336,18 @@ jobs:
               `Connecting to FTPS server on port ${port}...`
             );
 
-            // Connect to the known IP without DNS lookup.
-            // Verify the TLS certificate against FTP_HOST.
+            // Port 21: explicit FTPS with AUTH TLS.
+            // TLS certificate is verified against FTP_HOST.
             await client.access({
               host: ip,
               port,
               user: process.env.FTP_USER,
               password: process.env.FTP_PASSWORD,
-              secure: 'explicit',
+              secure: true,
               secureOptions: {
                 servername: host,
-                rejectUnauthorized: true
+                rejectUnauthorized: true,
+                minVersion: 'TLSv1.2'
               }
             });
 
