@@ -28,7 +28,7 @@ permissions:
 jobs:
   publish:
     if: github.event_name != 'push' || vars.AUTO_DEPLOY_ON_PUSH == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     environment: production
 
@@ -192,6 +192,7 @@ jobs:
       # FTPS deployment for hosting.com.tr
       
       # FTPS deployment for hosting.com.tr
+      
       - name: Deploy over FTPS
         id: deploy_ftps
         if: env.DEPLOY_METHOD == 'ftps'
@@ -201,8 +202,11 @@ jobs:
         run: |
           set -euo pipefail
 
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq lftp
+          if ! command -v lftp >/dev/null 2>&1; then
+            echo "Installing lftp..."
+            sudo apt-get update
+            sudo apt-get install -y lftp
+          fi
 
           test -n "$FTP_USER"
           test -n "$FTP_PASSWORD"
@@ -225,20 +229,24 @@ jobs:
             set ftp:passive-mode true
             set net:max-retries 2
             set net:timeout 30
+
             open ftp://codex.wlsrv.com
             source $CREDENTIALS_FILE
             cls
             cd \"$DEPLOY_PATH\"
+
             mirror -R --parallel=4 --verbose=1 \
               --exclude-glob api/ \
               --exclude-glob uploads/ \
               --exclude-glob .well-known/ \
               --exclude-glob cgi-bin/ \
               client/dist .
+
             bye
           "
 
           echo "FTPS upload completed"
+
 
 
           echo "FTPS upload completed"
