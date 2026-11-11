@@ -149,6 +149,7 @@ jobs:
         run: node .github/scripts/report.mjs build_succeeded
 
       - name: Package release
+        if: env.DEPLOY_METHOD == 'ssh'
         run: |
           tar -czf "release-$RELEASE_ID.tar.gz" -C client/dist .
 
@@ -189,67 +190,173 @@ jobs:
             "bash -s -- deploy '$RELEASE_ID' \"\$HOME/rma-deploy/incoming/release-$RELEASE_ID.tar.gz\" '$DEPLOY_PATH' 5" \
             < deploy/remote-site.sh
 
-      # FTPS deployment for hosting.com.tr
-      
-      # FTPS deployment for hosting.com.tr
-      
+      # FTPS deployment without apt-get or lftp
       - name: Deploy over FTPS
         id: deploy_ftps
         if: env.DEPLOY_METHOD == 'ftps'
         env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_PORT: ${{ vars.FTP_PORT || '21' }}
         run: |
           set -euo pipefail
 
-          if ! command -v lftp >/dev/null 2>&1; then
-            echo "Installing lftp..."
-            sudo apt-get update
-            sudo apt-get install -y lftp
-          fi
+          echo "Installing Node.js FTPS client..."
 
-          test -n "$FTP_USER"
-          test -n "$FTP_PASSWORD"
+          mkdir -p "$RUNNER_TEMP/rma-ftps"
+          cd "$RUNNER_TEMP/rma-ftps"
 
-          echo "77.245.159.39 codex.wlsrv.com" | sudo tee -a /etc/hosts >/dev/null
+          npm install \
+            --no-save \
+            --no-package-lock \
+            --no-audit \
+            --no-fund \
+            basic-ftp@5.2.0
 
-          CREDENTIALS_FILE="$(mktemp)"
-          chmod 600 "$CREDENTIALS_FILE"
-          trap 'rm -f "$CREDENTIALS_FILE"' EXIT
+          cd "$GITHUB_WORKSPACE"
 
-          printf 'user "%s" "%s"\n' \
-            "$FTP_USER" "$FTP_PASSWORD" > "$CREDENTIALS_FILE"
+          echo "Starting secure FTPS deployment..."
 
-          echo "Connecting to FTPS..."
+          node <<'EOF'
+          const ftp = require(
+            process.env.RUNNER_TEMP +
+            '/rma-ftps/node_modules/basic-ftp'
+          );
 
-          lftp -e "
-            set ftp:ssl-force true
-            set ftp:ssl-protect-data true
-            set ssl:verify-certificate true
-            set ftp:passive-mode true
-            set net:max-retries 2
-            set net:timeout 30
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const dns = require('node:dns').promises;
 
-            open ftp://codex.wlsrv.com
-            source $CREDENTIALS_FILE
-            cls
-            cd \"$DEPLOY_PATH\"
+          const client = new ftp.Client(60000);
 
-            mirror -R --parallel=4 --verbose=1 \
-              --exclude-glob api/ \
-              --exclude-glob uploads/ \
-              --exclude-glob .well-known/ \
-              --exclude-glob cgi-bin/ \
-              client/dist .
+          const localRoot = path.resolve('client/dist');
+          const remoteRoot = process.env.DEPLOY_PATH || '.';
 
-            bye
-          "
+          const protectedDirectories = new Set([
+            'api',
+            'uploads',
+            '.well-known',
+            'cgi-bin'
+          ]);
 
-          echo "FTPS upload completed"
+          async function resolveHost(host) {
+            // Preserve the previous workflow's known server IP.
+            // TLS verification still uses the configured hostname.
+            if (host === 'codex.wlsrv.com') {
+              return '77.245.159.39';
+            }
 
+            return (await dns.lookup(host)).address;
+          }
 
+          async function uploadDirectory(localDir, remoteDir) {
+            await client.ensureDir(remoteDir);
 
-          echo "FTPS upload completed"
+            const entries = fs.readdirSync(localDir, {
+              withFileTypes: true
+            });
+
+            for (const entry of entries) {
+              const isRoot = localDir === localRoot;
+
+              if (
+                isRoot &&
+                protectedDirectories.has(entry.name)
+              ) {
+                console.log(
+                  `Skipping protected directory: ${entry.name}`
+                );
+                continue;
+              }
+
+              if (entry.isSymbolicLink()) {
+                throw new Error(
+                  `Symbolic links are not supported: ${entry.name}`
+                );
+              }
+
+              const localPath = path.join(
+                localDir,
+                entry.name
+              );
+
+              const remotePath = path.posix.join(
+                remoteDir,
+                entry.name
+              );
+
+              if (entry.isDirectory()) {
+                await uploadDirectory(
+                  localPath,
+                  remotePath
+                );
+              } else if (entry.isFile()) {
+                await client.uploadFrom(
+                  localPath,
+                  remotePath
+                );
+              }
+            }
+          }
+
+          async function main() {
+            const host = process.env.FTP_HOST;
+            const user = process.env.FTP_USER;
+            const password = process.env.FTP_PASSWORD;
+            const port = Number(process.env.FTP_PORT || 21);
+
+            if (!host || !user || !password) {
+              throw new Error('Missing FTP credentials');
+            }
+
+            if (!fs.existsSync(localRoot)) {
+              throw new Error('Build directory not found');
+            }
+
+            const ip = await resolveHost(host);
+
+            console.log(`Connecting to FTPS: ${host}`);
+
+            await client.access({
+              host: ip,
+              port,
+              user,
+              password,
+              secure: true,
+              secureOptions: {
+                servername: host,
+                rejectUnauthorized: true
+              }
+            });
+
+            console.log('Secure FTPS connection established');
+
+            await client.cd(remoteRoot);
+            const baseDirectory = await client.pwd();
+
+            console.log('Remote directory selected');
+
+            await uploadDirectory(
+              localRoot,
+              baseDirectory
+            );
+
+            console.log('FTPS upload completed');
+          }
+
+          main()
+            .catch((error) => {
+              console.error(
+                'FTPS deployment failed:',
+                error.message
+              );
+              process.exitCode = 1;
+            })
+            .finally(() => {
+              client.close();
+            });
+          EOF
 
       - name: Verify live site
         id: live
