@@ -1014,6 +1014,12 @@ const en = {
         description: 'Food and water storage tanks for low spaces and vehicle-mounted use.',
         application: 'Water / Food',
       },
+      rectangular: {
+        label: 'Rectangular Tanks',
+        title: 'Rectangular Polyethylene Tanks',
+        description: 'Rectangular polyethylene tanks used as water tanks in caravans, and as AdBlue, diesel and fuel tanks in trucks and lorries.',
+        application: 'Caravans / Trucks',
+      },
       twoLayer: {
         label: 'Two-Layer Tanks',
         title: 'Two-Layer Water Tanks',

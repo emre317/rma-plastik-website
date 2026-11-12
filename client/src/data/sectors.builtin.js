@@ -14,7 +14,7 @@
 const sectors = [
   {
     id: 'water', icon: 'droplets', hue: 205, stored: 'water',
-    products: [{ group: 'vertical' }, { group: 'horizontal' }, { group: 'fuel', families: ['rectangular-tanks'] }, { group: 'twoLayer' }],
+    products: [{ group: 'vertical' }, { group: 'horizontal' }, { group: 'rectangular', families: ['rectangular-tanks'] }, { group: 'twoLayer' }],
   },
   {
     id: 'treatment', icon: 'filter', hue: 190,

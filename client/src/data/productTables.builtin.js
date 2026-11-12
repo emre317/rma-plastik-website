@@ -395,7 +395,7 @@ const families = [
   // ---------- Other (p. 17–19)
   {
     id: 'rectangular-tanks',
-    group: 'fuel',
+    group: 'rectangular',
     image: null,
     columns: ['code', 'volume', 'width', 'height', 'length', 'cap'],
     rows: rows(['code', 'volume', 'width', 'height', 'length', 'cap'], [

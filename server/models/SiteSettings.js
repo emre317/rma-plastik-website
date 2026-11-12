@@ -32,6 +32,9 @@ const siteSettingsSchema = new mongoose.Schema(
     offerBankInfo: str(800),
     offerTerms: str(3000),
 
+    // One-time catalogue changes already applied (services/catalogueMigrations.js)
+    catalogueMigrations: { type: [String], default: [] },
+
     // Publishing bookkeeping
     contentChangedAt: { type: Date, default: null },
     publishedAt: { type: Date, default: null },
