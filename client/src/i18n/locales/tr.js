@@ -577,6 +577,10 @@ const tr = {
         title: 'Paletler',
         text: 'Depolama ve taşıma için polietilen paletler.',
       },
+      planters: {
+        title: 'Saksılar',
+        text: 'Polietilen saksılar. İki değerli ölçüler alt / üst sırasıyladır (RSP05: dış / iç çap). RSP21 ölçüleri dış ölçüdür; iç ölçü 40 × 40 cm, alt iç ölçü 28 × 28 cm.',
+      },
     },
     quote: 'Teklif İste',
     waterLink: 'Su depolarını filtreleyin',
@@ -607,6 +611,8 @@ const tr = {
       camber: 'Bombe yüksekliği (cm)',
       throat: 'Boğaz yüksekliği (cm)',
       weight: 'Ağırlık (kg)',
+      lengthOrHeight: 'Boy (cm)',
+      depth: 'Derinlik (cm)',
     },
   },
 

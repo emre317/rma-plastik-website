@@ -578,6 +578,10 @@ const en = {
         title: 'Pallets',
         text: 'Polyethylene pallets for storage and handling.',
       },
+      planters: {
+        title: 'Planters',
+        text: 'Polyethylene planters. Where two values are given they are bottom / top (RSP05: outer / inner diameter). RSP21 sizes are outer sizes; inside 40 × 40 cm, inside at the bottom 28 × 28 cm.',
+      },
     },
     quote: 'Request a Quote',
     waterLink: 'Filter water tanks',
@@ -608,6 +612,8 @@ const en = {
       camber: 'Camber height (cm)',
       throat: 'Throat height (cm)',
       weight: 'Weight (kg)',
+      lengthOrHeight: 'Length / height (cm)',
+      depth: 'Depth (cm)',
     },
   },
 

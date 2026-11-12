@@ -32,7 +32,7 @@ const groups = [
   { id: 'pallets', category: 'other', image: `${ILL}/pallets.svg`, hue: 28 },
   { id: 'bins', category: 'other', image: `${ILL}/bins.svg`, hue: 150 },
   { id: 'barriers', category: 'other', image: `${IMG}/road-barrier.webp`, hue: 0 },
-  { id: 'planters', category: 'other', image: `${ILL}/planters.svg`, hue: 140, quoteOnly: true },
+  { id: 'planters', category: 'other', image: `${ILL}/planters.svg`, hue: 140 },
   { id: 'custom', category: 'other', image: '/images/custom-molding/train-tank.webp', hue: 240, page: 'custom' },
 ].map((group) => ({ page: 'tables', quoteOnly: false, monoblock: true, category: 'other', ...group }));
 
