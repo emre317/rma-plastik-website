@@ -108,7 +108,7 @@ tıklamasında olayların göründüğünü kontrol edin, sonra **Gönder → Ya
 | --- | --- |
 | GTM container | `GTM-NH4V3TWX` (GitHub değişkeni `VITE_GTM_ID`) |
 | GA4 ölçüm kimliği | `G-15MEPYKQ44` |
-| Google Ads | `AW-18530639193`, dönüşüm "Teklif Talebi" (birincil) |
+| Google Ads | `AW-10987488766`, dönüşüm "Teklif Talebi" (birincil) |
 
 Container içeriği `docs/gtm/` klasöründeki iki dosyadan içe aktarıldı:
 - `rma-gtm-ga4.json` – GA4 Google etiketi, `page_view`, site olayları, Conversion Linker
