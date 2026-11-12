@@ -83,7 +83,36 @@ async function rectangularGroup() {
   return done;
 }
 
-const MIGRATIONS = [['2026-11-rectangular-group', rectangularGroup]];
+/*
+  Planters (Saksılar) get a model table: the built-in table is added to the
+  saved ones and the group stops being "made to order" so its models show.
+*/
+async function plantersTable() {
+  const FAMILY = 'planters';
+  const done = [];
+
+  // No tables saved yet: the site shows the built-in ones, which have it
+  if ((await ProductFamily.countDocuments()) > 0 && !(await ProductFamily.findOne({ familyId: FAMILY }))) {
+    const { builtInFamilyDocs } = await import('../controllers/productFamilyController.js');
+    const doc = (await builtInFamilyDocs()).find((item) => item.familyId === FAMILY);
+    await ProductFamily.create(doc);
+    done.push(`table added (${doc.rows.length} models)`);
+  }
+
+  const group = await ProductGroup.findOne({ groupId: 'planters' });
+  if (group?.quoteOnly) {
+    group.quoteOnly = false;
+    await group.save();
+    done.push('group shows its models');
+  }
+
+  return done;
+}
+
+const MIGRATIONS = [
+  ['2026-11-rectangular-group', rectangularGroup],
+  ['2026-11-planters-table', plantersTable],
+];
 
 export async function runCatalogueMigrations() {
   const settings = await getSiteSettings();

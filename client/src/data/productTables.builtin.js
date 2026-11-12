@@ -15,7 +15,7 @@
 
   Columns: code, volume, diameter, height, length, width, cap, outlet,
   wheel, conical, reducer, upperLength, bottomLength, upperDiameter,
-  bottomDiameter, camber, throat
+  bottomDiameter, camber, throat, weight, lengthOrHeight, depth
 */
 
 const IMG = '/images/products';
@@ -453,6 +453,55 @@ const families = [
       ['RP 120*120', 120, 120, 15],
     ]),
   },
+  // ---------- Planters (planter list SAKSILAR, 2026): the list's own terms.
+  // En -> width, Boy -> lengthOrHeight, Yükseklik -> height, Derinlik -> depth,
+  // Çap -> diameter, KG -> weight. Two values: bottom / top (RSP05: outer / inner).
+  {
+    id: 'planters',
+    group: 'planters',
+    image: `${ILL}/planters.svg`,
+    columns: ['code', 'width', 'lengthOrHeight', 'height', 'depth', 'diameter', 'weight'],
+    rows: rows(['code', 'width', 'lengthOrHeight', 'height', 'depth', 'diameter', 'weight'], [
+      ['RSP01', 50, 50, null, 50, null, 6],
+      ['RSP02', '28 / 37', '78 / 90', null, 36, null, 7],
+      ['RSP03', 44, 44, null, 44, null, 7],
+      ['RSP05', null, 50, null, null, '47 / 40', 5],
+      ['RSP06', 28, 37, null, null, null, 2.5],
+      ['RSP07', null, 55, null, null, '42 / 36', 5],
+      ['RSP08', null, 70, null, 65, 40, 5],
+      ['RSP09', null, 70, null, null, 46, 5],
+      ['RSP10', null, 90, null, null, 46, 8.5],
+      ['RSP11', null, 51, null, null, 36, 5],
+      ['RSP12', null, 118, null, null, 54, 8],
+      ['RSP13', 101, 42, null, 40, null, 9],
+      ['RSP15', null, 79, null, null, '26 / 37', 10],
+      ['RSP16', null, 111, null, null, '55 / 70', 10],
+      ['RSP17', null, 85, null, 30, 40, 7],
+      ['RSP18', null, 55, null, 32, 58, 9],
+      ['RSP19', null, 36, null, 21, 40, 3],
+      ['RSP20', null, 59, null, 36, 47, 6],
+      ['RSP21', 50, 50, 50, 20, null, 7],
+      ['RSP22', null, 37, null, 7, 37, 7],
+      ['RSP23', null, 64, 25, null, 64, 5],
+      ['RSP24', null, 35, null, 37, 38, 2.5],
+      ['RSP25', null, 53, null, 50, 55, 4],
+      ['RSP26', null, 60, null, 20, 52, 5],
+      ['RSP27', null, 67, null, 5, 32, 5],
+      ['RSP28', null, 68, null, 30, 60, 10.5],
+      ['RSP29', null, 68, null, 66, 80, 14],
+      ['RSP30', null, 55, null, 30, 152, 17],
+      ['RSP31', null, 49, null, 22, 118, 13],
+      ['RSP32', null, null, 90, 30, 47, 10],
+      ['RSP33', null, 87, null, 23, 61, 14],
+      ['RSP34', null, null, 61, 50, 71, 23],
+      ['RSP35', null, 69, null, 25, 51, 13],
+      ['RSP36', null, 109, null, null, 63, 8],
+      ['RSP37', null, 55, null, 23, 108, 14],
+      ['RSP38', null, 36, null, 15, 89, 5],
+      ['RSP39', null, 43, null, 21, 49, 4],
+      ['RSP40', null, 55, null, 23, 60, 5],
+    ]),
+  },
 ];
 
 // Categories of the first admin version; tables saved then still carry them
@@ -461,6 +510,7 @@ export const LEGACY_GROUPS = ['tanks', 'textile', 'chemical', 'food', 'other'];
 export const COLUMN_KEYS = [
   'volume', 'diameter', 'height', 'length', 'width', 'cap', 'outlet', 'wheel', 'conical',
   'reducer', 'upperLength', 'bottomLength', 'upperDiameter', 'bottomDiameter', 'camber', 'throat', 'weight',
+  'lengthOrHeight', 'depth',
 ];
 
 export const WATER_USES = ['water', 'food', 'chemical', 'acid'];
