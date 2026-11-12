@@ -20,6 +20,10 @@ export const COLUMN_KEYS = [
 export const WATER_USES = ['water', 'food', 'chemical', 'acid'];
 
 // Photo galleries: the cover stays in `image`, further photos in `images`
+// Feature list of a family (one per line in `i18n.<lang>.features`)
+export const MAX_FEATURES = 20;
+export const MAX_FEATURE_LENGTH = 160;
+
 export const MAX_FAMILY_IMAGES = 16;
 export const MAX_ROW_IMAGES = 12;
 const IMAGE_PATH = /^\/(uploads|images)\/[\w./-]{1,280}$/;
@@ -34,6 +38,9 @@ const textSchema = new mongoose.Schema(
   {
     title: { type: String, trim: true, default: '', maxlength: 120 },
     text: { type: String, trim: true, default: '', maxlength: 800 },
+    // "Standart özellikler" card of the model pages: a heading and one feature per line
+    featuresTitle: { type: String, trim: true, default: '', maxlength: 80 },
+    features: { type: String, trim: true, default: '', maxlength: 2400 },
   },
   { _id: false }
 );

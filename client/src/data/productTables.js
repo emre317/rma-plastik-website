@@ -103,6 +103,32 @@ export function familyText(family, field, lang, t) {
   );
 }
 
+const textList = (value) => (Array.isArray(value) ? value.filter((item) => typeof item === 'string' && item.trim()) : []);
+
+/* Brochure feature list of a family; water tanks share the list of the water tank page */
+export function builtInFeatures(family, t) {
+  const own = textList(t(`productTables.families.${family.id}.features`, { returnObjects: true, defaultValue: [] }));
+  if (own.length || !family.waterTank) return own;
+  return textList(t('waterTanks.features', { returnObjects: true, defaultValue: [] }));
+}
+
+/*
+  "Standart özellikler" card of a family: { title, items }.
+  List saved in the admin panel (language → Turkish) → built-in brochure list.
+  No items: the card is not shown.
+*/
+export function familyStandard(family, lang, t) {
+  const saved = textList(family.i18n?.[lang]?.features);
+  const items = saved.length ? saved : textList(family.i18n?.tr?.features);
+
+  return {
+    title:
+      family.i18n?.[lang]?.featuresTitle ||
+      t(family.waterTank ? 'productModel.standardTitle' : 'productModel.featuresTitle'),
+    items: items.length ? items : builtInFeatures(family, t),
+  };
+}
+
 /* Water tank selector: every row of a family marked as water tank */
 export const waterTanks = families
   .filter((family) => family.waterTank)

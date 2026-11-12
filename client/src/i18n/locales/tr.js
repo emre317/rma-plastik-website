@@ -484,18 +484,37 @@ const tr = {
       'textile-trolleys': {
         title: 'Tekstil Arabaları',
         text: '230 litreden 3.500 litreye kadar, tekstil fabrikaları ve boyahanelerde kullanılmak üzere. Yüksek mukavemetli metal araba, kimyasallara ve boyalara dayanıklı polietilen gövde; istenilen boyutta teker takılabilir.',
+        features: [
+          'Kimyasallara ve boyalara karşı güçlü dayanımı olan polietilen gövde',
+          'Yüksek ağırlık taşıyabilen, yüksek mukavemetli metal araba',
+          'İstenilen boyutta teker takılabilir',
+        ],
       },
       'cylinder-trolleys': {
         title: 'Silindir Tekstil Arabaları',
         text: 'Kendi ekseni etrafında dönen silindir tekstil arabaları boyahanelere özel çözümler sunar.',
+        features: [
+          'Kendi ekseni etrafında dönebilir',
+          'Kimyasallara ve boyalara karşı güçlü dayanımı olan polietilen gövde',
+          'Yüksek ağırlık taşıyabilen, yüksek mukavemetli metal araba',
+          'İstenilen boyutta teker takılabilir',
+        ],
       },
       'stackable-rectangular': {
         title: 'Köşeli İstiflenebilir Tekstil Arabaları',
         text: 'İstiflenebilir arabalar iç içe geçerek taşıma kolaylığı ve nakliye avantajı sağlar.',
+        features: [
+          'İç içe geçerek istiflenir',
+          'Taşıma kolaylığı ve nakliye avantajı sağlar',
+        ],
       },
       'stackable-cylinder': {
         title: 'Silindir İstiflenebilir Tekstil Arabaları',
         text: 'İstiflenebilir konik arabalar iç içe geçerek taşıma kolaylığı ve nakliye avantajı sağlar.',
+        features: [
+          'İç içe geçerek istiflenir',
+          'Taşıma kolaylığı ve nakliye avantajı sağlar',
+        ],
       },
       'cop-boxes': {
         title: 'Kops Kutuları',
@@ -508,14 +527,34 @@ const tr = {
       'rope-dyeing-cans': {
         title: 'Halat Boyama Kovaları',
         text: 'Halat boyama kovalarına isteğinize göre teker takılabilir ve delik açılabilir.',
+        features: [
+          'İsteğe göre teker takılabilir',
+          'İsteğe göre delik açılabilir',
+        ],
       },
       'silo-tanks': {
         title: 'Silo Tanklar',
         text: '500 litreden 24 tona kadar kimyasal madde hazırlama ve stoklama silo tankları. Konik yapısı sayesinde tam boşaltım; ürünün yoğunluğuna göre ayarlanabilen et kalınlığı.',
+        features: [
+          'Konik yapısı sayesinde tam boşaltım',
+          'Temizlikte rahat erişim için 60 cm manhole',
+          '40 cm ikinci kapak',
+          'Kimyasallara ve boyalara karşı güçlü dayanımı olan polietilen gövde',
+          'Ürünün yoğunluğuna göre ayarlanabilen et kalınlığı',
+          'Yüksek ağırlık taşıyabilen, yüksek mukavemetli metal aksam',
+          'Tank kapaklarına erişim sağlayan merdiven',
+          'Asit ve kimyasallara dayanıklı polietilen çıkış',
+        ],
       },
       'mixer-silo-tanks': {
         title: 'Karıştırıcılı Silo Tanklar',
         text: 'Kullanım amacına göre depoların içerisine mikser veya havalı karıştırıcı monte edilir; müşterinin talep ettiği güçte redüktör takılabilir.',
+        features: [
+          'Kullanım amacına göre mikser veya havalı karıştırıcı monte edilir',
+          'Talep edilen güçte karıştırıcı redüktör takılabilir',
+          'Stoklanacak asit veya kimyasala göre polietilen, paslanmaz çelik veya polipropilen kaplı mikser kanatları',
+          'Mil yataklaması yapılır',
+        ],
       },
       'salt-tanks': {
         title: 'Tuz Tankları',
@@ -528,10 +567,21 @@ const tr = {
       'brine-tanks': {
         title: 'Salamura Tankları',
         text: 'Özellikle zeytin salamurasında kullanılır. Üst ağız kısmı komple açıktır; delikli baskı seperatörü ve numune alma kapağı vardır.',
+        features: [
+          'Üst ağız kısmı komple açık',
+          'Delikli baskı seperatörü',
+          'Seperatör kapağı üzerinde numune alma kapağı',
+          'İstenirse üst örtü kapağı kullanılır',
+        ],
       },
       'pickle-tanks': {
         title: 'Turşu Tankları',
         text: 'Özellikle turşuluk yaprak ve biber hazırlanmasında kullanılır. Özel kilitleme sistemli baskı kapağı, ürünün en iyi şartlarda fermente olması için tasarlanmıştır.',
+        features: [
+          'Özel tip baskı kapağı',
+          'Özel kilitleme sistemli kapak',
+          'Ürünün en iyi şartlarda fermente olması için tasarlanmıştır',
+        ],
       },
       'confit-pools': {
         title: 'Konfit Sistem Havuzları',
@@ -544,10 +594,20 @@ const tr = {
       'adblue-tanks': {
         title: 'AdBlue ve Dizel Tankları',
         text: 'Çift cidarlı, taşma tanklı AdBlue, benzin ve dizel stoklama ve dolum tankları. Pompa kilitlenebilir kabin içindedir; talep edilirse taşma valfi takılabilir.',
+        features: [
+          'Çift cidarlı gövde',
+          'Taşma tankı',
+          'Pompanın bulunduğu kilitlenebilir kabin',
+          'Talep edilirse taşma valfi takılabilir',
+        ],
       },
       'road-barriers': {
         title: 'Yol Bariyerleri',
         text: 'Rotasyonel kalıplama ve şişirme teknikleriyle üretilen yol güvenlik bariyerleri. Seri üretime uygundur, günde 300 adet teslim edilebilir; içerisine su veya kum doldurulabilir.',
+        features: [
+          'İçine su veya kum doldurulabilir',
+          'Seri üretime uygundur',
+        ],
       },
       'underground-vertical-tanks': {
         title: 'Yeraltı Tankları',
@@ -821,6 +881,7 @@ const tr = {
     allModels: 'Tüm modelleri gör',
     quote: 'Teklif İste',
     standardTitle: 'Tanklarımızda Standart',
+    featuresTitle: 'Standart Özellikler',
     description: '{{code}} – {{family}}. {{specs}}. RMA Plastik polietilen ürün; ölçüler ve teklif için inceleyin.',
     notFoundTitle: 'Model Bulunamadı',
     notFoundText: 'Bu model artık listede olmayabilir. Ürün tablolarındaki güncel modellere göz atın.',

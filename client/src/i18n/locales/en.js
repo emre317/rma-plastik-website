@@ -485,18 +485,37 @@ const en = {
       'textile-trolleys': {
         title: 'Textile Trolleys',
         text: 'From 230 to 3,500 litres for textile factories and dyeing workshops. High-strength metal frame, polyethylene body resistant to chemicals and paints; wheels in the desired size can be fitted.',
+        features: [
+          'Polyethylene body with strong resistance to chemicals and dyes',
+          'High-strength metal frame that can carry heavy loads',
+          'Can be fitted with wheels in the desired size',
+        ],
       },
       'cylinder-trolleys': {
         title: 'Cylinder Textile Trolleys',
         text: 'Cylinder textile trolleys that rotate around their own axis provide specialized solutions for dyeing workshops.',
+        features: [
+          'Rotates around its own axis',
+          'Polyethylene body with strong resistance to chemicals and dyes',
+          'High-strength metal frame that can carry heavy loads',
+          'Can be fitted with wheels in the desired size',
+        ],
       },
       'stackable-rectangular': {
         title: 'Rectangular Stackable Textile Trolleys',
         text: 'Stackable trolleys nest inside each other for easy transport and shipping.',
+        features: [
+          'Nest inside each other for stacking',
+          'Easy to handle, with a shipping advantage',
+        ],
       },
       'stackable-cylinder': {
         title: 'Cylinder Stackable Textile Trolleys',
         text: 'Stackable cone trolleys nest inside each other for easy transport and shipping.',
+        features: [
+          'Nest inside each other for stacking',
+          'Easy to handle, with a shipping advantage',
+        ],
       },
       'cop-boxes': {
         title: 'Cop Boxes',
@@ -509,14 +528,34 @@ const en = {
       'rope-dyeing-cans': {
         title: 'Rope Dyeing Cans',
         text: 'Wheels and holes can be added to rope dyeing cans as requested.',
+        features: [
+          'Wheels of the desired type can be fitted',
+          'Holes can be opened on request',
+        ],
       },
       'silo-tanks': {
         title: 'Silo Tanks',
         text: 'Silo tanks for preparing and storing chemical substances, from 500 litres to 24 tons. Full discharge thanks to the cone bottom; wall thickness adjustable to the density of the product.',
+        features: [
+          'Full discharge thanks to the conical base',
+          '60 cm manhole for easy access during cleaning',
+          '40 cm second cap',
+          'Polyethylene body with strong resistance to chemicals and dyes',
+          'Wall thickness adjustable to the density of the stored product',
+          'High-strength metal structure that can carry heavy loads',
+          'Ladder providing access to the tank caps',
+          'Polyethylene outlet resistant to acids and chemicals',
+        ],
       },
       'mixer-silo-tanks': {
         title: 'Mixer Silo Tanks',
         text: 'Mixers or air mixers are installed inside the tanks according to their intended use; reducers of the power requested by the customer can be fitted.',
+        features: [
+          'Mixer or air mixer installed according to the intended use',
+          'Mixing reducer of the requested power can be fitted',
+          'Mixer blades in polyethylene, stainless steel or polypropylene coating, chosen for the acid or chemical to be stored',
+          'Shaft bearing is fitted',
+        ],
       },
       'salt-tanks': {
         title: 'Salt Tanks',
@@ -529,10 +568,21 @@ const en = {
       'brine-tanks': {
         title: 'Brine Tanks',
         text: 'Used especially for olive brine. The top is fully open, with a perforated pressure separator and a sampling port.',
+        features: [
+          'Fully open top',
+          'Perforated pressure separator',
+          'Sampling port on the separator lid',
+          'Top cover lid available on request',
+        ],
       },
       'pickle-tanks': {
         title: 'Pickle Tanks',
         text: 'Used especially for pickled leaves and peppers. The special locking pressure lid is designed for the best fermentation conditions.',
+        features: [
+          'Special pressure lid',
+          'Lid with a special locking system',
+          'Designed so the product ferments under the best conditions',
+        ],
       },
       'confit-pools': {
         title: 'Confit System Pools',
@@ -545,10 +595,20 @@ const en = {
       'adblue-tanks': {
         title: 'AdBlue and Diesel Tanks',
         text: 'Bunded AdBlue, fuel and diesel storage and filling tanks with an overflow tank. The pump sits in a lockable cabinet; overflow valves can be fitted on request.',
+        features: [
+          'Double-walled (bunded) body',
+          'Overflow tank',
+          'Lockable cabinet housing the pump',
+          'Overflow valve can be fitted on request',
+        ],
       },
       'road-barriers': {
         title: 'Road Barriers',
         text: 'Road safety barriers produced with rotational and blow molding. Suitable for mass production, 300 units can be delivered per day; can be filled with water or sand.',
+        features: [
+          'Can be filled with water or sand',
+          'Suitable for mass production',
+        ],
       },
       'underground-vertical-tanks': {
         title: 'Underground Tanks',
@@ -822,6 +882,7 @@ const en = {
     allModels: 'See all models',
     quote: 'Request a Quote',
     standardTitle: 'Standard on our tanks',
+    featuresTitle: 'Standard Features',
     description: '{{code}} – {{family}}. {{specs}}. Polyethylene product by RMA Plastik; see dimensions and request a quote.',
     notFoundTitle: 'Model not found',
     notFoundText: 'This model may no longer be listed. Browse the current models in the product tables.',

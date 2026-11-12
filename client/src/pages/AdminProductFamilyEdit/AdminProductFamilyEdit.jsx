@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Images, X } from 'lucide-react';
+import { ArrowLeft, Check, Images, X } from 'lucide-react';
 
 import tr from '../../i18n/locales/tr';
+import en from '../../i18n/locales/en';
+import ar from '../../i18n/locales/ar';
 import useAdminApi from '../../hooks/useAdminApi';
 import usePageTitle from '../../hooks/usePageTitle';
 import { COLUMN_KEYS, WATER_USES } from '../../data/productTables.builtin';
@@ -32,6 +34,23 @@ const LANGUAGES = [
 const columnLabel = (key) => tr.productTables.columns[key] || key;
 const useLabel = (key) => tr.waterTanks.uses[key] || key;
 
+const LOCALES = { tr, en, ar };
+const MAX_FEATURES = 20;
+const emptyText = { title: '', text: '', featuresTitle: '', features: '' };
+
+// Text of the feature box -> lines that will be saved
+const featureLines = (text) => String(text || '').split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+
+/* Brochure list shown on the site while a family has no list of its own */
+function defaultFeatures(family, code) {
+  const own = LOCALES[code].productTables.families?.[family.familyId]?.features;
+  const list = Array.isArray(own) && own.length ? own : family.waterTank?.enabled ? LOCALES[code].waterTanks.features : [];
+  return (Array.isArray(list) ? list : []).join('\n');
+}
+
+const defaultFeaturesTitle = (family, code) =>
+  family.waterTank?.enabled ? LOCALES[code].productModel.standardTitle : LOCALES[code].productModel.featuresTitle;
+
 const emptyFamily = {
   familyId: '',
   group: 'vertical',
@@ -40,7 +59,7 @@ const emptyFamily = {
   image: '',
   images: [],
   columns: ['volume', 'diameter', 'height'],
-  i18n: { tr: { title: '', text: '' }, en: { title: '', text: '' }, ar: { title: '', text: '' } },
+  i18n: { tr: { ...emptyText }, en: { ...emptyText }, ar: { ...emptyText } },
   rows: [],
   waterTank: { enabled: false, orientation: 'vertical', layer: 'single', uses: ['water'] },
 };
@@ -91,6 +110,8 @@ export default function AdminProductFamilyEdit() {
   const [message, setMessage] = useState(null);
   const [pasteOpen, setPasteOpen] = useState(false);
   const [pasteText, setPasteText] = useState('');
+  // Feature boxes were filled with the brochure list (nothing saved for this family yet)
+  const [featuresPrefilled, setFeaturesPrefilled] = useState(false);
 
   // Index of the model whose photos are being edited (-1: none)
   const [rowGallery, setRowGallery] = useState(-1);
@@ -103,12 +124,16 @@ export default function AdminProductFamilyEdit() {
     (async () => {
       try {
         const { data } = await call(getFamily, id);
+        // No list saved yet: start from the list the site shows now, so it can be edited
+        const prefill = !LANGUAGES.some(({ code }) => data.i18n?.[code]?.features);
+        const features = (code) => (prefill ? defaultFeatures(data, code) : data.i18n?.[code]?.features || '');
+        setFeaturesPrefilled(prefill && Boolean(features('tr')));
         setForm({
           ...emptyFamily,
           ...data,
           images: Array.isArray(data.images) ? data.images : [],
           group: tableGroup(data),
-          i18n: Object.fromEntries(LANGUAGES.map(({ code }) => [code, { title: '', text: '', ...data.i18n?.[code] }])),
+          i18n: Object.fromEntries(LANGUAGES.map(({ code }) => [code, { ...emptyText, ...data.i18n?.[code], features: features(code) }])),
           waterTank: { ...emptyFamily.waterTank, ...data.waterTank },
           rows: (data.rows || []).map((row) => ({
             code: row.code,
@@ -224,6 +249,7 @@ export default function AdminProductFamilyEdit() {
       } else {
         const { data } = await call(updateFamily, id, payload);
         set('familyId', data.familyId);
+        setFeaturesPrefilled(false);
       }
 
       setMessage({
@@ -243,6 +269,7 @@ export default function AdminProductFamilyEdit() {
 
   const activeLanguage = LANGUAGES.find((item) => item.code === lang);
   const columns = ['code', ...form.columns];
+  const featureCount = featureLines(form.i18n[lang].features).length;
 
   return (
     <section className="adminContent">
@@ -303,6 +330,55 @@ export default function AdminProductFamilyEdit() {
                 onChange={(event) => setText('text', event.target.value)}
               />
             </label>
+
+            <div className="cmsFeatures">
+              <h2>Standart Özellikler</h2>
+              <p className="cmsHint">
+                Bu ailenin model sayfalarında ve teknik föyünde yeşil tikli liste olarak gösterilir. Her satıra bir özellik yazın.
+                Liste boş bırakılırsa katalogdaki varsayılan liste kullanılır; o da yoksa bölüm sitede gösterilmez.
+              </p>
+
+              {featuresPrefilled && (
+                <p className="cmsHint cmsFeaturesNote">
+                  Bu aile için henüz liste kaydedilmemiş; sitede şu an gösterilen katalog listesi yüklendi. Düzenleyip “Kaydet”e basın.
+                </p>
+              )}
+
+              <label className="cmsField">
+                <span>Bölüm Başlığı</span>
+                <input
+                  dir={activeLanguage.dir}
+                  value={form.i18n[lang].featuresTitle}
+                  maxLength={80}
+                  placeholder={defaultFeaturesTitle(form, lang)}
+                  onChange={(event) => setText('featuresTitle', event.target.value)}
+                />
+                <small>Boş bırakılırsa “{defaultFeaturesTitle(form, lang)}” yazılır.</small>
+              </label>
+
+              <label className="cmsField">
+                <span>Özellikler <span className="cmsMuted">({featureCount}/{MAX_FEATURES})</span></span>
+                <textarea
+                  rows={Math.min(14, Math.max(6, featureCount + 2))}
+                  dir={activeLanguage.dir}
+                  value={form.i18n[lang].features}
+                  placeholder={'Tek parça monoblok gövde\nUV koruması\n…'}
+                  onChange={(event) => setText('features', event.target.value)}
+                />
+                {featureCount > MAX_FEATURES && <small className="cmsFeaturesOver">En fazla {MAX_FEATURES} özellik kaydedilir; fazlası alınmaz.</small>}
+              </label>
+
+              {featureCount > 0 && (
+                <div className="cmsFeaturesPreview" dir={activeLanguage.dir}>
+                  <strong>{form.i18n[lang].featuresTitle || defaultFeaturesTitle(form, lang)}</strong>
+                  <ul>
+                    {featureLines(form.i18n[lang].features).slice(0, MAX_FEATURES).map((feature, index) => (
+                      <li key={index}><Check aria-hidden="true" />{feature}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
 
             <div className="cmsField">
               <span>Tablo Sütunları</span>

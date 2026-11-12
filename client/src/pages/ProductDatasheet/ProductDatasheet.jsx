@@ -11,7 +11,7 @@ import company from '../../data/company';
 import useLanguage from '../../hooks/useLanguage';
 import useModelQuote from '../../hooks/useModelQuote';
 import formatNumber from '../../utils/formatNumber';
-import { familyText, findModel, modelPath } from '../../data/productTables';
+import { familyStandard, familyText, findModel, modelPath } from '../../data/productTables';
 import NotFound from '../NotFound/NotFound';
 
 /*
@@ -74,8 +74,8 @@ export default function ProductDatasheet() {
 
   const headline = ['volume', 'diameter', 'width', 'length', 'height', 'weight'].filter((key) => columns.includes(key)).slice(0, 4);
   const uses = family.waterTank?.uses || [];
-  const features = t('waterTanks.features', { returnObjects: true });
-  const showFeatures = Boolean(family.waterTank) && Array.isArray(features);
+  const standard = familyStandard(family, lang, t);
+  const showFeatures = standard.items.length > 0;
   const pagePath = `/${lang}${modelPath(family, row)}`;
   const pageUrl = `${SITE_URL}${pagePath}`;
   const issued = new Intl.DateTimeFormat(lang === 'ar' ? 'ar' : lang, { dateStyle: 'long' }).format(new Date());
@@ -163,9 +163,9 @@ export default function ProductDatasheet() {
 
               {showFeatures && (
                 <div>
-                  <h2>{t('productModel.standardTitle')}</h2>
+                  <h2>{standard.title}</h2>
                   <ul className="dsChecks">
-                    {features.map((feature) => (
+                    {standard.items.map((feature) => (
                       <li key={feature}><Check aria-hidden="true" />{feature}</li>
                     ))}
                   </ul>

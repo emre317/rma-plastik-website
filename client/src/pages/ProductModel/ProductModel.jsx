@@ -19,7 +19,7 @@ import formatNumber from '../../utils/formatNumber';
 import ProductGallery from '../../components/product3d/ProductGallery';
 import { industriesForFamily } from '../../data/industries';
 import { groupById } from '../../data/productPortfolio';
-import { familyText, findModel, modelGallery, modelPath, similarModels } from '../../data/productTables';
+import { familyStandard, familyText, findModel, modelGallery, modelPath, similarModels } from '../../data/productTables';
 import ToleranceNote from '../../components/ui/ToleranceNote';
 
 // Up to four headline values shown as large tiles, in this order of preference
@@ -85,8 +85,7 @@ export default function ProductModel() {
   });
 
   const similar = similarModels(family, row);
-  const features = t('waterTanks.features', { returnObjects: true });
-  const showFeatures = Boolean(family.waterTank) && Array.isArray(features);
+  const standard = familyStandard(family, lang, t);
   const uses = family.waterTank?.uses || [];
   const sectors = industriesForFamily(family.id);
   const industryList = t('industries.items', { returnObjects: true });
@@ -314,11 +313,11 @@ export default function ProductModel() {
               </div>
             )}
 
-            {showFeatures && (
+            {standard.items.length > 0 && (
               <div className="pmCard">
-                <h2>{t('productModel.standardTitle')}</h2>
+                <h2>{standard.title}</h2>
                 <ul className="pmFeatures">
-                  {features.map((feature) => (
+                  {standard.items.map((feature) => (
                     <li key={feature}>
                       <Check aria-hidden="true" />
                       {feature}

@@ -1,6 +1,13 @@
 import mongoose from 'mongoose';
 
-import ProductFamily, { COLUMN_KEYS, MAX_FAMILY_IMAGES, MAX_ROW_IMAGES, WATER_USES } from '../models/ProductFamily.js';
+import ProductFamily, {
+  COLUMN_KEYS,
+  MAX_FAMILY_IMAGES,
+  MAX_FEATURES,
+  MAX_FEATURE_LENGTH,
+  MAX_ROW_IMAGES,
+  WATER_USES,
+} from '../models/ProductFamily.js';
 import { CONTENT_LANGUAGES } from '../config/languages.js';
 import { markContentChanged } from '../models/SiteSettings.js';
 
@@ -21,6 +28,15 @@ const cleanImage = (value) => {
 // Extra photos: valid site paths only, no duplicates, never the cover again
 const cleanImages = (value, max, cover = '') =>
   [...new Set((Array.isArray(value) ? value : []).map(cleanImage).filter((image) => image && image !== cover))].slice(0, max);
+
+// "Standart özellikler": one feature per line (a list is accepted too), no empty or repeated lines
+export const featureLines = (value) => [
+  ...new Set(
+    (Array.isArray(value) ? value : String(value ?? '').split(/\r?\n/))
+      .map((line) => (typeof line === 'string' ? line.replace(/^\s*[-•*✓]\s+/, '').trim().slice(0, MAX_FEATURE_LENGTH) : ''))
+      .filter(Boolean)
+  ),
+].slice(0, MAX_FEATURES);
 
 // Numbers stay numbers (sorting/filters); "40-60", "35 x 35", '3/4"' stay text
 function cleanValue(value) {
@@ -82,7 +98,12 @@ function familyPayload(body = {}) {
     i18n: Object.fromEntries(
       CONTENT_LANGUAGES.map((lang) => [
         lang,
-        { title: str(body.i18n?.[lang]?.title, 120), text: str(body.i18n?.[lang]?.text, 800) },
+        {
+          title: str(body.i18n?.[lang]?.title, 120),
+          text: str(body.i18n?.[lang]?.text, 800),
+          featuresTitle: str(body.i18n?.[lang]?.featuresTitle, 80),
+          features: featureLines(body.i18n?.[lang]?.features).join('\n'),
+        },
       ])
     ),
     rows,
@@ -105,7 +126,18 @@ export function toPublicFamily(doc) {
     ...(doc.images?.length ? { images: [...doc.images] } : {}),
     columns: ['code', ...doc.columns],
     i18n: Object.fromEntries(
-      CONTENT_LANGUAGES.map((lang) => [lang, { title: doc.i18n?.[lang]?.title || '', text: doc.i18n?.[lang]?.text || '' }])
+      CONTENT_LANGUAGES.map((lang) => {
+        const features = featureLines(doc.i18n?.[lang]?.features);
+        return [
+          lang,
+          {
+            title: doc.i18n?.[lang]?.title || '',
+            text: doc.i18n?.[lang]?.text || '',
+            ...(doc.i18n?.[lang]?.featuresTitle ? { featuresTitle: doc.i18n[lang].featuresTitle } : {}),
+            ...(features.length ? { features } : {}),
+          },
+        ];
+      })
     ),
     rows: doc.rows.map((row) => ({
       code: row.code,
@@ -215,6 +247,11 @@ export async function builtInFamilyDocs() {
         {
           title: locales[lang].productTables?.families?.[family.id]?.title || '',
           text: locales[lang].productTables?.families?.[family.id]?.text || '',
+          // Brochure feature list of the family; water tanks share the list of the water tank page
+          features: featureLines(
+            locales[lang].productTables?.families?.[family.id]?.features ||
+              (family.waterTank ? locales[lang].waterTanks?.features : [])
+          ).join('\n'),
         },
       ])
     ),
