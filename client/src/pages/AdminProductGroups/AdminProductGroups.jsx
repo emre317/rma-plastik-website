@@ -13,6 +13,7 @@ import {
   updateProductGroup, uploadProductImage,
 } from '../../services/adminContentApi';
 import { useConfirm } from '../../components/ui/ConfirmDialog';
+import FeaturesEditor from '../../components/admin/FeaturesEditor';
 
 const LANGS = [
   { code: 'tr', label: 'Türkçe' },
@@ -43,7 +44,7 @@ const CATEGORIES = ['tanks', 'textile', 'chemical', 'food', 'other'].map((value)
 
 const kindOf = (group) => (group.quoteOnly ? 'quote' : group.page || 'tables');
 
-const emptyTexts = () => Object.fromEntries(LANGS.map(({ code }) => [code, { label: '', title: '', description: '', application: '' }]));
+const emptyTexts = () => Object.fromEntries(LANGS.map(({ code }) => [code, { label: '', title: '', description: '', application: '', featuresTitle: '', features: '' }]));
 
 const empty = (order = 0) => ({
   _id: null,
@@ -257,6 +258,22 @@ export default function AdminProductGroups() {
                 <input dir={activeLanguage.dir} value={form.i18n[lang].application} maxLength={80} placeholder={placeholder('application') || 'ör. Su / Gıda / Kimya'} onChange={(event) => setText('application', event.target.value)} />
                 <small>Kartın köşesindeki kısa etiket.</small>
               </label>
+
+              <div className="cmsFeatures">
+                <h2>Standart Özellikler</h2>
+                <p className="cmsHint">
+                  Bu gruptaki tüm ürün tablolarının model sayfalarında ve teknik föylerinde yeşil tikli liste olarak gösterilir.
+                  Bir tabloya ya da tek bir modele özel özellikler <Link to="/admin/product-families">Ürün Tabloları</Link> sayfasından eklenir.
+                </p>
+
+                <FeaturesEditor
+                  dir={activeLanguage.dir}
+                  title={form.i18n[lang].featuresTitle}
+                  onTitle={(value) => setText('featuresTitle', value)}
+                  features={form.i18n[lang].features}
+                  onFeatures={(value) => setText('features', value)}
+                />
+              </div>
             </div>
 
             <div className="cmsColumn">

@@ -20,6 +20,9 @@ const textSchema = new mongoose.Schema(
     title: { type: String, trim: true, default: '', maxlength: 120 },
     description: { type: String, trim: true, default: '', maxlength: 600 },
     application: { type: String, trim: true, default: '', maxlength: 80 },
+    // "Standart özellikler" card shared by every model of the group: heading and one feature per line
+    featuresTitle: { type: String, trim: true, default: '', maxlength: 80 },
+    features: { type: String, trim: true, default: '', maxlength: 2400 },
   },
   { _id: false }
 );

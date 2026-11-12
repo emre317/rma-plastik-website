@@ -19,7 +19,8 @@ import formatNumber from '../../utils/formatNumber';
 import ProductGallery from '../../components/product3d/ProductGallery';
 import { industriesForFamily } from '../../data/industries';
 import { groupById } from '../../data/productPortfolio';
-import { familyStandard, familyText, findModel, modelGallery, modelPath, similarModels } from '../../data/productTables';
+import { familyText, findModel, modelGallery, modelPath, similarModels } from '../../data/productTables';
+import { productStandard, productText } from '../../data/productFeatures';
 import ToleranceNote from '../../components/ui/ToleranceNote';
 
 // Up to four headline values shown as large tiles, in this order of preference
@@ -63,7 +64,7 @@ export default function ProductModel() {
   const { family, row } = match;
   const product = quoteFor(family, row);
   const title = familyText(family, 'title', lang, t);
-  const text = familyText(family, 'text', lang, t);
+  const text = productText(family, row, lang, t);
   const gallery = modelGallery(family, row);
   const image = gallery[0];
   const num = (value) => formatNumber(value, lang);
@@ -85,7 +86,7 @@ export default function ProductModel() {
   });
 
   const similar = similarModels(family, row);
-  const standard = familyStandard(family, lang, t);
+  const standard = productStandard(family, row, lang, t);
   const uses = family.waterTank?.uses || [];
   const sectors = industriesForFamily(family.id);
   const industryList = t('industries.items', { returnObjects: true });

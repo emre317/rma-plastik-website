@@ -82,6 +82,12 @@ function familyPayload(body = {}) {
           .map((key) => [key, cleanValue(row?.values?.[key])])
           .filter(([, value]) => value !== undefined)
       ),
+      i18n: Object.fromEntries(
+        CONTENT_LANGUAGES.map((lang) => [
+          lang,
+          { text: str(row?.i18n?.[lang]?.text, 800), features: featureLines(row?.i18n?.[lang]?.features).join('\n') },
+        ])
+      ),
     }))
     .filter((row) => row.code);
 
@@ -118,6 +124,19 @@ function familyPayload(body = {}) {
 
 /* ---------- Public snapshot ---------- */
 
+// A model's own description and features, only the languages and fields that are filled
+function rowTexts(row) {
+  const i18n = {};
+
+  CONTENT_LANGUAGES.forEach((lang) => {
+    const text = row.i18n?.[lang]?.text || '';
+    const features = featureLines(row.i18n?.[lang]?.features);
+    if (text || features.length) i18n[lang] = { ...(text ? { text } : {}), ...(features.length ? { features } : {}) };
+  });
+
+  return Object.keys(i18n).length ? { i18n } : {};
+}
+
 export function toPublicFamily(doc) {
   return {
     id: doc.familyId,
@@ -144,6 +163,7 @@ export function toPublicFamily(doc) {
       ...row.values,
       ...(row.image ? { image: row.image } : {}),
       ...(row.images?.length ? { images: [...row.images] } : {}),
+      ...rowTexts(row),
     })),
     waterTank: doc.waterTank?.enabled
       ? { orientation: doc.waterTank.orientation, layer: doc.waterTank.layer, uses: doc.waterTank.uses }

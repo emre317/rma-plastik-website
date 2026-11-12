@@ -19,6 +19,8 @@ export const tableGroup = (family) =>
 */
 export default function useProductGroupOptions() {
   const call = useAdminApi();
+  // True once the saved groups were asked for (also when the request failed)
+  const [loaded, setLoaded] = useState(false);
   const [groups, setGroups] = useState(() => builtInGroups.map((group) => ({ id: group.id, label: builtInLabel(group.id), page: group.page })));
 
   useEffect(() => {
@@ -27,10 +29,11 @@ export default function useProductGroupOptions() {
     call(listProductGroups)
       .then(({ data }) => {
         if (active && Array.isArray(data) && data.length) {
-          setGroups(data.map((group) => ({ id: group.groupId, label: group.i18n?.tr?.label || group.groupId, page: group.page, published: group.published })));
+          setGroups(data.map((group) => ({ id: group.groupId, label: group.i18n?.tr?.label || group.groupId, page: group.page, published: group.published, i18n: group.i18n })));
         }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => { if (active) setLoaded(true); });
 
     return () => { active = false; };
   }, [call]);
@@ -39,5 +42,5 @@ export default function useProductGroupOptions() {
   // Custom molding has no tables
   const options = groups.filter((group) => group.page !== 'custom').map((group) => ({ value: group.id, label: group.label }));
 
-  return { groups, options, labelOf };
+  return { groups, options, labelOf, loaded };
 }

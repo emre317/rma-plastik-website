@@ -37,6 +37,8 @@ const portfolio = source.map((group) => {
     hue: Number.isFinite(group.hue) ? group.hue : 210,
     quoteOnly: Boolean(group.quoteOnly) && !custom,
     monoblock: group.monoblock !== false,
+    // Texts saved in the panel; the "Standart özellikler" list is read from here (data/productFeatures.js)
+    i18n: group.i18n || null,
     category: group.category || builtInCategory[group.id] || 'other',
     custom,
     round: custom,

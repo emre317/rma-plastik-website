@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import ProductFamily from '../models/ProductFamily.js';
+import ProductGroup from '../models/ProductGroup.js';
 import { builtInFamilyDocs, featureLines, toPublicFamily } from '../controllers/productFamilyController.js';
 
 test('feature lines: one per line, no blanks, bullets or repeats, capped', () => {
@@ -39,4 +40,36 @@ test('imported brochure tables start with their brochure feature lists', async (
   assert.equal(byId['silo-tanks'].i18n.ar.features.split('\n').length, 8);
   // Nothing in the brochure: left for the panel
   assert.equal(byId.pallets.i18n.tr.features, '');
+});
+
+test('a model carries its own description and features, only where filled', () => {
+  const doc = new ProductFamily({
+    familyId: 'vertical-tanks',
+    columns: ['volume'],
+    i18n: { tr: { title: 'Dikey Tanklar' } },
+    rows: [
+      { code: 'RD 100', values: { volume: 100 } },
+      { code: 'RD 5000', values: { volume: 5000 }, i18n: { tr: { text: 'Geniş kapaklı model.', features: 'Çift kapak\nSeviye göstergesi' }, en: { text: 'Wide-lid model.' } } },
+    ],
+  });
+  const [plain, own] = toPublicFamily(doc).rows;
+
+  assert.equal('i18n' in plain, false);
+  assert.deepEqual(own.i18n, {
+    tr: { text: 'Geniş kapaklı model.', features: ['Çift kapak', 'Seviye göstergesi'] },
+    en: { text: 'Wide-lid model.' },
+  });
+  assert.equal(own.volume, 5000);
+});
+
+test('a product group stores a feature heading and list per language', () => {
+  const group = new ProductGroup({
+    groupId: 'vertical',
+    i18n: { tr: { label: 'Dikey Tanklar', featuresTitle: 'Tanklarımızda Standart', features: 'UV koruması\nTaşıma kulpları' } },
+  });
+
+  assert.equal(group.validateSync(), undefined);
+  assert.equal(group.i18n.tr.featuresTitle, 'Tanklarımızda Standart');
+  assert.deepEqual(featureLines(group.i18n.tr.features), ['UV koruması', 'Taşıma kulpları']);
+  assert.equal(group.i18n.en.features, '');
 });

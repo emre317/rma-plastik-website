@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import ProductGroup, { GROUP_CATEGORIES, GROUP_PAGES } from '../models/ProductGroup.js';
 import Sector, { SECTOR_ICONS, SECTOR_STORED } from '../models/Sector.js';
 import ProductFamily from '../models/ProductFamily.js';
+import { featureLines } from './productFamilyController.js';
 import { CONTENT_LANGUAGES } from '../config/languages.js';
 import { markContentChanged } from '../models/SiteSettings.js';
 
@@ -62,8 +63,34 @@ function groupPayload(body = {}) {
     page: GROUP_PAGES.includes(body.page) ? body.page : 'tables',
     // Left empty when not chosen, so the built-in group's category applies
     category: GROUP_CATEGORIES.includes(body.category) ? body.category : undefined,
-    i18n: texts(body.i18n, GROUP_TEXT),
+    i18n: Object.fromEntries(
+      Object.entries(texts(body.i18n, GROUP_TEXT)).map(([lang, text]) => [
+        lang,
+        {
+          ...text,
+          featuresTitle: str(body.i18n?.[lang]?.featuresTitle, 80),
+          features: featureLines(body.i18n?.[lang]?.features).join('\n'),
+        },
+      ])
+    ),
   };
+}
+
+// Feature card of a group in the snapshot: only the languages and fields that are filled
+function groupTexts(i18n) {
+  return Object.fromEntries(
+    Object.entries(texts(i18n, GROUP_TEXT)).map(([lang, text]) => {
+      const features = featureLines(i18n?.[lang]?.features);
+      return [
+        lang,
+        {
+          ...text,
+          ...(i18n?.[lang]?.featuresTitle ? { featuresTitle: i18n[lang].featuresTitle } : {}),
+          ...(features.length ? { features } : {}),
+        },
+      ];
+    })
+  );
 }
 
 function sectorPayload(body = {}) {
@@ -109,7 +136,7 @@ export async function publicProductGroups() {
     monoblock: group.monoblock,
     page: group.page,
     category: group.category || builtInCategory(group.groupId) || 'other',
-    i18n: texts(group.i18n, GROUP_TEXT),
+    i18n: groupTexts(group.i18n),
   }));
 }
 

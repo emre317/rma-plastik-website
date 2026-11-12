@@ -45,6 +45,15 @@ const textSchema = new mongoose.Schema(
   { _id: false }
 );
 
+// Texts of one model (row): its own description and features, added to those of the group and family
+const rowTextSchema = new mongoose.Schema(
+  {
+    text: { type: String, trim: true, default: '', maxlength: 800 },
+    features: { type: String, trim: true, default: '', maxlength: 2400 },
+  },
+  { _id: false }
+);
+
 const rowSchema = new mongoose.Schema(
   {
     code: { type: String, trim: true, required: true, maxlength: 60 },
@@ -52,6 +61,7 @@ const rowSchema = new mongoose.Schema(
     images: imageList(MAX_ROW_IMAGES),
     // { volume: 1000, diameter: 102, cap: '40-60', ... } – keys from COLUMN_KEYS
     values: { type: mongoose.Schema.Types.Mixed, default: {} },
+    i18n: Object.fromEntries(CONTENT_LANGUAGES.map((lang) => [lang, { type: rowTextSchema, default: () => ({}) }])),
   },
   { _id: false }
 );

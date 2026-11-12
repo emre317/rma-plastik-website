@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Check, Images, X } from 'lucide-react';
+import { ArrowLeft, Images, NotebookPen, X } from 'lucide-react';
 
 import tr from '../../i18n/locales/tr';
 import en from '../../i18n/locales/en';
@@ -19,6 +19,7 @@ import {
 import Dropdown from '../../components/ui/Dropdown';
 import { useConfirm } from '../../components/ui/ConfirmDialog';
 import ImageGalleryEditor from '../../components/admin/ImageGalleryEditor';
+import FeaturesEditor, { featureLines } from '../../components/admin/FeaturesEditor';
 
 // Cover + gallery (server limits: 16 extra photos for a family, 12 for a model)
 const FAMILY_PHOTOS = 17;
@@ -35,11 +36,12 @@ const columnLabel = (key) => tr.productTables.columns[key] || key;
 const useLabel = (key) => tr.waterTanks.uses[key] || key;
 
 const LOCALES = { tr, en, ar };
-const MAX_FEATURES = 20;
 const emptyText = { title: '', text: '', featuresTitle: '', features: '' };
 
-// Text of the feature box -> lines that will be saved
-const featureLines = (text) => String(text || '').split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+// A model's own description and features, per language
+const emptyRowTexts = () => Object.fromEntries(LANGUAGES.map(({ code }) => [code, { text: '', features: '' }]));
+const rowTexts = (i18n) => Object.fromEntries(LANGUAGES.map(({ code }) => [code, { text: i18n?.[code]?.text || '', features: i18n?.[code]?.features || '' }]));
+const hasRowTexts = (row) => LANGUAGES.some(({ code }) => row.i18n?.[code]?.text || row.i18n?.[code]?.features);
 
 /* Brochure list shown on the site while a family has no list of its own */
 function defaultFeatures(family, code) {
@@ -64,7 +66,7 @@ const emptyFamily = {
   waterTank: { enabled: false, orientation: 'vertical', layer: 'single', uses: ['water'] },
 };
 
-const emptyRow = () => ({ code: '', image: '', images: [], values: {} });
+const emptyRow = () => ({ code: '', image: '', images: [], values: {}, i18n: emptyRowTexts() });
 
 function slugify(value) {
   return value
@@ -88,6 +90,7 @@ function parsePasted(text, columns) {
       code,
       image: '',
       images: [],
+      i18n: emptyRowTexts(),
       values: Object.fromEntries(columns.map((key, index) => [key, cells[index] ?? ''])),
     }));
 }
@@ -98,7 +101,7 @@ export default function AdminProductFamilyEdit() {
   const navigate = useNavigate();
   const call = useAdminApi();
   const confirm = useConfirm();
-  const { options: groupOptions } = useProductGroupOptions();
+  const { groups, options: groupOptions, loaded: groupsLoaded } = useProductGroupOptions();
 
   usePageTitle(isNew ? 'Yeni ürün ailesi' : 'Ürün ailesini düzenle');
 
@@ -110,8 +113,13 @@ export default function AdminProductFamilyEdit() {
   const [message, setMessage] = useState(null);
   const [pasteOpen, setPasteOpen] = useState(false);
   const [pasteText, setPasteText] = useState('');
-  // Feature boxes were filled with the brochure list (nothing saved for this family yet)
+  // Nothing saved for this family yet: its feature boxes start from the brochure list (see the effect below)
+  const [needsPrefill, setNeedsPrefill] = useState(false);
   const [featuresPrefilled, setFeaturesPrefilled] = useState(false);
+
+  // Index of the model whose description and features are being edited (-1: none)
+  const [rowText, setRowText] = useState(-1);
+  const [rowLang, setRowLang] = useState('tr');
 
   // Index of the model whose photos are being edited (-1: none)
   const [rowGallery, setRowGallery] = useState(-1);
@@ -124,21 +132,19 @@ export default function AdminProductFamilyEdit() {
     (async () => {
       try {
         const { data } = await call(getFamily, id);
-        // No list saved yet: start from the list the site shows now, so it can be edited
-        const prefill = !LANGUAGES.some(({ code }) => data.i18n?.[code]?.features);
-        const features = (code) => (prefill ? defaultFeatures(data, code) : data.i18n?.[code]?.features || '');
-        setFeaturesPrefilled(prefill && Boolean(features('tr')));
+        setNeedsPrefill(!LANGUAGES.some(({ code }) => data.i18n?.[code]?.features));
         setForm({
           ...emptyFamily,
           ...data,
           images: Array.isArray(data.images) ? data.images : [],
           group: tableGroup(data),
-          i18n: Object.fromEntries(LANGUAGES.map(({ code }) => [code, { ...emptyText, ...data.i18n?.[code], features: features(code) }])),
+          i18n: Object.fromEntries(LANGUAGES.map(({ code }) => [code, { ...emptyText, ...data.i18n?.[code] }])),
           waterTank: { ...emptyFamily.waterTank, ...data.waterTank },
           rows: (data.rows || []).map((row) => ({
             code: row.code,
             image: row.image || '',
             images: Array.isArray(row.images) ? row.images : [],
+            i18n: rowTexts(row.i18n),
             values: Object.fromEntries(Object.entries(row.values || {}).map(([key, value]) => [key, String(value)])),
           })),
         });
@@ -149,6 +155,28 @@ export default function AdminProductFamilyEdit() {
       }
     })();
   }, [call, id, isNew]);
+
+  // Features written for the family's product group (Ürün Grupları); shown before the family's own
+  const group = groups.find((item) => item.id === form.group);
+  const groupFeatures = (code) => featureLines(group?.i18n?.[code]?.features || group?.i18n?.tr?.features);
+
+  /*
+    A family with no saved list shows the brochure list on the site (unless its
+    group has a list). The boxes start from that list, so it can be edited.
+  */
+  useEffect(() => {
+    if (!needsPrefill || loading || !groupsLoaded) return;
+    setNeedsPrefill(false);
+
+    const saved = groups.find((item) => item.id === form.group);
+    if (featureLines(saved?.i18n?.tr?.features).length || !defaultFeatures(form, 'tr')) return;
+
+    setFeaturesPrefilled(true);
+    setForm((current) => ({
+      ...current,
+      i18n: Object.fromEntries(LANGUAGES.map(({ code }) => [code, { ...current.i18n[code], features: defaultFeatures(current, code) }])),
+    }));
+  }, [needsPrefill, loading, groupsLoaded, groups, form]);
 
   const set = (field, value) => setForm((current) => ({ ...current, [field]: value }));
 
@@ -185,7 +213,16 @@ export default function AdminProductFamilyEdit() {
     });
 
   const duplicateRow = (index) =>
-    setRows((rows) => [...rows.slice(0, index + 1), { ...rows[index], images: [...(rows[index].images || [])], values: { ...rows[index].values } }, ...rows.slice(index + 1)]);
+    setRows((rows) => [
+      ...rows.slice(0, index + 1),
+      { ...rows[index], images: [...(rows[index].images || [])], values: { ...rows[index].values }, i18n: rowTexts(rows[index].i18n) },
+      ...rows.slice(index + 1),
+    ]);
+
+  const setRowTextField = (index, field, value) =>
+    setRows((rows) =>
+      rows.map((row, i) => (i === index ? { ...row, i18n: { ...row.i18n, [rowLang]: { ...row.i18n[rowLang], [field]: value } } } : row))
+    );
 
   const removeRow = async (index, code) => {
     const ok = await confirm({
@@ -269,7 +306,6 @@ export default function AdminProductFamilyEdit() {
 
   const activeLanguage = LANGUAGES.find((item) => item.code === lang);
   const columns = ['code', ...form.columns];
-  const featureCount = featureLines(form.i18n[lang].features).length;
 
   return (
     <section className="adminContent">
@@ -334,8 +370,8 @@ export default function AdminProductFamilyEdit() {
             <div className="cmsFeatures">
               <h2>Standart Özellikler</h2>
               <p className="cmsHint">
-                Bu ailenin model sayfalarında ve teknik föyünde yeşil tikli liste olarak gösterilir. Her satıra bir özellik yazın.
-                Liste boş bırakılırsa katalogdaki varsayılan liste kullanılır; o da yoksa bölüm sitede gösterilmez.
+                Bu ailenin tüm model sayfalarında ve teknik föylerinde yeşil tikli liste olarak gösterilir.
+                Tek bir modele özel açıklama ve özellikleri aşağıdaki tabloda modelin “Açıklama” düğmesinden yazın.
               </p>
 
               {featuresPrefilled && (
@@ -344,40 +380,23 @@ export default function AdminProductFamilyEdit() {
                 </p>
               )}
 
-              <label className="cmsField">
-                <span>Bölüm Başlığı</span>
-                <input
-                  dir={activeLanguage.dir}
-                  value={form.i18n[lang].featuresTitle}
-                  maxLength={80}
-                  placeholder={defaultFeaturesTitle(form, lang)}
-                  onChange={(event) => setText('featuresTitle', event.target.value)}
-                />
-                <small>Boş bırakılırsa “{defaultFeaturesTitle(form, lang)}” yazılır.</small>
-              </label>
-
-              <label className="cmsField">
-                <span>Özellikler <span className="cmsMuted">({featureCount}/{MAX_FEATURES})</span></span>
-                <textarea
-                  rows={Math.min(14, Math.max(6, featureCount + 2))}
-                  dir={activeLanguage.dir}
-                  value={form.i18n[lang].features}
-                  placeholder={'Tek parça monoblok gövde\nUV koruması\n…'}
-                  onChange={(event) => setText('features', event.target.value)}
-                />
-                {featureCount > MAX_FEATURES && <small className="cmsFeaturesOver">En fazla {MAX_FEATURES} özellik kaydedilir; fazlası alınmaz.</small>}
-              </label>
-
-              {featureCount > 0 && (
-                <div className="cmsFeaturesPreview" dir={activeLanguage.dir}>
-                  <strong>{form.i18n[lang].featuresTitle || defaultFeaturesTitle(form, lang)}</strong>
-                  <ul>
-                    {featureLines(form.i18n[lang].features).slice(0, MAX_FEATURES).map((feature, index) => (
-                      <li key={index}><Check aria-hidden="true" />{feature}</li>
-                    ))}
-                  </ul>
-                </div>
+              {groupFeatures(lang).length > 0 && (
+                <p className="cmsHint cmsFeaturesNote">
+                  “{group.label}” grubunun {groupFeatures(lang).length} ortak özelliği bu ailede de gösterilir
+                  (<Link to="/admin/product-groups">Ürün Grupları</Link>). Buraya yalnızca bu aileye özel olanları yazın.
+                </p>
               )}
+
+              <FeaturesEditor
+                dir={activeLanguage.dir}
+                title={form.i18n[lang].featuresTitle}
+                onTitle={(value) => setText('featuresTitle', value)}
+                defaultTitle={group?.i18n?.[lang]?.featuresTitle || defaultFeaturesTitle(form, lang)}
+                features={form.i18n[lang].features}
+                onFeatures={(value) => setText('features', value)}
+                inherited={groupFeatures(lang)}
+                inheritedLabel="ürün grubundan"
+              />
             </div>
 
             <div className="cmsField">
@@ -556,13 +575,14 @@ export default function AdminProductFamilyEdit() {
                       <th key={key}>{columnLabel(key)}</th>
                     ))}
                     <th>Görseller</th>
+                    <th>Açıklama</th>
                     <th />
                   </tr>
                 </thead>
                 <tbody>
                   {form.rows.length === 0 && (
                     <tr>
-                      <td colSpan={columns.length + 3} className="cmsMuted cmsRowsEmpty">Henüz model yok. “Satır ekle” ya da “Excel’den yapıştır” ile ekleyin.</td>
+                      <td colSpan={columns.length + 4} className="cmsMuted cmsRowsEmpty">Henüz model yok. “Satır ekle” ya da “Excel’den yapıştır” ile ekleyin.</td>
                     </tr>
                   )}
 
@@ -591,6 +611,18 @@ export default function AdminProductFamilyEdit() {
                             {row.image ? <img src={row.image} alt="" /> : <Images aria-hidden="true" />}
                           </button>
                           {photoList(row).length > 1 && <span className="cmsRowImageCount">{photoList(row).length}</span>}
+                        </span>
+                      </td>
+                      <td>
+                        <span className={`cmsRowText ${hasRowTexts(row) ? 'filled' : ''}`}>
+                          <button
+                            type="button"
+                            onClick={() => { setRowLang('tr'); setRowText(index); }}
+                            title={hasRowTexts(row) ? 'Bu modele özel açıklama ve özellikler (dolu)' : 'Bu modele özel açıklama ve özellik ekle'}
+                            aria-label={`${row.code || `${index + 1}. satır`} – açıklama ve özellikler`}
+                          >
+                            <NotebookPen aria-hidden="true" />
+                          </button>
                         </span>
                       </td>
                       <td>
@@ -629,6 +661,59 @@ export default function AdminProductFamilyEdit() {
               />
               <div className="igRowActions">
                 <button type="button" className="cmsButton cmsButtonPrimary" onClick={() => setRowGallery(-1)}>Tamam</button>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
+
+        {rowText >= 0 && form.rows[rowText] && createPortal(
+          <div className="ig3dLayer" onMouseDown={(event) => { if (event.target === event.currentTarget) setRowText(-1); }}>
+            <div className="ig3dPanel cmsRowTextPanel" role="dialog" aria-modal="true" aria-label="Model açıklaması ve özellikleri">
+              <div className="ig3dHead">
+                <div>
+                  <strong>{form.rows[rowText].code || `${rowText + 1}. satır`} · Açıklama ve Özellikler</strong>
+                  <small>Yalnızca bu modelin sayfasında ve föyünde gösterilir. Değişiklikler “Kaydet” ile kalıcı olur.</small>
+                </div>
+                <button type="button" onClick={() => setRowText(-1)} aria-label="Kapat"><X aria-hidden="true" /></button>
+              </div>
+
+              <div className="cmsRowTextBody">
+                <div className="cmsTabs" role="tablist">
+                  {LANGUAGES.map((item) => (
+                    <button key={item.code} type="button" role="tab" aria-selected={rowLang === item.code} className={rowLang === item.code ? 'active' : ''} onClick={() => setRowLang(item.code)}>
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+
+                <label className="cmsField">
+                  <span>Model Açıklaması</span>
+                  <textarea
+                    rows={4}
+                    maxLength={800}
+                    dir={LANGUAGES.find((item) => item.code === rowLang).dir}
+                    value={form.rows[rowText].i18n[rowLang].text}
+                    placeholder={form.i18n[rowLang].text || form.i18n.tr.text}
+                    onChange={(event) => setRowTextField(rowText, 'text', event.target.value)}
+                  />
+                  <small>Boş bırakılırsa ailenin açıklaması gösterilir.</small>
+                </label>
+
+                <FeaturesEditor
+                  dir={LANGUAGES.find((item) => item.code === rowLang).dir}
+                  title={form.i18n[rowLang].featuresTitle}
+                  defaultTitle={group?.i18n?.[rowLang]?.featuresTitle || defaultFeaturesTitle(form, rowLang)}
+                  features={form.rows[rowText].i18n[rowLang].features}
+                  onFeatures={(value) => setRowTextField(rowText, 'features', value)}
+                  inherited={[...groupFeatures(rowLang), ...featureLines(form.i18n[rowLang].features || form.i18n.tr.features)]}
+                  inheritedLabel="ürün grubundan ve aileden"
+                  placeholder={'Bu modele özel özellikler\n…'}
+                />
+              </div>
+
+              <div className="igRowActions">
+                <button type="button" className="cmsButton cmsButtonPrimary" onClick={() => setRowText(-1)}>Tamam</button>
               </div>
             </div>
           </div>,

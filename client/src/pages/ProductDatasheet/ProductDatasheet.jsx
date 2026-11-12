@@ -11,7 +11,8 @@ import company from '../../data/company';
 import useLanguage from '../../hooks/useLanguage';
 import useModelQuote from '../../hooks/useModelQuote';
 import formatNumber from '../../utils/formatNumber';
-import { familyStandard, familyText, findModel, modelPath } from '../../data/productTables';
+import { familyText, findModel, modelPath } from '../../data/productTables';
+import { productStandard, productText } from '../../data/productFeatures';
 import NotFound from '../NotFound/NotFound';
 
 /*
@@ -54,7 +55,7 @@ export default function ProductDatasheet() {
   const { family, row } = match;
   const product = quoteFor(family, row);
   const title = familyText(family, 'title', lang, t);
-  const text = familyText(family, 'text', lang, t);
+  const text = productText(family, row, lang, t);
   const image = row.image || family.image;
   const num = (value) => formatNumber(value, lang);
   const col = (key) => t(`productTables.columns.${key}`);
@@ -74,7 +75,7 @@ export default function ProductDatasheet() {
 
   const headline = ['volume', 'diameter', 'width', 'length', 'height', 'weight'].filter((key) => columns.includes(key)).slice(0, 4);
   const uses = family.waterTank?.uses || [];
-  const standard = familyStandard(family, lang, t);
+  const standard = productStandard(family, row, lang, t);
   const showFeatures = standard.items.length > 0;
   const pagePath = `/${lang}${modelPath(family, row)}`;
   const pageUrl = `${SITE_URL}${pagePath}`;

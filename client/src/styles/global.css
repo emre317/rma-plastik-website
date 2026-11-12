@@ -38585,3 +38585,56 @@ html[lang="ar"] .pgBody small {
   background: rgba(31, 138, 91, 0.12);
   color: #1f8a5b;
 }
+
+.cmsFeaturesPreview li.inherited {
+  opacity: 0.55;
+}
+
+.cmsFeaturesLegend {
+  display: block;
+  margin-top: 12px;
+  color: var(--muted, #667085);
+  font-size: 12.5px;
+}
+
+/* Admin · product family: texts of one model (dialog) */
+.cmsRowTextPanel {
+  width: min(680px, 100%);
+}
+
+.cmsRowTextBody {
+  display: grid;
+  gap: 14px;
+  padding: 16px 20px 4px;
+  max-height: min(70vh, 720px);
+  overflow-y: auto;
+}
+
+.cmsRowText {
+  position: relative;
+  display: inline-flex;
+}
+
+.cmsRowText button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line, #e3e7ee);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--muted, #667085);
+  cursor: pointer;
+}
+
+.cmsRowText button svg {
+  width: 17px;
+  height: 17px;
+}
+
+.cmsRowText.filled button {
+  border-color: #1f8a5b;
+  background: rgba(31, 138, 91, 0.1);
+  color: #1f8a5b;
+}
