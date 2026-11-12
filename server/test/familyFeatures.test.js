@@ -73,3 +73,23 @@ test('a product group stores a feature heading and list per language', () => {
   assert.deepEqual(featureLines(group.i18n.tr.features), ['UV koruması', 'Taşıma kulpları']);
   assert.equal(group.i18n.en.features, '');
 });
+
+test('technical drawing: on the family and on a model, only files from the drawing upload', () => {
+  const file = '/uploads/drawings/0f8fad5b-d9cb-469f-a165-70867728950e.pdf';
+  const doc = new ProductFamily({
+    familyId: 'silo-tanks',
+    drawing: file,
+    i18n: { tr: { title: 'Silo Tanklar' } },
+    rows: [{ code: 'RS 500', drawing: file.replace('.pdf', '.docx') }, { code: 'RS 1000' }],
+  });
+
+  assert.equal(doc.validateSync(), undefined);
+  const family = toPublicFamily(doc);
+  assert.equal(family.drawing, file);
+  assert.equal(family.rows[0].drawing, file.replace('.pdf', '.docx'));
+  assert.equal('drawing' in family.rows[1], false);
+
+  doc.drawing = '/uploads/drawings/../../.env';
+  doc.rows[1].drawing = 'https://example.com/a.pdf';
+  assert.deepEqual(Object.keys(doc.validateSync().errors).sort(), ['drawing', 'rows.1.drawing']);
+});

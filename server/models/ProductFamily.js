@@ -27,6 +27,15 @@ export const MAX_FEATURE_LENGTH = 160;
 export const MAX_FAMILY_IMAGES = 16;
 export const MAX_ROW_IMAGES = 12;
 const IMAGE_PATH = /^\/(uploads|images)\/[\w./-]{1,280}$/;
+// Technical drawing uploaded in the panel (PNG, JPG, PDF or DOCX; middleware/upload.js)
+export const DRAWING_PATH = /^\/uploads\/drawings\/[0-9a-f-]{36}\.(png|jpg|pdf|docx)$/;
+const drawing = {
+  type: String,
+  trim: true,
+  default: '',
+  maxlength: 120,
+  validate: { validator: (value) => !value || DRAWING_PATH.test(value), message: 'Teknik çizim dosyası geçersiz.' },
+};
 
 const imageList = (max) => ({
   type: [{ type: String, trim: true, maxlength: 300, match: IMAGE_PATH }],
@@ -59,6 +68,8 @@ const rowSchema = new mongoose.Schema(
     code: { type: String, trim: true, required: true, maxlength: 60 },
     image: { type: String, trim: true, default: '', maxlength: 300 },
     images: imageList(MAX_ROW_IMAGES),
+    // The model's own technical drawing; empty: the family's drawing is offered
+    drawing,
     // { volume: 1000, diameter: 102, cap: '40-60', ... } – keys from COLUMN_KEYS
     values: { type: mongoose.Schema.Types.Mixed, default: {} },
     i18n: Object.fromEntries(CONTENT_LANGUAGES.map((lang) => [lang, { type: rowTextSchema, default: () => ({}) }])),
@@ -82,6 +93,8 @@ const productFamilySchema = new mongoose.Schema(
     published: { type: Boolean, default: true },
     image: { type: String, trim: true, default: '', maxlength: 300 },
     images: imageList(MAX_FAMILY_IMAGES),
+    // Technical drawing shared by the models that have none of their own
+    drawing,
     columns: {
       type: [{ type: String, enum: COLUMN_KEYS }],
       default: ['volume'],

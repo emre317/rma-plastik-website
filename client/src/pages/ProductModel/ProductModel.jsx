@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Check, ChevronRight, FileDown, FileText, Layers, Package, Phone, Recycle, Ruler, Sun } from 'lucide-react';
+import { Check, ChevronRight, DraftingCompass, FileDown, FileText, Layers, Package, Phone, Recycle, Ruler, Sun } from 'lucide-react';
 
 import Seo from '../../seo/Seo';
 import PageHeader from '../../components/ui/PageHeader';
@@ -19,7 +19,7 @@ import formatNumber from '../../utils/formatNumber';
 import ProductGallery from '../../components/product3d/ProductGallery';
 import { industriesForFamily } from '../../data/industries';
 import { groupById } from '../../data/productPortfolio';
-import { familyText, findModel, modelGallery, modelPath, similarModels } from '../../data/productTables';
+import { familyText, findModel, modelDrawing, modelGallery, modelPath, similarModels } from '../../data/productTables';
 import { productStandard, productText } from '../../data/productFeatures';
 import ToleranceNote from '../../components/ui/ToleranceNote';
 
@@ -87,6 +87,7 @@ export default function ProductModel() {
 
   const similar = similarModels(family, row);
   const standard = productStandard(family, row, lang, t);
+  const drawing = modelDrawing(family, row);
   const uses = family.waterTank?.uses || [];
   const sectors = industriesForFamily(family.id);
   const industryList = t('industries.items', { returnObjects: true });
@@ -230,6 +231,22 @@ export default function ProductModel() {
                     <strong>{t('datasheet.button')}</strong>
                   </span>
                 </LocalizedLink>
+                {drawing && (
+                  // Word files are saved; drawings the browser can show open in a new tab
+                  <a
+                    href={drawing.url}
+                    data-track="drawing"
+                    {...(drawing.kind === 'docx'
+                      ? { download: `${row.slug}-${lang === 'tr' ? 'teknik-cizim' : 'technical-drawing'}.docx` }
+                      : { target: '_blank', rel: 'noopener' })}
+                  >
+                    <DraftingCompass aria-hidden="true" />
+                    <span>
+                      <small>{t(`drawing.meta.${drawing.kind}`)}</small>
+                      <strong>{t('drawing.button')}</strong>
+                    </span>
+                  </a>
+                )}
                 <a href={CATALOG_PDF} download>
                   <FileDown aria-hidden="true" />
                   <span>

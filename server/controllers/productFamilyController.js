@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 import ProductFamily, {
   COLUMN_KEYS,
+  DRAWING_PATH,
   MAX_FAMILY_IMAGES,
   MAX_FEATURES,
   MAX_FEATURE_LENGTH,
@@ -24,6 +25,9 @@ const cleanImage = (value) => {
   const image = str(value, 300);
   return IMAGE_PATTERN.test(image) && !image.includes('..') ? image : '';
 };
+
+// Technical drawing: only a file stored by the panel's drawing upload
+const cleanDrawing = (value) => (DRAWING_PATH.test(str(value, 120)) ? str(value, 120) : '');
 
 // Extra photos: valid site paths only, no duplicates, never the cover again
 const cleanImages = (value, max, cover = '') =>
@@ -77,6 +81,7 @@ function familyPayload(body = {}) {
       code: str(row?.code, 60),
       image: cleanImage(row?.image),
       images: cleanImages(row?.images, MAX_ROW_IMAGES, cleanImage(row?.image)),
+      drawing: cleanDrawing(row?.drawing),
       values: Object.fromEntries(
         columns
           .map((key) => [key, cleanValue(row?.values?.[key])])
@@ -100,6 +105,7 @@ function familyPayload(body = {}) {
     published: body.published === undefined ? true : Boolean(body.published),
     image: cleanImage(body.image),
     images: cleanImages(body.images, MAX_FAMILY_IMAGES, cleanImage(body.image)),
+    drawing: cleanDrawing(body.drawing),
     columns,
     i18n: Object.fromEntries(
       CONTENT_LANGUAGES.map((lang) => [
@@ -143,6 +149,7 @@ export function toPublicFamily(doc) {
     group: doc.group,
     image: doc.image || null,
     ...(doc.images?.length ? { images: [...doc.images] } : {}),
+    ...(doc.drawing ? { drawing: doc.drawing } : {}),
     columns: ['code', ...doc.columns],
     i18n: Object.fromEntries(
       CONTENT_LANGUAGES.map((lang) => {
@@ -163,6 +170,7 @@ export function toPublicFamily(doc) {
       ...row.values,
       ...(row.image ? { image: row.image } : {}),
       ...(row.images?.length ? { images: [...row.images] } : {}),
+      ...(row.drawing ? { drawing: row.drawing } : {}),
       ...rowTexts(row),
     })),
     waterTank: doc.waterTank?.enabled

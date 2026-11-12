@@ -30,7 +30,7 @@ import {
 } from '../controllers/catalogueController.js';
 import { requireAdmin, requirePermission } from '../middleware/authMiddleware.js';
 import {
-  uploadGalleryImage, uploadPostImage, uploadProductImage, uploadProjectImage,
+  uploadGalleryImage, uploadPostImage, uploadProductDrawing, uploadProductImage, uploadProjectImage,
 } from '../middleware/upload.js';
 import { createFaq, deleteFaq, listFaqs, updateFaq } from '../controllers/faqController.js';
 import {
@@ -133,6 +133,7 @@ adminContentRouter.put('/sectors/:id', content, audit({ area: 'content', type: '
 adminContentRouter.delete('/sectors/:id', content, audit({ area: 'content', type: 'sector', action: 'Sektör sildi', lookup: Sector }), deleteSector);
 
 adminContentRouter.post('/uploads/product-image', content, uploadProductImage);
+adminContentRouter.post('/uploads/product-drawing', content, uploadProductDrawing);
 adminContentRouter.post('/uploads/post-image', content, uploadPostImage);
 adminContentRouter.post('/uploads/project-image', content, uploadProjectImage);
 adminContentRouter.post('/uploads/gallery-image', content, uploadGalleryImage);

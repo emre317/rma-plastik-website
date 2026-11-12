@@ -826,6 +826,11 @@ const en = {
     solarNote: 'Your products are made in Mersin with solar energy.',
   },
 
+  drawing: {
+    button: 'Technical Drawing',
+    meta: { pdf: 'PDF file', image: 'Image file', docx: 'Word file' },
+  },
+
   datasheet: {
     title: 'Technical Datasheet',
     button: 'Datasheet (PDF)',

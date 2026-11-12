@@ -90,6 +90,17 @@ export function modelGallery(family, row) {
   return [...new Set(list.filter((src) => typeof src === 'string' && src))];
 }
 
+/*
+  Technical drawing of a model: its own file, else the family's (uploaded in
+  the admin panel as PNG, JPG, PDF or DOCX). { url, kind: 'pdf' | 'image' | 'docx', ext } or null.
+*/
+export function modelDrawing(family, row) {
+  const url = row?.drawing || family?.drawing || '';
+  const ext = /^\/uploads\/drawings\/[\w-]+\.(png|jpg|pdf|docx)$/.exec(url)?.[1];
+  if (!ext) return null;
+  return { url, ext, kind: ext === 'pdf' || ext === 'docx' ? ext : 'image' };
+}
+
 export { COLUMN_KEYS, WATER_USES };
 
 export default families;

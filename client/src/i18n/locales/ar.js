@@ -826,6 +826,11 @@ const ar = {
     solarNote: 'تُصنع منتجاتك في مرسين بالطاقة الشمسية.',
   },
 
+  drawing: {
+    button: 'الرسم الفني',
+    meta: { pdf: 'ملف PDF', image: 'ملف صورة', docx: 'ملف Word' },
+  },
+
   datasheet: {
     title: 'ورقة البيانات الفنية',
     button: 'ورقة البيانات (PDF)',

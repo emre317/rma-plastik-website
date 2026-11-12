@@ -103,6 +103,23 @@ export const deleteCertificate = (id, token) => request(`/admin/certificates/${e
 export const importCertificates = (token) => request('/admin/certificates/import-defaults', { method: 'POST', token, fallbackMessage: 'Sertifikalar aktarılamadı.' });
 export const uploadCertificateImage = (file, token) => uploadImage('certificate-image', file, token);
 
+/* Technical drawing of a product table or model: PNG, JPG, PDF or DOCX (not resized or converted) */
+export async function uploadProductDrawing(file, token) {
+  const form = new FormData();
+  form.append('file', file);
+
+  let response;
+  try {
+    response = await fetch(`${API_BASE_URL}/admin/uploads/product-drawing`, { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: form });
+  } catch {
+    throw new ApiError('Sunucuya ulaşılamadı.', 0);
+  }
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new ApiError(data.message || 'Teknik çizim yüklenemedi.', response.status);
+  return data;
+}
+
 export async function uploadCertificateFile(file, token) {
   const form = new FormData();
   form.append('file', file);

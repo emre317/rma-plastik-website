@@ -825,6 +825,11 @@ const tr = {
     solarNote: 'Ürünleriniz Mersin’de güneş enerjisiyle üretilir.',
   },
 
+  drawing: {
+    button: 'Teknik Çizim',
+    meta: { pdf: 'PDF dosyası', image: 'Görsel dosyası', docx: 'Word dosyası' },
+  },
+
   datasheet: {
     title: 'Teknik Föy',
     button: 'Teknik föy (PDF)',

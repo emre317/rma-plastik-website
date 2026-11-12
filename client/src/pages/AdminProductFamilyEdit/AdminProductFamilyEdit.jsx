@@ -14,11 +14,13 @@ import {
   createFamily,
   getFamily,
   updateFamily,
+  uploadProductDrawing,
   uploadProductImage,
 } from '../../services/adminContentApi';
 import Dropdown from '../../components/ui/Dropdown';
 import { useConfirm } from '../../components/ui/ConfirmDialog';
 import ImageGalleryEditor from '../../components/admin/ImageGalleryEditor';
+import DrawingField from '../../components/admin/DrawingField';
 import FeaturesEditor, { featureLines } from '../../components/admin/FeaturesEditor';
 
 // Cover + gallery (server limits: 16 extra photos for a family, 12 for a model)
@@ -60,13 +62,14 @@ const emptyFamily = {
   published: true,
   image: '',
   images: [],
+  drawing: '',
   columns: ['volume', 'diameter', 'height'],
   i18n: { tr: { ...emptyText }, en: { ...emptyText }, ar: { ...emptyText } },
   rows: [],
   waterTank: { enabled: false, orientation: 'vertical', layer: 'single', uses: ['water'] },
 };
 
-const emptyRow = () => ({ code: '', image: '', images: [], values: {}, i18n: emptyRowTexts() });
+const emptyRow = () => ({ code: '', image: '', images: [], drawing: '', values: {}, i18n: emptyRowTexts() });
 
 function slugify(value) {
   return value
@@ -90,6 +93,7 @@ function parsePasted(text, columns) {
       code,
       image: '',
       images: [],
+      drawing: '',
       i18n: emptyRowTexts(),
       values: Object.fromEntries(columns.map((key, index) => [key, cells[index] ?? ''])),
     }));
@@ -137,6 +141,7 @@ export default function AdminProductFamilyEdit() {
           ...emptyFamily,
           ...data,
           images: Array.isArray(data.images) ? data.images : [],
+          drawing: data.drawing || '',
           group: tableGroup(data),
           i18n: Object.fromEntries(LANGUAGES.map(({ code }) => [code, { ...emptyText, ...data.i18n?.[code] }])),
           waterTank: { ...emptyFamily.waterTank, ...data.waterTank },
@@ -144,6 +149,7 @@ export default function AdminProductFamilyEdit() {
             code: row.code,
             image: row.image || '',
             images: Array.isArray(row.images) ? row.images : [],
+            drawing: row.drawing || '',
             i18n: rowTexts(row.i18n),
             values: Object.fromEntries(Object.entries(row.values || {}).map(([key, value]) => [key, String(value)])),
           })),
@@ -246,6 +252,20 @@ export default function AdminProductFamilyEdit() {
       setUploading('');
     }
   }
+
+  async function uploadDrawing(file) {
+    try {
+      setMessage(null);
+      const { data } = await call(uploadProductDrawing, file);
+      return data.url;
+    } catch (err) {
+      setMessage({ type: 'error', text: err.message });
+      return '';
+    }
+  }
+
+  const drawingError = (text) => setMessage({ type: 'error', text });
+  const setRowDrawing = (index, url) => setRows((rows) => rows.map((row, i) => (i === index ? { ...row, drawing: url } : row)));
 
   // Photo list -> cover (image) + gallery (images)
   const setFamilyPhotos = (list) => setForm((current) => ({ ...current, image: list[0] || '', images: list.slice(1) }));
@@ -466,6 +486,21 @@ export default function AdminProductFamilyEdit() {
             </div>
 
             <div className="cmsCard">
+              <h2>Teknik Çizim</h2>
+              <p className="cmsHint">
+                Model sayfasında “Teknik föy” düğmesinin yanında “Teknik Çizim” düğmesi olarak gösterilir.
+                Buradaki dosya ailenin tüm modellerinde kullanılır; bir modele özel çizim tablodaki “Çizim” sütunundan yüklenir.
+              </p>
+
+              <DrawingField
+                value={form.drawing}
+                onChange={(url) => set('drawing', url)}
+                upload={uploadDrawing}
+                onError={drawingError}
+              />
+            </div>
+
+            <div className="cmsCard">
               <h2>Su deposu seçici</h2>
 
               <label className="cmsCheck">
@@ -576,13 +611,14 @@ export default function AdminProductFamilyEdit() {
                     ))}
                     <th>Görseller</th>
                     <th>Açıklama</th>
+                    <th>Çizim</th>
                     <th />
                   </tr>
                 </thead>
                 <tbody>
                   {form.rows.length === 0 && (
                     <tr>
-                      <td colSpan={columns.length + 4} className="cmsMuted cmsRowsEmpty">Henüz model yok. “Satır ekle” ya da “Excel’den yapıştır” ile ekleyin.</td>
+                      <td colSpan={columns.length + 5} className="cmsMuted cmsRowsEmpty">Henüz model yok. “Satır ekle” ya da “Excel’den yapıştır” ile ekleyin.</td>
                     </tr>
                   )}
 
@@ -624,6 +660,16 @@ export default function AdminProductFamilyEdit() {
                             <NotebookPen aria-hidden="true" />
                           </button>
                         </span>
+                      </td>
+                      <td>
+                        <DrawingField
+                          compact
+                          value={row.drawing}
+                          onChange={(url) => setRowDrawing(index, url)}
+                          upload={uploadDrawing}
+                          onError={drawingError}
+                          label={`${row.code || `${index + 1}. satır`} – teknik çizim`}
+                        />
                       </td>
                       <td>
                         <span className="cmsRowTools">

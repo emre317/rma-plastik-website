@@ -17,7 +17,7 @@ const TYPES = {
   'image/webp': '.webp',
 };
 
-const FOLDERS = ['products', 'posts', 'projects', 'gallery', 'certificates'];
+const FOLDERS = ['products', 'posts', 'projects', 'gallery', 'certificates', 'drawings'];
 
 /*
   The declared type is not trusted: the first bytes must match it too
@@ -145,6 +145,60 @@ export function uploadCertificatePdf(req, res) {
     }
 
     return res.status(201).json({ success: true, data: { url: `/uploads/certificates/${req.file.filename}` } });
+  });
+}
+
+/*
+  Technical drawing of a product (Ürün Tabloları): PNG, JPG, PDF or DOCX, stored
+  under /uploads/drawings with a random name. The type is read from the file
+  itself, never from its name or declared type; Word files with macros are refused.
+*/
+const DRAWING_NAME = /\.(png|jpe?g|pdf|docx)$/i;
+const DRAWING_MAX = 15 * 1024 * 1024;
+
+export function drawingType(bytes) {
+  if (matchesSignature('image/png', bytes)) return 'png';
+  if (matchesSignature('image/jpeg', bytes)) return 'jpg';
+  if (bytes.subarray(0, 5).toString('latin1') === '%PDF-') return 'pdf';
+
+  // DOCX: a ZIP archive holding the Word document part (file names are stored as plain text)
+  const zip = bytes.subarray(0, 4).equals(Buffer.from([0x50, 0x4b, 0x03, 0x04]));
+  if (zip && bytes.includes('[Content_Types].xml') && bytes.includes('word/document.xml') && !bytes.includes('vbaProject')) return 'docx';
+
+  return '';
+}
+
+export function uploadProductDrawing(req, res) {
+  const folder = path.join(UPLOAD_ROOT, 'drawings');
+  const refuse = (message) => res.status(400).json({ success: false, message });
+
+  multer({
+    storage: multer.diskStorage({
+      destination: folder,
+      filename: (request, file, cb) => cb(null, `${crypto.randomUUID()}.upload`),
+    }),
+    limits: { fileSize: DRAWING_MAX, files: 1 },
+    fileFilter: (request, file, cb) => cb(null, DRAWING_NAME.test(file.originalname || '')),
+  }).single('file')(req, res, (error) => {
+    if (error) return refuse(error.code === 'LIMIT_FILE_SIZE' ? 'Teknik çizim en fazla 15 MB olabilir.' : 'Teknik çizim yüklenemedi.');
+    if (!req.file) return refuse('Yalnızca PNG, JPG, PDF veya DOCX dosyası yüklenebilir.');
+
+    let type = '';
+    try {
+      type = path.dirname(path.resolve(req.file.path)) === folder ? drawingType(fs.readFileSync(req.file.path)) : '';
+    } catch {
+      type = '';
+    }
+
+    if (!type) {
+      fs.rmSync(req.file.path, { force: true });
+      return refuse('Dosya geçerli bir PNG, JPG, PDF veya DOCX değil.');
+    }
+
+    const name = `${path.basename(req.file.filename, '.upload')}.${type}`;
+    fs.renameSync(req.file.path, path.join(folder, name));
+
+    return res.status(201).json({ success: true, data: { url: `/uploads/drawings/${name}`, type } });
   });
 }
 
