@@ -3,6 +3,7 @@ import 'dotenv/config';
 import app from './app.js';
 import { closeDatabase, connectDatabase, databaseState } from './config/db.js';
 import { checkEnvironment } from './config/env.js';
+import { runCatalogueMigrations } from './services/catalogueMigrations.js';
 import { recoverPublishJobs } from './services/publisher.js';
 import { startReminderTimer } from './services/meetingReminders.js';
 
@@ -34,7 +35,10 @@ const server = app.listen(PORT, () => {
   console.log(`RMA API running on port ${PORT} (${process.env.NODE_ENV || 'development'})`);
 });
 
-connectDatabase({ wait: false });
+// One-time catalogue changes (e.g. a new product group) once the database answers
+connectDatabase({ wait: true })
+  .then(() => runCatalogueMigrations())
+  .catch((error) => console.error('[catalogue] migration:', error.message));
 
 // Publish jobs left running by a restart are checked against GitHub or closed
 setTimeout(() => recoverPublishJobs().catch((error) => console.error('[publish] recovery:', error.message)), 15000).unref();

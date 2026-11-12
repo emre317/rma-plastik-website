@@ -1013,6 +1013,12 @@ const tr = {
         description: 'Alçak alanlar ve araç üstü kullanım için gıda ve su stoklama tankları.',
         application: 'Su / Gıda',
       },
+      rectangular: {
+        label: 'Köşeli Tanklar',
+        title: 'Köşeli Polietilen Tanklar',
+        description: 'Karavanlarda su tankı, tır ve kamyonlarda AdBlue, dizel ve benzin tankı olarak kullanılan köşeli polietilen tanklar.',
+        application: 'Karavan / Tır / Kamyon',
+      },
       twoLayer: {
         label: 'Çift Katmanlı Tanklar',
         title: 'Çift Katmanlı Su Tankları',
@@ -1126,11 +1132,11 @@ const tr = {
     items: [
       {
         title: 'Su Depolama',
-        description: 'İçme ve kullanma suyu depolaması için dikey, yatay, kare ve çift katmanlı polietilen tanklar.',
+        description: 'İçme ve kullanma suyu depolaması için dikey, yatay, köşeli ve çift katmanlı polietilen tanklar.',
         products: [
           'Dikey Tanklar',
           'Yatay Tanklar',
-          'Kare Tanklar',
+          'Köşeli Tanklar',
           'Çift Katmanlı Tanklar',
         ],
       },

@@ -18,6 +18,7 @@ const ILL = '/images/products/illustrations';
 const groups = [
   { id: 'vertical', category: 'tanks', image: `${IMG}/rd-15000.webp`, hue: 214 },
   { id: 'horizontal', category: 'tanks', image: `${IMG}/ry-1000.webp`, hue: 204 },
+  { id: 'rectangular', category: 'tanks', image: `${ILL}/rectangular.svg`, hue: 210 },
   { id: 'twoLayer', category: 'tanks', image: `${IMG}/sd-set.webp`, hue: 196 },
   { id: 'silo', category: 'chemical', image: `${IMG}/silo-tank.webp`, hue: 226 },
   { id: 'textile', category: 'textile', image: `${IMG}/textile-trolley.webp`, hue: 262, monoblock: false },

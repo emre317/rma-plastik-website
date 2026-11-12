@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Köşeli polietilen tank">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f7fa"/><stop offset="1" stop-color="#e6edf3"/></linearGradient>
+    <linearGradient id="front" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eef2f6"/><stop offset="1" stop-color="#cfd6de"/></linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#bg)"/>
+  <ellipse cx="200" cy="236" rx="170" ry="11" fill="#101317" opacity=".1"/>
+  <path d="M60 120l56-34h232l-56 34z" fill="#f7f9fb" stroke="#aab4bf" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M292 120l56-34v84l-56 46z" fill="#bcc5cf" stroke="#aab4bf" stroke-width="2" stroke-linejoin="round"/>
+  <rect x="60" y="120" width="232" height="96" rx="6" fill="url(#front)" stroke="#aab4bf" stroke-width="2"/>
+  <g stroke="#9aa6b2" stroke-width="3" stroke-linecap="round"><path d="M118 134v68"/><path d="M176 134v68"/><path d="M234 134v68"/></g>
+  <ellipse cx="236" cy="102" rx="26" ry="9" fill="#b8c1cb"/>
+  <path d="M210 94v8a26 9 0 0 0 52 0v-8z" fill="#9aa6b2"/>
+  <ellipse cx="236" cy="94" rx="26" ry="9" fill="#e4173a"/>
+</svg>

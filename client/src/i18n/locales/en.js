@@ -1014,6 +1014,12 @@ const en = {
         description: 'Food and water storage tanks for low spaces and vehicle-mounted use.',
         application: 'Water / Food',
       },
+      rectangular: {
+        label: 'Rectangular Tanks',
+        title: 'Rectangular Polyethylene Tanks',
+        description: 'Rectangular polyethylene tanks used as water tanks in caravans, and as AdBlue, diesel and fuel tanks in trucks and lorries.',
+        application: 'Caravans / Trucks',
+      },
       twoLayer: {
         label: 'Two-Layer Tanks',
         title: 'Two-Layer Water Tanks',
@@ -1127,11 +1133,11 @@ const en = {
     items: [
       {
         title: 'Water Storage',
-        description: 'Vertical, horizontal, square and two-layer polyethylene tanks for drinking and utility water.',
+        description: 'Vertical, horizontal, rectangular and two-layer polyethylene tanks for drinking and utility water.',
         products: [
           'Vertical Tanks',
           'Horizontal Tanks',
-          'Square Tanks',
+          'Rectangular Tanks',
           'Two-Layer Tanks',
         ],
       },
