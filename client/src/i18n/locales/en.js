@@ -1133,11 +1133,11 @@ const en = {
     items: [
       {
         title: 'Water Storage',
-        description: 'Vertical, horizontal, square and two-layer polyethylene tanks for drinking and utility water.',
+        description: 'Vertical, horizontal, rectangular and two-layer polyethylene tanks for drinking and utility water.',
         products: [
           'Vertical Tanks',
           'Horizontal Tanks',
-          'Square Tanks',
+          'Rectangular Tanks',
           'Two-Layer Tanks',
         ],
       },

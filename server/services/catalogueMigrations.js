@@ -13,8 +13,23 @@ import SiteSettings, { getSiteSettings, markContentChanged } from '../models/Sit
 /*
   Rectangular tanks (Köşeli Tanklar) become a product group of their own
   instead of sitting inside another group: the group is added right after the
-  horizontal tanks, the table and the sector products that show it move there.
+  horizontal tanks, the table and the sector products that show it move there
+  and are called "Köşeli" instead of "Kare".
 */
+// Earlier wording of the built-in sector texts -> the new one
+const RENAMED = {
+  product: {
+    tr: ['Kare Tanklar', 'Köşeli Tanklar'],
+    en: ['Square Tanks', 'Rectangular Tanks'],
+    ar: ['خزانات مربعة', 'خزانات مستطيلة'],
+  },
+  description: {
+    tr: ['dikey, yatay, kare ve çift katmanlı', 'dikey, yatay, köşeli ve çift katmanlı'],
+    en: ['Vertical, horizontal, square and two-layer', 'Vertical, horizontal, rectangular and two-layer'],
+    ar: ['عمودية وأفقية ومربعة وثنائية', 'عمودية وأفقية ومستطيلة وثنائية'],
+  },
+};
+
 async function rectangularGroup() {
   const GROUP = 'rectangular';
   const FAMILY = 'rectangular-tanks';
@@ -37,10 +52,30 @@ async function rectangularGroup() {
   }
 
   for (const sector of await Sector.find()) {
-    const products = (sector.products || []).filter((product) =>
-      product.group !== GROUP && product.families?.length === 1 && product.families[0] === FAMILY);
-    if (!products.length) continue;
-    products.forEach((product) => { product.group = GROUP; });
+    let dirty = false;
+
+    for (const product of sector.products || []) {
+      if (product.families?.length !== 1 || product.families[0] !== FAMILY) continue;
+      if (product.group !== GROUP) {
+        product.group = GROUP;
+        dirty = true;
+      }
+      // "Kare" becomes "Köşeli"; a name written in the panel stays as it is
+      for (const [lang, [from, to]] of Object.entries(RENAMED.product)) {
+        if (product.i18n?.[lang]?.name !== from) continue;
+        product.i18n[lang].name = to;
+        dirty = true;
+      }
+    }
+
+    for (const [lang, [from, to]] of Object.entries(RENAMED.description)) {
+      const text = sector.i18n?.[lang]?.description || '';
+      if (!text.includes(from)) continue;
+      sector.i18n[lang].description = text.replace(from, to);
+      dirty = true;
+    }
+
+    if (!dirty) continue;
     await sector.save();
     done.push(`sector "${sector.sectorId}" updated`);
   }

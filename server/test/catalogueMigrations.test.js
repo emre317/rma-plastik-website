@@ -21,9 +21,14 @@ for (const doc of await builtInFamilyDocs()) {
   await ProductFamily.create(doc.familyId === 'rectangular-tanks' ? { ...doc, group: 'horizontal' } : doc);
 }
 for (const doc of await builtInSectorDocs()) {
+  // ...and the sector texts still said "Kare"
+  const water = doc.sectorId === 'water';
   await Sector.create({
     ...doc,
-    products: doc.products.map((product) => (product.families?.[0] === 'rectangular-tanks' ? { ...product, group: 'fuel' } : product)),
+    i18n: water ? { ...doc.i18n, tr: { ...doc.i18n.tr, description: doc.i18n.tr.description.replace('köşeli', 'kare') } } : doc.i18n,
+    products: doc.products.map((product) => (product.families?.[0] === 'rectangular-tanks'
+      ? { ...product, group: 'fuel', i18n: { ...product.i18n, tr: { name: 'Kare Tanklar' }, en: { name: 'Caravan Tanks' } } }
+      : product)),
   });
 }
 
@@ -41,7 +46,11 @@ test('rectangular tanks get their own group, right after the horizontal tanks', 
 
   assert.equal((await family()).group, 'rectangular');
   const water = await Sector.findOne({ sectorId: 'water' });
-  assert.equal(water.products.find((product) => product.families[0] === 'rectangular-tanks').group, 'rectangular');
+  const product = water.products.find((item) => item.families[0] === 'rectangular-tanks');
+  assert.equal(product.group, 'rectangular');
+  assert.equal(product.i18n.tr.name, 'Köşeli Tanklar');
+  assert.equal(product.i18n.en.name, 'Caravan Tanks', 'a name written in the panel stays');
+  assert.match(water.i18n.tr.description, /dikey, yatay, köşeli ve çift katmanlı/);
   assert.equal(water.products[0].group, 'vertical');
   assert.ok((await SiteSettings.findOne({ singleton: 'site' })).contentChangedAt);
 });

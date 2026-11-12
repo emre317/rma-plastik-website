@@ -1132,11 +1132,11 @@ const tr = {
     items: [
       {
         title: 'Su Depolama',
-        description: 'İçme ve kullanma suyu depolaması için dikey, yatay, kare ve çift katmanlı polietilen tanklar.',
+        description: 'İçme ve kullanma suyu depolaması için dikey, yatay, köşeli ve çift katmanlı polietilen tanklar.',
         products: [
           'Dikey Tanklar',
           'Yatay Tanklar',
-          'Kare Tanklar',
+          'Köşeli Tanklar',
           'Çift Katmanlı Tanklar',
         ],
       },
