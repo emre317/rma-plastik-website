@@ -29,7 +29,7 @@ jobs:
   publish:
     if: github.event_name != 'push' || vars.AUTO_DEPLOY_ON_PUSH == 'true'
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 20
     environment: production
 
     env:
@@ -69,12 +69,10 @@ jobs:
             [ -n "$SSH_USER" ] || missing="$missing DEPLOY_USER"
             [ -n "$SSH_KEY" ] || missing="$missing DEPLOY_SSH_KEY"
             [ -n "$SSH_KNOWN_HOSTS" ] || missing="$missing DEPLOY_KNOWN_HOSTS"
-
           elif [ "$DEPLOY_METHOD" = "ftps" ]; then
             [ -n "$FTP_HOST" ] || missing="$missing FTP_HOST"
             [ -n "$FTP_USER" ] || missing="$missing FTP_USER"
             [ -n "$FTP_PASSWORD" ] || missing="$missing FTP_PASSWORD"
-
           else
             missing="$missing DEPLOY_METHOD"
           fi
@@ -101,23 +99,18 @@ jobs:
         working-directory: client
         run: npm ci --include=dev --no-audit --no-fund
 
-      # Diagnose the live content endpoint before building.
       - name: Diagnose content API
         env:
           CONTENT_TOKEN: ${{ secrets.CONTENT_API_TOKEN }}
         run: |
           set -euo pipefail
 
-          echo "Checking content API response..."
-
-          curl -sS -L \
+          curl -fsS -L \
             --max-time 20 \
             -o /dev/null \
-            -w 'HTTP status: %{http_code}\nContent type: %{content_type}\nFinal URL: %{url_effective}\n' \
+            -w 'Content API HTTP: %{http_code}\n' \
             -H "Authorization: Bearer $CONTENT_TOKEN" \
             "$API_URL/content"
-
-          echo "Content API diagnostic completed"
 
       - name: Build website
         id: build
@@ -138,7 +131,7 @@ jobs:
         id: verify
         working-directory: client/dist
         run: |
-          set -e
+          set -euo pipefail
 
           for file in index.html build.json sitemap.xml robots.txt .htaccess; do
             test -s "$file" || {
@@ -171,7 +164,6 @@ jobs:
         run: |
           tar -czf "release-$RELEASE_ID.tar.gz" -C client/dist .
 
-      # Optional SSH deployment
       - name: Deploy over SSH
         id: deploy_ssh
         if: env.DEPLOY_METHOD == 'ssh'
@@ -182,7 +174,7 @@ jobs:
           PORT: ${{ secrets.DEPLOY_PORT || '22' }}
           USER_NAME: ${{ secrets.DEPLOY_USER }}
         run: |
-          set -e
+          set -euo pipefail
 
           mkdir -p ~/.ssh
 
@@ -191,7 +183,7 @@ jobs:
 
           chmod 600 ~/.ssh/deploy_key ~/.ssh/known_hosts
 
-          SSH="ssh -i $HOME/.ssh/deploy_key -p $PORT -o BatchMode=yes -o StrictHostKeyChecking=yes"
+          SSH="ssh -i $HOME/.ssh/deploy_key -p $PORT -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=15"
 
           $SSH "$USER_NAME@$HOST" \
             'mkdir -p ~/rma-deploy/incoming'
@@ -208,10 +200,10 @@ jobs:
             "bash -s -- deploy '$RELEASE_ID' \"\$HOME/rma-deploy/incoming/release-$RELEASE_ID.tar.gz\" '$DEPLOY_PATH' 5" \
             < deploy/remote-site.sh
 
-      # Secure FTPS deployment using Node.js
       - name: Deploy over FTPS
         id: deploy_ftps
         if: env.DEPLOY_METHOD == 'ftps'
+        timeout-minutes: 15
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USER: ${{ secrets.FTP_USER }}
@@ -220,8 +212,6 @@ jobs:
           FTP_CONNECT_IP: ${{ vars.FTP_CONNECT_IP || '77.245.159.39' }}
         run: |
           set -euo pipefail
-
-          echo "Installing secure FTPS client..."
 
           mkdir -p "$RUNNER_TEMP/rma-ftps"
           cd "$RUNNER_TEMP/rma-ftps"
@@ -235,8 +225,6 @@ jobs:
 
           cd "$GITHUB_WORKSPACE"
 
-          echo "Starting FTPS deployment..."
-
           node <<'EOF'
           const ftp = require(
             process.env.RUNNER_TEMP +
@@ -244,172 +232,327 @@ jobs:
           );
 
           const fs = require('node:fs');
+          const os = require('node:os');
           const path = require('node:path');
+          const crypto = require('node:crypto');
 
-          const client = new ftp.Client(60000);
-          client.ftp.verbose = false;
+          const LOCAL_ROOT = path.resolve('client/dist');
+          const REMOTE_ROOT = process.env.DEPLOY_PATH || '.';
+          const MANIFEST = '.rma-deploy-manifest.json';
+          const WORKERS = 4;
+          const TIMEOUT = 20000;
+          const MAX_ATTEMPTS = 3;
 
-          const localRoot = path.resolve('client/dist');
-          const remoteRoot = process.env.DEPLOY_PATH || '.';
-
-          const protectedDirectories = new Set([
+          const protectedNames = new Set([
             'api',
             'uploads',
             '.well-known',
-            'cgi-bin'
+            'cgi-bin',
+            MANIFEST
           ]);
 
-          function validateConfiguration() {
-            const required = [
-              'FTP_HOST',
-              'FTP_USER',
-              'FTP_PASSWORD',
-              'FTP_CONNECT_IP'
-            ];
+          const sleep = ms =>
+            new Promise(resolve => setTimeout(resolve, ms));
 
-            for (const name of required) {
-              if (!process.env[name]) {
-                throw new Error(
-                  `Missing configuration: ${name}`
-                );
-              }
-            }
-
-            if (
-              !fs.existsSync(localRoot) ||
-              !fs.statSync(localRoot).isDirectory()
-            ) {
-              throw new Error(
-                'Build directory not found'
-              );
-            }
+          function hashFile(file) {
+            return crypto
+              .createHash('sha256')
+              .update(fs.readFileSync(file))
+              .digest('hex');
           }
 
-          async function uploadDirectory(localDir, remoteDir) {
-            await client.ensureDir(remoteDir);
+          function collectFiles(dir = LOCAL_ROOT, prefix = '') {
+            const result = [];
 
-            const entries = fs.readdirSync(localDir, {
+            for (const entry of fs.readdirSync(dir, {
               withFileTypes: true
-            });
-
-            for (const entry of entries) {
-              const isRoot = localDir === localRoot;
-
-              if (
-                isRoot &&
-                protectedDirectories.has(entry.name)
-              ) {
-                console.log(
-                  `Skipping protected directory: ${entry.name}`
-                );
+            })) {
+              if (!prefix && protectedNames.has(entry.name)) {
+                console.log('Protected:', entry.name);
                 continue;
               }
 
               if (entry.isSymbolicLink()) {
                 throw new Error(
-                  `Symbolic links are not supported: ${entry.name}`
+                  `Symbolic link not allowed: ${entry.name}`
                 );
               }
 
-              const localPath = path.join(
-                localDir,
-                entry.name
-              );
-
-              const remotePath = path.posix.join(
-                remoteDir,
-                entry.name
-              );
+              const absolute = path.join(dir, entry.name);
+              const relative = prefix
+                ? `${prefix}/${entry.name}`
+                : entry.name;
 
               if (entry.isDirectory()) {
-                await uploadDirectory(
-                  localPath,
-                  remotePath
-                );
+                result.push(...collectFiles(absolute, relative));
               } else if (entry.isFile()) {
-                await client.uploadFrom(
-                  localPath,
-                  remotePath
-                );
+                result.push({
+                  absolute,
+                  relative,
+                  hash: hashFile(absolute),
+                  size: fs.statSync(absolute).size
+                });
               }
             }
+
+            return result;
           }
 
-          async function main() {
-            validateConfiguration();
+          function createClient() {
+            const client = new ftp.Client(TIMEOUT);
+            client.ftp.verbose = false;
+            return client;
+          }
 
-            const host = process.env.FTP_HOST;
-            const ip = process.env.FTP_CONNECT_IP;
-            const port = Number(
-              process.env.FTP_PORT || 21
-            );
-
-            if (
-              !Number.isInteger(port) ||
-              port < 1 ||
-              port > 65535
-            ) {
-              throw new Error('Invalid FTP port');
-            }
-
-            console.log(
-              `Connecting to FTPS server on port ${port}...`
-            );
-
-            // Port 21: explicit FTPS with AUTH TLS.
-            // TLS certificate is verified against FTP_HOST.
+          async function connect(client) {
             await client.access({
-              host: ip,
-              port,
+              host: process.env.FTP_CONNECT_IP,
+              port: Number(process.env.FTP_PORT || 21),
               user: process.env.FTP_USER,
               password: process.env.FTP_PASSWORD,
               secure: true,
               secureOptions: {
-                servername: host,
+                servername: process.env.FTP_HOST,
                 rejectUnauthorized: true,
                 minVersion: 'TLSv1.2'
               }
             });
 
-            console.log(
-              'Secure FTPS connection established'
+            await client.cd(REMOTE_ROOT);
+            return client.pwd();
+          }
+
+          async function readManifest(client, root) {
+            const temp = path.join(
+              os.tmpdir(),
+              `rma-manifest-${process.pid}.json`
             );
 
-            await client.cd(remoteRoot);
+            try {
+              await client.downloadTo(
+                temp,
+                path.posix.join(root, MANIFEST)
+              );
 
-            const baseDirectory = await client.pwd();
+              const data = JSON.parse(
+                fs.readFileSync(temp, 'utf8')
+              );
 
-            console.log(
-              'Remote deployment directory selected'
+              if (
+                data.version !== 1 ||
+                typeof data.files !== 'object' ||
+                data.files === null ||
+                Array.isArray(data.files)
+              ) {
+                throw new Error('Invalid manifest structure');
+              }
+
+              return data.files;
+            } catch (error) {
+              console.log(
+                'Previous manifest unavailable:',
+                error.message
+              );
+              return {};
+            } finally {
+              fs.rmSync(temp, { force: true });
+            }
+          }
+
+          async function uploadOne(client, root, file) {
+            const destination = path.posix.join(
+              root,
+              file.relative
             );
 
-            await uploadDirectory(
-              localRoot,
-              baseDirectory
-            );
+            const parent = path.posix.dirname(destination);
 
-            console.log(
-              'FTPS upload completed successfully'
+            await client.ensureDir(parent);
+
+            await client.uploadFrom(
+              file.absolute,
+              destination
             );
           }
 
-          main()
-            .catch((error) => {
-              console.error(
-                'FTPS deployment failed:',
-                error.message
-              );
-              process.exitCode = 1;
-            })
-            .finally(() => {
+          async function worker(queue, root, number, results) {
+            let client = null;
+
+            try {
+              for (;;) {
+                const file = queue.shift();
+                if (!file) break;
+
+                let uploaded = false;
+                let lastError;
+
+                for (
+                  let attempt = 1;
+                  attempt <= MAX_ATTEMPTS;
+                  attempt++
+                ) {
+                  try {
+                    if (!client) {
+                      client = createClient();
+                      await connect(client);
+                    }
+
+                    console.log(
+                      `[Worker ${number}] Uploading: ${file.relative} (${file.size} bytes)`
+                    );
+
+                    await uploadOne(client, root, file);
+
+                    results.push(file.relative);
+                    uploaded = true;
+
+                    console.log(
+                      `[Worker ${number}] OK: ${file.relative}`
+                    );
+
+                    break;
+                  } catch (error) {
+                    lastError = error;
+
+                    console.error(
+                      `[Worker ${number}] Attempt ${attempt}/${MAX_ATTEMPTS} failed: ${file.relative}: ${error.message}`
+                    );
+
+                    if (client) client.close();
+                    client = null;
+
+                    if (attempt < MAX_ATTEMPTS) {
+                      await sleep(attempt * 1000);
+                    }
+                  }
+                }
+
+                if (!uploaded) {
+                  throw new Error(
+                    `Upload failed: ${file.relative}: ${lastError?.message}`
+                  );
+                }
+              }
+            } finally {
+              if (client) client.close();
+            }
+          }
+
+          async function main() {
+            for (const key of [
+              'FTP_HOST',
+              'FTP_USER',
+              'FTP_PASSWORD',
+              'FTP_CONNECT_IP'
+            ]) {
+              if (!process.env[key]) {
+                throw new Error(`Missing ${key}`);
+              }
+            }
+
+            if (!fs.existsSync(LOCAL_ROOT)) {
+              throw new Error('Build directory missing');
+            }
+
+            const allFiles = collectFiles();
+
+            const current = Object.fromEntries(
+              allFiles.map(file => [file.relative, file.hash])
+            );
+
+            console.log('Build files:', allFiles.length);
+
+            const client = createClient();
+            let root;
+            let previous;
+
+            try {
+              root = await connect(client);
+              console.log('FTPS connected. Remote:', root);
+              previous = await readManifest(client, root);
+            } finally {
               client.close();
-            });
+            }
+
+            const changed = allFiles.filter(
+              file => previous[file.relative] !== file.hash
+            );
+
+            const buildFile = changed.find(
+              file => file.relative === 'build.json'
+            );
+
+            const queue = changed.filter(
+              file => file.relative !== 'build.json'
+            );
+
+            const unchanged = allFiles.length - changed.length;
+
+            console.log('Unchanged files:', unchanged);
+            console.log('Files to upload:', changed.length);
+
+            const results = [];
+
+            const workers = Array.from(
+              { length: Math.min(WORKERS, queue.length) },
+              (_, i) => worker(queue, root, i + 1, results)
+            );
+
+            await Promise.all(workers);
+
+            const finalClient = createClient();
+
+            try {
+              await connect(finalClient);
+
+              if (buildFile) {
+                console.log('Uploading build.json last...');
+                await uploadOne(finalClient, root, buildFile);
+                results.push('build.json');
+              }
+
+              const manifestPath = path.join(
+                os.tmpdir(),
+                `rma-new-manifest-${process.pid}.json`
+              );
+
+              try {
+                fs.writeFileSync(
+                  manifestPath,
+                  JSON.stringify({
+                    version: 1,
+                    release: process.env.RELEASE_ID,
+                    createdAt: new Date().toISOString(),
+                    files: current
+                  })
+                );
+
+                await finalClient.uploadFrom(
+                  manifestPath,
+                  path.posix.join(root, MANIFEST)
+                );
+              } finally {
+                fs.rmSync(manifestPath, { force: true });
+              }
+            } finally {
+              finalClient.close();
+            }
+
+            console.log(
+              `Deployment complete. Uploaded ${results.length} files.`
+            );
+          }
+
+          main().catch(error => {
+            console.error('FTPS DEPLOYMENT FAILED:', error);
+            process.exitCode = 1;
+          });
           EOF
 
       - name: Verify live site
         id: live
         run: |
-          set -e
+          set -euo pipefail
 
           for attempt in 1 2 3 4 5 6; do
             run=$(
