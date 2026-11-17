@@ -39074,3 +39074,12 @@ html[lang="ar"] .pgBody small {
   flex: 1;
   min-width: 0;
 }
+
+/* Model page (product detail): every running text is justified, on all
+   screen sizes – description, feature list, tolerance note, custom-size card */
+.pmPage p,
+.pmPage .pmFeatures li {
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
