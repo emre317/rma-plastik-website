@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react';
 
@@ -9,7 +9,7 @@ import useProductGroupOptions, { tableGroup } from '../../hooks/useProductGroupO
 import builtInFamilies from '../../data/productTables.builtin';
 import SECTOR_ICONS from '../../data/sectorIcons';
 import Dropdown from '../../components/ui/Dropdown';
-import { createSector, getSector, listFamilies, updateSector } from '../../services/adminContentApi';
+import { createSector, getSector, listFamilies, updateSector, uploadProductImage } from '../../services/adminContentApi';
 import { useConfirm } from '../../components/ui/ConfirmDialog';
 
 const LANGS = [
@@ -33,7 +33,7 @@ const QUOTE_ITEM = '__quote';
 
 const names = () => Object.fromEntries(LANGS.map(({ code }) => [code, { name: '' }]));
 
-const emptyProduct = () => ({ key: Math.random().toString(36).slice(2), group: '', families: [], i18n: names() });
+const emptyProduct = () => ({ key: Math.random().toString(36).slice(2), group: '', families: [], image: '', i18n: names() });
 
 const emptySector = {
   sectorId: '',
@@ -110,6 +110,7 @@ export default function AdminSectorEdit() {
             ...emptyProduct(),
             group: product.group || '',
             families: product.families || [],
+            image: product.image || '',
             i18n: Object.fromEntries(LANGS.map(({ code }) => [code, { name: product.i18n?.[code]?.name || '' }])),
           })),
         });
@@ -156,6 +157,34 @@ export default function AdminSectorEdit() {
       : item)));
   }
 
+  // Photo of one product: the file input is shared, `uploadFor` is the product's key
+  const fileRef = useRef(null);
+  const uploadFor = useRef('');
+  const [uploading, setUploading] = useState('');
+
+  function pickImage(key) {
+    uploadFor.current = key;
+    fileRef.current?.click();
+  }
+
+  async function uploadImage(event) {
+    const file = event.target.files?.[0];
+    const key = uploadFor.current;
+    event.target.value = '';
+    if (!file || !key) return;
+
+    try {
+      setUploading(key);
+      setMessage(null);
+      const { data } = await call(uploadProductImage, file);
+      setProducts((list) => list.map((item) => (item.key === key ? { ...item, image: data.url } : item)));
+    } catch (err) {
+      setMessage({ type: 'error', text: err.message });
+    } finally {
+      setUploading('');
+    }
+  }
+
   function toggleTable(index, familyId) {
     const product = form.products[index];
     const next = product.families.includes(familyId)
@@ -178,7 +207,7 @@ export default function AdminSectorEdit() {
     const body = {
       ...form,
       sectorId: form.sectorId || slugify(form.i18n.en.title || form.i18n.tr.title),
-      products: form.products.map(({ group, families: list, i18n }) => ({ group, families: list, i18n })),
+      products: form.products.map(({ group, families: list, image, i18n }) => ({ group, families: list, image, i18n })),
     };
 
     try {
@@ -305,6 +334,8 @@ export default function AdminSectorEdit() {
             </button>
           </div>
 
+          <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" hidden onChange={uploadImage} />
+
           {form.products.length === 0 ? (
             <p className="cmsEmpty">Henüz ürün yok. “Ürün ekle” ile başlayın.</p>
           ) : (
@@ -353,6 +384,27 @@ export default function AdminSectorEdit() {
                           <small className="cmsMuted">{product.families.length ? `${product.families.length} tablo seçili` : 'Grubun tamamı'}</small>
                         </div>
                       )}
+
+                      <div className="adSectorImage">
+                        <span className="adSectorImageThumb">
+                          {product.image ? <img src={product.image} alt="" /> : <span>Görsel yok</span>}
+                        </span>
+                        <div>
+                          <div className="cmsRowActions">
+                            <button type="button" className="cmsButton" onClick={() => pickImage(product.key)} disabled={Boolean(uploading)}>
+                              {uploading === product.key ? 'Yükleniyor…' : product.image ? 'Görseli değiştir' : 'Görsel yükle'}
+                            </button>
+                            {product.image && (
+                              <button type="button" className="cmsButton cmsButtonDanger" onClick={() => setProduct(index, { image: '' })}>Kaldır</button>
+                            )}
+                          </div>
+                          <small className="cmsMuted">
+                            {product.group
+                              ? 'İsteğe bağlı. Boş bırakılırsa ürün grubunun / tablonun görseli kullanılır.'
+                              : 'Sektör sayfasındaki kartta gösterilir. Boş bırakılırsa sektör ikonu çıkar.'}
+                          </small>
+                        </div>
+                      </div>
 
                       {!product.group && <small className="cmsMuted">Kartta “Talebe göre” yazar ve “Teklif İste” düğmesi çıkar.</small>}
                     </div>

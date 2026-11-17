@@ -102,6 +102,7 @@ function sectorPayload(body = {}) {
         .map((id) => str(id, 80))
         .filter((id) => /^[a-z0-9-]{2,80}$/.test(id))
         .slice(0, 20),
+      image: cleanImage(product?.image),
       i18n: texts(product?.i18n, { name: 120 }),
     }))
     .filter((product) => product.i18n.tr.name);
@@ -152,6 +153,7 @@ export async function publicSectors() {
     products: sector.products.map((product) => ({
       group: product.group,
       families: product.families,
+      ...(product.image ? { image: product.image } : {}),
       i18n: texts(product.i18n, { name: 120 }),
     })),
   }));

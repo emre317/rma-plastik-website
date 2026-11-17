@@ -1,5 +1,4 @@
-import { useEffect, useRef } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Check, FileDown, Package } from 'lucide-react';
 
@@ -15,40 +14,25 @@ import { familyText, findModel, modelPath } from '../../data/productTables';
 import { productStandard, productText } from '../../data/productFeatures';
 import NotFound from '../NotFound/NotFound';
 
+// Longer feature lists leave the side column (see below)
+const WIDE_FEATURES_FROM = 8;
+
 /*
   Printable A4 datasheet of one catalogue model:
   /tr/product-tables/vertical-tanks/rd-5000/datasheet
-  "Save as PDF" uses the browser's print dialog, so Turkish and Arabic text
-  render exactly as on the site. With ?print=1 the dialog opens by itself.
+  The sheet opens as a page; "Save as PDF" uses the browser's print dialog, so
+  Turkish and Arabic text render exactly as on the site.
   Only catalogue values are shown; empty columns are left out.
+  A long feature list (group + family + model) is set in two columns across
+  the sheet instead of the narrow side column, so it stays on one A4 page.
 */
 export default function ProductDatasheet() {
   const { t } = useTranslation();
   const { code: lang, dir } = useLanguage();
   const { familyId, modelSlug } = useParams();
-  const [searchParams] = useSearchParams();
   const quoteFor = useModelQuote();
-  const printed = useRef(false);
 
   const match = findModel(familyId, modelSlug);
-
-  // Opened from the "Datasheet (PDF)" button: print once the photo is ready
-  useEffect(() => {
-    if (!match || searchParams.get('print') !== '1' || printed.current) return undefined;
-
-    const image = document.querySelector('.dsPhoto img');
-    const go = () => {
-      if (printed.current) return;
-      printed.current = true;
-      window.print();
-    };
-
-    const timer = setTimeout(go, 1500);
-    if (image && !image.complete) image.addEventListener('load', () => setTimeout(go, 150), { once: true });
-    else setTimeout(go, 300);
-
-    return () => clearTimeout(timer);
-  }, [match, searchParams]);
 
   if (!match) return <NotFound />;
 
@@ -77,6 +61,19 @@ export default function ProductDatasheet() {
   const uses = family.waterTank?.uses || [];
   const standard = productStandard(family, row, lang, t);
   const showFeatures = standard.items.length > 0;
+  // More than fits beside the table: full width, two columns
+  const wideFeatures = standard.items.length > WIDE_FEATURES_FROM;
+  const features = showFeatures && (
+    <div className={wideFeatures ? 'dsFeaturesWide' : undefined}>
+      <h2>{standard.title}</h2>
+      <ul className="dsChecks">
+        {standard.items.map((feature) => (
+          <li key={feature}><Check aria-hidden="true" /><span>{feature}</span></li>
+        ))}
+      </ul>
+    </div>
+  );
+  const sideFeatures = wideFeatures ? null : features;
   const pagePath = `/${lang}${modelPath(family, row)}`;
   const pageUrl = `${SITE_URL}${pagePath}`;
   const issued = new Intl.DateTimeFormat(lang === 'ar' ? 'ar' : lang, { dateStyle: 'long' }).format(new Date());
@@ -100,7 +97,7 @@ export default function ProductDatasheet() {
         </div>
       </div>
 
-      <article className="dsSheet" aria-label={`${row.code} – ${d('title')}`}>
+      <article className={wideFeatures ? 'dsSheet dsSheetWide' : 'dsSheet'} aria-label={`${row.code} – ${d('title')}`}>
         <header className="dsHead">
           <BrandLogo className="dsLogo" />
           <div className="dsHeadMeta">
@@ -136,7 +133,7 @@ export default function ProductDatasheet() {
           </div>
         </section>
 
-        <section className="dsBody">
+        <section className={wideFeatures ? 'dsBody dsBodyWide' : 'dsBody'}>
           <div className="dsSpecs">
             <h2>{t('productModel.specsTitle')}</h2>
             <table>
@@ -151,7 +148,7 @@ export default function ProductDatasheet() {
             </table>
           </div>
 
-          {(uses.length > 0 || showFeatures) && (
+          {(uses.length > 0 || sideFeatures) && (
             <div className="dsSide">
               {uses.length > 0 && (
                 <div>
@@ -162,19 +159,12 @@ export default function ProductDatasheet() {
                 </div>
               )}
 
-              {showFeatures && (
-                <div>
-                  <h2>{standard.title}</h2>
-                  <ul className="dsChecks">
-                    {standard.items.map((feature) => (
-                      <li key={feature}><Check aria-hidden="true" />{feature}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              {sideFeatures}
             </div>
           )}
         </section>
+
+        {wideFeatures && features}
 
         <p className="dsNote dsTolerance"><strong>{t('common.tolerance')}</strong></p>
         <p className="dsNote">{d('note')}</p>

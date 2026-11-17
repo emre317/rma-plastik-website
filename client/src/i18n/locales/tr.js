@@ -838,7 +838,7 @@ const tr = {
     saveHint: 'Yazdırma penceresinde hedef olarak “PDF olarak kaydet”i seçin.',
     back: 'Model sayfasına dön',
     issued: 'Tarih',
-    note: 'Ölçüler RMA Plastik ürün kataloğundan alınmıştır. Güncel bilgi ve fiyat teklifi için satış ekibimizle iletişime geçin.',
+    note: 'Güncel bilgi ve fiyat teklifi için satış ekibimizle iletişime geçin.',
     contact: 'Teklif ve bilgi',
     page: 'Ürün Sayfası',
   },

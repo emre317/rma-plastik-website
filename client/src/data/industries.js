@@ -13,6 +13,7 @@ import { sectorIcon } from './sectorIcons';
     { group }               a product group
     { group, families }     only these product tables of the group
     { quote: true }         made to order, no catalogue entry yet
+    { image }               own photo of the product in this sector (optional)
   `stored` is the stored product suggested in the quote form (data/quoteForm.js).
 */
 const source = Array.isArray(content.sectors) && content.sectors.length ? content.sectors : builtInSectors;
@@ -29,6 +30,8 @@ const industries = source.map((sector) => ({
       families,
       // First table stands for the card (text, photo, link)
       family: families[0] || '',
+      // Photo uploaded for this sector product in the panel (Sektörler)
+      image: typeof entry.image === 'string' ? entry.image : '',
       quote: !entry.group,
     };
   }),
@@ -48,7 +51,8 @@ const familyById = Object.fromEntries(families.map((family) => [family.id, famil
 /*
   A sector product resolved for display: group, family (if any), image and link.
   Made-to-order entries (and groups without a model table or no longer shown)
-  have no link and show the sector icon.
+  have no link; they show the photo uploaded for them in the panel, else the
+  sector icon.
 */
 export function sectorProduct(entry) {
   const group = entry.group ? groupById[entry.group] || null : null;
@@ -56,7 +60,7 @@ export function sectorProduct(entry) {
   const quote = entry.quote || !group;
 
   // A table that was removed in the admin panel falls back to its group
-  const image = quote ? '' : family?.image || (entry.families.length ? '' : group.image) || '';
+  const image = entry.image || (quote ? '' : family?.image || (entry.families.length ? '' : group.image) || '');
   const link = quote || group.quoteOnly
     ? ''
     : family ? (group.link === '/water-tanks' ? '/water-tanks' : `/product-tables#${family.id}`) : group.link || '';

@@ -33158,6 +33158,39 @@ select:disabled {
   margin-top: 22px;
 }
 
+/* Photo of a sector product (AdminSectorEdit) */
+.adSectorImage {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.adSectorImage > div {
+  display: grid;
+  gap: 6px;
+}
+
+.adSectorImageThumb {
+  width: 72px;
+  height: 72px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--ink-150);
+  border-radius: 10px;
+  background: var(--ink-100);
+  color: var(--ink-500);
+  font-size: 11px;
+  text-align: center;
+}
+
+.adSectorImageThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .adSectorProductActions svg {
   width: 16px;
   height: 16px;
@@ -38436,6 +38469,119 @@ html[lang="ar"] .pgBody small {
   color: var(--rma-blue);
 }
 
+/* Datasheet: a long feature list runs across the sheet in two columns */
+.dsFeaturesWide h2 {
+  margin: 0 0 3mm;
+  font-size: 11pt;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.dsFeaturesWide .dsChecks {
+  display: block;
+  columns: 2;
+  column-gap: 9mm;
+}
+
+.dsFeaturesWide .dsChecks li {
+  margin-bottom: 2mm;
+  break-inside: avoid;
+}
+
+.dsChecks li,
+.dsNote,
+.dsFoot {
+  break-inside: avoid;
+}
+
+/* With the wide feature list the table takes the full width as two columns of rows */
+.dsBody.dsBodyWide {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 5mm;
+}
+
+.dsBodyWide .dsSpecs tbody {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 9mm;
+}
+
+.dsBodyWide .dsSpecs tr {
+  display: grid;
+  grid-template-columns: 46% minmax(0, 1fr);
+  border-bottom: 1px solid var(--ink-150);
+}
+
+.dsBodyWide .dsSpecs tr th,
+.dsBodyWide .dsSpecs tr td {
+  width: auto;
+  border-bottom: 0;
+  background: none;
+}
+
+@media (max-width: 760px) {
+  .dsBodyWide .dsSpecs tbody {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media print {
+  .dsBody.dsBodyWide {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4mm;
+  }
+
+  /* Smaller photo and one row of headline values leave room for the list */
+  .dsSheetWide {
+    padding-top: 9mm;
+    gap: 3.6mm;
+  }
+
+  .dsSheetWide .dsHead {
+    padding-bottom: 3.5mm;
+  }
+
+  .dsSheetWide .dsChecks li {
+    margin-bottom: 0.9mm;
+    font-size: 8.6pt;
+    line-height: 1.3;
+  }
+
+  .dsSheetWide .dsHero {
+    grid-template-columns: 42mm 1fr;
+  }
+
+  .dsSheetWide .dsHighlights {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: 3mm;
+  }
+
+  .dsSheetWide .dsHighlights dd {
+    font-size: 11.5pt;
+  }
+
+  .dsBodyWide .dsSpecs tbody {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .dsFeaturesWide .dsChecks {
+    columns: 1;
+  }
+}
+
+@media print {
+  .dsFeaturesWide .dsChecks {
+    columns: 2;
+  }
+
+  .dsFeaturesWide .dsChecks li {
+    margin-bottom: 1.3mm;
+  }
+}
+
 /* Datasheet: the tolerance line stands out on paper too */
 .dsNote.dsTolerance {
   padding: 8px 12px;
@@ -38716,4 +38862,22 @@ html[lang="ar"] .pgBody small {
 .cmsDrawingRemove svg {
   width: 13px;
   height: 13px;
+}
+
+/* =====================================================================
+   Justified text: paragraphs of the public pages, the datasheet and the
+   offer document are set flush on both sides (last line stays at the
+   start). Zero specificity, so any paragraph with its own alignment keeps
+   it; hyphenation keeps the word spacing even in narrow cards.
+   ===================================================================== */
+:where(main:not(.adminPage, .algPage), .ofDoc) :where(p),
+:where(.dsChecks li span) {
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+
+/* Centred notes stay centred */
+.wtEmpty p {
+  text-align: center;
 }

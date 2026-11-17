@@ -224,7 +224,7 @@ export default function ProductModel() {
                     <strong>{company.phone.display}</strong>
                   </span>
                 </a>
-                <LocalizedLink to={`${path}/datasheet?print=1`} target="_blank" rel="noopener" data-track="datasheet">
+                <LocalizedLink to={`${path}/datasheet`} target="_blank" rel="noopener" data-track="datasheet">
                   <FileText aria-hidden="true" />
                   <span>
                     <small>{t('datasheet.buttonMeta')}</small>
@@ -294,7 +294,7 @@ export default function ProductModel() {
               {t('productModel.source')}{' '}
               <a href={CATALOG_PDF} download className="sourceLink">{t('common.catalog')} (PDF)</a>
               {' · '}
-              <LocalizedLink to={`${path}/datasheet?print=1`} target="_blank" rel="noopener" className="sourceLink">{t('datasheet.button')}</LocalizedLink>
+              <LocalizedLink to={`${path}/datasheet`} target="_blank" rel="noopener" className="sourceLink">{t('datasheet.button')}</LocalizedLink>
             </p>
             <ToleranceNote />
           </div>

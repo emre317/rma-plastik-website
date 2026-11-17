@@ -839,7 +839,7 @@ const en = {
     saveHint: 'In the print dialog, choose “Save as PDF” as the destination.',
     back: 'Back to the model page',
     issued: 'Date',
-    note: 'Dimensions are taken from the RMA Plastik product catalogue. Please contact our sales team for up-to-date information and a quotation.',
+    note: 'Please contact our sales team for up-to-date information and a quotation.',
     contact: 'Quotes and information',
     page: 'Product Page',
   },

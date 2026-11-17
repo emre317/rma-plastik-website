@@ -35,6 +35,8 @@ const productSchema = new mongoose.Schema(
   {
     group: { type: String, trim: true, default: '', maxlength: 60 },
     families: { type: [{ type: String, trim: true, maxlength: 80 }], default: [] },
+    // Own photo of the product in this sector (made-to-order items have no other); empty: the group's or table's photo
+    image: { type: String, trim: true, default: '', maxlength: 300 },
     i18n: Object.fromEntries(CONTENT_LANGUAGES.map((lang) => [lang, { type: nameSchema, default: () => ({}) }])),
   },
   { _id: false }
