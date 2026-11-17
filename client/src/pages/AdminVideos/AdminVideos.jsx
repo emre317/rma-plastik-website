@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import useAdminApi from '../../hooks/useAdminApi';
 import usePageTitle from '../../hooks/usePageTitle';
+import useProductGroupOptions from '../../hooks/useProductGroupOptions';
 import { youtubeThumbnail } from '../../components/content/YouTubeEmbed';
 import { createVideo, deleteVideo, listVideos, updateVideo } from '../../services/adminContentApi';
 import { useConfirm } from '../../components/ui/ConfirmDialog';
@@ -18,6 +19,7 @@ const empty = () => ({
   published: true,
   order: 0,
   uploadDate: '',
+  groups: [],
   i18n: Object.fromEntries(LANGS.map(({ code }) => [code, { title: '', description: '' }])),
 });
 
@@ -33,6 +35,7 @@ export default function AdminVideos() {
   usePageTitle('Videolar');
 
   const call = useAdminApi();
+  const { options: groupOptions, labelOf } = useProductGroupOptions();
   const confirm = useConfirm();
   const [videos, setVideos] = useState([]);
   const [form, setForm] = useState(null);
@@ -68,11 +71,18 @@ export default function AdminVideos() {
             published: video.published,
             order: video.order,
             uploadDate: video.uploadDate ? video.uploadDate.slice(0, 10) : '',
+            groups: video.groups || [],
             i18n: Object.fromEntries(LANGS.map(({ code }) => [code, { title: '', description: '', ...video.i18n?.[code] }])),
           }
         : empty()
     );
   }
+
+  const toggleGroup = (id) =>
+    setForm((current) => ({
+      ...current,
+      groups: current.groups.includes(id) ? current.groups.filter((item) => item !== id) : [...current.groups, id],
+    }));
 
   const setText = (field, value) =>
     setForm((current) => ({ ...current, i18n: { ...current.i18n, [lang]: { ...current.i18n[lang], [field]: value } } }));
@@ -169,6 +179,19 @@ export default function AdminVideos() {
                 </label>
               </div>
 
+              <div className="cmsField">
+                <span>Ürün sayfalarında göster</span>
+                <div className="adSectorTables">
+                  {groupOptions.map((group) => (
+                    <label key={group.value} className={`cmsColumnChip ${form.groups.includes(group.value) ? 'on' : ''}`}>
+                      <input type="checkbox" checked={form.groups.includes(group.value)} onChange={() => toggleGroup(group.value)} />
+                      {group.label}
+                    </label>
+                  ))}
+                </div>
+                <small>Seçilen ürün gruplarının tüm model sayfalarında “Ürün Videoları” bölümünde gösterilir (ör. Yol Bariyerleri). Videolar sayfasında her zaman görünür.</small>
+              </div>
+
               <label className="cmsCheck">
                 <input type="checkbox" checked={form.published} onChange={(event) => setForm({ ...form, published: event.target.checked })} />
                 <span>Sitede Göster</span>
@@ -205,7 +228,10 @@ export default function AdminVideos() {
                     <span className="cmsStatus on cmsStatusStatic cmsHeroBadge">Ana sayfa açılışı</span>
                   )}
                 </strong>
-                <small>{video.published ? 'Sitede' : 'Gizli'} · sıra {video.order}</small>
+                <small>
+                  {video.published ? 'Sitede' : 'Gizli'} · sıra {video.order}
+                  {video.groups?.length > 0 && ` · Ürün sayfaları: ${video.groups.map(labelOf).join(', ')}`}
+                </small>
               </div>
               <div className="cmsRowActions">
                 <button type="button" className="cmsButton" onClick={() => edit(video)}>Düzenle</button>

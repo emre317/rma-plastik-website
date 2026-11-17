@@ -39083,3 +39083,27 @@ html[lang="ar"] .pgBody small {
   hyphens: auto;
   -webkit-hyphens: auto;
 }
+
+/* Model page: videos of the product group (Videolar in the panel) */
+.pmVideos {
+  padding: 0 0 56px;
+}
+
+.pmVideoGrid {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
+  gap: 20px;
+  list-style: none;
+}
+
+.pmVideoGrid li {
+  display: grid;
+  gap: 10px;
+}
+
+.pmVideoGrid strong {
+  font-size: 15px;
+  font-weight: 600;
+}

@@ -15,6 +15,8 @@ const videoSchema = new mongoose.Schema(
     order: { type: Number, default: 0 },
     // YouTube upload date – needed for Google video rich results
     uploadDate: { type: Date, default: null },
+    // Product groups whose model pages show this video (e.g. 'barriers'); empty: none
+    groups: { type: [{ type: String, trim: true, maxlength: 60 }], default: [] },
     i18n: {
       tr: { type: textSchema, default: () => ({}) },
       en: { type: textSchema, default: () => ({}) },

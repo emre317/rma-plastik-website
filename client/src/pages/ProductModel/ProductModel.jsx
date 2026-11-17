@@ -22,6 +22,8 @@ import { groupById } from '../../data/productPortfolio';
 import { familyText, findModel, modelDrawing, modelGallery, modelPath, similarModels } from '../../data/productTables';
 import { productStandard, productText } from '../../data/productFeatures';
 import ToleranceNote from '../../components/ui/ToleranceNote';
+import YouTubeEmbed from '../../components/content/YouTubeEmbed';
+import { videoText, videosForGroup } from '../../data/videos';
 
 // Up to four headline values shown as large tiles, in this order of preference
 const HIGHLIGHT_KEYS = ['volume', 'diameter', 'width', 'length', 'height', 'outlet', 'cap'];
@@ -86,6 +88,7 @@ export default function ProductModel() {
   });
 
   const similar = similarModels(family, row);
+  const productVideos = videosForGroup(family.group);
   const standard = productStandard(family, row, lang, t);
   const drawing = modelDrawing(family, row);
   const uses = family.waterTank?.uses || [];
@@ -355,6 +358,33 @@ export default function ProductModel() {
           </div>
         </div>
       </section>
+
+      {/* Videos linked to the product group in the panel (Videolar) */}
+      {productVideos.length > 0 && (
+        <section className="pmVideos" aria-labelledby="product-videos">
+          <div className="container">
+            <div className="pmSimilarHead">
+              <h2 id="product-videos">{t('productModel.videosTitle')}</h2>
+              <LocalizedLink to="/videos" className="wtTextLink">
+                {t('videos.all')}
+                <Arrow />
+              </LocalizedLink>
+            </div>
+
+            <ul className="pmVideoGrid">
+              {productVideos.map((video) => {
+                const videoTitle = videoText(video, lang, 'title');
+                return (
+                  <li key={video.youtubeId}>
+                    <YouTubeEmbed id={video.youtubeId} title={videoTitle} />
+                    {videoTitle && <strong>{videoTitle}</strong>}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </section>
+      )}
 
       {similar.length > 0 && (
         <section className="pmSimilar">

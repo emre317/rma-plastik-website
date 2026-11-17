@@ -890,6 +890,7 @@ const tr = {
     notFoundTitle: 'Model Bulunamadı',
     notFoundText: 'Bu model artık listede olmayabilir. Ürün tablolarındaki güncel modellere göz atın.',
     backToTables: 'Ürün tablolarına dön',
+    videosTitle: 'Ürün Videoları',
     otherSizes: 'Ölçü seçin · {{count}} model',
     trust: { monoblock: 'Tek parça (monoblok) üretim' },
     callUs: 'Satış ekibini arayın',

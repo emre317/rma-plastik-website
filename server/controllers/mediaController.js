@@ -66,6 +66,7 @@ export async function publicVideos() {
   return videos.map((video) => ({
     youtubeId: video.youtubeId,
     uploadDate: video.uploadDate,
+    groups: video.groups || [],
     i18n: texts(video.i18n, VIDEO_FIELDS),
   }));
 }
@@ -164,6 +165,7 @@ function videoPayload(body = {}) {
     published: body.published === undefined ? true : Boolean(body.published),
     order: Number.isFinite(Number(body.order)) ? Number(body.order) : 0,
     uploadDate: uploadDate && !Number.isNaN(uploadDate.getTime()) ? uploadDate : null,
+    groups: [...new Set((Array.isArray(body.groups) ? body.groups : []).map((id) => str(id, 60)).filter((id) => /^[a-z0-9-]{2,60}$/.test(id)))].slice(0, 20),
     i18n: texts(body.i18n, VIDEO_FIELDS),
   };
 }
