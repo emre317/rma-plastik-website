@@ -39046,3 +39046,17 @@ html[lang="ar"] .pgBody small {
     margin-top: 12px;
   }
 }
+
+/* Page header photos that fill their tile edge to edge (mediaTone "fill"):
+   studio renders with their own background, no frame colour around them */
+.phMedia.fill figure {
+  border: 0;
+  background: none;
+  box-shadow: 0 34px 60px -30px rgba(0, 0, 0, 0.75);
+}
+
+.phMedia.fill img {
+  padding: 0;
+  object-fit: cover;
+  object-position: center;
+}

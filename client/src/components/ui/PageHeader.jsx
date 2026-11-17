@@ -11,7 +11,8 @@ import StatValue from './StatValue';
 
   crumbs: [{ label, to? }] after "Ana Sayfa" (the last one is the current page)
   facts:  [{ value, label }]
-  media:  [{ src }] – one to three product photos (mediaTone 'glass' for round cut-outs)
+  media:  [{ src }] – one to three product photos (mediaTone 'glass' for round cut-outs,
+          'fill' for studio renders that cover the whole tile)
   side:   any content for the right column instead of photos (e.g. contact cards)
 */
 export default function PageHeader({
@@ -98,7 +99,7 @@ export default function PageHeader({
           {side && !photos.length && <div className="phSide">{side}</div>}
 
           {photos.length > 0 && (
-            <div className={`phMedia count${photos.length} ${mediaTone === 'glass' ? 'glass' : ''}`} aria-hidden="true">
+            <div className={`phMedia count${photos.length} ${['glass', 'fill'].includes(mediaTone) ? mediaTone : ''}`} aria-hidden="true">
               {photos.map((photo) => (
                 <figure key={photo.src}>
                   <img src={photo.src} alt="" loading="eager" decoding="async" />

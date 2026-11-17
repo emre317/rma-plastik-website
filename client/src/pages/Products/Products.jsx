@@ -55,6 +55,7 @@ export default function Products() {
         title={t('productsPage.title')}
         accent={t('productsPage.titleAccent')}
         lead={t('productsPage.text')}
+        mediaTone="fill"
         media={[
           { src: '/images/products/products-cover-1.webp' },
           { src: '/images/products/products-cover-2.webp' },
