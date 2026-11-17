@@ -263,7 +263,7 @@ export default function ProductModel() {
       {/* Technical data */}
       <section className="pmDetails">
         <div className="container pmDetailsGrid">
-          <div className="pmCard">
+          <div className="pmCard pmCardSpecs">
             <h2>
               <Ruler aria-hidden="true" />
               {t('productModel.specsTitle')}
@@ -300,7 +300,7 @@ export default function ProductModel() {
 
           <div className="pmSide">
             {sectors.length > 0 && (
-              <div className="pmCard">
+              <div className="pmCard pmCardSectors">
                 <h2>{t('productModel.industriesTitle')}</h2>
                 <ul className="pmSectors">
                   {sectors.map((sector) => {
@@ -320,7 +320,7 @@ export default function ProductModel() {
             )}
 
             {uses.length > 0 && (
-              <div className="pmCard">
+              <div className="pmCard pmCardUses">
                 <h2>{t('productModel.usesTitle')}</h2>
                 <ul className="pmUses">
                   {uses.map((use) => (
@@ -331,7 +331,7 @@ export default function ProductModel() {
             )}
 
             {standard.items.length > 0 && (
-              <div className="pmCard">
+              <div className="pmCard pmCardFeatures">
                 <h2>{standard.title}</h2>
                 <ul className="pmFeatures">
                   {standard.items.map((feature) => (

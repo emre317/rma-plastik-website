@@ -38917,3 +38917,132 @@ html[lang="ar"] .pgBody small {
     margin-inline: auto;
   }
 }
+
+/* =====================================================================
+   Model page on desktop: the detail cards sit side by side in three even
+   columns (dimensions | sectors, uses, custom size | features) with level
+   bottoms, compact enough to be seen on one screen.
+   ===================================================================== */
+@media (min-width: 1025px) {
+  .pmHero {
+    padding-bottom: 28px;
+  }
+
+  .pmGrid {
+    margin-top: 20px;
+    grid-template-columns: minmax(0, 0.58fr) minmax(0, 1fr);
+    gap: 48px;
+  }
+
+  .pmDetails {
+    padding: 8px 0 48px;
+  }
+
+  .pmDetailsGrid {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr) minmax(0, 1fr);
+    grid-template-rows: auto auto 1fr;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  /* The cards of the side column are placed on the page grid themselves */
+  .pmDetailsGrid > .pmSide {
+    display: contents;
+  }
+
+  .pmCardSpecs {
+    grid-column: 1;
+    grid-row: 1 / -1;
+  }
+
+  .pmCardSectors,
+  .pmCardUses,
+  .pmCustom {
+    grid-column: 2;
+  }
+
+  .pmCardFeatures {
+    grid-column: 3;
+    grid-row: 1 / -1;
+  }
+
+  /* No feature list: two columns */
+  .pmDetailsGrid:not(:has(.pmCardFeatures)) {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+  }
+
+  .pmDetailsGrid .pmCard {
+    padding: 20px 22px;
+  }
+
+  .pmDetailsGrid .pmCard h2 {
+    margin-bottom: 12px;
+    font-size: 17px;
+  }
+
+  .pmDetailsGrid .pmTable {
+    font-size: 14px;
+  }
+
+  .pmDetailsGrid .pmTable th,
+  .pmDetailsGrid .pmTable td {
+    padding: 8px 12px;
+  }
+
+  .pmDetailsGrid .pmSource {
+    margin-top: 10px;
+  }
+
+  .pmDetailsGrid .toleranceNote {
+    margin-top: 10px;
+    padding: 8px 10px;
+    font-size: 12.5px;
+  }
+
+  .pmDetailsGrid .pmSectors {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .pmDetailsGrid .pmSectors a {
+    padding: 5px 8px 5px 5px;
+    gap: 8px;
+    font-size: 13px;
+  }
+
+  .pmDetailsGrid .pmSectors a > svg {
+    display: none;
+  }
+
+  .pmDetailsGrid .pmSectorIcon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .pmDetailsGrid .pmUses {
+    gap: 6px;
+  }
+
+  .pmDetailsGrid .pmUses li {
+    padding: 5px 12px;
+    font-size: 13px;
+  }
+
+  .pmDetailsGrid .pmFeatures {
+    gap: 7px;
+  }
+
+  .pmDetailsGrid .pmFeatures li {
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+
+  .pmDetailsGrid .pmCustom p {
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+
+  .pmDetailsGrid .pmCustomLink {
+    margin-top: 12px;
+  }
+}
