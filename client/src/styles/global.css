@@ -39060,3 +39060,17 @@ html[lang="ar"] .pgBody small {
   object-fit: cover;
   object-position: center;
 }
+
+/* Standard feature lists (datasheet and model page) are justified;
+   the last line of each item stays at the start */
+.dsChecks li > span,
+.pmFeatures li {
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+
+.dsChecks li > span {
+  flex: 1;
+  min-width: 0;
+}
