@@ -56,9 +56,9 @@ export default function Products() {
         accent={t('productsPage.titleAccent')}
         lead={t('productsPage.text')}
         media={[
-          { src: '/images/products/rd-15000.webp' },
-          { src: '/images/products/mixer-silo-tank.webp' },
-          { src: '/images/products/stackable-trolley.webp' },
+          { src: '/images/products/products-cover-1.webp' },
+          { src: '/images/products/products-cover-2.webp' },
+          { src: '/images/products/products-cover-3.webp' },
         ]}
         actions={(
           <>
