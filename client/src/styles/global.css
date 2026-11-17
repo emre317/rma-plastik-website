@@ -38865,19 +38865,36 @@ html[lang="ar"] .pgBody small {
 }
 
 /* =====================================================================
-   Justified text: paragraphs of the public pages, the datasheet and the
-   offer document are set flush on both sides (last line stays at the
-   start). Zero specificity, so any paragraph with its own alignment keeps
-   it; hyphenation keeps the word spacing even in narrow cards.
+   Justified text: only the wide text blocks (page introductions, articles,
+   legal texts, the datasheet description and the offer document) are set
+   flush on both sides. Narrow cards and the datasheet feature list stay
+   aligned to the start: justified short lines leave wide word gaps.
+   On the site it applies from 900px up (phones keep start alignment).
    ===================================================================== */
-:where(main:not(.adminPage, .algPage), .ofDoc) :where(p),
-:where(.dsChecks li span) {
+.ofDoc p,
+.dsIntro p,
+.dsNote {
   text-align: justify;
-  hyphens: auto;
-  -webkit-hyphens: auto;
 }
 
-/* Centred notes stay centred */
-.wtEmpty p {
-  text-align: center;
+@media (min-width: 900px) {
+  main .lead,
+  main .phLead,
+  main .pmText,
+  main .cmLead,
+  main .cmHomeText,
+  main .statsSubtitle,
+  main .machineParkText,
+  main .machineParkPanelText p,
+  main .productIntroText,
+  main .industriesShowcaseIntro p:not(.eyebrow),
+  main .certStripIntro p,
+  main .cmCtaPanel p,
+  main .certScopeItem p,
+  main .blogPostLead,
+  main .prose p,
+  main .legalBody p,
+  main .legalConsent p {
+    text-align: justify;
+  }
 }
