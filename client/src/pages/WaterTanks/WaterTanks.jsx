@@ -272,10 +272,11 @@ export default function WaterTanks() {
         accent={w('titleAccent')}
         lead={w('intro')}
         actions={<FinderCta tone="glass" />}
+        mediaTone="fill"
         media={[
-          { src: '/images/products/rd-15000.webp' },
-          { src: '/images/products/ry-1000.webp' },
-          { src: '/images/products/sd-set.webp' },
+          { src: '/images/products/water-cover-1.webp' },
+          { src: '/images/products/water-cover-2.webp' },
+          { src: '/images/products/water-cover-3.webp' },
         ]}
         facts={[
           { value: waterTanks.length, label: w('statModels') },
