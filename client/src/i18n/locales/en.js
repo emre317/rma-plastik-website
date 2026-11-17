@@ -892,7 +892,6 @@ const en = {
     notFoundTitle: 'Model not found',
     notFoundText: 'This model may no longer be listed. Browse the current models in the product tables.',
     backToTables: 'Back to product tables',
-    source: 'Dimensions are taken from the RMA Plastik product catalogue.',
     otherSizes: 'Choose a size · {{count}} models',
     trust: { monoblock: 'Single-piece (monoblock) production' },
     callUs: 'Call our sales team',

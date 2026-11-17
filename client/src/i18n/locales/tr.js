@@ -891,7 +891,6 @@ const tr = {
     notFoundTitle: 'Model Bulunamadı',
     notFoundText: 'Bu model artık listede olmayabilir. Ürün tablolarındaki güncel modellere göz atın.',
     backToTables: 'Ürün tablolarına dön',
-    source: 'Ölçüler RMA Plastik ürün kataloğundan alınmıştır.',
     otherSizes: 'Ölçü seçin · {{count}} model',
     trust: { monoblock: 'Tek parça (monoblok) üretim' },
     callUs: 'Satış ekibini arayın',

@@ -291,7 +291,6 @@ export default function ProductModel() {
               </tbody>
             </table>
             <p className="pmSource">
-              {t('productModel.source')}{' '}
               <a href={CATALOG_PDF} download className="sourceLink">{t('common.catalog')} (PDF)</a>
               {' · '}
               <LocalizedLink to={`${path}/datasheet`} target="_blank" rel="noopener" className="sourceLink">{t('datasheet.button')}</LocalizedLink>
