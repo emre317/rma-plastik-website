@@ -46,9 +46,9 @@ export default function Industries() {
         lead={t('industries.description')}
         mediaTone="fill"
         media={[
-          { src: '/images/products/products-cover-1.webp' },
-          { src: '/images/products/water-cover-2.webp' },
-          { src: '/images/products/products-cover-3.webp' },
+          { src: '/images/products/adblue-tank-tall.webp' },
+          { src: '/images/products/road-barrier.webp' },
+          { src: '/images/products/cop-box.webp' },
         ]}
         actions={(
           <>
