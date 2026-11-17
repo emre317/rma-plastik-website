@@ -38898,3 +38898,22 @@ html[lang="ar"] .pgBody small {
     text-align: justify;
   }
 }
+
+/* Model page: a smaller photo frame with more air around the product
+   (the photos were shown too large and too close) */
+@media (min-width: 1025px) {
+  .pmGrid {
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1fr);
+  }
+}
+
+.pgalOpen img {
+  padding: 15%;
+}
+
+@media (max-width: 1024px) {
+  .pgal {
+    max-width: 440px;
+    margin-inline: auto;
+  }
+}
