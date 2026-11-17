@@ -57,10 +57,11 @@ export default function Company() {
         title={c('title')}
         accent={c('titleAccent')}
         lead={c('text')}
+        mediaTone="fill"
         media={[
-          { src: '/images/products/rd-15000.webp' },
-          { src: '/images/products/silo-tank.webp' },
-          { src: '/images/products/textile-trolley.webp' },
+          { src: '/images/products/products-cover-1.webp' },
+          { src: '/images/products/products-cover-2.webp' },
+          { src: '/images/products/products-cover-3.webp' },
         ]}
         actions={(
           <>
