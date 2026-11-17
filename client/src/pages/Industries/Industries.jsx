@@ -44,10 +44,11 @@ export default function Industries() {
         title={p('title')}
         accent={p('titleAccent')}
         lead={t('industries.description')}
+        mediaTone="fill"
         media={[
-          { src: '/images/products/road-barrier.webp' },
-          { src: '/images/products/adblue-tank.webp' },
-          { src: '/images/products/cop-box.webp' },
+          { src: '/images/products/products-cover-1.webp' },
+          { src: '/images/products/water-cover-2.webp' },
+          { src: '/images/products/products-cover-3.webp' },
         ]}
         actions={(
           <>
