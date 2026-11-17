@@ -39107,3 +39107,300 @@ html[lang="ar"] .pgBody small {
   font-size: 15px;
   font-weight: 600;
 }
+
+/* =====================================================================
+   Videos page: featured player + playlist, group filter, channel band
+   ===================================================================== */
+.vdFilters {
+  margin-bottom: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.vdFilters button {
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
+}
+
+.vdFilters button:hover {
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.vdFilters button.active {
+  border-color: var(--ink-900);
+  background: var(--ink-900);
+  color: #fff;
+}
+
+.vdLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
+  gap: 24px;
+  align-items: start;
+}
+
+.vdLayout.single {
+  grid-template-columns: minmax(0, 960px);
+  justify-content: center;
+}
+
+.vdFeatured {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 30px 60px -40px rgba(16, 19, 23, 0.45);
+  scroll-margin-top: 96px;
+}
+
+.vdFeatured .youtubeEmbed {
+  border-radius: 0;
+}
+
+.vdInfo {
+  padding: 22px 26px 26px;
+}
+
+.vdMeta {
+  margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.vdTag {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.vdInfo h2 {
+  margin: 0;
+  font-size: clamp(20px, 2vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.vdInfo p {
+  margin: 10px 0 0;
+  max-width: 72ch;
+  color: var(--text-secondary);
+  font-size: 15.5px;
+  line-height: 1.65;
+}
+
+.vdPlaylist {
+  position: sticky;
+  top: 96px;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 120px);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+}
+
+.vdPlaylistHead {
+  padding: 16px 18px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.vdPlaylistHead strong {
+  font-size: 16px;
+}
+
+.vdPlaylistHead span {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.vdPlaylist ol {
+  margin: 0;
+  padding: 8px;
+  display: grid;
+  gap: 4px;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.vdPlaylist button {
+  width: 100%;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: 128px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: background-color 160ms ease;
+}
+
+.vdPlaylist button:hover {
+  background: var(--ink-050, #f6f8fb);
+}
+
+.vdPlaylist button.active {
+  background: color-mix(in srgb, var(--accent) 8%, #fff);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+[dir='rtl'] .vdPlaylist button.active {
+  box-shadow: inset -3px 0 0 var(--accent);
+}
+
+.vdThumb {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--ink-900);
+}
+
+.vdThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vdThumb svg {
+  position: absolute;
+  inset-inline-start: 50%;
+  top: 50%;
+  width: 30px;
+  height: 30px;
+  color: #fff;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+  transform: translate(-50%, -50%);
+  opacity: 0.9;
+}
+
+[dir='rtl'] .vdThumb svg {
+  transform: translate(50%, -50%);
+}
+
+.vdItemText {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.vdItemText strong {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.vdItemText small {
+  color: var(--accent);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.vdItemText small.vdItemDate {
+  color: var(--text-secondary);
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.vdChannel {
+  margin-top: 40px;
+  padding: 24px 28px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 20px;
+  align-items: center;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--ink-900), var(--ink-700));
+  color: #fff;
+}
+
+.vdChannelIcon {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.vdChannelIcon svg {
+  width: 30px;
+  height: 30px;
+  color: #f00;
+}
+
+.vdChannel strong {
+  font-size: 18px;
+}
+
+.vdChannel p {
+  margin: 4px 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 14.5px;
+  text-align: start;
+}
+
+@media (max-width: 1000px) {
+  .vdLayout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vdPlaylist {
+    position: static;
+    max-height: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .vdInfo {
+    padding: 18px;
+  }
+
+  .vdPlaylist button {
+    grid-template-columns: 112px minmax(0, 1fr);
+  }
+
+  .vdChannel {
+    grid-template-columns: auto minmax(0, 1fr);
+    padding: 20px;
+  }
+
+  .vdChannel .button {
+    grid-column: 1 / -1;
+  }
+}

@@ -16,10 +16,12 @@ export const youtubeThumbnailPublic = (id, size = 'hqdefault') => `https://i.yti
   Lightweight YouTube player: only a cover image (from our own server) is
   loaded with the page; the real player (youtube-nocookie.com) is created when
   the visitor clicks. Nothing reaches Google until a video is played.
+  With autoPlay the player starts at once (only after a visitor's click).
 */
-export default function YouTubeEmbed({ id, title, className = '' }) {
+export default function YouTubeEmbed({ id, title, className = '', autoPlay = false }) {
   const { t } = useTranslation();
-  const [playing, setPlaying] = useState(false);
+  // autoPlay: the visitor already chose this video (e.g. from a playlist)
+  const [playing, setPlaying] = useState(autoPlay);
 
   if (!id) {
     return null;

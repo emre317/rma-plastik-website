@@ -1522,6 +1522,12 @@ const tr = {
     play: 'Videoyu Oynat',
     all: 'Tüm Videolar',
     channel: 'YouTube kanalımıza abone olun',
+    playlist: 'Video Listesi',
+    filterAll: 'Tümü',
+    nowPlaying: 'Oynatılıyor',
+    count: '{{count}} video',
+    channelText: 'Yeni üretim ve uygulama videolarından haberdar olmak için kanalımıza abone olun.',
+    subscribe: 'Abone Ol',
   },
 
   contact: {

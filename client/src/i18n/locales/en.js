@@ -1524,6 +1524,12 @@ const en = {
     play: 'Play Video',
     all: 'All Videos',
     channel: 'Subscribe to our YouTube channel',
+    playlist: 'Playlist',
+    filterAll: 'All',
+    nowPlaying: 'Now playing',
+    count: '{{count}} videos',
+    channelText: 'Subscribe to our channel for our latest production and application videos.',
+    subscribe: 'Subscribe',
   },
 
   contact: {
