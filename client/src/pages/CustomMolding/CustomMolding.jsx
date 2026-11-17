@@ -46,6 +46,13 @@ export default function CustomMolding() {
   ];
   const openSlide = (src) => setViewer(slides.findIndex((slide) => slide.src === src));
 
+  // Reference project photos from the panel (Projeler). Photos uploaded there
+  // fill their tiles like the other page headers; the built-in round
+  // brochure cut-outs keep the glass frame.
+  const heroPhotos = [projects[2], projects[0], projects[1]]
+    .filter((project) => project?.image)
+    .map((project) => ({ src: project.image }));
+
   return (
     <main className="internalPage cmPage">
       <Seo
@@ -61,10 +68,8 @@ export default function CustomMolding() {
         title={text('title')}
         accent={text('titleAccent')}
         lead={text('intro')}
-        mediaTone="glass"
-        media={[
-          ...[projects[2], projects[0], projects[1]].filter(Boolean).map((project) => ({ src: project.image })),
-        ]}
+        mediaTone={heroPhotos.length && heroPhotos.every((photo) => photo.src.startsWith('/uploads/')) ? 'fill' : 'glass'}
+        media={heroPhotos}
         actions={(
           <>
             <LocalizedLink to="/custom-molding/project" className="button primary quoteButton">

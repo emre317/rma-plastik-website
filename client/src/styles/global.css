@@ -39404,3 +39404,9 @@ html[lang="ar"] .pgBody small {
     grid-column: 1 / -1;
   }
 }
+
+/* Edge-to-edge header photos sit on the same light studio background as the
+   product renders, so a photo with transparent parts never shows the dark page */
+.phMedia.fill figure {
+  background: linear-gradient(180deg, #fdfefe 0%, #e6e6e6 55%, #c6c6c6 100%);
+}
