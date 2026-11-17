@@ -645,7 +645,6 @@ const en = {
     },
     quote: 'Request a Quote',
     waterLink: 'Filter water tanks',
-    source: 'Values are taken from the RMA Plastik 2025 product catalogue.',
     groups: {
       tanks: 'Polyethylene Tanks',
       textile: 'Textile',

@@ -644,7 +644,6 @@ const tr = {
     },
     quote: 'Teklif İste',
     waterLink: 'Su depolarını filtreleyin',
-    source: 'Değerler RMA Plastik 2025 ürün kataloğundan alınmıştır.',
     groups: {
       tanks: 'Polietilen Tanklar',
       textile: 'Tekstil',

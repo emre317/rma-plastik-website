@@ -321,7 +321,6 @@ export default function ProductTables() {
           <ToleranceNote />
 
           <p className="ptSource">
-            {p('source')}
             <a href={CATALOG_PDF} download className="sourceLink">{t('common.catalog')} (PDF)</a>
             <EcoBadge type="recycle" />
           </p>
