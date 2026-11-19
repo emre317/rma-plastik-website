@@ -262,7 +262,11 @@ export async function sendQuoteNotification(quote) {
 
   return sendMail({
     to,
-    replyTo: { name: quote.name, address: quote.email },
+    // Reply-To stays on our own domain: a Reply-To on the customer's domain
+    // (different from the From domain) gets this notification silently
+    // dropped by some providers' anti-spoofing filters before it reaches
+    // the inbox. The "Müşteriye yanıt ver" button covers replying to them.
+    replyTo: to,
     subject,
     html,
     text,

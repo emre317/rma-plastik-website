@@ -375,7 +375,10 @@ export function buildMeetingNotification(meeting) {
 
 export function sendMeetingNotification(meeting) {
   const { subject, html, text } = buildMeetingNotification(meeting);
-  return sendMail({ to: notifyAddress(), replyTo: { name: meeting.name, address: meeting.email }, subject, html, text });
+  // Reply-To stays on our own domain, same reasoning as sendQuoteNotification
+  // in quoteEmail.js: a customer-domain Reply-To gets this silently dropped
+  // by some providers' anti-spoofing filters before it reaches the inbox.
+  return sendMail({ to: notifyAddress(), replyTo: notifyAddress(), subject, html, text });
 }
 
 /* ---------- 2./3. Customer: receipt, confirmed, updated, cancelled, declined ---------- */
