@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
@@ -8,6 +9,12 @@ import Arrow from '../../components/i18n/Arrow';
 import { youtubeThumbnail } from '../../components/content/YouTubeEmbed';
 import { postsForLanguage } from '../../data/posts';
 import videos, { videoText } from '../../data/videos';
+
+const PAGE_SIZE = 9;
+
+function normalize(value, lang) {
+  return (value || '').toLocaleLowerCase(lang === 'ar' ? 'ar' : lang).trim();
+}
 
 export function formatPostDate(date, lang) {
   if (!date) return '';
@@ -23,7 +30,29 @@ export default function Blog() {
   const { t } = useTranslation();
   const { lang } = useParams();
 
+  const [query, setQuery] = useState('');
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
   const posts = postsForLanguage(lang);
+
+  const filteredPosts = useMemo(() => {
+    const needle = normalize(query, lang);
+    if (!needle) return posts;
+
+    return posts.filter((post) => {
+      const text = post.i18n[lang];
+      return normalize(text.title, lang).includes(needle) || normalize(text.excerpt, lang).includes(needle);
+    });
+  }, [posts, query, lang]);
+
+  const visiblePosts = filteredPosts.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredPosts.length;
+  const isFiltering = query.trim().length > 0;
+
+  function handleSearchChange(event) {
+    setQuery(event.target.value);
+    setVisibleCount(PAGE_SIZE);
+  }
 
   return (
     <main className="internalPage blogPage">
@@ -53,43 +82,98 @@ export default function Blog() {
               </LocalizedLink>
             </div>
           ) : (
-            <div className="blogGrid">
-              {posts.map((post, index) => {
-                const text = post.i18n[lang];
+            <>
+              <div className="blogToolbar">
+                <label className="blogSearch">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" strokeWidth="2" />
+                    <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  </svg>
+                  <span className="visuallyHidden">{t('blog.searchLabel')}</span>
+                  <input
+                    type="search"
+                    value={query}
+                    onChange={handleSearchChange}
+                    placeholder={t('blog.searchPlaceholder')}
+                    aria-label={t('blog.searchLabel')}
+                  />
+                </label>
 
-                return (
-                  <article key={post.slug} className={`blogCard ${index === 0 ? 'featured' : ''}`}>
-                    <LocalizedLink to={`/blog/${post.slug}`} className="blogCardLink">
-                      <div className="blogCardMedia">
-                        {post.coverImage ? (
-                          <img src={post.coverImage} alt="" loading={index < 2 ? 'eager' : 'lazy'} decoding="async" />
-                        ) : post.youtubeId ? (
-                          <img src={youtubeThumbnail(post.youtubeId)} alt="" loading="lazy" decoding="async" />
-                        ) : (
-                          <span className="blogCardPlaceholder" aria-hidden="true">RMA</span>
-                        )}
-                      </div>
+                {isFiltering && (
+                  <p className="blogResultsCount">
+                    {t('blog.resultsCount', { count: filteredPosts.length })}
+                  </p>
+                )}
+              </div>
 
-                      <div className="blogCardBody">
-                        <p className="blogCardMeta">
-                          <time dateTime={post.publishedAt}>{formatPostDate(post.publishedAt, lang)}</time>
-                          <span>· {t('blog.readingTime', { count: text.readingMinutes || 1 })}</span>
-                        </p>
+              {filteredPosts.length === 0 ? (
+                <div className="blogEmpty">
+                  <p>{t('blog.noResults')}</p>
+                  <button type="button" className="blogClearSearch" onClick={() => setQuery('')}>
+                    {t('blog.clearSearch')}
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="blogGrid">
+                    {visiblePosts.map((post, index) => {
+                      const text = post.i18n[lang];
+                      const featured = index === 0 && !isFiltering;
 
-                        <h2>{text.title}</h2>
+                      return (
+                        <article key={post.slug} className={`blogCard ${featured ? 'featured' : ''}`}>
+                          <LocalizedLink to={`/blog/${post.slug}`} className="blogCardLink">
+                            <div className="blogCardMedia">
+                              {post.coverImage ? (
+                                <img
+                                  src={post.coverImage}
+                                  alt=""
+                                  loading={index < 2 ? 'eager' : 'lazy'}
+                                  decoding="async"
+                                />
+                              ) : post.youtubeId ? (
+                                <img src={youtubeThumbnail(post.youtubeId)} alt="" loading="lazy" decoding="async" />
+                              ) : (
+                                <span className="blogCardPlaceholder" aria-hidden="true">RMA</span>
+                              )}
+                            </div>
 
-                        {text.excerpt && <p className="blogCardExcerpt">{text.excerpt}</p>}
+                            <div className="blogCardBody">
+                              <p className="blogCardMeta">
+                                <time dateTime={post.publishedAt}>{formatPostDate(post.publishedAt, lang)}</time>
+                                <span>· {t('blog.readingTime', { count: text.readingMinutes || 1 })}</span>
+                              </p>
 
-                        <span className="blogCardMore">
-                          {t('blog.readMore')}
-                          <Arrow />
-                        </span>
-                      </div>
-                    </LocalizedLink>
-                  </article>
-                );
-              })}
-            </div>
+                              <h2>{text.title}</h2>
+
+                              {text.excerpt && <p className="blogCardExcerpt">{text.excerpt}</p>}
+
+                              <span className="blogCardMore">
+                                {t('blog.readMore')}
+                                <Arrow />
+                              </span>
+                            </div>
+                          </LocalizedLink>
+                        </article>
+                      );
+                    })}
+                  </div>
+
+                  {hasMore && (
+                    <div className="blogLoadMore">
+                      <button
+                        type="button"
+                        className="button ghost"
+                        onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
+                      >
+                        {t('blog.loadMore')}
+                        <Arrow className="buttonArrow" />
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+            </>
           )}
         </div>
       </section>

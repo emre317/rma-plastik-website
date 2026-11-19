@@ -7361,12 +7361,126 @@ button.contactChannel {
   font-weight: 600;
 }
 
+.blogToolbar {
+  margin-bottom: 32px;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 16px;
+}
+
+.blogSearch {
+  width: 100%;
+
+  max-width: 360px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 12px 18px;
+
+  border: 1px solid var(--line);
+
+  border-radius: 999px;
+
+  background: #fff;
+
+  color: var(--text-secondary);
+
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.blogSearch:focus-within {
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.blogSearch svg {
+  flex: none;
+
+  width: 18px;
+
+  height: 18px;
+
+  color: var(--text-secondary);
+}
+
+.blogSearch input {
+  flex: 1;
+
+  border: none;
+
+  outline: none;
+
+  background: none;
+
+  font-size: 14px;
+
+  color: var(--text);
+}
+
+.blogSearch input::placeholder {
+  color: var(--text-secondary);
+}
+
+.blogSearch input::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+.blogResultsCount {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 13px;
+}
+
+.blogClearSearch {
+  margin-top: 16px;
+
+  padding: 0;
+
+  border: none;
+
+  background: none;
+
+  color: var(--accent);
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.blogClearSearch:hover {
+  text-decoration: underline;
+}
+
 .blogGrid {
   display: grid;
 
   grid-template-columns: repeat(3, minmax(0, 1fr));
 
   gap: 24px;
+}
+
+.blogLoadMore {
+  margin-top: 40px;
+
+  display: flex;
+
+  justify-content: center;
 }
 
 .blogCard.featured {
