@@ -1,13 +1,13 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import Seo from '../../seo/Seo';
 import PageHeader from '../../components/ui/PageHeader';
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import { youtubeThumbnail } from '../../components/content/YouTubeEmbed';
-import { categoriesForLanguage, postsForLanguage } from '../../data/posts';
+import { categoryCountsForLanguage, postsForLanguage } from '../../data/posts';
 import videos, { videoText } from '../../data/videos';
 
 const PAGE_SIZE = 9;
@@ -29,13 +29,22 @@ export function formatPostDate(date, lang) {
 export default function Blog() {
   const { t } = useTranslation();
   const { lang } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [query, setQuery] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState(() => searchParams.get('category') || '');
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const posts = postsForLanguage(lang);
-  const categories = useMemo(() => categoriesForLanguage(lang), [lang]);
+  const categoryCounts = useMemo(() => categoryCountsForLanguage(lang), [lang]);
+
+  useEffect(() => {
+    const next = new URLSearchParams(searchParams);
+    if (category) next.set('category', category);
+    else next.delete('category');
+    setSearchParams(next, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category]);
 
   const filteredPosts = useMemo(() => {
     const needle = normalize(query, lang);
@@ -119,7 +128,7 @@ export default function Blog() {
                 )}
               </div>
 
-              {categories.length > 0 && (
+              {categoryCounts.length > 0 && (
                 <div className="blogCategories" role="group" aria-label={t('blog.categoriesLabel')}>
                   <button
                     type="button"
@@ -127,16 +136,18 @@ export default function Blog() {
                     onClick={() => handleCategoryChange('')}
                   >
                     {t('blog.allCategories')}
+                    <span className="blogCategoryCount">{posts.length}</span>
                   </button>
 
-                  {categories.map((item) => (
+                  {categoryCounts.map((item) => (
                     <button
-                      key={item}
+                      key={item.name}
                       type="button"
-                      className={`blogCategoryPill ${category === item ? 'active' : ''}`}
-                      onClick={() => handleCategoryChange(item)}
+                      className={`blogCategoryPill ${category === item.name ? 'active' : ''}`}
+                      onClick={() => handleCategoryChange(item.name)}
                     >
-                      {item}
+                      {item.name}
+                      <span className="blogCategoryCount">{item.count}</span>
                     </button>
                   ))}
                 </div>

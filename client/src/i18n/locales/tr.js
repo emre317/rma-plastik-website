@@ -1516,6 +1516,7 @@ const tr = {
     noResults: 'Aramanızla eşleşen bir yazı bulunamadı.',
     clearSearch: 'Aramayı temizle',
     loadMore: 'Daha Fazla Yazı Göster',
+    moreInCategory: '{{category}} konusunda diğer yazılar',
     back: 'Tüm Yazılar',
     relatedProducts: 'İlgili Ürünler',
     ctaTitle: 'Projeniz için doğru tankı birlikte seçelim.',

@@ -1511,6 +1511,7 @@ const ar = {
     noResults: 'لا توجد مقالات مطابقة لبحثك.',
     clearSearch: 'مسح البحث',
     loadMore: 'عرض المزيد من المقالات',
+    moreInCategory: 'مزيد من مقالات {{category}}',
     back: 'كل المقالات',
     relatedProducts: 'منتجات ذات صلة',
     ctaTitle: 'لنختر معًا الخزان المناسب لمشروعك.',

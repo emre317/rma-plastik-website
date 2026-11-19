@@ -7,7 +7,7 @@ import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import YouTubeEmbed from '../../components/content/YouTubeEmbed';
 import { useQuote } from '../../components/quote/QuoteContext';
-import posts, { postLanguages } from '../../data/posts';
+import posts, { postLanguages, relatedPostsByCategory } from '../../data/posts';
 import portfolio, { LEGACY_PRODUCT_GROUPS } from '../../data/productPortfolio';
 import NotFound from '../NotFound/NotFound';
 import { formatPostDate } from '../Blog/Blog';
@@ -29,6 +29,7 @@ export default function BlogPost() {
   // Related product groups (older posts stored generic product slugs)
   const relatedIds = [...new Set((post.relatedProducts || []).map((id) => LEGACY_PRODUCT_GROUPS[id] || id))];
   const related = relatedIds.map((id) => portfolio.find((group) => group.id === id)).filter(Boolean);
+  const relatedPosts = relatedPostsByCategory(post, lang, 3);
   const image = post.coverImage ? absoluteUrl(post.coverImage) : OG_IMAGE;
   const url = absoluteUrl(`/${lang}/blog/${post.slug}`);
 
@@ -70,6 +71,12 @@ export default function BlogPost() {
             <LocalizedLink to="/blog" className="blogBack">
               <Arrow direction="left" /> {t('blog.back')}
             </LocalizedLink>
+
+            {text.category && (
+              <LocalizedLink to={`/blog?category=${encodeURIComponent(text.category)}`} className="blogPostCategory">
+                {text.category}
+              </LocalizedLink>
+            )}
 
             <p className="blogCardMeta">
               <time dateTime={post.publishedAt}>{formatPostDate(post.publishedAt, lang)}</time>
@@ -132,6 +139,38 @@ export default function BlogPost() {
             </button>
           </aside>
         </div>
+
+        {relatedPosts.length > 0 && (
+          <section className="blogPostMore">
+            <div className="container">
+              <h2>{t('blog.moreInCategory', { category: text.category })}</h2>
+
+              <div className="blogPostMoreGrid">
+                {relatedPosts.map((item) => {
+                  const itemText = item.i18n[lang];
+
+                  return (
+                    <LocalizedLink key={item.slug} to={`/blog/${item.slug}`} className="blogPostMoreCard">
+                      <div className="blogPostMoreMedia">
+                        {item.coverImage ? (
+                          <img src={item.coverImage} alt="" loading="lazy" decoding="async" />
+                        ) : (
+                          <span className="blogCardPlaceholder" aria-hidden="true">RMA</span>
+                        )}
+                      </div>
+                      <div>
+                        <p className="blogCardMeta">
+                          <time dateTime={item.publishedAt}>{formatPostDate(item.publishedAt, lang)}</time>
+                        </p>
+                        <strong>{itemText.title}</strong>
+                      </div>
+                    </LocalizedLink>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        )}
       </article>
     </main>
   );

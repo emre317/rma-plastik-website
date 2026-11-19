@@ -1518,6 +1518,7 @@ const en = {
     noResults: 'No articles match your search.',
     clearSearch: 'Clear search',
     loadMore: 'Load More Articles',
+    moreInCategory: 'More on {{category}}',
     back: 'All Articles',
     relatedProducts: 'Related Products',
     ctaTitle: 'Let’s choose the right tank for your project.',
