@@ -5,7 +5,7 @@ import Video from '../models/Video.js';
 import { markContentChanged } from '../models/SiteSettings.js';
 
 const LANGS = ['tr', 'en', 'ar'];
-const POST_FIELDS = { title: 160, excerpt: 400, body: 60000, seoTitle: 70, seoDescription: 170 };
+const POST_FIELDS = { title: 160, category: 60, excerpt: 400, body: 60000, seoTitle: 70, seoDescription: 170 };
 const VIDEO_FIELDS = { title: 160, description: 1000 };
 
 const str = (value, max) => (typeof value === 'string' ? value.trim().slice(0, max) : '');
@@ -99,6 +99,29 @@ export async function listPosts(req, res) {
     return res.json({ success: true, data: posts });
   } catch (error) {
     return handleError(res, error, 'List posts error');
+  }
+}
+
+/* Distinct category names already used, per language (for the admin editor's suggestions) */
+export async function listPostCategories(req, res) {
+  try {
+    const posts = await Post.find({}, { i18n: 1 }).lean();
+    const byLang = { tr: new Set(), en: new Set(), ar: new Set() };
+
+    posts.forEach((post) => {
+      LANGS.forEach((lang) => {
+        const category = str(post.i18n?.[lang]?.category, 60);
+        if (category) byLang[lang].add(category);
+      });
+    });
+
+    const data = Object.fromEntries(
+      LANGS.map((lang) => [lang, [...byLang[lang]].sort((a, b) => a.localeCompare(b, lang))])
+    );
+
+    return res.json({ success: true, data });
+  } catch (error) {
+    return handleError(res, error, 'List post categories error');
   }
 }
 

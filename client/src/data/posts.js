@@ -9,4 +9,16 @@ export const postLanguages = (post) =>
 
 export const postsForLanguage = (lang) => posts.filter((post) => postLanguages(post).includes(lang));
 
+/* Distinct categories among a language's posts, in first-seen (= newest post) order */
+export const categoriesForLanguage = (lang) => {
+  const seen = new Set();
+
+  postsForLanguage(lang).forEach((post) => {
+    const category = post.i18n[lang]?.category?.trim();
+    if (category) seen.add(category);
+  });
+
+  return [...seen];
+};
+
 export default posts;

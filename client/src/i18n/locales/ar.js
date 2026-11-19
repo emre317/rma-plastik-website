@@ -1504,6 +1504,8 @@ const ar = {
     readingTime_other: '{{count}} دقائق قراءة',
     searchPlaceholder: 'ابحث في المقالات…',
     searchLabel: 'البحث في مقالات المدونة',
+    categoriesLabel: 'التصفية حسب الفئة',
+    allCategories: 'الكل',
     resultsCount_one: 'تم العثور على {{count}} مقالة',
     resultsCount_other: 'تم العثور على {{count}} مقالات',
     noResults: 'لا توجد مقالات مطابقة لبحثك.',

@@ -13,6 +13,7 @@ export const updateSettings = (body, token) => request('/admin/settings', { meth
 
 /* Blog posts */
 export const listPosts = (token) => request('/admin/posts', { token, fallbackMessage: 'Yazılar yüklenemedi.' });
+export const listPostCategories = (token) => request('/admin/posts/categories', { token, fallbackMessage: 'Kategoriler yüklenemedi.' });
 export const getPost = (id, token) => request(`/admin/posts/${encodeURIComponent(id)}`, { token, fallbackMessage: 'Yazı yüklenemedi.' });
 export const createPost = (body, token) => request('/admin/posts', { method: 'POST', body, token, fallbackMessage: 'Yazı kaydedilemedi.' });
 export const updatePost = (id, body, token) => request(`/admin/posts/${encodeURIComponent(id)}`, { method: 'PUT', body, token, fallbackMessage: 'Yazı kaydedilemedi.' });

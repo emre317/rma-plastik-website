@@ -1511,6 +1511,8 @@ const en = {
     readingTime_other: '{{count}} min read',
     searchPlaceholder: 'Search articles…',
     searchLabel: 'Search blog articles',
+    categoriesLabel: 'Filter by category',
+    allCategories: 'All',
     resultsCount_one: '{{count}} article found',
     resultsCount_other: '{{count}} articles found',
     noResults: 'No articles match your search.',

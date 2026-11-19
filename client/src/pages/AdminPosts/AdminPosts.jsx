@@ -74,6 +74,7 @@ export default function AdminPosts() {
         <div className="cmsTable">
           <div className="cmsTableHead cmsPostRow">
             <span>Yazı</span>
+            <span>Kategori</span>
             <span>Diller</span>
             <span>Tarih</span>
             <span>Durum</span>
@@ -92,6 +93,8 @@ export default function AdminPosts() {
                     <small>/blog/{post.slug}</small>
                   </span>
                 </span>
+
+                <span className="cmsMuted">{post.i18n?.tr?.category || '—'}</span>
 
                 <span className="cmsLangs">
                   {LANGS.map((lang) => (

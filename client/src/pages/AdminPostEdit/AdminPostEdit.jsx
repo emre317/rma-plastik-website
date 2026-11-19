@@ -10,6 +10,7 @@ import { renderMarkdown } from '../../components/content/markdown';
 import {
   createPost,
   getPost,
+  listPostCategories,
   updatePost,
   uploadPostImage,
 } from '../../services/adminContentApi';
@@ -20,7 +21,7 @@ const LANGUAGES = [
   { code: 'ar', label: 'العربية', dir: 'rtl' },
 ];
 
-const emptyText = () => ({ title: '', excerpt: '', body: '', seoTitle: '', seoDescription: '' });
+const emptyText = () => ({ title: '', category: '', excerpt: '', body: '', seoTitle: '', seoDescription: '' });
 
 const emptyPost = {
   slug: '',
@@ -77,6 +78,18 @@ export default function AdminPostEdit() {
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState(null);
   const [originalSlug, setOriginalSlug] = useState('');
+  const [categorySuggestions, setCategorySuggestions] = useState({ tr: [], en: [], ar: [] });
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await call(listPostCategories);
+        setCategorySuggestions({ tr: [], en: [], ar: [], ...data });
+      } catch {
+        // Suggestions are a convenience; a failed fetch just leaves the field free-text.
+      }
+    })();
+  }, [call]);
 
   useEffect(() => {
     if (isNew) return;
@@ -237,6 +250,24 @@ export default function AdminPostEdit() {
             <label className="cmsField">
               <span>Başlık{lang === 'tr' ? ' *' : ''}</span>
               <input dir={activeLanguage.dir} value={text.title} onChange={(event) => setText('title', event.target.value)} required={lang === 'tr'} maxLength={160} />
+            </label>
+
+            <label className="cmsField">
+              <span>Kategori (blog sayfasında filtre olarak kullanılır)</span>
+              <input
+                dir={activeLanguage.dir}
+                value={text.category}
+                onChange={(event) => setText('category', event.target.value)}
+                maxLength={60}
+                list={`post-categories-${lang}`}
+                placeholder="örn. Su Depolama"
+              />
+              <datalist id={`post-categories-${lang}`}>
+                {(categorySuggestions[lang] || []).map((category) => (
+                  <option key={category} value={category} />
+                ))}
+              </datalist>
+              <small>Mevcut yazılardaki kategorilerden birini seçin ya da yeni bir kategori yazın. Boş bırakılırsa yazı kategorisiz görünür.</small>
             </label>
 
             <label className="cmsField">

@@ -7467,6 +7467,70 @@ button.contactChannel {
   text-decoration: underline;
 }
 
+.blogCategories {
+  margin-bottom: 32px;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+}
+
+.blogCategoryPill {
+  padding: 8px 18px;
+
+  border: 1px solid var(--line);
+
+  border-radius: 999px;
+
+  background: #fff;
+
+  color: var(--text-secondary);
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: border-color 200ms ease, background-color 200ms ease, color 200ms ease;
+}
+
+.blogCategoryPill:hover {
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+
+  color: var(--text);
+}
+
+.blogCategoryPill.active {
+  border-color: var(--accent);
+
+  background: var(--accent);
+
+  color: #ffffff;
+}
+
+.blogCardCategory {
+  width: max-content;
+
+  padding: 4px 10px;
+
+  border-radius: 999px;
+
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+
+  color: var(--accent);
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.02em;
+
+  text-transform: uppercase;
+}
+
 .blogGrid {
   display: grid;
 
@@ -8100,7 +8164,7 @@ button.contactChannel {
 
   display: grid;
 
-  grid-template-columns: 2.4fr 120px 120px 110px 190px;
+  grid-template-columns: 2fr 1fr 120px 120px 110px 190px;
 
   gap: 16px;
 
@@ -8400,7 +8464,8 @@ button.contactChannel {
 
   .cmsPostRow > :nth-child(2),
   .cmsPostRow > :nth-child(3),
-  .cmsPostRow > :nth-child(4) {
+  .cmsPostRow > :nth-child(4),
+  .cmsPostRow > :nth-child(5) {
     display: none;
   }
 

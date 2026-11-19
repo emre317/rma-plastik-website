@@ -7,7 +7,7 @@ import PageHeader from '../../components/ui/PageHeader';
 import { LocalizedLink } from '../../components/i18n/LocalizedLink';
 import Arrow from '../../components/i18n/Arrow';
 import { youtubeThumbnail } from '../../components/content/YouTubeEmbed';
-import { postsForLanguage } from '../../data/posts';
+import { categoriesForLanguage, postsForLanguage } from '../../data/posts';
 import videos, { videoText } from '../../data/videos';
 
 const PAGE_SIZE = 9;
@@ -31,27 +31,40 @@ export default function Blog() {
   const { lang } = useParams();
 
   const [query, setQuery] = useState('');
+  const [category, setCategory] = useState('');
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const posts = postsForLanguage(lang);
+  const categories = useMemo(() => categoriesForLanguage(lang), [lang]);
 
   const filteredPosts = useMemo(() => {
     const needle = normalize(query, lang);
-    if (!needle) return posts;
 
     return posts.filter((post) => {
       const text = post.i18n[lang];
+      if (category && text.category !== category) return false;
+      if (!needle) return true;
       return normalize(text.title, lang).includes(needle) || normalize(text.excerpt, lang).includes(needle);
     });
-  }, [posts, query, lang]);
+  }, [posts, query, category, lang]);
 
   const visiblePosts = filteredPosts.slice(0, visibleCount);
   const hasMore = visibleCount < filteredPosts.length;
-  const isFiltering = query.trim().length > 0;
+  const isFiltering = query.trim().length > 0 || category.length > 0;
 
   function handleSearchChange(event) {
     setQuery(event.target.value);
     setVisibleCount(PAGE_SIZE);
+  }
+
+  function handleCategoryChange(value) {
+    setCategory((current) => (current === value ? '' : value));
+    setVisibleCount(PAGE_SIZE);
+  }
+
+  function clearFilters() {
+    setQuery('');
+    setCategory('');
   }
 
   return (
@@ -106,10 +119,33 @@ export default function Blog() {
                 )}
               </div>
 
+              {categories.length > 0 && (
+                <div className="blogCategories" role="group" aria-label={t('blog.categoriesLabel')}>
+                  <button
+                    type="button"
+                    className={`blogCategoryPill ${category === '' ? 'active' : ''}`}
+                    onClick={() => handleCategoryChange('')}
+                  >
+                    {t('blog.allCategories')}
+                  </button>
+
+                  {categories.map((item) => (
+                    <button
+                      key={item}
+                      type="button"
+                      className={`blogCategoryPill ${category === item ? 'active' : ''}`}
+                      onClick={() => handleCategoryChange(item)}
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </div>
+              )}
+
               {filteredPosts.length === 0 ? (
                 <div className="blogEmpty">
                   <p>{t('blog.noResults')}</p>
-                  <button type="button" className="blogClearSearch" onClick={() => setQuery('')}>
+                  <button type="button" className="blogClearSearch" onClick={clearFilters}>
                     {t('blog.clearSearch')}
                   </button>
                 </div>
@@ -139,6 +175,8 @@ export default function Blog() {
                             </div>
 
                             <div className="blogCardBody">
+                              {text.category && <span className="blogCardCategory">{text.category}</span>}
+
                               <p className="blogCardMeta">
                                 <time dateTime={post.publishedAt}>{formatPostDate(post.publishedAt, lang)}</time>
                                 <span>· {t('blog.readingTime', { count: text.readingMinutes || 1 })}</span>

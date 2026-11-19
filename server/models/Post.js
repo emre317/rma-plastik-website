@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const textSchema = new mongoose.Schema(
   {
     title: { type: String, trim: true, default: '', maxlength: 160 },
+    category: { type: String, trim: true, default: '', maxlength: 60 },
     excerpt: { type: String, trim: true, default: '', maxlength: 400 },
     // Markdown
     body: { type: String, default: '', maxlength: 60000 },

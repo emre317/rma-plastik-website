@@ -1509,6 +1509,8 @@ const tr = {
     readingTime_other: '{{count}} dk okuma',
     searchPlaceholder: 'Yazılarda ara…',
     searchLabel: 'Blog yazılarında ara',
+    categoriesLabel: 'Kategoriye göre filtrele',
+    allCategories: 'Tümü',
     resultsCount_one: '{{count}} yazı bulundu',
     resultsCount_other: '{{count}} yazı bulundu',
     noResults: 'Aramanızla eşleşen bir yazı bulunamadı.',

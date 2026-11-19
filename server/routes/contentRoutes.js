@@ -56,6 +56,7 @@ import {
   deletePost,
   deleteVideo,
   getPost,
+  listPostCategories,
   listPosts,
   listVideos,
   updatePost,
@@ -170,6 +171,7 @@ adminContentRouter.put('/export-markets/:id', content, audit({ area: 'content', 
 adminContentRouter.delete('/export-markets/:id', content, audit({ area: 'content', type: 'market', action: 'İhracat pazarı sildi', lookup: ExportMarket }), deleteExportMarket);
 
 adminContentRouter.get('/posts', listPosts);
+adminContentRouter.get('/posts/categories', listPostCategories);
 adminContentRouter.post('/posts', content, audit({ area: 'content', type: 'post', action: 'Blog yazısı ekledi' }), autoTranslate(Post, 'post'), createPost);
 adminContentRouter.get('/posts/:id', getPost);
 adminContentRouter.put('/posts/:id', content, audit({ area: 'content', type: 'post', action: 'Blog yazısı güncelledi', lookup: Post }), autoTranslate(Post, 'post'), updatePost);
