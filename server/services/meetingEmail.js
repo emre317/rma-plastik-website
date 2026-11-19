@@ -552,7 +552,9 @@ export function sendStaffMeetingEmail(meeting, kind) {
 
   return sendMail({
     to: staff.map((person) => ({ name: person.name, address: person.email })),
-    replyTo: { name: meeting.name, address: meeting.email },
+    // Same reasoning as sendQuoteNotification/sendMeetingNotification: keep
+    // Reply-To on our own domain so this doesn't get silently dropped.
+    replyTo: notifyAddress(),
     subject,
     html,
     text,
