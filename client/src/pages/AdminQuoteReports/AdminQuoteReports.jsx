@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  ArrowLeft, Banknote, Download, Flag, FlaskConical, Globe2, LogIn, MapPin, Megaphone, Package, Target, UserRound,
+  ArrowLeft, Banknote, Clock3, Download, Flag, Flame, FlaskConical, FileCheck2, Globe2, Inbox,
+  LogIn, MapPin, Megaphone, Package, Target, TrendingUp, Trophy, UserRound, XCircle,
 } from 'lucide-react';
 
 import { getQuoteReport } from '../../services/adminApi';
@@ -216,21 +217,25 @@ export default function AdminQuoteReports() {
         <div className={`adReportBody ${loading ? 'loading' : ''}`}>
           <div className="adRepKpis">
             <div className="adRepKpi">
+              <span className="adRepKpiIcon" aria-hidden="true"><Inbox /></span>
               <span>Toplam Talep</span>
               <strong>{nf.format(report.total)}</strong>
               <small>{rangeLabel}</small>
             </div>
             <div className="adRepKpi">
+              <span className="adRepKpiIcon" aria-hidden="true"><FileCheck2 /></span>
               <span>Teklif verildi / kapandı</span>
               <strong>{nf.format(quotedTotal)}</strong>
               <small>{report.total ? `Taleplerin ${pf.format(quotedTotal / report.total)}’i` : '—'}</small>
             </div>
             <div className="adRepKpi">
+              <span className="adRepKpiIcon" aria-hidden="true"><Globe2 /></span>
               <span>Ülke</span>
               <strong>{nf.format(countries)}</strong>
               <small>{report.byCountry[0] && report.byCountry[0].country !== 'Belirtilmemiş' ? `En çok: ${report.byCountry[0].country}` : 'Ülkesi belirtilen talep'}</small>
             </div>
             <div className="adRepKpi">
+              <span className="adRepKpiIcon" aria-hidden="true"><Flame /></span>
               <span>En çok istenen</span>
               <strong className="adRepKpiText" title={topProduct?.name}>{topProduct?.name || '—'}</strong>
               <small>{topProduct ? `${nf.format(topProduct.requests)} talep · ${nf.format(topProduct.pieces)} adet` : 'Ürün seçilen talep yok'}</small>
@@ -239,21 +244,25 @@ export default function AdminQuoteReports() {
 
           <div className="adRepKpis">
             <div className="adRepKpi accent">
+              <span className="adRepKpiIcon" aria-hidden="true"><TrendingUp /></span>
               <span>Kazanma Oranı</span>
               <strong>{decided ? pf.format(won / decided) : '—'}</strong>
               <small>{decided ? `Sonuçlanan ${nf.format(decided)} talepten` : 'Henüz sonuçlanan talep yok'}</small>
             </div>
-            <div className="adRepKpi">
+            <div className="adRepKpi good">
+              <span className="adRepKpiIcon" aria-hidden="true"><Trophy /></span>
               <span>Kazanılan</span>
               <strong>{nf.format(won)}</strong>
               <small><Link to="/admin/quotes?outcome=won">Talepleri gör</Link></small>
             </div>
-            <div className="adRepKpi">
+            <div className="adRepKpi bad">
+              <span className="adRepKpiIcon" aria-hidden="true"><XCircle /></span>
               <span>Kaybedilen</span>
               <strong>{nf.format(lost)}</strong>
               <small>{report.byLossReason[0] ? `En sık neden: ${lossReasonLabel(report.byLossReason[0].reason)}` : <Link to="/admin/quotes?outcome=lost">Talepleri gör</Link>}</small>
             </div>
             <div className="adRepKpi">
+              <span className="adRepKpiIcon" aria-hidden="true"><Clock3 /></span>
               <span>Sonuçlanmamış</span>
               <strong>{nf.format(Math.max(0, report.total - decided))}</strong>
               <small><Link to="/admin/quotes?outcome=open">Açık talepleri gör</Link></small>
