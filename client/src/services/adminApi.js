@@ -152,11 +152,16 @@ export function saveQuoteOffer(id, offer, token) {
   });
 }
 
-/* PDF made in the browser, sent as a file (multipart, so not through request()) */
-export async function sendQuoteOffer(id, pdfBlob, filename, token) {
+/*
+  PDFs made in the browser, sent as files (multipart, so not through
+  request()): the proforma itself, plus one datasheet per catalogue model
+  recognised in its lines (see offerAttachments.js / AdminQuoteOffer.jsx).
+*/
+export async function sendQuoteOffer(id, pdfBlob, filename, datasheets = [], token) {
   const API_BASE_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
   const form = new FormData();
   form.append('pdf', pdfBlob, filename);
+  datasheets.forEach(({ blob, filename: sheetName }) => form.append('datasheets', blob, sheetName));
 
   let response;
 

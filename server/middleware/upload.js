@@ -203,12 +203,17 @@ export function uploadProductDrawing(req, res) {
 }
 
 /* Offer PDF made in the admin panel, kept in memory only to attach it to the e-mail */
+// The proforma PDF itself, plus one datasheet per catalogue model recognised
+// in its lines (built in the browser from the exact same design as the site;
+// see client/src/pages/AdminQuoteOffer/AdminQuoteOffer.jsx)
+export const MAX_OFFER_DATASHEETS = 8;
+
 export function offerPdfUpload(req, res, next) {
   multer({
     storage: multer.memoryStorage(),
-    limits: { fileSize: 8 * 1024 * 1024, files: 1 },
+    limits: { fileSize: 8 * 1024 * 1024, files: 1 + MAX_OFFER_DATASHEETS },
     fileFilter: (request, file, cb) => cb(null, file.mimetype === 'application/pdf'),
-  }).single('pdf')(req, res, (error) => {
+  }).fields([{ name: 'pdf', maxCount: 1 }, { name: 'datasheets', maxCount: MAX_OFFER_DATASHEETS }])(req, res, (error) => {
     if (error) {
       return res.status(400).json({
         success: false,
@@ -216,10 +221,18 @@ export function offerPdfUpload(req, res, next) {
       });
     }
 
+    const files = [req.files?.pdf?.[0], ...(req.files?.datasheets || [])].filter(Boolean);
+
     // A real PDF starts with "%PDF-"
-    if (req.file && req.file.buffer.subarray(0, 5).toString('latin1') !== '%PDF-') {
+    if (files.some((file) => file.buffer.subarray(0, 5).toString('latin1') !== '%PDF-')) {
       return res.status(400).json({ success: false, message: 'Proforma PDF’i okunamadı.' });
     }
+
+    // Busboy reads multipart filenames as latin1 (the header names no charset), so a UTF-8
+    // name such as "... Föy.pdf" comes out garbled unless it is re-decoded here.
+    files.forEach((file) => {
+      if (file.originalname) file.originalname = Buffer.from(file.originalname, 'latin1').toString('utf8');
+    });
 
     return next();
   });

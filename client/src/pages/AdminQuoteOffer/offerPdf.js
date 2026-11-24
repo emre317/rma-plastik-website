@@ -9,13 +9,13 @@ const A4_WIDTH_MM = 210;
 const A4_HEIGHT_MM = 297;
 const MARGIN_MM = 12;
 
-export async function makeOfferPdf(element) {
+export async function makeOfferPdf(element, html2canvasOptions = {}) {
   const [{ default: html2canvas }, { jsPDF }] = await Promise.all([import('html2canvas-pro'), import('jspdf')]);
 
   if (document.fonts?.ready) await document.fonts.ready;
 
   const scale = 2;
-  const canvas = await html2canvas(element, { scale, backgroundColor: '#ffffff', useCORS: true, logging: false });
+  const canvas = await html2canvas(element, { scale, backgroundColor: '#ffffff', useCORS: true, logging: false, ...html2canvasOptions });
 
   // CSS px per mm of the printable width
   const cssWidth = element.offsetWidth;

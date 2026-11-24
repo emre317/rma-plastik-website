@@ -3,7 +3,7 @@ import path from 'node:path';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { datasheetAttachment, drawingAttachment, matchFromFamilies } from '../services/catalogAttachments.js';
+import { drawingAttachment, matchFromFamilies } from '../services/catalogAttachments.js';
 
 const family = {
   id: 'vertical-tanks',
@@ -50,16 +50,4 @@ test('an existing drawing file is read from /uploads and attached with its own m
   } finally {
     fs.rmSync(file, { force: true });
   }
-});
-
-test('the generated datasheet is a real PDF with the model code and dimensions on it', async () => {
-  const pdf = await datasheetAttachment(family, family.rows[0], 'tr');
-  assert.ok(Buffer.isBuffer(pdf));
-  assert.equal(pdf.subarray(0, 5).toString('latin1'), '%PDF-');
-  assert.ok(pdf.length > 1000);
-});
-
-test('an Arabic offer falls back to the English datasheet text (pdfkit cannot shape Arabic)', async () => {
-  const pdf = await datasheetAttachment(family, family.rows[0], 'ar');
-  assert.equal(pdf.subarray(0, 5).toString('latin1'), '%PDF-');
 });

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft, Download, Mail, Plus, Save, Trash2,
 } from 'lucide-react';
@@ -15,8 +16,11 @@ import builtInCompany from '../../data/company';
 import {
   INCOTERMS, OFFER_CURRENCIES, formatMoney, offerNumber, offerTotals,
 } from '../../data/offerText';
+import { matchedOfferProducts } from '../../data/offerAttachments';
 import OfferDocument from './OfferDocument';
 import { downloadBlob, makeOfferPdf } from './offerPdf';
+import DatasheetDocument from '../ProductDatasheet/DatasheetDocument';
+import { makeDatasheetPdf } from '../ProductDatasheet/datasheetPdf';
 import Dropdown from '../../components/ui/Dropdown';
 
 const LANGS = [
@@ -76,9 +80,11 @@ export default function AdminQuoteOffer() {
   usePageTitle('Proforma Fatura');
 
   const { id } = useParams();
+  const { i18n } = useTranslation();
   const call = useAdminApi();
   const docRef = useRef(null);
   const paperRef = useRef(null);
+  const datasheetRefs = useRef({});
   const [scale, setScale] = useState(0.6);
 
   const [quote, setQuote] = useState(null);
@@ -136,6 +142,11 @@ export default function AdminQuoteOffer() {
       website: SITE_URL.replace(/^https?:\/\//, ''),
     };
   }, [settings]);
+
+  // Catalogue models recognised in the offer's lines: their technical drawing and
+  // datasheet are attached to the e-mail automatically (see send() below)
+  const matchedProducts = useMemo(() => matchedOfferProducts(offer), [offer]);
+  const datasheetT = useMemo(() => i18n.getFixedT(offer?.language || 'tr'), [i18n, offer?.language]);
 
   const update = (changes) => {
     setOffer((current) => ({ ...current, ...changes }));
@@ -208,7 +219,19 @@ export default function AdminQuoteOffer() {
       // Wait for the re-render so the document shows the saved revision number
       await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
       const blob = await pdfBlob();
-      const { data } = await call(sendQuoteOffer, id, blob, `${offerNumber(saved._id, saved.offer.revision)}.pdf`);
+
+      // One datasheet PDF per catalogue model recognised in the offer's lines,
+      // captured from the same hidden DatasheetDocument the site itself prints
+      const datasheets = [];
+      for (const { family, row } of matchedProducts) {
+        const node = datasheetRefs.current[`${family.id}|${row.code}`];
+        if (!node) continue;
+        // eslint-disable-next-line no-await-in-loop
+        const sheetBlob = await makeDatasheetPdf(node);
+        datasheets.push({ blob: sheetBlob, filename: `${row.code} - Teknik Föy.pdf` });
+      }
+
+      const { data } = await call(sendQuoteOffer, id, blob, `${offerNumber(saved._id, saved.offer.revision)}.pdf`, datasheets);
       setQuote(data);
       setOffer(fromSaved(data.offer));
       setDirty(false);
@@ -406,6 +429,9 @@ export default function AdminQuoteOffer() {
               <p>
                 <strong>{number}</strong> PDF olarak <strong>{quote.email}</strong> adresine gönderilecek
                 {dirty ? ' (önce kaydedilecek)' : ''}. Toplam: <strong dir="ltr">{money(totals.total)}</strong>
+                {matchedProducts.length > 0 && (
+                  <> Ayrıca tanınan {matchedProducts.length} ürün için teknik çizim ve teknik föy otomatik eklenecek: {matchedProducts.map(({ row }) => row.code).join(', ')}.</>
+                )}
               </p>
               <div>
                 <button type="button" className="cmsButton" onClick={() => setConfirmSend(false)}>Vazgeç</button>
@@ -423,6 +449,20 @@ export default function AdminQuoteOffer() {
           {/* Full-size copy drawn into the PDF (off screen) */}
           <div className="adOfferCapture" aria-hidden="true">
             <OfferDocument ref={docRef} quote={quote} offer={offer} company={company} />
+          </div>
+
+          {/* One hidden datasheet per recognised product, captured the same way when sending */}
+          <div className="adOfferCapture" aria-hidden="true">
+            {matchedProducts.map(({ family, row }) => (
+              <DatasheetDocument
+                key={`${family.id}|${row.code}`}
+                ref={(node) => { datasheetRefs.current[`${family.id}|${row.code}`] = node; }}
+                family={family}
+                row={row}
+                lang={offer.language}
+                t={datasheetT}
+              />
+            ))}
           </div>
         </aside>
       </div>

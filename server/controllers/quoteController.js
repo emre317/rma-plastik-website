@@ -36,7 +36,7 @@ import {
   sendQuoteConfirmation,
   sendQuoteNotification,
 } from '../services/quoteEmail.js';
-import { collectOfferAttachments } from '../services/catalogAttachments.js';
+import { collectDrawingAttachments } from '../services/catalogAttachments.js';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -1212,11 +1212,18 @@ export async function sendQuoteOffer(req, res) {
       return res.status(400).json({ success: false, message: 'E-posta (SMTP) ayarlı değil; PDF’i indirip kendiniz gönderin.' });
     }
 
-    const pdf = req.file?.buffer;
+    const pdf = req.files?.pdf?.[0]?.buffer;
 
     if (!pdf || pdf.subarray(0, 5).toString('latin1') !== '%PDF-') {
       return res.status(400).json({ success: false, message: 'Proforma PDF’i oluşturulamadı.' });
     }
+
+    // Datasheet PDFs made in the browser (same design as the site), one per recognised product
+    const datasheetFiles = (req.files?.datasheets || []).map((file) => ({
+      filename: file.originalname || 'teknik-foy.pdf',
+      content: file.buffer,
+      contentType: 'application/pdf',
+    }));
 
     const quote = await QuoteRequest.findById(req.params.id);
 
@@ -1230,13 +1237,15 @@ export async function sendQuoteOffer(req, res) {
 
     const settings = await getSiteSettings().catch(() => ({}));
 
-    // Technical drawing(s) and datasheet(s) of every catalogue model recognised in the offer's lines
-    let extraAttachments = [];
+    // Technical drawing of every catalogue model recognised in the offer's lines
+    let drawingFiles = [];
     try {
-      extraAttachments = await collectOfferAttachments(quote.offer);
+      drawingFiles = await collectDrawingAttachments(quote.offer);
     } catch (attachmentError) {
-      console.error('Offer catalogue attachments error:', attachmentError);
+      console.error('Offer drawing attachments error:', attachmentError);
     }
+
+    const extraAttachments = [...drawingFiles, ...datasheetFiles];
 
     const { number, total } = await sendOfferEmail(quote, quote.offer, settings || {}, pdf, extraAttachments);
 
