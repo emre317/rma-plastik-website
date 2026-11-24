@@ -552,7 +552,7 @@ export async function sendQuoteConfirmation(quote, contact = {}) {
 
 /* ---------- Commercial offer sent to the customer (PDF attached) ---------- */
 
-export async function buildOfferEmail(quote, offer, contact = {}) {
+export async function buildOfferEmail(quote, offer, contact = {}, hasExtraAttachments = false) {
   // Shared with the admin offer document (kept free of imports)
   const { offerCopy, offerNumber, offerTotals, formatMoney, formatOfferDate } = await import('../../client/src/data/offerText.js');
 
@@ -655,7 +655,7 @@ export async function buildOfferEmail(quote, offer, contact = {}) {
           </tr>
           <tr>
             <td style="padding:20px 32px 28px;text-align:${align};font-size:14px;line-height:1.65;">
-              <p style="margin:0 0 6px;">📎 ${escapeHtml(copy.emailAttachment)}</p>
+              <p style="margin:0 0 6px;">📎 ${escapeHtml(copy.emailAttachment(hasExtraAttachments))}</p>
               <p style="margin:0;">${escapeHtml(copy.emailReply)}</p>
               <p style="margin:16px 0 0;color:#5c6673;font-size:13px;">${escapeHtml(offer.preparedBy || 'RMA Plastik')}<br><span dir="ltr">${escapeHtml(phoneDisplay)}</span> · ${escapeHtml(email)}</p>
             </td>
@@ -677,7 +677,7 @@ export async function buildOfferEmail(quote, offer, contact = {}) {
     '',
     ...facts.map(([label, value]) => `${label}: ${value}`),
     '',
-    copy.emailAttachment,
+    copy.emailAttachment(hasExtraAttachments),
     copy.emailReply,
     '',
     `${offer.preparedBy || 'RMA Plastik'} · ${phoneDisplay} · ${email}`,
@@ -686,8 +686,8 @@ export async function buildOfferEmail(quote, offer, contact = {}) {
   return { subject, html, text: plain, name, number, total: money(totals.total) };
 }
 
-export async function sendOfferEmail(quote, offer, contact = {}, pdf) {
-  const { subject, html, text, name, number, total } = await buildOfferEmail(quote, offer, contact);
+export async function sendOfferEmail(quote, offer, contact = {}, pdf, extraAttachments = []) {
+  const { subject, html, text, name, number, total } = await buildOfferEmail(quote, offer, contact, extraAttachments.length > 0);
 
   // Copy to the sales team so the sent offer is also in their inbox
   const sales = quoteNotifyAddress().split(',').map((item) => item.trim()).filter(Boolean);
@@ -700,7 +700,8 @@ export async function sendOfferEmail(quote, offer, contact = {}, pdf) {
     subject,
     html,
     text,
-    attachments: [{ filename: `${number}.pdf`, content: pdf, contentType: 'application/pdf' }],
+    // The proforma PDF first, then the matched products' technical drawing(s) and datasheet(s)
+    attachments: [{ filename: `${number}.pdf`, content: pdf, contentType: 'application/pdf' }, ...extraAttachments],
   });
 
   return { number, total };

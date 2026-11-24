@@ -48,7 +48,7 @@ export const OFFER_TEXT = {
     emailGreeting: (name) => `Sayın ${name},`,
     emailIntro: (reference) => `${reference} numaralı talebiniz için hazırladığımız proforma faturayı ekte PDF olarak bulabilirsiniz. Özeti aşağıdadır.`,
     emailReply: 'Sorularınız veya değişiklik talepleriniz için bu e-postayı yanıtlayabilirsiniz.',
-    emailAttachment: 'Proforma fatura (PDF) ektedir.',
+    emailAttachment: (extra) => `Proforma fatura (PDF) ektedir.${extra ? ' İlgili ürün(ler) için teknik çizim ve teknik föy PDF’leri de ekte yer almaktadır.' : ''}`,
   },
   en: {
     title: 'Proforma Invoice',
@@ -86,7 +86,7 @@ export const OFFER_TEXT = {
     emailGreeting: (name) => `Dear ${name},`,
     emailIntro: (reference) => `Please find attached our proforma invoice (PDF) for your request ${reference}. A summary is given below.`,
     emailReply: 'If you have any questions or would like changes, simply reply to this email.',
-    emailAttachment: 'The proforma invoice (PDF) is attached.',
+    emailAttachment: (extra) => `The proforma invoice (PDF) is attached.${extra ? ' The technical drawing and datasheet for the relevant product(s) are attached as well.' : ''}`,
   },
   ar: {
     dir: 'rtl',
@@ -125,7 +125,7 @@ export const OFFER_TEXT = {
     emailGreeting: (name) => `السيد/السيدة ${name}،`,
     emailIntro: (reference) => `تجدون مرفقاً الفاتورة المبدئية (PDF) الخاصة بطلبكم رقم ${reference}. وفيما يلي ملخصها.`,
     emailReply: 'لأي استفسار أو طلب تعديل، يمكنكم الرد على هذا البريد الإلكتروني.',
-    emailAttachment: 'الفاتورة المبدئية (PDF) مرفقة.',
+    emailAttachment: (extra) => `الفاتورة المبدئية (PDF) مرفقة.${extra ? ' كما تم إرفاق الرسم الفني وورقة البيانات الفنية للمنتج (المنتجات) المعنية.' : ''}`,
   },
 };
 

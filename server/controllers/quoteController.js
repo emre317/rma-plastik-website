@@ -36,6 +36,7 @@ import {
   sendQuoteConfirmation,
   sendQuoteNotification,
 } from '../services/quoteEmail.js';
+import { collectOfferAttachments } from '../services/catalogAttachments.js';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -1228,7 +1229,16 @@ export async function sendQuoteOffer(req, res) {
     }
 
     const settings = await getSiteSettings().catch(() => ({}));
-    const { number, total } = await sendOfferEmail(quote, quote.offer, settings || {}, pdf);
+
+    // Technical drawing(s) and datasheet(s) of every catalogue model recognised in the offer's lines
+    let extraAttachments = [];
+    try {
+      extraAttachments = await collectOfferAttachments(quote.offer);
+    } catch (attachmentError) {
+      console.error('Offer catalogue attachments error:', attachmentError);
+    }
+
+    const { number, total } = await sendOfferEmail(quote, quote.offer, settings || {}, pdf, extraAttachments);
 
     quote.offer.sentAt = new Date();
     quote.offer.sentTo = quote.email;
@@ -1238,7 +1248,7 @@ export async function sendQuoteOffer(req, res) {
     }
 
     quote.notes.push({
-      text: `Proforma fatura ${number} e-postayla gönderildi (${quote.email}). Toplam: ${total}`,
+      text: `Proforma fatura ${number} e-postayla gönderildi (${quote.email}). Toplam: ${total}${extraAttachments.length ? ` (+${extraAttachments.length} teknik çizim/föy eki)` : ''}`,
       author: req.admin?.name || req.admin?.email || '',
     });
 
