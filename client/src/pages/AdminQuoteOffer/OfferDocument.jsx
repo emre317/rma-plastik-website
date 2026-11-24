@@ -161,6 +161,7 @@ const OfferDocument = forwardRef(function OfferDocument({ quote, offer, company 
             <>
               <span className="ofLabel">{copy.preparedBy}</span>
               <strong><bdi>{offer.preparedBy}</bdi></strong>
+              {offer.preparedByPhone && <span dir="ltr">{offer.preparedByPhone}</span>}
             </>
           )}
           <span dir="ltr">{[company.phone, company.email].filter(Boolean).join(' · ')}</span>

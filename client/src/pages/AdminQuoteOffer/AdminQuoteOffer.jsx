@@ -62,6 +62,7 @@ function draftFromQuote(quote, settings) {
     notes: '',
     terms: settings?.offerTerms || '',
     preparedBy: quote.assignee || getAdminUser()?.name || '',
+    preparedByPhone: getAdminUser()?.phone || '',
     revision: 1,
   };
 }
@@ -310,10 +311,16 @@ export default function AdminQuoteOffer() {
                 <button key={days} type="button" className="adChip" onClick={() => update({ validUntil: addDays(days) })}>{days} gün</button>
               ))}
             </div>
-            <label className="cmsField">
-              <span>Hazırlayan</span>
-              <input value={offer.preparedBy} maxLength={120} onChange={(event) => update({ preparedBy: event.target.value })} placeholder="ör. Ayşe Demir – İhracat" />
-            </label>
+            <div className="adOfferRow">
+              <label className="cmsField adOfferWide">
+                <span>Hazırlayan</span>
+                <input value={offer.preparedBy} maxLength={120} onChange={(event) => update({ preparedBy: event.target.value })} placeholder="ör. Ayşe Demir – İhracat" />
+              </label>
+              <label className="cmsField">
+                <span>Hazırlayanın Telefonu</span>
+                <input value={offer.preparedByPhone} maxLength={40} dir="ltr" onChange={(event) => update({ preparedByPhone: event.target.value })} placeholder="ör. +90 532 000 00 00" />
+              </label>
+            </div>
           </div>
 
           {/* Lines */}

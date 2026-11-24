@@ -364,6 +364,7 @@ const quoteRequestSchema = new mongoose.Schema(
           notes: { type: String, trim: true, default: '', maxlength: 2000 },
           terms: { type: String, trim: true, default: '', maxlength: 3000 },
           preparedBy: { type: String, trim: true, default: '', maxlength: 120 },
+          preparedByPhone: { type: String, trim: true, default: '', maxlength: 40 },
           savedAt: { type: Date, default: null },
           sentAt: { type: Date, default: null },
           sentTo: { type: String, trim: true, default: '', maxlength: 254 },

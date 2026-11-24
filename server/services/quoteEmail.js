@@ -657,7 +657,7 @@ export async function buildOfferEmail(quote, offer, contact = {}, hasExtraAttach
             <td style="padding:20px 32px 28px;text-align:${align};font-size:14px;line-height:1.65;">
               <p style="margin:0 0 6px;">📎 ${escapeHtml(copy.emailAttachment(hasExtraAttachments))}</p>
               <p style="margin:0;">${escapeHtml(copy.emailReply)}</p>
-              <p style="margin:16px 0 0;color:#5c6673;font-size:13px;">${escapeHtml(offer.preparedBy || 'RMA Plastik')}<br><span dir="ltr">${escapeHtml(phoneDisplay)}</span> · ${escapeHtml(email)}</p>
+              <p style="margin:16px 0 0;color:#5c6673;font-size:13px;">${escapeHtml(offer.preparedBy || 'RMA Plastik')}${offer.preparedByPhone ? `<br><span dir="ltr">${escapeHtml(offer.preparedByPhone)}</span>` : ''}<br><span dir="ltr">${escapeHtml(phoneDisplay)}</span> · ${escapeHtml(email)}</p>
             </td>
           </tr>
         </table>
@@ -680,7 +680,7 @@ export async function buildOfferEmail(quote, offer, contact = {}, hasExtraAttach
     copy.emailAttachment(hasExtraAttachments),
     copy.emailReply,
     '',
-    `${offer.preparedBy || 'RMA Plastik'} · ${phoneDisplay} · ${email}`,
+    `${offer.preparedBy || 'RMA Plastik'}${offer.preparedByPhone ? ` (${offer.preparedByPhone})` : ''} · ${phoneDisplay} · ${email}`,
   ].join('\n');
 
   return { subject, html, text: plain, name, number, total: money(totals.total) };

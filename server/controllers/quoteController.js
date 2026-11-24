@@ -1152,6 +1152,7 @@ function offerPayload(body = {}) {
     notes: cleanString(body.notes).slice(0, 2000),
     terms: cleanString(body.terms).slice(0, 3000),
     preparedBy: cleanString(body.preparedBy).slice(0, 120),
+    preparedByPhone: cleanString(body.preparedByPhone).slice(0, 40),
   };
 }
 
