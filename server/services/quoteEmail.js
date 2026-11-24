@@ -706,3 +706,153 @@ export async function sendOfferEmail(quote, offer, contact = {}, pdf, extraAttac
 
   return { number, total };
 }
+
+/* ---------- Reminder: the sent proforma is still awaiting a reply ---------- */
+
+const REMINDER_TEXT = {
+  tr: {
+    locale: 'tr-TR',
+    subject: (number, nth) => `Hatırlatma${nth > 1 ? ` (${nth}.)` : ''}: ${number} numaralı teklifimiz`,
+    greeting: (name) => `Sayın ${name},`,
+    body: (number, sentDate) => `${sentDate} tarihinde ilettiğimiz ${number} numaralı teklifimizi değerlendirme fırsatınız oldu mu diye nazikçe hatırlatmak istedik.`,
+    previous: (date) => `Daha önce ${date} tarihinde de bu teklifle ilgili bir hatırlatma iletmiştik.`,
+    validUntil: (date) => `Teklifimiz ${date} tarihine kadar geçerlidir.`,
+    total: 'Teklif Tutarı',
+    attachment: 'Proforma faturamızı tekrar ekte bulabilirsiniz.',
+    reply: (preparedBy) => `Sorularınız için bu e-postayı yanıtlayabilir${preparedBy ? ` veya ${preparedBy} ile iletişime geçebilirsiniz` : ''}.`,
+  },
+  en: {
+    locale: 'en-GB',
+    subject: (number, nth) => `Reminder${nth > 1 ? ` (${nth})` : ''}: our offer ${number}`,
+    greeting: (name) => `Dear ${name},`,
+    body: (number, sentDate) => `We wanted to kindly follow up on our offer ${number}, sent to you on ${sentDate} — have you had a chance to review it?`,
+    previous: (date) => `We also sent a reminder about this offer on ${date}.`,
+    validUntil: (date) => `Our offer is valid until ${date}.`,
+    total: 'Offer Total',
+    attachment: 'Please find our proforma invoice attached again.',
+    reply: (preparedBy) => `If you have any questions, simply reply to this e-mail${preparedBy ? ` or contact ${preparedBy}` : ''}.`,
+  },
+  ar: {
+    locale: 'ar',
+    dir: 'rtl',
+    subject: (number, nth) => `تذكير${nth > 1 ? ` (${nth})` : ''}: عرضنا رقم ${number}`,
+    greeting: (name) => `السيد/السيدة ${name}،`,
+    body: (number, sentDate) => `أردنا تذكيركم بلطف بعرضنا رقم ${number} الذي أرسلناه لكم بتاريخ ${sentDate} — هل أتيحت لكم الفرصة لمراجعته؟`,
+    previous: (date) => `كما أرسلنا تذكيراً بخصوص هذا العرض بتاريخ ${date}.`,
+    validUntil: (date) => `يبقى عرضنا سارياً حتى ${date}.`,
+    total: 'إجمالي العرض',
+    attachment: 'تجدون مرفقاً الفاتورة المبدئية مرة أخرى.',
+    reply: (preparedBy) => `لأي استفسار، يمكنكم الرد على هذا البريد الإلكتروني${preparedBy ? ` أو التواصل مع ${preparedBy}` : ''}.`,
+  },
+};
+
+export async function buildReminderEmail(quote, offer, contact = {}, previousCount = 0) {
+  const { offerNumber, offerTotals, formatMoney, formatOfferDate } = await import('../../client/src/data/offerText.js');
+
+  const lang = REMINDER_TEXT[offer.language] ? offer.language : 'tr';
+  const copy = REMINDER_TEXT[lang];
+  const dir = copy.dir || 'ltr';
+  const align = dir === 'rtl' ? 'right' : 'left';
+  const number = offerNumber(quote._id, offer.revision);
+  const reference = quoteReference(quote._id);
+  const total = formatMoney(offerTotals(offer).total, offer.currency, lang);
+  const name = String(quote.name || '').slice(0, 80);
+  const email = contact.email || DEFAULT_CONTACT.email;
+  const phoneDisplay = contact.phoneDisplay || DEFAULT_CONTACT.phoneDisplay;
+  const sentDate = formatOfferDate(offer.sentAt, lang);
+  const firstReminderDate = previousCount > 0 ? formatOfferDate(offer.reminders?.[0]?.sentAt, lang) : '';
+
+  const subject = copy.subject(number, previousCount + 1);
+
+  const html = `<!doctype html>
+<html lang="${lang}" dir="${dir}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${escapeHtml(subject)}</title>
+</head>
+<body style="margin:0;padding:0;background:#f7f9fa;font-family:Arial,Helvetica,sans-serif;color:#101317;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f7f9fa;padding:32px 12px;" dir="${dir}">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #d5dae0;">
+          <tr>
+            <td style="background:#101317;border-bottom:4px solid #e4173a;padding:28px 32px;text-align:${align};">
+              <div dir="ltr" style="text-align:${align};">${emailLogo()}</div>
+              <p style="margin:20px 0 4px;font-size:12px;font-weight:700;color:#ff4560;letter-spacing:0.06em;text-transform:uppercase;" dir="ltr">${escapeHtml(reference)}</p>
+              <h1 style="margin:0;font-size:22px;color:#ffffff;font-weight:600;" dir="ltr">${escapeHtml(number)}</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:28px 32px 4px;text-align:${align};font-size:15px;line-height:1.75;">
+              <p style="margin:0 0 14px;font-weight:700;">${escapeHtml(copy.greeting(name))}</p>
+              <p style="margin:0 0 10px;">${escapeHtml(copy.body(number, sentDate))}</p>
+              ${firstReminderDate ? `<p style="margin:0 0 10px;color:#5c6673;">${escapeHtml(copy.previous(firstReminderDate))}</p>` : ''}
+              <p style="margin:0;">${escapeHtml(copy.validUntil(formatOfferDate(offer.validUntil, lang) || '—'))}</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:18px 32px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fdecef;border-radius:12px;">
+                <tr>
+                  <td style="padding:16px 20px;text-align:${align};">
+                    <p style="margin:0 0 4px;font-size:12px;font-weight:700;color:#5c6673;letter-spacing:0.06em;text-transform:uppercase;">${escapeHtml(copy.total)}</p>
+                    <p style="margin:0;font-size:24px;font-weight:700;color:#e4173a;" dir="ltr">${escapeHtml(total)}</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:22px 32px 28px;text-align:${align};font-size:14px;line-height:1.65;">
+              <p style="margin:0 0 6px;">📎 ${escapeHtml(copy.attachment)}</p>
+              <p style="margin:0;">${escapeHtml(copy.reply(offer.preparedBy))}</p>
+              <p style="margin:16px 0 0;color:#5c6673;font-size:13px;">${escapeHtml(offer.preparedBy || 'RMA Plastik')}${offer.preparedByPhone ? `<br><span dir="ltr">${escapeHtml(offer.preparedByPhone)}</span>` : ''}<br><span dir="ltr">${escapeHtml(phoneDisplay)}</span> · ${escapeHtml(email)}</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+
+  const text = [
+    copy.greeting(name),
+    '',
+    copy.body(number, sentDate),
+    ...(firstReminderDate ? [copy.previous(firstReminderDate)] : []),
+    copy.validUntil(formatOfferDate(offer.validUntil, lang) || '—'),
+    '',
+    `${copy.total}: ${total}`,
+    '',
+    copy.attachment,
+    copy.reply(offer.preparedBy),
+    '',
+    `${offer.preparedBy || 'RMA Plastik'}${offer.preparedByPhone ? ` (${offer.preparedByPhone})` : ''} · ${phoneDisplay} · ${email}`,
+  ].join('\n');
+
+  return { subject, html, text, name, number };
+}
+
+/* `attachments`: { pdf, datasheets } as saved by services/offerFiles.js when the offer was sent */
+export async function sendReminderEmail(quote, offer, contact = {}, attachments, previousCount = 0) {
+  const { offerNumber } = await import('../../client/src/data/offerText.js');
+  const { subject, html, text, name } = await buildReminderEmail(quote, offer, contact, previousCount);
+
+  const sales = quoteNotifyAddress().split(',').map((item) => item.trim()).filter(Boolean);
+  const replyTo = contact.email || sales[0] || undefined;
+
+  await sendMail({
+    to: { name, address: quote.email },
+    ...(sales.length ? { bcc: sales } : {}),
+    ...(replyTo ? { replyTo } : {}),
+    subject,
+    html,
+    text,
+    attachments: [
+      { filename: `${offerNumber(quote._id, offer.revision)}.pdf`, content: attachments.pdf, contentType: 'application/pdf' },
+      ...attachments.datasheets,
+    ],
+  });
+}

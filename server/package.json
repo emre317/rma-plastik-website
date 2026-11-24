@@ -13,7 +13,8 @@
     "backup-db": "node scripts/backupDatabase.js",
     "sync-dimensions": "node scripts/syncProductDimensions.js",
     "kvkk-retention": "node scripts/kvkkRetention.js",
-    "meeting-reminders": "node scripts/meetingReminders.js"
+    "meeting-reminders": "node scripts/meetingReminders.js",
+    "quote-reminders": "node scripts/quoteReminders.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.7.0",

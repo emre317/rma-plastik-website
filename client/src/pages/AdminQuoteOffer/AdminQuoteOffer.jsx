@@ -2,13 +2,13 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  ArrowLeft, Download, Mail, Plus, Save, Trash2,
+  ArrowLeft, Bell, Download, Mail, Plus, Save, Trash2,
 } from 'lucide-react';
 
 import useAdminApi from '../../hooks/useAdminApi';
 import usePageTitle from '../../hooks/usePageTitle';
 import { getAdminUser, notifyQuotesChanged } from '../../services/adminAuth';
-import { getQuoteById, saveQuoteOffer, sendQuoteOffer } from '../../services/adminApi';
+import { getQuoteById, remindQuoteOffer, saveQuoteOffer, sendQuoteOffer } from '../../services/adminApi';
 import { getSettings } from '../../services/adminContentApi';
 import { SITE_URL } from '../../seo/site';
 import { dayValue, formatDate, todayValue } from '../../components/admin/quoteStatus';
@@ -95,6 +95,7 @@ export default function AdminQuoteOffer() {
   const [busy, setBusy] = useState('');
   const [message, setMessage] = useState(null);
   const [confirmSend, setConfirmSend] = useState(false);
+  const [confirmRemind, setConfirmRemind] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -189,6 +190,24 @@ export default function AdminQuoteOffer() {
     return makeOfferPdf(docRef.current);
   }
 
+  // The proforma PDF, plus one datasheet per catalogue model recognised in the
+  // offer's lines, captured from the same hidden DatasheetDocument the site
+  // itself prints. Shared by send() and remind().
+  async function buildAttachments() {
+    const blob = await pdfBlob();
+    const datasheets = [];
+
+    for (const { family, row } of matchedProducts) {
+      const node = datasheetRefs.current[`${family.id}|${row.code}`];
+      if (!node) continue;
+      // eslint-disable-next-line no-await-in-loop
+      const sheetBlob = await makeDatasheetPdf(node);
+      datasheets.push({ blob: sheetBlob, filename: `${row.code} - Teknik Föy.pdf` });
+    }
+
+    return { blob, datasheets };
+  }
+
   async function download() {
     setBusy('pdf');
     setMessage(null);
@@ -219,18 +238,7 @@ export default function AdminQuoteOffer() {
     try {
       // Wait for the re-render so the document shows the saved revision number
       await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-      const blob = await pdfBlob();
-
-      // One datasheet PDF per catalogue model recognised in the offer's lines,
-      // captured from the same hidden DatasheetDocument the site itself prints
-      const datasheets = [];
-      for (const { family, row } of matchedProducts) {
-        const node = datasheetRefs.current[`${family.id}|${row.code}`];
-        if (!node) continue;
-        // eslint-disable-next-line no-await-in-loop
-        const sheetBlob = await makeDatasheetPdf(node);
-        datasheets.push({ blob: sheetBlob, filename: `${row.code} - Teknik Föy.pdf` });
-      }
+      const { blob, datasheets } = await buildAttachments();
 
       const { data } = await call(sendQuoteOffer, id, blob, `${offerNumber(saved._id, saved.offer.revision)}.pdf`, datasheets);
       setQuote(data);
@@ -238,6 +246,39 @@ export default function AdminQuoteOffer() {
       setDirty(false);
       notifyQuotesChanged();
       setMessage({ type: 'success', text: `Proforma fatura ${data.email} adresine gönderildi. Talep “Teklif verildi” durumuna alındı.` });
+    } catch (err) {
+      setMessage({ type: 'error', text: err.message });
+    } finally {
+      setBusy('');
+    }
+  }
+
+  // Follow-up note re-sending the same files; unlike send(), it never touches
+  // sentAt or the offer status — it just lets the customer know we're still
+  // waiting on them. Sales can send as many as they like, any time, while the
+  // quote stays open (an automatic one also goes out once, 4 days after
+  // sending, if nobody has sent one yet: services/quoteReminders.js).
+  async function remind() {
+    setConfirmRemind(false);
+
+    let saved = quote;
+    if (dirty) {
+      saved = await save();
+      if (!saved) return;
+    }
+
+    setBusy('remind');
+    setMessage(null);
+
+    try {
+      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      const { blob, datasheets } = await buildAttachments();
+
+      const { data } = await call(remindQuoteOffer, id, blob, `${offerNumber(saved._id, saved.offer.revision)}.pdf`, datasheets);
+      setQuote(data);
+      setDirty(false);
+      notifyQuotesChanged();
+      setMessage({ type: 'success', text: `Hatırlatma ${data.email} adresine gönderildi.` });
     } catch (err) {
       setMessage({ type: 'error', text: err.message });
     } finally {
@@ -259,6 +300,9 @@ export default function AdminQuoteOffer() {
   const missingPrice = offer.lines.some((line) => !Number(line.unitPrice));
   const number = offerNumber(quote._id, offer.revision);
   const sentInfo = quote.offer?.sentAt ? `${formatDate(quote.offer.sentAt, true)} tarihinde ${quote.offer.sentTo} adresine gönderildi` : '';
+  const reminders = quote.offer?.reminders || [];
+  // Only while the offer is still open: a won/lost/closed request has nothing to follow up on
+  const canRemind = Boolean(quote.offer?.sentAt) && !quote.outcome;
 
   return (
     <section className="adminContent adOffer">
@@ -427,9 +471,26 @@ export default function AdminQuoteOffer() {
               <Mail aria-hidden="true" />
               {busy === 'send' ? 'Gönderiliyor…' : 'Müşteriye Gönder'}
             </button>
+            {canRemind && (
+              <button type="button" className="cmsButton" onClick={() => setConfirmRemind(true)} disabled={Boolean(busy)}>
+                <Bell aria-hidden="true" />
+                {busy === 'remind' ? 'Gönderiliyor…' : `Hatırlatma Gönder${reminders.length ? ` (${reminders.length + 1}.)` : ''}`}
+              </button>
+            )}
           </div>
 
           {missingPrice && <p className="adOfferWarn">Fiyatı girilmemiş satır var (0 olarak görünür).</p>}
+
+          {reminders.length > 0 && (
+            <p className="adHint">
+              Hatırlatma geçmişi: {reminders.map((item, index) => (
+                <span key={index}>
+                  {index > 0 && ', '}
+                  {formatDate(item.sentAt, true)}{item.kind === 'manual' ? ` (${item.by || 'elle'})` : ' (otomatik)'}
+                </span>
+              ))}
+            </p>
+          )}
 
           {confirmSend && (
             <div className="adOfferConfirm" role="alertdialog" aria-label="Proformayı gönder">
@@ -443,6 +504,20 @@ export default function AdminQuoteOffer() {
               <div>
                 <button type="button" className="cmsButton" onClick={() => setConfirmSend(false)}>Vazgeç</button>
                 <button type="button" className="cmsButton cmsButtonPrimary" onClick={send}>Gönder</button>
+              </div>
+            </div>
+          )}
+
+          {confirmRemind && (
+            <div className="adOfferConfirm" role="alertdialog" aria-label="Hatırlatma gönder">
+              <p>
+                <strong>{quote.email}</strong> adresine, teklifimizin hâlâ yanıt beklediğini hatırlatan kısa bir
+                e-posta (proforma PDF’i tekrar ekli) gönderilecek{dirty ? ' (önce kaydedilecek)' : ''}.
+                {reminders.length > 0 && ` Bu, bu teklif için ${reminders.length + 1}. hatırlatma olacak.`}
+              </p>
+              <div>
+                <button type="button" className="cmsButton" onClick={() => setConfirmRemind(false)}>Vazgeç</button>
+                <button type="button" className="cmsButton cmsButtonPrimary" onClick={remind}>Gönder</button>
               </div>
             </div>
           )}

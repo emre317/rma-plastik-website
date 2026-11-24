@@ -6,6 +6,7 @@ import { checkEnvironment } from './config/env.js';
 import { runCatalogueMigrations } from './services/catalogueMigrations.js';
 import { recoverPublishJobs } from './services/publisher.js';
 import { startReminderTimer } from './services/meetingReminders.js';
+import { startQuoteReminderTimer } from './services/quoteReminders.js';
 
 
 /* =====================================================
@@ -45,6 +46,9 @@ setTimeout(() => recoverPublishJobs().catch((error) => console.error('[publish] 
 
 // Meeting reminders (24 h before by default); also `npm run meeting-reminders` from cron
 startReminderTimer(() => databaseState() === 'connected');
+
+// Quote follow-up reminders (4 days after a proforma was sent by default); also `npm run quote-reminders` from cron
+startQuoteReminderTimer(() => databaseState() === 'connected');
 
 
 /* =====================================================

@@ -368,6 +368,25 @@ const quoteRequestSchema = new mongoose.Schema(
           savedAt: { type: Date, default: null },
           sentAt: { type: Date, default: null },
           sentTo: { type: String, trim: true, default: '', maxlength: 254 },
+          // "Değerlendirme fırsatınız oldu mu" follow-ups: one auto 4 days after sending
+          // (services/quoteReminders.js) if the outcome is still open, plus as many
+          // manual ones as sales sends from the panel
+          reminders: {
+            type: [
+              new mongoose.Schema(
+                {
+                  sentAt: { type: Date, required: true },
+                  kind: { type: String, enum: ['auto', 'manual'], default: 'manual' },
+                  by: { type: String, trim: true, default: '', maxlength: 120 },
+                },
+                { _id: false }
+              ),
+            ],
+            default: [],
+          },
+          // Set the moment the automatic reminder is sent (services/quoteReminders.js),
+          // atomically, so the in-process timer and the cron fallback never send it twice
+          autoReminderAt: { type: Date, default: null },
         },
         { _id: false }
       ),

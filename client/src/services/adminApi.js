@@ -156,8 +156,10 @@ export function saveQuoteOffer(id, offer, token) {
   PDFs made in the browser, sent as files (multipart, so not through
   request()): the proforma itself, plus one datasheet per catalogue model
   recognised in its lines (see offerAttachments.js / AdminQuoteOffer.jsx).
+  Shared by sendQuoteOffer (the offer itself) and remindQuoteOffer (a
+  follow-up note re-sending the same files).
 */
-export async function sendQuoteOffer(id, pdfBlob, filename, datasheets = [], token) {
+async function postOfferFiles(path, id, pdfBlob, filename, datasheets, token, fallbackMessage) {
   const API_BASE_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
   const form = new FormData();
   form.append('pdf', pdfBlob, filename);
@@ -166,7 +168,7 @@ export async function sendQuoteOffer(id, pdfBlob, filename, datasheets = [], tok
   let response;
 
   try {
-    response = await fetch(`${API_BASE_URL}/quote/${encodeURIComponent(id)}/offer/send`, {
+    response = await fetch(`${API_BASE_URL}/quote/${encodeURIComponent(id)}${path}`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
       body: form,
@@ -178,11 +180,17 @@ export async function sendQuoteOffer(id, pdfBlob, filename, datasheets = [], tok
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new ApiError(data.message || 'Teklif gönderilemedi.', response.status);
+    throw new ApiError(data.message || fallbackMessage, response.status);
   }
 
   return data;
 }
+
+export const sendQuoteOffer = (id, pdfBlob, filename, datasheets = [], token) =>
+  postOfferFiles('/offer/send', id, pdfBlob, filename, datasheets, token, 'Teklif gönderilemedi.');
+
+export const remindQuoteOffer = (id, pdfBlob, filename, datasheets = [], token) =>
+  postOfferFiles('/offer/remind', id, pdfBlob, filename, datasheets, token, 'Hatırlatma gönderilemedi.');
 
 /* A drawing sent with a project brief: fetched with the login, saved by the browser */
 export async function downloadQuoteFile(id, file, token) {

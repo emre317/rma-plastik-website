@@ -17,6 +17,7 @@ import {
   deleteQuoteRequest,
   saveQuoteOffer,
   sendQuoteOffer,
+  remindQuoteOffer,
   createProjectRequest,
   downloadProjectFile,
 } from '../controllers/quoteController.js';
@@ -128,5 +129,6 @@ router.delete('/:id', requireAdmin, requireRole('admin'), quoteAudit('Teklif tal
 router.delete('/:id/notes/:noteId', requireAdmin, sales, quoteAudit('Not sildi'), deleteQuoteNote);
 router.put('/:id/offer', requireAdmin, sales, quoteAudit('Proformayı kaydetti', (req, data) => (data?.offer ? `R${data.offer.revision} · ${data.offer.lines?.length || 0} satır · ${data.offer.currency}` : '')), saveQuoteOffer);
 router.post('/:id/offer/send', requireAdmin, sales, offerPdfUpload, quoteAudit('Proformayı e-postayla gönderdi', (req, data) => (data?.offer?.sentTo ? `Alıcı: ${data.offer.sentTo}` : '')), sendQuoteOffer);
+router.post('/:id/offer/remind', requireAdmin, sales, offerPdfUpload, quoteAudit('Teklif hatırlatması gönderdi', (req, data) => (data?.email ? `Alıcı: ${data.email}` : '')), remindQuoteOffer);
 
 export default router;
