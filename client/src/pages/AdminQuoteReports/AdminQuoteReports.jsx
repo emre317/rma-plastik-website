@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  ArrowLeft, Banknote, Clock3, Download, Flag, Flame, FlaskConical, FileCheck2, Globe2, Inbox,
+  Banknote, Clock3, Download, Flag, Flame, FlaskConical, FileCheck2, Globe2, Inbox,
   LogIn, MapPin, Megaphone, Package, Target, TrendingUp, Trophy, UserRound, XCircle,
 } from 'lucide-react';
 
@@ -178,8 +178,6 @@ export default function AdminQuoteReports() {
 
   return (
     <section className="adminContent adReport">
-      <Link to="/admin/quotes" className="adBack"><ArrowLeft aria-hidden="true" />Teklif Talepleri</Link>
-
       <header className="adPageHead">
         <div>
           <span className="adEyebrow">Satış</span>
