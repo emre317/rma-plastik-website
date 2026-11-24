@@ -22012,6 +22012,7 @@ html[lang="ar"] .ecoBandEyebrow {
 .tone-amber { --tone: #b7791f; --tone-bg: #fdf4e3; }
 .tone-violet { --tone: #6d4bd8; --tone-bg: #efeafd; }
 .tone-green { --tone: #1f8a5b; --tone-bg: #e5f5ed; }
+.tone-teal { --tone: #0f766e; --tone-bg: #e1f4f2; }
 .tone-gray { --tone: var(--ink-500); --tone-bg: var(--ink-100); }
 .tone-empty { --tone: var(--ink-150); }
 
