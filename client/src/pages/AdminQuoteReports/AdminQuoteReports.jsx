@@ -99,6 +99,35 @@ function RankList({ rows, label, value, suffix, link, limit = 10 }) {
   );
 }
 
+/* Ranked columns (one series): short-labelled, few-item rankings read as a small bar chart instead of a list */
+function RankColumns({ rows, label, value, suffix, link, max = 8 }) {
+  if (!rows.length) return <p className="adEmpty">Bu dönemde veri yok.</p>;
+
+  const shown = rows.slice(0, max);
+  const maxVal = Math.max(1, ...shown.map(value));
+
+  return (
+    <div className="adCatCols" role="table" aria-label="Sıralama">
+      {shown.map((row) => {
+        const name = label(row);
+        const content = (
+          <>
+            <span className="adCatColValue">{nf.format(value(row))}</span>
+            <span className="adCatColTrack" aria-hidden="true">
+              <span className="adCatColBar" style={{ height: `${(value(row) / maxVal) * 100}%` }} />
+            </span>
+            <span className="adCatColLabel" title={name}>{name}</span>
+            {suffix && <small className="adCatColSuffix">{suffix(row)}</small>}
+          </>
+        );
+
+        const to = link?.(row);
+        return <div key={name} className="adCatCol">{to ? <Link to={to}>{content}</Link> : <div>{content}</div>}</div>;
+      })}
+    </div>
+  );
+}
+
 /* Sales report: requests by month, country, product, status and assignee */
 export default function AdminQuoteReports() {
   usePageTitle('Satış Raporu');
@@ -186,10 +215,6 @@ export default function AdminQuoteReports() {
           <h1>Satış Raporu</h1>
           <p>Siteden gelen teklif taleplerinin aya, ülkeye, ürüne, kanala ve sorumluya göre dağılımı; kazanma oranı ve proforma tutarları. Tarihler talebin geldiği güne göredir.</p>
         </div>
-        <button type="button" className="cmsButton cmsButtonInfo" onClick={download} disabled={!report || exporting || !report.total}>
-          <Download aria-hidden="true" />
-          {exporting ? 'Hazırlanıyor…' : 'Excel’e aktar'}
-        </button>
       </header>
 
       <SalesTargets />
@@ -207,6 +232,10 @@ export default function AdminQuoteReports() {
           <span aria-hidden="true">–</span>
           <input type="date" value={range === 'custom' ? custom.to : period.to} min={custom.from || undefined} aria-label="Bitiş tarihi" onChange={(event) => { setCustom({ from: range === 'custom' ? custom.from : period.from, to: event.target.value }); setRange('custom'); }} />
         </div>
+        <button type="button" className="cmsButton cmsButtonInfo adReportExport" onClick={download} disabled={!report || exporting || !report.total}>
+          <Download aria-hidden="true" />
+          {exporting ? 'Hazırlanıyor…' : 'Excel’e aktar'}
+        </button>
       </div>
 
       {error && <div className="adminInlineError" role="alert">{error}</div>}
@@ -380,11 +409,10 @@ export default function AdminQuoteReports() {
                 <h2><FlaskConical aria-hidden="true" />Stoklanacak Ürün</h2>
                 <span className="adHint">Belirtilen talepler</span>
               </div>
-              <RankList
+              <RankColumns
                 rows={report.byStored || []}
                 label={(row) => row.stored}
                 value={(row) => row.count}
-                suffix={(row) => pf.format(row.count / Math.max(1, (report.byStored || []).reduce((sum, item) => sum + item.count, 0)))}
                 link={(row) => `/admin/quotes?q=${encodeURIComponent(row.stored)}`}
               />
             </div>
@@ -394,11 +422,10 @@ export default function AdminQuoteReports() {
                 <h2><MapPin aria-hidden="true" />Teslimat Şehri</h2>
                 <span className="adHint">Talep Sayısı</span>
               </div>
-              <RankList
+              <RankColumns
                 rows={report.byCity || []}
                 label={(row) => row.city}
                 value={(row) => row.count}
-                suffix={(row) => pf.format(row.count / Math.max(1, report.total))}
                 link={(row) => `/admin/quotes?q=${encodeURIComponent(row.city)}`}
               />
             </div>
@@ -408,7 +435,7 @@ export default function AdminQuoteReports() {
                 <h2><Package aria-hidden="true" />Ürünler</h2>
                 <span className="adHint">Talep · toplam adet</span>
               </div>
-              <RankList
+              <RankColumns
                 rows={report.byProduct}
                 label={(row) => row.name}
                 value={(row) => row.requests}
@@ -465,7 +492,7 @@ export default function AdminQuoteReports() {
                 <h2><Megaphone aria-hidden="true" />Kanallar</h2>
                 <span className="adHint">Talep · kazanılan</span>
               </div>
-              <RankList
+              <RankColumns
                 rows={report.byChannel}
                 label={(row) => row.channel}
                 value={(row) => row.count}
@@ -518,7 +545,7 @@ export default function AdminQuoteReports() {
                 <h2><UserRound aria-hidden="true" />Sorumlular</h2>
                 <span className="adHint">Talep · açık</span>
               </div>
-              <RankList
+              <RankColumns
                 rows={report.byAssignee}
                 label={(row) => row.assignee || 'Atanmamış'}
                 value={(row) => row.count}
