@@ -25011,7 +25011,14 @@ html[lang="ar"] .ecoBandEyebrow {
   transition: transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
 }
 
+.adReport .adPageHead .cmsButton,
 .adReport .adPageHead .cmsButton:hover:not(:disabled) {
+  color: #ffffff;
+}
+
+.adReport .adPageHead .cmsButton:hover:not(:disabled) {
+  background: linear-gradient(160deg, var(--rma-red) 0%, var(--rma-red-dark) 100%);
+  border-color: color-mix(in srgb, var(--rma-red-light) 35%, transparent);
   transform: translateY(-1px);
   box-shadow: 0 14px 28px -10px rgba(228, 23, 58, 0.62);
 }
@@ -25038,8 +25045,18 @@ html[lang="ar"] .ecoBandEyebrow {
   background: var(--ink-050);
 }
 
+.adReport .adSegment button {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.adReport .adSegment button:hover {
+  color: var(--text);
+}
+
 .adReport .adSegment button.active {
   background: var(--ink-900);
+  color: #ffffff;
   box-shadow: 0 6px 14px -6px rgba(16, 19, 23, 0.45);
 }
 
@@ -25211,6 +25228,7 @@ html[lang="ar"] .ecoBandEyebrow {
 
 .adReport .adRankMore {
   border-radius: 999px;
+  font-weight: 700;
 }
 
 .adReport .adRankMore:hover {
