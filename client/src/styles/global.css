@@ -24941,92 +24941,6 @@ html[lang="ar"] .ecoBandEyebrow {
   }
 }
 
-/* Hero band: the page header bleeds to the edges of the admin frame */
-.adReport .adPageHead {
-  margin: -36px -44px 28px;
-  padding: 38px 44px 30px;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-  background:
-    radial-gradient(760px 260px at 110% -30%, color-mix(in srgb, var(--rma-red) 32%, transparent), transparent 70%),
-    linear-gradient(120deg, var(--ink-900) 0%, var(--ink-800) 52%, var(--ink-700) 100%);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 18px 36px -24px rgba(16, 19, 23, 0.55);
-}
-
-.adReport .adPageHead::after {
-  content: '';
-  position: absolute;
-  inset-inline-end: -120px;
-  top: -140px;
-  width: 320px;
-  height: 320px;
-  border-radius: 50%;
-  background: radial-gradient(closest-side, color-mix(in srgb, var(--rma-blue) 38%, transparent), transparent);
-  pointer-events: none;
-}
-
-.adReport .adPageHead > div {
-  position: relative;
-  z-index: 1;
-}
-
-.adReport .adEyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--rma-red-light);
-}
-
-.adReport .adEyebrow::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--rma-red-light) 22%, transparent);
-}
-
-.adReport .adPageHead h1 {
-  color: #ffffff;
-  letter-spacing: -0.025em;
-}
-
-.adReport .adPageHead p {
-  color: var(--ink-300);
-  max-width: 620px;
-}
-
-.adReport .adPageHead .cmsButton {
-  position: relative;
-  z-index: 1;
-  height: 44px;
-  padding: 0 20px;
-  border: 1px solid color-mix(in srgb, var(--rma-red-light) 35%, transparent);
-  border-radius: 9px;
-  background: linear-gradient(160deg, var(--rma-red) 0%, var(--rma-red-dark) 100%);
-  box-shadow: 0 10px 22px -8px rgba(228, 23, 58, 0.55);
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  transition: transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
-}
-
-.adReport .adPageHead .cmsButton,
-.adReport .adPageHead .cmsButton:hover:not(:disabled) {
-  color: #ffffff;
-}
-
-.adReport .adPageHead .cmsButton:hover:not(:disabled) {
-  background: linear-gradient(160deg, var(--rma-red) 0%, var(--rma-red-dark) 100%);
-  border-color: color-mix(in srgb, var(--rma-red-light) 35%, transparent);
-  transform: translateY(-1px);
-  box-shadow: 0 14px 28px -10px rgba(228, 23, 58, 0.62);
-}
-
-.adReport .adPageHead .cmsButton:disabled {
-  opacity: 0.55;
-}
-
 /* Filter strip: a crisper, elevated control bar */
 .adReport .adReportFilters {
   padding: 12px 14px;
@@ -25229,19 +25143,6 @@ html[lang="ar"] .ecoBandEyebrow {
 
 .adReport .adRankMore:hover {
   background: color-mix(in srgb, var(--accent) 8%, transparent);
-}
-
-@media (max-width: 1100px) {
-  .adReport .adPageHead {
-    margin: -24px -24px 24px;
-    padding: 28px 24px 24px;
-  }
-}
-
-@media (max-width: 560px) {
-  .adReport .adPageHead {
-    flex-wrap: wrap;
-  }
 }
 
 /* ===== Model datasheet (A4, printable) ===== */
