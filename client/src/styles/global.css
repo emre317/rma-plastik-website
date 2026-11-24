@@ -24651,6 +24651,9 @@ html[lang="ar"] .ecoBandEyebrow {
 }
 
 .adColumnsPlot {
+  /* Explicit (not inherited/stretched) so the bars' percentage heights always
+     have a definite height to resolve against, in every browser */
+  height: 232px;
   position: relative;
   display: flex;
   align-items: stretch;
@@ -24666,6 +24669,9 @@ html[lang="ar"] .ecoBandEyebrow {
 }
 
 .adColumn {
+  /* Explicit, not inherited from the flex row, so the bar's percentage
+     height always has a definite height to resolve against */
+  height: 100%;
   position: relative;
   flex: 1;
   min-width: 0;
