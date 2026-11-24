@@ -10,7 +10,7 @@ import { youtubeThumbnail } from '../../components/content/YouTubeEmbed';
 import { categoryCountsForLanguage, postsForLanguage } from '../../data/posts';
 import videos, { videoText } from '../../data/videos';
 
-const PAGE_SIZE = 9;
+const PAGE_SIZE = 8;
 
 function normalize(value, lang) {
   return (value || '').toLocaleLowerCase(lang === 'ar' ? 'ar' : lang).trim();
