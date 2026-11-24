@@ -30,8 +30,8 @@ const NAV = [
     collapsible: true,
     items: [
       { to: '/admin/quotes', label: 'Teklif Talepleri', icon: Inbox, badge: true, area: 'sales' },
-      { to: '/admin/meetings', label: 'Toplantılar', icon: CalendarDays, hint: 'Yüz yüze ve online toplantı talepleri', badge: 'meetings', area: 'sales' },
       { to: '/admin/quote-reports', label: 'Satış Raporu', icon: BarChart3, hint: 'Ülke, ürün, kanal ve kazanma oranı', area: 'sales' },
+      { to: '/admin/meetings', label: 'Toplantılar', icon: CalendarDays, hint: 'Yüz yüze ve online toplantı talepleri', badge: 'meetings', area: 'sales' },
       { to: '/admin/leads', label: 'Potansiyel Müşteriler', icon: UserPlus, hint: 'Kataloğu indiren ziyaretçiler', badge: 'leads', area: 'sales' },
     ],
   },
