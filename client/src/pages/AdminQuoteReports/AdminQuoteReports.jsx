@@ -227,6 +227,9 @@ export default function AdminQuoteReports() {
               <span>Teklif verildi / kapandı</span>
               <strong>{nf.format(quotedTotal)}</strong>
               <small>{report.total ? `Taleplerin ${pf.format(quotedTotal / report.total)}’i` : '—'}</small>
+              {report.total > 0 && (
+                <span className="adKpiMeter" aria-hidden="true"><span style={{ width: `${(quotedTotal / report.total) * 100}%` }} /></span>
+              )}
             </div>
             <div className="adRepKpi">
               <span className="adRepKpiIcon" aria-hidden="true"><Globe2 /></span>
@@ -248,6 +251,9 @@ export default function AdminQuoteReports() {
               <span>Kazanma Oranı</span>
               <strong>{decided ? pf.format(won / decided) : '—'}</strong>
               <small>{decided ? `Sonuçlanan ${nf.format(decided)} talepten` : 'Henüz sonuçlanan talep yok'}</small>
+              {decided > 0 && (
+                <span className="adKpiMeter" aria-hidden="true"><span style={{ width: `${(won / decided) * 100}%` }} /></span>
+              )}
             </div>
             <div className="adRepKpi good">
               <span className="adRepKpiIcon" aria-hidden="true"><Trophy /></span>
@@ -413,6 +419,30 @@ export default function AdminQuoteReports() {
 
             <div className="adCard">
               <div className="adCardHead"><h2>Durumlar</h2></div>
+              {report.total > 0 && (
+                <div
+                  className="adPipeline"
+                  role="img"
+                  aria-label={`Durum dağılımı: ${QUOTE_STATUSES.map((status) => `${status.label} ${nf.format(statusCount(status.id))}`).join(', ')}`}
+                >
+                  {QUOTE_STATUSES.map((status, index) => {
+                    const count = statusCount(status.id);
+                    if (!count) return null;
+                    const share = count / report.total;
+                    return (
+                      <Link
+                        key={status.id}
+                        to={`/admin/quotes?status=${status.id}`}
+                        className={`adPipelineSeg step-${index}`}
+                        style={{ flexGrow: count }}
+                        title={`${status.label}: ${nf.format(count)} (${pf.format(share)})`}
+                      >
+                        {share >= 0.08 && <span>{pf.format(share)}</span>}
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
               <ul className="adStatusBreak">
                 {QUOTE_STATUSES.map((status) => {
                   const count = statusCount(status.id);

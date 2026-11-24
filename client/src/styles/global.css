@@ -25235,6 +25235,73 @@ html[lang="ar"] .ecoBandEyebrow {
   background: color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
+/* Ratio KPIs: a thin meter under the figure (same-hue fill + a lighter track) */
+.adKpiMeter {
+  margin-top: 6px;
+  height: 6px;
+  display: block;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--brand-primary) 14%, #fff);
+  overflow: hidden;
+}
+
+.adKpiMeter > span {
+  height: 100%;
+  min-width: 3px;
+  display: block;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--rma-magenta) 0%, var(--brand-primary) 100%);
+}
+
+.adRepKpi.accent .adKpiMeter {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.adRepKpi.accent .adKpiMeter > span {
+  background: linear-gradient(90deg, var(--rma-blue-light) 0%, var(--rma-red-light) 100%);
+}
+
+/* Durumlar: a tall segmented bar (one whole, ordinal one-hue ramp) above the detail list */
+.adPipeline {
+  margin-bottom: 14px;
+  height: 30px;
+  display: flex;
+  gap: 2px;
+}
+
+.adPipelineSeg {
+  min-width: 3px;
+  flex-basis: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 4px;
+  font-size: 11.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: filter 140ms ease;
+}
+
+.adPipelineSeg:hover {
+  filter: brightness(1.06);
+}
+
+.adPipelineSeg.step-0 { background: color-mix(in srgb, var(--rma-red) 45%, #fff); color: var(--ink-900); }
+.adPipelineSeg.step-1 { background: color-mix(in srgb, var(--rma-red) 60%, #fff); color: var(--ink-900); }
+.adPipelineSeg.step-2 { background: var(--rma-red); color: #fff; }
+.adPipelineSeg.step-3 { background: var(--rma-red-dark); color: #fff; }
+.adPipelineSeg.step-4 { background: var(--rma-red-darker); color: #fff; }
+
+/* The detail list below reuses the same ordinal ramp as the segmented bar */
+.adReport .adStatusBreak li:nth-child(1) { --tone: color-mix(in srgb, var(--rma-red) 45%, #fff); }
+.adReport .adStatusBreak li:nth-child(2) { --tone: color-mix(in srgb, var(--rma-red) 60%, #fff); }
+.adReport .adStatusBreak li:nth-child(3) { --tone: var(--rma-red); }
+.adReport .adStatusBreak li:nth-child(4) { --tone: var(--rma-red-dark); }
+.adReport .adStatusBreak li:nth-child(5) { --tone: var(--rma-red-darker); }
+
 @media (max-width: 1100px) {
   .adReport .adPageHead {
     margin: 0 -24px 24px;
@@ -25245,6 +25312,14 @@ html[lang="ar"] .ecoBandEyebrow {
 @media (max-width: 560px) {
   .adReport .adPageHead {
     flex-wrap: wrap;
+  }
+
+  .adPipeline {
+    height: 22px;
+  }
+
+  .adPipelineSeg span {
+    display: none;
   }
 }
 
